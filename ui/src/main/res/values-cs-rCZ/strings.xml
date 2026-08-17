@@ -12,7 +12,7 @@
     <string name="copy_username">Kopírovat uživatelské jméno</string>
     <string name="delete">Smazat</string>
     <string name="preview">Náhled</string>
-    <string name="deleting">Mazání...</string>
+    <string name="deleting">Mazání…</string>
     <string name="do_you_really_want_to_delete">Opravdu chcete smazat tuto položku? Akce je nevratná.</string>
     <string name="edit">Upravit</string>
     <string name="edit_folder">Upravit složku</string>
@@ -24,8 +24,8 @@
     <string name="folder_created">Nová složka byla vytvořena.</string>
     <string name="folder_deleted">Složka byla smazána.</string>
     <string name="folder_none">Žádná složka</string>
-    <string name="folders">Složky</string>
     <string name="folder_updated">Složka byla uložena</string>
+    <string name="folders">Složky</string>
     <string name="hide">Skrýt</string>
     <string name="internet_connection_required_message">Před pokračováním se připojte k internetu.</string>
     <string name="internet_connection_required_title">Je vyžadováno připojení k internetu</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Hlavní heslo (vyžadováno)</string>
     <string name="new_master_password_required">Nové hlavní heslo (vyžadováno)</string>
     <string name="more_options">Více voleb</string>
+    <string name="my_folder">Moje složka</string>
+    <string name="my_folders">Moje složky</string>
     <string name="my_vault">Můj trezor</string>
     <string name="name">Název</string>
     <string name="item_name_required">Název položky (povinné)</string>
@@ -55,7 +57,7 @@
     <string name="password">Heslo</string>
     <string name="save">Uložit</string>
     <string name="move">Přesunout</string>
-    <string name="saving">Ukládání...</string>
+    <string name="saving">Ukládání…</string>
     <string name="settings">Nastavení</string>
     <string name="show">Zobrazit</string>
     <string name="item_deleted">Položka byla smazána</string>
@@ -105,7 +107,7 @@
     <string name="immediately">Okamžitě</string>
     <string name="vault_timeout_log_out_confirmation_title">Nastavit časový limit relace na \"Odhlásit\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Po uplynutí časového období budete odhlášeni. Pro přihlášení do Vašeho trezoru budete muset být připojeni k internetu. Vaše nastavení a PIN uložený na tomto zařízení se nezmění.</string>
-    <string name="logging_in">Přihlašování...</string>
+    <string name="logging_in">Přihlašování…</string>
     <string name="login_to_bitwarden">Přihlásit se do Bitwardenu</string>
     <string name="master_password_confirmation_val_message">Potvrzení hesla se neshoduje.</string>
     <string name="master_password_description">Hlavní heslo je heslo, které používáte k přístupu do Vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste jej zapomněli.</string>
@@ -150,8 +152,8 @@
     <string name="select">Vybrat</string>
     <string name="item_details">Detaily položky</string>
     <string name="item_updated">Položka byla uložena</string>
-    <string name="submitting">Odesílání...</string>
-    <string name="syncing">Synchronizování...</string>
+    <string name="submitting">Odesílání…</string>
+    <string name="syncing">Synchronizování…</string>
     <string name="syncing_complete">Synchronizace byla dokončena</string>
     <string name="two_step_login">Dvoufázové přihlášení</string>
     <string name="unlock_with_biometrics">Odemknout pomocí biometrie</string>
@@ -190,7 +192,7 @@
     <string name="add_new_attachment">Přidat novou přílohu</string>
     <string name="attachments">Přílohy</string>
     <string name="unable_to_download_file">Nelze stáhnout soubor.</string>
-    <string name="downloading">Stahování...</string>
+    <string name="downloading">Stahování…</string>
     <string name="attachment_large_warning">Tento soubor je <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Opravdu jej chcete stáhnout?</string>
     <string name="authenticator_key">Ověřovací klíč (TOTP)</string>
     <string name="verification_code_totp">Ověřovací kód (TOTP)</string>
@@ -285,7 +287,9 @@ Načtení proběhne automaticky.</string>
     <string name="vault_is_locked">Trezor je uzamčený</string>
     <string name="go_to_my_vault">Přejít do trezoru</string>
     <string name="collections">Sbírky</string>
+    <string name="shared_folders">Sdílené složky</string>
     <string name="no_items_collection">V této sbírce nejsou žádné položky.</string>
+    <string name="there_are_no_items_in_this_shared_folder">V této sdílené složce nejsou žádné položky.</string>
     <string name="no_items_folder">V této složce nejsou žádné položky.</string>
     <string name="no_items_trash">V koši nejsou žádné položky.</string>
     <string name="autofill_accessibility_summary">Pomůže při vyplňování uživatelského jména a hesla v jiných aplikacích a na webu.</string>
@@ -342,12 +346,16 @@ Načtení proběhne automaticky.</string>
     <string name="move_up">Přesunout nahoru</string>
     <string name="owner">Vlastník</string>
     <string name="no_collections_to_list">Žádné sbírky k zobrazení.</string>
+    <string name="there_are_no_shared_folders_to_list">Nejsou k dispozici žádné sdílené složky.</string>
     <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
     <string name="select_one_collection">Musíte vybrat alespoň jednu sbírku.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Musíte vybrat alespoň jednu sdílenou složku.</string>
     <string name="share">Sdílet</string>
-    <string name="move_to_vault">Přesunout do trezoru</string>
+    <string name="move_to_organization">Přesunout do organizace</string>
+    <string name="no_orgs_to_list">Žádné organizace k zobrazení.</string>
+    <string name="move_to_org_desc">Vyberte organizaci, do které chcete tuto položku přesunout. Přesun do organizace převede vlastnictví položky této organizaci. Po přesunutí této položky již nebudete přímým vlastníkem této položky.</string>
     <string name="no_vaults_to_list">Žádné trezory k zobrazení.</string>
-    <string name="move_to_vault_desc">Vyberte úložiště, do kterého chcete tuto položku přesunout. Přesunutím do jiného úložiště se vlastnictví položky převede na danou organizaci. Jakmile bude položka přesunuta, přestanete být jejím přímým vlastníkem.</string>
+    <string name="move_to_vault_desc">Vyberte trezor, do kterého chcete tuto položku přesunout. Přesunutím do jiného trezoru se vlastnictví položky převede na danou organizaci. Jakmile bude položka přesunuta, přestanete být jejím přímým vlastníkem.</string>
     <string name="number_of_words">Počet slov</string>
     <string name="passphrase">Heslová fráze</string>
     <string name="word_separator">Oddělovač slov</string>
@@ -413,10 +421,10 @@ Načtení proběhne automaticky.</string>
     <string name="save_attachment_success">Příloha byla úspěšně uložena</string>
     <string name="autofill_tile_accessibility_required">Pro povolení dlaždice automatického vyplňování povolte v nastavení Bitwardenu \"Službu automatického vyplňování\".</string>
     <string name="autofill_tile_uri_not_found">Nebyla nalezena žádná pole s heslem</string>
-    <string name="soft_deleting">Přesouvání do koše...</string>
+    <string name="soft_deleting">Přesouvání do koše…</string>
     <string name="item_soft_deleted">Položka byla přesunuta do koše.</string>
     <string name="restore">Obnovit</string>
-    <string name="restoring">Obnovování...</string>
+    <string name="restoring">Obnovování…</string>
     <string name="item_restored">Položka byla obnovena</string>
     <string name="trash">Koš</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Opravdu chcete trvale tuto položku smazat? Akce je nevratná.</string>
@@ -461,6 +469,7 @@ Načtení proběhne automaticky.</string>
     <string name="deletion_date">Datum smazání</string>
     <string name="deletion_time">Čas smazání</string>
     <string name="deletion_date_info">Tento Send bude trvale smazán v určený den a čas.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kdo může zobrazit</string>
     <string name="anyone_with_the_link">Kdokoli s odkazem</string>
     <string name="anyone_with_link_can_view_send">Kdokoli s tímto odkazem může zobrazit tento Send</string>
@@ -498,6 +507,7 @@ Načtení proběhne automaticky.</string>
     <string name="two_days">2 dny</string>
     <string name="three_days">3 dny</string>
     <string name="seven_days">7 dnů</string>
+    <string name="fourteen_days">14 dnů</string>
     <string name="thirty_days">30 dnů</string>
     <string name="custom">Vlastní</string>
     <string name="custom_timeout">Vlastní časový limit</string>
@@ -694,6 +704,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="logging_in_on">Přihlašování na</string>
     <string name="logging_in_on_with_colon">Přihlašování na:</string>
     <string name="vault">Trezor</string>
+    <string name="select_vault">Vybrat trezor</string>
     <string name="appearance">Vzhled</string>
     <string name="account_security">Zabezpečení účtu</string>
     <string name="bitwarden_help_center">Centrum nápovědy Bitwarden</string>
@@ -861,7 +872,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="import_help">nápověda pro import</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný soubor</annotation> někde na Vašem počítači, kde jej můžete snadno najít.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
-    <string name="syncing_logins_loading_message">Synchronizování přihlašovacích údajů...</string>
+    <string name="syncing_logins_loading_message">Synchronizování přihlašovacích údajů…</string>
     <string name="download_the_browser_extension">Stáhnout rozšíření prohlížeče</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Přejděte na bitwarden.com/download a integrujte Bitwarden do svého oblíbeného prohlížeče pro bezproblémové používání.</string>
     <string name="use_the_web_app">Použít webovou aplikaci</string>
@@ -1176,7 +1187,7 @@ při opakování problémů.</string>
     <string name="vault_sync_failed_description">Nepodařilo se nám synchronizovat Váš trezor se serverem. Váš trezor nemusí obsahovat Vaše nejnovější změny. Můžete to zkusit znovu hned teď, nebo se synchronizace provede automaticky později.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vaše položky byly úspěšně importovány, ale nemohly být synchronizovány. Importované položky nebudou viditelné v trezoru, dokud nebude provedena synchronizace.</string>
     <string name="there_was_a_problem_importing_your_items">Při importu Vašich položek došlo k chybě. Zkuste to znovu. Pokud problém přetrvává, kontaktujte podporu.</string>
-    <string name="saving_items">Ukládání položek...</string>
+    <string name="saving_items">Ukládání položek…</string>
     <string name="unable_to_import_your_items">Nelze importovat Vaše položky</string>
     <string name="import_from_computer">Importovat z počítače</string>
     <string name="import_from_another_app">Importovat z jiné aplikace</string>
@@ -1199,7 +1210,7 @@ při opakování problémů.</string>
     <string name="access_help_and_troubleshooting_documentation_here">Zde můžete přistupovat k nápovědě a dokumentaci k řešení problémů</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import hesel, přístupových hesel a dalších typů položek z Vašeho trezoru Bitwarden.</string>
     <string name="items_to_import">Položky k importu</string>
-    <string name="exporting_items">Exportování položek...</string>
+    <string name="exporting_items">Exportování položek…</string>
     <string name="export_failed">Export se nezdařil</string>
     <string name="passwords">Hesla</string>
     <string name="passkeys">Přístupové klíče</string>
@@ -1214,7 +1225,7 @@ při opakování problémů.</string>
     <string name="enter_the_6_digit_code_that_was_emailed_to_the_address_below">Zadejte 6místný kód, který byl zaslán e-mailem na níže uvedenou adresu</string>
     <string name="lock_app">Uzamknout aplikaci</string>
     <string name="use_your_devices_lock_method_to_unlock_the_app">Použít metodu uzamčení zařízení k odemknutí aplikace</string>
-    <string name="loading_vault_data">Načítání dat trezoru...</string>
+    <string name="loading_vault_data">Načítání dat trezoru…</string>
     <string name="resending">Opakované odesílání</string>
     <string name="you_left_the_organization">Opustili jste organizaci</string>
     <string name="transfer_items_to_org">Převést položky do %1$s</string>
@@ -1293,7 +1304,7 @@ při opakování problémů.</string>
     <string name="upgraded_to_premium">Aktualizováno na Premium</string>
     <string name="you_now_have_access_to_all_advanced_security_features">Nyní máte přístup ke všem pokročilým bezpečnostním funkcím.</string>
     <string name="you_now_have_access_to_advanced_security_features_learn_more_about_premium">Nyní máte přístup k pokročilým bezpečnostním funkcím. Přečtěte si více o tom, co je zahrnuto v Premium.</string>
-    <string name="confirming_your_upgrade">Potvrzování Vaší aktualizace...</string>
+    <string name="confirming_your_upgrade">Potvrzování Vaší aktualizace…</string>
     <string name="upgrade_pending">Nevyřízená aktualizace</string>
     <string name="upgrade_pending_message">Vaše aktualizace je zpracovávána. Zůstanete na bezplatném tarifu, dokud nebude dokončena. Synchronizujte pro kontrolu, nebo pokračujte a aktualizace se provede automaticky.</string>
     <string name="unlock_premium_features">Odemkněte pokročilejší funkce s předplatným Premium.</string>
@@ -1304,7 +1315,7 @@ při opakování problémů.</string>
     <string name="secure_file_storage">Zabezpečené úložiště souborů</string>
     <string name="breach_monitoring">Sledování úniků</string>
     <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Nákup dokončíte prostřednictvím zabezpečené platební brány Stripe.</string>
-    <string name="opening_checkout">Otevírání pokladny...</string>
+    <string name="opening_checkout">Otevírání pokladny…</string>
     <string name="secure_checkout_didnt_load">Zabezpečená pokladna se nenačetla</string>
     <string name="trouble_opening_payment_page">Měli jsme potíže s otevřením platební stránky, zkuste to znovu.</string>
     <string name="payment_not_received_yet">Platba ještě nebyla přijata</string>
@@ -1351,8 +1362,8 @@ při opakování problémů.</string>
     </plurals>
     <string name="subscription_paused_description">Vaše předplatné bylo pozastaveno. Chcete-li pokračovat v používání prémiových funkcí, proveďte obnovení.</string>
     <string name="subscription_expired_description">Vaše předplatné vypršelo <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Chcete-li pokračovat v používání funkcí Premium, proveďte obnovení.</string>
-    <string name="loading_subscription">Načítání předplatného...</string>
-    <string name="loading_portal">Načítání portálu...</string>
+    <string name="loading_subscription">Načítání předplatného…</string>
+    <string name="loading_portal">Načítání portálu…</string>
     <string name="portal_error">Něco se pokazilo</string>
     <string name="trouble_loading_portal">Měli jsme potíže s načítáním portálu pro správu, zkuste to znovu.</string>
     <string name="trouble_loading_subscription">Nemohli jsme načíst údaje o předplatném. Zkuste to znovu.</string>

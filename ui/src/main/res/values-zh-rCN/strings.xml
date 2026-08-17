@@ -24,8 +24,8 @@
     <string name="folder_created">新文件夹已创建。</string>
     <string name="folder_deleted">文件夹已删除。</string>
     <string name="folder_none">无文件夹</string>
-    <string name="folders">文件夹</string>
     <string name="folder_updated">文件夹已保存</string>
+    <string name="folders">文件夹</string>
     <string name="hide">隐藏</string>
     <string name="internet_connection_required_message">请连接因特网后再继续。</string>
     <string name="internet_connection_required_title">需要互联网连接</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">主密码（必填）</string>
     <string name="new_master_password_required">新主密码（必填）</string>
     <string name="more_options">更多选项</string>
+    <string name="my_folder">我的文件夹</string>
+    <string name="my_folders">我的文件夹</string>
     <string name="my_vault">我的密码库</string>
     <string name="name">名称</string>
     <string name="item_name_required">项目名称 （必填）</string>
@@ -115,7 +117,7 @@
         <item quantity="other">主密码长度必须至少为 %d 个字符。</item>
     </plurals>
     <string name="min_numbers">数字最少个数</string>
-    <string name="min_special">符号最少个数</string>
+    <string name="min_special">特殊字符最少个数</string>
     <string name="never">从不</string>
     <string name="new_item_created">项目已添加</string>
     <string name="no_cards">您的密码库中没有支付卡。</string>
@@ -282,11 +284,13 @@
     <string name="vault_is_locked">密码库已锁定</string>
     <string name="go_to_my_vault">前往我的密码库</string>
     <string name="collections">集合</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">共享文件夹</string>
+    <string name="no_items_collection">此集合中没有项目。</string>
+    <string name="there_are_no_items_in_this_shared_folder">此共享文件夹中没有项目。</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
     <string name="no_items_trash">回收站中没有项目。</string>
     <string name="autofill_accessibility_summary">在其他 App 和网站上辅助填充用户名和密码字段。</string>
-    <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到您设备上的其他 App 中。</string>
+    <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来辅助将登录信息填充到您设备上的其他 App 中。</string>
     <string name="bitwarden_autofill_go_to_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</string>
     <string name="custom_field_name">自定义字段名称</string>
     <string name="field_type_boolean">布尔型</string>
@@ -336,12 +340,16 @@
     <string name="move_up">上移</string>
     <string name="owner">所有者</string>
     <string name="no_collections_to_list">没有可列出的集合。</string>
+    <string name="there_are_no_shared_folders_to_list">没有可列出的共享文件夹。</string>
     <string name="moved_item_to_org">%1$s 已移动到 %2$s。</string>
     <string name="select_one_collection">您必须至少选择一个集合。</string>
+    <string name="you_must_select_at_least_one_shared_folder">您必须至少选择一个共享文件夹。</string>
     <string name="share">共享</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
+    <string name="move_to_organization">移动到组织</string>
+    <string name="no_orgs_to_list">没有可列出的组织。</string>
+    <string name="move_to_org_desc">选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
+    <string name="no_vaults_to_list">没有可列出的密码库。</string>
+    <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给对应组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="number_of_words">单词个数</string>
     <string name="passphrase">密码短语</string>
     <string name="word_separator">单词分隔符</string>
@@ -455,6 +463,7 @@
     <string name="deletion_date">删除日期</string>
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
+    <string name="this_date_is_enforced_by_your_organization">此日期由您的组织强制执行</string>
     <string name="who_can_view">谁可以查看</string>
     <string name="anyone_with_the_link">拥有链接的任何人</string>
     <string name="anyone_with_link_can_view_send">拥有此链接的任何人都可以查看此 Send</string>
@@ -492,6 +501,7 @@
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
     <string name="seven_days">7 天</string>
+    <string name="fourteen_days">14 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自定义</string>
     <string name="custom_timeout">自定义超时</string>
@@ -571,7 +581,7 @@
     <string name="set_up_authenticator_key">设置验证器密钥</string>
     <string name="once_the_key_is_successfully_entered">成功输入密钥后，
 选择「添加 TOTP」以安全地存储此密钥</string>
-    <string name="never_lock_warning">将锁定选项设置为「从不」会让任何能够访问您的设备的人都可以使用您的密码库。如果使用此选项，您应确保您的设备已受到妥善保护。</string>
+    <string name="never_lock_warning">将锁定选项设置为「从不」会让拥有您的设备访问权限的任何人都可以使用您的密码库。如果使用此选项，您应确保您的设备已受到妥善保护。</string>
     <string name="environment_page_urls_error">输入的一个或多个 URL 无效。请修改后再次尝试保存。</string>
     <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
     <string name="allow_screen_capture">允许屏幕截图</string>
@@ -683,6 +693,7 @@
     <string name="logging_in_on">正登录到</string>
     <string name="logging_in_on_with_colon">正登录到：</string>
     <string name="vault">密码库</string>
+    <string name="select_vault">选择密码库</string>
     <string name="appearance">外观</string>
     <string name="account_security">账户安全</string>
     <string name="bitwarden_help_center">Bitwarden 帮助中心</string>
@@ -1294,7 +1305,7 @@
     <string name="current_plan">当前方案</string>
     <string name="premium_plan_name">高级版</string>
     <string name="billing_amount">计费金额</string>
-    <string name="storage_cost">存储空间成本</string>
+    <string name="storage_cost">存储空间费用</string>
     <string name="discount">折扣</string>
     <string name="estimated_tax">预估税额</string>
     <string name="total">总计</string>
@@ -1303,7 +1314,7 @@
     <string name="manage_plan">管理方案</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">在 Bitwarden 网页 App 中管理您的订阅方案。</string>
     <string name="cancel_premium">取消高级版</string>
-    <string name="subscription_status_active">激活</string>
+    <string name="subscription_status_active">活跃</string>
     <string name="subscription_status_canceled">已取消</string>
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>

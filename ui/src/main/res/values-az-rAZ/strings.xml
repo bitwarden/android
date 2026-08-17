@@ -24,8 +24,8 @@
     <string name="folder_created">Yeni qovluq yaradıldı.</string>
     <string name="folder_deleted">Qovluq silindi.</string>
     <string name="folder_none">Qovluq yoxdur</string>
-    <string name="folders">Qovluqlar</string>
     <string name="folder_updated">Qovluq güncəlləndi.</string>
+    <string name="folders">Qovluqlar</string>
     <string name="hide">Gizlət</string>
     <string name="internet_connection_required_message">Davam etməzdən əvvəl lütfən internetə bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı tələb olunur</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Ana parol (tələb olunur)</string>
     <string name="new_master_password_required">Yeni ana parol (tələb olunur)</string>
     <string name="more_options">Daha çox seçim</string>
+    <string name="my_folder">Qovluğum</string>
+    <string name="my_folders">Qovluqlarım</string>
     <string name="my_vault">Seyfim</string>
     <string name="name">Ad</string>
     <string name="item_name_required">Element adı (tələb olunur)</string>
@@ -283,7 +285,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="vault_is_locked">Seyf kilidlənib</string>
     <string name="go_to_my_vault">Seyfimə get</string>
     <string name="collections">Kolleksiyalar</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">Paylaşılan qovluqlar</string>
+    <string name="no_items_collection">Bu kolleksiyada heç bir element yoxdur.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Bu paylaşılan qovluqda heç bir element yoxdur.</string>
     <string name="no_items_folder">Bu qovluqda heç bir element yoxdur.</string>
     <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
     <string name="autofill_accessibility_summary">Digər tətbiqlərdə və vebdə istifadəçi adı və parol xanalarının doldurulmasına kömək edin.</string>
@@ -338,12 +342,16 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="move_up">Yuxarı daşı</string>
     <string name="owner">Sahibi</string>
     <string name="no_collections_to_list">Sadalanacaq heç bir kolleksiya yoxdur.</string>
+    <string name="there_are_no_shared_folders_to_list">Sadalanacaq heç bir paylaşılan qovluq yoxdur.</string>
     <string name="moved_item_to_org">%1$s, bura daşındı: %2$s.</string>
     <string name="select_one_collection">Ən azı bir kolleksiya seçməlisiniz.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Ən azı bir paylaşılan qovluq seçməlisiniz.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">Təşkilata daşı</string>
+    <string name="no_orgs_to_list">Sadalanacaq heç bir təşkilat yoxdur.</string>
+    <string name="move_to_org_desc">Bu elementi daşımaq istədiyiniz təşkilatı seçin. Bir təşkilata daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
+    <string name="no_vaults_to_list">Sadalanacaq seyf yoxdur.</string>
+    <string name="move_to_vault_desc">Bu elementi daşımaq istədiyiniz seyfi seçin. Başqa bir seyfə daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
     <string name="number_of_words">Söz sayı</string>
     <string name="passphrase">Uzun ifadə</string>
     <string name="word_separator">Söz ayırıcı</string>
@@ -379,8 +387,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
     <string name="ask_to_add_item">Element əlavə etməyi soruş</string>
     <string name="ask_to_add_item_description">Seyfinizdə tapılmayan elementin əlavə edilməsi soruşulsun.</string>
-    <string name="turn_on_fill_assist">Turn on fill assist</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
+    <string name="turn_on_fill_assist">\"Doldurma Köməyi\"ni işə sal</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Doldurma köməyi, sayta xas qaydaları istifadə edərək dəstəklənən saytlarda avto-doldurma dəqiqliyini artırır.</string>
     <string name="on_restart">Tətbiq yenidən başladılanda</string>
     <string name="capitalize">İlk hərfi böyük yaz</string>
     <string name="include_number">Rəqəm əlavə et</string>
@@ -457,6 +465,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="deletion_date">Silinmə tarixi</string>
     <string name="deletion_time">Silinmə vaxtı</string>
     <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
+    <string name="this_date_is_enforced_by_your_organization">Bu tarix, təşkilatınız tərəfindən müəyyən olunub.</string>
     <string name="who_can_view">Kimlər baxa bilər</string>
     <string name="anyone_with_the_link">Keçidə sahib olan hər kəs</string>
     <string name="anyone_with_link_can_view_send">Bu keçidə sahib olan hər kəs bu \"Send\"ə baxa bilər</string>
@@ -494,6 +503,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
     <string name="seven_days">7 gün</string>
+    <string name="fourteen_days">14 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="custom">Özəl</string>
     <string name="custom_timeout">Özəl bitmə vaxtı</string>
@@ -614,7 +624,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="accessibility_service_disclosure">Erişiləbilənlik Xidməti açıqlaması</string>
     <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
     <string name="accessibility_disclosure_start_up_text_1">Bitwarden-in erişiləbilənlik əsaslı avto-doldurma xidmətini təklif etməsi üçün bu bildiriş tələb olunur.</string>
-    <string name="accessibility_disclosure_start_up_text_2">Bitwarden, Android-in Erişiləbilənlik Xidmətini istifadə edərək giriş xanalarını aşkarlamaq üçün ixtiyari bir avto-doldurma üsulu təklif edir. Bunu fəallaşdırsanız, Bitwarden müvafiq xanaları müəyyənləşdirəcək və uyuşma tapıldığı zama giriş məlumatlarınızı dolduracaq.</string>
+    <string name="accessibility_disclosure_start_up_text_2">Bitwarden, Android-in Erişiləbilənlik Xidmətini istifadə edərək giriş xanalarını aşkarlamaq üçün ixtiyari bir avto-doldurma üsulu təklif edir. Bunu fəallaşdırsanız, Bitwarden müvafiq xanaları müəyyənləşdirəcək və uyuşma tapıldığı zaman giriş məlumatlarınızı dolduracaq.</string>
     <string name="accessibility_disclosure_start_up_text_3">Erişiləbilənlik Xidmətini istifadə etdiyiniz zaman ekrandakı heç bir məlumatı saxlamırıq və ekrandakı giriş məlumatlarını daxil etmə elementləri istisna olmaqla heç nəyi idarə etmirik.</string>
     <string name="i_understand">Anladım</string>
     <string name="accept">Qəbul et</string>
@@ -686,6 +696,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="logging_in_on">Giriş edilir</string>
     <string name="logging_in_on_with_colon">Giriş edilir:</string>
     <string name="vault">Seyf</string>
+    <string name="select_vault">Seyfi seç</string>
     <string name="appearance">Görünüş</string>
     <string name="account_security">Hesab güvənliyi</string>
     <string name="bitwarden_help_center">Bitwarden Kömək Mərkəzi</string>
@@ -1168,7 +1179,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
         <item quantity="one">%1$d element seyfinizə köçürüldü.</item>
         <item quantity="other">%1$d element seyfinizə köçürüldü.</item>
     </plurals>
-    <string name="enable_browser_autofill_to_keep_filling_passwords">Parolları doldurmağa davam etmək üçün brauzer Avto-doldurma fəallaşdır</string>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Parolları doldurmağa davam etmək üçün brauzer Avto-doldurmanı fəallaşdır</string>
     <string name="your_browser_recently_updated_how_autofill_works_singular">Brauzeriniz təzəlikcə güncəllənib və bu, Bitwarden-in avto-doldurma özəlliyini sıradan çıxardıb. Parollarınızı Bitwarden ilə doldurmağa davam etmək üçün avto-doldurma ayarlarında brauzer avto-doldurmanı fəallaşdırın.</string>
     <string name="not_now">İndi yox</string>
     <string name="import_from_bitwarden">Bitwarden-dən daxilə köçür</string>
@@ -1415,6 +1426,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="keep_documents_safe_and_encrypted">Sənədləri əmniyyətdə və şifrələnmiş saxla</string>
     <string name="share_files_securely_with_anyone_using_send">Send istifadəsi ilə faylları istədiyiniz şəxslə təhlükəsiz formatda paylaşın</string>
     <string name="receive_24_7_priority_support">24/7 prioritet dəstək alın</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="account_creation_restricted">Hesab yaratma məhdudlaşdırılıb</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s, yalnız dəvət edilən istifadəçilərin hesab yaratmasına icazə verir.</string>
 </resources>

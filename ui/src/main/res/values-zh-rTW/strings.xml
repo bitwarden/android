@@ -24,8 +24,8 @@
     <string name="folder_created">已新增資料夾。</string>
     <string name="folder_deleted">已刪除資料夾。</string>
     <string name="folder_none">（未分類）</string>
-    <string name="folders">資料夾</string>
     <string name="folder_updated">已更新資料夾。</string>
+    <string name="folders">資料夾</string>
     <string name="hide">隱藏</string>
     <string name="internet_connection_required_message">請先連線至網際網路再繼續。</string>
     <string name="internet_connection_required_title">需要網際網路連線</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">主密碼（必填）</string>
     <string name="new_master_password_required">新增主密碼（必填）</string>
     <string name="more_options">更多選項</string>
+    <string name="my_folder">我的資料夾</string>
+    <string name="my_folders">我的資料夾</string>
     <string name="my_vault">我的密碼庫</string>
     <string name="name">名稱</string>
     <string name="item_name_required">項目名稱（必填）</string>
@@ -282,7 +284,9 @@
     <string name="vault_is_locked">密碼庫已鎖定</string>
     <string name="go_to_my_vault">前往我的密碼庫</string>
     <string name="collections">集合</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">共享資料夾</string>
+    <string name="no_items_collection">此集合中沒有項目。</string>
+    <string name="there_are_no_items_in_this_shared_folder">此共享資料夾中沒有項目。</string>
     <string name="no_items_folder">此資料夾中沒有項目。</string>
     <string name="no_items_trash">垃圾桶中沒有項目。</string>
     <string name="autofill_accessibility_summary">在其它應用程式及網頁上協助自動填寫使用者名稱和密碼。</string>
@@ -336,12 +340,16 @@
     <string name="move_up">上移</string>
     <string name="owner">擁有者</string>
     <string name="no_collections_to_list">沒有可顯示的集合。</string>
+    <string name="there_are_no_shared_folders_to_list">沒有可列出的共享資料夾。</string>
     <string name="moved_item_to_org">%1$s 已移動至 %2$s。</string>
     <string name="select_one_collection">您必須至少選擇一個集合。</string>
+    <string name="you_must_select_at_least_one_shared_folder">您必須至少選擇一個共享資料夾。</string>
     <string name="share">共用</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">移動至組織</string>
+    <string name="no_orgs_to_list">沒有可列出的組織。</string>
+    <string name="move_to_org_desc">選擇您希望將這個項目移動至哪個組織。項目的擁有權將會轉移至該組織。轉移之後，您將不再是此項目的直接擁有者。</string>
+    <string name="no_vaults_to_list">沒有可列出的保管庫。</string>
+    <string name="move_to_vault_desc">選擇您要將此項目移至的保管庫。移至另一個保管庫後，此項目的擁有權將移轉給該組織。項目移動後，您將不再是此項目的直接擁有者。</string>
     <string name="number_of_words">單字數量</string>
     <string name="passphrase">密碼短語</string>
     <string name="word_separator">單字分隔字元</string>
@@ -377,8 +385,8 @@
     <string name="pin_require_master_password_restart">當應用程式重新啟動時，是否要求使用主密碼解鎖？</string>
     <string name="ask_to_add_item">要求新增項目</string>
     <string name="ask_to_add_item_description">在密碼庫中找不到相符的項目時詢問是否新增項目。</string>
-    <string name="turn_on_fill_assist">Turn on fill assist</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
+    <string name="turn_on_fill_assist">啟用填入輔助</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">填入輔助會使用網站專屬規則，提高支援網站上的自動填入準確性。</string>
     <string name="on_restart">於程式重新啟動時</string>
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>
@@ -455,6 +463,7 @@
     <string name="deletion_date">刪除日期</string>
     <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">誰可以檢視</string>
     <string name="anyone_with_the_link">任何持有連結的人</string>
     <string name="anyone_with_link_can_view_send">任何持有此連結的人都可以檢視此 Send</string>
@@ -492,6 +501,7 @@
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
     <string name="seven_days">7 天</string>
+    <string name="fourteen_days">14 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自訂</string>
     <string name="custom_timeout">自訂逾時時間</string>
@@ -684,6 +694,7 @@
     <string name="logging_in_on">正登入到</string>
     <string name="logging_in_on_with_colon">正登入到：</string>
     <string name="vault">密碼庫</string>
+    <string name="select_vault">選擇保管庫</string>
     <string name="appearance">外觀</string>
     <string name="account_security">帳戶安全性</string>
     <string name="bitwarden_help_center">Bitwarden 幫助中心</string>
@@ -1271,13 +1282,13 @@
     <string name="upgrade_pending">升級處理中</string>
     <string name="upgrade_pending_message">您的升級正在處理中。在完成之前，您將維持免費方案。立即同步以進行檢查，或繼續操作，系統將自動更新。</string>
     <string name="unlock_premium_features">透過 Premium 方案解鎖更多進階功能。</string>
-    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
-    <string name="per_month_cancel_anytime_content_description">%1$s per month, cancel anytime</string>
+    <string name="per_month_cancel_anytime">/ 月 · 隨時可取消</string>
+    <string name="per_month_cancel_anytime_content_description">每月 %1$s，隨時可取消</string>
     <string name="built_in_authenticator">內建驗證器</string>
     <string name="emergency_access">緊急存取</string>
     <string name="secure_file_storage">安全檔案儲存</string>
     <string name="breach_monitoring">外洩監控</string>
-    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">您將透過 Stripe 安全結帳完成購買。</string>
     <string name="opening_checkout">正在開啟結帳頁面…</string>
     <string name="secure_checkout_didnt_load">安全結帳頁面未成功載入</string>
     <string name="trouble_opening_payment_page">開啟付款頁面時發生問題，請再試一次。</string>
@@ -1309,7 +1320,7 @@
     <string name="subscription_status_expired">已逾期</string>
     <string name="subscription_status_past_due">逾期</string>
     <string name="subscription_status_paused">已暫停</string>
-    <string name="subscription_status_unpaid">未付款</string>
+    <string name="subscription_status_unpaid">待付款</string>
     <string name="subscription_status_update_payment">更新付款方式</string>
     <string name="subscription_status_pending_cancellation">待取消</string>
     <string name="subscription_pending_cancellation_description">您的訂閱預計將於 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 取消。在此之前，您隨時都可以恢復訂閱。</string>
@@ -1397,15 +1408,15 @@
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">您的要求已中斷，因為應用程式需要本機網路存取權限。您可以在裝置設定中啟用此權限。</string>
     <string name="continue_to_stripe">要前往 Stripe 嗎？</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">您將前往 Stripe 管理您的訂閱取消事宜。</string>
-    <string name="unlock_advanced_protection">Unlock advanced protection</string>
-    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
-    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
-    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
-    <string name="identify_unsecure_websites">Identify unsecure websites</string>
-    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
-    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
-    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
-    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="unlock_advanced_protection">解鎖進階防護功能</string>
+    <string name="breeze_through_2fa_with_built_in_codes">使用內建驗證碼輕鬆完成雙重驗證</string>
+    <string name="run_reports_to_find_risky_passwords">執行報表以找出高風險密碼</string>
+    <string name="add_a_trusted_emergency_contact">新增可信任的緊急聯絡人</string>
+    <string name="identify_unsecure_websites">識別不安全的網站</string>
+    <string name="flag_accounts_with_inactive_2fa">標示未啟用雙重驗證的帳戶</string>
+    <string name="keep_documents_safe_and_encrypted">安全加密保存文件</string>
+    <string name="share_files_securely_with_anyone_using_send">使用 Send 安全地與任何人分享檔案</string>
+    <string name="receive_24_7_priority_support">享有全年無休的優先支援</string>
+    <string name="account_creation_restricted">帳戶建立受到限制</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s 僅允許受邀使用者建立帳戶。</string>
 </resources>

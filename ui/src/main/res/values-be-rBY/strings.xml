@@ -24,8 +24,8 @@
     <string name="folder_created">Створана новая папка.</string>
     <string name="folder_deleted">Папка выдалена.</string>
     <string name="folder_none">Без папкі</string>
-    <string name="folders">Папкі</string>
     <string name="folder_updated">Папка абноўлена.</string>
+    <string name="folders">Папкі</string>
     <string name="hide">Схаваць</string>
     <string name="internet_connection_required_message">Калі ласка, спачатку падлучыце інтэрнэт.</string>
     <string name="internet_connection_required_title">Патрабуецца доступ да інтэрнэту</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Галоўны пароль (абавязкова)</string>
     <string name="new_master_password_required">Новы галоўны пароль (абавязкова)</string>
     <string name="more_options">Дадатковыя параметры</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Маё сховішча</string>
     <string name="name">Назва</string>
     <string name="item_name_required">Назва элемента (абавязкова)</string>
@@ -284,7 +286,9 @@
     <string name="vault_is_locked">Сховішча заблакіравана</string>
     <string name="go_to_my_vault">Перайсці ў сховішча</string>
     <string name="collections">Калекцыі</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">У гэтай калекцыі няма элементаў.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">У гэтай папцы адсутнічаюць элементы.</string>
     <string name="no_items_trash">У сметніцы адсутнічаюць элементы.</string>
     <string name="autofill_accessibility_summary">Дапамагае запаўняць палі імя карыстальніка і пароля ў іншых праграмах і ў інтэрнэце.</string>
@@ -341,12 +345,16 @@
     <string name="move_up">Перамясціць уверх</string>
     <string name="owner">Уладальнік</string>
     <string name="no_collections_to_list">У спісе адсутнічаюць калекцыі.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s перамешчана ў %2$s.</string>
     <string name="select_one_collection">Вы павінны выбраць прынамсі адну калекцыю.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Абагуліць</string>
-    <string name="move_to_vault">Перамясціць у сховішча</string>
-    <string name="no_vaults_to_list">Няма сховішчаў для спісу.</string>
-    <string name="move_to_vault_desc">Выберыце сховішча, у якое хочаце перамясціць гэты элемент. Перамяшчэнне ў іншае сховішча перадае правы ўласнасці на элемент гэтай арганізацыі. Пасля перамяшчэння вы больш не будзеце прамым уладальнікам гэтага элемента.</string>
+    <string name="move_to_organization">Перамясціць у арганізацыю</string>
+    <string name="no_orgs_to_list">Няма арганізацый для паказу.</string>
+    <string name="move_to_org_desc">Выберыце арганізацыю, у якую вы хочаце перамясціць гэты элемент. Пры перамяшчэнні ў арганізацыю ўсе правы ўласнасці на дадзены элемент пяройдуць да гэтай арганізацыі. Вы больш не будзеце адзіным уласнікам гэтага элемента пасля яго перамяшчэння.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Колькасць слоў</string>
     <string name="passphrase">Парольная фраза</string>
     <string name="word_separator">Раздзяляльнік слоў</string>
@@ -460,6 +468,7 @@
     <string name="deletion_date">Дата выдалення</string>
     <string name="deletion_time">Час выдалення</string>
     <string name="deletion_date_info">Send будзе незваротна выдалены ў азначаныя дату і час.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Хто можа праглядаць</string>
     <string name="anyone_with_the_link">Хто заўгодна са спасылкай</string>
     <string name="anyone_with_link_can_view_send">Усе, у каго ёсць гэтая спасылка, могуць праглядаць гэты Send</string>
@@ -497,6 +506,7 @@
     <string name="two_days">2 дні</string>
     <string name="three_days">3 дні</string>
     <string name="seven_days">7 дзён</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 дзён</string>
     <string name="custom">Карыстальніцкі</string>
     <string name="custom_timeout">Карыстальніцкі тайм-аўт</string>
@@ -691,6 +701,7 @@
     <string name="logging_in_on">Увайсці на</string>
     <string name="logging_in_on_with_colon">Уваход на:</string>
     <string name="vault">Сховішча</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Знешні выгляд</string>
     <string name="account_security">Бяспеке акаўнта</string>
     <string name="bitwarden_help_center">Даведачны цэнтр Bitwarden</string>

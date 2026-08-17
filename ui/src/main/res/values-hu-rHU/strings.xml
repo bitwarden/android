@@ -24,8 +24,8 @@
     <string name="folder_created">Új mappa létrehozva.</string>
     <string name="folder_deleted">A mappa törlése megtörtént.</string>
     <string name="folder_none">Nincs mappa</string>
-    <string name="folders">Mappák</string>
     <string name="folder_updated">A mappa mentésre került.</string>
+    <string name="folders">Mappák</string>
     <string name="hide">Elrejt</string>
     <string name="internet_connection_required_message">Csatlakozzunk az internetre a folytatás előtt.</string>
     <string name="internet_connection_required_title">Internetkapcsolat szükséges</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Mesterjelszó (kötelező)</string>
     <string name="new_master_password_required">Új mesterjelszó (kötelező)</string>
     <string name="more_options">További opciók</string>
+    <string name="my_folder">Saját mappa</string>
+    <string name="my_folders">Saját mappák</string>
     <string name="my_vault">Saját széf</string>
     <string name="name">Név</string>
     <string name="item_name_required">Elem név (kötelező)</string>
@@ -282,7 +284,9 @@
     <string name="vault_is_locked">A széf zárolva van.</string>
     <string name="go_to_my_vault">Saját széf megnyitása</string>
     <string name="collections">Gyűjtemények</string>
+    <string name="shared_folders">Megosztott mappák</string>
     <string name="no_items_collection">Nincsenek elemek ebben a gyűjteményben.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Nincsenek elemek ebben a megosztott mappában.</string>
     <string name="no_items_folder">Nincsenek elemek ebben a mappában.</string>
     <string name="no_items_trash">Nincs elem a lomtárban.</string>
     <string name="autofill_accessibility_summary">Segítségnyújtás a felhasználónév és jelszó mezők kitöltésében más alkalmazásokban és a weben.</string>
@@ -337,10 +341,14 @@
     <string name="move_up">Felfelé mozgatás</string>
     <string name="owner">Tulajdonos</string>
     <string name="no_collections_to_list">Nincsenek megjeleníthető gyűjtemények.</string>
+    <string name="there_are_no_shared_folders_to_list">Nincsenek listázható megosztott mappák.</string>
     <string name="moved_item_to_org">%1$s áthelyezésre került: %2$s.</string>
     <string name="select_one_collection">Legalább egy gyűjteményt ki kell választani.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Legalább egy megosztott mappát ki kell választani.</string>
     <string name="share">Megosztás</string>
-    <string name="move_to_vault">Áthelyezés széfbe</string>
+    <string name="move_to_organization">Áthelyezés szervezetbe</string>
+    <string name="no_orgs_to_list">Nincs megjeleníthető szervezet.</string>
+    <string name="move_to_org_desc">Válasszunk egy szervezetet, ahová áthelyezni szeretnénk ezt az elemet. A szervezetbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
     <string name="no_vaults_to_list">Nincsenek listázandó széfek.</string>
     <string name="move_to_vault_desc">Válasszunk egy széfet, ahová áthelyezni szeretnénk ezt az elemet. A széfbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
     <string name="number_of_words">Szavak száma</string>
@@ -456,6 +464,7 @@
     <string name="deletion_date">Törlési dátum</string>
     <string name="deletion_time">Törlési időpont</string>
     <string name="deletion_date_info">A Send véglegesen törlésre kerül a meghatározott időpontban.</string>
+    <string name="this_date_is_enforced_by_your_organization">Ezt a dátumot a szervezet erőlteti.</string>
     <string name="who_can_view">Ki láthatja</string>
     <string name="anyone_with_the_link">Bárki ezzel a hivatkozással</string>
     <string name="anyone_with_link_can_view_send">Bárki ezzel a hivatkozással megtekintheti ezt a Send elemet.</string>
@@ -493,6 +502,7 @@
     <string name="two_days">2 nap</string>
     <string name="three_days">3 nap</string>
     <string name="seven_days">7 nap</string>
+    <string name="fourteen_days">14 nap</string>
     <string name="thirty_days">30 nap</string>
     <string name="custom">Egyedi</string>
     <string name="custom_timeout">Egyedi időkifutás</string>
@@ -530,7 +540,7 @@
     </plurals>
     <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">A szervezet a maximális munkamenet időkifutást %1$s és %2$s értékre állította.</string>
     <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">A szervezet a maximális munkamenet időkifutást %1$s értékre állította.</string>
-    <string name="this_setting_is_managed_by_your_organization">Ezt a beállítást a szervezet lezeli.</string>
+    <string name="this_setting_is_managed_by_your_organization">Ezt a beállítást a szervezet kezeli.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_never">A szervezet a maximális munkamenet időkifutást soha értékre állította.</string>
     <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">A szervezet a maximális munkamenet időkifutást alkalmazás újraindítás értékre állította.</string>
     <string name="vault_timeout_to_large">A széf időkorlátja túllépi a szervezet által beállított korlátozást.</string>
@@ -686,6 +696,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="logging_in_on">Bejelentkezés:</string>
     <string name="logging_in_on_with_colon">Bejelentkezés:</string>
     <string name="vault">Széf</string>
+    <string name="select_vault">Széf választás</string>
     <string name="appearance">Megjelenés</string>
     <string name="account_security">Fiókbiztonság</string>
     <string name="bitwarden_help_center">Bitwarden Segítségközpont</string>

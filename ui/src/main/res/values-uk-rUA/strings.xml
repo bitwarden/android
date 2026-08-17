@@ -24,8 +24,8 @@
     <string name="folder_created">Нову теку створено.</string>
     <string name="folder_deleted">Теку видалено.</string>
     <string name="folder_none">Без теки</string>
-    <string name="folders">Теки</string>
     <string name="folder_updated">Теку збережено</string>
+    <string name="folders">Теки</string>
     <string name="hide">Приховати</string>
     <string name="internet_connection_required_message">Щоб продовжити, під\'єднайтеся до інтернету.</string>
     <string name="internet_connection_required_title">Необхідно під\'єднатися до інтернету</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Головний пароль (обов\'язково)</string>
     <string name="new_master_password_required">Новий головний пароль (обов\'язково)</string>
     <string name="more_options">Інші варіанти</string>
+    <string name="my_folder">Моя тека</string>
+    <string name="my_folders">Мої теки</string>
     <string name="my_vault">Моє сховище</string>
     <string name="name">Назва</string>
     <string name="item_name_required">Назва запису (обов\'язково)</string>
@@ -285,7 +287,9 @@
     <string name="vault_is_locked">Сховище заблоковано</string>
     <string name="go_to_my_vault">Перейти в моє сховище</string>
     <string name="collections">Збірки</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">Спільні теки</string>
+    <string name="no_items_collection">У цій збірці немає записів.</string>
+    <string name="there_are_no_items_in_this_shared_folder">У цій спільній теці немає записів.</string>
     <string name="no_items_folder">У цій теці немає записів.</string>
     <string name="no_items_trash">У смітнику немає записів.</string>
     <string name="autofill_accessibility_summary">Допомога із заповненням полів імені користувача і пароля в інших програмах і в інтернеті.</string>
@@ -342,12 +346,16 @@
     <string name="move_up">Перемістити вгору</string>
     <string name="owner">Власник</string>
     <string name="no_collections_to_list">Немає збірок.</string>
+    <string name="there_are_no_shared_folders_to_list">Немає спільних тек для показу.</string>
     <string name="moved_item_to_org">%1$s переміщено до %2$s.</string>
     <string name="select_one_collection">Необхідно вибрати принаймні одну збірку.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Необхідно вибрати принаймні одну спільну теку.</string>
     <string name="share">Поділитися</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="move_to_organization">Перемістити до організації</string>
+    <string name="no_orgs_to_list">Немає організацій.</string>
+    <string name="move_to_org_desc">Виберіть організацію, до якої ви бажаєте перемістити цей запис. Переміщуючи до організації, власність запису передається тій організації. Ви більше не будете єдиним власником цього запису після переміщення.</string>
+    <string name="no_vaults_to_list">Немає сховищ для показу.</string>
+    <string name="move_to_vault_desc">Виберіть сховище, до якого ви бажаєте перемістити цей запис. Переміщення до іншого сховища передає власність запису тій організації. Ви більше не будете єдиним власником цього запису після переміщення.</string>
     <string name="number_of_words">Кількість слів</string>
     <string name="passphrase">Парольна фраза</string>
     <string name="word_separator">Розділювач слів</string>
@@ -383,8 +391,8 @@
     <string name="pin_require_master_password_restart">Ви хочете вимагати розблокування головним паролем при перезапуску програми?</string>
     <string name="ask_to_add_item">Запитувати про додавання запису</string>
     <string name="ask_to_add_item_description">Запитувати про додавання запису, якщо його немає у вашому сховищі.</string>
-    <string name="turn_on_fill_assist">Turn on fill assist</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
+    <string name="turn_on_fill_assist">Увімкнути помічник із заповнення</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Помічник із заповнення покращує точність автозаповнення на підтримуваних сайтах, використовуючи специфічні правила для кожного сайту.</string>
     <string name="on_restart">Під час перезапуску програми</string>
     <string name="capitalize">Великі літери</string>
     <string name="include_number">Включити число</string>
@@ -461,6 +469,7 @@
     <string name="deletion_date">Термін дії</string>
     <string name="deletion_time">Час видалення</string>
     <string name="deletion_date_info">Відправлення буде остаточно видалено у вказаний час.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Хто може переглядати</string>
     <string name="anyone_with_the_link">Будь-хто з посиланням</string>
     <string name="anyone_with_link_can_view_send">Будь-хто з цим посиланням може переглядати це відправлення</string>
@@ -498,6 +507,7 @@
     <string name="two_days">2 дні</string>
     <string name="three_days">3 дні</string>
     <string name="seven_days">7 днів</string>
+    <string name="fourteen_days">14 днів</string>
     <string name="thirty_days">30 днів</string>
     <string name="custom">Власний</string>
     <string name="custom_timeout">Власний час очікування</string>
@@ -695,6 +705,7 @@
     <string name="logging_in_on">Увійти на</string>
     <string name="logging_in_on_with_colon">Вхід на:</string>
     <string name="vault">Сховище</string>
+    <string name="select_vault">Виберіть сховище</string>
     <string name="appearance">Подання</string>
     <string name="account_security">Безпека облікового запису</string>
     <string name="bitwarden_help_center">Довідковий центр Bitwarden</string>
@@ -1436,6 +1447,6 @@
     <string name="keep_documents_safe_and_encrypted">Зберігайте документи в безпеці та зашифрованому вигляді</string>
     <string name="share_files_securely_with_anyone_using_send">Безпечно обмінюйтесь файлами з ким завгодно за допомогою відправлень</string>
     <string name="receive_24_7_priority_support">Отримуйте цілодобову пріоритетну підтримку</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="account_creation_restricted">Створення облікових записів обмежено</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s дозволяє створювати облікові записи тільки запрошеним користувачам.</string>
 </resources>

@@ -24,8 +24,8 @@
     <string name="folder_created">Nova mapa stvorena.</string>
     <string name="folder_deleted">Mapa izbrisana.</string>
     <string name="folder_none">Nema mape</string>
-    <string name="folders">Mape</string>
     <string name="folder_updated">Mapa ažurirana</string>
+    <string name="folders">Mape</string>
     <string name="hide">Sakrij</string>
     <string name="internet_connection_required_message">Spoji se na internet prije nastavka.</string>
     <string name="internet_connection_required_title">Potrebna je veza s internetom</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Glavna lozinka (obavezno)</string>
     <string name="new_master_password_required">Nova glavna lozinka (obavezno)</string>
     <string name="more_options">Više mogućnosti</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Moj trezor</string>
     <string name="name">Naziv</string>
     <string name="item_name_required">Naziv stavke (obavezno)</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">Trezor je zaključan</string>
     <string name="go_to_my_vault">Uđi u moj trezor</string>
     <string name="collections">Zbirke</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nema stavki u ovoj mapi.</string>
     <string name="no_items_trash">Nema stavki u smeću.</string>
     <string name="autofill_accessibility_summary">Pomoć pri ispunjavanju polja za korisničko ime i lozinku u drugim aplikacijama i na webu.</string>
@@ -339,10 +343,14 @@
     <string name="move_up">Pomakni gore</string>
     <string name="owner">Vlasnik</string>
     <string name="no_collections_to_list">Nema zbirki za prikaz.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s premješteno u %2$s.</string>
     <string name="select_one_collection">Moraš odabrati barem jednu zbirku.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Podijeli</string>
-    <string name="move_to_vault">Move to vault</string>
+    <string name="move_to_organization">Premjesti u organizaciju</string>
+    <string name="no_orgs_to_list">Nema organizacija za prikaz.</string>
+    <string name="move_to_org_desc">Odaberi organizaciju u koju želiš premjestiti ovu stavku. Premještanje prenosi vlasništvo stavke na organizaciju. Nakon premještanja više nećeš biti izravni vlasnik ove stavke.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Broj riječi</string>
@@ -458,6 +466,7 @@
     <string name="deletion_date">Obriši za</string>
     <string name="deletion_time">Vrijeme brisanja</string>
     <string name="deletion_date_info">Send će nakon navedenog vremena biti trajno izbrisan.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Tko može pogledati</string>
     <string name="anyone_with_the_link">Svatko s poveznicom</string>
     <string name="anyone_with_link_can_view_send">Bilo tko s ovom poveznicom može pogledati ovaj Send</string>
@@ -495,6 +504,7 @@
     <string name="two_days">2 dana</string>
     <string name="three_days">3 dana</string>
     <string name="seven_days">7 dana</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 dana</string>
     <string name="custom">Prilagođeno</string>
     <string name="custom_timeout">Osobni istek</string>
@@ -689,6 +699,7 @@
     <string name="logging_in_on">Prijava na</string>
     <string name="logging_in_on_with_colon">Prijava na:</string>
     <string name="vault">Trezor</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Izgled</string>
     <string name="account_security">Sigurnost računa</string>
     <string name="bitwarden_help_center">Bitwarden centar za pomoć</string>

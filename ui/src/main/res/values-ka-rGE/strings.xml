@@ -24,8 +24,8 @@
     <string name="folder_created">ახალი პაპკა შეიქმნა.</string>
     <string name="folder_deleted">პაპკა წაიშალა.</string>
     <string name="folder_none">პაპკის გარეშე</string>
-    <string name="folders">პაპკები</string>
     <string name="folder_updated">პაპკა შენახულია</string>
+    <string name="folders">პაპკები</string>
     <string name="hide">დამალვა</string>
     <string name="internet_connection_required_message">გაგრძელებამდე, გთხოვთ, დაუკავშირდეთ ინტერნეტს.</string>
     <string name="internet_connection_required_title">საჭიროა ინტერნეტთან კავშირი</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">მთავარი პაროლი (სავალდებულო)</string>
     <string name="new_master_password_required">ახალი მთავარი პაროლი (სავალდებულო)</string>
     <string name="more_options">მეტი ვარიანტი</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">ჩემი სეიფი</string>
     <string name="name">სახელი</string>
     <string name="item_name_required">ჩანაწერის სახელი (სავალდებულო)</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">სეიფი დაბლოკილია</string>
     <string name="go_to_my_vault">ჩემს სეიფში გადასვლა</string>
     <string name="collections">კოლექციები</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">ამ კოლექციაში ჩანაწერები არ არის.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">ამ პაპკაში ჩანაწერები არ არის.</string>
     <string name="no_items_trash">ნაგავში ჩანაწერები არ არის.</string>
     <string name="autofill_accessibility_summary">დახმარება მომხმარებლის სახელისა და პაროლის ველების შევსებაში სხვა აპლიკაციებსა და ვებში.</string>
@@ -338,12 +342,16 @@
     <string name="move_up">ზემოთ გადატანა</string>
     <string name="owner">მფლობელი</string>
     <string name="no_collections_to_list">გამოსატანი კოლექციები არ არის.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s გადატანილია %2$s-ში.</string>
     <string name="select_one_collection">უნდა აირჩიოთ მინიმუმ ერთი კოლექცია.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">გაზიარება</string>
-    <string name="move_to_vault">სეიფში გადატანა</string>
-    <string name="no_vaults_to_list">გამოსატანი სეიფები არ არის.</string>
-    <string name="move_to_vault_desc">აირჩიეთ სეიფი, რომელშიც გსურთ ამ ჩანაწერის გადატანა. სხვა სეიფში გადატანა გადასცემს ჩანაწერის საკუთრებას იმ ორგანიზაციას. გადატანის შემდეგ, თქვენ აღარ იქნებით ამ ჩანაწერის პირდაპირი მფლობელი.</string>
+    <string name="move_to_organization">ორგანიზაციაში გადატანა</string>
+    <string name="no_orgs_to_list">გამოსატანი ორგანიზაციები არ არის.</string>
+    <string name="move_to_org_desc">აირჩიეთ ორგანიზაცია, რომელშიც გსურთ ამ ჩანაწერის გადატანა. ორგანიზაციაში გადატანა გადასცემს ჩანაწერის საკუთრებას ამ ორგანიზაციას. გადატანის შემდეგ, თქვენ აღარ იქნებით ამ ჩანაწერის პირდაპირი მფლობელი.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">სიტყვების რაოდენობა</string>
     <string name="passphrase">ფრაზა</string>
     <string name="word_separator">სიტყვების გამყოფი</string>
@@ -457,6 +465,7 @@
     <string name="deletion_date">წაშლის თარიღი</string>
     <string name="deletion_time">წაშლის დრო</string>
     <string name="deletion_date_info">Send საბოლოოდ წაიშლება მითითებულ თარიღსა და დროს.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">ვის შეუძლია ნახვა</string>
     <string name="anyone_with_the_link">ნებისმიერი ბმულით</string>
     <string name="anyone_with_link_can_view_send">ნებისმიერ ამ ბმულის მქონე პირს შეუძლია ამ Send-ის ნახვა</string>
@@ -494,6 +503,7 @@
     <string name="two_days">2 დღე</string>
     <string name="three_days">3 დღე</string>
     <string name="seven_days">7 დღე</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 დღე</string>
     <string name="custom">მორგებული</string>
     <string name="custom_timeout">მორგებული ვადა</string>
@@ -687,6 +697,7 @@
     <string name="logging_in_on">შესვლა მოწყობილობაზე</string>
     <string name="logging_in_on_with_colon">შესვლა მოწყობილობაზე:</string>
     <string name="vault">სეიფი</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">გარეგნობა</string>
     <string name="account_security">ანგარიშის უსაფრთხოება</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>

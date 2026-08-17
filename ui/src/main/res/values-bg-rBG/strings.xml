@@ -24,8 +24,8 @@
     <string name="folder_created">Папката е създадена.</string>
     <string name="folder_deleted">Папката е изтрита.</string>
     <string name="folder_none">Няма папка</string>
-    <string name="folders">Папки</string>
     <string name="folder_updated">Папката е обновена.</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скриване</string>
     <string name="internet_connection_required_message">Свържете се с Интернет, за да продължите.</string>
     <string name="internet_connection_required_title">Необходима е връзка към Интернет</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Главна парола (задължително)</string>
     <string name="new_master_password_required">Нова главна парола (задължително)</string>
     <string name="more_options">Още настройки</string>
+    <string name="my_folder">Моята папка</string>
+    <string name="my_folders">Моите папки</string>
     <string name="my_vault">Моят трезор</string>
     <string name="name">Име</string>
     <string name="item_name_required">Име на елемента (задължително)</string>
@@ -283,7 +285,9 @@
     <string name="vault_is_locked">Трезорът е заключен</string>
     <string name="go_to_my_vault">Към трезора</string>
     <string name="collections">Колекции</string>
+    <string name="shared_folders">Споделени папки</string>
     <string name="no_items_collection">Няма елементи в тази колекция.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Няма елементи в тази споделена папка.</string>
     <string name="no_items_folder">Няма елементи в тази папка.</string>
     <string name="no_items_trash">Няма записи в кошчето.</string>
     <string name="autofill_accessibility_summary">Помощ с попълването на полета за потребителско име и парола в други приложения и в уеб сайтове.</string>
@@ -338,10 +342,14 @@
     <string name="move_up">Преместване нагоре</string>
     <string name="owner">Собственик</string>
     <string name="no_collections_to_list">Няма колекции за показване.</string>
+    <string name="there_are_no_shared_folders_to_list">Няма споделени папки за показване.</string>
     <string name="moved_item_to_org">%1$s се премести в %2$s.</string>
     <string name="select_one_collection">Изберете поне една колекция.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Изберете поне една споделена папка.</string>
     <string name="share">Споделяне</string>
-    <string name="move_to_vault">Преместване в трезора</string>
+    <string name="move_to_organization">Преместване в организация</string>
+    <string name="no_orgs_to_list">Няма организации за показване.</string>
+    <string name="move_to_org_desc">Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</string>
     <string name="no_vaults_to_list">Няма трезори за показване.</string>
     <string name="move_to_vault_desc">Изберете трезор, в която искате да преместите записа. Преместването към друг трезор прехвърля собствеността му към съответната организация. След това няма вече директно да го притежавате.</string>
     <string name="number_of_words">Брой думи</string>
@@ -457,6 +465,7 @@
     <string name="deletion_date">Дата на изтриване</string>
     <string name="deletion_time">Време на изтриване</string>
     <string name="deletion_date_info">Изпращането ще бъде окончателно изтрито на зададената дата и време.</string>
+    <string name="this_date_is_enforced_by_your_organization">Тази дата е наложена от организацията Ви</string>
     <string name="who_can_view">Кой може да преглежда</string>
     <string name="anyone_with_the_link">Всеки с връзката</string>
     <string name="anyone_with_link_can_view_send">Всеки с тази връзка може да види това Изпращане</string>
@@ -494,6 +503,7 @@
     <string name="two_days">2 дни</string>
     <string name="three_days">3 дни</string>
     <string name="seven_days">7 дни</string>
+    <string name="fourteen_days">14 дни</string>
     <string name="thirty_days">30 дни</string>
     <string name="custom">По избор</string>
     <string name="custom_timeout">Персонализирано време за достъп</string>
@@ -687,6 +697,7 @@
     <string name="logging_in_on">Вписване в</string>
     <string name="logging_in_on_with_colon">Вписване в:</string>
     <string name="vault">Трезор</string>
+    <string name="select_vault">Изберете трезор</string>
     <string name="appearance">Външен вид</string>
     <string name="account_security">Защита на регистрацията</string>
     <string name="bitwarden_help_center">Помощен център на Битуорден</string>
