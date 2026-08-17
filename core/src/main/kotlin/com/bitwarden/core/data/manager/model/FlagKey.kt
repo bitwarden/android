@@ -188,8 +188,8 @@ sealed class FlagKey<out T : Any> {
      * work.
      */
     data object Vfo1Foundation : FlagKey<Boolean>() {
-        override val keyName: String = "vfo1-foundation"
-        override val defaultValue: Boolean = false
+        override val keyName: String = "vfo1-foundation-wrong"
+        override val defaultValue: Boolean = true
     }
 
     /**
