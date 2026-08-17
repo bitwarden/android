@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
@@ -49,6 +51,35 @@ class SendViewExtensionsTest {
             ),
             result,
         )
+    }
+    @Test
+    fun `toSendAuth should use a password when the original has one`() {
+        val sendView = createMockSendView(number = 1, hasPassword = true)
+
+        assertEquals(SendAuth.Password, sendView.toSendAuth())
+    }
+
+    @Test
+    fun `toSendAuth should carry over the original recipients`() {
+        val sendView = createMockSendView(number = 1, hasPassword = false)
+            .copy(emails = listOf("one@example.com", "two@example.com"))
+
+        assertEquals(
+            SendAuth.Email(
+                emails = persistentListOf(
+                    AuthEmail(value = "one@example.com"),
+                    AuthEmail(value = "two@example.com"),
+                ),
+            ).emails.map { it.value },
+            (sendView.toSendAuth() as SendAuth.Email).emails.map { it.value },
+        )
+    }
+
+    @Test
+    fun `toSendAuth should use link access when the original has neither`() {
+        val sendView = createMockSendView(number = 1, hasPassword = false)
+
+        assertEquals(SendAuth.None, sendView.toSendAuth())
     }
 }
 

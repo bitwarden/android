@@ -9,6 +9,18 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import kotlinx.collections.immutable.toImmutableList
 
 /**
+ * Returns the [SendAuth] describing who this Send is shared with.
+ */
+fun SendView.toSendAuth(): SendAuth = when {
+    hasPassword -> SendAuth.Password
+    emails.isNotEmpty() -> {
+        SendAuth.Email(emails = this.emails.map { AuthEmail(value = it) }.toImmutableList())
+    }
+
+    else -> SendAuth.None
+}
+
+/**
  * Transforms [SendView] into [AddEditSendState.ViewState.Content].
  */
 fun SendView.toViewState(
@@ -32,16 +44,7 @@ fun SendView.toViewState(
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
             isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-            sendAuth = when {
-                hasPassword -> SendAuth.Password
-                emails.isNotEmpty() -> {
-                    SendAuth.Email(
-                        emails = this.emails.map { AuthEmail(value = it) }.toImmutableList(),
-                    )
-                }
-
-                else -> SendAuth.None
-            },
+            sendAuth = toSendAuth(),
         ),
         selectedType = when (type) {
             SendType.TEXT -> {
