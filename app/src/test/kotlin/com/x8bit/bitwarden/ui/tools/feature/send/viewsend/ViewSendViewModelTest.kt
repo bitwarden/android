@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -12,7 +13,10 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -51,6 +55,20 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     private val environmentRepository = mockk<EnvironmentRepository> {
         every { environment } returns Environment.Prod.Us
     }
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
+    private val policyManager = mockk<PolicyManager> {
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
+    }
+    private val mutableSendControlsFlagFlow = MutableStateFlow(false)
+    private val mutableExistingSendsFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlagFlow(key = FlagKey.SendControls)
+        } returns mutableSendControlsFlagFlow
+        every {
+            getFeatureFlagFlow(key = FlagKey.SendControlsExistingSends)
+        } returns mutableExistingSendsFlagFlow
+    }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
@@ -84,6 +102,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
 
     @Test
     fun `on CloseClick should send NavigateBack`() = runTest {
@@ -462,6 +481,8 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
+        policyManager = policyManager,
         snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)
@@ -491,6 +512,19 @@ private val DEFAULT_STATE = ViewSendState(
     viewState = ViewSendState.ViewState.Loading,
     dialogState = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
+    allowedSendTypes = null,
+    isSendDisabled = false,
+    isSendControlsEnabled = false,
+    isSendControlsExistingSendsEnabled = false,
+)
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -14,14 +16,20 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -36,7 +44,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the view send screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class ViewSendViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
@@ -44,6 +52,8 @@ class ViewSendViewModel @Inject constructor(
     private val clock: Clock,
     private val vaultRepository: VaultRepository,
     environmentRepository: EnvironmentRepository,
+    featureFlagManager: FeatureFlagManager,
+    policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ViewSendState, ViewSendEvent, ViewSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -55,6 +65,10 @@ class ViewSendViewModel @Inject constructor(
             viewState = ViewSendState.ViewState.Loading,
             dialogState = null,
             baseWebSendUrl = environmentRepository.environment.baseWebSendUrl,
+            allowedSendTypes = null,
+            isSendDisabled = false,
+            isSendControlsEnabled = false,
+            isSendControlsExistingSendsEnabled = false,
         )
     },
 ) {
@@ -67,6 +81,22 @@ class ViewSendViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.SEND_UPDATED)
             .map { ViewSendAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        // The effective policy itself depends on the feature flags, so all three are observed
+        // together to keep the derived restriction consistent whenever any one of them changes.
+        combine(
+            policyManager.getEffectiveSendPolicyFlow(),
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControls),
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControlsExistingSends),
+        ) { effectiveSendPolicy, isSendControlsEnabled, isSendControlsExistingSendsEnabled ->
+            ViewSendAction.Internal.EffectiveSendPolicyReceive(
+                effectiveSendPolicy = effectiveSendPolicy,
+                isSendControlsEnabled = isSendControlsEnabled,
+                isSendControlsExistingSendsEnabled = isSendControlsExistingSendsEnabled,
+            )
+        }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -88,7 +118,23 @@ class ViewSendViewModel @Inject constructor(
         when (action) {
             is ViewSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
             is ViewSendAction.Internal.DeleteResultReceive -> handleDeleteResultReceive(action)
+            is ViewSendAction.Internal.EffectiveSendPolicyReceive -> {
+                handleEffectiveSendPolicyReceive(action)
+            }
+
             is ViewSendAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
+        }
+    }
+
+    private fun handleEffectiveSendPolicyReceive(
+        action: ViewSendAction.Internal.EffectiveSendPolicyReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                allowedSendTypes = action.effectiveSendPolicy.allowedSendTypes,
+                isSendControlsEnabled = action.isSendControlsEnabled,
+                isSendControlsExistingSendsEnabled = action.isSendControlsExistingSendsEnabled,
+            )
         }
     }
 
@@ -218,6 +264,7 @@ class ViewSendViewModel @Inject constructor(
     private fun updateStateWithSendView(sendView: SendView) {
         mutableStateFlow.update {
             it.copy(
+                isSendDisabled = sendView.disabled,
                 viewState = sendView.toViewSendViewStateContent(
                     baseWebSendUrl = it.baseWebSendUrl,
                     clock = clock,
@@ -239,6 +286,14 @@ class ViewSendViewModel @Inject constructor(
 
 /**
  * Models state for the new send screen.
+ *
+ * @property allowedSendTypes The types of Sends that are allowed to exist, sourced from
+ * [EffectiveSendPolicy.allowedSendTypes]. A `null` value means no type restriction is in effect.
+ * @property isSendDisabled Whether the server has marked this Send disabled.
+ * @property isSendControlsEnabled Whether the SendControls policy is in effect, which is what makes
+ * a disabled Send attributable to that policy.
+ * @property isSendControlsExistingSendsEnabled Whether enforcement against Sends that predate the
+ * policy is enabled.
  */
 @Parcelize
 data class ViewSendState(
@@ -247,6 +302,10 @@ data class ViewSendState(
     val viewState: ViewState,
     val dialogState: DialogState?,
     val baseWebSendUrl: String,
+    val allowedSendTypes: List<SendTypeJson>?,
+    val isSendDisabled: Boolean,
+    val isSendControlsEnabled: Boolean,
+    val isSendControlsExistingSendsEnabled: Boolean,
 ) : Parcelable {
     /**
      * Helper to determine the screen display name.
@@ -258,9 +317,37 @@ data class ViewSendState(
         }
 
     /**
-     * Whether the fab is visible.
+     * Helper to determine how the SendControls policy restricts this Send, or `null` when it is
+     * unrestricted and the screen behaves as it always has.
+     *
+     * A Send is only treated as policy-restricted while both feature flags are enabled, since
+     * `disabled` is also set when the Send is deactivated by hand on another client.
      */
-    val isFabVisible: Boolean get() = viewState is ViewState.Content
+    val policyRestriction: SendPolicyRestriction?
+        get() = when {
+            !isSendControlsExistingSendsEnabled || !isSendControlsEnabled -> null
+            !isSendDisabled -> null
+            // A file send is reported as simply non-compliant even when its type is also
+            // disallowed, since its attachment cannot be uploaded again either way.
+            sendType == SendItemType.FILE -> SendPolicyRestriction.FileNotCompliant
+            !isSendTypeAllowed -> SendPolicyRestriction.TypeNotAllowed
+            else -> SendPolicyRestriction.CopyRequired
+        }
+
+    /**
+     * Whether the fab is visible. A policy-restricted Send cannot be edited, so it has no fab.
+     */
+    val isFabVisible: Boolean
+        get() = viewState is ViewState.Content && policyRestriction == null
+
+    /**
+     * Whether this Send's type is still allowed by the policy.
+     */
+    private val isSendTypeAllowed: Boolean
+        get() = allowedSendTypes
+            ?.map { it.toSendItemType() }
+            ?.contains(sendType)
+            ?: true
 
     /**
      * Represents the specific view states for the view send screen.
@@ -418,6 +505,16 @@ sealed class ViewSendAction {
          * Indicates a result for deleting the send has been received.
          */
         data class DeleteResultReceive(val result: DeleteSendResult) : Internal()
+
+        /**
+         * Indicates that the effective Send policy, or either feature flag it depends on, has
+         * changed.
+         */
+        data class EffectiveSendPolicyReceive(
+            val effectiveSendPolicy: EffectiveSendPolicy,
+            val isSendControlsEnabled: Boolean,
+            val isSendControlsExistingSendsEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the send item data has been received.

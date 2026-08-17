@@ -357,4 +357,8 @@ private val DEFAULT_STATE = ViewSendState(
     viewState = DEFAULT_CONTENT_VIEW_STATE,
     dialogState = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
+    allowedSendTypes = null,
+    isSendDisabled = false,
+    isSendControlsEnabled = false,
+    isSendControlsExistingSendsEnabled = false,
 )
