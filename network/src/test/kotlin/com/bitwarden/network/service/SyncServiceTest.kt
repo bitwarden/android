@@ -522,6 +522,7 @@ private const val SYNC_SUCCESS_JSON = """
         "expirationDate": "mockExpirationDate-1",
       },
       "encryptedFor": "mockEncryptedFor-1",
+      "data": "mockData-1",
       "archivedDate": "2023-10-27T12:00:00.00Z"
     }
   ],
@@ -596,6 +597,10 @@ private const val SYNC_SUCCESS_JSON = """
       },
       "masterKeyWrappedUserKey": "mockMasterKeyWrappedUserKey-1",
       "salt": "mockSalt-1"
+    },
+    "v2UpgradeToken": {
+      "wrappedUserKey1": "mockWrappedUserKey1-1",
+      "wrappedUserKey2": "mockWrappedUserKey2-1"
     }
   }
 }

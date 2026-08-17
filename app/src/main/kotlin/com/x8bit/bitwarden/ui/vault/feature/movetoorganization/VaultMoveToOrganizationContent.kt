@@ -14,6 +14,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import kotlinx.collections.immutable.toImmutableList
@@ -21,7 +22,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Content view for the [VaultMoveToOrganizationScreen].
  */
-@Suppress("LongMethod")
 @Composable
 fun VaultMoveToOrganizationContent(
     state: VaultMoveToOrganizationState.ViewState.Content,
@@ -39,7 +39,9 @@ fun VaultMoveToOrganizationContent(
         if (!showOnlyCollections) {
             item {
                 BitwardenMultiSelectButton(
-                    label = stringResource(id = BitwardenString.vault),
+                    label = stringResource(
+                        id = vfo1Foundation(BitwardenString.vault, BitwardenString.organization),
+                    ),
                     options = state
                         .organizations
                         .map { it.name }
@@ -52,7 +54,12 @@ fun VaultMoveToOrganizationContent(
                                 .first { it.name == selectedString },
                         )
                     },
-                    supportingText = stringResource(id = BitwardenString.move_to_vault_desc),
+                    supportingText = stringResource(
+                        id = vfo1Foundation(
+                            new = BitwardenString.move_to_vault_desc,
+                            old = BitwardenString.move_to_org_desc,
+                        ),
+                    ),
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .testTag("OrganizationListDropdown")

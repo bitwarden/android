@@ -235,8 +235,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
+    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow =

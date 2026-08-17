@@ -2,9 +2,9 @@ package com.bitwarden.data.manager.file
 
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.data.manager.model.DownloadResult
 import com.bitwarden.data.manager.model.ZipFileResult
 import java.io.File
+import java.io.InputStream
 
 /**
  * Manages reading files.
@@ -28,10 +28,10 @@ interface FileManager {
     suspend fun delete(vararg files: File)
 
     /**
-     * Downloads a file temporarily to cache from [url]. A successful [DownloadResult] will contain
+     * Opens the provided [stream] and writes it to cache. A successful [Result] will contain
      * the final file path.
      */
-    suspend fun downloadFileToCache(url: String): DownloadResult
+    suspend fun streamFileToCache(stream: InputStream): Result<File>
 
     /**
      * Writes an existing [file] to a [fileUri]. `true` will be returned if the file was

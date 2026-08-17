@@ -202,6 +202,7 @@ fun SendScreen(
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
                 policyDisablesSend = state.policyDisablesSend,
+                shouldShowTypesSection = state.shouldShowTypesSection,
                 state = viewState,
                 upgradedToPremiumCardData = upgradedToPremiumCardData,
                 sendHandlers = sendHandlers,

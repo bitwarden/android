@@ -284,7 +284,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="vault_is_locked">Glabātava ir aizslēgta</string>
     <string name="go_to_my_vault">Doties uz manu glabātavu</string>
     <string name="collections">Krājumi</string>
-    <string name="no_items_collection">Šajā krājumā nav vienumu.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Šajā mapē nav vienumu.</string>
     <string name="no_items_trash">Atkritnē nav vienumu.</string>
     <string name="autofill_accessibility_summary">Palīdzēt ar lietotājvārda un paroles lauku aizpildīšanu citās lietotnēs tīmeklī.</string>
@@ -343,9 +343,9 @@ Nolasīšana notiks automātiski.</string>
     <string name="moved_item_to_org">%1$s pārvietots uz %2$s.</string>
     <string name="select_one_collection">Ir jāizvēlas vismaz viens krājums.</string>
     <string name="share">Kopīgot</string>
-    <string name="move_to_organization">Pārvietot uz apvienību</string>
-    <string name="no_orgs_to_list">Nav apvienību, ko parādīt</string>
-    <string name="move_to_org_desc">Izvēlies apvienību, uz kuru pārvietot šo vienumu. Pārvietošana nodod šī vienuma piederību apvienībai. Tu vairs nebūsi šī vienuma tiešais īpašnieks pēc tā pārvietošanas.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Vārdu skaits</string>
     <string name="passphrase">Paroles vārdkopa</string>
     <string name="word_separator">Vārdu atdalītājs</string>
@@ -381,6 +381,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
     <string name="ask_to_add_item">Vaicāt, lai pievienotu vienumu</string>
     <string name="ask_to_add_item_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Pārsāknējot lietotni</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
@@ -1422,4 +1424,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

@@ -21,6 +21,7 @@ fun SendView.toViewSendViewStateContent(
         sendType = when (this.type) {
             SendType.FILE -> requireNotNull(this.file).toFileType()
             SendType.TEXT -> requireNotNull(this.text).toTextType()
+            SendType.ITEM -> TODO("[PM-41095] Support Item SendType")
         },
         shareLink = this.toSendUrl(baseWebSendUrl = baseWebSendUrl),
         sendName = this.name,

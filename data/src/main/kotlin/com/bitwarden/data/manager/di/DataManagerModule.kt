@@ -3,7 +3,9 @@ package com.bitwarden.data.manager.di
 import android.app.Application
 import android.content.Context
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.manager.UuidManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.manager.BitwardenPackageManager
 import com.bitwarden.data.manager.BitwardenPackageManagerImpl
@@ -17,8 +19,6 @@ import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManagerImpl
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriter
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderWriterImpl
-import com.bitwarden.data.repository.ServerConfigRepository
-import com.bitwarden.network.service.DownloadService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,11 +50,11 @@ object DataManagerModule {
     @Singleton
     fun provideFileManager(
         @ApplicationContext context: Context,
-        downloadService: DownloadService,
+        uuidManager: UuidManager,
         dispatcherManager: DispatcherManager,
     ): FileManager = FileManagerImpl(
         context = context,
-        downloadService = downloadService,
+        uuidManager = uuidManager,
         dispatcherManager = dispatcherManager,
     )
 
@@ -81,13 +81,13 @@ object DataManagerModule {
         fileManager: FileManager,
         dispatcherManager: DispatcherManager,
         buildInfoManager: BuildInfoManager,
-        serverConfigRepository: ServerConfigRepository,
+        configDiskSource: ConfigDiskSource,
     ): FlightRecorderWriter = FlightRecorderWriterImpl(
         clock = clock,
         fileManager = fileManager,
         dispatcherManager = dispatcherManager,
         buildInfoManager = buildInfoManager,
-        serverConfigRepository = serverConfigRepository,
+        configDiskSource = configDiskSource,
     )
 
     @Provides

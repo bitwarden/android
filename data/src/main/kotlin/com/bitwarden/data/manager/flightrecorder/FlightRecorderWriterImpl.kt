@@ -8,9 +8,9 @@ import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.util.deviceData
 import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.model.FlightRecorderDataSet
 import com.bitwarden.data.manager.file.FileManager
-import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.util.redactHostnamesInMessage
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -34,12 +34,15 @@ internal class FlightRecorderWriterImpl(
     private val fileManager: FileManager,
     private val dispatcherManager: DispatcherManager,
     private val buildInfoManager: BuildInfoManager,
-    private val serverConfigRepository: ServerConfigRepository,
+    private val configDiskSource: ConfigDiskSource,
 ) : FlightRecorderWriter {
     private val configuredHosts: Set<String>
         get() {
-            val environment = serverConfigRepository.serverConfigStateFlow.value
-                ?.serverData?.environment ?: return emptySet()
+            val environment = configDiskSource
+                .serverConfig
+                ?.serverData
+                ?.environment
+                ?: return emptySet()
             return listOfNotNull(
                 environment.vaultUrl,
                 environment.apiUrl,
@@ -75,7 +78,7 @@ internal class FlightRecorderWriterImpl(
                 logFile.createNewFile()
 
                 val ciInfo = buildInfoManager.ciBuildInfo?.takeIf { it.isNotBlank() }
-                val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
+                val serverData = configDiskSource.serverConfig?.serverData
                 val serverInfo = StringBuilder()
                     .append(serverData?.server?.name ?: "Bitwarden Cloud")
                     .apply {

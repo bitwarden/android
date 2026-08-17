@@ -74,6 +74,7 @@ fun Cipher.toEncryptedNetworkCipher(
         driversLicense = driversLicense?.toEncryptedNetworkDriversLicense(),
         passport = passport?.toEncryptedNetworkPassport(),
         archivedDate = archivedDate,
+        data = data,
         encryptedFor = encryptedFor,
     )
 

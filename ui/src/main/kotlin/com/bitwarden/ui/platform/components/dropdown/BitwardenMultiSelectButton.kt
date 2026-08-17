@@ -119,6 +119,7 @@ fun BitwardenMultiSelectButton(
  * @param supportingContent An optional supporting content that will appear below the button.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param dialogSubtitle The subtitle to apply to the dialog.
  * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.

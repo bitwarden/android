@@ -114,6 +114,7 @@ import io.mockk.runs
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -238,9 +239,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val cardScanManager: CardScanManager = mockk {
         every { cardScanResultFlow } returns mutableCardScanResultFlow
     }
+    private val mutableVfo1FoundationFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
+        every { getFeatureFlag(FlagKey.Vfo1Foundation) } answers { mutableVfo1FoundationFlow.value }
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlow
     }
     private val buildInfoManager: BuildInfoManager = mockk {
         every { isFdroid } returns false
@@ -286,6 +290,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -360,7 +365,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         availableOwners = listOf(
                             VaultAddEditState.Owner(
                                 id = "organizationId",
-                                name = "organizationName",
+                                name = "organizationName".asText(),
                                 collections = emptyList(),
                             ),
                         ),
@@ -374,6 +379,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
                 isCardScannerEnabled = false,
+                isVfo1FoundationEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -384,6 +390,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the content state using the latest vault data`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.AddItem
+            val vaultItemCipherType = VaultItemCipherType.LOGIN
+            mutableVaultDataFlow.value = DataState.Loaded(data = createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = null,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = vaultItemCipherType,
+                ),
+            )
+
+            assertEquals(
+                BitwardenString.my_vault.asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+
+            mutableVfo1FoundationFlow.value = false
+
+            assertEquals(
+                "activeEmail".asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+        }
 
     @Test
     fun `initial add state should be correct when autofill selection`() = runTest {
@@ -5281,7 +5323,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             availableOwners = listOf(
                                 VaultAddEditState.Owner(
                                     id = "organizationId",
-                                    name = "organizationName",
+                                    name = "organizationName".asText(),
                                     collections = emptyList(),
                                 ),
                             ),
@@ -6354,6 +6396,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
     @Suppress("LongParameterList")
@@ -6387,7 +6430,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             selectedOwnerId = selectedOwnerId,
             originalCipher = originalCipher,
             availableFolders = availableFolders,
-            availableOwners = availableOwners,
+            availableOwners = availableOwners.toImmutableList(),
             hasOrganizations = hasOrganizations,
             canDelete = canDelete,
             canAssignToCollections = canAssociateToCollections,
@@ -6519,12 +6562,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         listOf(
             VaultAddEditState.Owner(
                 id = null,
-                name = "activeEmail",
+                name = BitwardenString.my_vault.asText(),
                 collections = emptyList(),
             ),
             VaultAddEditState.Owner(
                 id = "organizationId",
-                name = "organizationName",
+                name = "organizationName".asText(),
                 collections = if (hasCollection) {
                     listOf(
                         VaultCollection(

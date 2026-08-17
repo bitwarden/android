@@ -109,10 +109,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
-import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
-import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
+import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
+import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
@@ -380,7 +380,7 @@ class AuthRepositoryImpl(
 
                 // Otherwise check the user's password against the policies and set or
                 // clear the force reset reason accordingly.
-                storeUserResetPasswordReason(
+                authDiskSource.userState = authDiskSource.userState?.updateForcePasswordReset(
                     userId = userId,
                     reason = ForcePasswordResetReason
                         .WEAK_MASTER_PASSWORD_ON_LOGIN
@@ -1058,7 +1058,10 @@ class AuthRepositoryImpl(
                     MigrateExistingUserToKeyConnectorResult.Success -> {
                         authDiskSource.userState = authDiskSource
                             .userState
-                            ?.toRemovedPasswordUserStateJson(userId = userId)
+                            ?.updateMasterPasswordUnlock(
+                                userId = userId,
+                                masterPasswordUnlock = null,
+                            )
                         vaultRepository.sync()
                         settingsRepository.setDefaultsIfNecessary(userId = userId)
                         RemovePasswordResult.Success
@@ -1180,13 +1183,17 @@ class AuthRepositoryImpl(
                     .map { response }
             }
             .onSuccess { response ->
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = MasterPasswordUnlockData(
-                        kdf = profile.toSdkParams(),
-                        masterKeyWrappedUserKey = response.newKey,
-                        salt = profile.email,
-                    ),
-                )
+                authDiskSource.userState = authDiskSource
+                    .userState
+                    ?.updateMasterPasswordUnlock(
+                        userId = userId,
+                        masterPasswordUnlock = MasterPasswordUnlockData(
+                            kdf = profile.toSdkParams(),
+                            masterKeyWrappedUserKey = response.newKey,
+                            salt = profile.email,
+                        ),
+                    )
+                    ?.updateForcePasswordReset(userId = userId, reason = null)
                 this.organizationIdentifier = null
             }
             .flatMap { response ->
@@ -1241,9 +1248,13 @@ class AuthRepositoryImpl(
                     userId = userId,
                     accountCryptographicState = response.accountCryptographicState,
                 )
-                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword(
-                    masterPasswordUnlock = response.masterPasswordUnlock,
-                )
+                authDiskSource.userState = authDiskSource
+                    .userState
+                    ?.updateMasterPasswordUnlock(
+                        userId = userId,
+                        masterPasswordUnlock = response.masterPasswordUnlock,
+                    )
+                    ?.updateForcePasswordReset(userId = userId, reason = null)
                 this.organizationIdentifier = null
             }
             .flatMap { response ->
@@ -1304,13 +1315,15 @@ class AuthRepositoryImpl(
                         )
                         authDiskSource.userState = authDiskSource
                             .userState
-                            ?.toUserStateJsonWithPassword(
+                            ?.updateMasterPasswordUnlock(
+                                userId = userId,
                                 masterPasswordUnlock = MasterPasswordUnlockData(
                                     kdf = profile.toSdkParams(),
                                     masterKeyWrappedUserKey = response.encryptedUserKey,
                                     salt = profile.email,
                                 ),
                             )
+                            ?.updateForcePasswordReset(userId = userId, reason = null)
                         this.organizationIdentifier = null
                     }
                     .map { response }
@@ -1706,25 +1719,6 @@ class AuthRepositoryImpl(
                 remember = false,
             )
         }
-
-    /**
-     * Update the saved state with the force password reset reason.
-     */
-    private fun storeUserResetPasswordReason(userId: String, reason: ForcePasswordResetReason?) {
-        val accounts = authDiskSource
-            .userState
-            ?.accounts
-            ?.toMutableMap()
-            ?: return
-        val account = accounts[userId] ?: return
-        val updatedProfile = account
-            .profile
-            .copy(forcePasswordResetReason = reason)
-        accounts[userId] = account.copy(profile = updatedProfile)
-        authDiskSource.userState = authDiskSource
-            .userState
-            ?.copy(accounts = accounts)
-    }
 
     //region LoginCommon
 

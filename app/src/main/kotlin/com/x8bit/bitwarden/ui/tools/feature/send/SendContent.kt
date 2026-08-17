@@ -33,6 +33,7 @@ private const val SEND_TYPES_COUNT: Int = 2
 @Composable
 fun SendContent(
     policyDisablesSend: Boolean,
+    shouldShowTypesSection: Boolean,
     state: SendState.ViewState.Content,
     upgradedToPremiumCardData: UpgradedToPremiumCardData?,
     sendHandlers: SendHandlers,
@@ -67,44 +68,46 @@ fun SendContent(
             }
         }
 
-        item {
-            BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.types),
-                supportingLabel = SEND_TYPES_COUNT.toString(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
+        if (shouldShowTypesSection) {
+            item {
+                BitwardenListHeaderText(
+                    label = stringResource(id = BitwardenString.types),
+                    supportingLabel = SEND_TYPES_COUNT.toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
 
-        item {
-            BitwardenGroupItem(
-                label = stringResource(id = BitwardenString.type_text),
-                supportingLabel = state.textTypeCount.toString(),
-                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file_text),
-                onClick = sendHandlers.onTextTypeClick,
-                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("SendTextFilter")
-                    .standardHorizontalMargin(),
-            )
-        }
+            item {
+                BitwardenGroupItem(
+                    label = stringResource(id = BitwardenString.type_text),
+                    supportingLabel = state.textTypeCount.toString(),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file_text),
+                    onClick = sendHandlers.onTextTypeClick,
+                    cardStyle = CardStyle.Top(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SendTextFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
 
-        item {
-            BitwardenGroupItem(
-                label = stringResource(id = BitwardenString.type_file),
-                supportingLabel = state.fileTypeCount.toString(),
-                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file),
-                onClick = sendHandlers.onFileTypeClick,
-                cardStyle = CardStyle.Bottom,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("SendFileFilter")
-                    .standardHorizontalMargin(),
-            )
+            item {
+                BitwardenGroupItem(
+                    label = stringResource(id = BitwardenString.type_file),
+                    supportingLabel = state.fileTypeCount.toString(),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file),
+                    onClick = sendHandlers.onFileTypeClick,
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SendFileFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
         }
 
         item {

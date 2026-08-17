@@ -7,19 +7,28 @@ import kotlinx.serialization.json.JsonElement
 
 /**
  * Attempts to decode the given JSON [element] into the given type [T]. If there is an error in
+ * processing the JSON or deserializing it to an instance of [T], the error result will be returned.
+ */
+fun <T> Json.decodeFromJsonElementForResult(
+    deserializer: DeserializationStrategy<T>,
+    element: JsonElement,
+): Result<T> =
+    try {
+        decodeFromJsonElement(deserializer = deserializer, element = element).asSuccess()
+    } catch (se: SerializationException) {
+        se.asFailure()
+    } catch (iae: IllegalArgumentException) {
+        iae.asFailure()
+    }
+
+/**
+ * Attempts to decode the given JSON [element] into the given type [T]. If there is an error in
  * processing the JSON or deserializing it to an instance of [T], `null` will be returned.
  */
 fun <T> Json.decodeFromJsonElementOrNull(
     deserializer: DeserializationStrategy<T>,
     element: JsonElement,
-): T? =
-    try {
-        decodeFromJsonElement(deserializer = deserializer, element = element)
-    } catch (_: SerializationException) {
-        null
-    } catch (_: IllegalArgumentException) {
-        null
-    }
+): T? = decodeFromJsonElementForResult(deserializer = deserializer, element = element).getOrNull()
 
 /**
  * Attempts to decode the given JSON [string] into the given type [T]. If there is an error in

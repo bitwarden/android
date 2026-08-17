@@ -50,7 +50,7 @@ fun createMockCipher(
     shouldViewPassword: Boolean = false,
     key: String? = "mockKey-$number",
     encryptedFor: String? = "mockEncryptedFor-$number",
-    data: String? = null,
+    data: String? = "mockData-$number",
 ): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         id = id,

@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.browser.auth.AuthTabIntent
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
@@ -31,6 +32,7 @@ import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
@@ -84,6 +86,7 @@ class MainViewModel @Inject constructor(
     private val credentialProviderRequestManager: CredentialProviderRequestManager,
     private val shareManager: ShareManager,
     private val settingsRepository: SettingsRepository,
+    private val featureFlagManager: FeatureFlagManager,
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
@@ -97,6 +100,7 @@ class MainViewModel @Inject constructor(
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
         hasResizeBeenRequested = false,
+        isVfo1FoundationEnabled = featureFlagManager.getFeatureFlag(FlagKey.Vfo1Foundation),
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -144,6 +148,12 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .isDynamicColorsEnabledFlow
             .map { MainAction.Internal.DynamicColorsUpdate(it) }
+            .onEach(::trySendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { MainAction.Internal.Vfo1FoundationUpdate(it) }
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
@@ -214,6 +224,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
+            is MainAction.Internal.Vfo1FoundationUpdate -> handleVfo1FoundationUpdate(action)
             is MainAction.Internal.ResizeHasBeenRequested -> handleResizeHasBeenRequested()
         }
     }
@@ -293,6 +304,12 @@ class MainViewModel @Inject constructor(
 
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
         mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
+    }
+
+    private fun handleVfo1FoundationUpdate(action: MainAction.Internal.Vfo1FoundationUpdate) {
+        mutableStateFlow.update {
+            it.copy(isVfo1FoundationEnabled = action.isVfo1FoundationEnabled)
+        }
     }
 
     private fun handleResizeHasBeenRequested() {
@@ -529,12 +546,13 @@ data class MainState(
     val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
     val hasResizeBeenRequested: Boolean,
+    val isVfo1FoundationEnabled: Boolean,
 ) : Parcelable {
     /**
      * Contains all feature flags that are available to the UI.
      */
     val featureFlagsState: FeatureFlagsState
-        get() = FeatureFlagsState
+        get() = FeatureFlagsState(isVfo1FoundationEnabled = isVfo1FoundationEnabled)
 }
 
 /**
@@ -647,6 +665,13 @@ sealed class MainAction {
          */
         data class DynamicColorsUpdate(
             val isDynamicColorsEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the VFO-1 foundation feature flag has changed.
+         */
+        data class Vfo1FoundationUpdate(
+            val isVfo1FoundationEnabled: Boolean,
         ) : Internal()
 
         /**

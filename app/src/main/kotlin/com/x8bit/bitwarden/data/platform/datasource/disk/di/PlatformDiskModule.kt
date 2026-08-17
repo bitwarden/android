@@ -7,7 +7,9 @@ import androidx.room.Room
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.KeystoreEncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
+import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
@@ -22,6 +24,8 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.OrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.database.PlatformDatabase
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.DiskSourceMigrationLogger
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.DiskSourceMigrationLoggerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigratorImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorage
@@ -116,6 +120,20 @@ object PlatformDiskModule {
 
     @Provides
     @Singleton
+    fun provideDiskSourceMigrationLogger(
+        flightRecorderManager: FlightRecorderManager,
+        @EncryptedPreferences encryptedPreferences: SharedPreferences,
+        @KeystoreEncryptedPreferences keystoreEncryptedPreferences: SharedPreferences,
+        dispatcherManager: DispatcherManager,
+    ): DiskSourceMigrationLogger = DiskSourceMigrationLoggerImpl(
+        flightRecorderManager = flightRecorderManager,
+        encryptedPreferences = encryptedPreferences,
+        keystoreEncryptedPreferences = keystoreEncryptedPreferences,
+        dispatcherManager = dispatcherManager,
+    )
+
+    @Provides
+    @Singleton
     fun provideLegacyAppCenterMigrator(
         application: Application,
         settingsRepository: SettingsRepository,
@@ -162,10 +180,12 @@ object PlatformDiskModule {
     @Singleton
     fun provideCookieDiskSource(
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        @KeystoreEncryptedPreferences keystoreEncryptedPreferences: SharedPreferences,
         @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
         json: Json,
     ): CookieDiskSource = CookieDiskSourceImpl(
         sharedPreferences = sharedPreferences,
+        keystoreEncryptedPreferences = keystoreEncryptedPreferences,
         encryptedSharedPreferences = encryptedSharedPreferences,
         json = json,
     )

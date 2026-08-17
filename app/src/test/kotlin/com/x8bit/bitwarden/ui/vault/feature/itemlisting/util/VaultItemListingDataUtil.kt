@@ -43,8 +43,8 @@ fun createMockDisplayItemForCipher(
                 iconData = iconData,
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -101,8 +101,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -149,8 +149,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -201,8 +201,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -245,8 +245,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -289,8 +289,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -333,8 +333,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -377,8 +377,8 @@ fun createMockDisplayItemForCipher(
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = BitwardenDrawable.ic_collections,
-                        contentDescription = BitwardenString.collections.asText(),
+                        iconRes = BitwardenDrawable.ic_shared_folder,
+                        contentDescription = BitwardenString.shared_folders.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
@@ -516,6 +516,55 @@ fun createMockDisplayItemForSend(
                 itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
+
+        SendType.ITEM -> {
+            VaultItemListingState.DisplayItem(
+                id = "mockId-$number",
+                title = "mockName-$number".asText(),
+                titleTestTag = "SendNameLabel",
+                secondSubtitle = null,
+                secondSubtitleTestTag = null,
+                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitleTestTag = "SendDateLabel",
+                iconData = IconData.Local(BitwardenDrawable.ic_file_text),
+                extraIconList = persistentListOf(
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_key,
+                        contentDescription = BitwardenString.password.asText(),
+                        testTag = "PasswordProtectedSendIcon",
+                    ),
+                    IconData.Local(
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
+                        contentDescription = BitwardenString.maximum_access_count_reached.asText(),
+                        testTag = "MaxAccessSendIcon",
+                    ),
+                ),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
+                    ListingItemOverflowAction.SendAction.EditClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
+                    ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
+                ),
+                optionsTestTag = "SendOptionsButton",
+                isAutofill = false,
+                isCredentialCreation = false,
+                shouldShowMasterPasswordReprompt = false,
+                iconTestTag = null,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
+            )
+        }
     }
 
 /**
@@ -535,8 +584,8 @@ fun createMockDisplayItemForDecryptionError(
     iconTestTag = "LoginCipherIcon",
     extraIconList = persistentListOf(
         IconData.Local(
-            iconRes = BitwardenDrawable.ic_collections,
-            contentDescription = BitwardenString.collections.asText(),
+            iconRes = BitwardenDrawable.ic_shared_folder,
+            contentDescription = BitwardenString.shared_folders.asText(),
             testTag = "CipherInCollectionIcon",
         ),
     ),

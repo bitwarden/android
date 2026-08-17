@@ -631,6 +631,7 @@ private const val CIPHER_JSON = """
     "issueDate": "mockIssueDate-1",
     "expirationDate": "mockExpirationDate-1",
   },
+  "data": "mockData-1",
   "encryptedFor": "mockEncryptedFor-1"
 }
 """

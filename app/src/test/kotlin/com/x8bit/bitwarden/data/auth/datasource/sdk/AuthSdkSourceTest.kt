@@ -238,6 +238,7 @@ class AuthSdkSourceTest {
                         providerInviteToken = null,
                         providerUserId = null,
                         salesAssistedToken = null,
+                        openOrgInvite = null,
                     ),
                 )
             } returns expectedResult
@@ -267,6 +268,7 @@ class AuthSdkSourceTest {
                         providerInviteToken = null,
                         providerUserId = null,
                         salesAssistedToken = null,
+                        openOrgInvite = null,
                     ),
                 )
             }

@@ -341,9 +341,9 @@ Het scannen gebeurt automatisch.</string>
     <string name="moved_item_to_org">%1$s is verplaatst naar %2$s.</string>
     <string name="select_one_collection">Je moet tenminste één verzameling selecteren.</string>
     <string name="share">Delen</string>
-    <string name="move_to_organization">Naar organisatie verplaatsen</string>
-    <string name="no_orgs_to_list">Geen organisaties om weer te geven.</string>
-    <string name="move_to_org_desc">Kies een organisatie waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
+    <string name="move_to_vault">Naar kluis verplaatsen</string>
+    <string name="no_vaults_to_list">Geen kluizen om weer te geven.</string>
+    <string name="move_to_vault_desc">Kies een kluis waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="number_of_words">Aantal woorden</string>
     <string name="passphrase">Wachtwoordzin</string>
     <string name="word_separator">Scheidingsteken</string>
@@ -379,6 +379,8 @@ Het scannen gebeurt automatisch.</string>
     <string name="pin_require_master_password_restart">Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</string>
     <string name="ask_to_add_item">Vraag om item toe te voegen</string>
     <string name="ask_to_add_item_description">Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</string>
+    <string name="turn_on_fill_assist">Invulassistent inschakelen</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Invulassistentie verbetert de nauwkeurigheid van automatisch invullen op ondersteunde sites met site-specifieke regels..</string>
     <string name="on_restart">Na opnieuw starten</string>
     <string name="capitalize">Beginhoofdletters</string>
     <string name="include_number">Cijfer toevoegen</string>
@@ -1412,4 +1414,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="keep_documents_safe_and_encrypted">Behoud documenten veilig en versleuteld</string>
     <string name="share_files_securely_with_anyone_using_send">Deel bestanden veilig met iedereen met behulp van Send</string>
     <string name="receive_24_7_priority_support">Ontvang 24/7 prioriteitsondersteuning</string>
+    <string name="account_creation_restricted">Account aanmaken beperkt</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s staat het aanmaken van accounts alleen toe aan uitgenodigde gebruikers.</string>
 </resources>

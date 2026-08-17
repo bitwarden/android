@@ -282,7 +282,7 @@
     <string name="vault_is_locked">密碼庫已鎖定</string>
     <string name="go_to_my_vault">前往我的密碼庫</string>
     <string name="collections">集合</string>
-    <string name="no_items_collection">此集合中沒有項目。</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">此資料夾中沒有項目。</string>
     <string name="no_items_trash">垃圾桶中沒有項目。</string>
     <string name="autofill_accessibility_summary">在其它應用程式及網頁上協助自動填寫使用者名稱和密碼。</string>
@@ -339,9 +339,9 @@
     <string name="moved_item_to_org">%1$s 已移動至 %2$s。</string>
     <string name="select_one_collection">您必須至少選擇一個集合。</string>
     <string name="share">共用</string>
-    <string name="move_to_organization">移動至組織</string>
-    <string name="no_orgs_to_list">沒有可列出的組織。</string>
-    <string name="move_to_org_desc">選擇您希望將這個項目移動至哪個組織。項目的擁有權將會轉移至該組織。轉移之後，您將不再是此項目的直接擁有者。</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">單字數量</string>
     <string name="passphrase">密碼短語</string>
     <string name="word_separator">單字分隔字元</string>
@@ -377,6 +377,8 @@
     <string name="pin_require_master_password_restart">當應用程式重新啟動時，是否要求使用主密碼解鎖？</string>
     <string name="ask_to_add_item">要求新增項目</string>
     <string name="ask_to_add_item_description">在密碼庫中找不到相符的項目時詢問是否新增項目。</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">於程式重新啟動時</string>
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>
@@ -1404,4 +1406,6 @@
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

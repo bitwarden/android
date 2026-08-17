@@ -282,7 +282,7 @@
     <string name="vault_is_locked">보관함이 잠겨 있음</string>
     <string name="go_to_my_vault">내 보관함으로 이동</string>
     <string name="collections">컬렉션</string>
-    <string name="no_items_collection">이 컬렉션에 항목이 없습니다.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">이 폴더에 항목이 없습니다.</string>
     <string name="no_items_trash">휴지통에 아무 항목도 없습니다.</string>
     <string name="autofill_accessibility_summary">Assist with filling username and password fields in other apps and on the web.</string>
@@ -339,9 +339,9 @@
     <string name="moved_item_to_org">%1$s 항목이 %2$s 조직으로 이동되었습니다.</string>
     <string name="select_one_collection">반드시 하나 이상의 컬렉션을 선택해야 합니다.</string>
     <string name="share">공유</string>
-    <string name="move_to_organization">조직으로 이동하기</string>
-    <string name="no_orgs_to_list">조직이 없습니다.</string>
-    <string name="move_to_org_desc">이 항목을 이동할 조직을 선택하십시오. 항목이 조직으로 이동되면 소유권이 조직으로 이전됩니다. 일단 이동되면, 더는 이동된 항목의 직접적인 소유자가 아니게 됩니다.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">단어 수</string>
     <string name="passphrase">패스프레이즈</string>
     <string name="word_separator">구분 기호</string>
@@ -377,6 +377,8 @@
     <string name="pin_require_master_password_restart">애플리케이션을 다시 시작했을 때 마스터 비밀번호로 잠금 해제가 필요하도록 하시겠습니까?</string>
     <string name="ask_to_add_item">항목 추가 묻기</string>
     <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">앱 재시작 시</string>
     <string name="capitalize">첫 글자를 대문자로</string>
     <string name="include_number">숫자 포함</string>
@@ -1402,4 +1404,6 @@
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

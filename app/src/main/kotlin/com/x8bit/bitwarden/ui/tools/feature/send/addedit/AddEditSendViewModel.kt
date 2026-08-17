@@ -4,11 +4,13 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
-import com.bitwarden.policies.PolicyType
+import com.bitwarden.network.model.SendAccessTypeJson
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -21,13 +23,13 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
-import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
@@ -51,6 +53,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -63,6 +66,11 @@ import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+
+/**
+ * The deletion window applied to a new Send when no deletion date is enforced by policy (7 days).
+ */
+private const val DEFAULT_DELETION_HOURS: Long = 7 * 24L
 
 private const val KEY_STATE = "state"
 
@@ -83,6 +91,7 @@ class AddEditSendViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
+    private val featureFlagManager: FeatureFlagManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
@@ -98,6 +107,8 @@ class AddEditSendViewModel @Inject constructor(
         val args = savedStateHandle.toAddEditSendArgs()
         val sendType = args.sendType
         val addEditSendType = args.addEditSendType
+        val effectiveSendPolicy = policyManager.getEffectiveSendPolicy()
+        val isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls)
 
         AddEditSendState(
             sendType = sendType,
@@ -114,12 +125,15 @@ class AddEditSendViewModel @Inject constructor(
                         noteInput = "",
                         isHideEmailChecked = false,
                         isDeactivateChecked = false,
-                        isHideEmailAddressEnabled = !policyManager
-                            .getActivePolicies<PolicyInformation.SendOptions>()
-                            .any { it.shouldDisableHideEmail ?: false },
-                        deletionDate = clock
-                            .instant()
-                            .plus(@Suppress("MagicNumber") 7, ChronoUnit.DAYS),
+                        isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+                        deletionDate = clock.instant().plus(
+                            effectiveSendPolicy
+                                .deletionHours
+                                ?.takeIf { isSendControlsEnabled }
+                                ?.toLong()
+                                ?: DEFAULT_DELETION_HOURS,
+                            ChronoUnit.HOURS,
+                        ),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
@@ -148,9 +162,12 @@ class AddEditSendViewModel @Inject constructor(
             },
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-            policyDisablesSend = policyManager
-                .getActivePolicies(type = PolicyType.DISABLE_SEND)
-                .any(),
+            policyDisablesSend = effectiveSendPolicy.disableSend,
+            isSendControlsEnabled = isSendControlsEnabled,
+            allowedDomains = effectiveSendPolicy.allowedDomains,
+            allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
+            deletionHours = effectiveSendPolicy.deletionHours,
+            whoCanAccess = effectiveSendPolicy.whoCanAccess,
             isPremium = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         )
     },
@@ -179,6 +196,20 @@ class AddEditSendViewModel @Inject constructor(
                 }
                 AddEditSendAction.Internal.GeneratorResultReceive(generatorResult = result)
             }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        // The effective policy itself depends on the feature flag, so both are observed together
+        // to keep the derived state consistent whenever either one changes.
+        combine(
+            policyManager.getEffectiveSendPolicyFlow(),
+            featureFlagManager.getFeatureFlagFlow(key = FlagKey.SendControls),
+        ) { effectiveSendPolicy, isSendControlsEnabled ->
+            AddEditSendAction.Internal.EffectiveSendPolicyReceive(
+                effectiveSendPolicy = effectiveSendPolicy,
+                isSendControlsEnabled = isSendControlsEnabled,
+            )
+        }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -230,6 +261,10 @@ class AddEditSendViewModel @Inject constructor(
 
         is AddEditSendAction.Internal.RemovePasswordResultReceive -> {
             handleRemovePasswordResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.EffectiveSendPolicyReceive -> {
+            handleEffectiveSendPolicyReceive(action)
         }
 
         is AddEditSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
@@ -381,6 +416,56 @@ class AddEditSendViewModel @Inject constructor(
                 it.copy(passwordInput = passwordData.password)
             }
         }
+    }
+
+    private fun handleEffectiveSendPolicyReceive(
+        action: AddEditSendAction.Internal.EffectiveSendPolicyReceive,
+    ) {
+        val effectiveSendPolicy = action.effectiveSendPolicy
+        val newEnforcedDeletionHours = effectiveSendPolicy
+            .deletionHours
+            ?.takeIf { action.isSendControlsEnabled }
+        // Captured before the state is updated below, since detecting a dropped enforcement
+        // requires the previous value of `enforcedDeletionHours`.
+        val newDeletionDate = state.newDeletionDateOrNull(
+            newEnforcedDeletionHours = newEnforcedDeletionHours,
+        )
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                policyDisablesSend = effectiveSendPolicy.disableSend,
+                isSendControlsEnabled = action.isSendControlsEnabled,
+                allowedDomains = effectiveSendPolicy.allowedDomains,
+                allowedSendTypes = effectiveSendPolicy.allowedSendTypes,
+                deletionHours = effectiveSendPolicy.deletionHours,
+                whoCanAccess = effectiveSendPolicy.whoCanAccess,
+            )
+        }
+        updateCommonContent {
+            it.copy(
+                deletionDate = newDeletionDate ?: it.deletionDate,
+                isHideEmailAddressEnabled = !effectiveSendPolicy.disableHideEmail,
+            )
+        }
+    }
+
+    /**
+     * Returns the deletion date a new Send should adopt in response to a policy change, or `null`
+     * when the current date should be left alone.
+     *
+     * Only a new Send is affected — an existing Send keeps the deletion date it was created with.
+     * Dropping the enforcement (the policy is lifted or the SendControls flag is turned off)
+     * restores the default window, so the chooser and the state cannot disagree once the chooser
+     * unlocks.
+     */
+    private fun AddEditSendState.newDeletionDateOrNull(newEnforcedDeletionHours: Int?): Instant? {
+        if (!isAddMode) return null
+        val hours = when {
+            newEnforcedDeletionHours != null -> newEnforcedDeletionHours.toLong()
+            // The enforcement was just dropped, so the default window is restored.
+            enforcedDeletionHours != null -> DEFAULT_DELETION_HOURS
+            else -> return null
+        }
+        return clock.instant().plus(hours, ChronoUnit.HOURS)
     }
 
     @Suppress("LongMethod")
@@ -825,9 +910,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private val isHideEmailAddressEnabled: Boolean
-        get() = !policyManager
-            .getActivePolicies<PolicyInformation.SendOptions>()
-            .any { it.shouldDisableHideEmail ?: false }
+        get() = !policyManager.getEffectiveSendPolicy().disableHideEmail
 
     private inline fun onContent(
         crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
@@ -886,6 +969,15 @@ class AddEditSendViewModel @Inject constructor(
 
 /**
  * Models state for the add/edit send screen.
+ *
+ * @property allowedDomains The allowed recipient email domains, sourced from
+ * [EffectiveSendPolicy.allowedDomains]. Currently unused by the UI.
+ * @property allowedSendTypes The types of Sends that are allowed to be created, sourced from
+ * [EffectiveSendPolicy.allowedSendTypes]. Currently unused by the UI.
+ * @property deletionHours The enforced Send deletion window in hours, sourced from
+ * [EffectiveSendPolicy.deletionHours]. Currently unused by the UI.
+ * @property whoCanAccess The access type Sends are restricted to, sourced from
+ * [EffectiveSendPolicy.whoCanAccess]. Currently unused by the UI.
  */
 @Parcelize
 data class AddEditSendState(
@@ -897,8 +989,20 @@ data class AddEditSendState(
     val isShared: Boolean,
     val baseWebSendUrl: String,
     val policyDisablesSend: Boolean,
+    val isSendControlsEnabled: Boolean,
+    val allowedDomains: String?,
+    val allowedSendTypes: List<SendTypeJson>?,
+    val deletionHours: Int?,
+    val whoCanAccess: SendAccessTypeJson?,
     val isPremium: Boolean,
 ) : Parcelable {
+
+    /**
+     * Helper to determine the Send deletion window enforced by the SendControls policy, or `null`
+     * when the deletion date is left to the user. The legacy send options policy has no equivalent
+     * enforcement, so this is only in effect alongside the SendControls feature flag.
+     */
+    val enforcedDeletionHours: Int? get() = deletionHours.takeIf { isSendControlsEnabled }
 
     /**
      * Helper to determine the screen display name.
@@ -917,11 +1021,23 @@ data class AddEditSendState(
         }
 
     /**
-     * Helper to determine if the policy notice should be displayed.
+     * Helper to determine if the policy notice should be displayed. The notice is only relevant to
+     * the legacy send options policy, which disables the affected controls rather than hiding them.
+     * The SendControls policy removes those controls entirely, so there is nothing to explain.
      */
     val shouldDisplayPolicyWarning: Boolean
         get() = !policyDisablesSend &&
+            !isSendControlsEnabled &&
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled != true
+
+    /**
+     * Helper to determine if the "hide my email" toggle should be hidden entirely rather than
+     * simply disabled. The SendControls policy hides the toggle, while the legacy send options
+     * policy continues to only disable it.
+     */
+    val shouldHideEmailAddressToggle: Boolean
+        get() = isSendControlsEnabled &&
+            (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled == false
 
     /**
      * Helper to determine if the UI should display the content in add send mode.
@@ -1239,6 +1355,14 @@ sealed class AddEditSendAction {
          * Indicates a result for creating a send has been received.
          */
         data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+
+        /**
+         * Indicates an updated effective send policy has been received.
+         */
+        data class EffectiveSendPolicyReceive(
+            val effectiveSendPolicy: EffectiveSendPolicy,
+            val isSendControlsEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the vault totp code result has been received.

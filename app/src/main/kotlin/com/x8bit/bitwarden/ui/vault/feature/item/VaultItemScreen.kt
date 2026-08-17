@@ -41,6 +41,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
@@ -202,7 +203,12 @@ fun VaultItemScreen(
                             )
                                 .takeUnless { state.isCipherInCollection },
                             OverflowMenuItemData(
-                                text = stringResource(id = BitwardenString.move_to_vault),
+                                text = stringResource(
+                                    id = vfo1Foundation(
+                                        new = BitwardenString.move,
+                                        old = BitwardenString.move_to_organization,
+                                    ),
+                                ),
                                 onClick = {
                                     viewModel.trySendAction(
                                         VaultItemAction.Common.MoveToOrganizationClick,
@@ -214,7 +220,12 @@ fun VaultItemScreen(
                                         !state.hasOrganizations
                                 },
                             OverflowMenuItemData(
-                                text = stringResource(id = BitwardenString.collections),
+                                text = stringResource(
+                                    id = vfo1Foundation(
+                                        new = BitwardenString.shared_folders,
+                                        old = BitwardenString.collections,
+                                    ),
+                                ),
                                 onClick = {
                                     viewModel.trySendAction(VaultItemAction.Common.CollectionsClick)
                                 },

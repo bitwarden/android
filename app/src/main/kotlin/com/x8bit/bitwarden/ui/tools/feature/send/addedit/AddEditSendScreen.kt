@@ -173,8 +173,10 @@ fun AddEditSendScreen(
         when (val viewState = state.viewState) {
             is AddEditSendState.ViewState.Content -> AddEditSendContent(
                 state = viewState,
+                enforcedDeletionHours = state.enforcedDeletionHours,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
+                shouldHideEmailAddressToggle = state.shouldHideEmailAddressToggle,
                 isAddMode = state.isAddMode,
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,

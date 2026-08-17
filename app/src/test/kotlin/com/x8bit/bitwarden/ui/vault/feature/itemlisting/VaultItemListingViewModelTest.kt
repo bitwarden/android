@@ -78,6 +78,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -221,8 +222,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
-        every { getActivePolicies(type = PolicyType.DISABLE_SEND) } returns emptyList()
-        every { getActivePoliciesFlow(type = PolicyType.DISABLE_SEND) } returns emptyFlow()
+        every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
+        every { getEffectiveSendPolicyFlow() } returns emptyFlow()
         every {
             getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
         } returns mutableActivePoliciesFlow
@@ -306,8 +307,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isInAppUpgradeAvailable() } returns false
     }
     private val mutableNewItemTypesFlow = MutableStateFlow(false)
+    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
@@ -2725,6 +2728,67 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
+        runTest {
+            setupMockUri()
+
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(createMockCipherListView(number = 1, isDeleted = false)),
+                    ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            mutableVfo1FoundationFlagFlow.value = false
+
+            assertEquals(
+                createVaultItemListingState(
+                    isVfo1FoundationEnabled = false,
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(
+                                number = 1,
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitle = "mockSubtitle-1",
+                            )
+                                .copy(
+                                    extraIconList = persistentListOf(
+                                        IconData.Local(
+                                            iconRes = BitwardenDrawable.ic_collections,
+                                            contentDescription = BitwardenString
+                                                .collections
+                                                .asText(),
+                                            testTag = "CipherInCollectionIcon",
+                                        ),
+                                        IconData.Local(
+                                            iconRes = BitwardenDrawable.ic_paperclip,
+                                            contentDescription = BitwardenString
+                                                .attachments
+                                                .asText(),
+                                            testTag = "CipherWithAttachmentsIcon",
+                                        ),
+                                    ),
+                                ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -6663,6 +6727,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
         dialogState: VaultItemListingState.DialogState? = null,
         isPremium: Boolean = true,
+        isVfo1FoundationEnabled: Boolean = true,
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
@@ -6683,6 +6748,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isPremium = isPremium,
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
+            isVfo1FoundationEnabled = isVfo1FoundationEnabled,
         )
 }
 
@@ -6712,6 +6778,15 @@ private val DEFAULT_ACCOUNT = UserState.Account(
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
+)
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )
 
 private const val DEFAULT_RELYING_PARTY_ID = "www.bitwarden.com"

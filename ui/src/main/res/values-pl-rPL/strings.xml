@@ -285,7 +285,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="vault_is_locked">Sejf jest zablokowany</string>
     <string name="go_to_my_vault">Przejdź do sejfu</string>
     <string name="collections">Kolekcje</string>
-    <string name="no_items_collection">Brak elementów w kolekcji.</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="no_items_folder">Brak elementów w folderze.</string>
     <string name="no_items_trash">Brak elementów w koszu.</string>
     <string name="autofill_accessibility_summary">Pomoc w uzupełnianiu pól nazwy użytkownika i hasła w innych aplikacjach oraz Internecie.</string>
@@ -345,9 +345,9 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="moved_item_to_org">Przeniesiono %1$s do %2$s.</string>
     <string name="select_one_collection">Musisz wybrać co najmniej jedną kolekcję.</string>
     <string name="share">Udostępnij</string>
-    <string name="move_to_organization">Przenieś do organizacji</string>
-    <string name="no_orgs_to_list">Brak organizacji do wyświetlenia.</string>
-    <string name="move_to_org_desc">Wybierz organizację, do której chcesz przenieść element. Przeniesienie spowoduje zmianę własności elementu na organizację.</string>
+    <string name="move_to_vault">Move to vault</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Liczba słów</string>
     <string name="passphrase">Hasło wyrazowe</string>
     <string name="word_separator">Separator słów</string>
@@ -383,6 +383,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
     <string name="ask_to_add_item">Proponuj zapisywanie elementu</string>
     <string name="ask_to_add_item_description">Proponuj zapisywanie danych logowania, jeśli nie ma ich w sejfie.</string>
+    <string name="turn_on_fill_assist">Turn on fill assist</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill assist improves autofill accuracy on supported sites by using site specific rules.</string>
     <string name="on_restart">Po uruchomieniu aplikacji</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>
@@ -1431,4 +1433,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
     <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
+    <string name="account_creation_restricted">Account creation restricted</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
 </resources>

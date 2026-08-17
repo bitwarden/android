@@ -124,6 +124,7 @@ class AuthSdkSourceImpl(
                         providerInviteToken = null,
                         providerUserId = null,
                         salesAssistedToken = null,
+                        openOrgInvite = null,
                     ),
                 )
             }

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
@@ -23,36 +24,6 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
-
-/**
- * Updates the given [UserStateJson] with the data to indicate that the password has been removed.
- * The original will be returned if the [userId] does not match any accounts in the [UserStateJson].
- */
-fun UserStateJson.toRemovedPasswordUserStateJson(
-    userId: String,
-): UserStateJson {
-    val account = this.accounts[userId] ?: return this
-    val profile = account.profile
-    val updatedUserDecryptionOptions = profile
-        .userDecryptionOptions
-        ?.copy(
-            hasMasterPassword = false,
-            masterPasswordUnlock = null,
-        )
-        ?: UserDecryptionOptionsJson(
-            hasMasterPassword = false,
-            trustedDeviceUserDecryptionOptions = null,
-            keyConnectorUserDecryptionOptions = null,
-            masterPasswordUnlock = null,
-        )
-    val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
-    val updatedAccount = account.copy(profile = updatedProfile)
-    return this.copy(
-        accounts = accounts
-            .toMutableMap()
-            .apply { replace(userId, updatedAccount) },
-    )
-}
 
 /**
  * Updates the given [UserStateJson] with the data from the [syncResponse] to return a new
@@ -134,69 +105,100 @@ private fun SyncResponseJson.Profile.getForcePasswordResetReason(
 }
 
 /**
- * Updates the [UserStateJson] to set the `hasMasterPassword` value to `true` after a user sets
- * their password.
+ * Updates the [UserStateJson] by setting the `forcePasswordResetReason` value for the given
+ * [userId]. If the user is not present in the `UserStateJson`, nothing is updated.
  */
-fun UserStateJson.toUserStateJsonWithPassword(
-    masterPasswordUnlock: MasterPasswordUnlockData,
+fun UserStateJson.updateForcePasswordReset(
+    userId: String,
+    reason: ForcePasswordResetReason?,
 ): UserStateJson {
-    val account = this.activeAccount
+    val account = accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedProfile = profile.copy(forcePasswordResetReason = reason)
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+/**
+ * Updates the [UserStateJson] by setting the `hasMasterPassword` and `masterPasswordUnlock` values
+ * for the given [userId]. If the user is not present in the `UserStateJson`, nothing is updated.
+ */
+fun UserStateJson.updateMasterPasswordUnlock(
+    userId: String,
+    masterPasswordUnlock: MasterPasswordUnlockData?,
+): UserStateJson {
+    val account = accounts[userId] ?: return this
     val profile = account.profile
     val userDecryptionOptions = profile.userDecryptionOptions
-    val masterPasswordUnlockJson = MasterPasswordUnlockDataJson(
-        salt = masterPasswordUnlock.salt,
-        kdf = masterPasswordUnlock.kdf.toKdfRequestModel(),
-        masterKeyWrappedUserKey = masterPasswordUnlock.masterKeyWrappedUserKey,
+    val masterPasswordUnlockJson = masterPasswordUnlock?.let {
+        MasterPasswordUnlockDataJson(
+            salt = it.salt,
+            kdf = it.kdf.toKdfRequestModel(),
+            masterKeyWrappedUserKey = it.masterKeyWrappedUserKey,
+        )
+    }
+    val updatedProfile = profile.copy(
+        userDecryptionOptions = userDecryptionOptions
+            ?.copy(
+                hasMasterPassword = masterPasswordUnlockJson != null,
+                masterPasswordUnlock = masterPasswordUnlockJson,
+            )
+            ?: UserDecryptionOptionsJson(
+                hasMasterPassword = masterPasswordUnlockJson != null,
+                keyConnectorUserDecryptionOptions = null,
+                trustedDeviceUserDecryptionOptions = null,
+                masterPasswordUnlock = masterPasswordUnlockJson,
+            ),
     )
-    val updatedProfile = profile
-        .copy(
-            forcePasswordResetReason = null,
-            userDecryptionOptions = userDecryptionOptions
-                ?.copy(
-                    hasMasterPassword = true,
-                    masterPasswordUnlock = masterPasswordUnlockJson,
-                )
-                ?: UserDecryptionOptionsJson(
-                    hasMasterPassword = true,
-                    keyConnectorUserDecryptionOptions = null,
-                    trustedDeviceUserDecryptionOptions = null,
-                    masterPasswordUnlock = masterPasswordUnlockJson,
-                ),
-        )
     val updatedAccount = account.copy(profile = updatedProfile)
-    return this
-        .copy(
-            accounts = accounts
-                .toMutableMap()
-                .apply {
-                    replace(activeUserId, updatedAccount)
-                },
-        )
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
+}
+
+/**
+ * Updates the [UserStateJson] by setting the KDF values for the given [userId]. If the user is
+ * not present in the `UserStateJson`, nothing is updated.
+ */
+fun UserStateJson.updateKdf(
+    userId: String,
+    kdf: KdfJson?,
+): UserStateJson {
+    val account = accounts[userId] ?: return this
+    val profile = account.profile
+    val updatedProfile = profile.copy(
+        kdfType = kdf?.kdfType,
+        kdfIterations = kdf?.iterations,
+        kdfMemory = kdf?.memory,
+        kdfParallelism = kdf?.parallelism,
+    )
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this.copy(
+        accounts = accounts
+            .toMutableMap()
+            .apply { replace(userId, updatedAccount) },
+    )
 }
 
 /**
  * Updates the [UserStateJson] KDF settings to minimum requirements.
  */
-fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson {
-    val account = this.activeAccount
-    val profile = account.profile
-    val updatedProfile = profile
-        .copy(
+fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson =
+    this.updateKdf(
+        userId = this.activeUserId,
+        kdf = KdfJson(
             kdfType = KdfTypeJson.PBKDF2_SHA256,
-            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
-            kdfMemory = null,
-            kdfParallelism = null,
-        )
-    val updatedAccount = account.copy(profile = updatedProfile)
-    return this
-        .copy(
-            accounts = accounts
-                .toMutableMap()
-                .apply {
-                    replace(activeUserId, updatedAccount)
-                },
-        )
-}
+            iterations = DEFAULT_PBKDF2_ITERATIONS,
+            memory = null,
+            parallelism = null,
+        ),
+    )
 
 /**
  * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].

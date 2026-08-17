@@ -70,7 +70,7 @@ fun createMockSdkCipher(
         organizationUseTotp = false,
         viewPassword = false,
         localData = null,
-        data = null,
+        data = "mockData-$number",
     )
 
 /**
