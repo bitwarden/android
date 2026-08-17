@@ -512,6 +512,10 @@ Scanning will happen automatically.</string>
     <string name="about_send">About Send</string>
     <string name="hide_email">Hide my email address from recipients</string>
     <string name="send_options_policy_in_effect">One or more organization policies are affecting your Send options.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
     <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A Premium membership is required to use files with Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Master password re-prompt</string>
