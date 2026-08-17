@@ -109,6 +109,7 @@ class ViewSendViewModel @Inject constructor(
             ViewSendAction.DeleteClick -> handleDeleteClick()
             ViewSendAction.DialogDismiss -> handleDialogDismiss()
             ViewSendAction.EditClick -> handleEditClick()
+            ViewSendAction.MakeACopyClick -> handleMakeACopyClick()
             ViewSendAction.ShareClick -> handleShareClick()
             is ViewSendAction.Internal -> handleInternalAction(action)
         }
@@ -170,6 +171,10 @@ class ViewSendViewModel @Inject constructor(
 
     private fun handleEditClick() {
         sendEvent(ViewSendEvent.NavigateToEdit(sendType = state.sendType, sendId = state.sendId))
+    }
+
+    private fun handleMakeACopyClick() {
+        sendEvent(ViewSendEvent.NavigateToCopy(sendType = state.sendType, sendId = state.sendId))
     }
 
     private fun handleShareClick() {
@@ -435,6 +440,14 @@ sealed class ViewSendEvent {
     data object NavigateBack : ViewSendEvent()
 
     /**
+     * Navigate to the add send screen, pre-filled from the current send.
+     */
+    data class NavigateToCopy(
+        val sendType: SendItemType,
+        val sendId: String,
+    ) : ViewSendEvent()
+
+    /**
      * Navigate to the edit send screen for the current send.
      */
     data class NavigateToEdit(
@@ -490,6 +503,11 @@ sealed class ViewSendAction {
      * The user has clicked the edit button.
      */
     data object EditClick : ViewSendAction()
+
+    /**
+     * The user clicked the make a copy button on the policy restriction warning.
+     */
+    data object MakeACopyClick : ViewSendAction()
 
     /**
      * The user has clicked the share button.

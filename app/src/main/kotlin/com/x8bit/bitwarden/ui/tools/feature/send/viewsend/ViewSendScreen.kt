@@ -97,6 +97,16 @@ fun ViewSendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ViewSendEvent.NavigateBack -> onNavigateBack()
+            is ViewSendEvent.NavigateToCopy -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        sendType = event.sendType,
+                        modeType = ModeType.COPY,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
+
             is ViewSendEvent.NavigateToEdit -> {
                 onNavigateToAddEditSend(
                     AddEditSendRoute(
@@ -156,6 +166,7 @@ fun ViewSendScreen(
             state = state,
             modifier = Modifier.fillMaxSize(),
             onCopyClick = { viewModel.trySendAction(ViewSendAction.CopyClick) },
+            onMakeACopyClick = { viewModel.trySendAction(ViewSendAction.MakeACopyClick) },
             onCopyNotesClick = { viewModel.trySendAction(ViewSendAction.CopyNotesClick) },
             onDeleteClick = { viewModel.trySendAction(ViewSendAction.DeleteClick) },
             onShareClick = { viewModel.trySendAction(ViewSendAction.ShareClick) },
@@ -190,6 +201,7 @@ private fun ViewSendDialogs(
 private fun ViewSendScreenContent(
     state: ViewSendState,
     onCopyClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -201,6 +213,7 @@ private fun ViewSendScreenContent(
                 state = viewState,
                 policyRestriction = state.policyRestriction,
                 onCopyClick = onCopyClick,
+                onMakeACopyClick = onMakeACopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
                 onShareClick = onShareClick,
@@ -227,6 +240,7 @@ private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
     policyRestriction: SendPolicyRestriction?,
     onCopyClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -240,6 +254,9 @@ private fun ViewStateContent(
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.organization_policy_restriction),
                 cardSubtitle = it.message(),
+                actionText = stringResource(id = BitwardenString.make_a_copy)
+                    .takeIf { _ -> it.isCopyable },
+                onActionClick = onMakeACopyClick.takeIf { _ -> it.isCopyable },
                 leadingContent = {
                     BitwardenIcon(
                         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),

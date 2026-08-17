@@ -12,6 +12,11 @@ import kotlinx.parcelize.Parcelize
  */
 sealed class SendPolicyRestriction : Parcelable {
     /**
+     * Whether a compliant copy of the Send can be made to replace it.
+     */
+    abstract val isCopyable: Boolean
+
+    /**
      * The explanation shown to the user for this restriction.
      */
     abstract val message: Text
@@ -22,6 +27,8 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object FileNotCompliant : SendPolicyRestriction() {
+        override val isCopyable: Boolean get() = false
+
         override val message: Text
             get() = BitwardenString
                 .this_send_is_not_compliant_with_your_organizations_send_policy
@@ -34,6 +41,8 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object TypeNotAllowed : SendPolicyRestriction() {
+        override val isCopyable: Boolean get() = false
+
         override val message: Text
             get() = BitwardenString.text_sends_are_not_allowed_for_your_organization.asText()
     }
@@ -43,6 +52,8 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object CopyRequired : SendPolicyRestriction() {
+        override val isCopyable: Boolean get() = true
+
         override val message: Text
             get() = BitwardenString.to_edit_this_send_make_a_copy.asText()
     }
