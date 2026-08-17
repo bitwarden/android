@@ -40,12 +40,14 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 
 /**
- * A design component action card, which contains a title, action button, and a dismiss button
- * by default, with optional leading icon content.
+ * A design component action card, which contains a title, with an optional action button, dismiss
+ * button, and leading icon content.
  *
  * @param cardTitle The title of the card.
- * @param actionText The text content on the CTA button.
+ * @param actionText The text content on the CTA button, or `null` to omit the button, which suits
+ * a card that only explains something. [onActionClick] is required alongside it.
  * @param onActionClick The action to perform when the CTA button is clicked.
+ * @param modifier The [Modifier] to be applied to the card.
  * @param onDismissClick Optional action to perform when the dismiss button is clicked.
  * @param cardSubtitle The subtitle of the card.
  * @param secondaryButton The optional data for a secondary button.
@@ -57,8 +59,8 @@ import com.bitwarden.ui.util.asText
 @Composable
 fun BitwardenActionCard(
     cardTitle: String,
-    actionText: String,
-    onActionClick: () -> Unit,
+    actionText: String? = null,
+    onActionClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
@@ -122,32 +124,35 @@ fun BitwardenActionCard(
                 )
             }
         }
-        if (cardSubtitle == null && rowBottomPx > titleBottomPx) {
-            // When the subtitle is missing, we want to ensure that the filled button is 16dp below
-            // the title but the close button can be taller than the title which will push the
-            // button further down. So we measure the difference and use that to offset the spacer
-            // size.
-            Spacer(
-                modifier = Modifier.height(height = 16.dp - (rowBottomPx - titleBottomPx).toDp()),
-            )
-        } else {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-        }
-        BitwardenFilledButton(
-            label = actionText,
-            onClick = onActionClick,
-            isExternalLink = isExternalLink,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
-        secondaryButton?.let {
-            BitwardenTextButton(
-                buttonData = it,
+        if (actionText != null && onActionClick != null) {
+            if (cardSubtitle == null && rowBottomPx > titleBottomPx) {
+                // When the subtitle is missing, we want to ensure that the filled button is 16dp
+                // below the title but the close button can be taller than the title which will push
+                // the button further down. So we measure the difference and use that to offset the
+                // spacer size.
+                Spacer(
+                    modifier = Modifier
+                        .height(height = 16.dp - (rowBottomPx - titleBottomPx).toDp()),
+                )
+            } else {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
+            BitwardenFilledButton(
+                label = actionText,
+                onClick = onActionClick,
+                isExternalLink = isExternalLink,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
+            secondaryButton?.let {
+                BitwardenTextButton(
+                    buttonData = it,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
         }
         Spacer(modifier = Modifier.height(height = 16.dp))
     }
