@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - testharness/**
+    branches:
+      - main
+      - release/**/*
   workflow_dispatch:
     inputs:
       version-name:
