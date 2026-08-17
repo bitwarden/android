@@ -25,16 +25,12 @@ internal class DiskSourceMigrationLoggerImpl(
     init {
         flightRecorderManager
             .isLoggingReadyFlow
-            .filter { it }
-            .onEach {
-                // The older encrypted shared preferences has its own values written to disk,
-                // so it is normal for there to be 2 values still present.
-                if (keystoreEncryptedPreferences.all.isNotEmpty() &&
-                    encryptedPreferences.all.size <= 2
-                ) {
-                    Timber.d("Encrypted data has been migrated to Keystore encryption.")
-                }
+            .filter { isLoggingReady ->
+                isLoggingReady &&
+                    keystoreEncryptedPreferences.all.isNotEmpty() &&
+                    encryptedPreferences.all.isEmpty()
             }
+            .onEach { Timber.d("Encrypted data has been migrated to Keystore encryption.") }
             .launchIn(unconfinedScope)
     }
 }
