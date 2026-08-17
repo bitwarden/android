@@ -44,6 +44,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toCopyViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
@@ -196,7 +198,10 @@ class AddEditSendViewModel @Inject constructor(
                     },
                 )
 
-                is AddEditSendType.EditItem -> AddEditSendState.ViewState.Loading
+                // A copy is loaded from the send it is based on, the same way an edit is.
+                is AddEditSendType.CopyItem,
+                is AddEditSendType.EditItem,
+                    -> AddEditSendState.ViewState.Loading
             },
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
@@ -212,18 +217,17 @@ class AddEditSendViewModel @Inject constructor(
 ) {
 
     init {
-        when (val addSendType = state.addEditSendType) {
-            AddEditSendType.AddItem -> Unit
-            is AddEditSendType.EditItem -> {
+        state
+            .sourceSendItemIdOrNull
+            ?.let { sendItemId ->
                 vaultRepo
-                    .getSendStateFlow(addSendType.sendItemId)
+                    .getSendStateFlow(sendItemId)
                     // We'll stop getting updates as soon as we get some loaded data.
                     .takeUntilLoaded()
                     .map { AddEditSendAction.Internal.SendDataReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
-        }
 
         generatorRepository
             .generatorResultFlow
@@ -535,6 +539,39 @@ class AddEditSendViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Maps a loaded [SendView] into the content for whichever mode this screen is in: the send's
+     * own values when editing it, or the values a compliant copy of it should start from.
+     */
+    private fun SendView.toAddEditViewState(
+        state: AddEditSendState,
+    ): AddEditSendState.ViewState.Content {
+        return when (state.addEditSendType) {
+            is AddEditSendType.CopyItem -> {
+                toCopyViewState(
+                    deletionDate = clock.instant().plus(
+                        state.enforcedDeletionHours?.toLong() ?: DEFAULT_DELETION_HOURS,
+                        ChronoUnit.HOURS,
+                    ),
+                    isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+                    sendAuth = state
+                        .enforcedWhoCanAccess
+                        ?.toEnforcedSendAuth(current = toSendAuth())
+                        ?: toSendAuth(),
+                )
+            }
+
+            AddEditSendType.AddItem,
+            is AddEditSendType.EditItem,
+                -> {
+                toViewState(
+                    baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
+                    isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+                )
+            }
+        }
+    }
+
     @Suppress("LongMethod")
     private fun handleSendDataReceive(action: AddEditSendAction.Internal.SendDataReceive) {
         when (val sendDataState = action.sendDataState) {
@@ -553,10 +590,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toViewState(
-                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                            )
+                            ?.toAddEditViewState(state = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
@@ -590,10 +624,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toViewState(
-                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                            )
+                            ?.toAddEditViewState(state = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
@@ -908,7 +939,10 @@ class AddEditSendViewModel @Inject constructor(
             }
             viewModelScope.launch {
                 when (val addSendType = state.addEditSendType) {
-                    AddEditSendType.AddItem -> {
+                    // A copy is saved as a brand new Send, leaving the original untouched.
+                    AddEditSendType.AddItem,
+                    is AddEditSendType.CopyItem,
+                        -> {
                         val fileType = content
                             .selectedType as? AddEditSendState.ViewState.Content.SendType.File
                         val result = vaultRepo.createSend(
@@ -1098,7 +1132,10 @@ data class AddEditSendState(
      */
     val screenDisplayName: Text
         get() = when (addEditSendType) {
-            AddEditSendType.AddItem -> when (sendType) {
+            // A copy is a new Send, so it is titled the same way as one.
+            AddEditSendType.AddItem,
+            is AddEditSendType.CopyItem,
+                -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.add_file_send.asText()
                 SendItemType.TEXT -> BitwardenString.add_text_send.asText()
             }
@@ -1129,9 +1166,21 @@ data class AddEditSendState(
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled == false
 
     /**
-     * Helper to determine if the UI should display the content in add send mode.
+     * Helper to determine if the UI should display the content in add send mode. A copy creates a
+     * new Send, so it is in add mode despite being loaded from an existing one.
      */
-    val isAddMode: Boolean get() = addEditSendType is AddEditSendType.AddItem
+    val isAddMode: Boolean get() = addEditSendType !is AddEditSendType.EditItem
+
+    /**
+     * Helper to determine the ID of the send whose data this screen loads, or `null` when the send
+     * is being created from scratch and there is nothing to load.
+     */
+    val sourceSendItemIdOrNull: String?
+        get() = when (val type = addEditSendType) {
+            AddEditSendType.AddItem -> null
+            is AddEditSendType.CopyItem -> type.sendItemId
+            is AddEditSendType.EditItem -> type.sendItemId
+        }
 
     /**
      * Helper to determine if the currently displayed send has a password already set.

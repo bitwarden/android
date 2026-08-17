@@ -27,6 +27,7 @@ data class AddEditSendRoute(
 @Serializable
 enum class ModeType {
     ADD,
+    COPY,
     EDIT,
 }
 
@@ -47,6 +48,7 @@ fun SavedStateHandle.toAddEditSendArgs(): AddEditSendArgs {
         sendType = route.sendType,
         addEditSendType = when (route.modeType) {
             ModeType.ADD -> AddEditSendType.AddItem
+            ModeType.COPY -> AddEditSendType.CopyItem(sendItemId = requireNotNull(route.sendId))
             ModeType.EDIT -> AddEditSendType.EditItem(sendItemId = requireNotNull(route.sendId))
         },
     )
