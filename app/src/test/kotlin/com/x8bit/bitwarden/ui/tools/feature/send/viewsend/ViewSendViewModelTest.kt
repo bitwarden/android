@@ -235,6 +235,18 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on MakeACopyClick should send NavigateToCopy`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ViewSendAction.MakeACopyClick)
+            assertEquals(
+                ViewSendEvent.NavigateToCopy(sendType = SendItemType.TEXT, sendId = "send_id"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on CloseClick should send NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
