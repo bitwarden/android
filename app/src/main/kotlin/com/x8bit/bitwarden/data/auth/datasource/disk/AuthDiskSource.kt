@@ -139,6 +139,16 @@ interface AuthDiskSource : AppIdProvider {
     )
 
     /**
+     * Returns the id of the user key for the given [userId].
+     */
+    fun getUserKeyId(userId: String): String?
+
+    /**
+     * Stores the id of the user key for the given [userId].
+     */
+    fun storeUserKeyId(userId: String, userKeyId: String?)
+
+    /**
      * Retrieves a user auto-unlock key for the given [userId].
      */
     fun getUserAutoUnlockKey(userId: String): String?

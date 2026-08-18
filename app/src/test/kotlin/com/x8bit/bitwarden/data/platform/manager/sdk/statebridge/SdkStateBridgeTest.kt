@@ -57,6 +57,31 @@ class SdkStateBridgeTest {
     }
 
     @Test
+    fun `setUserKeyId should store the user key id`() = runTest {
+        stateBridge.setUserKeyId(value = "userKeyId")
+
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+    }
+
+    @Test
+    fun `getUserKeyId should return the stored user key id`() = runTest {
+        assertNull(stateBridge.getUserKeyId())
+
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+
+        assertEquals("userKeyId", stateBridge.getUserKeyId())
+    }
+
+    @Test
+    fun `clearUserKeyId should clear the stored user key id`() = runTest {
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+
+        stateBridge.clearUserKeyId()
+
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = null)
+    }
+
+    @Test
     fun `setPersistentPinEnvelope should store the persistent pin envelope`() = runTest {
         stateBridge.setPersistentPinEnvelope(value = "pinEnvelope")
 

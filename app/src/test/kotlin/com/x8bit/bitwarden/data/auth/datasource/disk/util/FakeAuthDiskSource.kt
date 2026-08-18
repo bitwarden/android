@@ -73,6 +73,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val mutablePersistentPinProtectedUserKeyEnvelopesFlowMap =
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val storedV2UpgradeTokens = mutableMapOf<String, V2UpgradeTokenJson?>()
+    private val storedUserKeyIds = mutableMapOf<String, String?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -100,6 +101,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedEncryptedPins.remove(userId)
         storedPinProtectedUserKeys.remove(userId)
         storedV2UpgradeTokens.remove(userId)
+        storedUserKeyIds.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
@@ -161,6 +163,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         storedAccountCryptographicState[userId] = accountCryptographicState
+    }
+
+    override fun getUserKeyId(userId: String): String? = storedUserKeyIds[userId]
+
+    override fun storeUserKeyId(userId: String, userKeyId: String?) {
+        storedUserKeyIds[userId] = userKeyId
     }
 
     override fun getV2UpgradeToken(userId: String): V2UpgradeTokenJson? =
@@ -447,6 +455,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         accountCryptographicState: WrappedAccountCryptographicState?,
     ) {
         assertEquals(accountCryptographicState, storedAccountCryptographicState[userId])
+    }
+
+    /**
+     * Assert that the [userKeyId] was stored successfully using the [userId].
+     */
+    fun assertUserKeyId(userId: String, userKeyId: String?) {
+        assertEquals(userKeyId, storedUserKeyIds[userId])
     }
 
     /**

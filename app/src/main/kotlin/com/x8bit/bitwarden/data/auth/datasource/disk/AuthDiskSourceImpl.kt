@@ -61,6 +61,7 @@ private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
 private const val V2_UPGRADE_TOKEN = "v2UpgradeToken"
+private const val USER_KEY_ID_KEY = "userKeyId"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -201,6 +202,7 @@ class AuthDiskSourceImpl(
             pinProtectedUserKeyEnvelope = null,
         )
         storeV2UpgradeToken(userId = userId, v2UpgradeToken = null)
+        storeUserKeyId(userId = userId, userKeyId = null)
 
         // Certain values are never removed as required by the feature requirements:
         // * DeviceKey
@@ -288,6 +290,13 @@ class AuthDiskSourceImpl(
                 json.encodeToString(wrappedAccountCryptographicStateSerializer, it)
             },
         )
+    }
+
+    override fun getUserKeyId(userId: String): String? =
+        getString(key = USER_KEY_ID_KEY.appendIdentifier(userId))
+
+    override fun storeUserKeyId(userId: String, userKeyId: String?) {
+        putString(key = USER_KEY_ID_KEY.appendIdentifier(userId), value = userKeyId)
     }
 
     override fun getUserAutoUnlockKey(userId: String): String? =

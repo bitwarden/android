@@ -39,6 +39,16 @@ internal class SdkStateBridge(
         inMemoryUserKey = null
     }
 
+    override suspend fun setUserKeyId(value: String) {
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = value)
+    }
+
+    override suspend fun getUserKeyId(): String? = authDiskSource.getUserKeyId(userId = userId)
+
+    override suspend fun clearUserKeyId() {
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = null)
+    }
+
     override suspend fun setPersistentPinEnvelope(value: PasswordProtectedKeyEnvelope) {
         authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
             userId = userId,
