@@ -29,6 +29,9 @@ internal class SdkStateBridge(
     @Volatile
     private var inMemoryUserKey: SymmetricCryptoKey? = null
 
+    @Volatile
+    private var inMemoryUserKeyId: String? = null
+
     override suspend fun setUserKey(value: SymmetricCryptoKey) {
         inMemoryUserKey = value
     }
@@ -37,6 +40,18 @@ internal class SdkStateBridge(
 
     override suspend fun clearUserKey() {
         inMemoryUserKey = null
+    }
+
+    // Nothing on Android consumes the user key id yet, so it is held alongside the in-memory user
+    // key rather than persisted.
+    override suspend fun setUserKeyId(value: String) {
+        inMemoryUserKeyId = value
+    }
+
+    override suspend fun getUserKeyId(): String? = inMemoryUserKeyId
+
+    override suspend fun clearUserKeyId() {
+        inMemoryUserKeyId = null
     }
 
     override suspend fun setPersistentPinEnvelope(value: PasswordProtectedKeyEnvelope) {
