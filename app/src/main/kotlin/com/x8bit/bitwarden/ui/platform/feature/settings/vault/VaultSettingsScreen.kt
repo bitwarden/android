@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -40,6 +41,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 
 /**
@@ -103,11 +105,13 @@ fun VaultSettingsScreen(
             ) {
                 BitwardenActionCard(
                     cardTitle = stringResource(id = BitwardenString.import_saved_logins),
-                    actionText = stringResource(BitwardenString.get_started),
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.get_started.asText(),
+                        onClick = {
+                            viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
+                        },
+                    ),
                     cardSubtitle = stringResource(BitwardenString.use_a_computer_to_import_logins),
-                    onActionClick = {
-                        viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
-                    },
                     onDismissClick = {
                         viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardDismissClick)
                     },

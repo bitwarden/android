@@ -4,19 +4,23 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.bitwarden.ui.platform.base.BaseComposeTest
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import org.junit.Test
 
 class BitwardenActionCardTest : BaseComposeTest() {
 
     @Test
-    fun `action button content description defaults to actionText`() {
+    fun `action button content description defaults to the action button label`() {
         setTestContent {
             BitwardenTheme {
                 BitwardenActionCard(
                     cardTitle = "Title",
-                    actionText = "Learn more",
-                    onActionClick = {},
+                    actionButton = BitwardenButtonData(
+                        label = "Learn more".asText(),
+                        onClick = {},
+                    ),
                 )
             }
         }
@@ -31,9 +35,11 @@ class BitwardenActionCardTest : BaseComposeTest() {
             BitwardenTheme {
                 BitwardenActionCard(
                     cardTitle = "Title",
-                    actionText = "Learn more",
-                    isExternalLink = true,
-                    onActionClick = {},
+                    actionButton = BitwardenButtonData(
+                        label = "Learn more".asText(),
+                        onClick = {},
+                        isExternalLink = true,
+                    ),
                 )
             }
         }

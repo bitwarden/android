@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
@@ -29,6 +30,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -130,8 +132,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     cardSubtitle = stringResource(
                         BitwardenString.we_ll_walk_you_through_the_key_features_to_add_a_new_login,
                     ),
-                    actionText = stringResource(BitwardenString.get_started),
-                    onActionClick = loginItemTypeHandlers.onStartLoginCoachMarkTour,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.get_started.asText(),
+                        onClick = loginItemTypeHandlers.onStartLoginCoachMarkTour,
+                    ),
                     onDismissClick = loginItemTypeHandlers.onDismissLearnAboutLoginsCard,
                     modifier = Modifier
                         .fillMaxWidth()

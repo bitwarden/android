@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
@@ -34,6 +35,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -165,8 +167,10 @@ private fun NeedSomeInspirationCard(
 ) {
     BitwardenActionCard(
         cardTitle = stringResource(BitwardenString.need_some_inspiration),
-        actionText = stringResource(BitwardenString.check_out_the_passphrase_generator),
-        onActionClick = onActionClicked,
+        actionButton = BitwardenButtonData(
+            label = BitwardenString.check_out_the_passphrase_generator.asText(),
+            onClick = onActionClicked,
+        ),
         modifier = modifier.fillMaxWidth(),
     )
 }

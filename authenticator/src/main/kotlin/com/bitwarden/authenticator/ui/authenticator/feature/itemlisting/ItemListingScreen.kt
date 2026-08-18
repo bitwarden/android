@@ -571,9 +571,11 @@ private fun ActionCard(
             BitwardenActionCard(
                 modifier = modifier,
                 cardSubtitle = stringResource(id = BitwardenString.download_bitwarden_card_message),
-                actionText = stringResource(id = BitwardenString.download_now),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.download_now.asText(),
+                    onClick = onDownloadBitwardenClick,
+                ),
                 cardTitle = stringResource(id = BitwardenString.download_bitwarden_card_title),
-                onActionClick = onDownloadBitwardenClick,
                 onDismissClick = onDownloadBitwardenDismissClick,
                 leadingContent = {
                     Icon(
@@ -589,8 +591,10 @@ private fun ActionCard(
             BitwardenActionCard(
                 modifier = modifier,
                 cardTitle = stringResource(id = BitwardenString.sync_with_the_bitwarden_app),
-                actionText = stringResource(id = BitwardenString.take_me_to_app_settings),
-                onActionClick = onSyncWithBitwardenClick,
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.take_me_to_app_settings.asText(),
+                    onClick = onSyncWithBitwardenClick,
+                ),
                 cardSubtitle = stringResource(
                     id = BitwardenString.sync_with_bitwarden_action_card_message,
                 ),

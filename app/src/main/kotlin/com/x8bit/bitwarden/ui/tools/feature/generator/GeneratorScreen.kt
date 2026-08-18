@@ -50,6 +50,7 @@ import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
@@ -397,8 +398,11 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                     cardSubtitle = stringResource(
                         id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                     ),
-                    actionText = stringResource(id = BitwardenString.learn_more),
-                    isExternalLink = true,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.learn_more.asText(),
+                        onClick = onUpgradedToPremiumCardClick,
+                        isExternalLink = true,
+                    ),
                     leadingContent = {
                         Icon(
                             painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
@@ -406,7 +410,6 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                             tint = BitwardenTheme.colorScheme.icon.secondary,
                         )
                     },
-                    onActionClick = onUpgradedToPremiumCardClick,
                     onDismissClick = onUpgradedToPremiumCardDismiss,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -438,8 +441,10 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                     cardSubtitle = stringResource(
                         BitwardenString.learn_more_about_generating_secure_login_credentials_with_guided_tour,
                     ),
-                    actionText = stringResource(BitwardenString.get_started),
-                    onActionClick = passwordHandlers.onGeneratorActionCardClicked,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.get_started.asText(),
+                        onClick = passwordHandlers.onGeneratorActionCardClicked,
+                    ),
                     onDismissClick = passwordHandlers.onGeneratorActionCardDismissed,
                     modifier = Modifier
                         .fillMaxWidth()

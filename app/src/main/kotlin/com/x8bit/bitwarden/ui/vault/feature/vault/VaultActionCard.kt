@@ -4,11 +4,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
 /**
@@ -28,8 +30,11 @@ fun VaultActionCard(
                 cardSubtitle = stringResource(
                     id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                 ),
-                actionText = stringResource(id = BitwardenString.learn_more),
-                isExternalLink = true,
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.learn_more.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                    isExternalLink = true,
+                ),
                 leadingContent = {
                     Icon(
                         painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
@@ -37,7 +42,6 @@ fun VaultActionCard(
                         tint = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
             )
@@ -52,8 +56,10 @@ fun VaultActionCard(
                     id = BitwardenString
                         .a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control,
                 ),
-                actionText = stringResource(id = BitwardenString.learn_more),
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.learn_more.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
             )
@@ -63,8 +69,10 @@ fun VaultActionCard(
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.your_subscription_needs_attention),
                 cardSubtitle = stringResource(id = BitwardenString.check_your_plan_for_details),
-                actionText = stringResource(id = BitwardenString.view_plan),
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.view_plan.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
                 modifier = modifier,
             )
         }
@@ -75,7 +83,10 @@ fun VaultActionCard(
                 cardSubtitle = stringResource(
                     id = BitwardenString.keep_items_you_dont_need_right_now_safe_but_out_sight,
                 ),
-                actionText = stringResource(id = BitwardenString.go_to_archive),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.go_to_archive.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
                 leadingContent = {
                     Icon(
                         painter = rememberVectorPainter(id = BitwardenDrawable.ic_archive),
@@ -83,7 +94,6 @@ fun VaultActionCard(
                         tint = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
             )
@@ -93,8 +103,10 @@ fun VaultActionCard(
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.import_saved_logins),
                 cardSubtitle = stringResource(id = BitwardenString.use_a_computer_to_import_logins),
-                actionText = stringResource(id = BitwardenString.get_started),
-                onActionClick = { vaultHandlers.actionCardClick(actionCardState) },
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.get_started.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
                 onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
                 modifier = modifier,
             )
