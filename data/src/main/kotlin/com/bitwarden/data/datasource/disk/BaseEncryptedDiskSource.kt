@@ -16,6 +16,14 @@ abstract class BaseEncryptedDiskSource(
     private val encryptedSharedPreferences: SharedPreferences,
     private val keystoreEncryptedPreferences: SharedPreferences,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences) {
+    protected fun getLegacyEncryptedString(
+        key: String,
+    ): String? = encryptedSharedPreferences.getString("$LEGACY_PREFIX$key", null)
+
+    protected fun clearLegacyEncryptedString(key: String) {
+        encryptedSharedPreferences.edit { remove("$LEGACY_PREFIX$key") }
+    }
+
     protected fun getEncryptedString(
         key: String,
     ): String? = keystoreEncryptedPreferences.getString(key, null)

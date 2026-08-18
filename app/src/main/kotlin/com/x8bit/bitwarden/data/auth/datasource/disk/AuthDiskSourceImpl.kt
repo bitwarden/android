@@ -726,7 +726,7 @@ class AuthDiskSourceImpl(
                 val userId = account.profile.userId
                 val accountKeysKey = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId)
                 val privateKeyKey = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId)
-                val accountKeys = getEncryptedString(key = accountKeysKey)
+                val accountKeys = getLegacyEncryptedString(key = accountKeysKey)
                     ?.let { json.decodeFromStringOrNull<AccountKeysJson>(it) }
                 val privateKey = accountKeys
                     ?.publicKeyEncryptionKeyPair
@@ -738,7 +738,7 @@ class AuthDiskSourceImpl(
                         accountCryptographicState = accountKeys.toAccountCryptographicState(it),
                     )
                     // Remove the Account Keys and Private Key
-                    putEncryptedString(key = accountKeysKey, value = null)
+                    clearLegacyEncryptedString(key = accountKeysKey)
                     putString(key = privateKeyKey, value = null)
                 }
             }
