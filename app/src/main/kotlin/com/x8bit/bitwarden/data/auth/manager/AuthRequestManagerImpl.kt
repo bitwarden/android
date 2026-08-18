@@ -4,6 +4,7 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.NewAuthRequestService
@@ -18,14 +19,19 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.util.isSso
+import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequest
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.isActive
+import timber.log.Timber
 import java.time.Clock
 import java.time.Instant
 import javax.inject.Singleton
@@ -38,7 +44,7 @@ private const val PASSWORDLESS_APPROVER_INTERVAL_MILLIS: Long = 5L * 60L * 1_000
 /**
  * Default implementation of [AuthRequestManager].
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRequestManagerImpl(
     private val clock: Clock,
@@ -47,6 +53,7 @@ class AuthRequestManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
+    private val pushManager: PushManager,
 ) : AuthRequestManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -91,19 +98,7 @@ class AuthRequestManagerImpl(
                     isSso = authRequestType.isSso,
                 )
                 .map { request ->
-                    AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = authRequest.fingerprint,
-                    )
+                    request.toAuthRequest(fingerprint = authRequest.fingerprint)
                 }
                 .fold(
                     onFailure = { emit(CreateAuthRequestResult.Error(error = it)) },
@@ -183,21 +178,15 @@ class AuthRequestManagerImpl(
                             isRequestApproved = false
                             responseDate = clock.instant()
                         }
-                        AuthRequest(
-                            id = request.id,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            originUrl = request.originUrl,
-                            responseDate = responseDate,
-                            requestApproved = isRequestApproved,
+                        request
                             // The PublicKey and Fingerprint should be frozen in place to
                             // ensure no funny-business happens between multiple requests.
-                            publicKey = initialAuthRequest.publicKey,
-                            fingerprint = initialAuthRequest.fingerprint,
-                        )
+                            .toAuthRequest(fingerprint = initialAuthRequest.fingerprint)
+                            .copy(
+                                publicKey = initialAuthRequest.publicKey,
+                                responseDate = responseDate,
+                                requestApproved = isRequestApproved,
+                            )
                     }
                 }
                 .fold(
@@ -258,23 +247,9 @@ class AuthRequestManagerImpl(
         authRequestsService
             .getAuthRequest(requestId)
             .mapCatching { response ->
-                getFingerprintPhrase(response.publicKey)
-                    .getOrThrow()
-                    .let { fingerprint ->
-                        AuthRequest(
-                            id = response.id,
-                            publicKey = response.publicKey,
-                            platform = response.platform,
-                            ipAddress = response.ipAddress,
-                            key = response.key,
-                            masterPasswordHash = response.masterPasswordHash,
-                            creationDate = response.creationDate,
-                            responseDate = response.responseDate,
-                            requestApproved = response.requestApproved ?: false,
-                            originUrl = response.originUrl,
-                            fingerprint = fingerprint,
-                        )
-                    }
+                response.toAuthRequest(
+                    fingerprint = getFingerprintPhrase(response.publicKey).getOrThrow(),
+                )
             }
             .fold(
                 onFailure = { AuthRequestUpdatesResult.Error(error = it) },
@@ -282,25 +257,34 @@ class AuthRequestManagerImpl(
             )
     }
 
+    override fun getPasswordlessAuthRequestFlow(): Flow<AuthRequest> = pushManager
+        .passwordlessRequestFlow
+        // A push for a non-active user would otherwise be hydrated with the active user's token.
+        .filter { it.userId == activeUserId }
+        .mapNotNull { data ->
+            authRequestsService
+                .getAuthRequest(data.loginRequestId)
+                .mapCatching { response ->
+                    response.toAuthRequest(
+                        fingerprint = getFingerprintPhrase(response.publicKey).getOrThrow(),
+                    )
+                }
+                .fold(
+                    onFailure = {
+                        Timber.d(it, "Unable to hydrate the requested auth request.")
+                        null
+                    },
+                    onSuccess = { authRequest -> authRequest.takeIf { it.isActionable } },
+                )
+        }
+
     override suspend fun getAuthRequestIfApproved(requestId: String): Result<AuthRequest> =
         authRequestsService
             .getAuthRequest(requestId)
             .flatMap { request ->
                 if (request.requestApproved == true) {
                     getFingerprintPhrase(request.publicKey).map { fingerprint ->
-                        AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = true,
-                            originUrl = request.originUrl,
-                            fingerprint = fingerprint,
-                        )
+                        request.toAuthRequest(fingerprint = fingerprint)
                     }
                 } else {
                     IllegalStateException("Request not approved.").asFailure()
@@ -313,19 +297,7 @@ class AuthRequestManagerImpl(
             .map { response ->
                 response.authRequests.mapNotNull { request ->
                     getFingerprintPhrase(request.publicKey).getOrNull()?.let { fingerprint ->
-                        AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = request.requestApproved ?: false,
-                            originUrl = request.originUrl,
-                            fingerprint = fingerprint,
-                        )
+                        request.toAuthRequest(fingerprint = fingerprint)
                     }
                 }
             }
@@ -355,21 +327,7 @@ class AuthRequestManagerImpl(
                     isApproved = isApproved,
                 )
             }
-            .map { request ->
-                AuthRequest(
-                    id = request.id,
-                    publicKey = request.publicKey,
-                    platform = request.platform,
-                    ipAddress = request.ipAddress,
-                    key = request.key,
-                    masterPasswordHash = request.masterPasswordHash,
-                    creationDate = request.creationDate,
-                    responseDate = request.responseDate,
-                    requestApproved = request.requestApproved ?: false,
-                    originUrl = request.originUrl,
-                    fingerprint = "",
-                )
-            }
+            .map { request -> request.toAuthRequest(fingerprint = "") }
             .fold(
                 onFailure = { AuthRequestResult.Error(error = it) },
                 onSuccess = { AuthRequestResult.Success(authRequest = it) },
@@ -393,17 +351,7 @@ class AuthRequestManagerImpl(
                         .getAuthRequest(pendingAuthRequest.requestId)
                         .map {
                             NewAuthRequestData(
-                                authRequest = AuthRequest(
-                                    id = it.id,
-                                    publicKey = it.publicKey,
-                                    platform = it.platform,
-                                    ipAddress = it.ipAddress,
-                                    key = it.key,
-                                    masterPasswordHash = it.masterPasswordHash,
-                                    creationDate = it.creationDate,
-                                    responseDate = it.responseDate,
-                                    requestApproved = it.requestApproved ?: false,
-                                    originUrl = it.originUrl,
+                                authRequest = it.toAuthRequest(
                                     fingerprint = pendingAuthRequest.requestFingerprint,
                                 ),
                                 privateKey = pendingAuthRequest.requestPrivateKey,
@@ -456,19 +404,7 @@ class AuthRequestManagerImpl(
                         }
                     }
                     .map { request ->
-                        AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = request.requestApproved ?: false,
-                            originUrl = request.originUrl,
-                            fingerprint = authRequestResponse.fingerprint,
-                        )
+                        request.toAuthRequest(fingerprint = authRequestResponse.fingerprint)
                     }
                     .map {
                         NewAuthRequestData(
@@ -489,6 +425,16 @@ class AuthRequestManagerImpl(
             publicKey = publicKey,
         )
     }
+
+    /**
+     * Whether this request may still be approved or declined, meaning it has not already been
+     * approved, not been declined (indicated by it not being approved & having a responseDate),
+     * and has not expired (it is under 5 minutes old).
+     */
+    private val AuthRequest.isActionable: Boolean
+        get() = !requestApproved &&
+            responseDate == null &&
+            !creationDate.isOverFiveMinutesOld(clock)
 }
 
 /**

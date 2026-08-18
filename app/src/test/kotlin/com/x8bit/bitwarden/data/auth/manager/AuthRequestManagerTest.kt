@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.AuthRequestTypeJson
@@ -22,9 +23,12 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
@@ -52,6 +56,11 @@ class AuthRequestManagerTest {
         } returns "AsymmetricEncString".asSuccess()
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val mutablePasswordlessRequestFlow =
+        bufferedMutableSharedFlow<PasswordlessRequestData>()
+    private val pushManager: PushManager = mockk {
+        every { passwordlessRequestFlow } returns mutablePasswordlessRequestFlow
+    }
 
     private val repository: AuthRequestManager = AuthRequestManagerImpl(
         clock = fixedClock,
@@ -60,6 +69,7 @@ class AuthRequestManagerTest {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        pushManager = pushManager,
     )
 
     @Suppress("MaxLineLength")
@@ -1281,6 +1291,124 @@ class AuthRequestManagerTest {
         }
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit hydrated pending request`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery {
+            authRequestsService.getAuthRequest(REQUEST_ID)
+        } returns PENDING_AUTH_REQUEST_RESPONSE.asSuccess()
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit nothing for non-active user`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery {
+            authRequestsService.getAuthRequest(REQUEST_ID)
+        } returns PENDING_AUTH_REQUEST_RESPONSE.asSuccess()
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(
+                PASSWORDLESS_REQUEST_DATA.copy(userId = "otherUserId"),
+            )
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            // Only the active user's request arrives, proving the other was dropped.
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+
+        coVerify(exactly = 1) { authRequestsService.getAuthRequest(REQUEST_ID) }
+    }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit nothing on request failure`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
+            Throwable("Fail").asFailure(),
+            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit nothing when approved`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
+            PENDING_AUTH_REQUEST_RESPONSE.copy(requestApproved = true).asSuccess(),
+            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit nothing when declined`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
+            PENDING_AUTH_REQUEST_RESPONSE.copy(responseDate = fixedClock.instant()).asSuccess(),
+            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getPasswordlessAuthRequestFlow should emit nothing when expired`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
+            PENDING_AUTH_REQUEST_RESPONSE
+                .copy(creationDate = Instant.parse("2023-10-27T11:54:00Z"))
+                .asSuccess(),
+            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+        } returns FINGER_PRINT.asSuccess()
+
+        repository.getPasswordlessAuthRequestFlow().test {
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+        }
+    }
 }
 
 private const val EMAIL: String = "test@bitwarden.com"
@@ -1362,4 +1490,24 @@ private val AUTH_REQUEST_RESPONSE: AuthRequestResponse = AuthRequestResponse(
     publicKey = PUBLIC_KEY,
     accessCode = "accessCode",
     fingerprint = "fingerprint",
+)
+
+private val PASSWORDLESS_REQUEST_DATA: PasswordlessRequestData = PasswordlessRequestData(
+    loginRequestId = REQUEST_ID,
+    userId = USER_ID,
+)
+
+/**
+ * An unanswered request created one minute before the [AuthRequestManagerTest] clock, making it
+ * neither responded to nor expired.
+ */
+private val PENDING_AUTH_REQUEST_RESPONSE: AuthRequestsResponseJson.AuthRequest =
+    AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+        creationDate = Instant.parse("2023-10-27T11:59:00Z"),
+        requestApproved = false,
+    )
+
+private val PENDING_AUTH_REQUEST: AuthRequest = AUTH_REQUEST.copy(
+    creationDate = Instant.parse("2023-10-27T11:59:00Z"),
+    requestApproved = false,
 )

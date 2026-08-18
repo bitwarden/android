@@ -72,6 +72,11 @@ class ManageDevicesViewModel @Inject constructor(
     init {
         updateAuthRequestList()
         fetchAllDevices()
+        authRepository
+            .getPasswordlessAuthRequestFlow()
+            .map { ManageDevicesAction.Internal.PasswordlessAuthRequestReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { ManageDevicesAction.Internal.PullToRefreshEnableReceive(it) }
@@ -147,6 +152,14 @@ class ManageDevicesViewModel @Inject constructor(
             is ManageDevicesAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
             }
+
+            is ManageDevicesAction.Internal.PasswordlessAuthRequestReceive -> {
+                handlePasswordlessAuthRequestReceive(action)
+            }
+
+            is ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive -> {
+                handlePasswordlessAuthRequestDevicesReceive(action)
+            }
         }
     }
 
@@ -221,6 +234,47 @@ class ManageDevicesViewModel @Inject constructor(
                 devices = devicesResult.devices.toImmutableList(),
                 devicesLoaded = true,
                 isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
+            )
+        }
+        if (state.authRequestsLoaded) {
+            updateContentWithCurrentData()
+        }
+    }
+
+    private fun handlePasswordlessAuthRequestReceive(
+        action: ManageDevicesAction.Internal.PasswordlessAuthRequestReceive,
+    ) {
+        // The device list is the only source that reports which device owns a pending request, so
+        // it is re-read before the new request can be rendered against its device.
+        viewModelScope.launch {
+            sendAction(
+                ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive(
+                    authRequest = action.authRequest,
+                    devicesResult = authRepository.getDevices(),
+                ),
+            )
+        }
+    }
+
+    private fun handlePasswordlessAuthRequestDevicesReceive(
+        action: ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive,
+    ) {
+        // This refresh is not user-initiated, so a failure leaves the screen untouched rather than
+        // replacing it with an error; polling and pull-to-refresh reconcile it later.
+        val devices = (action.devicesResult as? GetDevicesResult.Success)
+            ?.devices
+            ?: return
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                // Replaces any earlier copy of this request so it cannot be listed twice.
+                authRequests = currentState
+                    .authRequests
+                    .filterNot { it.id == action.authRequest.id }
+                    .plus(action.authRequest)
+                    .toImmutableList(),
+                devices = devices.toImmutableList(),
+                devicesLoaded = true,
             )
         }
         if (state.authRequestsLoaded) {
@@ -445,6 +499,22 @@ sealed class ManageDevicesAction {
          */
         data class AuthRequestsResultReceive(
             val authRequestsUpdatesResult: AuthRequestsUpdatesResult,
+        ) : Internal()
+
+        /**
+         * Indicates that an incoming passwordless request has been received.
+         */
+        data class PasswordlessAuthRequestReceive(
+            val authRequest: AuthRequest,
+        ) : Internal()
+
+        /**
+         * Indicates that the devices accompanying an incoming passwordless request have been
+         * received.
+         */
+        data class PasswordlessAuthRequestDevicesReceive(
+            val authRequest: AuthRequest,
+            val devicesResult: GetDevicesResult,
         ) : Internal()
     }
 }

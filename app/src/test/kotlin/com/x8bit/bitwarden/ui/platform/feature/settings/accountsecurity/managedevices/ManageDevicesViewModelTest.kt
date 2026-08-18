@@ -51,8 +51,10 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     )
     private val mutableAuthRequestsWithUpdatesFlow =
         bufferedMutableSharedFlow<AuthRequestsUpdatesResult>()
+    private val mutablePasswordlessAuthRequestFlow = bufferedMutableSharedFlow<AuthRequest>()
     private val authRepository = mockk<AuthRepository> {
         every { getAuthRequestsWithUpdates() } returns mutableAuthRequestsWithUpdatesFlow
+        every { getPasswordlessAuthRequestFlow() } returns mutablePasswordlessAuthRequestFlow
         coEvery { getDevices() } returns GetDevicesResult.Success(emptyList())
     }
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
@@ -323,6 +325,73 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `passwordless request should add a pending row for its device`() = runTest {
+        val pendingDevice = DEFAULT_DEVICE.copy(
+            id = "device-pending",
+            pendingAuthRequest = DevicePendingAuthRequest(
+                id = PASSWORDLESS_AUTH_REQUEST.id,
+                creationDate = fixedClock.instant(),
+            ),
+        )
+        val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
+
+        // The device only reports its pending association once the request exists server-side.
+        coEvery { authRepository.getDevices() } returns GetDevicesResult.Success(
+            devices = listOf(pendingDevice),
+        )
+        mutablePasswordlessAuthRequestFlow.tryEmit(PASSWORDLESS_AUTH_REQUEST)
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                ManageDevicesState(
+                    authRequests = listOf(PASSWORDLESS_AUTH_REQUEST).toImmutableList(),
+                    devices = listOf(pendingDevice).toImmutableList(),
+                    viewState = ManageDevicesState.ViewState.Content(
+                        items = listOf(
+                            ManageDevicesState.ViewState.Content.DeviceItem(
+                                id = pendingDevice.id,
+                                name = pendingDevice.name,
+                                typeName = pendingDevice.type.readableDeviceTypeName,
+                                isTrusted = pendingDevice.isTrusted,
+                                firstLoginDate = "Oct 27, 2023, 12:00:00 PM",
+                                lastActivityLabel = pendingDevice.lastActivityDate
+                                    ?.toLastActivityLabel(clock = fixedClock),
+                                status = DeviceSessionStatus.Pending,
+                                fingerprintPhrase = PASSWORDLESS_AUTH_REQUEST.fingerprint,
+                            ),
+                        ),
+                    ),
+                    isPullToRefreshSettingEnabled = false,
+                    isRefreshing = false,
+                    internalHideBottomSheet = false,
+                    isFdroid = false,
+                    devicesLoaded = true,
+                    authRequestsLoaded = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `passwordless request should leave the state untouched when the device fetch fails`() =
+        runTest {
+            val viewModel = createViewModel()
+            mutableAuthRequestsWithUpdatesFlow.tryEmit(
+                AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+            )
+            val expectedState = viewModel.stateFlow.value
+
+            coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
+            mutablePasswordlessAuthRequestFlow.tryEmit(PASSWORDLESS_AUTH_REQUEST)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
     private fun createViewModel(state: ManageDevicesState? = null) = ManageDevicesViewModel(
         clock = fixedClock,
         authRepository = authRepository,
@@ -332,6 +401,20 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle(mapOf("state" to state)),
     )
 }
+
+private val PASSWORDLESS_AUTH_REQUEST = AuthRequest(
+    id = "auth-req-push",
+    publicKey = "publicKey",
+    platform = "Android",
+    ipAddress = "192.168.0.1",
+    key = null,
+    masterPasswordHash = null,
+    creationDate = Instant.parse("2023-10-27T12:00:00Z"),
+    responseDate = null,
+    requestApproved = false,
+    originUrl = "www.bitwarden.com",
+    fingerprint = "fingerprint-phrase",
+)
 
 private val DEFAULT_DEVICE = DeviceInfo(
     id = "device-current",

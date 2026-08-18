@@ -73,6 +73,7 @@ object AuthManagerModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        pushManager: PushManager,
     ): AuthRequestManager =
         AuthRequestManagerImpl(
             clock = clock,
@@ -81,6 +82,7 @@ object AuthManagerModule {
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
             authDiskSource = authDiskSource,
+            pushManager = pushManager,
         )
 
     @Provides
