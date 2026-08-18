@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
@@ -94,11 +95,12 @@ private fun String.hasAllowedDomain(allowedDomains: List<String>): Boolean {
  * usable such as `","`. An empty result is treated as no restriction rather than as a restriction
  * nothing can satisfy, since the latter would block saving with no way for the user to recover.
  */
-private fun String?.toAllowedDomains(): List<String> = this
+private fun String?.splitToDomains(): ImmutableList<String> = this
     ?.split(",")
     ?.map { it.trim() }
     ?.filter { it.isNotBlank() }
     .orEmpty()
+    .toImmutableList()
 
 /**
  * Returns the [SendAuth] this access type restricts a Send to, preserving [current] when it already
@@ -1072,8 +1074,8 @@ data class AddEditSendState(
      * or an empty list when recipients may use any domain. The legacy send options policy has no
      * equivalent enforcement, so this is only in effect alongside the SendControls feature flag.
      */
-    val enforcedAllowedDomains: List<String>
-        get() = allowedDomains.takeIf { isSendControlsEnabled }.toAllowedDomains()
+    val enforcedAllowedDomains: ImmutableList<String>
+        get() = allowedDomains.takeIf { isSendControlsEnabled }.splitToDomains()
 
     /**
      * Helper to determine the Send deletion window enforced by the SendControls policy, or `null`
