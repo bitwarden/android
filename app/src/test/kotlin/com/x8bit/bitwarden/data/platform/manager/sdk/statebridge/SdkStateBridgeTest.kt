@@ -57,28 +57,28 @@ class SdkStateBridgeTest {
     }
 
     @Test
-    fun `setUserKeyId should store the user key id in memory`() = runTest {
+    fun `setUserKeyId should store the user key id`() = runTest {
         stateBridge.setUserKeyId(value = "userKeyId")
 
-        assertEquals("userKeyId", stateBridge.getUserKeyId())
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
     }
 
     @Test
-    fun `getUserKeyId should return the in-memory user key id`() = runTest {
+    fun `getUserKeyId should return the stored user key id`() = runTest {
         assertNull(stateBridge.getUserKeyId())
 
-        stateBridge.setUserKeyId(value = "userKeyId")
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
 
         assertEquals("userKeyId", stateBridge.getUserKeyId())
     }
 
     @Test
-    fun `clearUserKeyId should clear the in-memory user key id`() = runTest {
-        stateBridge.setUserKeyId(value = "userKeyId")
+    fun `clearUserKeyId should clear the stored user key id`() = runTest {
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
 
         stateBridge.clearUserKeyId()
 
-        assertNull(stateBridge.getUserKeyId())
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = null)
     }
 
     @Test

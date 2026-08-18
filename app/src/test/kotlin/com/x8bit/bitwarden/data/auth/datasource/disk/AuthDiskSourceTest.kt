@@ -377,6 +377,7 @@ class AuthDiskSourceTest {
                 wrappedUserKey2 = "wrappedUserKey2",
             ),
         )
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = "userKeyId")
 
         authDiskSource.clearData(userId = userId)
 
@@ -410,6 +411,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getV2UpgradeToken(userId = userId))
+        assertNull(authDiskSource.getUserKeyId(userId = userId))
     }
 
     @Test
@@ -536,6 +538,28 @@ class AuthDiskSourceTest {
             ),
             json.parseToJsonElement(requireNotNull(actual)),
         )
+    }
+
+    @Test
+    fun `getUserKeyId should pull from SharedPreferences`() {
+        val userKeyIdBaseKey = "bwPreferencesStorage:userKeyId"
+        val mockUserId = "mockUserId"
+        val mockUserKeyId = "mockUserKeyId"
+        fakeSharedPreferences.edit {
+            putString("${userKeyIdBaseKey}_$mockUserId", mockUserKeyId)
+        }
+        val actual = authDiskSource.getUserKeyId(userId = mockUserId)
+        assertEquals(mockUserKeyId, actual)
+    }
+
+    @Test
+    fun `storeUserKeyId should update SharedPreferences`() {
+        val userKeyIdBaseKey = "bwPreferencesStorage:userKeyId"
+        val mockUserId = "mockUserId"
+        val mockUserKeyId = "mockUserKeyId"
+        authDiskSource.storeUserKeyId(userId = mockUserId, userKeyId = mockUserKeyId)
+        val actual = fakeSharedPreferences.getString("${userKeyIdBaseKey}_$mockUserId", null)
+        assertEquals(mockUserKeyId, actual)
     }
 
     @Test
