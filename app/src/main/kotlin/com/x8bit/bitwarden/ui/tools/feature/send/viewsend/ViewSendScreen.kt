@@ -51,6 +51,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
@@ -254,9 +255,11 @@ private fun ViewStateContent(
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.organization_policy_restriction),
                 cardSubtitle = it.message(),
-                actionText = stringResource(id = BitwardenString.make_a_copy)
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.make_a_copy.asText(),
+                    onClick = onMakeACopyClick,
+                )
                     .takeIf { _ -> it.isCopyable },
-                onActionClick = onMakeACopyClick.takeIf { _ -> it.isCopyable },
                 leadingContent = {
                     BitwardenIcon(
                         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
