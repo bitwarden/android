@@ -1918,6 +1918,33 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ItemTypeToAddSelected sends NavigateToAddVaultItem with the collection ID when viewing a collection`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Collection(
+                        collectionId = "mockId-1",
+                    ),
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ItemTypeToAddSelected(
+                        itemType = CreateVaultItemType.LOGIN,
+                    ),
+                )
+                assertEquals(
+                    VaultItemListingEvent.NavigateToAddVaultItem(
+                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        selectedCollectionId = "mockId-1",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `FolderClick for vault item should emit NavigateToFolderItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()

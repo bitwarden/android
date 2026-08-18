@@ -682,8 +682,77 @@ class CipherViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `appendFolderAndOwnerData should default the owner to the selected collection's organization`() {
+        val viewState = createSecureNoteViewState(
+            cipherView = null,
+            availableOwners = listOf(USER_OWNER, ORGANIZATION_OWNER),
+            availableFolders = emptyList(),
+            selectedOwnerId = null,
+            selectedFolderId = null,
+            selectedCollectionId = "mockId-1",
+        )
+        val account = createAccount()
+        val collectionList = listOf(createMockCollectionView(number = 1))
+
+        val result = viewState.appendFolderAndOwnerData(
+            folderViewList = emptyList(),
+            collectionViewList = collectionList,
+            activeAccount = account,
+            isIndividualVaultDisabled = false,
+            resourceManager = resourceManager,
+            isVfo1FoundationEnabled = true,
+        )
+
+        val expected = createSecureNoteViewState(
+            cipherView = null,
+            availableOwners = listOf(USER_OWNER, ORGANIZATION_OWNER),
+            availableFolders = listOf(NO_FOLDER_ITEM),
+            selectedOwnerId = ORGANIZATION_OWNER.id,
+            selectedFolderId = null,
+            selectedCollectionId = "mockId-1",
+        )
+        assertEquals(expected, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `appendFolderAndOwnerData should leave the owner unselected when no collection is selected`() {
+        val viewState = createSecureNoteViewState(
+            cipherView = null,
+            availableOwners = listOf(USER_OWNER, ORGANIZATION_OWNER),
+            availableFolders = emptyList(),
+            selectedOwnerId = null,
+            selectedFolderId = null,
+            selectedCollectionId = null,
+        )
+        val account = createAccount()
+        val collectionList = listOf(createMockCollectionView(number = 1))
+
+        val result = viewState.appendFolderAndOwnerData(
+            folderViewList = emptyList(),
+            collectionViewList = collectionList,
+            activeAccount = account,
+            isIndividualVaultDisabled = false,
+            resourceManager = resourceManager,
+            isVfo1FoundationEnabled = true,
+        )
+
+        val expected = createSecureNoteViewState(
+            cipherView = null,
+            availableOwners = listOf(USER_OWNER, ORGANIZATION_OWNER_UNSELECTED_COLLECTION),
+            availableFolders = listOf(NO_FOLDER_ITEM),
+            selectedOwnerId = null,
+            selectedFolderId = null,
+            selectedCollectionId = null,
+        )
+        assertEquals(expected, result)
+    }
+
+    @Suppress("LongParameterList")
     private fun createSecureNoteViewState(
-        cipherView: CipherView = createMockCipherView(number = 1),
+        cipherView: CipherView? = createMockCipherView(number = 1),
         availableOwners: List<VaultAddEditState.Owner> = listOf(
             USER_OWNER,
             ORGANIZATION_OWNER,
@@ -694,6 +763,7 @@ class CipherViewExtensionsTest {
         ),
         selectedFolderId: String? = availableFolders.firstOrNull()?.id,
         selectedOwnerId: String? = availableOwners.firstOrNull()?.id,
+        selectedCollectionId: String? = null,
     ): VaultAddEditState.ViewState.Content =
         VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -721,6 +791,7 @@ class CipherViewExtensionsTest {
                 ),
                 availableFolders = emptyList(),
                 availableOwners = persistentListOf(),
+                selectedCollectionId = selectedCollectionId,
             )
                 .let {
                     if (availableOwners.isNotEmpty()) {
@@ -1011,6 +1082,19 @@ private val ORGANIZATION_OWNER_DEFAULT_COLLECTION = VaultAddEditState.Owner(
         ),
     ),
 )
+private val ORGANIZATION_OWNER_UNSELECTED_COLLECTION = VaultAddEditState.Owner(
+    id = "mockOrganizationId-1",
+    name = "organizationName".asText(),
+    collections = listOf(
+        VaultCollection(
+            id = "mockId-1",
+            name = "mockName-1",
+            isSelected = false,
+            isDefaultUserCollection = false,
+        ),
+    ),
+)
+
 private val USER_OWNER = VaultAddEditState.Owner(
     id = null,
     name = BitwardenString.my_vault.asText(),

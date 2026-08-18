@@ -110,7 +110,7 @@ fun NavController.navigateToVaultAddEdit(
             vaultItemId = args.vaultAddEditType.vaultItemId,
             vaultItemCipherType = args.vaultItemCipherType,
             selectedFolderId = args.selectedFolderId,
-            selectedCollectionId = args.selectedFolderId,
+            selectedCollectionId = args.selectedCollectionId,
         ),
         navOptions = navOptions,
     )
