@@ -89,7 +89,7 @@ jobs:
           --name testharness_apk-keystore.jks --file ${{ github.workspace }}/keystores/testharness_apk-keystore.jks --output none
 
       - name: Download Firebase credentials
-        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -142,11 +142,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Distribute to Firebase - testharness.apk
-        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_dev_firebase-creds.json
         run: |
