@@ -285,7 +285,7 @@ class ViewSendViewModel @Inject constructor(
 }
 
 /**
- * Models state for the new send screen.
+ * Models state for the view send screen.
  *
  * @property allowedSendTypes The types of Sends that are allowed to exist, sourced from
  * [EffectiveSendPolicy.allowedSendTypes]. A `null` value means no type restriction is in effect.

@@ -144,7 +144,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `policy restriction should be absent when the send type is allowed`() {
+    fun `policy restriction should require a copy when the send type is allowed`() {
         val state = restrictedState(allowedSendTypes = listOf(SendTypeJson.TEXT))
 
         assertEquals(SendPolicyRestriction.CopyRequired, state.policyRestriction)
