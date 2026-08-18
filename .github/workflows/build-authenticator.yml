@@ -102,7 +102,7 @@ jobs:
           --name com.bitwarden.authenticator.dev-google-services.json --file ${{ github.workspace }}/authenticator/src/debug/google-services.json --output none
 
       - name: Download Firebase credentials
-        if: ${{ env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -113,7 +113,7 @@ jobs:
           --name authenticator_play_firebase-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json --output none
 
       - name: Download Play Store credentials
-        if: ${{ env.PUBLISH_TO_PLAY_STORE }}
+        if: ${{ env.PUBLISH_TO_PLAY_STORE == 'true' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -130,7 +130,7 @@ jobs:
         uses: ./.github/actions/setup-android-build
 
       - name: Verify Play Store credentials
-        if: ${{ env.PUBLISH_TO_PLAY_STORE }}
+        if: ${{ env.PUBLISH_TO_PLAY_STORE == 'true' }}
         run: |
           bundle exec fastlane run validate_play_store_json_key \
           json_key:"${{ github.workspace }}/secrets/authenticator_play_store-creds.json"
@@ -219,11 +219,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Distribute to Firebase - prod.aab
-        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE }}
+        if: ${{ matrix.variant == 'aab' && env.DISTRIBUTE_TO_FIREBASE == 'true' }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
@@ -231,7 +231,7 @@ jobs:
           serviceCredentialsFile:"$FIREBASE_CREDS_PATH"
 
       - name: Publish to Play Store - prod.aab
-        if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE }}
+        if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE == 'true' }}
         env:
           PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
         run: |
