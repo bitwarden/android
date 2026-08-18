@@ -34,6 +34,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
+import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -459,109 +460,98 @@ class AuthSdkSourceTest {
         }
 
     @Test
-    fun `passwordStrength should call SDK and return a Result with the correct data`() =
-        runBlocking {
-            val slot = slot<suspend Client.() -> PasswordStrength>()
-            coEvery {
-                sdkClientManager.singleUseClient(block = capture(slot))
-            } coAnswers { slot.captured(client) }
-            val email = "email"
-            val password = "password"
-            val additionalInputs = listOf("test1", "test2")
-            val sdkResult = 3.toUByte()
-            val expectedResult = PasswordStrength.LEVEL_3
-            coEvery {
-                clientAuth.passwordStrength(
-                    email = email,
-                    password = password,
-                    additionalInputs = additionalInputs,
-                )
-            } returns sdkResult
-
-            val result = authSkdSource.passwordStrength(
+    fun `passwordStrength should call SDK and return a Result with the correct data`() {
+        val email = "email"
+        val password = "password"
+        val additionalInputs = listOf("test1", "test2")
+        val sdkResult = 3.toUByte()
+        val expectedResult = PasswordStrength.LEVEL_3
+        every {
+            clientAuth.passwordStrength(
                 email = email,
                 password = password,
                 additionalInputs = additionalInputs,
             )
-            assertEquals(
-                expectedResult.asSuccess(),
-                result,
+        } returns sdkResult
+
+        val result = authSkdSource.passwordStrength(
+            email = email,
+            password = password,
+            additionalInputs = additionalInputs,
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        verify(exactly = 1) {
+            clientAuth.passwordStrength(
+                email = email,
+                password = password,
+                additionalInputs = additionalInputs,
             )
-            coVerify {
-                clientAuth.passwordStrength(
-                    email = email,
-                    password = password,
-                    additionalInputs = additionalInputs,
-                )
-            }
         }
+    }
 
     @Test
-    fun `satisfiesPolicy should call SDK and return a Result with the correct data`() =
-        runBlocking {
-            val slot = slot<suspend Client.() -> Boolean>()
-            coEvery {
-                sdkClientManager.singleUseClient(block = capture(slot))
-            } coAnswers { slot.captured(client) }
-            val password = "password"
-            val passwordStrength = PasswordStrength.LEVEL_3
-            val rawStrength = 3.toUByte()
-            val policy = mockk<MasterPasswordPolicyOptions>()
-            val expectedResult = true
-            coEvery {
-                clientAuth.satisfiesPolicy(
-                    password = password,
-                    strength = rawStrength,
-                    policy = policy,
-                )
-            } returns expectedResult
-
-            val result = authSkdSource.satisfiesPolicy(
+    fun `satisfiesPolicy should call SDK and return a Result with the correct data`() {
+        val password = "password"
+        val passwordStrength = PasswordStrength.LEVEL_3
+        val rawStrength = 3.toUByte()
+        val policy = mockk<MasterPasswordPolicyOptions>()
+        val expectedResult = true
+        every {
+            clientAuth.satisfiesPolicy(
                 password = password,
-                passwordStrength = passwordStrength,
+                strength = rawStrength,
                 policy = policy,
             )
-            assertEquals(
-                expectedResult.asSuccess(),
-                result,
+        } returns expectedResult
+
+        val result = authSkdSource.satisfiesPolicy(
+            password = password,
+            passwordStrength = passwordStrength,
+            policy = policy,
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        verify(exactly = 1) {
+            clientAuth.satisfiesPolicy(
+                password = password,
+                strength = rawStrength,
+                policy = policy,
             )
-            coVerify {
-                clientAuth.satisfiesPolicy(
-                    password = password,
-                    strength = rawStrength,
-                    policy = policy,
-                )
-            }
         }
+    }
 
     @Test
-    fun `filterPolicies should call SDK and return a Result with the correct data`() =
-        runBlocking {
-            val policies = listOf(mockk<PolicyView>())
-            val organizations = listOf(mockk<OrganizationUserPolicyContext>())
-            val policyType = mockk<PolicyType>()
-            val expectedResult = listOf(mockk<PolicyView>())
-            coEvery {
-                clientPolicies.filterByType(
-                    policies = policies,
-                    organizationUserPolicyContexts = organizations,
-                    policyType = policyType,
-                )
-            } returns expectedResult
-
-            val result = authSkdSource.filterPolicies(
+    fun `filterPolicies should call SDK and return a Result with the correct data`() {
+        val policies = listOf(mockk<PolicyView>())
+        val organizations = listOf(mockk<OrganizationUserPolicyContext>())
+        val policyType = mockk<PolicyType>()
+        val expectedResult = listOf(mockk<PolicyView>())
+        every {
+            clientPolicies.filterByType(
                 policies = policies,
-                organizations = organizations,
+                organizationUserPolicyContexts = organizations,
                 policyType = policyType,
             )
+        } returns expectedResult
 
-            assertEquals(expectedResult.asSuccess(), result)
-            coVerify(exactly = 1) {
-                clientPolicies.filterByType(
-                    policies = policies,
-                    organizationUserPolicyContexts = organizations,
-                    policyType = policyType,
-                )
-            }
+        val result = authSkdSource.filterPolicies(
+            policies = policies,
+            organizations = organizations,
+            policyType = policyType,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
+        verify(exactly = 1) {
+            clientPolicies.filterByType(
+                policies = policies,
+                organizationUserPolicyContexts = organizations,
+                policyType = policyType,
+            )
         }
+    }
 }
