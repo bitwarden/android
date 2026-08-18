@@ -7,6 +7,7 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -58,6 +59,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -350,6 +352,275 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE.copy(isSendControlsEnabled = true), awaitItem())
             }
         }
+
+    @Test
+    fun `initial state should use the enforced access type when send controls is enabled`() {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE)
+
+        assertEquals(
+            enforcedAccessState(
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                sendAuth = SendAuth.Email(),
+            ),
+            createViewModel().stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial state should use the enforced access type for a password protected policy`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED)
+
+        assertEquals(
+            enforcedAccessState(
+                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                sendAuth = SendAuth.Password,
+            ),
+            createViewModel().stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial state should leave the access type alone for an any policy`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.ANY)
+
+        // Every option stays available, so nothing is enforced and the chooser stays interactive.
+        val state = createViewModel().stateFlow.value
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.ANY,
+            ),
+            state,
+        )
+        assertNull(state.enforcedWhoCanAccess)
+    }
+
+    @Test
+    fun `access type should stay put when an any policy arrives`() = runTest {
+        mutableSendControlsFlagFlow.value = true
+        val initialState = DEFAULT_STATE.copy(
+            isSendControlsEnabled = true,
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+            ),
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                .copy(whoCanAccess = SendAccessTypeJson.ANY)
+
+            val state = awaitItem()
+            assertEquals(initialState.copy(whoCanAccess = SendAccessTypeJson.ANY), state)
+            assertNull(state.enforcedWhoCanAccess)
+        }
+    }
+
+    @Test
+    fun `initial state should use the enforced access type without a premium account`() {
+        every { UUID.randomUUID().toString() } returns "uuid"
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+        )
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE)
+
+        // The policy outranks the premium requirement that gates picking this option by hand.
+        assertEquals(
+            enforcedAccessState(
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                sendAuth = SendAuth.Email(),
+            ).copy(isPremium = false),
+            createViewModel().stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial state should leave the access type alone when send controls is disabled`() {
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE)
+
+        assertEquals(
+            DEFAULT_STATE.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE),
+            createViewModel().stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `access type should update when the enforced access type changes in add mode`() = runTest {
+        mutableSendControlsFlagFlow.value = true
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE.copy(isSendControlsEnabled = true), awaitItem())
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                .copy(whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED)
+
+            assertEquals(
+                enforcedAccessState(
+                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                    sendAuth = SendAuth.Password,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `access type should keep entered emails when the enforcement repeats the current type`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val enteredEmails = SendAuth.Email(
+                emails = persistentListOf(AuthEmail(value = "test@example.com")),
+            )
+            val initialState = DEFAULT_STATE.copy(
+                isSendControlsEnabled = true,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = enteredEmails),
+                ),
+            )
+            val viewModel = createViewModel(state = initialState)
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                    .copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE)
+
+                // The emails already typed survive the policy re-confirming the same type.
+                assertEquals(
+                    initialState.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `access type should not change when the enforced access type changes in edit mode`() =
+        runTest {
+            mutableSendControlsFlagFlow.value = true
+            val sendId = "sendId-1"
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val initialState = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+                isSendControlsEnabled = true,
+            )
+            val viewModel = createViewModel(
+                state = initialState,
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+
+                mutableEffectiveSendPolicyFlow.value =
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(
+                        whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                    )
+
+                // The existing Send keeps its own access type even though it is now enforced.
+                assertEquals(
+                    initialState.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `access type should not change when the policy changes with send controls off`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                .copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE)
+
+            assertEquals(
+                DEFAULT_STATE.copy(whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `access type should stay put when the enforcement is lifted`() = runTest {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED)
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                enforcedAccessState(
+                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                    sendAuth = SendAuth.Password,
+                ),
+                awaitItem(),
+            )
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+
+            // Unlocking the chooser leaves the selection as-is rather than discarding it.
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isSendControlsEnabled = true,
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `access type should stay put when send controls is turned off`() = runTest {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED)
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                enforcedAccessState(
+                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                    sendAuth = SendAuth.Password,
+                ),
+                awaitItem(),
+            )
+
+            mutableSendControlsFlagFlow.value = false
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
 
     @Test
     fun `initial state should read from saved state when present`() {
@@ -1717,6 +1988,20 @@ private val DEFAULT_STATE = AddEditSendState(
     whoCanAccess = null,
     sendType = SendItemType.TEXT,
     isPremium = true,
+)
+
+/**
+ * Builds the state expected when [whoCanAccess] is enforced and has forced [sendAuth].
+ */
+private fun enforcedAccessState(
+    whoCanAccess: SendAccessTypeJson,
+    sendAuth: SendAuth,
+): AddEditSendState = DEFAULT_STATE.copy(
+    isSendControlsEnabled = true,
+    whoCanAccess = whoCanAccess,
+    viewState = DEFAULT_VIEW_STATE.copy(
+        common = DEFAULT_COMMON_STATE.copy(sendAuth = sendAuth),
+    ),
 )
 
 private val ENFORCED_DELETION_DATE: Instant = Instant.parse("2023-10-28T12:00:00Z")

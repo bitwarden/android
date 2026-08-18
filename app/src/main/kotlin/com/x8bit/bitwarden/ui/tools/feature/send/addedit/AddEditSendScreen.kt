@@ -174,6 +174,7 @@ fun AddEditSendScreen(
             is AddEditSendState.ViewState.Content -> AddEditSendContent(
                 state = viewState,
                 enforcedDeletionHours = state.enforcedDeletionHours,
+                enforcedWhoCanAccess = state.enforcedWhoCanAccess,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
                 shouldHideEmailAddressToggle = state.shouldHideEmailAddressToggle,

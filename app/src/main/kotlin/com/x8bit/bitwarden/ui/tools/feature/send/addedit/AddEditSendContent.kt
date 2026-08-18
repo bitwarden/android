@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
@@ -63,6 +64,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHan
 fun AddEditSendContent(
     state: AddEditSendState.ViewState.Content,
     enforcedDeletionHours: Int?,
+    enforcedWhoCanAccess: SendAccessTypeJson?,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
     shouldHideEmailAddressToggle: Boolean,
@@ -174,7 +176,7 @@ fun AddEditSendContent(
             onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
             onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
             password = state.common.passwordInput,
-            isEnabled = !policyDisablesSend,
+            isEnabled = !policyDisablesSend && enforcedWhoCanAccess == null,
             isSendsRestrictedByPolicy = policyDisablesSend,
             modifier = Modifier
                 .testTag("SendAuthTypeChooser")

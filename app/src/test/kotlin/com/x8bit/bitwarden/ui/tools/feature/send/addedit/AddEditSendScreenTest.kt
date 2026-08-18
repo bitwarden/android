@@ -22,6 +22,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
@@ -1702,6 +1703,129 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .filterToOne(hasAnyAncestor(hasSetTextAction()))
             .performScrollTo()
             .assertIsNotEnabled()
+    }
+
+    @Test
+    fun `who can view chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Email()),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendVisibilityChooser")
+            .performScrollTo()
+            .assertIsNotEnabled()
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // The enforced option is displayed, but the other options are never composed.
+        composeTestRule
+            .onNodeWithText("Anyone with the link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should display the enforced option when locked to a password`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = false,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when the policy allows any access type`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.ANY,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // ANY leaves every option available, so nothing is locked.
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when the policy leaves it unset`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = null,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
     }
     //endregion Authentication UI Tests
 }
