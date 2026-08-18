@@ -4,7 +4,6 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
-import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.NewAuthRequestService
@@ -18,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.util.isActionable
 import com.x8bit.bitwarden.data.auth.manager.util.isSso
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequest
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
@@ -274,7 +274,9 @@ class AuthRequestManagerImpl(
                         Timber.d(it, "Unable to hydrate the requested auth request.")
                         null
                     },
-                    onSuccess = { authRequest -> authRequest.takeIf { it.isActionable } },
+                    onSuccess = { authRequest ->
+                        authRequest.takeIf { it.isActionable(clock = clock) }
+                    },
                 )
         }
 
@@ -425,16 +427,6 @@ class AuthRequestManagerImpl(
             publicKey = publicKey,
         )
     }
-
-    /**
-     * Whether this request may still be approved or declined, meaning it has not already been
-     * approved, not been declined (indicated by it not being approved & having a responseDate),
-     * and has not expired (it is under 5 minutes old).
-     */
-    private val AuthRequest.isActionable: Boolean
-        get() = !requestApproved &&
-            responseDate == null &&
-            !creationDate.isOverFiveMinutesOld(clock)
 }
 
 /**

@@ -8,13 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
+import com.x8bit.bitwarden.data.auth.manager.util.isActionable
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -399,8 +399,4 @@ sealed class PendingRequestsAction {
  * * The request has expired (it is at least 5 minutes old).
  */
 private fun List<AuthRequest>.filterRespondedAndExpired(clock: Clock) =
-    filterNot { request ->
-        request.requestApproved ||
-            request.responseDate != null ||
-            request.creationDate.isOverFiveMinutesOld(clock)
-    }
+    filter { it.isActionable(clock = clock) }
