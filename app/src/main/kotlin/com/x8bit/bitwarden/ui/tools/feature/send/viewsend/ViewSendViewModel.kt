@@ -345,8 +345,7 @@ data class ViewSendState(
      */
     private val isSendTypeAllowed: Boolean
         get() = allowedSendTypes
-            ?.map { it.toSendItemType() }
-            ?.contains(sendType)
+            ?.any { it.toSendItemType() == sendType }
             ?: true
 
     /**
