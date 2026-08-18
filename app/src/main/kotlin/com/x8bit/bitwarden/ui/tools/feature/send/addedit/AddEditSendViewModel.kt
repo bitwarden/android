@@ -80,13 +80,6 @@ private const val KEY_STATE = "state"
 private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 
 /**
- * Whether this access type restricts a Send to a single option. [SendAccessTypeJson.ANY] leaves
- * every option available, so it restricts nothing.
- */
-private val SendAccessTypeJson.restrictsAccess: Boolean
-    get() = this != SendAccessTypeJson.ANY
-
-/**
  * Returns the [SendAuth] this access type restricts a Send to, preserving [current] when it already
  * matches the restricted type so that any emails already entered are kept.
  */
@@ -1044,7 +1037,7 @@ data class AddEditSendState(
      * enforcement, so this is only in effect alongside the SendControls feature flag.
      */
     val enforcedWhoCanAccess: SendAccessTypeJson?
-        get() = whoCanAccess?.takeIf { isSendControlsEnabled && it.restrictsAccess }
+        get() = whoCanAccess?.takeIf { isSendControlsEnabled && it != SendAccessTypeJson.ANY }
 
     /**
      * Helper to determine the screen display name.
