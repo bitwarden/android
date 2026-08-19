@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -12,13 +14,17 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
 import io.mockk.coEvery
 import io.mockk.every
@@ -33,6 +39,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -50,6 +59,20 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
     private val environmentRepository = mockk<EnvironmentRepository> {
         every { environment } returns Environment.Prod.Us
+    }
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
+    private val policyManager = mockk<PolicyManager> {
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
+    }
+    private val mutableSendControlsFlagFlow = MutableStateFlow(false)
+    private val mutableExistingSendsFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlagFlow(key = FlagKey.SendControls)
+        } returns mutableSendControlsFlagFlow
+        every {
+            getFeatureFlagFlow(key = FlagKey.SendControlsExistingSends)
+        } returns mutableExistingSendsFlagFlow
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
@@ -83,6 +106,132 @@ class ViewSendViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(viewState = ViewSendState.ViewState.Loading),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `policy restriction should require a copy for a disabled text send`() {
+        val state = restrictedState()
+
+        assertEquals(SendPolicyRestriction.CopyRequired, state.policyRestriction)
+        assertFalse(state.isFabVisible)
+    }
+
+    @Test
+    fun `policy restriction should report a file send as not compliant`() {
+        val state = restrictedState(sendType = SendItemType.FILE)
+
+        assertEquals(SendPolicyRestriction.FileNotCompliant, state.policyRestriction)
+        assertFalse(state.isFabVisible)
+    }
+
+    @Test
+    fun `policy restriction should report a text send whose type is not allowed`() {
+        val state = restrictedState(allowedSendTypes = listOf(SendTypeJson.FILE))
+
+        assertEquals(SendPolicyRestriction.TypeNotAllowed, state.policyRestriction)
+        assertFalse(state.isFabVisible)
+    }
+
+    @Test
+    fun `policy restriction should report a file send as not compliant before type`() {
+        val state = restrictedState(
+            sendType = SendItemType.FILE,
+            allowedSendTypes = listOf(SendTypeJson.TEXT),
+        )
+
+        // A file send cannot be copied either way, so the type restriction is not reported.
+        assertEquals(SendPolicyRestriction.FileNotCompliant, state.policyRestriction)
+    }
+
+    @Test
+    fun `policy restriction should require a copy when the send type is allowed`() {
+        val state = restrictedState(allowedSendTypes = listOf(SendTypeJson.TEXT))
+
+        assertEquals(SendPolicyRestriction.CopyRequired, state.policyRestriction)
+    }
+
+    @Test
+    fun `policy restriction should be absent when the send is not disabled`() {
+        val state = restrictedState(isSendDisabled = false)
+
+        assertNull(state.policyRestriction)
+        assertTrue(state.isFabVisible)
+    }
+
+    @Test
+    fun `policy restriction should be absent when send controls is disabled`() {
+        val state = restrictedState(isSendControlsEnabled = false)
+
+        assertNull(state.policyRestriction)
+        assertTrue(state.isFabVisible)
+    }
+
+    @Test
+    fun `policy restriction should be absent when existing sends enforcement is disabled`() {
+        val state = restrictedState(isSendControlsExistingSendsEnabled = false)
+
+        assertNull(state.policyRestriction)
+        assertTrue(state.isFabVisible)
+    }
+
+    @Test
+    fun `state should update when the enforced send types change`() = runTest {
+        mutableSendStateFlow.value = DataState.Loaded(createDisabledSendView())
+        mutableSendControlsFlagFlow.value = true
+        mutableExistingSendsFlagFlow.value = true
+        val viewModel = createViewModel()
+        val enforcedState = DEFAULT_STATE.copy(
+            isSendDisabled = true,
+            isSendControlsEnabled = true,
+            isSendControlsExistingSendsEnabled = true,
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+        )
+
+        viewModel.stateFlow.test {
+            val initialState = awaitItem()
+            assertEquals(enforcedState, initialState)
+            assertEquals(SendPolicyRestriction.CopyRequired, initialState.policyRestriction)
+
+            mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+                .copy(allowedSendTypes = listOf(SendTypeJson.FILE))
+
+            val state = awaitItem()
+            assertEquals(enforcedState.copy(allowedSendTypes = listOf(SendTypeJson.FILE)), state)
+            assertEquals(SendPolicyRestriction.TypeNotAllowed, state.policyRestriction)
+        }
+    }
+
+    @Test
+    fun `state should update when the existing sends flag is turned off`() = runTest {
+        mutableSendStateFlow.value = DataState.Loaded(createDisabledSendView())
+        mutableSendControlsFlagFlow.value = true
+        mutableExistingSendsFlagFlow.value = true
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(SendPolicyRestriction.CopyRequired, awaitItem().policyRestriction)
+
+            mutableExistingSendsFlagFlow.value = false
+
+            val state = awaitItem()
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isSendDisabled = true,
+                    isSendControlsEnabled = true,
+                    viewState = DEFAULT_CONTENT_VIEW_STATE,
+                ),
+                state,
+            )
+            assertNull(state.policyRestriction)
+        }
+    }
+
+    @Test
+    fun `fab should remain hidden while the view state is loading`() {
+        val state = restrictedState(isSendDisabled = false)
+            .copy(viewState = ViewSendState.ViewState.Loading)
+
+        assertFalse(state.isFabVisible)
     }
 
     @Test
@@ -462,6 +611,8 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
         environmentRepository = environmentRepository,
+        featureFlagManager = featureFlagManager,
+        policyManager = policyManager,
         snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)
@@ -491,6 +642,47 @@ private val DEFAULT_STATE = ViewSendState(
     viewState = ViewSendState.ViewState.Loading,
     dialogState = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
+    allowedSendTypes = null,
+    isSendDisabled = false,
+    isSendControlsEnabled = false,
+    isSendControlsExistingSendsEnabled = false,
+)
+
+/**
+ * Builds a state that is policy-restricted by default, so each test only names the field it varies.
+ */
+private fun restrictedState(
+    sendType: SendItemType = SendItemType.TEXT,
+    allowedSendTypes: List<SendTypeJson>? = null,
+    isSendDisabled: Boolean = true,
+    isSendControlsEnabled: Boolean = true,
+    isSendControlsExistingSendsEnabled: Boolean = true,
+): ViewSendState = DEFAULT_STATE.copy(
+    sendType = sendType,
+    allowedSendTypes = allowedSendTypes,
+    isSendDisabled = isSendDisabled,
+    isSendControlsEnabled = isSendControlsEnabled,
+    isSendControlsExistingSendsEnabled = isSendControlsExistingSendsEnabled,
+    viewState = DEFAULT_CONTENT_VIEW_STATE,
+)
+
+/**
+ * Builds a [SendView] the server has marked disabled, mapped to [DEFAULT_CONTENT_VIEW_STATE].
+ */
+private fun createDisabledSendView(): SendView = mockk<SendView> {
+    every { disabled } returns true
+    every {
+        toViewSendViewStateContent(baseWebSendUrl = any(), clock = any())
+    } returns DEFAULT_CONTENT_VIEW_STATE
+}
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
