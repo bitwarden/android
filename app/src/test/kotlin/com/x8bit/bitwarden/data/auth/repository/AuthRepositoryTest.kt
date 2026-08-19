@@ -6486,24 +6486,24 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `getPasswordStrength returns expected results for various strength levels`() = runTest {
-        coEvery {
+    fun `getPasswordStrength returns expected results for various strength levels`() {
+        every {
             authSdkSource.passwordStrength(any(), eq("level_0"))
         } returns LEVEL_0.asSuccess()
 
-        coEvery {
+        every {
             authSdkSource.passwordStrength(any(), eq("level_1"))
         } returns LEVEL_1.asSuccess()
 
-        coEvery {
+        every {
             authSdkSource.passwordStrength(any(), eq("level_2"))
         } returns LEVEL_2.asSuccess()
 
-        coEvery {
+        every {
             authSdkSource.passwordStrength(any(), eq("level_3"))
         } returns LEVEL_3.asSuccess()
 
-        coEvery {
+        every {
             authSdkSource.passwordStrength(any(), eq("level_4"))
         } returns LEVEL_4.asSuccess()
 

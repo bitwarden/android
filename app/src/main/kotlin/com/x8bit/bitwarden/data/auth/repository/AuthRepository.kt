@@ -378,7 +378,7 @@ interface AuthRepository :
      * If no value is passed for the [email] will use the active email of the current active
      * account via the [userStateFlow].
      */
-    suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
+    fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
      * Validates the master password for the current logged-in user.
@@ -394,7 +394,7 @@ interface AuthRepository :
      * Validates the given [password] against the master password
      * policies for the current user.
      */
-    suspend fun validatePasswordAgainstPolicies(password: String): Boolean
+    fun validatePasswordAgainstPolicies(password: String): Boolean
 
     /**
      * Send a verification email.

@@ -201,35 +201,33 @@ class AuthSdkSourceImpl(
             )
     }
 
-    override suspend fun passwordStrength(
+    override fun passwordStrength(
         email: String,
         password: String,
         additionalInputs: List<String>,
     ): Result<PasswordStrength> = runCatchingWithLogs {
-        useClient {
-            @Suppress("UnsafeCallOnNullableType")
-            auth()
+        requireNotNull(
+            globalClient
+                .auth()
                 .passwordStrength(
                     password = password,
                     email = email,
                     additionalInputs = additionalInputs,
                 )
-                .toPasswordStrengthOrNull()!!
-        }
+                .toPasswordStrengthOrNull(),
+        )
     }
 
-    override suspend fun satisfiesPolicy(
+    override fun satisfiesPolicy(
         password: String,
         passwordStrength: PasswordStrength,
         policy: MasterPasswordPolicyOptions,
     ): Result<Boolean> = runCatchingWithLogs {
-        useClient {
-            auth().satisfiesPolicy(
-                password = password,
-                strength = passwordStrength.toUByte(),
-                policy = policy,
-            )
-        }
+        globalClient.auth().satisfiesPolicy(
+            password = password,
+            strength = passwordStrength.toUByte(),
+            policy = policy,
+        )
     }
 
     override fun filterPolicies(

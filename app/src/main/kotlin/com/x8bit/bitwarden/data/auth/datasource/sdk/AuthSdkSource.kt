@@ -122,7 +122,7 @@ interface AuthSdkSource {
      * Checks the password strength for the given [email] and [password] combination, along with
      * some [additionalInputs].
      */
-    suspend fun passwordStrength(
+    fun passwordStrength(
         email: String,
         password: String,
         additionalInputs: List<String> = emptyList(),
@@ -132,7 +132,7 @@ interface AuthSdkSource {
      * Checks that the given [password] with the given [passwordStrength] satisfies the given
      * [policy]. Returns `true` if so and `false` otherwise.
      */
-    suspend fun satisfiesPolicy(
+    fun satisfiesPolicy(
         password: String,
         passwordStrength: PasswordStrength,
         policy: MasterPasswordPolicyOptions,

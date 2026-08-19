@@ -1444,7 +1444,7 @@ class AuthRepositoryImpl(
                 onSuccess = { BreachCountResult.Success(it) },
             )
 
-    override suspend fun getPasswordStrength(
+    override fun getPasswordStrength(
         email: String?,
         password: String,
     ): PasswordStrengthResult =
@@ -1537,7 +1537,7 @@ class AuthRepositoryImpl(
             )
     }
 
-    override suspend fun validatePasswordAgainstPolicies(
+    override fun validatePasswordAgainstPolicies(
         password: String,
     ): Boolean = passwordPolicies
         .all { validatePasswordAgainstPolicy(password, it) }
@@ -1620,7 +1620,7 @@ class AuthRepositoryImpl(
         )
 
     @Suppress("CyclomaticComplexMethod")
-    private suspend fun validatePasswordAgainstPolicy(
+    private fun validatePasswordAgainstPolicy(
         password: String,
         policy: PolicyInformation.MasterPassword,
     ): Boolean {
@@ -1659,7 +1659,7 @@ class AuthRepositoryImpl(
      * Return true if there are any [PolicyInformation.MasterPassword] policies that the user's
      * master password has failed to pass.
      */
-    private suspend fun passwordPassesPolicies(
+    private fun passwordPassesPolicies(
         password: String,
         policies: List<PolicyView>,
     ): Boolean {
