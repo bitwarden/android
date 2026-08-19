@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -27,10 +26,7 @@ class SendViewCopyExtensionsTest {
         assertEquals(
             AddEditSendState.ViewState.Content(
                 common = EXPECTED_COMMON,
-                selectedType = AddEditSendState.ViewState.Content.SendType.Text(
-                    input = "mockText-1",
-                    isHideByDefaultChecked = false,
-                ),
+                selectedType = EXPECTED_TEXT_TYPE,
             ),
             result,
         )
@@ -51,15 +47,15 @@ class SendViewCopyExtensionsTest {
             sendAuth = SendAuth.None,
         )
 
-        val common = result.common
-        // The copy is a brand new Send, so none of these follow it over.
-        assertNull(common.originalSendView)
-        assertNull(common.sendUrl)
-        assertNull(common.currentAccessCount)
-        assertNull(common.expirationDate)
-        assertEquals("", common.passwordInput)
-        assertFalse(common.hasPassword)
-        assertFalse(common.isDeactivateChecked)
+        // The copy is a brand new Send, so the original's URL, access count, expiration date,
+        // password and deactivated state are all left behind.
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = EXPECTED_COMMON,
+                selectedType = EXPECTED_TEXT_TYPE,
+            ),
+            result,
+        )
     }
 
     @Test
@@ -67,12 +63,18 @@ class SendViewCopyExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.TEXT)
 
         val result = sendView.toCopyViewState(
-            deletionDate = COPY_DELETION_DATE,
+            deletionDate = OTHER_DELETION_DATE,
             isHideEmailAddressEnabled = true,
             sendAuth = SendAuth.None,
         )
 
-        assertEquals(COPY_DELETION_DATE, result.common.deletionDate)
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = EXPECTED_COMMON.copy(deletionDate = OTHER_DELETION_DATE),
+                selectedType = EXPECTED_TEXT_TYPE,
+            ),
+            result,
+        )
     }
 
     @Test
@@ -127,6 +129,14 @@ class SendViewCopyExtensionsTest {
 }
 
 private val COPY_DELETION_DATE: Instant = Instant.parse("2023-11-03T12:00:00Z")
+
+private val OTHER_DELETION_DATE: Instant = Instant.parse("2023-12-25T12:00:00Z")
+
+private val EXPECTED_TEXT_TYPE: AddEditSendState.ViewState.Content.SendType.Text =
+    AddEditSendState.ViewState.Content.SendType.Text(
+        input = "mockText-1",
+        isHideByDefaultChecked = false,
+    )
 
 private val EXPECTED_COMMON: AddEditSendState.ViewState.Content.Common =
     AddEditSendState.ViewState.Content.Common(

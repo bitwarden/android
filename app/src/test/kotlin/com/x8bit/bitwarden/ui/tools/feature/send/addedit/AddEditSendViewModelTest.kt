@@ -639,20 +639,17 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             .stateFlow
             .value
 
+        // The copy adopts the policy window rather than the original send's deletion date.
         assertEquals(
             copyModeState(
                 sendAuth = SendAuth.Password,
                 deletionDate = ENFORCED_DELETION_DATE,
-            ).copy(
-                isSendControlsEnabled = true,
-                deletionHours = ENFORCED_DELETION_HOURS,
-            ),
+            )
+                .copy(
+                    isSendControlsEnabled = true,
+                    deletionHours = ENFORCED_DELETION_HOURS,
+                ),
             state,
-        )
-        // The copy adopts the policy window rather than the original send's deletion date.
-        assertEquals(
-            ENFORCED_DELETION_DATE,
-            (state.viewState as AddEditSendState.ViewState.Content).common.deletionDate,
         )
     }
 
@@ -675,15 +672,12 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             .value
 
         assertEquals(
-            copyModeState(sendAuth = SendAuth.Password).copy(
-                isSendControlsEnabled = true,
-                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
-            ),
+            copyModeState(sendAuth = SendAuth.Password)
+                .copy(
+                    isSendControlsEnabled = true,
+                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                ),
             state,
-        )
-        assertEquals(
-            SendAuth.Password,
-            (state.viewState as AddEditSendState.ViewState.Content).common.sendAuth,
         )
     }
 

@@ -5,12 +5,28 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.collections.immutable.persistentListOf
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.util.UUID
 
 class SendViewExtensionsTest {
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(UUID::randomUUID)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(UUID::randomUUID)
+    }
 
     @Test
     fun `toViewState should create an appropriate ViewState for file type`() {
@@ -52,6 +68,7 @@ class SendViewExtensionsTest {
             result,
         )
     }
+
     @Test
     fun `toSendAuth should use a password when the original has one`() {
         val sendView = createMockSendView(number = 1, hasPassword = true)
@@ -61,17 +78,18 @@ class SendViewExtensionsTest {
 
     @Test
     fun `toSendAuth should carry over the original recipients`() {
+        every { UUID.randomUUID().toString() } returns "uuid"
         val sendView = createMockSendView(number = 1, hasPassword = false)
             .copy(emails = listOf("one@example.com", "two@example.com"))
 
         assertEquals(
             SendAuth.Email(
                 emails = persistentListOf(
-                    AuthEmail(value = "one@example.com"),
-                    AuthEmail(value = "two@example.com"),
+                    AuthEmail(id = "uuid", value = "one@example.com"),
+                    AuthEmail(id = "uuid", value = "two@example.com"),
                 ),
-            ).emails.map { it.value },
-            (sendView.toSendAuth() as SendAuth.Email).emails.map { it.value },
+            ),
+            sendView.toSendAuth(),
         )
     }
 
