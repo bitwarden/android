@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model
 
 import android.os.Parcelable
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -9,9 +12,9 @@ import kotlinx.parcelize.Parcelize
  */
 sealed class SendPolicyRestriction : Parcelable {
     /**
-     * Whether a compliant copy of the Send can be made to replace it.
+     * The explanation shown to the user for this restriction.
      */
-    abstract val isCopyable: Boolean
+    abstract val message: Text
 
     /**
      * The Send is a file send, so it cannot be brought into compliance: its attachment is not
@@ -19,7 +22,10 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object FileNotCompliant : SendPolicyRestriction() {
-        override val isCopyable: Boolean get() = false
+        override val message: Text
+            get() = BitwardenString
+                .this_send_is_not_compliant_with_your_organizations_send_policy
+                .asText()
     }
 
     /**
@@ -28,7 +34,8 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object TypeNotAllowed : SendPolicyRestriction() {
-        override val isCopyable: Boolean get() = false
+        override val message: Text
+            get() = BitwardenString.text_sends_are_not_allowed_for_your_organization.asText()
     }
 
     /**
@@ -36,6 +43,7 @@ sealed class SendPolicyRestriction : Parcelable {
      */
     @Parcelize
     data object CopyRequired : SendPolicyRestriction() {
-        override val isCopyable: Boolean get() = true
+        override val message: Text
+            get() = BitwardenString.to_edit_this_send_make_a_copy.asText()
     }
 }

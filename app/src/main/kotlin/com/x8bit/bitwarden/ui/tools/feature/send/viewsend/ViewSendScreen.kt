@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +51,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -59,6 +61,8 @@ import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -73,6 +77,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 
 /**
  * Displays view send screen.
@@ -194,6 +199,7 @@ private fun ViewSendScreenContent(
         is ViewSendState.ViewState.Content -> {
             ViewStateContent(
                 state = viewState,
+                policyRestriction = state.policyRestriction,
                 onCopyClick = onCopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
@@ -219,6 +225,7 @@ private fun ViewSendScreenContent(
 @Composable
 private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
+    policyRestriction: SendPolicyRestriction?,
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -229,6 +236,24 @@ private fun ViewStateContent(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
+        policyRestriction?.let {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.organization_policy_restriction),
+                cardSubtitle = it.message(),
+                leadingContent = {
+                    BitwardenIcon(
+                        iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
+                        tint = BitwardenTheme.colorScheme.text.primary,
+                        modifier = Modifier.size(size = 16.dp),
+                    )
+                },
+                modifier = Modifier
+                    .testTag(tag = "SendPolicyRestrictionBanner")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
         ShareLinkSection(
             shareLink = state.shareLink,
             modifier = Modifier

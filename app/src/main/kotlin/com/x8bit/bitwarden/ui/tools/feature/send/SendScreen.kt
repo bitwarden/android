@@ -294,7 +294,11 @@ internal fun UpgradedToPremiumActionCard(
         cardSubtitle = stringResource(
             id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
         ),
-        actionText = stringResource(id = BitwardenString.learn_more),
+        actionButton = BitwardenButtonData(
+            label = BitwardenString.learn_more.asText(),
+            onClick = onActionClick,
+            isExternalLink = true,
+        ),
         leadingContent = {
             Icon(
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
@@ -302,8 +306,6 @@ internal fun UpgradedToPremiumActionCard(
                 tint = BitwardenTheme.colorScheme.icon.secondary,
             )
         },
-        isExternalLink = true,
-        onActionClick = onActionClick,
         onDismissClick = onDismissClick,
         modifier = modifier,
     )

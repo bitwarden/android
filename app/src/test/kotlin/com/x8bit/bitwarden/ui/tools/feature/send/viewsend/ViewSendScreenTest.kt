@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
@@ -103,6 +104,96 @@ class ViewSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = message)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should not be displayed by default`() {
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `policy restriction banner should display the copy required explanation`() {
+        mutableStateFlow.update { it.copy(isSendDisabled = true, isSendControlsEnabled = true) }
+
+        // Both flags are required, so the banner is still absent until enforcement is enabled.
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(isSendControlsExistingSendsEnabled = true) }
+
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "To edit this Send, make a copy. If this Send can expire at the set " +
+                    "deletion date, no action is needed.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should display the not compliant explanation for a file send`() {
+        mutableStateFlow.update {
+            it.copy(
+                sendType = SendItemType.FILE,
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                text = "This Send is not compliant with your organization’s Send policy and will " +
+                    "automatically expire at the set deletion date.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should display the type not allowed explanation`() {
+        mutableStateFlow.update {
+            it.copy(
+                allowedSendTypes = listOf(SendTypeJson.FILE),
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                text = "Text Sends are not allowed for your organization and this Send will " +
+                    "automatically expire at the set deletion date.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `edit fab should be hidden when a policy restriction applies`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Edit Send")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Edit Send")
+            .assertDoesNotExist()
     }
 
     @Test
