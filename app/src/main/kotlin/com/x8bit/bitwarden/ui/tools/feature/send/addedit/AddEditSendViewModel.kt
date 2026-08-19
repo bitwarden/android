@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
@@ -78,6 +79,28 @@ private const val KEY_STATE = "state"
  * The maximum size an upload-able file is allowed to be (100 MiB).
  */
 private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
+
+/**
+ * Whether this email address belongs to one of [allowedDomains], compared case-insensitively.
+ */
+private fun String.hasAllowedDomain(allowedDomains: List<String>): Boolean {
+    val domain = substringAfterLast(delimiter = '@', missingDelimiterValue = "")
+    return allowedDomains.any { it.equals(other = domain, ignoreCase = true) }
+}
+
+/**
+ * Splits this comma-separated policy value into trimmed, non-blank domains.
+ *
+ * Returns an empty list when no domain is configured, which includes a value that holds nothing
+ * usable such as `","`. An empty result is treated as no restriction rather than as a restriction
+ * nothing can satisfy, since the latter would block saving with no way for the user to recover.
+ */
+private fun String?.splitToDomains(): ImmutableList<String> = this
+    ?.split(",")
+    ?.map { it.trim() }
+    ?.filter { it.isNotBlank() }
+    .orEmpty()
+    .toImmutableList()
 
 /**
  * Returns the [SendAuth] this access type restricts a Send to, preserving [current] when it already
@@ -494,6 +517,24 @@ class AddEditSendViewModel @Inject constructor(
         return clock.instant().plus(hours, ChronoUnit.HOURS)
     }
 
+    /**
+     * Returns the error to show when any of [emails] falls outside the recipient domains the
+     * SendControls policy allows, or `null` when every recipient is acceptable.
+     */
+    private fun AddEditSendState.disallowedDomainErrorOrNull(
+        emails: List<AuthEmail>,
+    ): AddEditSendState.DialogState.Error? {
+        val enforced = enforcedAllowedDomains
+        if (enforced.isEmpty()) return null
+        if (emails.all { it.value.hasAllowedDomain(enforced) }) return null
+        return AddEditSendState.DialogState.Error(
+            title = BitwardenString.invalid_email_addresses.asText(),
+            message = BitwardenString
+                .only_include_the_following_domains_x_please_review_and_try_again
+                .asText(enforced.joinToString(separator = ", ")),
+        )
+    }
+
     @Suppress("LongMethod")
     private fun handleSendDataReceive(action: AddEditSendAction.Internal.SendDataReceive) {
         when (val sendDataState = action.sendDataState) {
@@ -800,6 +841,11 @@ class AddEditSendViewModel @Inject constructor(
                     }
                     return@onContent
                 }
+
+                state.disallowedDomainErrorOrNull(emails = nonBlankEmails)?.let { error ->
+                    mutableStateFlow.update { it.copy(dialogState = error) }
+                    return@onContent
+                }
             }
 
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
@@ -996,8 +1042,8 @@ class AddEditSendViewModel @Inject constructor(
 /**
  * Models state for the add/edit send screen.
  *
- * @property allowedDomains The allowed recipient email domains, sourced from
- * [EffectiveSendPolicy.allowedDomains]. Currently unused by the UI.
+ * @property allowedDomains The allowed recipient email domains as a comma-separated list, sourced
+ * from [EffectiveSendPolicy.allowedDomains].
  * @property allowedSendTypes The types of Sends that are allowed to be created, sourced from
  * [EffectiveSendPolicy.allowedSendTypes]. Currently unused by the UI.
  * @property deletionHours The enforced Send deletion window in hours, sourced from
@@ -1022,6 +1068,14 @@ data class AddEditSendState(
     val whoCanAccess: SendAccessTypeJson?,
     val isPremium: Boolean,
 ) : Parcelable {
+
+    /**
+     * Helper to determine the recipient email domains the SendControls policy restricts a Send to,
+     * or an empty list when recipients may use any domain. The legacy send options policy has no
+     * equivalent enforcement, so this is only in effect alongside the SendControls feature flag.
+     */
+    val enforcedAllowedDomains: ImmutableList<String>
+        get() = allowedDomains.takeIf { isSendControlsEnabled }.splitToDomains()
 
     /**
      * Helper to determine the Send deletion window enforced by the SendControls policy, or `null`
