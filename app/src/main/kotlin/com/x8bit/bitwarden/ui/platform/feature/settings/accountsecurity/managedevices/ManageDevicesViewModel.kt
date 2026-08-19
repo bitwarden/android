@@ -72,11 +72,7 @@ class ManageDevicesViewModel @Inject constructor(
     init {
         updateAuthRequestList()
         fetchAllDevices()
-        authRepository
-            .getPasswordlessAuthRequestFlow()
-            .map { ManageDevicesAction.Internal.PasswordlessAuthRequestReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+        observePasswordlessAuthRequests()
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { ManageDevicesAction.Internal.PullToRefreshEnableReceive(it) }
@@ -156,10 +152,6 @@ class ManageDevicesViewModel @Inject constructor(
             is ManageDevicesAction.Internal.PasswordlessAuthRequestReceive -> {
                 handlePasswordlessAuthRequestReceive(action)
             }
-
-            is ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive -> {
-                handlePasswordlessAuthRequestDevicesReceive(action)
-            }
         }
     }
 
@@ -182,6 +174,21 @@ class ManageDevicesViewModel @Inject constructor(
         authJob = authRepository
             .getAuthRequestsWithUpdates()
             .map { ManageDevicesAction.Internal.AuthRequestsResultReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
+
+    private fun observePasswordlessAuthRequests() {
+        authRepository
+            .getPasswordlessAuthRequestFlow()
+            .map { authRequest ->
+                // The device list is the only source that reports which device owns a pending
+                // request, so it is re-read before the new request can be rendered against it.
+                ManageDevicesAction.Internal.PasswordlessAuthRequestReceive(
+                    authRequest = authRequest,
+                    devicesResult = authRepository.getDevices(),
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -243,21 +250,6 @@ class ManageDevicesViewModel @Inject constructor(
 
     private fun handlePasswordlessAuthRequestReceive(
         action: ManageDevicesAction.Internal.PasswordlessAuthRequestReceive,
-    ) {
-        // The device list is the only source that reports which device owns a pending request, so
-        // it is re-read before the new request can be rendered against its device.
-        viewModelScope.launch {
-            sendAction(
-                ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive(
-                    authRequest = action.authRequest,
-                    devicesResult = authRepository.getDevices(),
-                ),
-            )
-        }
-    }
-
-    private fun handlePasswordlessAuthRequestDevicesReceive(
-        action: ManageDevicesAction.Internal.PasswordlessAuthRequestDevicesReceive,
     ) {
         // This refresh is not user-initiated, so a failure leaves the screen untouched rather than
         // replacing it with an error; polling and pull-to-refresh reconcile it later.
@@ -502,17 +494,10 @@ sealed class ManageDevicesAction {
         ) : Internal()
 
         /**
-         * Indicates that an incoming passwordless request has been received.
+         * Indicates that an incoming passwordless request has been received, along with the
+         * devices it should be rendered against.
          */
         data class PasswordlessAuthRequestReceive(
-            val authRequest: AuthRequest,
-        ) : Internal()
-
-        /**
-         * Indicates that the devices accompanying an incoming passwordless request have been
-         * received.
-         */
-        data class PasswordlessAuthRequestDevicesReceive(
             val authRequest: AuthRequest,
             val devicesResult: GetDevicesResult,
         ) : Internal()

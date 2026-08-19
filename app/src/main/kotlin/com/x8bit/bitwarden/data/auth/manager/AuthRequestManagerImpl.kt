@@ -98,7 +98,12 @@ class AuthRequestManagerImpl(
                     isSso = authRequestType.isSso,
                 )
                 .map { request ->
-                    request.toAuthRequest(fingerprint = authRequest.fingerprint)
+                    request.toAuthRequest(
+                        fingerprint = authRequest.fingerprint,
+                        publicKey = request.publicKey,
+                        responseDate = request.responseDate,
+                        isRequestApproved = request.requestApproved ?: false,
+                    )
                 }
                 .fold(
                     onFailure = { emit(CreateAuthRequestResult.Error(error = it)) },
@@ -178,15 +183,14 @@ class AuthRequestManagerImpl(
                             isRequestApproved = false
                             responseDate = clock.instant()
                         }
-                        request
-                            // The PublicKey and Fingerprint should be frozen in place to
-                            // ensure no funny-business happens between multiple requests.
-                            .toAuthRequest(fingerprint = initialAuthRequest.fingerprint)
-                            .copy(
-                                publicKey = initialAuthRequest.publicKey,
-                                responseDate = responseDate,
-                                requestApproved = isRequestApproved,
-                            )
+                        // The PublicKey and Fingerprint should be frozen in place to ensure no
+                        // funny-business happens between multiple requests.
+                        request.toAuthRequest(
+                            fingerprint = initialAuthRequest.fingerprint,
+                            publicKey = initialAuthRequest.publicKey,
+                            responseDate = responseDate,
+                            isRequestApproved = isRequestApproved,
+                        )
                     }
                 }
                 .fold(
@@ -249,6 +253,9 @@ class AuthRequestManagerImpl(
             .mapCatching { response ->
                 response.toAuthRequest(
                     fingerprint = getFingerprintPhrase(response.publicKey).getOrThrow(),
+                    publicKey = response.publicKey,
+                    responseDate = response.responseDate,
+                    isRequestApproved = response.requestApproved ?: false,
                 )
             }
             .fold(
@@ -267,6 +274,9 @@ class AuthRequestManagerImpl(
                 .mapCatching { response ->
                     response.toAuthRequest(
                         fingerprint = getFingerprintPhrase(response.publicKey).getOrThrow(),
+                        publicKey = response.publicKey,
+                        responseDate = response.responseDate,
+                        isRequestApproved = response.requestApproved ?: false,
                     )
                 }
                 .fold(
@@ -286,7 +296,12 @@ class AuthRequestManagerImpl(
             .flatMap { request ->
                 if (request.requestApproved == true) {
                     getFingerprintPhrase(request.publicKey).map { fingerprint ->
-                        request.toAuthRequest(fingerprint = fingerprint)
+                        request.toAuthRequest(
+                            fingerprint = fingerprint,
+                            publicKey = request.publicKey,
+                            responseDate = request.responseDate,
+                            isRequestApproved = true,
+                        )
                     }
                 } else {
                     IllegalStateException("Request not approved.").asFailure()
@@ -299,7 +314,12 @@ class AuthRequestManagerImpl(
             .map { response ->
                 response.authRequests.mapNotNull { request ->
                     getFingerprintPhrase(request.publicKey).getOrNull()?.let { fingerprint ->
-                        request.toAuthRequest(fingerprint = fingerprint)
+                        request.toAuthRequest(
+                            fingerprint = fingerprint,
+                            publicKey = request.publicKey,
+                            responseDate = request.responseDate,
+                            isRequestApproved = request.requestApproved ?: false,
+                        )
                     }
                 }
             }
@@ -329,7 +349,14 @@ class AuthRequestManagerImpl(
                     isApproved = isApproved,
                 )
             }
-            .map { request -> request.toAuthRequest(fingerprint = "") }
+            .map { request ->
+                request.toAuthRequest(
+                    fingerprint = "",
+                    publicKey = request.publicKey,
+                    responseDate = request.responseDate,
+                    isRequestApproved = request.requestApproved ?: false,
+                )
+            }
             .fold(
                 onFailure = { AuthRequestResult.Error(error = it) },
                 onSuccess = { AuthRequestResult.Success(authRequest = it) },
@@ -351,10 +378,13 @@ class AuthRequestManagerImpl(
                 ?.let { pendingAuthRequest ->
                     authRequestsService
                         .getAuthRequest(pendingAuthRequest.requestId)
-                        .map {
+                        .map { request ->
                             NewAuthRequestData(
-                                authRequest = it.toAuthRequest(
+                                authRequest = request.toAuthRequest(
                                     fingerprint = pendingAuthRequest.requestFingerprint,
+                                    publicKey = request.publicKey,
+                                    responseDate = request.responseDate,
+                                    isRequestApproved = request.requestApproved ?: false,
                                 ),
                                 privateKey = pendingAuthRequest.requestPrivateKey,
                                 accessCode = pendingAuthRequest.requestAccessCode,
@@ -406,7 +436,12 @@ class AuthRequestManagerImpl(
                         }
                     }
                     .map { request ->
-                        request.toAuthRequest(fingerprint = authRequestResponse.fingerprint)
+                        request.toAuthRequest(
+                            fingerprint = authRequestResponse.fingerprint,
+                            publicKey = request.publicKey,
+                            responseDate = request.responseDate,
+                            isRequestApproved = request.requestApproved ?: false,
+                        )
                     }
                     .map {
                         NewAuthRequestData(
