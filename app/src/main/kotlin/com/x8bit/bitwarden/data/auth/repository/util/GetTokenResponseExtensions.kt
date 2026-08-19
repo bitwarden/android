@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 fun GetTokenResponseJson.Success.toUserState(
     previousUserState: UserStateJson?,
     environmentUrlData: EnvironmentUrlDataJson,
+    passwordPassesPolicy: Boolean,
 ): UserStateJson {
     val jwtTokenData = requireNotNull(parseJwtTokenDataOrNull(jwtToken = this.accessToken))
     val userId = jwtTokenData.userId
@@ -33,7 +34,9 @@ fun GetTokenResponseJson.Success.toUserState(
             avatarColorHex = null,
             hasPremiumPersonally = jwtTokenData.hasPremium,
             hasPremiumFromOrganization = null,
-            forcePasswordResetReason = this.toForcePasswordResetReason(),
+            forcePasswordResetReason = this.toForcePasswordResetReason(
+                passwordPassesPolicy = passwordPassesPolicy,
+            ),
             kdfType = this.kdfType,
             kdfIterations = this.kdfIterations,
             kdfMemory = this.kdfMemory,
@@ -66,7 +69,9 @@ fun GetTokenResponseJson.Success.toUserState(
 /**
  * Determines the [ForcePasswordResetReason] from the [GetTokenResponseJson.Success].
  */
-private fun GetTokenResponseJson.Success.toForcePasswordResetReason(): ForcePasswordResetReason? =
+private fun GetTokenResponseJson.Success.toForcePasswordResetReason(
+    passwordPassesPolicy: Boolean,
+): ForcePasswordResetReason? =
     this
         .userDecryptionOptions
         ?.let { decryptionOptionsJson ->
@@ -82,3 +87,5 @@ private fun GetTokenResponseJson.Success.toForcePasswordResetReason(): ForcePass
                 ?: ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
                     .takeIf { this.shouldForcePasswordReset }
         }
+        ?: ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
+            .takeUnless { passwordPassesPolicy }

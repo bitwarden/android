@@ -21,6 +21,8 @@ import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.appstate.model.AppCreationState
 import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
@@ -29,9 +31,11 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -41,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
+import com.x8bit.bitwarden.data.vault.repository.util.password
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
@@ -82,7 +87,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
  * Primary implementation [VaultLockManager].
  */
 @Suppress("TooManyFunctions", "LongParameterList")
-class VaultLockManagerImpl(
+internal class VaultLockManagerImpl(
     private val clock: Clock,
     private val realtimeManager: RealtimeManager,
     private val authDiskSource: AuthDiskSource,
@@ -94,6 +99,7 @@ class VaultLockManagerImpl(
     private val trustedDeviceManager: TrustedDeviceManager,
     private val kdfManager: KdfManager,
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
+    private val passwordPolicyManager: PasswordPolicyManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : VaultLockManager {
@@ -106,7 +112,8 @@ class VaultLockManagerImpl(
      */
     private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = concurrentMapOf()
 
-    private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+    private val userState: UserStateJson? get() = authDiskSource.userState
+    private val activeUserId: String? get() = userState?.activeUserId
 
     private val mutableVaultUnlockDataStateFlow =
         MutableStateFlow<List<VaultUnlockData>>(emptyList())
@@ -222,7 +229,7 @@ class VaultLockManagerImpl(
                             initializeCryptoResult
                                 .toVaultUnlockResult()
                                 .also {
-                                    hashAndStoreMasterPassword(
+                                    processMasterPassword(
                                         initUserCryptoMethod = initUserCryptoMethod,
                                         email = email,
                                         kdf = kdf,
@@ -254,19 +261,20 @@ class VaultLockManagerImpl(
 
     /**
      * Hashes a password and stores it as the master password hash for a given user.
+     * The password is also validated against any stored Master Password policies.
      */
-    private suspend fun hashAndStoreMasterPassword(
+    private suspend fun processMasterPassword(
         initUserCryptoMethod: InitUserCryptoMethod,
         email: String,
         kdf: Kdf,
         userId: String,
     ) {
-        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
+        initUserCryptoMethod.password?.let { password ->
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
                     email = email,
-                    password = initUserCryptoMethod.password,
+                    password = password,
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
@@ -276,6 +284,17 @@ class VaultLockManagerImpl(
                         passwordHash = it,
                     )
                 }
+
+            // If there is currently no forcePasswordResetReason, then we want to check to see if
+            // the password is strong enough based on known policies.
+            if (userState?.accounts[userId]?.profile?.forcePasswordResetReason == null &&
+                !passwordPolicyManager.validatePasswordAgainstPolicies(password, false)
+            ) {
+                authDiskSource.userState = userState?.updateForcePasswordReset(
+                    userId = userId,
+                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+                )
+            }
         }
     }
 
@@ -675,7 +694,7 @@ class VaultLockManagerImpl(
         userId: String,
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
-        val account = authDiskSource.userState?.accounts?.get(userId)
+        val account = userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val accountCryptographicState = authDiskSource
             .getAccountCryptographicState(userId = userId)
@@ -699,19 +718,7 @@ class VaultLockManagerImpl(
     }
 
     private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
-        val password = when (initUserCryptoMethod) {
-            is InitUserCryptoMethod.MasterPasswordUnlock -> initUserCryptoMethod.password
-            is InitUserCryptoMethod.AuthRequest,
-            is InitUserCryptoMethod.DecryptedKey,
-            is InitUserCryptoMethod.DeviceKey,
-            is InitUserCryptoMethod.KeyConnector,
-            is InitUserCryptoMethod.KeyConnectorUrl,
-            is InitUserCryptoMethod.Pin,
-            is InitUserCryptoMethod.PinEnvelope,
-            is InitUserCryptoMethod.PinState,
-                -> return
-        }
-
+        val password = initUserCryptoMethod.password ?: return
         kdfManager
             .updateKdfToMinimumsIfNeeded(
                 password = password,
@@ -768,7 +775,7 @@ class VaultLockManagerImpl(
          * Indicates the app has entered a Created state.
          *
          * @param firstTimeCreation if this is the first time the process is being created.
-         * @param createdForAutofill if the the creation event is due to an activity being launched
+         * @param createdForAutofill if the creation event is due to an activity being launched
          * for autofill.
          */
         data class AppCreated(
