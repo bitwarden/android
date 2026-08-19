@@ -167,9 +167,9 @@ fun ViewSendScreen(
             state = state,
             modifier = Modifier.fillMaxSize(),
             onCopyClick = { viewModel.trySendAction(ViewSendAction.CopyClick) },
-            onMakeACopyClick = { viewModel.trySendAction(ViewSendAction.MakeACopyClick) },
             onCopyNotesClick = { viewModel.trySendAction(ViewSendAction.CopyNotesClick) },
             onDeleteClick = { viewModel.trySendAction(ViewSendAction.DeleteClick) },
+            onMakeACopyClick = { viewModel.trySendAction(ViewSendAction.MakeACopyClick) },
             onShareClick = { viewModel.trySendAction(ViewSendAction.ShareClick) },
         )
     }
@@ -202,9 +202,9 @@ private fun ViewSendDialogs(
 private fun ViewSendScreenContent(
     state: ViewSendState,
     onCopyClick: () -> Unit,
-    onMakeACopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -214,9 +214,9 @@ private fun ViewSendScreenContent(
                 state = viewState,
                 policyRestriction = state.policyRestriction,
                 onCopyClick = onCopyClick,
-                onMakeACopyClick = onMakeACopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
+                onMakeACopyClick = onMakeACopyClick,
                 onShareClick = onShareClick,
                 modifier = modifier,
             )
@@ -241,9 +241,9 @@ private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
     policyRestriction: SendPolicyRestriction?,
     onCopyClick: () -> Unit,
-    onMakeACopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

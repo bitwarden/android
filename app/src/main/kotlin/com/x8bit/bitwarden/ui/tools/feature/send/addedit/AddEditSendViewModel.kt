@@ -542,19 +542,22 @@ class AddEditSendViewModel @Inject constructor(
     /**
      * Maps a loaded [SendView] into the content for whichever mode this screen is in: the send's
      * own values when editing it, or the values a compliant copy of it should start from.
+     *
+     * @param currentState The state being updated, which is the in-flight value rather than the
+     * [state] property so that the mapping sees the same policy data as the update it belongs to.
      */
     private fun SendView.toAddEditViewState(
-        state: AddEditSendState,
+        currentState: AddEditSendState,
     ): AddEditSendState.ViewState.Content {
-        return when (state.addEditSendType) {
+        return when (currentState.addEditSendType) {
             is AddEditSendType.CopyItem -> {
                 toCopyViewState(
                     deletionDate = clock.instant().plus(
-                        state.enforcedDeletionHours?.toLong() ?: DEFAULT_DELETION_HOURS,
+                        currentState.enforcedDeletionHours?.toLong() ?: DEFAULT_DELETION_HOURS,
                         ChronoUnit.HOURS,
                     ),
                     isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                    sendAuth = state
+                    sendAuth = currentState
                         .enforcedWhoCanAccess
                         ?.toEnforcedSendAuth(current = toSendAuth())
                         ?: toSendAuth(),
@@ -572,7 +575,6 @@ class AddEditSendViewModel @Inject constructor(
         }
     }
 
-    @Suppress("LongMethod")
     private fun handleSendDataReceive(action: AddEditSendAction.Internal.SendDataReceive) {
         when (val sendDataState = action.sendDataState) {
             is DataState.Error -> {
@@ -590,7 +592,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toAddEditViewState(state = it)
+                            ?.toAddEditViewState(currentState = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
@@ -624,7 +626,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toAddEditViewState(state = it)
+                            ?.toAddEditViewState(currentState = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
