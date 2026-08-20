@@ -178,6 +178,73 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `make a copy button should only be displayed when a copy is possible`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // A file send cannot be copied, so the action is not offered.
+        mutableStateFlow.update { it.copy(sendType = SendItemType.FILE) }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .assertDoesNotExist()
+
+        // Neither can a send whose type the policy no longer allows.
+        mutableStateFlow.update {
+            it.copy(sendType = SendItemType.TEXT, allowedSendTypes = listOf(SendTypeJson.FILE))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `on make a copy click should send MakeACopyClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(ViewSendAction.MakeACopyClick)
+        }
+    }
+
+    @Test
+    fun `on NavigateToCopy event should navigate to add send in copy mode`() {
+        val sendType = SendItemType.TEXT
+        val sendId = "send_id"
+
+        mutableEventFlow.tryEmit(
+            ViewSendEvent.NavigateToCopy(sendType = sendType, sendId = sendId),
+        )
+
+        assertEquals(
+            AddEditSendRoute(sendId = sendId, sendType = sendType, modeType = ModeType.COPY),
+            onNavigateToAddEditRoute,
+        )
+    }
+
+    @Test
     fun `edit fab should be hidden when a policy restriction applies`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Edit Send")

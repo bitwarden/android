@@ -43,11 +43,13 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.DEFAULT_DELETION_HOURS
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toAddEditViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toEnforcedSendAuth
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,11 +69,6 @@ import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-
-/**
- * The deletion window applied to a new Send when no deletion date is enforced by policy (7 days).
- */
-private const val DEFAULT_DELETION_HOURS: Long = 7 * 24L
 
 private const val KEY_STATE = "state"
 
@@ -101,17 +98,6 @@ private fun String?.splitToDomains(): ImmutableList<String> = this
     ?.filter { it.isNotBlank() }
     .orEmpty()
     .toImmutableList()
-
-/**
- * Returns the [SendAuth] this access type restricts a Send to, preserving [current] when it already
- * matches the restricted type so that any emails already entered are kept.
- */
-private fun SendAccessTypeJson.toEnforcedSendAuth(current: SendAuth): SendAuth = when (this) {
-    // Every option stays available, so the current selection is left alone.
-    SendAccessTypeJson.ANY -> current
-    SendAccessTypeJson.PASSWORD_PROTECTED -> SendAuth.Password
-    SendAccessTypeJson.SPECIFIC_PEOPLE -> current as? SendAuth.Email ?: SendAuth.Email()
-}
 
 /**
  * View model for the add/edit send screen.
@@ -196,7 +182,10 @@ class AddEditSendViewModel @Inject constructor(
                     },
                 )
 
-                is AddEditSendType.EditItem -> AddEditSendState.ViewState.Loading
+                // A copy is loaded from the send it is based on, the same way an edit is.
+                is AddEditSendType.CopyItem,
+                is AddEditSendType.EditItem,
+                    -> AddEditSendState.ViewState.Loading
             },
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
@@ -212,18 +201,17 @@ class AddEditSendViewModel @Inject constructor(
 ) {
 
     init {
-        when (val addSendType = state.addEditSendType) {
-            AddEditSendType.AddItem -> Unit
-            is AddEditSendType.EditItem -> {
+        state
+            .sourceSendItemIdOrNull
+            ?.let { sendItemId ->
                 vaultRepo
-                    .getSendStateFlow(addSendType.sendItemId)
+                    .getSendStateFlow(sendItemId)
                     // We'll stop getting updates as soon as we get some loaded data.
                     .takeUntilLoaded()
                     .map { AddEditSendAction.Internal.SendDataReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
-        }
 
         generatorRepository
             .generatorResultFlow
@@ -472,7 +460,7 @@ class AddEditSendViewModel @Inject constructor(
         // created with.
         val newEnforcedWhoCanAccess = effectiveSendPolicy
             .whoCanAccess
-            ?.takeIf { action.isSendControlsEnabled && state.isAddMode }
+            ?.takeIf { action.isSendControlsEnabled && state.isNewSend }
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 policyDisablesSend = effectiveSendPolicy.disableSend,
@@ -507,7 +495,7 @@ class AddEditSendViewModel @Inject constructor(
      * unlocks.
      */
     private fun AddEditSendState.newDeletionDateOrNull(newEnforcedDeletionHours: Int?): Instant? {
-        if (!isAddMode) return null
+        if (!isNewSend) return null
         val hours = when {
             newEnforcedDeletionHours != null -> newEnforcedDeletionHours.toLong()
             // The enforcement was just dropped, so the default window is restored.
@@ -535,7 +523,22 @@ class AddEditSendViewModel @Inject constructor(
         )
     }
 
-    @Suppress("LongMethod")
+    /**
+     * Maps a loaded [SendView] into the content for whichever mode this screen is in, supplying the
+     * mapping with the collaborators it needs from this view model.
+     *
+     * @param currentState The state being updated, which is the in-flight value rather than the
+     * [state] property so that the mapping sees the same policy data as the update it belongs to.
+     */
+    private fun SendView.toCurrentModeViewState(
+        currentState: AddEditSendState,
+    ): AddEditSendState.ViewState.Content = toAddEditViewState(
+        state = currentState,
+        clock = clock,
+        baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
+        isHideEmailAddressEnabled = isHideEmailAddressEnabled,
+    )
+
     private fun handleSendDataReceive(action: AddEditSendAction.Internal.SendDataReceive) {
         when (val sendDataState = action.sendDataState) {
             is DataState.Error -> {
@@ -553,10 +556,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toViewState(
-                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                            )
+                            ?.toCurrentModeViewState(currentState = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
@@ -590,10 +590,7 @@ class AddEditSendViewModel @Inject constructor(
                     it.copy(
                         viewState = sendDataState
                             .data
-                            ?.toViewState(
-                                baseWebSendUrl = environmentRepo.environment.baseWebSendUrl,
-                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
-                            )
+                            ?.toCurrentModeViewState(currentState = it)
                             ?: AddEditSendState.ViewState.Error(
                                 message = BitwardenString.generic_error_message.asText(),
                             ),
@@ -908,7 +905,10 @@ class AddEditSendViewModel @Inject constructor(
             }
             viewModelScope.launch {
                 when (val addSendType = state.addEditSendType) {
-                    AddEditSendType.AddItem -> {
+                    // A copy is saved as a brand new Send, leaving the original untouched.
+                    AddEditSendType.AddItem,
+                    is AddEditSendType.CopyItem,
+                        -> {
                         val fileType = content
                             .selectedType as? AddEditSendState.ViewState.Content.SendType.File
                         val result = vaultRepo.createSend(
@@ -1098,7 +1098,10 @@ data class AddEditSendState(
      */
     val screenDisplayName: Text
         get() = when (addEditSendType) {
-            AddEditSendType.AddItem -> when (sendType) {
+            // A copy is a new Send, so it is titled the same way as one.
+            AddEditSendType.AddItem,
+            is AddEditSendType.CopyItem,
+                -> when (sendType) {
                 SendItemType.FILE -> BitwardenString.add_file_send.asText()
                 SendItemType.TEXT -> BitwardenString.add_text_send.asText()
             }
@@ -1129,9 +1132,29 @@ data class AddEditSendState(
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled == false
 
     /**
-     * Helper to determine if the UI should display the content in add send mode.
+     * Helper to determine if this screen creates a brand-new Send rather than modifying an
+     * existing one. A copy is a new Send that happens to be pre-filled from another, so it counts
+     * as new despite being loaded from an existing one.
      */
-    val isAddMode: Boolean get() = addEditSendType is AddEditSendType.AddItem
+    val isNewSend: Boolean
+        get() = when (addEditSendType) {
+            AddEditSendType.AddItem,
+            is AddEditSendType.CopyItem,
+                -> true
+
+            is AddEditSendType.EditItem -> false
+        }
+
+    /**
+     * Helper to determine the ID of the send whose data this screen loads, or `null` when the send
+     * is being created from scratch and there is nothing to load.
+     */
+    val sourceSendItemIdOrNull: String?
+        get() = when (val type = addEditSendType) {
+            AddEditSendType.AddItem -> null
+            is AddEditSendType.CopyItem -> type.sendItemId
+            is AddEditSendType.EditItem -> type.sendItemId
+        }
 
     /**
      * Helper to determine if the currently displayed send has a password already set.

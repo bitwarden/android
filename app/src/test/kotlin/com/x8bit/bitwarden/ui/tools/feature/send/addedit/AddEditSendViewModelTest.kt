@@ -8,6 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.SendAccessTypeJson
+import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -61,6 +62,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -622,6 +624,101 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `copy mode should apply the enforced deletion window to the copy`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value =
+            DEFAULT_EFFECTIVE_SEND_POLICY.copy(deletionHours = ENFORCED_DELETION_HOURS)
+        val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+
+        val state = createViewModel(
+            addEditSendType = AddEditSendType.CopyItem(sendItemId = COPY_SEND_ID),
+        )
+            .stateFlow
+            .value
+
+        // The copy adopts the policy window rather than the original send's deletion date.
+        assertEquals(
+            copyModeState(
+                sendAuth = SendAuth.Password,
+                deletionDate = ENFORCED_DELETION_DATE,
+                isSendControlsEnabled = true,
+                deletionHours = ENFORCED_DELETION_HOURS,
+            ),
+            state,
+        )
+    }
+
+    @Test
+    fun `copy mode should apply the enforced access type to the copy`() {
+        mutableSendControlsFlagFlow.value = true
+        mutableEffectiveSendPolicyFlow.value = DEFAULT_EFFECTIVE_SEND_POLICY
+            .copy(whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED)
+        val mockSendView = createMockSendView(
+            number = 1,
+            type = SendType.TEXT,
+            hasPassword = false,
+        )
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+
+        val state = createViewModel(
+            addEditSendType = AddEditSendType.CopyItem(sendItemId = COPY_SEND_ID),
+        )
+            .stateFlow
+            .value
+
+        assertEquals(
+            copyModeState(
+                sendAuth = SendAuth.Password,
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+            ),
+            state,
+        )
+    }
+
+    @Test
+    fun `copy mode should be treated as a new send`() {
+        val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+
+        val state = createViewModel(
+            addEditSendType = AddEditSendType.CopyItem(sendItemId = COPY_SEND_ID),
+        )
+            .stateFlow
+            .value
+
+        assertEquals(copyModeState(sendAuth = SendAuth.Password), state)
+        assertTrue(state.isNewSend)
+    }
+
+    @Test
+    fun `SaveClick in copy mode should create a new send rather than update the original`() =
+        runTest {
+            val sendId = "sendId-1"
+            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val viewModel = createViewModel(
+                addEditSendType = AddEditSendType.CopyItem(sendItemId = sendId),
+            )
+            val content = viewModel.stateFlow.value.viewState as AddEditSendState.ViewState.Content
+            val createdSendView = mockk<SendView>()
+            every { content.toSendView(clock) } returns createdSendView
+            coEvery {
+                vaultRepository.createSend(sendView = createdSendView, fileUri = null)
+            } returns CreateSendResult.Error(message = null, error = null)
+
+            viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+            coVerify(exactly = 1) {
+                vaultRepository.createSend(sendView = createdSendView, fileUri = null)
+            }
+            coVerify(exactly = 0) {
+                vaultRepository.updateSend(sendId = any(), sendView = any())
+            }
+        }
 
     @Test
     fun `initial state should read from saved state when present`() {
@@ -2200,6 +2297,47 @@ private fun enforcedAccessState(
     whoCanAccess = whoCanAccess,
     viewState = DEFAULT_VIEW_STATE.copy(
         common = DEFAULT_COMMON_STATE.copy(sendAuth = sendAuth),
+    ),
+)
+
+private const val COPY_SEND_ID: String = "sendId-1"
+
+/**
+ * Builds the state expected in copy mode, where the content is derived from the send being copied
+ * rather than from [DEFAULT_VIEW_STATE].
+ */
+private fun copyModeState(
+    sendAuth: SendAuth,
+    deletionDate: Instant = Instant.parse("2023-11-03T12:00:00Z"),
+    isSendControlsEnabled: Boolean = false,
+    deletionHours: Int? = null,
+    whoCanAccess: SendAccessTypeJson? = null,
+): AddEditSendState = DEFAULT_STATE.copy(
+    addEditSendType = AddEditSendType.CopyItem(sendItemId = COPY_SEND_ID),
+    isSendControlsEnabled = isSendControlsEnabled,
+    deletionHours = deletionHours,
+    whoCanAccess = whoCanAccess,
+    viewState = AddEditSendState.ViewState.Content(
+        common = AddEditSendState.ViewState.Content.Common(
+            originalSendView = null,
+            name = "mockName-1",
+            currentAccessCount = null,
+            maxAccessCount = 1,
+            passwordInput = "",
+            noteInput = "mockNotes-1",
+            isHideEmailChecked = false,
+            isDeactivateChecked = false,
+            deletionDate = deletionDate,
+            expirationDate = null,
+            sendUrl = null,
+            hasPassword = false,
+            isHideEmailAddressEnabled = true,
+            sendAuth = sendAuth,
+        ),
+        selectedType = AddEditSendState.ViewState.Content.SendType.Text(
+            input = "mockText-1",
+            isHideByDefaultChecked = false,
+        ),
     ),
 )
 

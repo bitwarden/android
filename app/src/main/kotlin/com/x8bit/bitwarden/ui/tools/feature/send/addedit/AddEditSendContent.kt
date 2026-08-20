@@ -68,7 +68,7 @@ fun AddEditSendContent(
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
     shouldHideEmailAddressToggle: Boolean,
-    isAddMode: Boolean,
+    isNewSend: Boolean,
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
@@ -126,7 +126,7 @@ fun AddEditSendContent(
                     fileType = type,
                     addSendHandlers = addSendHandlers,
                     permissionsManager = permissionsManager,
-                    isAddMode = isAddMode,
+                    isNewSend = isNewSend,
                     isShared = isShared,
                 )
             }
@@ -142,7 +142,7 @@ fun AddEditSendContent(
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
-        if (isAddMode) {
+        if (isNewSend) {
             AddEditSendDeletionDateChooser(
                 enforcedDeletionHours = enforcedDeletionHours,
                 onDateSelect = addSendHandlers.onDeletionDateChange,
@@ -188,11 +188,11 @@ fun AddEditSendContent(
             state = state,
             isSendsRestrictedByPolicy = policyDisablesSend,
             shouldHideEmailAddressToggle = shouldHideEmailAddressToggle,
-            isAddMode = isAddMode,
+            isNewSend = isNewSend,
             addSendHandlers = addSendHandlers,
         )
 
-        if (!isAddMode) {
+        if (!isNewSend) {
             DeleteButton(
                 onDeleteClick = addSendHandlers.onDeleteClick,
                 modifier = Modifier
@@ -273,7 +273,7 @@ private fun ColumnScope.FileTypeContent(
     fileType: AddEditSendState.ViewState.Content.SendType.File,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
-    isAddMode: Boolean,
+    isNewSend: Boolean,
     isShared: Boolean,
 ) {
     val chooseFileCameraPermissionLauncher = permissionsManager.getLauncher { isGranted ->
@@ -300,7 +300,7 @@ private fun ColumnScope.FileTypeContent(
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
-    } else if (isAddMode) {
+    } else if (isNewSend) {
         fileType.name?.let {
             Box(
                 contentAlignment = Alignment.CenterStart,
@@ -381,8 +381,8 @@ private fun ColumnScope.FileTypeContent(
  * @param state The content state.
  * @param isSendsRestrictedByPolicy When `true`, indicates that there's a policy preventing the user
  * from editing or creating sends.
- * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
- * an existing send.
+ * @param isNewSend When `true`, indicates that we are creating a new send and `false` when editing
+ * an existing send. Copying a send creates a new one, so it is also `true` in that case.
  * @param addSendHandlers THe handlers various events.
  */
 @Suppress("LongMethod")
@@ -391,7 +391,7 @@ private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
     isSendsRestrictedByPolicy: Boolean,
     shouldHideEmailAddressToggle: Boolean,
-    isAddMode: Boolean,
+    isNewSend: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -424,7 +424,7 @@ private fun AddEditSendOptions(
                         targetState = state
                             .common
                             .currentAccessCount
-                            ?.takeUnless { isAddMode || state.common.maxAccessCount == null },
+                            ?.takeUnless { isNewSend || state.common.maxAccessCount == null },
                         enter = fadeIn() + expandVertically(),
                         exit = fadeOut() + shrinkVertically(),
                     ) {

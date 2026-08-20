@@ -51,6 +51,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
@@ -97,6 +98,16 @@ fun ViewSendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ViewSendEvent.NavigateBack -> onNavigateBack()
+            is ViewSendEvent.NavigateToCopy -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        sendType = event.sendType,
+                        modeType = ModeType.COPY,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
+
             is ViewSendEvent.NavigateToEdit -> {
                 onNavigateToAddEditSend(
                     AddEditSendRoute(
@@ -158,6 +169,7 @@ fun ViewSendScreen(
             onCopyClick = { viewModel.trySendAction(ViewSendAction.CopyClick) },
             onCopyNotesClick = { viewModel.trySendAction(ViewSendAction.CopyNotesClick) },
             onDeleteClick = { viewModel.trySendAction(ViewSendAction.DeleteClick) },
+            onMakeACopyClick = { viewModel.trySendAction(ViewSendAction.MakeACopyClick) },
             onShareClick = { viewModel.trySendAction(ViewSendAction.ShareClick) },
         )
     }
@@ -192,6 +204,7 @@ private fun ViewSendScreenContent(
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -203,6 +216,7 @@ private fun ViewSendScreenContent(
                 onCopyClick = onCopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
+                onMakeACopyClick = onMakeACopyClick,
                 onShareClick = onShareClick,
                 modifier = modifier,
             )
@@ -229,6 +243,7 @@ private fun ViewStateContent(
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -240,6 +255,11 @@ private fun ViewStateContent(
             BitwardenActionCard(
                 cardTitle = stringResource(id = BitwardenString.organization_policy_restriction),
                 cardSubtitle = it.message(),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.make_a_copy.asText(),
+                    onClick = onMakeACopyClick,
+                )
+                    .takeIf { _ -> it.isCopyable },
                 leadingContent = {
                     BitwardenIcon(
                         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
