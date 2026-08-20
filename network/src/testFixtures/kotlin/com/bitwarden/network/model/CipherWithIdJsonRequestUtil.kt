@@ -1,0 +1,59 @@
+package com.bitwarden.network.model
+
+import java.time.Instant
+
+/**
+ * Create a mock [CipherWithIdJsonRequest] with a given [number].
+ */
+@Suppress("LongParameterList")
+fun createMockCipherWithIdJsonRequest(
+    number: Int,
+    id: String = "mockId-$number",
+    attachments: Map<String, AttachmentJsonRequest>? = mapOf(
+        "mockId-$number" to createMockAttachmentJsonRequest(number = 1),
+    ),
+    organizationId: String? = "mockOrganizationId-$number",
+    folderId: String? = "mockFolderId-$number",
+    name: String? = "mockName-$number",
+    notes: String? = "mockNotes-$number",
+    type: CipherTypeJson = CipherTypeJson.LOGIN,
+    login: SyncResponseJson.Cipher.Login? = createMockLogin(number = number),
+    card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
+    sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
+    identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
+    secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
+    fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),
+    isFavorite: Boolean = false,
+    passwordHistory: List<SyncResponseJson.Cipher.PasswordHistory>? = listOf(
+        createMockPasswordHistory(number = number),
+    ),
+    reprompt: CipherRepromptTypeJson = CipherRepromptTypeJson.NONE,
+    lastKnownRevisionDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
+    key: String? = "mockKey-$number",
+    data: String? = "mockData-$number",
+    encryptedFor: String? = "mockEncryptedFor-$number",
+    encryptedByKeyId: String? = "mockEncryptedByKeyId-$number",
+): CipherWithIdJsonRequest =
+    CipherWithIdJsonRequest(
+        id = id,
+        attachments = attachments,
+        organizationId = organizationId,
+        folderId = folderId,
+        name = name,
+        notes = notes,
+        type = type,
+        login = login,
+        card = card,
+        sshKey = sshKey,
+        identity = identity,
+        secureNote = secureNote,
+        fields = fields,
+        isFavorite = isFavorite,
+        passwordHistory = passwordHistory,
+        reprompt = reprompt,
+        lastKnownRevisionDate = lastKnownRevisionDate,
+        key = key,
+        data = data,
+        encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
+    )
