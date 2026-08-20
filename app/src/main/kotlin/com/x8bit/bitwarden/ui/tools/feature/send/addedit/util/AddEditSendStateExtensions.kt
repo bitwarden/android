@@ -30,6 +30,8 @@ fun AddEditSendState.ViewState.Content.toSendView(
         type = selectedType.toSendType(),
         file = toSendFileView(),
         text = toSendTextView(),
+        // TODO: Implement Item-type Sends
+        data = null,
         maxAccessCount = common.maxAccessCount?.toUInt(),
         accessCount = 0U,
         disabled = common.isDeactivateChecked,
