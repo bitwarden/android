@@ -10,9 +10,10 @@ import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
@@ -227,7 +228,7 @@ class CredentialExchangeImportManagerTest {
                         userId = DEFAULT_USER_ID,
                         payload = DEFAULT_ACCOUNT_JSON,
                     )
-                } returns emptyList<Cipher>().asSuccess()
+                } returns emptyList<EncryptionContext>().asSuccess()
                 coEvery {
                     ciphersService.importCiphers(any())
                 } just awaits
@@ -253,8 +254,8 @@ class CredentialExchangeImportManagerTest {
                     accountsJsonList = listOf(DEFAULT_ACCOUNT_JSON, DEFAULT_ACCOUNT_JSON_2),
                 )
 
-                val cipher1 = createMockSdkCipher(number = 1)
-                val cipher2 = createMockSdkCipher(number = 2)
+                val cipher1 = createMockEncryptionContext(number = 1)
+                val cipher2 = createMockEncryptionContext(number = 2)
                 coEvery {
                     vaultSdkSource.importCxf(
                         userId = DEFAULT_USER_ID,
@@ -303,7 +304,7 @@ class CredentialExchangeImportManagerTest {
                         userId = DEFAULT_USER_ID,
                         payload = DEFAULT_ACCOUNT_JSON,
                     )
-                } returns listOf(createMockSdkCipher(number = 1)).asSuccess()
+                } returns listOf(createMockEncryptionContext(number = 1)).asSuccess()
 
                 val exception = RuntimeException("SDK import failed on second account")
                 coEvery {
@@ -346,9 +347,12 @@ class CredentialExchangeImportManagerTest {
                     ),
                 )
 
-                val loginCipher = createMockSdkCipher(number = 1)
-                val cardCipher = createMockSdkCipher(number = 2).copy(
-                    type = com.bitwarden.vault.CipherType.CARD,
+                val loginCipher = createMockEncryptionContext(number = 1)
+                val cardCipher = createMockEncryptionContext(
+                    number = 2,
+                    cipher = createMockSdkCipher(number = 2).copy(
+                        type = com.bitwarden.vault.CipherType.CARD,
+                    ),
                 )
                 val mixedCipherList = listOf(loginCipher, cardCipher)
 
@@ -387,9 +391,12 @@ class CredentialExchangeImportManagerTest {
                     policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns emptyList()
 
-                val loginCipher = createMockSdkCipher(number = 1)
-                val cardCipher = createMockSdkCipher(number = 2).copy(
-                    type = com.bitwarden.vault.CipherType.CARD,
+                val loginCipher = createMockEncryptionContext(number = 1)
+                val cardCipher = createMockEncryptionContext(
+                    number = 2,
+                    cipher = createMockSdkCipher(number = 2).copy(
+                        type = com.bitwarden.vault.CipherType.CARD,
+                    ),
                 )
                 val mixedCipherList = listOf(loginCipher, cardCipher)
 
@@ -435,9 +442,12 @@ class CredentialExchangeImportManagerTest {
                     ),
                 )
 
-                val loginCipher = createMockSdkCipher(number = 1)
-                val cardCipher = createMockSdkCipher(number = 2).copy(
-                    type = com.bitwarden.vault.CipherType.CARD,
+                val loginCipher = createMockEncryptionContext(number = 1)
+                val cardCipher = createMockEncryptionContext(
+                    number = 2,
+                    cipher = createMockSdkCipher(number = 2).copy(
+                        type = com.bitwarden.vault.CipherType.CARD,
+                    ),
                 )
                 val mixedCipherList = listOf(loginCipher, cardCipher)
 
@@ -483,11 +493,17 @@ class CredentialExchangeImportManagerTest {
                     ),
                 )
 
-                val cardCipher1 = createMockSdkCipher(number = 1).copy(
-                    type = com.bitwarden.vault.CipherType.CARD,
+                val cardCipher1 = createMockEncryptionContext(
+                    number = 1,
+                    cipher = createMockSdkCipher(number = 1).copy(
+                        type = com.bitwarden.vault.CipherType.CARD,
+                    ),
                 )
-                val cardCipher2 = createMockSdkCipher(number = 2).copy(
-                    type = com.bitwarden.vault.CipherType.CARD,
+                val cardCipher2 = createMockEncryptionContext(
+                    number = 2,
+                    cipher = createMockSdkCipher(number = 2).copy(
+                        type = com.bitwarden.vault.CipherType.CARD,
+                    ),
                 )
                 val allCardsList = listOf(cardCipher1, cardCipher2)
 
@@ -514,8 +530,8 @@ class CredentialExchangeImportManagerTest {
 
 private const val DEFAULT_USER_ID = "mockId-1"
 private const val DEFAULT_PAYLOAD = "mockPayload-1"
-private val DEFAULT_CIPHER: Cipher = createMockSdkCipher(number = 1)
-private val DEFAULT_CIPHER_LIST: List<Cipher> = listOf(DEFAULT_CIPHER)
+private val DEFAULT_CIPHER: EncryptionContext = createMockEncryptionContext(number = 1)
+private val DEFAULT_CIPHER_LIST: List<EncryptionContext> = listOf(DEFAULT_CIPHER)
 
 private val DEFAULT_ACCOUNT_JSON = """
     {

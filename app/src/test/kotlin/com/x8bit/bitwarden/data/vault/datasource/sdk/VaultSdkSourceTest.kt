@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearch
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import io.mockk.coEvery
@@ -1312,7 +1313,7 @@ class VaultSdkSourceTest {
     @Test
     fun `importCxf should call SDK and return a Result with the correct data`() = runTest {
         val userId = "userId"
-        val expected = listOf(createMockSdkCipher(number = 1))
+        val expected = listOf(createMockEncryptionContext(number = 1))
         val cxf = "cxf"
 
         coEvery {
