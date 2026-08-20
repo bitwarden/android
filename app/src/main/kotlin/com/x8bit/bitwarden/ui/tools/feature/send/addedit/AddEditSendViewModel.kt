@@ -460,7 +460,7 @@ class AddEditSendViewModel @Inject constructor(
         // created with.
         val newEnforcedWhoCanAccess = effectiveSendPolicy
             .whoCanAccess
-            ?.takeIf { action.isSendControlsEnabled && state.isAddMode }
+            ?.takeIf { action.isSendControlsEnabled && state.isNewSend }
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 policyDisablesSend = effectiveSendPolicy.disableSend,
@@ -495,7 +495,7 @@ class AddEditSendViewModel @Inject constructor(
      * unlocks.
      */
     private fun AddEditSendState.newDeletionDateOrNull(newEnforcedDeletionHours: Int?): Instant? {
-        if (!isAddMode) return null
+        if (!isNewSend) return null
         val hours = when {
             newEnforcedDeletionHours != null -> newEnforcedDeletionHours.toLong()
             // The enforcement was just dropped, so the default window is restored.
@@ -1132,10 +1132,18 @@ data class AddEditSendState(
             (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled == false
 
     /**
-     * Helper to determine if the UI should display the content in add send mode. A copy creates a
-     * new Send, so it is in add mode despite being loaded from an existing one.
+     * Helper to determine if this screen creates a brand-new Send rather than modifying an
+     * existing one. A copy is a new Send that happens to be pre-filled from another, so it counts
+     * as new despite being loaded from an existing one.
      */
-    val isAddMode: Boolean get() = addEditSendType !is AddEditSendType.EditItem
+    val isNewSend: Boolean
+        get() = when (addEditSendType) {
+            AddEditSendType.AddItem,
+            is AddEditSendType.CopyItem,
+                -> true
+
+            is AddEditSendType.EditItem -> false
+        }
 
     /**
      * Helper to determine the ID of the send whose data this screen loads, or `null` when the send

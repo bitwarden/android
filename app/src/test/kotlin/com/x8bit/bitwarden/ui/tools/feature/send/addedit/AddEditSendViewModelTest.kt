@@ -680,7 +680,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `copy mode should be treated as add mode`() {
+    fun `copy mode should be treated as a new send`() {
         val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
 
@@ -691,7 +691,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             .value
 
         assertEquals(copyModeState(sendAuth = SendAuth.Password), state)
-        assertTrue(state.isAddMode)
+        assertTrue(state.isNewSend)
     }
 
     @Test
