@@ -136,6 +136,31 @@ class CredentialExchangeImportManagerTest {
         }
 
         @Test
+        fun `importCiphers request should carry the encryption metadata from the SDK`() = runTest {
+            coEvery {
+                vaultSdkSource.importCxf(
+                    userId = DEFAULT_USER_ID,
+                    payload = DEFAULT_ACCOUNT_JSON,
+                )
+            } returns DEFAULT_CIPHER_LIST.asSuccess()
+
+            val capturedRequest = slot<ImportCiphersJsonRequest>()
+            coEvery {
+                ciphersService.importCiphers(capture(capturedRequest))
+            } returns ImportCiphersResponseJson.Success.asSuccess()
+
+            coEvery {
+                vaultSyncManager.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+            importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
+
+            val cipher = capturedRequest.captured.ciphers.first()
+            assertEquals(DEFAULT_CIPHER.encryptedFor, cipher.encryptedFor)
+            assertEquals(DEFAULT_CIPHER.encryptedByKeyId, cipher.encryptedByKeyId)
+        }
+
+        @Test
         fun `when ciphersService importCiphers returns Invalid, should return Error`() = runTest {
             coEvery {
                 vaultSdkSource.importCxf(

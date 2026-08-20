@@ -43,12 +43,14 @@ import com.bitwarden.vault.UriMatchType
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
- * [SyncResponseJson.Cipher] object.
+ * [CipherJsonRequest] object.
  *
  * @param encryptedFor The ID of the user who this cipher is encrypted by.
+ * @param encryptedByKeyId The ID of the key this cipher is encrypted by.
  */
 fun Cipher.toEncryptedNetworkCipher(
     encryptedFor: String,
+    encryptedByKeyId: String?,
 ): CipherJsonRequest =
     CipherJsonRequest(
         notes = notes,
@@ -76,6 +78,7 @@ fun Cipher.toEncryptedNetworkCipher(
         archivedDate = archivedDate,
         data = data,
         encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
     )
 
 /**
@@ -810,7 +813,10 @@ fun List<CipherListView>.sortAlphabetically(): List<CipherListView> {
  * object.
  */
 fun EncryptionContext.toEncryptedNetworkCipher(): CipherJsonRequest =
-    cipher.toEncryptedNetworkCipher(encryptedFor = encryptedFor)
+    cipher.toEncryptedNetworkCipher(
+        encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
+    )
 
 /**
  * Converts a Bitwarden SDK [EncryptionContext] object to a corresponding [SyncResponseJson.Cipher]

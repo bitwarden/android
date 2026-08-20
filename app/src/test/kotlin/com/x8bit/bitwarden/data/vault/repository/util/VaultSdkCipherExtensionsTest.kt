@@ -82,6 +82,7 @@ class VaultSdkCipherExtensionsTest {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
         val syncCipher = sdkCipher.toEncryptedNetworkCipher(
             encryptedFor = "mockEncryptedFor-1",
+            encryptedByKeyId = "mockEncryptedByKeyId-1",
         )
         assertEquals(
             createMockCipherJsonRequest(
@@ -219,7 +220,10 @@ class VaultSdkCipherExtensionsTest {
         )
             .copy(bankAccount = null)
 
-        val request = sdkCipher.toEncryptedNetworkCipher(encryptedFor = "mockEncryptedFor-1")
+        val request = sdkCipher.toEncryptedNetworkCipher(
+            encryptedFor = "mockEncryptedFor-1",
+            encryptedByKeyId = "mockEncryptedByKeyId-1",
+        )
 
         assertNull(request.bankAccount)
     }
@@ -228,7 +232,10 @@ class VaultSdkCipherExtensionsTest {
     fun `toEncryptedNetworkCipher should map driversLicense and passport`() {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
 
-        val request = sdkCipher.toEncryptedNetworkCipher(encryptedFor = "mockEncryptedFor-1")
+        val request = sdkCipher.toEncryptedNetworkCipher(
+            encryptedFor = "mockEncryptedFor-1",
+            encryptedByKeyId = "mockEncryptedByKeyId-1",
+        )
 
         assertEquals(createMockDriversLicense(number = 1), request.driversLicense)
         assertEquals(createMockPassport(number = 1), request.passport)
