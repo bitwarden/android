@@ -99,7 +99,140 @@ class SendViewExtensionsTest {
 
         assertEquals(SendAuth.None, sendView.toSendAuth())
     }
+
+    @Test
+    fun `toCopyViewState should carry over the copyable fields of a text send`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT)
+
+        val result = sendView.toCopyViewState(
+            deletionDate = COPY_DELETION_DATE,
+            isHideEmailAddressEnabled = true,
+            sendAuth = SendAuth.None,
+        )
+
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON,
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCopyViewState should not carry over anything belonging to the original send`() {
+        val sendView = createMockSendView(
+            number = 1,
+            type = SendType.TEXT,
+            disabled = true,
+            hasPassword = true,
+        )
+
+        val result = sendView.toCopyViewState(
+            deletionDate = COPY_DELETION_DATE,
+            isHideEmailAddressEnabled = true,
+            sendAuth = SendAuth.None,
+        )
+
+        // The copy is a brand new Send, so the original's URL, access count, expiration date,
+        // password and deactivated state are all left behind.
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON,
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCopyViewState should use the deletion date it is given`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT)
+
+        val result = sendView.toCopyViewState(
+            deletionDate = OTHER_DELETION_DATE,
+            isHideEmailAddressEnabled = true,
+            sendAuth = SendAuth.None,
+        )
+
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON.copy(deletionDate = OTHER_DELETION_DATE),
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCopyViewState should use the access type it is given`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT)
+        val sendAuth = SendAuth.Email(
+            emails = persistentListOf(AuthEmail(id = "id", value = "test@example.com")),
+        )
+
+        val result = sendView.toCopyViewState(
+            deletionDate = COPY_DELETION_DATE,
+            isHideEmailAddressEnabled = true,
+            sendAuth = sendAuth,
+        )
+
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON.copy(sendAuth = sendAuth),
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCopyViewState should not hide the email when the policy disallows it`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT, hideEmail = true)
+
+        val result = sendView.toCopyViewState(
+            deletionDate = COPY_DELETION_DATE,
+            isHideEmailAddressEnabled = false,
+            sendAuth = SendAuth.None,
+        )
+
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON.copy(isHideEmailAddressEnabled = false),
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCopyViewState should drop the attachment of a file send`() {
+        val sendView = createMockSendView(number = 1, type = SendType.FILE)
+
+        val result = sendView.toCopyViewState(
+            deletionDate = COPY_DELETION_DATE,
+            isHideEmailAddressEnabled = true,
+            sendAuth = SendAuth.None,
+        )
+
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = COPY_COMMON,
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
+            ),
+            result,
+        )
+    }
 }
+
+private val COPY_DELETION_DATE: Instant = Instant.parse("2023-11-03T12:00:00Z")
+
+private val OTHER_DELETION_DATE: Instant = Instant.parse("2023-12-25T12:00:00Z")
 
 private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
     AddEditSendState.ViewState.Content.Common(
@@ -136,4 +269,22 @@ private val DEFAULT_STATE: AddEditSendState.ViewState.Content =
     AddEditSendState.ViewState.Content(
         common = DEFAULT_COMMON,
         selectedType = DEFAULT_FILE_TYPE,
+    )
+
+private val COPY_COMMON: AddEditSendState.ViewState.Content.Common =
+    AddEditSendState.ViewState.Content.Common(
+        originalSendView = null,
+        name = "mockName-1",
+        currentAccessCount = null,
+        maxAccessCount = 1,
+        passwordInput = "",
+        noteInput = "mockNotes-1",
+        isHideEmailChecked = false,
+        isDeactivateChecked = false,
+        deletionDate = COPY_DELETION_DATE,
+        expirationDate = null,
+        sendUrl = null,
+        hasPassword = false,
+        isHideEmailAddressEnabled = true,
+        sendAuth = SendAuth.None,
     )
