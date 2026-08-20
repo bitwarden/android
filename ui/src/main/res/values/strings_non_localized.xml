@@ -61,6 +61,7 @@
     <string name="send_controls">Send Controls</string>
     <string name="send_controls_existing_sends">Send Controls - Existing Sends</string>
     <string name="identity_autofill">Identity Autofill</string>
+    <string name="sdk_pin_unlock">SDK PIN Unlock</string>
 
     <!-- endregion Debug Menu -->
 </resources>

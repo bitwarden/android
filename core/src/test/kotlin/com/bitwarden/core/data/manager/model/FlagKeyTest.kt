@@ -80,6 +80,10 @@ class FlagKeyTest {
             FlagKey.IdentityAutofill.keyName,
             "pm-38138-mobile-identity-autofill",
         )
+        assertEquals(
+            FlagKey.SdkPinUnlock.keyName,
+            "pm-31059-sdk-pin-unlock",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,
+                FlagKey.SdkPinUnlock,
             ).all {
                 !it.defaultValue
             },
