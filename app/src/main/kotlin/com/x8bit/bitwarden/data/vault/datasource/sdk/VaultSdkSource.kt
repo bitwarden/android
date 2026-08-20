@@ -450,10 +450,10 @@ interface VaultSdkSource {
     /**
      * Imports the given CXF formatted [payload] into the users vault.
      *
-     * @return Result of the import. If successful, a list of [Cipher]s deciphered from the CXF
-     * payload.
+     * @return Result of the import. If successful, a list of [EncryptionContext]s for the ciphers
+     * deciphered from the CXF payload.
      */
-    suspend fun importCxf(userId: String, payload: String): Result<List<Cipher>>
+    suspend fun importCxf(userId: String, payload: String): Result<List<EncryptionContext>>
 
     /**
      * Register a new FIDO 2 credential to a cipher.

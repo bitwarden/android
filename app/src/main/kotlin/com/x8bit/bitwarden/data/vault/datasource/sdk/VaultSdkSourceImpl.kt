@@ -565,7 +565,7 @@ class VaultSdkSourceImpl(
     override suspend fun importCxf(
         userId: String,
         payload: String,
-    ): Result<List<Cipher>> = runCatchingWithLogs {
+    ): Result<List<EncryptionContext>> = runCatchingWithLogs {
         getClient(userId = userId)
             .exporters()
             .importCxf(payload = payload)
