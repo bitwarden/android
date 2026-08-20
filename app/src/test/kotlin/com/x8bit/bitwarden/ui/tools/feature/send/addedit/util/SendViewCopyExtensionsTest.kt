@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AuthEmail
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.SendAuth
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -90,7 +89,13 @@ class SendViewCopyExtensionsTest {
             sendAuth = sendAuth,
         )
 
-        assertEquals(sendAuth, result.common.sendAuth)
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = EXPECTED_COMMON.copy(sendAuth = sendAuth),
+                selectedType = EXPECTED_TEXT_TYPE,
+            ),
+            result,
+        )
     }
 
     @Test
@@ -103,7 +108,13 @@ class SendViewCopyExtensionsTest {
             sendAuth = SendAuth.None,
         )
 
-        assertFalse(result.common.isHideEmailChecked)
+        assertEquals(
+            AddEditSendState.ViewState.Content(
+                common = EXPECTED_COMMON.copy(isHideEmailAddressEnabled = false),
+                selectedType = EXPECTED_TEXT_TYPE,
+            ),
+            result,
+        )
     }
 
     @Test
@@ -117,13 +128,16 @@ class SendViewCopyExtensionsTest {
         )
 
         assertEquals(
-            AddEditSendState.ViewState.Content.SendType.File(
-                uri = null,
-                name = null,
-                displaySize = null,
-                sizeBytes = null,
+            AddEditSendState.ViewState.Content(
+                common = EXPECTED_COMMON,
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
             ),
-            result.selectedType,
+            result,
         )
     }
 }

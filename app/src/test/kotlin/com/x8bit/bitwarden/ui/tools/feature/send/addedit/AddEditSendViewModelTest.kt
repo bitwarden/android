@@ -644,11 +644,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             copyModeState(
                 sendAuth = SendAuth.Password,
                 deletionDate = ENFORCED_DELETION_DATE,
-            )
-                .copy(
-                    isSendControlsEnabled = true,
-                    deletionHours = ENFORCED_DELETION_HOURS,
-                ),
+                isSendControlsEnabled = true,
+                deletionHours = ENFORCED_DELETION_HOURS,
+            ),
             state,
         )
     }
@@ -672,11 +670,11 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             .value
 
         assertEquals(
-            copyModeState(sendAuth = SendAuth.Password)
-                .copy(
-                    isSendControlsEnabled = true,
-                    whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
-                ),
+            copyModeState(
+                sendAuth = SendAuth.Password,
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+            ),
             state,
         )
     }
@@ -2311,8 +2309,14 @@ private const val COPY_SEND_ID: String = "sendId-1"
 private fun copyModeState(
     sendAuth: SendAuth,
     deletionDate: Instant = Instant.parse("2023-11-03T12:00:00Z"),
+    isSendControlsEnabled: Boolean = false,
+    deletionHours: Int? = null,
+    whoCanAccess: SendAccessTypeJson? = null,
 ): AddEditSendState = DEFAULT_STATE.copy(
     addEditSendType = AddEditSendType.CopyItem(sendItemId = COPY_SEND_ID),
+    isSendControlsEnabled = isSendControlsEnabled,
+    deletionHours = deletionHours,
+    whoCanAccess = whoCanAccess,
     viewState = AddEditSendState.ViewState.Content(
         common = AddEditSendState.ViewState.Content.Common(
             originalSendView = null,
