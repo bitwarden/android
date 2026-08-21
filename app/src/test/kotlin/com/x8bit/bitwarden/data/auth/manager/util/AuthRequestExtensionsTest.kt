@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.manager.util
 
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -39,6 +40,34 @@ class AuthRequestExtensionsTest {
             AUTH_REQUEST
                 .copy(creationDate = Instant.parse("2024-09-12T23:58:00Z"))
                 .isActionable(clock = clock),
+        )
+    }
+
+    @Test
+    fun `filterRespondedAndExpired should retain only the actionable requests`() {
+        val actionable = AUTH_REQUEST.copy(id = "actionable")
+        val approved = AUTH_REQUEST.copy(id = "approved", requestApproved = true)
+        val declined = AUTH_REQUEST.copy(
+            id = "declined",
+            responseDate = Instant.parse("2024-09-13T00:03:00Z"),
+        )
+        val expired = AUTH_REQUEST.copy(
+            id = "expired",
+            creationDate = Instant.parse("2024-09-12T23:58:00Z"),
+        )
+
+        assertEquals(
+            listOf(actionable),
+            listOf(actionable, approved, declined, expired)
+                .filterRespondedAndExpired(clock = clock),
+        )
+    }
+
+    @Test
+    fun `filterRespondedAndExpired should return an empty list when given an empty list`() {
+        assertEquals(
+            emptyList<AuthRequest>(),
+            emptyList<AuthRequest>().filterRespondedAndExpired(clock = clock),
         )
     }
 }
