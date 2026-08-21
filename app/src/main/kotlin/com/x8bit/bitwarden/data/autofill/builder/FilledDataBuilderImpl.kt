@@ -91,6 +91,12 @@ class FilledDataBuilderImpl(
                     }
                     .orEmpty()
             }
+
+            is AutofillPartition.Identity -> {
+                // Filling an identity partition is wired up in a later phase; this is a no-op
+                // today since nothing yet classifies a view as Identity.
+                emptyList()
+            }
         }
 
         // Use getOrLastOrNull so if the list has run dry take the last spec.

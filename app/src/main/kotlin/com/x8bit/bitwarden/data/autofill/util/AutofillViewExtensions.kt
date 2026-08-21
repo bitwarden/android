@@ -51,7 +51,7 @@ fun AutofillView.buildFilledItemOrNull(
 /**
  * Build a list [AutofillValue] out of [value] or return null if not possible.
  */
-@Suppress("MagicNumber")
+@Suppress("LongMethod", "MagicNumber")
 private fun AutofillView.buildListAutofillValueOrNull(
     value: String,
 ): AutofillValue? =
@@ -93,6 +93,23 @@ private fun AutofillView.buildListAutofillValueOrNull(
         is AutofillView.Login.Email,
         is AutofillView.Login.Password,
         is AutofillView.Login.Username,
+        is AutofillView.Identity.AddressCountry,
+        is AutofillView.Identity.AddressLocality,
+        is AutofillView.Identity.AddressRegion,
+        is AutofillView.Identity.AddressStreet,
+        is AutofillView.Identity.Company,
+        is AutofillView.Identity.Email,
+        is AutofillView.Identity.LicenseNumber,
+        is AutofillView.Identity.PassportNumber,
+        is AutofillView.Identity.PersonNameFamily,
+        is AutofillView.Identity.PersonNameFull,
+        is AutofillView.Identity.PersonNameGiven,
+        is AutofillView.Identity.PersonNameMiddle,
+        is AutofillView.Identity.PersonNamePrefix,
+        is AutofillView.Identity.PhoneFull,
+        is AutofillView.Identity.PostalAddressFull,
+        is AutofillView.Identity.PostalCode,
+        is AutofillView.Identity.Ssn,
         is AutofillView.Unused,
             -> {
             this

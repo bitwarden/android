@@ -420,6 +420,59 @@ class AutofillProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `processSaveRequest should invoke empty callback when autofill enabled, has fill contexts, and toAutofillSaveItem returns null`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val assistStructure: AssistStructure = mockk()
+        val fillContext: FillContext = mockk {
+            every { structure } returns assistStructure
+        }
+        val saveRequest: SaveRequest = mockk {
+            every { fillContexts } returns listOf(fillContext)
+        }
+        val autofillPartition: AutofillPartition = mockk()
+        val autofillRequest: AutofillRequest.Fillable = mockk {
+            every { packageName } returns PACKAGE_NAME
+            every { partition } returns autofillPartition
+            every { toAutofillSaveItem() } returns null
+        }
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns emptyList()
+        every {
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+        } returns autofillRequest
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verify(exactly = 1) {
+            settingsRepository.isAutofillSavePromptDisabled
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+            saveCallback.onSuccess()
+        }
+        verify(exactly = 0) {
+            createAutofillSavedItemIntentSender(any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `processSaveRequest should invoke empty callback when autofill enabled, has fill contexts, and parser returns Unfillable`() {
         // Setup
         val saveCallback: SaveCallback = mockk {

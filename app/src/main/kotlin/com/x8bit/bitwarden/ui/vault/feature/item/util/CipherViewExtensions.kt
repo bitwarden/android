@@ -383,6 +383,22 @@ private val CardView.paymentCardBrandIconRes: Int?
             -> null
     }
 
+private val CardView.cardBrand: VaultCardBrand?
+    get() = brand
+        ?.findVaultCardBrandWithNameOrNull()
+        .takeUnless { it == VaultCardBrand.SELECT }
+
+private val CardView.expiration: String?
+    get() = listOfNotNull(
+        expMonth?.padStart(length = 2, padChar = '0'),
+        expYear,
+    )
+        .joinToString("/")
+        .orNullIfBlank()
+
+/**
+ * The full postal address for an [IdentityView], joining its address parts.
+ */
 private val IdentityView.identityAddress: String?
     get() = listOfNotNull(
         address1,
@@ -396,6 +412,9 @@ private val IdentityView.identityAddress: String?
         .joinToString("\n")
         .orNullIfBlank()
 
+/**
+ * The full name for an [IdentityView], joining its name parts.
+ */
 private val IdentityView.identityName: String?
     get() = listOfNotNull(
         title
@@ -408,17 +427,4 @@ private val IdentityView.identityName: String?
         lastName,
     )
         .joinToString(" ")
-        .orNullIfBlank()
-
-private val CardView.cardBrand: VaultCardBrand?
-    get() = brand
-        ?.findVaultCardBrandWithNameOrNull()
-        .takeUnless { it == VaultCardBrand.SELECT }
-
-private val CardView.expiration: String?
-    get() = listOfNotNull(
-        expMonth?.padStart(length = 2, padChar = '0'),
-        expYear,
-    )
-        .joinToString("/")
         .orNullIfBlank()
