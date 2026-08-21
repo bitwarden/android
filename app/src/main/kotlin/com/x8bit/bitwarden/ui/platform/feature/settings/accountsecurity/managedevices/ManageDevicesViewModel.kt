@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -18,6 +17,7 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
+import com.x8bit.bitwarden.data.auth.manager.util.filterRespondedAndExpired
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
@@ -72,6 +72,7 @@ class ManageDevicesViewModel @Inject constructor(
     init {
         updateAuthRequestList()
         fetchAllDevices()
+        observePasswordlessAuthRequests()
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { ManageDevicesAction.Internal.PullToRefreshEnableReceive(it) }
@@ -147,6 +148,10 @@ class ManageDevicesViewModel @Inject constructor(
             is ManageDevicesAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
             }
+
+            is ManageDevicesAction.Internal.PasswordlessAuthRequestReceive -> {
+                handlePasswordlessAuthRequestReceive(action)
+            }
         }
     }
 
@@ -169,6 +174,21 @@ class ManageDevicesViewModel @Inject constructor(
         authJob = authRepository
             .getAuthRequestsWithUpdates()
             .map { ManageDevicesAction.Internal.AuthRequestsResultReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
+
+    private fun observePasswordlessAuthRequests() {
+        authRepository
+            .getPasswordlessAuthRequestFlow()
+            .map { authRequest ->
+                // The device list is the only source that reports which device owns a pending
+                // request, so it is re-read before the new request can be rendered against it.
+                ManageDevicesAction.Internal.PasswordlessAuthRequestReceive(
+                    authRequest = authRequest,
+                    devicesResult = authRepository.getDevices(),
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -221,6 +241,32 @@ class ManageDevicesViewModel @Inject constructor(
                 devices = devicesResult.devices.toImmutableList(),
                 devicesLoaded = true,
                 isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
+            )
+        }
+        if (state.authRequestsLoaded) {
+            updateContentWithCurrentData()
+        }
+    }
+
+    private fun handlePasswordlessAuthRequestReceive(
+        action: ManageDevicesAction.Internal.PasswordlessAuthRequestReceive,
+    ) {
+        // This refresh is not user-initiated, so a failure leaves the screen untouched rather than
+        // replacing it with an error; polling and pull-to-refresh reconcile it later.
+        val devices = (action.devicesResult as? GetDevicesResult.Success)
+            ?.devices
+            ?: return
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                // Replaces any earlier copy of this request so it cannot be listed twice.
+                authRequests = currentState
+                    .authRequests
+                    .filterNot { it.id == action.authRequest.id }
+                    .plus(action.authRequest)
+                    .toImmutableList(),
+                devices = devices.toImmutableList(),
+                devicesLoaded = true,
             )
         }
         if (state.authRequestsLoaded) {
@@ -446,6 +492,15 @@ sealed class ManageDevicesAction {
         data class AuthRequestsResultReceive(
             val authRequestsUpdatesResult: AuthRequestsUpdatesResult,
         ) : Internal()
+
+        /**
+         * Indicates that an incoming passwordless request has been received, along with the
+         * devices it should be rendered against.
+         */
+        data class PasswordlessAuthRequestReceive(
+            val authRequest: AuthRequest,
+            val devicesResult: GetDevicesResult,
+        ) : Internal()
     }
 }
 
@@ -457,16 +512,3 @@ enum class DeviceSessionStatus {
     Pending,
     None,
 }
-
-/**
- * Filters out [AuthRequest]s that match one of the following criteria:
- * * The request has been approved.
- * * The request has been declined (indicated by it not being approved & having a responseDate).
- * * The request has expired (it is at least 5 minutes old).
- */
-private fun List<AuthRequest>.filterRespondedAndExpired(clock: Clock) =
-    filterNot { request ->
-        request.requestApproved ||
-            request.responseDate != null ||
-            request.creationDate.isOverFiveMinutesOld(clock)
-    }

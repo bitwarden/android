@@ -37,6 +37,15 @@ interface AuthRequestManager {
     fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult>
 
     /**
+     * Get the [AuthRequest] for each incoming passwordless request for the active user, hydrated
+     * with the fingerprint required to approve it.
+     *
+     * Only requests that can still be acted upon are emitted; those already approved, declined, or
+     * expired are not. Requests that cannot be retrieved are omitted rather than emitted as errors.
+     */
+    fun getPasswordlessAuthRequestFlow(): Flow<AuthRequest>
+
+    /**
      * Get an [AuthRequest] by its request ID.
      */
     suspend fun getAuthRequestIfApproved(requestId: String): Result<AuthRequest>
