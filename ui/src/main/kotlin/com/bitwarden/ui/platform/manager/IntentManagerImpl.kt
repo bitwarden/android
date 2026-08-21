@@ -98,9 +98,19 @@ internal class IntentManagerImpl(
                 }
             }
         } else {
-            // Fall back to a Custom Tab.
-            Timber.d("Launching uri with CustomTabs fallback for $providerPackageName")
-            startCustomTabsActivity(uri = uri)
+            when (authTabData) {
+                is AuthTabData.CustomScheme -> {
+                    Timber.d("Launching uri with CustomTabs fallback for $providerPackageName")
+                    startCustomTabsActivity(uri = uri)
+                }
+
+                is AuthTabData.HttpsScheme -> {
+                    Timber.d(
+                        "Launching uri with external browser fallback for $providerPackageName",
+                    )
+                    launchUri(uri = uri)
+                }
+            }
         }
     }
 
