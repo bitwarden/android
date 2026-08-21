@@ -53,6 +53,7 @@ class AutofillParserTests {
         every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
+        every { this@mockk.hint } returns null
     }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
@@ -63,6 +64,7 @@ class AutofillParserTests {
         every { this@mockk.htmlInfo } returns mockk(relaxed = true)
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.idEntry } returns null
+        every { this@mockk.hint } returns null
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
@@ -85,6 +87,7 @@ class AutofillParserTests {
     }
     private val fillAssistManager: FillAssistManager = mockk()
     private val mutableFillAssistFlagFlow = MutableStateFlow(false)
+    private val mutableIdentityAutofillFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlag(FlagKey.FillAssistTargetingRules)
@@ -94,6 +97,11 @@ class AutofillParserTests {
         every {
             getFeatureFlagFlow(FlagKey.FillAssistTargetingRules)
         } returns mutableFillAssistFlagFlow
+        every {
+            getFeatureFlag(FlagKey.IdentityAutofill)
+        } answers {
+            mutableIdentityAutofillFlagFlow.value
+        }
     }
 
     private var mockIsInlineAutofillEnabled = true
@@ -265,7 +273,12 @@ class AutofillParserTests {
                 website = null,
             ),
         )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
         val autofillPartition = AutofillPartition.Login(
             views = listOf(
                 loginAutofillView.copy(data = loginAutofillView.data.copy(website = website)),
@@ -313,7 +326,12 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns null
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
+            every {
+                this@mockk.toAutofillView(
+                    parentWebsite = any(),
+                    isIdentityAutofillEnabled = any(),
+                )
+            } returns null
             every { this@mockk.website } returns null
         }
         // `invalidChildViewNode` simulates the OS assigning a node's idPackage to "android", which
@@ -326,7 +344,12 @@ class AutofillParserTests {
             every { this@mockk.childCount } returns 0
             every { this@mockk.idPackage } returns ID_PACKAGE_ANDROID
             every { this@mockk.isFocused } returns false
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns null
+            every {
+                this@mockk.toAutofillView(
+                    parentWebsite = any(),
+                    isIdentityAutofillEnabled = any(),
+                )
+            } returns null
             every { this@mockk.website } returns null
         }
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
@@ -347,7 +370,12 @@ class AutofillParserTests {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
             every { this@mockk.autofillId } returns parentAutofillId
             every { this@mockk.idPackage } returns null
-            every { this@mockk.toAutofillView(parentWebsite = any()) } returns parentAutofillView
+            every {
+                this@mockk.toAutofillView(
+                    parentWebsite = any(),
+                    isIdentityAutofillEnabled = any(),
+                )
+            } returns parentAutofillView
             every { this@mockk.childCount } returns 2
             every { this@mockk.getChildAt(0) } returns childViewNode
             every { this@mockk.getChildAt(1) } returns invalidChildViewNode
@@ -433,8 +461,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -496,8 +534,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -552,7 +600,12 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedAutofillView
 
         // Test
         val actual = parser.parse(
@@ -654,12 +707,23 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { rootViewNode.toAutofillView(parentWebsite = any()) } returns null
         every {
-            hiddenUserNameViewNode.toAutofillView(parentWebsite = any())
+            rootViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns null
+        every {
+            hiddenUserNameViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
         } returns unusedAutofillView
         every {
-            passwordViewNode.toAutofillView(parentWebsite = any())
+            passwordViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
         } returns loginPasswordAutofillView
 
         // Test
@@ -722,8 +786,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -786,8 +860,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -858,8 +942,18 @@ class AutofillParserTests {
                 website = URI,
             ),
         )
-        every { urlBarViewNode.toAutofillView(parentWebsite = any()) } returns unusedFocusedView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            urlBarViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedFocusedView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -915,8 +1009,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -979,8 +1083,18 @@ class AutofillParserTests {
             partition = autofillPartition,
             uri = URI,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(
@@ -1035,8 +1149,18 @@ class AutofillParserTests {
             "blockListedUri.com",
             "blockListedAgainUri.com",
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
         every { settingsRepository.blockedAutofillUris } returns remoteBlockList
 
         // A function for asserting that a block listed URI results in an unfillable request.
@@ -1108,7 +1232,12 @@ class AutofillParserTests {
             ),
             yearValue = null,
         )
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns cardAutofillView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns cardAutofillView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1165,7 +1294,12 @@ class AutofillParserTests {
                 website = FILL_ASSIST_URI,
             ),
         )
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns loginAutofillView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginAutofillView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1238,7 +1372,12 @@ class AutofillParserTests {
         } returns fillAssistLoginData
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns heuristicLoginView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns heuristicLoginView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1311,7 +1450,12 @@ class AutofillParserTests {
         } returns fillAssistCardData
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
-        every { cardViewNode.toAutofillView(parentWebsite = any()) } returns heuristicCardView
+        every {
+            cardViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns heuristicCardView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1373,7 +1517,12 @@ class AutofillParserTests {
         every { any<HtmlInfo>().matchesSelectorClause(any()) } returns true
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedLoginView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1443,7 +1592,12 @@ class AutofillParserTests {
         // matchesSelectorClause defaults to false per setup -- fill-assist matches nothing.
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedLoginView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1471,7 +1625,12 @@ class AutofillParserTests {
         )
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
-        every { loginViewNode.toAutofillView(parentWebsite = any()) } returns unusedLoginView
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
 
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
@@ -1513,8 +1672,18 @@ class AutofillParserTests {
                 website = URI,
             ),
         )
-        every { parentViewNode.toAutofillView(parentWebsite = any()) } returns sharedAutofillView
-        every { childViewNode.toAutofillView(parentWebsite = any()) } returns sharedAutofillView
+        every {
+            parentViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns sharedAutofillView
+        every {
+            childViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns sharedAutofillView
 
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
@@ -1547,6 +1716,252 @@ class AutofillParserTests {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should choose AutofillPartition Login when an Identity view is focused but a Login view is fillable elsewhere`() {
+        // Setup: a focused field heuristics classify as Identity (e.g. "First name" on a signup
+        // form) sits in one window, while a fillable, unfocused Login.Username field exists in
+        // another window on the same screen. Before Phase D's Identity partition exists, a
+        // focused Identity view must not force the whole request to Unfillable when a fillable
+        // Login/Card partition exists elsewhere -- it should be excluded from candidates exactly
+        // like Unused, falling through to the other fillable view.
+        val identityAutofillId: AutofillId = mockk()
+        val identityViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns identityAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns null
+        }
+        val identityWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns identityViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 2
+        every { assistStructure.getWindowNodeAt(0) } returns identityWindowNode
+        every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
+        val identityAutofillView = AutofillView.Identity.PersonNameGiven(
+            data = AutofillView.Data(
+                autofillId = identityAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        val loginAutofillView = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        every {
+            identityViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns identityAutofillView
+        every {
+            loginViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: falls through to the fillable Login view instead of becoming Unfillable.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(loginAutofillView)),
+            uri = URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should promote a phone-hinted field to Login Username via updateForMissingUsernameFields when IdentityAutofill is disabled`() {
+        // Setup: a node that heuristics would classify as Identity PhoneFull once identity
+        // detection is active, sitting directly above a password field. Before identity
+        // detection existed, this same node fell through to Unused and was promoted to
+        // Login.Username via updateForMissingUsernameFields. With IdentityAutofill disabled
+        // (the default), toAutofillView must still resolve it to Unused, so that promotion
+        // continues to work exactly as it did before identity heuristics existed.
+        val (rootViewNode, phoneHintedViewNode, passwordViewNode, passwordAutofillId) =
+            setupPhoneHintedFieldAbovePassword()
+        val windowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns rootViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns windowNode
+        val unusedPhoneView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        val loginPasswordAutofillView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = passwordAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        every {
+            phoneHintedViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = false,
+            )
+        } returns unusedPhoneView
+        every {
+            passwordViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginPasswordAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: promoted to Login.Username, so both fields are present in the partition.
+        val loginUsernameAutofillView = AutofillView.Login.Username(data = unusedPhoneView.data)
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = listOf(rootViewNode.autofillId!!),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(
+                views = listOf(loginUsernameAutofillView, loginPasswordAutofillView),
+            ),
+            uri = URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should not promote a phone-hinted field to Login Username when IdentityAutofill is enabled and the field resolves to Identity PhoneFull`() {
+        // Setup: same shape as the disabled case above, but IdentityAutofill is enabled, so
+        // toAutofillView resolves the field to Identity.PhoneFull instead of Unused before
+        // updateForMissingUsernameFields ever runs. The promotion is skipped, and the Login
+        // partition ends up missing its username field -- the regression this fix is guarding.
+        mutableIdentityAutofillFlagFlow.value = true
+        val (rootViewNode, phoneHintedViewNode, passwordViewNode, passwordAutofillId) =
+            setupPhoneHintedFieldAbovePassword()
+        val windowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns rootViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns windowNode
+        val identityPhoneView = AutofillView.Identity.PhoneFull(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        val loginPasswordAutofillView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = passwordAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        every {
+            phoneHintedViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = true,
+            )
+        } returns identityPhoneView
+        every {
+            passwordViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns loginPasswordAutofillView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: no promotion -- the Login partition only contains the password field.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = listOf(rootViewNode.autofillId!!),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(loginPasswordAutofillView)),
+            uri = URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    /**
+     * Sets up a root node with two children -- a phone-hinted field and a password field
+     * directly below it -- for testing [updateForMissingUsernameFields]'s Unused-only promotion
+     * against a field that heuristics may classify as Identity.PhoneFull.
+     */
+    private fun setupPhoneHintedFieldAbovePassword(): PhoneAbovePasswordNodes {
+        val phoneHintedViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns loginAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+        }
+        val passwordAutofillId = mockk<AutofillId>()
+        val passwordViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns passwordAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+        }
+        val rootAutofillId = mockk<AutofillId>()
+        val rootViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns rootAutofillId
+            every { this@mockk.childCount } returns 2
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+            every { this@mockk.getChildAt(0) } returns phoneHintedViewNode
+            every { this@mockk.getChildAt(1) } returns passwordViewNode
+            every {
+                this@mockk.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+            } returns null
+        }
+        return PhoneAbovePasswordNodes(
+            rootViewNode = rootViewNode,
+            phoneHintedViewNode = phoneHintedViewNode,
+            passwordViewNode = passwordViewNode,
+            passwordAutofillId = passwordAutofillId,
+        )
+    }
+
     /**
      * Setup [assistStructure] to return window nodes with each [AutofillView] type (card and login)
      * so we can test how different window node configurations produce different partitions.
@@ -1557,6 +1972,18 @@ class AutofillParserTests {
         every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
     }
 }
+
+/**
+ * The nodes built by `setupPhoneHintedFieldAbovePassword`, returned so each test can stub
+ * [AssistStructure.ViewNode.toAutofillView] differently for the phone-hinted node depending on
+ * whether IdentityAutofill is enabled.
+ */
+private data class PhoneAbovePasswordNodes(
+    val rootViewNode: AssistStructure.ViewNode,
+    val phoneHintedViewNode: AssistStructure.ViewNode,
+    val passwordViewNode: AssistStructure.ViewNode,
+    val passwordAutofillId: AutofillId,
+)
 
 private const val FILL_ASSIST_URI: String = "https://example.com"
 
