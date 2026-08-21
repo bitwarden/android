@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.manager.sanitizeTimestamps
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -535,6 +536,68 @@ class CredentialExchangeImportManagerTest {
                     ciphersService.importCiphers(any())
                 }
             }
+    }
+}
+
+class SanitizeTimestampsTest {
+    @Test
+    fun `import flow sanitizes negative timestamps before SDK call`() = runTest {
+        val negativeTimestampJson = DEFAULT_ACCOUNT_JSON.replace(
+            "1759783057",
+            "-11644473600",
+        )
+        val sanitizedJson = sanitizeTimestamps(negativeTimestampJson)
+
+        val importManager = CredentialExchangeImportManagerImpl(
+            vaultSdkSource = mockk {
+                coEvery { importCxf(any(), any()) } returns DEFAULT_CIPHER_LIST.asSuccess()
+            },
+            ciphersService = mockk {
+                coEvery { importCiphers(any()) } returns
+                    ImportCiphersResponseJson.Success.asSuccess()
+            },
+            vaultSyncManager = mockk {
+                coEvery { syncForResult(forced = true) } returns SyncVaultDataResult.Success
+            },
+            policyManager = mockk { every { getActivePolicies(any()) } returns emptyList() },
+            credentialExchangePayloadParser = mockk {
+                every { parse(any()) } returns CredentialExchangePayload.Importable(
+                    accountsJsonList = listOf(negativeTimestampJson),
+                )
+            },
+        )
+
+        val result = importManager.importCxfPayload(DEFAULT_USER_ID, "payload")
+
+        assertTrue(result is ImportCxfPayloadResult.Success)
+    }
+
+
+    @Test
+    fun `sanitizeTimestamps replaces negative creationAt with 0`() {
+        val input = """{"creationAt": -11644473600, "modifiedAt": 1759783057}"""
+        val expected = """{"creationAt": 0, "modifiedAt": 1759783057}"""
+        assertEquals(expected, sanitizeTimestamps(input))
+    }
+
+    @Test
+    fun `sanitizeTimestamps replaces negative modifiedAt with 0`() {
+        val input = """{"creationAt": 1759783057, "modifiedAt": -11644473600}"""
+        val expected = """{"creationAt": 1759783057, "modifiedAt": 0}"""
+        assertEquals(expected, sanitizeTimestamps(input))
+    }
+
+    @Test
+    fun `sanitizeTimestamps replaces both negative timestamps`() {
+        val input = """{"creationAt": -11644473600, "modifiedAt": -11644473600}"""
+        val expected = """{"creationAt": 0, "modifiedAt": 0}"""
+        assertEquals(expected, sanitizeTimestamps(input))
+    }
+
+    @Test
+    fun `sanitizeTimestamps does not modify valid timestamps`() {
+        val input = """{"creationAt": 1759783057, "modifiedAt": 1759783057}"""
+        assertEquals(input, sanitizeTimestamps(input))
     }
 }
 
