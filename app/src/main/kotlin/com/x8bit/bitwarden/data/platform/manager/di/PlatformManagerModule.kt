@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnab
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.CustomHeadersDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -42,6 +44,8 @@ import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -417,6 +421,18 @@ object PlatformManagerModule {
     ): CertificateManager = CertificateManagerImpl(
         context = context,
         environmentRepository = environmentRepository,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCustomHeadersManager(
+        authDiskSource: AuthDiskSource,
+        customHeadersDiskSource: CustomHeadersDiskSource,
+        environmentDiskSource: EnvironmentDiskSource,
+    ): CustomHeadersManager = CustomHeadersManagerImpl(
+        authDiskSource = authDiskSource,
+        customHeadersDiskSource = customHeadersDiskSource,
+        environmentDiskSource = environmentDiskSource,
     )
 
     @Provides

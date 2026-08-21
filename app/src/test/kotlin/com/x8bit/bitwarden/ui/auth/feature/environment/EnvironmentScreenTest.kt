@@ -8,6 +8,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -324,6 +325,87 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `add header click should send AddHeaderClick`() {
+        composeTestRule
+            .onNodeWithText("Add header")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(EnvironmentAction.AddHeaderClick)
+        }
+    }
+
+    @Test
+    fun `header name change should send HeaderNameChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                customHeaders = listOf(EnvironmentState.CustomHeaderField(id = "id-1")),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Name")
+            .performScrollTo()
+            .performTextInput("CF-Access-Client-Id")
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.HeaderNameChange(id = "id-1", name = "CF-Access-Client-Id"),
+            )
+        }
+    }
+
+    @Test
+    fun `header value change should send HeaderValueChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                customHeaders = listOf(EnvironmentState.CustomHeaderField(id = "id-1")),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Value")
+            .performScrollTo()
+            .performTextInput("mock-value")
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.HeaderValueChange(id = "id-1", value = "mock-value"),
+            )
+        }
+    }
+
+    @Test
+    fun `header value visibility toggle click should send HeaderValueVisibilityChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                customHeaders = listOf(EnvironmentState.CustomHeaderField(id = "id-1")),
+            )
+        }
+        composeTestRule
+            .onNodeWithTag("HeaderValueVisibilityToggle")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.HeaderValueVisibilityChange(id = "id-1", isVisible = true),
+            )
+        }
+    }
+
+    @Test
+    fun `remove header click should send RemoveHeaderClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                customHeaders = listOf(EnvironmentState.CustomHeaderField(id = "id-1")),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Remove header")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(EnvironmentAction.RemoveHeaderClick(id = "id-1"))
+        }
+    }
+
+    @Test
     fun `ConfirmOverwriteCertificate dialog should display based on state`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
 
@@ -436,6 +518,8 @@ private val DEFAULT_STATE: EnvironmentState = EnvironmentState(
     apiServerUrl = "",
     identityServerUrl = "",
     iconsServerUrl = "",
+    customHeaders = emptyList(),
+    customHeadersId = null,
     keyHost = null,
     dialog = null,
     isRelease = true,

@@ -16,6 +16,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
@@ -37,6 +38,11 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
     private val mockCertificateManager = mockk<CertificateManager> {
         every { getMutualTlsKeyAliases() } returns emptyList()
+    }
+    private val mockCustomHeadersManager = mockk<CustomHeadersManager> {
+        every { getStoredCustomHeaders(id = any()) } returns null
+        every { saveCustomHeaders(headers = any()) } returns "mockHeadersId"
+        every { removeCustomHeaders(id = any()) } just runs
     }
     private val mockFileManager = mockk<FileManager>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
@@ -82,6 +88,41 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initial state should load the stored custom headers sorted by name when the current environment has a custom headers ID`() {
+        every {
+            mockCustomHeadersManager.getStoredCustomHeaders(id = "mockHeadersId")
+        } returns mapOf("Header-B" to "2", "Header-A" to "1")
+        fakeEnvironmentRepository.environment = Environment.SelfHosted(
+            environmentUrlData = EnvironmentUrlDataJson(
+                base = "self-hosted-base",
+                customHeadersId = "mockHeadersId",
+            ),
+        )
+        val viewModel = createViewModel()
+        val customHeaders = viewModel.stateFlow.value.customHeaders
+        assertEquals(
+            DEFAULT_STATE.copy(
+                serverUrl = "self-hosted-base",
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(
+                        id = customHeaders[0].id,
+                        name = "Header-A",
+                        value = "1",
+                    ),
+                    EnvironmentState.CustomHeaderField(
+                        id = customHeaders[1].id,
+                        name = "Header-B",
+                        value = "2",
+                    ),
+                ),
+                customHeadersId = "mockHeadersId",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Test
     fun `initial state should be correct when restoring from the save state handle`() {
         val savedState = DEFAULT_STATE.copy(
@@ -109,6 +150,32 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 iconsServerUrl = "saved-icons",
                 keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
                 keyAlias = "saved-key-alias",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initial state should restore the stored custom header values when restoring from the save state handle`() {
+        every {
+            mockCustomHeadersManager.getStoredCustomHeaders(id = "mockHeadersId")
+        } returns mapOf("Header-A" to "1")
+        // Header values are excluded from the saved state, so a restored field's value is empty.
+        val savedState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = ""),
+            ),
+            customHeadersId = "mockHeadersId",
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(initialState = mapOf("state" to savedState)),
+        )
+        assertEquals(
+            savedState.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -278,6 +345,258 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveClick should save the trimmed custom headers and update the environment with the returned custom headers ID`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(
+                        id = "id-1",
+                        name = " Header-A ",
+                        value = " 1 ",
+                    ),
+                    EnvironmentState.CustomHeaderField(id = "id-2", name = "", value = ""),
+                ),
+            )
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(
+                    initialState = mapOf(
+                        "state" to initialState,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+            assertEquals(
+                Environment.SelfHosted(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "",
+                        customHeadersId = "mockHeadersId",
+                    ),
+                ),
+                fakeEnvironmentRepository.environment,
+            )
+            assertEquals(
+                initialState.copy(customHeadersId = "mockHeadersId"),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) {
+                mockCustomHeadersManager.saveCustomHeaders(headers = mapOf("Header-A" to "1"))
+            }
+            verify(exactly = 0) {
+                mockCustomHeadersManager.removeCustomHeaders(id = any())
+            }
+        }
+
+    @Test
+    fun `SaveClick with unchanged custom headers should reuse the existing custom headers ID`() =
+        runTest {
+            every {
+                mockCustomHeadersManager.getStoredCustomHeaders(id = "previousHeadersId")
+            } returns mapOf("Header-A" to "1")
+            val initialState = DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                ),
+                customHeadersId = "previousHeadersId",
+            )
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(
+                    initialState = mapOf(
+                        "state" to initialState,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+            assertEquals(
+                Environment.SelfHosted(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "",
+                        customHeadersId = "previousHeadersId",
+                    ),
+                ),
+                fakeEnvironmentRepository.environment,
+            )
+            assertEquals(
+                initialState.copy(customHeadersId = "previousHeadersId"),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 0) {
+                mockCustomHeadersManager.saveCustomHeaders(headers = any())
+                mockCustomHeadersManager.removeCustomHeaders(id = any())
+            }
+        }
+
+    @Test
+    fun `SaveClick with changed custom headers should save them under a new ID`() =
+        runTest {
+            every {
+                mockCustomHeadersManager.getStoredCustomHeaders(id = "previousHeadersId")
+            } returns mapOf("Header-A" to "1")
+            val initialState = DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(
+                        id = "id-1",
+                        name = "Header-A",
+                        value = "updated",
+                    ),
+                ),
+                customHeadersId = "previousHeadersId",
+            )
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(
+                    initialState = mapOf(
+                        "state" to initialState,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+            assertEquals(
+                Environment.SelfHosted(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "",
+                        customHeadersId = "mockHeadersId",
+                    ),
+                ),
+                fakeEnvironmentRepository.environment,
+            )
+            assertEquals(
+                initialState.copy(customHeadersId = "mockHeadersId"),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) {
+                mockCustomHeadersManager.saveCustomHeaders(
+                    headers = mapOf("Header-A" to "updated"),
+                )
+            }
+        }
+
+    @Test
+    fun `SaveClick with all custom header fields removed should clear the custom headers ID`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                ),
+                customHeadersId = "previousHeadersId",
+            )
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(
+                    initialState = mapOf(
+                        "state" to initialState,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(EnvironmentAction.RemoveHeaderClick(id = "id-1"))
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+            assertEquals(
+                Environment.SelfHosted(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "",
+                        customHeadersId = null,
+                    ),
+                ),
+                fakeEnvironmentRepository.environment,
+            )
+            assertEquals(
+                initialState.copy(
+                    customHeaders = emptyList(),
+                    customHeadersId = null,
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 0) {
+                mockCustomHeadersManager.saveCustomHeaders(headers = any())
+            }
+        }
+
+    @Test
+    fun `SaveClick should show the error dialog when a custom header name is invalid`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(
+                    id = "id-1",
+                    name = "Invalid Header",
+                    value = "1",
+                ),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(initialState = mapOf("state" to initialState)),
+        )
+
+        viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    message = BitwardenString.one_or_more_custom_headers_are_invalid.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
+        verify(exactly = 0) { mockCustomHeadersManager.saveCustomHeaders(headers = any()) }
+    }
+
+    @Test
+    fun `SaveClick should show the error dialog when a custom header value is missing`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = ""),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(initialState = mapOf("state" to initialState)),
+        )
+
+        viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    message = BitwardenString.one_or_more_custom_headers_are_invalid.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
+    }
+
+    @Test
+    fun `SaveClick should show the error dialog when custom header names are duplicated`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                    EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-A", value = "2"),
+                ),
+            )
+            val viewModel = createViewModel(
+                savedStateHandle = SavedStateHandle(initialState = mapOf("state" to initialState)),
+            )
+
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+
+            assertEquals(
+                initialState.copy(
+                    dialog = EnvironmentState.DialogState.Error(
+                        message = BitwardenString.one_or_more_custom_headers_are_invalid.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
+        }
+
     @Test
     fun `ServerUrlChange should update the server URL`() {
         val viewModel = createViewModel()
@@ -334,6 +653,148 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(iconsServerUrl = "updated-icons-url"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `AddHeaderClick should append an empty custom header field`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(EnvironmentAction.AddHeaderClick)
+        val customHeaders = viewModel.stateFlow.value.customHeaders
+        assertEquals(
+            DEFAULT_STATE.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = customHeaders[0].id),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `HeaderNameChange should update the name of only the matching header field`() {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(
+                initialState = mapOf(
+                    "state" to initialState,
+                ),
+            ),
+        )
+        viewModel.trySendAction(
+            EnvironmentAction.HeaderNameChange(id = "id-1", name = "Updated-Header"),
+        )
+        assertEquals(
+            initialState.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(
+                        id = "id-1",
+                        name = "Updated-Header",
+                        value = "1",
+                    ),
+                    EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `HeaderValueChange should update the value of only the matching header field`() {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(
+                initialState = mapOf(
+                    "state" to initialState,
+                ),
+            ),
+        )
+        viewModel.trySendAction(
+            EnvironmentAction.HeaderValueChange(id = "id-2", value = "updated-value"),
+        )
+        assertEquals(
+            initialState.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                    EnvironmentState.CustomHeaderField(
+                        id = "id-2",
+                        name = "Header-B",
+                        value = "updated-value",
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `HeaderValueVisibilityChange should update the value visibility of only the matching header field`() {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(
+                initialState = mapOf(
+                    "state" to initialState,
+                ),
+            ),
+        )
+        viewModel.trySendAction(
+            EnvironmentAction.HeaderValueVisibilityChange(id = "id-1", isVisible = true),
+        )
+        assertEquals(
+            initialState.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(
+                        id = "id-1",
+                        name = "Header-A",
+                        value = "1",
+                        isValueVisible = true,
+                    ),
+                    EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `RemoveHeaderClick should remove the matching header field`() {
+        val initialState = DEFAULT_STATE.copy(
+            customHeaders = listOf(
+                EnvironmentState.CustomHeaderField(id = "id-1", name = "Header-A", value = "1"),
+                EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+            ),
+        )
+        val viewModel = createViewModel(
+            savedStateHandle = SavedStateHandle(
+                initialState = mapOf(
+                    "state" to initialState,
+                ),
+            ),
+        )
+        viewModel.trySendAction(EnvironmentAction.RemoveHeaderClick(id = "id-1"))
+        assertEquals(
+            initialState.copy(
+                customHeaders = listOf(
+                    EnvironmentState.CustomHeaderField(id = "id-2", name = "Header-B", value = "2"),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -819,6 +1280,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
             certificateManager = mockCertificateManager,
+            customHeadersManager = mockCustomHeadersManager,
             fileManager = mockFileManager,
             snackbarRelayManager = snackbarRelayManager,
             buildInfoManager = buildInfoManager,
@@ -835,6 +1297,8 @@ private val DEFAULT_STATE: EnvironmentState = EnvironmentState(
     apiServerUrl = "",
     identityServerUrl = "",
     iconsServerUrl = "",
+    customHeaders = emptyList(),
+    customHeadersId = null,
     keyHost = null,
     dialog = null,
     isRelease = true,

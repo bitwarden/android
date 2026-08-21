@@ -8,6 +8,8 @@ import kotlinx.serialization.Serializable
  *
  * @property base The overall base URL.
  * @property keyUri A Uri containing the alias and host of the key used for mutual TLS.
+ * @property customHeadersId The identifier of the custom headers stored in encrypted storage
+ * (if applicable).
  * @property api Separate base URL for the "/api" domain (if applicable).
  * @property identity Separate base URL for the "/identity" domain (if applicable).
  * @property icon Separate base URL for the icon domain (if applicable).
@@ -22,6 +24,9 @@ data class EnvironmentUrlDataJson(
 
     @SerialName("keyUri")
     val keyUri: String? = null,
+
+    @SerialName("customHeadersId")
+    val customHeadersId: String? = null,
 
     @SerialName("api")
     val api: String? = null,

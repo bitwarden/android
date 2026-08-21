@@ -12,6 +12,8 @@ import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.CustomHeadersDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.CustomHeadersDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -174,6 +176,18 @@ object PlatformDiskModule {
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
     ): FeatureFlagOverrideDiskSource = FeatureFlagOverrideDiskSourceImpl(
         sharedPreferences = sharedPreferences,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCustomHeadersDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+        json: Json,
+    ): CustomHeadersDiskSource = CustomHeadersDiskSourceImpl(
+        sharedPreferences = sharedPreferences,
+        encryptedSharedPreferences = encryptedSharedPreferences,
+        json = json,
     )
 
     @Provides
