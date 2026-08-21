@@ -77,6 +77,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
+import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -271,6 +273,18 @@ object PlatformManagerModule {
         authDiskSource = authDiskSource,
         authSdkSource = authSdkSource,
         featureFlagManager = featureFlagManager,
+    )
+
+    @Provides
+    @Singleton
+    fun providePasswordPolicyManager(
+        authDiskSource: AuthDiskSource,
+        authSdkSource: AuthSdkSource,
+        policyManager: PolicyManager,
+    ): PasswordPolicyManager = PasswordPolicyManagerImpl(
+        authDiskSource = authDiskSource,
+        authSdkSource = authSdkSource,
+        policyManager = policyManager,
     )
 
     @Provides
