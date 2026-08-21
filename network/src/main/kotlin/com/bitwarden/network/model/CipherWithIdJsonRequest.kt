@@ -74,6 +74,9 @@ data class CipherWithIdJsonRequest(
 
     @SerialName("encryptedFor")
     val encryptedFor: String?,
+
+    @SerialName("encryptedByKeyId")
+    val encryptedByKeyId: String?,
 )
 
 /**
@@ -101,4 +104,5 @@ fun CipherJsonRequest.toCipherWithIdJsonRequest(id: String): CipherWithIdJsonReq
         key = key,
         data = data,
         encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
     )

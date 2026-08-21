@@ -3,11 +3,12 @@ package com.bitwarden.network.model
 import java.time.Instant
 
 /**
- * Create a mock [CipherJsonRequest] with a given [number].
+ * Create a mock [CipherWithIdJsonRequest] with a given [number].
  */
 @Suppress("LongParameterList")
-fun createMockCipherJsonRequest(
+fun createMockCipherWithIdJsonRequest(
     number: Int,
+    id: String = "mockId-$number",
     attachments: Map<String, AttachmentJsonRequest>? = mapOf(
         "mockId-$number" to createMockAttachmentJsonRequest(number = 1),
     ),
@@ -19,11 +20,6 @@ fun createMockCipherJsonRequest(
     login: SyncResponseJson.Cipher.Login? = createMockLogin(number = number),
     card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
-    bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
-    driversLicense: SyncResponseJson.Cipher.DriversLicense? = createMockDriversLicense(
-        number = number,
-    ),
-    passport: SyncResponseJson.Cipher.Passport? = createMockPassport(number = number),
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
     secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
     fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),
@@ -34,12 +30,12 @@ fun createMockCipherJsonRequest(
     reprompt: CipherRepromptTypeJson = CipherRepromptTypeJson.NONE,
     lastKnownRevisionDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     key: String? = "mockKey-$number",
-    archivedDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     data: String? = "mockData-$number",
     encryptedFor: String? = "mockEncryptedFor-$number",
     encryptedByKeyId: String? = "mockEncryptedByKeyId-$number",
-): CipherJsonRequest =
-    CipherJsonRequest(
+): CipherWithIdJsonRequest =
+    CipherWithIdJsonRequest(
+        id = id,
         attachments = attachments,
         organizationId = organizationId,
         folderId = folderId,
@@ -49,9 +45,6 @@ fun createMockCipherJsonRequest(
         login = login,
         card = card,
         sshKey = sshKey,
-        bankAccount = bankAccount,
-        driversLicense = driversLicense,
-        passport = passport,
         identity = identity,
         secureNote = secureNote,
         fields = fields,
@@ -60,7 +53,6 @@ fun createMockCipherJsonRequest(
         reprompt = reprompt,
         lastKnownRevisionDate = lastKnownRevisionDate,
         key = key,
-        archivedDate = archivedDate,
         data = data,
         encryptedFor = encryptedFor,
         encryptedByKeyId = encryptedByKeyId,

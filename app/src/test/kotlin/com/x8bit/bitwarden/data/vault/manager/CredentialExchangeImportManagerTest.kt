@@ -8,6 +8,8 @@ import com.bitwarden.cxf.model.CredentialExchangePayload
 import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
+import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockLogin
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.EncryptionContext
@@ -128,7 +130,15 @@ class CredentialExchangeImportManagerTest {
             val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
 
             assertEquals(ImportCxfPayloadResult.Error(exception), result)
-            assertEquals(1, capturedRequest.captured.ciphers.size)
+            assertEquals(
+                listOf(
+                    createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
+                ),
+                capturedRequest.captured.ciphers,
+            )
             coVerify(exactly = 1) {
                 vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_ACCOUNT_JSON)
                 ciphersService.importCiphers(any())

@@ -24,5 +24,6 @@ fun createMockEncryptionContext(
 ): EncryptionContext =
     EncryptionContext(
         encryptedFor = "mockEncryptedFor-$number",
+        encryptedByKeyId = "mockEncryptedByKeyId-$number",
         cipher = cipher,
     )
