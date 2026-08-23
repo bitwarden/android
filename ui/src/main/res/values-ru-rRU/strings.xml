@@ -516,6 +516,11 @@
     <string name="about_send">О Send</string>
     <string name="hide_email">Скрыть мой адрес email от получателей</string>
     <string name="send_options_policy_in_effect">На параметры Send влияют одна или несколько политик организации.</string>
+    <string name="organization_policy_restriction">Ограничение политики организации</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Эта Send не совместима с политикой Send вашей организации и будет автоматически удалена в установленную дату.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Текстовые Send не разрешены в вашей организации и эта Send будет автоматически удалена в установленную дату.</string>
+    <string name="to_edit_this_send_make_a_copy">Для редактирования этой Send, сделайте копию. Если эта Send может истечь к дате удаления, никаких действий не требуется</string>
+    <string name="make_a_copy">Сделать копию</string>
     <string name="send_file_premium_required">Используя бесплатную учетную запись, можно делиться только текстом. Чтобы использовать файлы с помощью Send, требуется Премиум.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Совместное использование с конкретными пользователями является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="password_prompt">Повторный запрос мастер-пароля</string>
@@ -1250,11 +1255,11 @@
     <string name="upgrade_to_premium">Обновить до Премиум</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Чтобы управлять подпиской Премиум, вам необходимо войти в свое веб-хранилище на компьютере.</string>
-    <string name="unlock_advanced_security_features">Разблокировать дополнительные функции безопасности</string>
+    <string name="unlock_advanced_security_features">Разблокировать дополнительные возможности безопасности</string>
     <string name="your_subscription_needs_attention">Ваша подписка требует внимания</string>
     <string name="check_your_plan_for_details">Для получения более подробной информации ознакомьтесь с вашим планом.</string>
     <string name="view_plan">Посмотреть план</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум дает вам больше возможностей по обеспечения безопасности и контроля.</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум предлагает вам больше возможностей для обеспечения безопасности и контроля.</string>
     <string name="this_item_is_archived">Этот элемент архивирован.</string>
     <string name="introducing_archive">Представляем архив</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Храните элементы, которые вам сейчас не нужны, в безопасности, но вне поля зрения.</string>
@@ -1268,6 +1273,7 @@
     <string name="invalid_email_addresses">Неверные адреса email</string>
     <string name="one_or_more_email_addresses_are_incorrect">Один или несколько адресов email указаны неверно. Проверьте и попробуйте еще раз.</string>
     <string name="no_email_addresses_entered">Не введены адреса email</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Включить только следующие домены: %1$s. Пожалуйста, проверьте и повторите попытку</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Введите хотя бы один действительный адрес email, чтобы поделиться этой Send.</string>
     <string name="sync_with_browser">Синхронизация с браузером</string>
     <string name="sync_with_browser_description">Чтобы подключиться к %1$s, синхронизируйте ваш браузер по умолчанию с мобильным приложением Bitwarden. Когда браузер откроется, выполните авторизацию, если будет предложено. После завершения синхронизации вы вернетесь в это приложение.</string>
@@ -1306,7 +1312,7 @@
     <string name="confirming_your_upgrade">Подтверждение перехода…</string>
     <string name="upgrade_pending">Ожидание перехода</string>
     <string name="upgrade_pending_message">Ваш переход на платный тарифный план находится в процессе обработки. До завершения перехода вы будете пользоваться бесплатным тарифным планом. Вы можете синхронизировать данные прямо сейчас, чтобы проверить, или продолжить — обновление произойдет автоматически.</string>
-    <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
+    <string name="unlock_premium_features">Разблокировать дополнительные возможности с планом Премиум.</string>
     <string name="per_month_cancel_anytime">/ месяц · Отмена в любое время</string>
     <string name="per_month_cancel_anytime_content_description">%1$s в месяц, можно отменить в любой момент</string>
     <string name="built_in_authenticator">Встроенный аутентификатор</string>

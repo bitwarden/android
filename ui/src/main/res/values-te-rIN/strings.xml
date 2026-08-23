@@ -512,6 +512,11 @@
     <string name="about_send">Send గురించి</string>
     <string name="hide_email">స్వీకర్తల నుండి నా ఇమెయిల్ చిరునామాను దాచు</string>
     <string name="send_options_policy_in_effect">ఒకటి లేదా అంతకంటే ఎక్కువ సంస్థ విధానాలు మీ Send ఎంపికలను ప్రభావితం చేస్తున్నాయి.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">ఉచిత ఖాతాలు టెక్స్ట్‌ను మాత్రమే భాగస్వామ్యం చేయడానికి పరిమితం చేయబడ్డాయి. Sendతో ఫైల్‌లను ఉపయోగించడానికి ప్రీమియం సభ్యత్వం అవసరం.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">నిర్దిష్ట వ్యక్తులతో భాగస్వామ్యం చేయడం ప్రీమియం ఫీచర్. మీ ప్రస్తుత ప్లాన్‌లో ఈ ఫీచర్‌కు ప్రాప్యత లేదు.</string>
     <string name="password_prompt">మాస్టర్ పాస్వర్డ్ మళ్లీ ప్రాంప్ట్ చేయి</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">అమాన్యమైన ఇమెయిల్ చిరునామాలు</string>
     <string name="one_or_more_email_addresses_are_incorrect">ఒకటి లేదా అంతకంటే ఎక్కువ ఇమెయిల్ చిరునామాలు తప్పు. దయచేసి సమీక్షించి మళ్లీ ప్రయత్నించండి.</string>
     <string name="no_email_addresses_entered">ఇమెయిల్ చిరునామాలు నమోదు చేయబడలేదు</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">ఈ Sendను భాగస్వామ్యం చేయడానికి కనీసం ఒక చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి.</string>
     <string name="sync_with_browser">బ్రౌజర్‌తో సింక్ చేయి</string>
     <string name="sync_with_browser_description">%1$sకి కనెక్ట్ అవ్వడానికి, మీ డిఫాల్ట్ బ్రౌజర్‌ను Bitwarden మొబైల్ యాప్‌తో సింక్ చేయండి. మీ బ్రౌజర్ తెరిచినప్పుడు, ప్రాంప్ట్ చేస్తే సైన్-ఇన్ పూర్తి చేయండి.\nసింక్ పూర్తయిన తర్వాత, మీరు ఈ యాప్‌కు తిరిగి వస్తారు.</string>

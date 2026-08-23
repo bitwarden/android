@@ -512,6 +512,11 @@ L\'escaneig es farà automàticament.</string>
     <string name="about_send">Quant a Send</string>
     <string name="hide_email">Amagueu la meua adreça de correu electrònic als destinataris.</string>
     <string name="send_options_policy_in_effect">Una o més polítiques d\'organització afecten les vostres opcions del Send.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Els comptes gratuïts només es poden compartir text. Cal utilitzar una subscripció premium per utilitzar fitxers amb Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Compartir amb persones específiques és una funció Premium. El teu pla actual no inclou l\'accés a aquesta funció.</string>
     <string name="password_prompt">Re-sol·licitud de la contrasenya mestra</string>
@@ -1250,6 +1255,7 @@ Voleu canviar a aquest compte?</string>
     <string name="invalid_email_addresses">Adreces de correu electrònic no vàlides</string>
     <string name="one_or_more_email_addresses_are_incorrect">Una o més adreces de correu electrònic són incorrectes. Revisa-les i torna a intentar-ho.</string>
     <string name="no_email_addresses_entered">No s\'han introduït adreces de correu electrònic</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Introdueix almenys una adreça de correu electrònic vàlida per compartir aquest enviament.</string>
     <string name="sync_with_browser">Sincronitza amb el navegador</string>
     <string name="sync_with_browser_description">Per connectar-te a %1$s, sincronitza el teu navegador per defecte amb l\'aplicació mòbil de Bitwarden. Quan s\'obri el navegador, completa l\'inici de sessió si se\'t demana.\nUn cop finalitzada la sincronització, tornaràs a aquesta aplicació.</string>

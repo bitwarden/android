@@ -511,6 +511,11 @@
     <string name="about_send">सेंड के बारे में</string>
     <string name="hide_email">प्राप्तकर्ताओं से अपना ईमेल पता छुपाएं</string>
     <string name="send_options_policy_in_effect">एक या अधिक संगठन नीतियां आपके Send विकल्पों को प्रभावित कर रही हैं।</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">मुफ्त खाते केवल टेक्स्ट साझा करने तक सीमित हैं। Send के साथ फ़ाइलों का उपयोग करने के लिए प्रीमियम सदस्यता आवश्यक है।</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">विशिष्ट लोगों के साथ साझा करना एक प्रीमियम सुविधा है। आपकी वर्तमान योजना में इस सुविधा तक पहुँच शामिल नहीं है।</string>
     <string name="password_prompt">मास्टर पासवर्ड पुनः संकेत</string>
@@ -1249,6 +1254,7 @@
     <string name="invalid_email_addresses">अमान्य ईमेल पते</string>
     <string name="one_or_more_email_addresses_are_incorrect">एक या अधिक ईमेल पते गलत हैं। कृपया समीक्षा करें और पुनः प्रयास करें।</string>
     <string name="no_email_addresses_entered">कोई ईमेल पता दर्ज नहीं किया गया</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">इस Send को साझा करने के लिए कम से कम एक मान्य ईमेल पता दर्ज करें।</string>
     <string name="sync_with_browser">ब्राउज़र के साथ सिंक करें</string>
     <string name="sync_with_browser_description">%1$s से कनेक्ट करने के लिए, अपने डिफ़ॉल्ट ब्राउज़र को Bitwarden मोबाइल ऐप से सिंक करें। जब आपका ब्राउज़र खुले, तो यदि संकेत दिया जाए तो साइन-इन पूरा करें।\nएक बार सिंकिंग पूरी हो जाने पर, आपको इस ऐप पर वापस ले जाया जाएगा।</string>

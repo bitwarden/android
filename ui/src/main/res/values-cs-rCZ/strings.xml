@@ -469,7 +469,7 @@ Načtení proběhne automaticky.</string>
     <string name="deletion_date">Datum smazání</string>
     <string name="deletion_time">Čas smazání</string>
     <string name="deletion_date_info">Tento Send bude trvale smazán v určený den a čas.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Toto datum vynucuje Vaše organizace</string>
     <string name="who_can_view">Kdo může zobrazit</string>
     <string name="anyone_with_the_link">Kdokoli s odkazem</string>
     <string name="anyone_with_link_can_view_send">Kdokoli s tímto odkazem může zobrazit tento Send</string>
@@ -516,6 +516,11 @@ Načtení proběhne automaticky.</string>
     <string name="about_send">O Send</string>
     <string name="hide_email">Skrýt mou e-mailovou adresu před příjemci</string>
     <string name="send_options_policy_in_effect">Jedna nebo více zásad organizace ovlivňuje nastavení Send.</string>
+    <string name="organization_policy_restriction">Omezení zásad organizace</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Tento Send není v souladu se zásadami Vaší organizace a jeho platnost automaticky vyprší v nastavený den smazání.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Vaší organizaci není povoleno odesílat textové Sends a tato zpráva automaticky vyprší v nastavený den smazání.</string>
+    <string name="to_edit_this_send_make_a_copy">Pro úpravu tohoto Send vytvořte kopii. Pokud tento Send vyprší v nastaveném datu smazání, není potřeba žádná akce.</string>
+    <string name="make_a_copy">Vytvořit kopii</string>
     <string name="send_file_premium_required">Bezplatné účty jsou omezeny jen na sdílení textu. K používání souborů pomocí Send je vyžadováno členství Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sdílení s vybranými lidmi je prémiová funkce. Váš aktuální plán nezahrnuje přístup k této funkci.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
@@ -1269,6 +1274,7 @@ při opakování problémů.</string>
     <string name="invalid_email_addresses">Neplatná e-mailová adresa</string>
     <string name="one_or_more_email_addresses_are_incorrect">Jedna nebo více e-mailových adres je nesprávná. Zkontrolujte ji a zkuste to znovu.</string>
     <string name="no_email_addresses_entered">Nebyly zadány žádné e-mailové adresy</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Zahrnout jen následující domény: %1$s. Zkontrolujte to a zkuste to znovu.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Zadejte alespoň jednu platnou e-mailovou adresu pro sdílení tohoto Send.</string>
     <string name="sync_with_browser">Synchronizovat s prohlížečem</string>
     <string name="sync_with_browser_description">Chcete-li se připojit k %1$s, synchronizujte výchozí prohlížeč s mobilní aplikací Bitwarden. Když se Váš prohlížeč otevře, po výzvě se přihlásíte.\nJakmile bude synchronizace dokončena, vrátíte se do této aplikace.</string>

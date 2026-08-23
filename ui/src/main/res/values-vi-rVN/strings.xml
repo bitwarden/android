@@ -511,6 +511,11 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="about_send">Về Send</string>
     <string name="hide_email">Ẩn địa chỉ email của tôi với người nhận</string>
     <string name="send_options_policy_in_effect">Các chính sách của tổ chức đang ảnh hưởng đến tùy chọn Send của bạn.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Tài khoản miễn phí chỉ được gửi văn bản. Nâng cấp lên gói Cao Cấp để gửi các tập tin.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Chia sẻ với những người cụ thể là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="password_prompt">Nhập lại mật khẩu chính</string>
@@ -1246,6 +1251,7 @@ các vấn đề.</string>
     <string name="invalid_email_addresses">Địa chỉ email không hợp lệ</string>
     <string name="one_or_more_email_addresses_are_incorrect">Một hoặc nhiều địa chỉ email chưa chính xác. Vui lòng kiểm tra và thử lại.</string>
     <string name="no_email_addresses_entered">Chưa nhập địa chỉ email</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Nhập ít nhất một địa chỉ email hợp lệ để chia sẻ Send này.</string>
     <string name="sync_with_browser">Đồng bộ với trình duyệt</string>
     <string name="sync_with_browser_description">Để kết nối với %1$s, đồng bộ trình duyệt mặc định của bạn với ứng dụng Bitwarden. Khi trình duyệt mở lên, thực hiện đăng nhập nếu được yêu cầu\nSau khi đồng bộ hoàn tất, bạn sẽ được đưa trở lại ứng dụng này.</string>

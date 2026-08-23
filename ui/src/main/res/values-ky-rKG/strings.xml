@@ -512,6 +512,11 @@
     <string name="about_send">Send жөнүндө</string>
     <string name="hide_email">Менин электрондук почта дарегимди кабыл алуучулардан жашыруу</string>
     <string name="send_options_policy_in_effect">Бир же бир нече уюм саясаты сиздин Send параметрлериңизге таасир этүүдө.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Акысыз аккаунттар текст менен гана бөлүшүүгө чектелген. Send менен файлдарды колдонуу үчүн Premium мүчөлүгү талап кылынат.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Белгилүү адамдар менен бөлүшүү - Premium функциясы. Учурдагы планыңыз бул функцияга кирүү мүмкүнчүлүгүн камтыбайт.</string>
     <string name="password_prompt">Башкы сырсөздү кайра суроо</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">Жараксыз электрондук почта даректер</string>
     <string name="one_or_more_email_addresses_are_incorrect">Бир же бир нече электрондук почта даректери туура эмес. Кайра карап чыгып, аракет кылыңыз.</string>
     <string name="no_email_addresses_entered">Электрондук почта даректери киргизилген жок</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Бул Sendди бөлүшүү үчүн жок дегенде бир туура электрондук почта даректи киргизиңиз.</string>
     <string name="sync_with_browser">Браузер менен синхрондоштуруу</string>
     <string name="sync_with_browser_description">%1$s туташуу үчүн, дөөлөттүү браузериңизди Bitwarden мобилдик колдонмосу менен синхрондоштуруңуз. Браузериңиз ачылганда, суралса кирүүнү аяктаңыз.\nСинхрондоштуруу аяктагандан кийин, сиз ушул колдонмого кайтарыласыз.</string>

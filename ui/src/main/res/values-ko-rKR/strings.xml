@@ -510,6 +510,11 @@
     <string name="about_send">Send 정보</string>
     <string name="hide_email">받는 사람으로부터 나의 이메일 주소 숨기기</string>
     <string name="send_options_policy_in_effect">하나 이상의 단체 정책이 Send 설정에 영향을 미치고 있습니다.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">무료 계정은 텍스트만 공유할 수 있습니다. Premium 멤버십이 있어야 Send에서 파일을 사용할 수 있습니다</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">특정 사람과 공유는 프리미엄 기능입니다. 현재 요금제에는 이 기능에 대한 액세스가 포함되어 있지 않습니다.</string>
     <string name="password_prompt">마스터 비밀번호 재확인</string>
@@ -1241,6 +1246,7 @@
     <string name="invalid_email_addresses">잘못된 이메일 주소</string>
     <string name="one_or_more_email_addresses_are_incorrect">하나 이상의 이메일 주소가 잘못되었습니다. 확인 후 다시 시도하세요.</string>
     <string name="no_email_addresses_entered">입력된 이메일 주소 없음</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">이 Send를 공유하려면 하나 이상의 유효한 이메일 주소를 입력하세요.</string>
     <string name="sync_with_browser">브라우저와 동기화</string>
     <string name="sync_with_browser_description">%1$s에 연결하려면 기본 브라우저와 Bitwarden 모바일 앱을 동기화하세요. 브라우저가 열리고, 메시지가 표시되면 로그인을 완료하세요.\n동기화가 끝나면 이 앱으로 돌아오게 됩니다.</string>

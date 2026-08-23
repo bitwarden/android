@@ -512,6 +512,11 @@
     <string name="about_send">Относно изпращането</string>
     <string name="hide_email">Скриване на е-пощата ми от получателите.</string>
     <string name="send_options_policy_in_effect">Поне една политика на организация влияе на настройките за изпращане.</string>
+    <string name="organization_policy_restriction">Ограничение за политиката на организацията</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Това Изпращане не отговаря на политиката за Изпращания на организацията Ви и автоматично ще загуби давност на зададената дата за изтриване.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Текстовите Изпращания не са разрешени от организацията Ви. Това Изпращане автоматично ще загуби давност на зададената дата за изтриване.</string>
+    <string name="to_edit_this_send_make_a_copy">За да редактирате това Изпращане, първо му направете копие. Ако давността на това Изпращане може да изтече на зададена дата за изтриване, не са необходими допълнителни действия.</string>
+    <string name="make_a_copy">Създаване на копие</string>
     <string name="send_file_premium_required">Безплатните регистрации могат да споделят само текст. Необходим е платен абонамент, за да можете да изпращате файлове.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Споделянето с определени хора е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="password_prompt">Повторно запитване за главната парола</string>
@@ -1252,6 +1257,7 @@
     <string name="invalid_email_addresses">Грешни адреси на е-пощи</string>
     <string name="one_or_more_email_addresses_are_incorrect">Един или повече от адресите на е-пощи са неправилни. Моля, прегледайте ги и опитайте отново.</string>
     <string name="no_email_addresses_entered">Няма въведени адреси на е-пощи</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Включват се само следните домейни: %1$s. Моля, прегледайте и опитайте отново.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Въведете поне един правилен адрес на е-поща, за да споделите това Изпращане.</string>
     <string name="sync_with_browser">Синхронизиране с браузъра</string>
     <string name="sync_with_browser_description">За да се свържете с %1$s, синхронизирайте стандартния си браузър с мобилното приложение на Битуорден. Когато браузърът се отвори, завършете процедурата по вписване, ако е нужно.\nСлед като синхронизирането завърши, ще се върнете автоматично в това приложение.</string>

@@ -520,6 +520,11 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="about_send">Ynghylch Send</string>
     <string name="hide_email">Cuddio fy nghyfeiriad ebost rhag derbynwyr</string>
     <string name="send_options_policy_in_effect">Mae un neu fwy o bolisïau sefydliad yn effeithio ar eich opsiynau Anfon.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Mae cyfrifon am ddim wedi\'u cyfyngu i rannu testun yn unig. Mae angen aelodaeth Premiwm i ddefnyddio ffeiliau gydag Anfon.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Mae rhannu gyda phobl benodol yn nodwedd Premiwm. Nid yw\'ch cynllun presennol yn cynnwys mynediad i\'r nodwedd hon.</string>
     <string name="password_prompt">Ailofyn am y prif gyfrinair</string>
@@ -1286,6 +1291,7 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="invalid_email_addresses">Cyfeiriadau e-bost annilys</string>
     <string name="one_or_more_email_addresses_are_incorrect">Mae un neu fwy o gyfeiriadau e-bost yn anghywir. Adolygwch a cheisiwch eto.</string>
     <string name="no_email_addresses_entered">Dim cyfeiriadau e-bost wedi\'u nodi</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Rhowch o leiaf un cyfeiriad e-bost dilys i rannu\'r Anfon hwn.</string>
     <string name="sync_with_browser">Cydamseru gyda phorwr</string>
     <string name="sync_with_browser_description">I gysylltu â %1$s, cydamserwch eich porwr diofyn gydag ap symudol Bitwarden. Pan fydd eich porwr yn agor, cwblhewch fewngofnodi os gofynnir.\nAr ôl i\'r cydamseru ddod i ben, cewch eich dychwelyd i\'r ap hwn.</string>

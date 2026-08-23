@@ -512,6 +512,11 @@ Skanning skjer automatisk.</string>
     <string name="about_send">Om Send</string>
     <string name="hide_email">Gøym E-postadressa mi frå mottakarar</string>
     <string name="send_options_policy_in_effect">Ein eller fleire samskipnadsvilkår påverkar Send-innstillingane dine.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Kontoar med ein gratisplan kan berre dela tekst. For å dela filer må du ha ei tinging på Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Deling med spesifikke personar er ein Premium-funksjon. Den noverande planen din gir ikkje tilgang til denne funksjonen.</string>
     <string name="password_prompt">Spør om hovudpassord å nyo</string>
@@ -1250,6 +1255,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="invalid_email_addresses">Ugyldige e-postadresser</string>
     <string name="one_or_more_email_addresses_are_incorrect">Éin eller fleire e-postadresser er feil. Gå gjennom og prøv igjen.</string>
     <string name="no_email_addresses_entered">Ingen e-postadresser skrivne inn</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Skriv inn minst éi gyldig e-postadresse for å dele denne Senden.</string>
     <string name="sync_with_browser">Synkroniser med nettlesar</string>
     <string name="sync_with_browser_description">For å kople til %1$s, synkroniser standardnettlesaren din med Bitwarden-mobilappen. Når nettlesaren opnar seg, fullfør innlogging viss du blir beden om det.\nNår synkroniseringa er fullført, kjem du tilbake til denne appen.</string>

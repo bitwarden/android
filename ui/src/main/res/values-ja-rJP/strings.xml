@@ -510,6 +510,11 @@
     <string name="about_send">Send について</string>
     <string name="hide_email">メールアドレスを受信者に表示しない</string>
     <string name="send_options_policy_in_effect">一つ以上の組織ポリシーが Send の設定に影響しています。</string>
+    <string name="organization_policy_restriction">組織ポリシーの制限</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">この Send は組織の Send ポリシーに準拠していないため、設定された削除日時に自動的に失効します。</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">この組織ではテキスト Send が許可されていないため、設定された削除日時に自動的に失効します。</string>
+    <string name="to_edit_this_send_make_a_copy">この Send を編集するには、コピーを作成してください。この Send が設定された削除日時に期限切れになる可能性がある場合は、アクションは必要ありません。</string>
+    <string name="make_a_copy">コピーを作成</string>
     <string name="send_file_premium_required">無料アカウントではテキストの共有のみに制限されています。Send でファイルを送信するにはプレミアム会員登録が必要です。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">特定のユーザーとの共有はプレミアム機能です。現在のプランではこの機能にはアクセスできません。</string>
     <string name="password_prompt">マスターパスワードの再要求</string>
@@ -1241,6 +1246,7 @@
     <string name="invalid_email_addresses">無効なメール アドレスです</string>
     <string name="one_or_more_email_addresses_are_incorrect">1つ以上のメールアドレスが正しくありません。確認して再試行してください。</string>
     <string name="no_email_addresses_entered">メールアドレスが入力されていません</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">以下のドメインのみを含めてください: %1$s 修正し、もう一度やり直してください。</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">このSendを共有するには、有効なメールアドレスを少なくとも1つ入力してください。</string>
     <string name="sync_with_browser">ブラウザーと同期</string>
     <string name="sync_with_browser_description">%1$s に接続するには、デフォルトのブラウザをBitwardenモバイルアプリと同期します。ブラウザが開いたら、プロンプトが表示されたらサインインを完了してください。\n同期が完了すると、このアプリに戻ります。</string>

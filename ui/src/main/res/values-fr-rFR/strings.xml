@@ -465,7 +465,7 @@ La numérisation se fera automatiquement.</string>
     <string name="deletion_date">Date de suppression</string>
     <string name="deletion_time">Heure de suppression</string>
     <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Cette date est imposée par votre organisation</string>
     <string name="who_can_view">Qui peut consulter</string>
     <string name="anyone_with_the_link">Toute personne disposant du lien</string>
     <string name="anyone_with_link_can_view_send">Toute personne disposant de ce lien peut afficher ce Send</string>
@@ -512,6 +512,11 @@ La numérisation se fera automatiquement.</string>
     <string name="about_send">À propos de Send</string>
     <string name="hide_email">Masquer mon adresse électronique aux destinataires</string>
     <string name="send_options_policy_in_effect">Une ou plusieurs politiques de sécurité de l\'organisation affectent vos options Send.</string>
+    <string name="organization_policy_restriction">Contrainte de stratégie d\'organisation</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Ce Send n\'est pas conforme à la politique Send de votre organisation et expirera automatiquement à la date de suppression définie.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Les textes Send ne sont pas autorisés pour votre organisation et ce Send expirera automatiquement à la date de suppression définie.</string>
+    <string name="to_edit_this_send_make_a_copy">Pour modifier ce Send, faites-en une copie. Si ce Send peut expirer à la date de suppression définie, aucune action n\'est nécessaire.</string>
+    <string name="make_a_copy">Créer une copie</string>
     <string name="send_file_premium_required">Les comptes gratuits sont limités au partage de texte uniquement. Une adhésion Premium est requise pour utiliser les fichiers avec Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Partager avec des personnes spécifiques est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="password_prompt">Ressaisir le mot de passe principal</string>
@@ -1167,7 +1172,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="no_items_received_from_the_selected_app">Aucun élément reçu de l\'application sélectionnée.</string>
     <string name="vault_sync_failed">La synchronisation du coffre a échoué</string>
     <string name="vault_sync_unsuccessful">Échec de la synchronisation</string>
-    <string name="vault_sync_failed_description">Nous n\'avons pas pu synchroniser votre coffre avec le serveur. Votre coffre pourrait ne pas refléter vos dernières modifications. Vous pouvez réessayer maintenant, ou il se synchronisera automatiquement plus tard.</string>
+    <string name="vault_sync_failed_description">Nous n\'avons pas pu synchroniser votre coffre avec le serveur. Votre coffre pourrait ne pas refléter vos dernières modifications. Vous pouvez réessayer maintenant ou il se synchronisera automatiquement plus tard.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vos éléments ont été importés avec succès, mais ils ne seront pas visibles dans votre coffre tant que la synchronisation n\'aura pas été effectuée.</string>
     <string name="there_was_a_problem_importing_your_items">Un problème est survenu lors de l\'importation de vos éléments. Veuillez réessayer. Si le problème persiste, contactez le support.</string>
     <string name="saving_items">Enregistrement des éléments…</string>
@@ -1250,6 +1255,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="invalid_email_addresses">Adresses courriel invalides</string>
     <string name="one_or_more_email_addresses_are_incorrect">Une ou plusieurs adresses courriel sont incorrectes. Veuillez vérifier et réessayer.</string>
     <string name="no_email_addresses_entered">Aucune adresse courriel saisie</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Inclure uniquement les domaines suivants : %1$s. Veuillez vérifier et réessayer.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Entrez au moins une adresse courriel valide pour partager ce Send.</string>
     <string name="sync_with_browser">Synchroniser avec le navigateur</string>
     <string name="sync_with_browser_description">Pour vous connecter à %1$s, synchronisez votre navigateur par défaut avec l\'application mobile Bitwarden. Lorsque votre navigateur s\'ouvre, complétez la connexion si cela vous est demandé. \nUne fois la synchronisation terminée, vous serez renvoyé à cette application.</string>

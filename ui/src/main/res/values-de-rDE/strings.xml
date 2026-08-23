@@ -512,6 +512,11 @@ Das Scannen erfolgt automatisch.</string>
     <string name="about_send">Über Send</string>
     <string name="hide_email">Meine E-Mail-Adresse vor den Empfängern verstecken</string>
     <string name="send_options_policy_in_effect">Eine oder mehrere Organisationsrichtlinien beeinflussen deine Send Einstellungen.</string>
+    <string name="organization_policy_restriction">Einschränkung aufgrund von Organisationsrichtlinien</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Dieses Send entspricht nicht den Send-Richtlinien deiner Organisation und läuft automatisch zum festgelegten Löschdatum ab.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text-Sends sind für deine Organisation nicht erlaubt und dieses Senden läuft automatisch zum festgelegten Löschdatum ab.</string>
+    <string name="to_edit_this_send_make_a_copy">Erstellle eine Kopie, um diesen Send zu bearbeiten. Wenn dieses Send zum festgelegten Löschdatum ablaufen kann, sind keine Maßnahmen erforderlich.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Kostenlose Konten sind auf das Teilen von Texten beschränkt. Eine Premium-Mitgliedschaft ist erforderlich, um Dateien mit Send zu verwenden.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Das Teilen mit bestimmten Personen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="password_prompt">Master-Passwort erneut abfragen</string>
@@ -1249,6 +1254,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="invalid_email_addresses">Ungültige E-Mail-Adressen</string>
     <string name="one_or_more_email_addresses_are_incorrect">Eine oder mehrere E-Mail-Adressen sind falsch. Bitte überprüfe sie und versuche es erneut.</string>
     <string name="no_email_addresses_entered">Keine E-Mail-Adressen eingegeben</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Bitte gib nur die folgenden Domains an: %1$s. Bitte überprüfe die Eingabe und versuche es erneut.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Gib mindestens eine gültige E-Mail-Adresse ein, um dieses Send mit anderen zu teilen.</string>
     <string name="sync_with_browser">Mit Browser synchronisieren</string>
     <string name="sync_with_browser_description">Um dich mit %1$s zu verbinden, synchronisiere deinen Standardbrowser mit der mobilen Bitwarden-App. Wenn sich dein Browser öffnet, dann schließ die Anmeldung ab, wenn du dazu aufgefordert wirst.\nSobald die Synchronisierung abgeschlossen ist, wirst du zu dieser App zurückgeleitet.</string>

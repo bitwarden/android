@@ -510,6 +510,11 @@
     <string name="about_send">เกี่ยวกับ Send</string>
     <string name="hide_email">ซ่อนที่อยู่อีเมลของฉันจากผู้รับ</string>
     <string name="send_options_policy_in_effect">นโยบายองค์กรอย่างน้อยหนึ่งรายการมีผลต่อตัวเลือก Send ของคุณ</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">บัญชีฟรีถูกจำกัดให้แชร์ได้เฉพาะข้อความ ต้องเป็นสมาชิกพรีเมียมเพื่อใช้ไฟล์กับ Send</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">การแชร์กับบุคคลที่ระบุเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
     <string name="password_prompt">ถามรหัสผ่านหลักซ้ำ</string>
@@ -1241,6 +1246,7 @@
     <string name="invalid_email_addresses">ที่อยู่อีเมลไม่ถูกต้อง</string>
     <string name="one_or_more_email_addresses_are_incorrect">มีที่อยู่อีเมลอย่างน้อยหนึ่งรายการไม่ถูกต้อง โปรดตรวจสอบแล้วลองอีกครั้ง</string>
     <string name="no_email_addresses_entered">ไม่ได้ระบุที่อยู่อีเมล</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">โปรดระบุที่อยู่อีเมลที่ถูกต้องอย่างน้อยหนึ่งรายการเพื่อแชร์รายการ Send นี้</string>
     <string name="sync_with_browser">ซิงค์กับบราว์เซอร์</string>
     <string name="sync_with_browser_description">เมื่อต้องการเชื่อมต่อกับ %1$s ให้ซิงค์เบราว์เซอร์เริ่มต้นกับแอปมือถือ Bitwarden เมื่อเบราว์เซอร์เปิดขึ้น ให้เข้าสู่ระบบให้เสร็จสิ้นหากได้รับแจ้ง\nเมื่อซิงค์เสร็จแล้ว ระบบจะพากลับมาที่แอปนี้</string>

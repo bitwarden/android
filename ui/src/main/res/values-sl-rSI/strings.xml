@@ -516,6 +516,11 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="about_send">O pošiljkah</string>
     <string name="hide_email">Skrij moj e-poštni naslov od prejemnikov.</string>
     <string name="send_options_policy_in_effect">Ena ali več pravilnikov organizacije vpliva na vaše možnosti pošiljanja.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Brezplačni računi so omejeni samo na besedilne pošiljke. Za uporabo datotečnih pošiljk je potrebno članstvo Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Skupna raba z določenimi osebami je funkcija Premium. Vaš trenutni paket ne vključuje dostopa do te funkcije.</string>
     <string name="password_prompt">Ponovno zahtevaj glavno geslo</string>
@@ -1268,6 +1273,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="invalid_email_addresses">Neveljavni e-poštni naslovi</string>
     <string name="one_or_more_email_addresses_are_incorrect">Eden ali več e-poštnih naslovov je napačnih. Preglejte in poskusite znova.</string>
     <string name="no_email_addresses_entered">Ni vnesenih e-poštnih naslovov</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Za skupno rabo tega Senda vnesite vsaj en veljaven e-poštni naslov.</string>
     <string name="sync_with_browser">Sinhroniziraj z brskalnikom</string>
     <string name="sync_with_browser_description">Za povezavo z %1$s sinhronizirajte svoj privzeti brskalnik z mobilno aplikacijo Bitwarden. Ko se brskalnik odpre, dokončajte prijavo, če ste pozvani.\nKo je sinhronizacija končana, se boste vrnili v to aplikacijo.</string>

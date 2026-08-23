@@ -515,6 +515,11 @@
     <string name="about_send">Пра Send</string>
     <string name="hide_email">Схаваць мой адрас электроннай пошты ад атрымальнікаў</string>
     <string name="send_options_policy_in_effect">Адна або больш палітык арганізацыі ўплываюць на параметры Send.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">У бясплатных уліковых запісах можна адпраўляць толькі тэкст. Для адпраўкі файлаў праз Send, патрабуецца прэміяльны статус.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Абмен з пэўнымі людзьмі — гэта функцыя Premium. Ваш бягучы тарыф не ўключае доступ да гэтай функцыі.</string>
     <string name="password_prompt">Паўторны запыт асноўнага пароля</string>
@@ -1266,6 +1271,7 @@
     <string name="invalid_email_addresses">Няправільныя адрасы электроннай пошты</string>
     <string name="one_or_more_email_addresses_are_incorrect">Адзін або некалькі адрасоў электроннай пошты няправільныя. Калі ласка, праверце і паспрабуйце яшчэ раз.</string>
     <string name="no_email_addresses_entered">Адрасы электроннай пошты не ўведзеныя</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Увядзіце прынамсі адзін сапраўдны адрас электроннай пошты, каб абагуліць гэты Send.</string>
     <string name="sync_with_browser">Сінхранізаваць з браўзерам</string>
     <string name="sync_with_browser_description">Каб падключыцца да %1$s, сінхранізуйце свой прадвызначаны браўзер з мабільнай праграмай Bitwarden. Калі браўзер адкрыецца, завершыце ўваход, калі будзе запытана. Пасля завяршэння сінхранізацыі вы вернецеся ў гэту праграму.</string>
