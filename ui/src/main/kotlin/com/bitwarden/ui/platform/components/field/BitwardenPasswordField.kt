@@ -151,7 +151,9 @@ fun BitwardenPasswordField(
 
         TextToolbarType.NONE -> BitwardenEmptyTextToolbar
     }
-    var lastTextValue by remember(value) { mutableStateOf(value = value) }
+    var lastTextValue by remember(displayedValue) {
+        mutableStateOf(value = displayedValue)
+    }
     CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
         Column(
             modifier = modifier
