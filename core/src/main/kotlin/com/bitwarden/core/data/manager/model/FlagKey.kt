@@ -50,6 +50,7 @@ sealed class FlagKey<out T : Any> {
                 SendControls,
                 SendControlsExistingSends,
                 IdentityAutofill,
+                SdkPinUnlock,
             )
         }
     }
@@ -225,6 +226,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object IdentityAutofill : FlagKey<Boolean>() {
         override val keyName: String = "pm-38138-mobile-identity-autofill"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for gating PIN unlock through SDK.
+     */
+    data object SdkPinUnlock : FlagKey<Boolean>() {
+        override val keyName: String = "pm-31059-sdk-pin-unlock"
         override val defaultValue: Boolean = false
     }
 
