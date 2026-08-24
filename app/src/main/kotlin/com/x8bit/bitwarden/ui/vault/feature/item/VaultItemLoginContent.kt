@@ -248,6 +248,7 @@ private fun PasswordField(
             showPassword = passwordData.isVisible,
             onValueChange = { },
             readOnly = true,
+            useFixedLengthMask = true,
             singleLine = false,
             actions = {
                 BitwardenStandardIconButton(

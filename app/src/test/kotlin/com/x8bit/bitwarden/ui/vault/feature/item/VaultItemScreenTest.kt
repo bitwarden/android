@@ -974,6 +974,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 composeTestRule
                     .onNodeWithTextAfterScroll(textField.name)
+                    .assertTextEquals(textField.name, "••••••••")
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(textField.name)
                     .onChildren()
                     .filterToOne(hasContentDescription("Show"))
                     .performClick()
@@ -1152,7 +1156,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "p@ssw0rd",
+                            password = "correct horse battery staple",
                             isVisible = false,
                             canViewPassword = true,
                         ),
@@ -1180,7 +1184,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "p@ssw0rd",
+                            password = "correct horse battery staple",
                             isVisible = true,
                             canViewPassword = true,
                         ),
@@ -1191,7 +1195,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Password")
-            .assertTextEquals("Password", "p@ssw0rd")
+            .assertTextEquals("Password", "correct horse battery staple")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Check password for data breaches")
@@ -1208,7 +1212,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "p@ssw0rd",
+                            password = "correct horse battery staple",
                             isVisible = true,
                             canViewPassword = false,
                         ),

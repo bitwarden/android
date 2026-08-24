@@ -62,6 +62,8 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
+internal const val MASKED_PASSWORD_VALUE = "********"
+
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
  *
@@ -77,6 +79,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier Modifier for the composable.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param useFixedLengthMask `true` to hide the underlying value length when the field is read-only
+ * and the password is hidden.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
@@ -107,6 +111,7 @@ fun BitwardenPasswordField(
     modifier: Modifier = Modifier,
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
+    useFixedLengthMask: Boolean = false,
     singleLine: Boolean = true,
     showPasswordTestTag: String? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
@@ -120,8 +125,14 @@ fun BitwardenPasswordField(
     actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     val focusRequester = remember { FocusRequester() }
-    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
-    val textFieldValue = textFieldValueState.copy(text = value)
+    val shouldUseFixedLengthMask = readOnly && useFixedLengthMask && !showPassword
+    val displayedValue = if (shouldUseFixedLengthMask && value.isNotEmpty()) {
+        MASKED_PASSWORD_VALUE
+    } else {
+        value
+    }
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = displayedValue)) }
+    val textFieldValue = textFieldValueState.copy(text = displayedValue)
     SideEffect {
         if (textFieldValue.selection != textFieldValueState.selection ||
             textFieldValue.composition != textFieldValueState.composition
@@ -265,6 +276,8 @@ fun BitwardenPasswordField(
  * @param modifier Modifier for the composable.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param useFixedLengthMask `true` to hide the underlying value length when the field is read-only
+ * and the password is hidden.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param supportingText An optional supporting text that will appear below the text input.
@@ -294,6 +307,7 @@ fun BitwardenPasswordField(
     modifier: Modifier = Modifier,
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
+    useFixedLengthMask: Boolean = false,
     singleLine: Boolean = true,
     supportingText: String? = null,
     showPasswordTestTag: String? = null,
@@ -316,6 +330,7 @@ fun BitwardenPasswordField(
         modifier = modifier,
         helpData = helpData,
         readOnly = readOnly,
+        useFixedLengthMask = useFixedLengthMask,
         singleLine = singleLine,
         supportingContent = supportingText?.let {
             {

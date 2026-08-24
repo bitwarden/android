@@ -42,7 +42,7 @@ fun BitwardenHiddenPasswordField(
                 .nullableTestTag(tag = passwordFieldTestTag),
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             label = label?.let { { Text(text = it) } },
-            value = value,
+            value = if (value.isNotEmpty()) MASKED_PASSWORD_VALUE else value,
             onValueChange = { },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
