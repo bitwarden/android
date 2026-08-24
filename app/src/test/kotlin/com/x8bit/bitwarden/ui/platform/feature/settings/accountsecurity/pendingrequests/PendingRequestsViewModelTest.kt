@@ -195,10 +195,30 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         val expected = DEFAULT_STATE.copy(
             viewState = PendingRequestsState.ViewState.Error,
         )
-        val viewModel = createViewModel()
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Loading),
+        )
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             value = AuthRequestsUpdatesResult.Error(error = Throwable()),
         )
+        assertEquals(expected, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `getPendingResults failure after a successful load should leave the state in place`() {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Loading),
+        )
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            value = AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
+        val expected = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Empty)
+        assertEquals(expected, viewModel.stateFlow.value)
+
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            value = AuthRequestsUpdatesResult.Error(error = Throwable()),
+        )
+
         assertEquals(expected, viewModel.stateFlow.value)
     }
 

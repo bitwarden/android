@@ -64,15 +64,13 @@ class ManageDevicesViewModel @Inject constructor(
         internalHideBottomSheet = false,
         isFdroid = buildInfoManager.isFdroid,
         devicesLoaded = false,
-        authRequestsLoaded = false,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
+    private var devicesJob: Job = Job().apply { complete() }
 
     init {
         updateAuthRequestList()
-        fetchAllDevices()
-        observePasswordlessAuthRequests()
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { ManageDevicesAction.Internal.PullToRefreshEnableReceive(it) }
@@ -112,17 +110,8 @@ class ManageDevicesViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
-        val shouldRefetchDevices = !state.devicesLoaded
-        mutableStateFlow.update {
-            it.copy(
-                isRefreshing = true,
-                authRequestsLoaded = false,
-            )
-        }
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         updateAuthRequestList()
-        if (shouldRefetchDevices) {
-            fetchAllDevices()
-        }
     }
 
     private fun handlePendingRequestRowClicked(
@@ -147,10 +136,6 @@ class ManageDevicesViewModel @Inject constructor(
 
             is ManageDevicesAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
-            }
-
-            is ManageDevicesAction.Internal.PasswordlessAuthRequestReceive -> {
-                handlePasswordlessAuthRequestReceive(action)
             }
         }
     }
@@ -178,23 +163,11 @@ class ManageDevicesViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun observePasswordlessAuthRequests() {
-        authRepository
-            .getPasswordlessAuthRequestFlow()
-            .map { authRequest ->
-                // The device list is the only source that reports which device owns a pending
-                // request, so it is re-read before the new request can be rendered against it.
-                ManageDevicesAction.Internal.PasswordlessAuthRequestReceive(
-                    authRequest = authRequest,
-                    devicesResult = authRepository.getDevices(),
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-    }
-
     private fun fetchAllDevices() {
-        viewModelScope.launch {
+        // Canceled first so a slower earlier read cannot land after a newer one and render a
+        // stale list or dismiss the pull-to-refresh indicator early.
+        devicesJob.cancel()
+        devicesJob = viewModelScope.launch {
             sendAction(
                 ManageDevicesAction.Internal.GetDevicesResultReceive(
                     devicesResult = authRepository.getDevices(),
@@ -213,16 +186,10 @@ class ManageDevicesViewModel @Inject constructor(
 
             is AuthRequestsUpdatesResult.Error -> emptyList()
         }
-        mutableStateFlow.update {
-            it.copy(
-                authRequests = filteredRequests.toImmutableList(),
-                authRequestsLoaded = true,
-                isRefreshing = if (state.devicesLoaded) false else it.isRefreshing,
-            )
-        }
-        if (state.devicesLoaded) {
-            updateContentWithCurrentData()
-        }
+        mutableStateFlow.update { it.copy(authRequests = filteredRequests.toImmutableList()) }
+        // The device list is the only source that reports which device owns a pending request, so
+        // it is re-read before the new list can be rendered against it.
+        fetchAllDevices()
     }
 
     private fun handleGetDevicesResultReceived(
@@ -231,7 +198,17 @@ class ManageDevicesViewModel @Inject constructor(
         val devicesResult = action.devicesResult as? GetDevicesResult.Success
             ?: run {
                 mutableStateFlow.update {
-                    it.copy(viewState = ManageDevicesState.ViewState.Error, isRefreshing = false)
+                    it.copy(
+                        // Once devices have rendered, a failed refresh leaves the existing content
+                        // in place rather than replacing it with an error; the next update
+                        // reconciles it.
+                        viewState = if (it.devicesLoaded) {
+                            it.viewState
+                        } else {
+                            ManageDevicesState.ViewState.Error
+                        },
+                        isRefreshing = false,
+                    )
                 }
                 return
             }
@@ -240,38 +217,10 @@ class ManageDevicesViewModel @Inject constructor(
             it.copy(
                 devices = devicesResult.devices.toImmutableList(),
                 devicesLoaded = true,
-                isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
+                isRefreshing = false,
             )
         }
-        if (state.authRequestsLoaded) {
-            updateContentWithCurrentData()
-        }
-    }
-
-    private fun handlePasswordlessAuthRequestReceive(
-        action: ManageDevicesAction.Internal.PasswordlessAuthRequestReceive,
-    ) {
-        // This refresh is not user-initiated, so a failure leaves the screen untouched rather than
-        // replacing it with an error; polling and pull-to-refresh reconcile it later.
-        val devices = (action.devicesResult as? GetDevicesResult.Success)
-            ?.devices
-            ?: return
-
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                // Replaces any earlier copy of this request so it cannot be listed twice.
-                authRequests = currentState
-                    .authRequests
-                    .filterNot { it.id == action.authRequest.id }
-                    .plus(action.authRequest)
-                    .toImmutableList(),
-                devices = devices.toImmutableList(),
-                devicesLoaded = true,
-            )
-        }
-        if (state.authRequestsLoaded) {
-            updateContentWithCurrentData()
-        }
+        updateContentWithCurrentData()
     }
 
     private fun updateContentWithCurrentData() {
@@ -332,7 +281,6 @@ data class ManageDevicesState(
     private val internalHideBottomSheet: Boolean,
     private val isFdroid: Boolean,
     val devicesLoaded: Boolean,
-    val authRequestsLoaded: Boolean,
 ) : Parcelable {
 
     /**
@@ -491,15 +439,6 @@ sealed class ManageDevicesAction {
          */
         data class AuthRequestsResultReceive(
             val authRequestsUpdatesResult: AuthRequestsUpdatesResult,
-        ) : Internal()
-
-        /**
-         * Indicates that an incoming passwordless request has been received, along with the
-         * devices it should be rendered against.
-         */
-        data class PasswordlessAuthRequestReceive(
-            val authRequest: AuthRequest,
-            val devicesResult: GetDevicesResult,
         ) : Internal()
     }
 }

@@ -1292,123 +1292,38 @@ class AuthRequestManagerTest {
         assertEquals(expected, result)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getPasswordlessAuthRequestFlow should emit hydrated pending request`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery {
-            authRequestsService.getAuthRequest(REQUEST_ID)
-        } returns PENDING_AUTH_REQUEST_RESPONSE.asSuccess()
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
-        }
-    }
-
-    @Test
-    fun `getPasswordlessAuthRequestFlow should emit nothing for non-active user`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery {
-            authRequestsService.getAuthRequest(REQUEST_ID)
-        } returns PENDING_AUTH_REQUEST_RESPONSE.asSuccess()
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(
-                PASSWORDLESS_REQUEST_DATA.copy(userId = "otherUserId"),
+    fun `getAuthRequestsWithUpdates should re-read on a push and ignore a non-active user push`() =
+        runTest {
+            val expected = AuthRequestsUpdatesResult.Update(authRequests = listOf(AUTH_REQUEST))
+            coEvery { authRequestsService.getAuthRequests() } returns AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
             )
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+                .asSuccess()
+            coEvery {
+                authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
+            } returns FINGER_PRINT.asSuccess()
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE
 
-            // Only the active user's request arrives, proving the other was dropped.
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
+            repository
+                .getAuthRequestsWithUpdates()
+                .test {
+                    assertEquals(expected, awaitItem())
+
+                    mutablePasswordlessRequestFlow.emit(
+                        PASSWORDLESS_REQUEST_DATA.copy(userId = "otherUserId"),
+                    )
+                    mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
+
+                    // Only the active user's push produces a re-read, and it arrives without
+                    // waiting for the polling interval.
+                    assertEquals(expected, awaitItem())
+                    cancelAndIgnoreRemainingEvents()
+                }
+
+            coVerify(exactly = 2) { authRequestsService.getAuthRequests() }
         }
-
-        coVerify(exactly = 1) { authRequestsService.getAuthRequest(REQUEST_ID) }
-    }
-
-    @Test
-    fun `getPasswordlessAuthRequestFlow should emit nothing on request failure`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
-            Throwable("Fail").asFailure(),
-            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
-        }
-    }
-
-    @Test
-    fun `getPasswordlessAuthRequestFlow should emit nothing when approved`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
-            PENDING_AUTH_REQUEST_RESPONSE.copy(requestApproved = true).asSuccess(),
-            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
-        }
-    }
-
-    @Test
-    fun `getPasswordlessAuthRequestFlow should emit nothing when declined`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
-            PENDING_AUTH_REQUEST_RESPONSE.copy(responseDate = fixedClock.instant()).asSuccess(),
-            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
-        }
-    }
-
-    @Test
-    fun `getPasswordlessAuthRequestFlow should emit nothing when expired`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE
-        coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returnsMany listOf(
-            PENDING_AUTH_REQUEST_RESPONSE
-                .copy(creationDate = Instant.parse("2023-10-27T11:54:00Z"))
-                .asSuccess(),
-            PENDING_AUTH_REQUEST_RESPONSE.asSuccess(),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns FINGER_PRINT.asSuccess()
-
-        repository.getPasswordlessAuthRequestFlow().test {
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-            mutablePasswordlessRequestFlow.emit(PASSWORDLESS_REQUEST_DATA)
-
-            assertEquals(PENDING_AUTH_REQUEST, awaitItem())
-        }
-    }
 }
 
 private const val EMAIL: String = "test@bitwarden.com"

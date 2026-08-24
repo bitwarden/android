@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
-import com.x8bit.bitwarden.data.auth.manager.util.isActionable
 import com.x8bit.bitwarden.data.auth.manager.util.isSso
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequest
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
@@ -29,9 +28,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
-import timber.log.Timber
 import java.time.Clock
 import java.time.Instant
 import javax.inject.Singleton
@@ -57,20 +56,27 @@ class AuthRequestManagerImpl(
 ) : AuthRequestManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    override fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult> = flow {
-        while (currentCoroutineContext().isActive) {
+    override fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult> = merge(
+        // Reads immediately, then on the polling interval.
+        flow {
+            while (currentCoroutineContext().isActive) {
+                emit(Unit)
+                delay(timeMillis = PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
+            }
+        },
+        pushManager
+            .passwordlessRequestFlow
+            .filter { it.userId == activeUserId }
+            .map { },
+    )
+        .map {
             when (val result = getAuthRequests()) {
-                is AuthRequestsResult.Error -> {
-                    emit(AuthRequestsUpdatesResult.Error(error = result.error))
-                }
-
+                is AuthRequestsResult.Error -> AuthRequestsUpdatesResult.Error(error = result.error)
                 is AuthRequestsResult.Success -> {
-                    emit(AuthRequestsUpdatesResult.Update(authRequests = result.authRequests))
+                    AuthRequestsUpdatesResult.Update(authRequests = result.authRequests)
                 }
             }
-            delay(timeMillis = PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
         }
-    }
 
     @Suppress("LongMethod")
     override fun createAuthRequestWithUpdates(
@@ -263,32 +269,6 @@ class AuthRequestManagerImpl(
                 onSuccess = { AuthRequestUpdatesResult.Update(authRequest = it) },
             )
     }
-
-    override fun getPasswordlessAuthRequestFlow(): Flow<AuthRequest> = pushManager
-        .passwordlessRequestFlow
-        // A push for a non-active user would otherwise be hydrated with the active user's token.
-        .filter { it.userId == activeUserId }
-        .mapNotNull { data ->
-            authRequestsService
-                .getAuthRequest(data.loginRequestId)
-                .mapCatching { response ->
-                    response.toAuthRequest(
-                        fingerprint = getFingerprintPhrase(response.publicKey).getOrThrow(),
-                        publicKey = response.publicKey,
-                        responseDate = response.responseDate,
-                        isRequestApproved = response.requestApproved ?: false,
-                    )
-                }
-                .fold(
-                    onFailure = {
-                        Timber.d(it, "Unable to hydrate the requested auth request.")
-                        null
-                    },
-                    onSuccess = { authRequest ->
-                        authRequest.takeIf { it.isActionable(clock = clock) }
-                    },
-                )
-        }
 
     override suspend fun getAuthRequestIfApproved(requestId: String): Result<AuthRequest> =
         authRequestsService

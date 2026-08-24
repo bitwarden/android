@@ -198,10 +198,16 @@ class PendingRequestsViewModel @Inject constructor(
 
             is AuthRequestsUpdatesResult.Error -> {
                 mutableStateFlow.update {
-                    it.copy(
-                        authRequests = emptyList(),
-                        viewState = PendingRequestsState.ViewState.Error,
-                    )
+                    // Once something has rendered, a failed refresh leaves it in place rather
+                    // than replacing it with an error; the next update reconciles it.
+                    if (it.viewState is PendingRequestsState.ViewState.Loading) {
+                        it.copy(
+                            authRequests = emptyList(),
+                            viewState = PendingRequestsState.ViewState.Error,
+                        )
+                    } else {
+                        it
+                    }
                 }
             }
         }

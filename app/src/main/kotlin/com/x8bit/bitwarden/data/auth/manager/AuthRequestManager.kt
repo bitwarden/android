@@ -32,18 +32,10 @@ interface AuthRequestManager {
     fun getAuthRequestByIdFlow(requestId: String): Flow<AuthRequestUpdatesResult>
 
     /**
-     * Get all auth request and emits updates over time.
+     * Get all auth requests and emits updates over time, including when a passwordless push for
+     * the active user indicates the list changed.
      */
     fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult>
-
-    /**
-     * Get the [AuthRequest] for each incoming passwordless request for the active user, hydrated
-     * with the fingerprint required to approve it.
-     *
-     * Only requests that can still be acted upon are emitted; those already approved, declined, or
-     * expired are not. Requests that cannot be retrieved are omitted rather than emitted as errors.
-     */
-    fun getPasswordlessAuthRequestFlow(): Flow<AuthRequest>
 
     /**
      * Get an [AuthRequest] by its request ID.

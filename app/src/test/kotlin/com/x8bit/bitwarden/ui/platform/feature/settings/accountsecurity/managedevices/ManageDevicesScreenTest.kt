@@ -243,5 +243,4 @@ private val DEFAULT_STATE = ManageDevicesState(
     internalHideBottomSheet = false,
     isFdroid = false,
     devicesLoaded = false,
-    authRequestsLoaded = false,
 )

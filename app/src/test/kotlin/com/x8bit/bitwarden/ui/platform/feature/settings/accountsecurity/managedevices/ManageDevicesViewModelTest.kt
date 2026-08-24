@@ -51,10 +51,8 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     )
     private val mutableAuthRequestsWithUpdatesFlow =
         bufferedMutableSharedFlow<AuthRequestsUpdatesResult>()
-    private val mutablePasswordlessAuthRequestFlow = bufferedMutableSharedFlow<AuthRequest>()
     private val authRepository = mockk<AuthRepository> {
         every { getAuthRequestsWithUpdates() } returns mutableAuthRequestsWithUpdatesFlow
-        every { getPasswordlessAuthRequestFlow() } returns mutablePasswordlessAuthRequestFlow
         coEvery { getDevices() } returns GetDevicesResult.Success(emptyList())
     }
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
@@ -85,19 +83,16 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `init should make necessary network calls`() {
-        createViewModel()
-        coVerify {
-            authRepository.getAuthRequestsWithUpdates()
-            authRepository.getDevices()
-        }
-    }
-
-    @Test
-    fun `init should set devicesLoaded true after device fetch success`() {
+    fun `auth request update should trigger a device fetch`() {
         val viewModel = createViewModel()
-        // After init with unconfined dispatcher, devices coroutine runs immediately
-        assertEquals(true, viewModel.stateFlow.value.devicesLoaded)
+        coVerify(exactly = 0) { authRepository.getDevices() }
+
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
+
+        coVerify(exactly = 1) { authRepository.getDevices() }
+        assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
     }
 
     @Test
@@ -118,42 +113,36 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LifecycleResume should re-fetch auth requests only`() = runTest {
+    fun `LifecycleResume should re-subscribe to auth request updates`() {
         val viewModel = createViewModel()
+
         viewModel.trySendAction(ManageDevicesAction.LifecycleResume)
+
         // getAuthRequestsWithUpdates called twice: once on init, once on resume
         verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
-        coVerify(exactly = 1) { authRepository.getDevices() }
     }
 
     @Test
-    fun `RefreshPull when devices loaded should re-fetch auth requests only`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            skipItems(1)
+    fun `RefreshPull should re-subscribe to auth request updates and clear isRefreshing`() =
+        runTest {
+            val viewModel = createViewModel()
+            mutableAuthRequestsWithUpdatesFlow.tryEmit(
+                AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+            )
 
             viewModel.trySendAction(ManageDevicesAction.RefreshPull)
+            assertEquals(
+                EMPTY_CONTENT_STATE.copy(isRefreshing = true),
+                viewModel.stateFlow.value,
+            )
 
-            coVerify(exactly = 1) { authRepository.getDevices() }
+            mutableAuthRequestsWithUpdatesFlow.tryEmit(
+                AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+            )
+
             verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `RefreshPull when devices failed should re-fetch both devices and auth requests`() =
-        runTest {
-            coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
-            val viewModel = createViewModel()
-            viewModel.stateFlow.test {
-                skipItems(1)
-
-                viewModel.trySendAction(ManageDevicesAction.RefreshPull)
-
-                coVerify(exactly = 2) { authRepository.getDevices() }
-                verify(exactly = 2) { authRepository.getAuthRequestsWithUpdates() }
-                cancelAndIgnoreRemainingEvents()
-            }
+            coVerify(exactly = 2) { authRepository.getDevices() }
+            assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
         }
 
     @Test
@@ -170,35 +159,42 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `when getDevices returns error should show error state`() {
+    fun `when the first getDevices returns error should show error state`() {
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
         val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
         assertEquals(
-            ManageDevicesState(
-                authRequests = persistentListOf(),
-                devices = persistentListOf(),
-                viewState = ManageDevicesState.ViewState.Error,
-                isPullToRefreshSettingEnabled = false,
-                isRefreshing = false,
-                internalHideBottomSheet = false,
-                isFdroid = false,
-                devicesLoaded = false,
-                authRequestsLoaded = false,
-            ),
+            DEFAULT_STATE.copy(viewState = ManageDevicesState.ViewState.Error),
             viewModel.stateFlow.value,
         )
     }
 
     @Test
-    fun `AuthRequestsResultReceive with error should use empty auth request list`() {
+    fun `when a later getDevices returns error should leave the rendered content in place`() {
+        val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
+        assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
+
+        coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
+
+        coVerify(exactly = 2) { authRepository.getDevices() }
+        assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `AuthRequestsResultReceive with error should still render with an empty request list`() {
         val viewModel = createViewModel()
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             AuthRequestsUpdatesResult.Error(error = Throwable()),
         )
-        assertEquals(
-            emptyList<AuthRequest>(),
-            viewModel.stateFlow.value.authRequests,
-        )
+        assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
     }
 
     @Test
@@ -269,13 +265,14 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
             )
             viewModel.stateFlow.test {
                 assertEquals(
-                    ManageDevicesState(
+                    DEFAULT_STATE.copy(
                         authRequests = listOf(validAuthRequest).toImmutableList(),
                         devices = listOf(
                             otherDevice,
                             pendingDevice,
                             currentDevice,
                         ).toImmutableList(),
+                        devicesLoaded = true,
                         viewState = ManageDevicesState.ViewState.Content(
                             items = listOf(
                                 ManageDevicesState.ViewState.Content.DeviceItem(
@@ -313,12 +310,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                                 ),
                             ),
                         ),
-                        isPullToRefreshSettingEnabled = false,
-                        isRefreshing = false,
-                        internalHideBottomSheet = false,
-                        isFdroid = false,
-                        devicesLoaded = true,
-                        authRequestsLoaded = true,
                     ),
                     awaitItem(),
                 )
@@ -326,7 +317,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `passwordless request should add a pending row for its device`() = runTest {
+    fun `push-driven auth request update should add a pending row for its device`() = runTest {
         val pendingDevice = DEFAULT_DEVICE.copy(
             id = "device-pending",
             pendingAuthRequest = DevicePendingAuthRequest(
@@ -343,13 +334,17 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Success(
             devices = listOf(pendingDevice),
         )
-        mutablePasswordlessAuthRequestFlow.tryEmit(PASSWORDLESS_AUTH_REQUEST)
+        // A push makes the manager re-read the list, which surfaces here as another update.
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = listOf(PASSWORDLESS_AUTH_REQUEST)),
+        )
 
         viewModel.stateFlow.test {
             assertEquals(
-                ManageDevicesState(
+                DEFAULT_STATE.copy(
                     authRequests = listOf(PASSWORDLESS_AUTH_REQUEST).toImmutableList(),
                     devices = listOf(pendingDevice).toImmutableList(),
+                    devicesLoaded = true,
                     viewState = ManageDevicesState.ViewState.Content(
                         items = listOf(
                             ManageDevicesState.ViewState.Content.DeviceItem(
@@ -365,32 +360,11 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                     ),
-                    isPullToRefreshSettingEnabled = false,
-                    isRefreshing = false,
-                    internalHideBottomSheet = false,
-                    isFdroid = false,
-                    devicesLoaded = true,
-                    authRequestsLoaded = true,
                 ),
                 awaitItem(),
             )
         }
     }
-
-    @Test
-    fun `passwordless request should leave the state untouched when the device fetch fails`() =
-        runTest {
-            val viewModel = createViewModel()
-            mutableAuthRequestsWithUpdatesFlow.tryEmit(
-                AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
-            )
-            val expectedState = viewModel.stateFlow.value
-
-            coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
-            mutablePasswordlessAuthRequestFlow.tryEmit(PASSWORDLESS_AUTH_REQUEST)
-
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
 
     private fun createViewModel(state: ManageDevicesState? = null) = ManageDevicesViewModel(
         clock = fixedClock,
@@ -401,6 +375,22 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle(mapOf("state" to state)),
     )
 }
+
+private val DEFAULT_STATE = ManageDevicesState(
+    authRequests = persistentListOf(),
+    devices = persistentListOf(),
+    viewState = ManageDevicesState.ViewState.Loading,
+    isPullToRefreshSettingEnabled = false,
+    isRefreshing = false,
+    internalHideBottomSheet = false,
+    isFdroid = false,
+    devicesLoaded = false,
+)
+
+private val EMPTY_CONTENT_STATE = DEFAULT_STATE.copy(
+    viewState = ManageDevicesState.ViewState.Content(items = emptyList()),
+    devicesLoaded = true,
+)
 
 private val PASSWORDLESS_AUTH_REQUEST = AuthRequest(
     id = "auth-req-push",
