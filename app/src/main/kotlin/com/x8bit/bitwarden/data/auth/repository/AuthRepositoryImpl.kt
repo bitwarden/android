@@ -25,7 +25,6 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
-import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -61,23 +60,22 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -86,7 +84,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
-import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -100,10 +97,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
-import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toPolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -130,20 +125,13 @@ import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockSuccess
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
@@ -177,14 +165,18 @@ internal class AuthRepositoryImpl(
     private val kdfManager: KdfManager,
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
+    authStateManager: AuthStateManager,
+    organizationManager: OrganizationManager,
     passwordPolicyManager: PasswordPolicyManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
+    AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
     /**
@@ -230,29 +222,6 @@ internal class AuthRepositoryImpl(
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val authStateFlow: StateFlow<AuthState> = authDiskSource
-        .activeUserIdChangesFlow
-        .flatMapLatest { activeUserId ->
-            activeUserId
-                ?.let { userId ->
-                    authDiskSource
-                        .getAccountTokensFlow(userId)
-                        .map { accountTokens ->
-                            accountTokens
-                                ?.accessToken
-                                ?.let { AuthState.Authenticated(it) }
-                                ?: AuthState.Unauthenticated
-                        }
-                }
-                ?: flowOf(AuthState.Unauthenticated)
-        }
-        .stateIn(
-            scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
-            initialValue = AuthState.Uninitialized,
-        )
-
     private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> = duoTokenChannel.receiveAsFlow()
 
@@ -284,13 +253,6 @@ internal class AuthRepositoryImpl(
                 authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
             }
         }
-
-    override val organizations: List<Organization>
-        get() = activeUserId
-            ?.let { authDiskSource.getOrganizations(it) }
-            ?.filter { it.status == OrganizationStatusType.CONFIRMED }
-            .orEmpty()
-            .toOrganizations()
 
     override val showWelcomeCarousel: Boolean
         get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
@@ -1529,20 +1491,6 @@ internal class AuthRepositoryImpl(
             )
         }
     }
-
-    override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
-        organizationService.leaveOrganization(organizationId).fold(
-            onSuccess = { LeaveOrganizationResult.Success },
-            onFailure = { LeaveOrganizationResult.Error(error = it) },
-        )
-
-    override suspend fun revokeFromOrganization(
-        organizationId: String,
-    ): RevokeFromOrganizationResult =
-        organizationService.revokeFromOrganization(organizationId).fold(
-            onSuccess = { RevokeFromOrganizationResult.Success },
-            onFailure = { RevokeFromOrganizationResult.Error(error = it) },
-        )
 
     /**
      * Enrolls the active user in password reset if their organization requires it.

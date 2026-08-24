@@ -4,19 +4,18 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
-import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -24,7 +23,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
-import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -41,7 +39,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Authen
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Provides an API for observing and modifying authentication state.
@@ -50,15 +47,12 @@ import kotlinx.coroutines.flow.StateFlow
 interface AuthRepository :
     AuthenticatorProvider,
     AuthRequestManager,
+    AuthStateManager,
     BiometricsEncryptionManager,
     KdfManager,
+    OrganizationManager,
     PasswordPolicyManager,
     UserStateManager {
-    /**
-     * Models the current auth state.
-     */
-    val authStateFlow: StateFlow<AuthState>
-
     /**
      * Flow of the current [DuoCallbackTokenResult]. Subscribers should listen to the flow
      * in order to receive updates whenever [setDuoCallbackTokenResult] is called.
@@ -119,11 +113,6 @@ interface AuthRepository :
      * The currently persisted state indicating whether the user has trusted this device.
      */
     var shouldTrustDevice: Boolean
-
-    /**
-     * The organization for the active user.
-     */
-    val organizations: List<Organization>
 
     /**
      * Whether the welcome carousel should be displayed, based on the feature flag and
@@ -393,18 +382,4 @@ interface AuthRepository :
      * Update the value of the onboarding status for the user.
      */
     fun setOnboardingStatus(status: OnboardingStatus)
-
-    /**
-     * Leaves the organization that matches the given [organizationId]
-     */
-    suspend fun leaveOrganization(
-        organizationId: String,
-    ): LeaveOrganizationResult
-
-    /**
-     * Revokes self from the organization that matches the given [organizationId]
-     */
-    suspend fun revokeFromOrganization(
-        organizationId: String,
-    ): RevokeFromOrganizationResult
 }

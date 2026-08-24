@@ -11,26 +11,24 @@ import com.bitwarden.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
-import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -76,6 +74,8 @@ object AuthRepositoryModule {
         kdfManager: KdfManager,
         toastManager: ToastManager,
         featureFlagManager: FeatureFlagManager,
+        organizationManager: OrganizationManager,
+        authStateManager: AuthStateManager,
     ): AuthRepository = AuthRepositoryImpl(
         clock = clock,
         accountsService = accountsService,
@@ -104,21 +104,7 @@ object AuthRepositoryModule {
         kdfManager = kdfManager,
         toastManager = toastManager,
         featureFlagManager = featureFlagManager,
-    )
-
-    @Provides
-    @Singleton
-    fun providesUserStateManager(
-        authDiskSource: AuthDiskSource,
-        firstTimeActionManager: FirstTimeActionManager,
-        vaultLockManager: VaultLockManager,
-        policyManager: PolicyManager,
-        dispatcherManager: DispatcherManager,
-    ): UserStateManager = UserStateManagerImpl(
-        authDiskSource = authDiskSource,
-        firstTimeActionManager = firstTimeActionManager,
-        vaultLockManager = vaultLockManager,
-        policyManager = policyManager,
-        dispatcherManager = dispatcherManager,
+        organizationManager = organizationManager,
+        authStateManager = authStateManager,
     )
 }

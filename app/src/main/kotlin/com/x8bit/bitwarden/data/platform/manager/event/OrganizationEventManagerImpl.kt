@@ -6,7 +6,9 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.service.EventService
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -34,9 +36,11 @@ private const val UPLOAD_DELAY_INTERVAL_MS: Long = 300_000L
  * Default implementation of [OrganizationEventManager].
  */
 @Suppress("LongParameterList")
-class OrganizationEventManagerImpl(
+internal class OrganizationEventManagerImpl(
     private val clock: Clock,
-    private val authRepository: AuthRepository,
+    private val authStateManager: AuthStateManager,
+    private val authDiskSource: AuthDiskSource,
+    private val organizationManager: OrganizationManager,
     private val vaultRepository: VaultRepository,
     private val eventDiskSource: EventDiskSource,
     private val eventService: EventService,
@@ -45,6 +49,8 @@ class OrganizationEventManagerImpl(
 ) : OrganizationEventManager {
     private val ioScope = CoroutineScope(dispatcherManager.io)
     private var job: Job = Job().apply { complete() }
+
+    private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     init {
         processLifecycleOwner.lifecycle.addObserver(
@@ -57,9 +63,9 @@ class OrganizationEventManagerImpl(
     }
 
     override fun trackEvent(event: OrganizationEvent) {
-        val userId = authRepository.activeUserId ?: return
-        if (authRepository.authStateFlow.value !is AuthState.Authenticated) return
-        val organizations = authRepository.organizations.filter { it.shouldUseEvents }
+        val userId = activeUserId ?: return
+        if (authStateManager.authStateFlow.value !is AuthState.Authenticated) return
+        val organizations = organizationManager.organizations.filter { it.shouldUseEvents }
         if (organizations.none()) return
 
         ioScope.launch {
@@ -85,7 +91,7 @@ class OrganizationEventManagerImpl(
     }
 
     private suspend fun uploadEvents() {
-        val userId = authRepository.activeUserId ?: return
+        val userId = activeUserId ?: return
         val events = eventDiskSource
             .getOrganizationEvents(userId = userId)
             .takeUnless { it.isEmpty() }
