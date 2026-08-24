@@ -1,11 +1,8 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.MasterPasswordUnlockData
-import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
-import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
@@ -21,10 +18,8 @@ import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.TotpResponse
@@ -48,12 +43,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.PinProtectedUserKeyManager
-import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
-import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -63,7 +56,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
-import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -87,14 +79,12 @@ import javax.crypto.Cipher
 
 @Suppress("LargeClass")
 class VaultRepositoryTest {
-    private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val mutableGetCiphersFlow: MutableStateFlow<List<SyncResponseJson.Cipher>> =
         MutableStateFlow(listOf(createMockCipher(1)))
     private val vaultDiskSource: VaultDiskSource = mockk {
         every { getCiphersFlow(any()) } returns mutableGetCiphersFlow
     }
-    private val totpCodeManager: TotpCodeManager = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val vaultLockManager: VaultLockManager = mockk()
     private val mutableVaultDataStateFlow =
@@ -129,8 +119,6 @@ class VaultRepositoryTest {
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
         vaultLockManager = vaultLockManager,
-        dispatcherManager = dispatcherManager,
-        totpCodeManager = totpCodeManager,
         cipherManager = mockk(),
         folderManager = mockk(),
         sendManager = mockk(),
@@ -138,6 +126,7 @@ class VaultRepositoryTest {
         credentialExchangeImportManager = credentialExchangeImportManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
         featureFlagManager = featureFlagManager,
+        vaultDataManager = mockk(),
     )
 
     @BeforeEach
@@ -156,18 +145,6 @@ class VaultRepositoryTest {
     fun tearDown() {
         unmockkConstructor(NoActiveUserException::class)
         unmockkConstructor(MissingPropertyException::class)
-    }
-
-    @Test
-    fun `deleteVaultData should call deleteVaultData on VaultDiskSource`() {
-        val userId = "userId-1234"
-        coEvery { vaultDiskSource.deleteVaultData(userId) } just runs
-
-        vaultRepository.deleteVaultData(userId = userId)
-
-        coVerify(exactly = 1) {
-            vaultDiskSource.deleteVaultData(userId)
-        }
     }
 
     @Test
@@ -956,106 +933,6 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `getVaultItemStateFlow should update to Error when error state is emitted`() =
-        runTest {
-            val folderId = 1234
-            val folderIdString = "mockId-$folderId"
-            val throwable = Throwable("Fail")
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getVaultItemStateFlow(folderIdString).test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableVaultDataStateFlow.value = DataState.Error(throwable)
-                assertEquals(DataState.Error<CipherView>(throwable), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getVaultItemStateFlow should update to NoNetwork when a NoNetwork value is emitted`() =
-        runTest {
-            val itemId = 1234
-            val itemIdString = "mockId-$itemId"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getVaultItemStateFlow(itemIdString).test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableVaultDataStateFlow.value = DataState.NoNetwork()
-                assertEquals(DataState.NoNetwork<CipherView>(), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getVaultFolderStateFlow should update to NoNetwork when no network value is emitted`() =
-        runTest {
-            val folderId = 1234
-            val folderIdString = "mockId-$folderId"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getVaultFolderStateFlow(folderIdString).test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableVaultDataStateFlow.value = DataState.NoNetwork()
-                assertEquals(DataState.NoNetwork<FolderView>(), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getVaultFolderStateFlow should update to Error when an error is emitted`() =
-        runTest {
-            val folderId = 1234
-            val folderIdString = "mockId-$folderId"
-            val throwable = Throwable("Fail")
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getVaultFolderStateFlow(folderIdString).test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableVaultDataStateFlow.value = DataState.Error(throwable)
-                assertEquals(DataState.Error<FolderView>(throwable), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getSendStateFlow should update emit SendView when present`() = runTest {
-        val sendId = 1
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val sendView = createMockSendView(number = sendId)
-
-        vaultRepository.getSendStateFlow("mockId-$sendId").test {
-            assertEquals(DataState.Loading, awaitItem())
-            mutableSendDataStateFlow.value = DataState.Loaded(SendData(emptyList()))
-            assertEquals(DataState.Loaded<SendView?>(null), awaitItem())
-            mutableSendDataStateFlow.value = DataState.Loaded(SendData(listOf(sendView)))
-            assertEquals(DataState.Loaded<SendView?>(sendView), awaitItem())
-        }
-    }
-
-    @Test
-    fun `getSendStateFlow should update to NoNetwork when NoNetwork value is emitted`() =
-        runTest {
-            val sendId = 1234
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getSendStateFlow("mockId-$sendId").test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableSendDataStateFlow.value = DataState.NoNetwork()
-                assertEquals(DataState.NoNetwork<SendView?>(), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getSendStateFlow should update to Error when an error is emitted`() =
-        runTest {
-            val sendId = 1234
-            val throwable = Throwable("Fail")
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            vaultRepository.getSendStateFlow("mockId-$sendId").test {
-                assertEquals(DataState.Loading, awaitItem())
-                mutableSendDataStateFlow.value = DataState.Error(throwable)
-                assertEquals(DataState.Error<SendView?>(throwable), awaitItem())
-            }
-        }
-
-    @Test
     fun `generateTotp with no active user should return GenerateTotpResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = null
@@ -1297,94 +1174,6 @@ class VaultRepositoryTest {
         )
 
         assertEquals(setOf("mockId-1"), result)
-    }
-
-    @Test
-    fun `getAuthCodeFlow with no active user should emit an error`() = runTest {
-        fakeAuthDiskSource.userState = null
-        assertTrue(vaultRepository.getAuthCodeFlow(cipherId = "cipherId").value is DataState.Error)
-    }
-
-    @Test
-    fun `getAuthCodeFlow for a single cipher should update data state when state changes`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val stateFlow = MutableStateFlow<DataState<VerificationCodeItem?>>(DataState.Loading)
-
-            every {
-                totpCodeManager.getTotpCodeStateFlow(userId = userId, cipherListView = any())
-            } returns stateFlow
-            mutableVaultDataStateFlow.value = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = DecryptCipherListResult(
-                        successes = listOf(createMockCipherListView(number = 1)),
-                        failures = emptyList(),
-                    ),
-                    collectionViewList = emptyList(),
-                    folderViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
-            )
-
-            vaultRepository.getAuthCodeFlow(userId).test {
-                assertEquals(
-                    DataState.Loading,
-                    awaitItem(),
-                )
-
-                stateFlow.tryEmit(DataState.Loaded(createVerificationCodeItem()))
-
-                assertEquals(
-                    DataState.Loaded(createVerificationCodeItem()),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
-    fun `getAuthCodesFlow with no active user should emit an error`() = runTest {
-        fakeAuthDiskSource.userState = null
-        assertTrue(vaultRepository.getAuthCodesFlow().value is DataState.Error)
-    }
-
-    @Test
-    fun `getAuthCodesFlow should update data state when state changes`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val userId = "mockId-1"
-        val stateFlow = MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
-
-        every {
-            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(
-                userId = userId,
-                cipherListViews = any(),
-            )
-        } returns stateFlow
-        mutableVaultDataStateFlow.value = DataState.Loaded(
-            data = VaultData(
-                decryptCipherListResult = DecryptCipherListResult(
-                    successes = listOf(createMockCipherListView(number = 1)),
-                    failures = emptyList(),
-                ),
-                collectionViewList = emptyList(),
-                folderViewList = emptyList(),
-                sendViewList = emptyList(),
-            ),
-        )
-
-        vaultRepository.getAuthCodesFlow().test {
-            assertEquals(
-                DataState.Loading,
-                awaitItem(),
-            )
-
-            stateFlow.tryEmit(DataState.Loaded(listOf(createVerificationCodeItem())))
-
-            assertEquals(
-                DataState.Loaded(listOf(createVerificationCodeItem())),
-                awaitItem(),
-            )
-        }
     }
 
     @Suppress("MaxLineLength")

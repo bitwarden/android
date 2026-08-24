@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.manager.VaultDataManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -41,7 +41,7 @@ internal class OrganizationEventManagerImpl(
     private val authStateManager: AuthStateManager,
     private val authDiskSource: AuthDiskSource,
     private val organizationManager: OrganizationManager,
-    private val vaultRepository: VaultRepository,
+    private val vaultDataManager: VaultDataManager,
     private val eventDiskSource: EventDiskSource,
     private val eventService: EventService,
     dispatcherManager: DispatcherManager,
@@ -70,7 +70,7 @@ internal class OrganizationEventManagerImpl(
 
         ioScope.launch {
             event.cipherId?.let { id ->
-                val cipherOrganizationId = vaultRepository
+                val cipherOrganizationId = vaultDataManager
                     .getVaultItemStateFlow(itemId = id)
                     .first { it.data != null }
                     .data

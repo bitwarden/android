@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.manager.VaultDataManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -46,7 +46,7 @@ class OrganizationEventManagerTest {
     private val mutableVaultItemStateFlow = MutableStateFlow<DataState<CipherView?>>(
         value = DataState.Loading,
     )
-    private val vaultRepository = mockk<VaultRepository> {
+    private val vaultDataManager = mockk<VaultDataManager> {
         every { getVaultItemStateFlow(itemId = any()) } returns mutableVaultItemStateFlow
     }
     private val eventService = mockk<EventService>()
@@ -73,7 +73,7 @@ class OrganizationEventManagerTest {
         authDiskSource = fakeAuthDiskSource,
         authStateManager = authStateManager,
         organizationManager = organizationManager,
-        vaultRepository = vaultRepository,
+        vaultDataManager = vaultDataManager,
         eventService = eventService,
         eventDiskSource = eventDiskSource,
     )

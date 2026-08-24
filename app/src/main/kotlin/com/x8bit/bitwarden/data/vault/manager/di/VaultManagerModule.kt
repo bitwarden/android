@@ -43,6 +43,8 @@ import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.SendManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.VaultDataManager
+import com.x8bit.bitwarden.data.vault.manager.VaultDataManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
@@ -227,6 +229,24 @@ object VaultManagerModule {
             dispatcherManager = dispatcherManager,
             clock = clock,
         )
+
+    @Provides
+    @Singleton
+    fun provideVaultDataManager(
+        authDiskSource: AuthDiskSource,
+        cipherManager: CipherManager,
+        totpCodeManager: TotpCodeManager,
+        vaultDiskSource: VaultDiskSource,
+        vaultSyncManager: VaultSyncManager,
+        dispatcherManager: DispatcherManager,
+    ): VaultDataManager = VaultDataManagerImpl(
+        authDiskSource = authDiskSource,
+        cipherManager = cipherManager,
+        totpCodeManager = totpCodeManager,
+        vaultDiskSource = vaultDiskSource,
+        vaultSyncManager = vaultSyncManager,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton

@@ -94,6 +94,7 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.manager.VaultDataManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -132,7 +133,7 @@ object PlatformManagerModule {
     fun provideOrganizationEventManager(
         authStateManager: AuthStateManager,
         organizationManager: OrganizationManager,
-        vaultRepository: VaultRepository,
+        vaultDataManager: VaultDataManager,
         authDiskSource: AuthDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
@@ -142,7 +143,7 @@ object PlatformManagerModule {
         authStateManager = authStateManager,
         authDiskSource = authDiskSource,
         organizationManager = organizationManager,
-        vaultRepository = vaultRepository,
+        vaultDataManager = vaultDataManager,
         clock = clock,
         dispatcherManager = dispatcherManager,
         eventDiskSource = eventDiskSource,
