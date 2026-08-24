@@ -512,6 +512,11 @@
     <string name="about_send">ପଠାଣ ବିଷୟରେ</string>
     <string name="hide_email">ପ୍ରାପ୍ତକାରୀଙ୍କଠାରୁ ମୋ ଇମେଲ ଠିକଣା ଲୁଚାନ୍ତୁ</string>
     <string name="send_options_policy_in_effect">ଗୋଟିଏ ବା ଏକାଧିକ ସଂଗଠନ ନୀତି ଆପଣଙ୍କ ପଠାଣ ବିକଳ୍ପଗୁଡ଼ିକୁ ପ୍ରଭାବିତ କରୁଛି।</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">ମାଗଣା ଖାତାଗୁଡ଼ିକ କେବଳ ପାଠ ବାଣ୍ଟିବାକୁ ସୀମିତ। ପଠାଣ ସହ ଫାଇଲ୍ ବ୍ୟବହାର କରିବାକୁ Premium ସଦସ୍ୟତା ଆବଶ୍ୟକ।</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">ନିର୍ଦ୍ଦିଷ୍ଟ ବ୍ୟକ୍ତିଙ୍କ ସହ ବାଣ୍ଟିବା ଏକ Premium ବୈଶିଷ୍ଟ୍ୟ। ଆପଣଙ୍କ ବର୍ତ୍ତମାନ ଯୋଜନାରେ ଏହି ବୈଶିଷ୍ଟ୍ୟର ପ୍ରବେଶ ଅନ୍ତର୍ଭୁକ୍ତ ନୁହେଁ।</string>
     <string name="password_prompt">ମାଷ୍ଟର ପାସୱାର୍ଡ ପୁନଃପ୍ରମ୍ପ୍ଟ</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">ଅବୈଧ ଇମେଲ ଠିକଣା</string>
     <string name="one_or_more_email_addresses_are_incorrect">ଗୋଟିଏ ବା ଏକାଧିକ ଇମେଲ ଠିକଣା ଭୁଲ୍। ଦୟାକରି ଯାଞ୍ଚ ଏବଂ ପୁନଃ ଚେଷ୍ଟା।</string>
     <string name="no_email_addresses_entered">କୌଣସି ଇମେଲ ଠିକଣା ଦିଆଯାଇନାହିଁ</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">ଏହି ପଠାଣ ବାଣ୍ଟିବାକୁ ଅତି କମରେ ଗୋଟିଏ ବୈଧ ଇମେଲ ଠିକଣା ଦିଅନ୍ତୁ।</string>
     <string name="sync_with_browser">ବ୍ରାଉଜର ସହ ସିଙ୍କ</string>
     <string name="sync_with_browser_description">%1$s ସହ ସଂଯୋଗ କରିବାକୁ, ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜରକୁ Bitwarden ମୋବାଇଲ୍ ଆପ୍ ସହ ସିଙ୍କ। ଆପଣଙ୍କ ବ୍ରାଉଜର ଖୋଲିଲେ, ପଚରାଗଲେ ସାଇନ୍-ଇନ୍ ସମାପ୍ତ।\nସିଙ୍କ ସମାପ୍ତ ହେବା ପରେ, ଆପଣ ଏହି ଆପ୍‌କୁ ଫେରିଆସିବେ।</string>

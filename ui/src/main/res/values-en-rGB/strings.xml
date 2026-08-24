@@ -512,6 +512,11 @@ Scanning will happen automatically.</string>
     <string name="about_send">About Send</string>
     <string name="hide_email">Hide my email address from recipients</string>
     <string name="send_options_policy_in_effect">One or more organisation policies are affecting your Send options.</string>
+    <string name="organization_policy_restriction">Organisation policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organisation’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organisation and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Sharing with specific people is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="password_prompt">Master password re-prompt</string>
@@ -1252,6 +1257,7 @@ any issues.</string>
     <string name="invalid_email_addresses">Invalid email addresses</string>
     <string name="one_or_more_email_addresses_are_incorrect">One or more email addresses are incorrect. Please review and try again.</string>
     <string name="no_email_addresses_entered">No email addresses entered</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Enter at least one valid email address to share this Send.</string>
     <string name="sync_with_browser">Sync with browser</string>
     <string name="sync_with_browser_description">To connect to %1$s, sync your default browser with the Bitwarden mobile app. When your browser opens, complete sign-in if prompted.\nOnce syncing is complete, you’ll be returned to this app.</string>

@@ -512,6 +512,11 @@ Skandering gebeur outomaties.</string>
     <string name="about_send">Oor Send</string>
     <string name="hide_email">Versteek my e-posadres vir ontvangers.</string>
     <string name="send_options_policy_in_effect">Een of meer organisasiebeleide beïnvloed u Send-opsies.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Met gratis rekeninge kan u slegs teks deel. ’n Premie-lidmaatskap word vereis om lêers met Send te gebruik.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Deel met spesifieke mense is \'n Premium-funksie. U huidige plan sluit nie toegang tot hierdie funksie in nie.</string>
     <string name="password_prompt">Vra weer vir hoofwagwoord</string>
@@ -1255,6 +1260,7 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="invalid_email_addresses">Ongeldige e-posadresse</string>
     <string name="one_or_more_email_addresses_are_incorrect">Een of meer e-posadresse is verkeerd. Hersien asseblief en probeer weer.</string>
     <string name="no_email_addresses_entered">Geen e-posadresse ingevoer nie</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Voer ten minste een geldige e-posadres in om hierdie Send te deel.</string>
     <string name="sync_with_browser">Sinchroniseer met blaaier</string>
     <string name="sync_with_browser_description">Om aan %1$s te koppel, sinchroniseer u verstekblaaier met die Bitwarden-mobiele toep. Wanneer u blaaier oopmaak, voltooi aanmelding indien gevra.

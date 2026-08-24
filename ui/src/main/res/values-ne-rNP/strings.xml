@@ -512,6 +512,11 @@
     <string name="about_send">पठाउनेको बारेमा</string>
     <string name="hide_email">प्राप्तकर्ताहरूबाट मेरो इमेल ठेगाना लुकाउनुहोस्</string>
     <string name="send_options_policy_in_effect">एक वा बढी संगठन नीतिहरूले तपाईंको पठाउने विकल्पहरूलाई असर गरिरहेको छ।</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">नि:शुल्क खाताहरू पाठ मात्र साझेदारी गर्न प्रतिबन्धित छन्। पठाउनेसँग फाइलहरू प्रयोग गर्न Premium सदस्यता आवश्यक छ।</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">विशिष्ट व्यक्तिहरूसँग साझेदारी गर्नु Premium सुविधा हो। तपाईंको हालको योजनाले यो सुविधामा पहुँच समावेश गर्दैन।</string>
     <string name="password_prompt">मास्टर पासवर्ड पुन: सोध्ने</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">अमान्य इमेल ठेगानाहरू</string>
     <string name="one_or_more_email_addresses_are_incorrect">एक वा बढी इमेल ठेगानाहरू गलत छन्। कृपया समीक्षा गर्नुहोस् र फेरि प्रयास गर्नुहोस्।</string>
     <string name="no_email_addresses_entered">कुनै इमेल ठेगानाहरू प्रविष्ट गरिएनन्</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">यो पठाउने साझेदारी गर्न कम्तीमा एउटा मान्य इमेल ठेगाना प्रविष्ट गर्नुहोस्।</string>
     <string name="sync_with_browser">ब्राउजरसँग सिङ्क गर्नुहोस्</string>
     <string name="sync_with_browser_description">%1$s मा जडान गर्न, आफ्नो पूर्वनिर्धारित ब्राउजरलाई Bitwarden मोबाइल एपसँग सिङ्क गर्नुहोस्। जब तपाईंको ब्राउजर खुल्छ, संकेत गरिएमा साइन-इन पूरा गर्नुहोस्।\nसिङ्क पूरा भएपछि, तपाईं यस एपमा फर्किनुहुनेछ।</string>

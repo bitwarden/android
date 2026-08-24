@@ -105,7 +105,7 @@
     <string name="one_minute">1 dəqiqə</string>
     <string name="four_hours">4 saat</string>
     <string name="immediately">Dərhal</string>
-    <string name="vault_timeout_log_out_confirmation_title">Seans vaxt bitməsi “Çıxış et” olaraq təyin edilsin?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Sessiya vaxtının bitməsi “Çıxış et” olaraq təyin edilsin?</string>
     <string name="vault_timeout_log_out_confirmation_message">Vaxt bitdikdən sonra hesabdan çıxış ediləcək. Seyfinizə təkrar giriş edib erişmək üçün internetə bağlanmalısınız. Bu cihazdakı saxlanılmış ayarlarınız və PIN dəyişməyəcək.</string>
     <string name="logging_in">Giriş edilir…</string>
     <string name="login_to_bitwarden">Bitwarden-ə giriş edin</string>
@@ -170,8 +170,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Bir giriş axtar və ya yenisini əlavə et</string>
     <string name="disabled">Sıradan çıxarıldı</string>
     <string name="bitwarden_autofill_service_alert2">Seyfinizə yeni bir giriş əlavə etməyin ən asan yolu, Bitwarden Avto-doldurma Xidmətidir. Bitwarden Avto-doldurma Xidmətini istifadə etməklə bağlı daha ətraflı məlumat üçün “Ayarlar” ekranına gedin.</string>
-    <string name="autofill_noun">Avto-doldur</string>
-    <string name="autofill_verb">Avto-doldur</string>
+    <string name="autofill_noun">Avto-doldurma</string>
+    <string name="autofill_verb">Avto-doldurma</string>
     <string name="autofill_or_view">Avto-doldurmaq və ya bu elementə baxmaq istəyirsiniz?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s axtar</string>
     <string name="learn_org">Təşkilatlar barədə daha ətraflı</string>
@@ -394,7 +394,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="include_number">Rəqəm əlavə et</string>
     <string name="download">Endir</string>
     <string name="download_file">Faylı endir</string>
-    <string name="login_expired">Seansın müddəti bitdi.</string>
+    <string name="login_expired">Giriş sessiyanızın müddəti bitdi.</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
     <string name="device_verification">Cihaz doğrulaması</string>
     <string name="biometrics_failed">Biometrik uğursuzdur</string>
@@ -512,6 +512,11 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="about_send">\"Send\" haqqında</string>
     <string name="hide_email">E-poçt ünvanımı alıcılardan gizlət.</string>
     <string name="send_options_policy_in_effect">Bir və ya daha çox təşkilat siyasətləri \"Send\" seçimlərinizə təsir edir.</string>
+    <string name="organization_policy_restriction">Təşkilat siyasəti məhdudiyyəti</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Bu Send, təşkilatınızın Send siyasətinə riayət etmir və müddəti ayarlanmış silinmə tarixində avtomatik olaraq bitəcək.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Təşkilatınız üçün mətn Send-lərinə icazə verilmir və bu Send-in müddəti ayarlanmış silinmə tarixində avtomatik olaraq bitəcək.</string>
+    <string name="to_edit_this_send_make_a_copy">Bu \"Send\"ə düzəliş etmək üçün bir kopyasını yaradın. Əgər bu \"Send\"in müddəti, təyin olunmuş silinmə tarixində bitəcəksə, heç bir əməliyyata ehtiyac yoxdur</string>
+    <string name="make_a_copy">Kopyasını yarat</string>
     <string name="send_file_premium_required">Ödənişsiz hesablar yalnız mətn paylaşa bilər. Faylları \"Send\" ilə istifadə etmək üçün premium üzvlük tələb olunur.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Xüsusi insanlarla paylaşım, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="password_prompt">Ana parolu təkrar soruş</string>
@@ -539,11 +544,11 @@ Skan prosesi avtomatik baş tutacaq.</string>
         <item quantity="one">%1$d dəqiqə</item>
         <item quantity="other">%1$d dəqiqə</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Təşkilatınız, seansın maksimum bitmə vaxtını %1$s %2$s olaraq təyin etdi.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Təşkilatınız, seansın maksimum bitmə vaxtını %1$s olaraq təyin etdi.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Təşkilatınız, sessiyanın maksimum bitmə vaxtını %1$s %2$s olaraq təyin etdi.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Təşkilatınız, sessiyanın maksimum bitmə vaxtını %1$s olaraq təyin etdi.</string>
     <string name="this_setting_is_managed_by_your_organization">Bu ayar, təşkilatınız tərəfindən idarə olunur.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Təşkilatınız, seansın ilkin bitmə vaxtını heç vaxt olaraq təyin etdi.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Təşkilatınız, seansın ilkin bitmə vaxtını tətbiq başladılanda olaraq təyin etdi.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Təşkilatınız, sessiyanın ilkin bitmə vaxtını heç vaxt olaraq təyin etdi.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Təşkilatınız, sessiyanın ilkin bitmə vaxtını tətbiq başladılanda olaraq təyin etdi.</string>
     <string name="vault_timeout_to_large">Seyfin bitmə vaxtı, təşkilatınız tərəfindən ayarlanan məhdudiyyətləri aşır.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Bir və ya daha çox təşkilat siyasəti, fərdi seyfinizi xaricə köçürməyinizi əngəlləyir.</string>
     <string name="add_account">Hesab əlavə et</string>
@@ -773,7 +778,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="set_up_unlock">Kilid açmanı qur</string>
     <string name="set_up_later">Daha sonra qur</string>
     <string name="set_up_unlock_later">Kilid açma daha sonra qurulsun?</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Bu addımı tamamlamaq üçün istənilən vaxt Ayarlardakı Hesab Güvənliyinə gedə bilərsiniz.</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Bu addımı istənilən vaxt Ayarlardakı \"Hesab Təhlükəsizliyi\"ndən tamamlaya bilərsiniz.</string>
     <string name="confirm">Təsdiqlə</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Seyfinizə cəld erişmək və giriş məlumatlarınızı Avto-doldurmaq üçün biometrik qurun və ya bir PIN kodu seçin.</string>
     <string name="never_lose_access_to_your_vault">Seyfinizə erişimi heç vaxt itirməyin</string>
@@ -805,7 +810,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="expired_link">Vaxtı bitmiş keçid</string>
     <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
     <string name="restart_registration">Qeydiyyatı yenidən başlat</string>
-    <string name="authenticator_sync">Kimlik doğrulayıcı sinxrn</string>
+    <string name="authenticator_sync">Kimlik doğrulayıcı sinxronlaşdırma</string>
     <string name="allow_bitwarden_authenticator_syncing">Kimlik doğrulayıcını sinxrn icazə ver</string>
     <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
     <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
@@ -895,7 +900,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="page_number_x_of_y">%1$s/%2$s</string>
     <string name="copy_identity_name">Kimlik adını kopyala</string>
     <string name="copy_company">Şirkəti kopyala</string>
-    <string name="copy_ssn">Sosial güvənlik nömrəsini kopyala</string>
+    <string name="copy_ssn">Sosial təminat nömrəsini kopyala</string>
     <string name="copy_passport_number">Pasport nömrəsini kopyala</string>
     <string name="copy_first_name">Adı kopyala</string>
     <string name="copy_last_name">Soyadı kopyala</string>
@@ -1251,6 +1256,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="invalid_email_addresses">Yararsız e-poçt ünvanı</string>
     <string name="one_or_more_email_addresses_are_incorrect">Bir və ya daha çox e-poçt ünvanı yanlışdır. Lütfən incələyib yenidən sınayın.</string>
     <string name="no_email_addresses_entered">Heç bir e-poçt ünvanı daxil edilməyib</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Yalnız aşağıdakı domenlər daxildir: %1$s. Lütfən incələyib yenidən sınayın</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send-i paylaşmaq üçün ən azı bir yararlı e-poçt ünvanı daxil edin.</string>
     <string name="sync_with_browser">Brauzerlə sinxronlaşdır</string>
     <string name="sync_with_browser_description">%1$s ilə bağlantı qurmaq üçün ilkin brauzerinizi Bitwarden mobil tətbiqi ilə sinxronlaşdırın. Brauzeriniz açıldığı zaman, soruşulsa daxil olma prosesini tamamlayın.\nSinxronlaşdırma tamamlandıqdan sonra bu tətbiqə qayıdacaqsınız.</string>
@@ -1294,7 +1300,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="per_month_cancel_anytime_content_description">Aylıq %1$s, istənilən vaxt ləğv et</string>
     <string name="built_in_authenticator">Daxili kimlik doğrulayıcı</string>
     <string name="emergency_access">Fövqəladə hal erişimi</string>
-    <string name="secure_file_storage">Güvənli fayl anbarı</string>
+    <string name="secure_file_storage">Güvənli fayl deposu</string>
     <string name="breach_monitoring">Pozuntu monitorinqi</string>
     <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Satın alma prosesini Stripe təhlükəsiz ödəmə ilə tamamlayacaqsınız.</string>
     <string name="opening_checkout">Ödəmə səhifəsi açılır…</string>
@@ -1314,7 +1320,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="current_plan">Hazırkı plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Faktura məbləği</string>
-    <string name="storage_cost">Anbar xərci</string>
+    <string name="storage_cost">Depolama xərci</string>
     <string name="discount">Endirim</string>
     <string name="estimated_tax">Təxmini vergi</string>
     <string name="total">Cəmi</string>

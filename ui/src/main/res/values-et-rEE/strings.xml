@@ -512,6 +512,11 @@ Skaneerimine toimub automaatselt.</string>
     <string name="about_send">Rohkem infot</string>
     <string name="hide_email">Ära näita saajatele minu e-posti aadressi.</string>
     <string name="send_options_policy_in_effect">Organisatsiooni seaded mõjutavad sinu Sendi sätteid.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Tasuta kontoga on võimalik saata ainult tekste. Failide saatmiseks on vajalik omada tasulist kontot.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Kindlate inimestega jagamine on Premium funktsioon. Teie praegune plaan ei hõlma sellele funktsioonile juurdepääsu.</string>
     <string name="password_prompt">Nõutav on ülemparool</string>
@@ -1250,6 +1255,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="invalid_email_addresses">Vigased e-posti aadressid</string>
     <string name="one_or_more_email_addresses_are_incorrect">Üks või mitu e-posti aadressi on valed. Palun kontrollige ja proovige uuesti.</string>
     <string name="no_email_addresses_entered">Ühtegi e-posti aadressi pole sisestatud</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Selle saadetise jagamiseks sisestage vähemalt üks kehtiv e-posti aadress.</string>
     <string name="sync_with_browser">Sünkrooni brauseriga</string>
     <string name="sync_with_browser_description">%1$s ühendamiseks sünkroonige oma vaikebrauser Bitwardeni mobiilirakendusega. Kui brauser avaneb, lõpetage sisselogimine, kui seda palutakse.\nKui sünkroonimine on lõppenud, naasete sellesse rakendusse.</string>

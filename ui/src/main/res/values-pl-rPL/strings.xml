@@ -516,6 +516,11 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="about_send">O wysyłkach</string>
     <string name="hide_email">Ukryj mój adres e-mail przed odbiorcami</string>
     <string name="send_options_policy_in_effect">Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">Aby edytować wysyłkę, utwórz jej kopię. Jeśli wysyłka może wygasnąć w dacie usunięcia, nie musisz nic robić.</string>
+    <string name="make_a_copy">Utwórz kopię</string>
     <string name="send_file_premium_required">Darmowe konta są ograniczone do udostępniania tylko tekstu. Konto Premium jest wymagane do udostępniania plików.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Udostępnianie użytkownikom jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="password_prompt">Potwierdź hasłem głównym</string>
@@ -1267,6 +1272,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="invalid_email_addresses">Adres e-mail jest nieprawidłowy</string>
     <string name="one_or_more_email_addresses_are_incorrect">Co najmniej jeden adres e-mail jest nieprawidłowy. Sprawdź je i spróbuj ponownie.</string>
     <string name="no_email_addresses_entered">Brak adresu e-mail</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Dozwolone domeny: %1$s. Sprawdź i spróbuj ponownie</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Wpisz co najmniej jeden prawidłowy adres e-mail, aby udostępnić wysyłkę.</string>
     <string name="sync_with_browser">Synchronizuj z przeglądarką</string>
     <string name="sync_with_browser_description">Aby połączyć się z %1$s, zsynchronizuj domyślną przeglądarkę z aplikacją mobilną Bitwarden. Zaloguj się do przeglądarki, jeśli to będzie konieczne.\nPo zakończeniu synchronizacji nastąpi powrót do aplikacji.</string>

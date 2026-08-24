@@ -512,6 +512,11 @@
     <string name="about_send">সেন্ড সম্পর্কে</string>
     <string name="hide_email">প্রাপকদের কাছ থেকে আমার ইমেল ঠিকানা লুকান</string>
     <string name="send_options_policy_in_effect">এক বা একাধিক সংগঠন নীতি আপনার সেন্ড বিকল্পগুলিকে প্রভাবিত করছে।</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">বিনামূল্যে অ্যাকাউন্টগুলি শুধুমাত্র টেক্সট শেয়ার করার জন্য সীমাবদ্ধ। Send এর মাধ্যমে ফাইল ব্যবহার করার জন্য একটি প্রিমিয়াম সদস্যপদ প্রয়োজন।</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">নির্দিষ্ট ব্যক্তিদের সাথে শেয়ার করা একটি প্রিমিয়াম বৈশিষ্ট্য। আপনার বর্তমান প্ল্যানে এই বৈশিষ্ট্যটিতে অ্যাক্সেস অন্তর্ভুক্ত নয়।</string>
     <string name="password_prompt">মাস্টার পাসওয়ার্ড পুনরায় প্রম্পট</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">অবৈধ ইমেল ঠিকানা</string>
     <string name="one_or_more_email_addresses_are_incorrect">এক বা একাধিক ইমেল ঠিকানা ভুল। অনুগ্রহ করে পর্যালোচনা করে আবার চেষ্টা করুন।</string>
     <string name="no_email_addresses_entered">কোন ইমেল ঠিকানা প্রবেশ করানো হয়নি</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">এই সেন্ড শেয়ার করতে কমপক্ষে একটি বৈধ ইমেল ঠিকানা লিখুন।</string>
     <string name="sync_with_browser">ব্রাউজারের সাথে সিঙ্ক করুন</string>
     <string name="sync_with_browser_description">%1$s-এর সাথে সংযোগ করতে, আপনার ডিফল্ট ব্রাউজারটিকে Bitwarden মোবাইল অ্যাপের সাথে সিঙ্ক করুন। আপনার ব্রাউজার খোলার সময়, প্রম্পট করা হলে সাইন-ইন সম্পূর্ণ করুন।\nসিঙ্ক সম্পূর্ণ হলে, আপনাকে এই অ্যাপে ফিরিয়ে আনা হবে।</string>

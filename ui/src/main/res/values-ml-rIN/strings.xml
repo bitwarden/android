@@ -512,6 +512,11 @@
     <string name="about_send">Send-നെ കുറിച്ച്</string>
     <string name="hide_email">എന്റെ ഇമെയിൽ വിലാസം സ്വീകർത്താക്കളിൽ നിന്ന് മറയ്ക്കുക</string>
     <string name="send_options_policy_in_effect">ഒന്നോ അതിലധികമോ സംഘടന നയങ്ങൾ നിങ്ങളുടെ Send ഓപ്ഷനുകളെ ബാധിക്കുന്നു.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">സൗജന്യ അക്കൗണ്ടുകൾ ടെക്സ്റ്റ് മാത്രം പങ്കിടുന്നതിന് പരിമിതപ്പെടുത്തിയിരിക്കുന്നു. Send-നൊപ്പം ഫയലുകൾ ഉപയോഗിക്കുന്നതിന് ഒരു പ്രീമിയം അംഗത്വം ആവശ്യമാണ്.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">നിർദ്ദിഷ്ട ആളുകളുമായി പങ്കിടുന്നത് ഒരു പ്രീമിയം സവിശേഷതയാണ്. നിങ്ങളുടെ നിലവിലെ പ്ലാനിൽ ഈ സവിശേഷതയിലേക്കുള്ള ആക്സസ് ഉൾപ്പെടുന്നില്ല.</string>
     <string name="password_prompt">മാസ്റ്റർ പാസ്വേഡ് വീണ്ടും ചോദിക്കുക</string>
@@ -1250,6 +1255,7 @@
     <string name="invalid_email_addresses">അസാധുവായ ഇമെയിൽ വിലാസങ്ങൾ</string>
     <string name="one_or_more_email_addresses_are_incorrect">ഒന്നോ അതിലധികമോ ഇമെയിൽ വിലാസങ്ങൾ തെറ്റാണ്. ദയവായി പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.</string>
     <string name="no_email_addresses_entered">ഇമെയിൽ വിലാസങ്ങളൊന്നും നൽകിയിട്ടില്ല</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">ഈ Send പങ്കിടുന്നതിന് കുറഞ്ഞത് ഒരു സാധുവായ ഇമെയിൽ വിലാസമെങ്കിലും നൽകുക.</string>
     <string name="sync_with_browser">ബ്രൗസറുമായി സമന്വയിപ്പിക്കുക</string>
     <string name="sync_with_browser_description">%1$s ലേക്ക് കണക്റ്റ് ചെയ്യുന്നതിന്, നിങ്ങളുടെ സ്വതവേയുള്ള ബ്രൗസറിനെ Bitwarden മൊബൈൽ ആപ്പുമായി സമന്വയിപ്പിക്കുക. നിങ്ങളുടെ ബ്രൗസർ തുറക്കുമ്പോൾ, ആവശ്യപ്പെട്ടാൽ സൈൻ-ഇൻ പൂർത്തിയാക്കുക.\nസമന്വയിപ്പിക്കൽ പൂർത്തിയായിക്കഴിഞ്ഞാൽ, നിങ്ങളെ ഈ ആപ്പിലേക്ക് തിരികെ കൊണ്ടുവരും.</string>

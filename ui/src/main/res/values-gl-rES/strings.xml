@@ -512,6 +512,11 @@ Escanearase automaticamente.</string>
     <string name="about_send">Sobre Send</string>
     <string name="hide_email">Ocultar o meu correo ós destinatarios</string>
     <string name="send_options_policy_in_effect">As directivas da organización están afectando ás opcións do Send.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">As contas gratiuitas só poden compartir texto. Para enviar arquivos con Send requírese unha conta Prémium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Compartir con persoas específicas é unha función Premium. O teu plan actual non inclúe acceso a esta función.</string>
     <string name="password_prompt">Volver solicitar o contrasinal mestre</string>
@@ -1250,6 +1255,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="invalid_email_addresses">Enderezos de correo non válidos</string>
     <string name="one_or_more_email_addresses_are_incorrect">Un ou máis enderezos de correo son incorrectos. Revisa e inténtao de novo.</string>
     <string name="no_email_addresses_entered">Non se introduciu ningún enderezo de correo</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Introduce polo menos un enderezo de correo válido para compartir este Send.</string>
     <string name="sync_with_browser">Sincronizar co navegador</string>
     <string name="sync_with_browser_description">Para conectar con %1$s, sincroniza o teu navegador predeterminado coa aplicación móbil de Bitwarden. Cando se abra o navegador, completa o inicio de sesión se se solicita.\nUnha vez completada a sincronización, volverás a esta aplicación.</string>

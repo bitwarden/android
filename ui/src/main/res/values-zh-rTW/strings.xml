@@ -510,6 +510,11 @@
     <string name="about_send">關於 Send</string>
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">與特定人員分享為 Premium 功能。您目前的方案不包含此功能的使用權限。</string>
     <string name="password_prompt">重新詢問主密碼</string>
@@ -1243,6 +1248,7 @@
     <string name="invalid_email_addresses">電郵無效</string>
     <string name="one_or_more_email_addresses_are_incorrect">一個或多個電子郵件地址不正確。請檢查後再試一次。</string>
     <string name="no_email_addresses_entered">尚未輸入任何電子郵件地址</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">請至少輸入一個有效的電子郵件地址以分享此 Send。</string>
     <string name="sync_with_browser">與瀏覽器同步</string>
     <string name="sync_with_browser_description">若要連線至 %1$s，請將您的預設瀏覽器與 Bitwarden 行動應用程式同步。瀏覽器開啟後，如有提示請完成登入。\n同步完成後，您將返回此應用程式。</string>
