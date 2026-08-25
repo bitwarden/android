@@ -21,6 +21,8 @@ import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -128,14 +130,18 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideOrganizationEventManager(
-        authRepository: AuthRepository,
+        authStateManager: AuthStateManager,
+        organizationManager: OrganizationManager,
         vaultRepository: VaultRepository,
+        authDiskSource: AuthDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
         eventDiskSource: EventDiskSource,
         eventService: EventService,
     ): OrganizationEventManager = OrganizationEventManagerImpl(
-        authRepository = authRepository,
+        authStateManager = authStateManager,
+        authDiskSource = authDiskSource,
+        organizationManager = organizationManager,
         vaultRepository = vaultRepository,
         clock = clock,
         dispatcherManager = dispatcherManager,

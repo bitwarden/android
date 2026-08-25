@@ -7,6 +7,7 @@ import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.NewAuthRequestService
+import com.bitwarden.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
@@ -15,25 +16,34 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
 import com.x8bit.bitwarden.data.auth.manager.AuthTokenManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -82,6 +92,16 @@ object AuthManagerModule {
             vaultSdkSource = vaultSdkSource,
             authDiskSource = authDiskSource,
         )
+
+    @Provides
+    @Singleton
+    fun providesAuthStateManager(
+        authDiskSource: AuthDiskSource,
+        dispatcherManager: DispatcherManager,
+    ): AuthStateManager = AuthStateManagerImpl(
+        authDiskSource = authDiskSource,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton
@@ -161,5 +181,31 @@ object AuthManagerModule {
         vaultSdkSource = vaultSdkSource,
         accountsService = accountsService,
         featureFlagManager = featureFlagManager,
+    )
+
+    @Provides
+    @Singleton
+    fun providesOrganizationManager(
+        authDiskSource: AuthDiskSource,
+        organizationService: OrganizationService,
+    ): OrganizationManager = OrganizationManagerImpl(
+        authDiskSource = authDiskSource,
+        organizationService = organizationService,
+    )
+
+    @Provides
+    @Singleton
+    fun providesUserStateManager(
+        authDiskSource: AuthDiskSource,
+        firstTimeActionManager: FirstTimeActionManager,
+        vaultLockManager: VaultLockManager,
+        policyManager: PolicyManager,
+        dispatcherManager: DispatcherManager,
+    ): UserStateManager = UserStateManagerImpl(
+        authDiskSource = authDiskSource,
+        firstTimeActionManager = firstTimeActionManager,
+        vaultLockManager = vaultLockManager,
+        policyManager = policyManager,
+        dispatcherManager = dispatcherManager,
     )
 }
