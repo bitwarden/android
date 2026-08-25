@@ -1767,7 +1767,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Title")
             .performClick()
 
         // Choose the option from the menu
@@ -1790,7 +1790,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Identity the Title should display the selected title from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Title")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2435,7 +2435,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Brand")
             .performClick()
 
         // Choose the option from the menu
@@ -2458,7 +2458,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Card the Brand should display the selected brand from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Brand")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2479,7 +2479,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Expiration month")
             .performClick()
 
         // Choose the option from the menu
@@ -2503,7 +2503,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Card the Expiration month should display the selected expiration month from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Expiration month")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2654,7 +2654,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Account type")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Account type")
             .performClick()
 
         // Choose the option from the menu
