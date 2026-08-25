@@ -241,6 +241,7 @@ class VaultItemListingViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
                 SnackbarRelay.CIPHER_UPDATED,
+                SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.SEND_DELETED,
                 SnackbarRelay.SEND_UPDATED,
             )

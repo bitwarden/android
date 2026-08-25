@@ -6683,6 +6683,18 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `viewModel should subscribe to the folder created snackbar relay`() {
+        createVaultItemListingViewModel()
+
+        verify(exactly = 1) {
+            snackbarRelayManager.getSnackbarDataFlow(
+                relay = any(),
+                relays = varargAny { it == SnackbarRelay.FOLDER_CREATED },
+            )
+        }
+    }
+
+    @Test
     fun `BankAccount listing type should display the FAB`() {
         assertTrue(VaultItemListingState.ItemListingType.Vault.BankAccount.hasFab)
     }

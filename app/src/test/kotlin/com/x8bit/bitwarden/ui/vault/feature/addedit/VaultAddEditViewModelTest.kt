@@ -4624,6 +4624,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Nested
     inner class VaultAddEditCommonActions {
+        private val createdFolderId: String = "123"
+        private val newFolderName: String = "folderName"
+        private val createdFolderView: FolderView = FolderView(
+            id = createdFolderId,
+            name = newFolderName,
+            revisionDate = fixedClock.instant(),
+        )
         private lateinit var viewModel: VaultAddEditViewModel
         private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var secureNotesInitialSavedStateHandle: SavedStateHandle
@@ -4721,20 +4728,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder action calls create folder from vault repository`() = runTest {
-            val folderName = "folderName"
-            val expectedFolderResult = FolderView(
-                id = "123",
-                name = folderName,
-                revisionDate = fixedClock.instant(),
-            )
             coEvery {
                 vaultRepository.createFolder(any())
-            } returns CreateFolderResult.Success(expectedFolderResult)
-            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+            } returns CreateFolderResult.Success(createdFolderView)
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
             coVerify {
                 vaultRepository.createFolder(
                     FolderView(
-                        name = folderName,
+                        name = newFolderName,
                         id = null,
                         revisionDate = fixedClock.instant(),
                     ),
@@ -4744,20 +4745,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
-            val folderId = "123"
-            val folderName = "folderName"
-            val expectedFolderResult = FolderView(
-                id = folderId,
-                name = folderName,
-                revisionDate = fixedClock.instant(),
-            )
             coEvery {
                 vaultRepository.createFolder(any())
-            } returns CreateFolderResult.Success(expectedFolderResult)
+            } returns CreateFolderResult.Success(createdFolderView)
 
             viewModel.stateFlow.test {
                 awaitItem() // initial state.
-                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
                 assertEquals(
                     vaultAddItemInitialState.copy(
                         dialog = VaultAddEditState.DialogState.Loading(
@@ -4770,11 +4764,38 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     createVaultAddItemState(
                         dialogState = null,
                         commonContentViewState = createCommonContentViewState(
-                            selectedFolderId = folderId,
+                            selectedFolderId = createdFolderId,
                         ),
                     ),
                     awaitItem(),
                 )
+            }
+        }
+
+        @Test
+        fun `AddNewFolder shows the folder created snackbar on success`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(createdFolderView)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.folder_created.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `AddNewFolder does not show the folder created snackbar on error`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Error(error = Throwable("Fail"))
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                expectNoEvents()
             }
         }
 
