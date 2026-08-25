@@ -199,7 +199,7 @@ class ManageDevicesScreenTest : BitwardenComposeTest() {
     @Test
     fun `bottom sheet should not show when permission already granted`() {
         permissionsManager.checkPermissionResult = true
-        mutableStateFlow.value = DEFAULT_STATE.copy(devicesLoaded = true)
+        mutableStateFlow.value = DEFAULT_STATE
         composeTestRule.onNodeWithText("Skip for now").assertDoesNotExist()
     }
 
@@ -242,5 +242,4 @@ private val DEFAULT_STATE = ManageDevicesState(
     isRefreshing = false,
     internalHideBottomSheet = false,
     isFdroid = false,
-    devicesLoaded = false,
 )

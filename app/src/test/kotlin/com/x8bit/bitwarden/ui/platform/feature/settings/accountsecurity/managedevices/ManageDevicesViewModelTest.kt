@@ -159,7 +159,7 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `when the first getDevices returns error should show error state`() {
+    fun `when getDevices returns error should show error state`() {
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
         val viewModel = createViewModel()
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
@@ -172,20 +172,24 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `when a later getDevices returns error should leave the rendered content in place`() {
+    fun `when getDevices returns error after content should show error state`() {
         val viewModel = createViewModel()
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
         )
         assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
 
+        // A failed read means the rendered list is stale, so the error state is shown.
         coEvery { authRepository.getDevices() } returns GetDevicesResult.Error
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
         )
 
         coVerify(exactly = 2) { authRepository.getDevices() }
-        assertEquals(EMPTY_CONTENT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE.copy(viewState = ManageDevicesState.ViewState.Error),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -272,7 +276,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                             pendingDevice,
                             currentDevice,
                         ).toImmutableList(),
-                        devicesLoaded = true,
                         viewState = ManageDevicesState.ViewState.Content(
                             items = listOf(
                                 ManageDevicesState.ViewState.Content.DeviceItem(
@@ -344,7 +347,6 @@ class ManageDevicesViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     authRequests = listOf(PASSWORDLESS_AUTH_REQUEST).toImmutableList(),
                     devices = listOf(pendingDevice).toImmutableList(),
-                    devicesLoaded = true,
                     viewState = ManageDevicesState.ViewState.Content(
                         items = listOf(
                             ManageDevicesState.ViewState.Content.DeviceItem(
@@ -384,12 +386,10 @@ private val DEFAULT_STATE = ManageDevicesState(
     isRefreshing = false,
     internalHideBottomSheet = false,
     isFdroid = false,
-    devicesLoaded = false,
 )
 
 private val EMPTY_CONTENT_STATE = DEFAULT_STATE.copy(
     viewState = ManageDevicesState.ViewState.Content(items = emptyList()),
-    devicesLoaded = true,
 )
 
 private val PASSWORDLESS_AUTH_REQUEST = AuthRequest(

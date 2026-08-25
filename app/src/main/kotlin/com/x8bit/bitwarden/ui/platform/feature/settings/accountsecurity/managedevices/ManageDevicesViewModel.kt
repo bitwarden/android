@@ -63,7 +63,6 @@ class ManageDevicesViewModel @Inject constructor(
         isRefreshing = false,
         internalHideBottomSheet = false,
         isFdroid = buildInfoManager.isFdroid,
-        devicesLoaded = false,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
@@ -199,14 +198,7 @@ class ManageDevicesViewModel @Inject constructor(
             ?: run {
                 mutableStateFlow.update {
                     it.copy(
-                        // Once devices have rendered, a failed refresh leaves the existing content
-                        // in place rather than replacing it with an error; the next update
-                        // reconciles it.
-                        viewState = if (it.devicesLoaded) {
-                            it.viewState
-                        } else {
-                            ManageDevicesState.ViewState.Error
-                        },
+                        viewState = ManageDevicesState.ViewState.Error,
                         isRefreshing = false,
                     )
                 }
@@ -216,7 +208,6 @@ class ManageDevicesViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 devices = devicesResult.devices.toImmutableList(),
-                devicesLoaded = true,
                 isRefreshing = false,
             )
         }
@@ -280,7 +271,6 @@ data class ManageDevicesState(
     val isRefreshing: Boolean,
     private val internalHideBottomSheet: Boolean,
     private val isFdroid: Boolean,
-    val devicesLoaded: Boolean,
 ) : Parcelable {
 
     /**
