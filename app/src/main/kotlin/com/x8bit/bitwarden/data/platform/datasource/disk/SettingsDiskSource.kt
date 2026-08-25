@@ -153,6 +153,24 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether the vault policy banner has been dismissed.
+     */
+    fun getVaultPolicyBannerDismissedDate(userId: String): Instant?
+
+    /**
+     * Stores whether the vault policy banner has been dismissed.
+     */
+    fun storeVaultPolicyBannerDismissedDate(
+        userId: String,
+        dismissalRevisionDate: Instant?,
+    )
+
+    /**
+     * Emits updates that track [getVaultPolicyBannerDismissedDate] for the given [userId].
+     */
+    fun getVaultPolicyBannerDismissedDateFlow(userId: String): Flow<Instant?>
+
+    /**
      * Retrieves the stored value of whether the "Upgraded to Premium" action card has been
      * consumed (either dismissed via the close icon or actioned via the Learn more CTA).
      */

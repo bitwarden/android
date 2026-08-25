@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.network.model.OrganizationType
-import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SendAccessTypeJson
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPermissions
@@ -186,6 +186,26 @@ class SyncResponseJsonExtensionsTest {
         )
         val policy = createMockPolicyView(
             type = PolicyType.SEND_CONTROLS,
+            data = Json.encodeToString(policyInformation),
+        )
+
+        assertEquals(
+            policyInformation,
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `policyInformation converts the OrganizationUserNotification Json data to policy information`() {
+        val policyInformation = PolicyInformation.OrganizationUserNotification(
+            headerText = "headerText",
+            descriptionText = "descriptionText",
+            buttonText = "buttonText",
+            showAfterEveryLogin = true,
+        )
+        val policy = createMockPolicyView(
+            type = PolicyType.ORGANIZATION_USER_NOTIFICATION,
             data = Json.encodeToString(policyInformation),
         )
 

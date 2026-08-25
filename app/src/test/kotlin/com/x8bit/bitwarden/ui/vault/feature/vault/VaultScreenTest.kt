@@ -2990,6 +2990,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     restrictItemTypesPolicyOrgIds = emptyList(),
     isIntroducingArchiveActionCardDismissed = false,
     validTotpIds = persistentSetOf(),
+    policyBanner = null,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

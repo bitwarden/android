@@ -55,9 +55,9 @@ import com.bitwarden.ui.util.asText
 @Suppress("LongMethod")
 @Composable
 fun BitwardenActionCard(
-    cardTitle: String,
-    actionButton: BitwardenButtonData? = null,
+    cardTitle: String?,
     modifier: Modifier = Modifier,
+    actionButton: BitwardenButtonData? = null,
     onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
     secondaryButton: BitwardenButtonData? = null,
@@ -92,17 +92,24 @@ fun BitwardenActionCard(
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(
-                        text = cardTitle,
-                        style = BitwardenTheme.typography.titleMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onGloballyPositioned {
-                                titleBottomPx = it.positionInParent().y.toInt() + it.size.height
-                            },
-                    )
+                    cardTitle?.let {
+                        Text(
+                            text = it,
+                            style = BitwardenTheme.typography.titleMedium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onGloballyPositioned { coordinates ->
+                                    titleBottomPx = coordinates.positionInParent().y.toInt() +
+                                        coordinates.size.height
+                                },
+                        )
+                    }
                     cardSubtitle?.let {
-                        Spacer(modifier = Modifier.height(height = 4.dp))
+                        cardTitle?.let { _ ->
+                            // We only need this to create a gap between the title and subtitle.
+                            // So if the title is not present, we can skip the spacer.
+                            Spacer(modifier = Modifier.height(height = 4.dp))
+                        }
                         Text(
                             text = it,
                             style = BitwardenTheme.typography.bodyMedium,

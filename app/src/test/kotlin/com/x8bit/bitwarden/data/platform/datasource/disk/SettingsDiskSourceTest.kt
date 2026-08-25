@@ -146,6 +146,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isDismissed = true,
         )
+        settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+            userId = userId,
+            dismissalRevisionDate = Instant.parse("2023-10-27T12:00:00Z"),
+        )
         settingsDiskSource.storeUpgradedToPremiumCardConsumed(
             userId = userId,
             isConsumed = true,
@@ -221,6 +225,7 @@ class SettingsDiskSourceTest {
                 systemBioIntegrityState = systemBioIntegrityState,
             ),
         )
+        assertNull(settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId))
     }
 
     @Suppress("MaxLineLength")
@@ -947,6 +952,67 @@ class SettingsDiskSourceTest {
                         isDismissed = true,
                     )
                     assertEquals(true, awaitItem())
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getVaultPolicyBannerDismissedDate when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:vaultPolicyBannerDismissedDate"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        val instantLong = 1_698_408_000_000L
+        val instant = Instant.ofEpochMilli(instantLong)
+        assertNull(settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = mockUserId))
+        fakeSharedPreferences.edit { putLong(key, instantLong) }
+        assertEquals(
+            instant,
+            settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeVaultPolicyBannerDismissedDate should update SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:vaultPolicyBannerDismissedDate"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        val instantLong = 1_698_408_000_000L
+        val instant = Instant.ofEpochMilli(instantLong)
+        settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+            userId = mockUserId,
+            dismissalRevisionDate = instant,
+        )
+        assertEquals(instantLong, fakeSharedPreferences.getLong(key, 0L))
+
+        // A null value clears the stored key
+        settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+            userId = mockUserId,
+            dismissalRevisionDate = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(key))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getVaultPolicyBannerDismissedDateFlow should react to changes in storeVaultPolicyBannerDismissed`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            val instant = Instant.ofEpochMilli(1_698_408_000_000L)
+            settingsDiskSource
+                .getVaultPolicyBannerDismissedDateFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(
+                        settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = mockUserId),
+                    )
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+                        userId = mockUserId,
+                        dismissalRevisionDate = instant,
+                    )
+                    assertEquals(instant, awaitItem())
                 }
         }
 

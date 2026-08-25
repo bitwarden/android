@@ -46,6 +46,8 @@ import com.x8bit.bitwarden.data.platform.manager.model.RegisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
+import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
@@ -233,6 +235,13 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { register() } returns RegisterExportResult.Success
         coEvery { unregister() } returns UnregisterExportResult.Success
+    }
+    private val mutableUserNotificationPolicyDataFlow =
+        MutableStateFlow<UserNotificationPolicyData?>(null)
+    private val userNotificationPolicyManager: UserNotificationPolicyManager = mockk {
+        every { displayData } returns null
+        every { displayDataFlow } returns mutableUserNotificationPolicyDataFlow
+        every { dismissBanner() } just runs
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
@@ -588,6 +597,128 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
 
         assertNull(state.actionCard)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initial state should include a policy banner when the user notification policy manager has display data`() {
+        every { userNotificationPolicyManager.displayData } returns USER_NOTIFICATION_POLICY_DATA
+        mutableUserNotificationPolicyDataFlow.value = USER_NOTIFICATION_POLICY_DATA
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(policyBanner = POLICY_BANNER),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UserNotificationPolicyReceive should update the policy banner in the state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableUserNotificationPolicyDataFlow.value = USER_NOTIFICATION_POLICY_DATA
+            assertEquals(DEFAULT_STATE.copy(policyBanner = POLICY_BANNER), awaitItem())
+
+            mutableUserNotificationPolicyDataFlow.value = null
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserNotificationPolicyReceive should update the policy banner in the state when optional text is null`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                mutableUserNotificationPolicyDataFlow.value = USER_NOTIFICATION_POLICY_DATA.copy(
+                    headerText = null,
+                    buttonText = null,
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        policyBanner = POLICY_BANNER.copy(header = null, buttonText = null),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissActionCardClick with VaultPolicyBanner should call dismissBanner`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(VAULT_POLICY_BANNER_ACTION_CARD),
+        )
+
+        verify(exactly = 1) {
+            userNotificationPolicyManager.dismissBanner()
+        }
+        verify(exactly = 0) {
+            organizationEventManager.trackEvent(event = any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ActionCardClick with VaultPolicyBanner should track the banner action click and call dismissBanner`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(VAULT_POLICY_BANNER_ACTION_CARD),
+                )
+                expectNoEvents()
+            }
+
+            verify(exactly = 1) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.OrganizationUserNotificationBannerActionClicked(
+                        organizationId = "mockOrganizationId",
+                    ),
+                )
+                userNotificationPolicyManager.dismissBanner()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `actionCard should return VaultPolicyBanner when a policy banner is present and content is showing`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            policyBanner = POLICY_BANNER,
+            isUpgradedToPremiumCardEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertEquals(
+            VAULT_POLICY_BANNER_ACTION_CARD,
+            state.actionCard,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `actionCard should return VaultPolicyBanner when a policy banner is present and NoItems is showing`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            policyBanner = POLICY_BANNER,
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertEquals(
+            VAULT_POLICY_BANNER_ACTION_CARD,
+            state.actionCard,
+        )
     }
 
     @Test
@@ -4648,6 +4779,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            userNotificationPolicyManager = userNotificationPolicyManager,
             buildInfoManager = buildInfoManager,
             featureFlagManager = featureFlagManager,
         )
@@ -4666,6 +4798,29 @@ private val VAULT_FILTER_DATA = VaultFilterData(
         ORGANIZATION_VAULT_FILTER,
     ),
 )
+
+private val USER_NOTIFICATION_POLICY_DATA: UserNotificationPolicyData =
+    UserNotificationPolicyData(
+        organizationId = "mockOrganizationId",
+        headerText = "mockHeaderText",
+        descriptionText = "mockDescriptionText",
+        buttonText = "mockButtonText",
+    )
+
+private val POLICY_BANNER: VaultState.PolicyBanner = VaultState.PolicyBanner(
+    organizationId = "mockOrganizationId",
+    header = "mockHeaderText".asText(),
+    message = "mockDescriptionText".asText(),
+    buttonText = "mockButtonText".asText(),
+)
+
+private val VAULT_POLICY_BANNER_ACTION_CARD: VaultState.ActionCardState.VaultPolicyBanner =
+    VaultState.ActionCardState.VaultPolicyBanner(
+        organizationId = "mockOrganizationId",
+        title = "mockHeaderText".asText(),
+        message = "mockDescriptionText".asText(),
+        button = "mockButtonText".asText(),
+    )
 
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
@@ -4776,6 +4931,7 @@ private fun createMockVaultState(
         isIntroducingArchiveActionCardDismissed = false,
         premiumCard = PremiumCard.NONE,
         validTotpIds = validTotpIds.toImmutableSet(),
+        policyBanner = null,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE = VaultState.ViewState.Content(

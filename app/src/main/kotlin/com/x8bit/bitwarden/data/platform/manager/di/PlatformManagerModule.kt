@@ -81,6 +81,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManage
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -291,6 +293,20 @@ object PlatformManagerModule {
         authDiskSource = authDiskSource,
         authSdkSource = authSdkSource,
         policyManager = policyManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideUserNotificationPolicyManager(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        policyManager: PolicyManager,
+        dispatcherManager: DispatcherManager,
+    ): UserNotificationPolicyManager = UserNotificationPolicyManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        policyManager = policyManager,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
