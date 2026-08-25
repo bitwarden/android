@@ -5,7 +5,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 
 /**
  * Defines all available expiration month options for cards.
@@ -15,7 +14,7 @@ enum class VaultCardExpirationMonth(
     val number: String,
 ) {
     SELECT(
-        value = SELECT_TEXT,
+        value = BitwardenString.select.asText(),
         number = "0",
     ),
     JANUARY(

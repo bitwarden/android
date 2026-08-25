@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.util
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 
 /**
@@ -11,7 +10,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
  */
 val VaultCardBrand.longName: Text
     get() = when (this) {
-        VaultCardBrand.SELECT -> SELECT_TEXT
+        VaultCardBrand.SELECT -> BitwardenString.select.asText()
         VaultCardBrand.VISA -> "Visa".asText()
         VaultCardBrand.MASTERCARD -> "Mastercard".asText()
         VaultCardBrand.AMEX -> "American Express".asText()
@@ -29,7 +28,7 @@ val VaultCardBrand.longName: Text
  */
 val VaultCardBrand.shortName: Text
     get() = when (this) {
-        VaultCardBrand.SELECT -> SELECT_TEXT
+        VaultCardBrand.SELECT -> BitwardenString.select.asText()
         VaultCardBrand.VISA -> "Visa".asText()
         VaultCardBrand.MASTERCARD -> "Mastercard".asText()
         VaultCardBrand.AMEX -> "Amex".asText()

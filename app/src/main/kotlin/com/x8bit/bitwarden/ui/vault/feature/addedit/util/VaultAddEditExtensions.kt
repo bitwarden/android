@@ -1,16 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
-
-/**
- * Default, "select" Text to show on multi select buttons in the VaultAddEdit package.
- */
-val SELECT_TEXT: Text
-    get() = BitwardenString.select.asText()
 
 /**
  * Transforms a [VaultItemCipherType] into [VaultAddEditState.ViewState.Content.ItemType].
