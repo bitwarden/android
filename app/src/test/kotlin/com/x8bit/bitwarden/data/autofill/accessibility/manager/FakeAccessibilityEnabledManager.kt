@@ -11,11 +11,7 @@ class FakeAccessibilityEnabledManager : AccessibilityEnabledManager {
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
         get() = mutableIsAccessibilityEnabledStateFlow.asStateFlow()
 
-    override fun refreshAccessibilityEnabledFromSettings() {
-        mutableIsAccessibilityEnabledStateFlow.value = isAccessibilityEnabled
-    }
-
-    var isAccessibilityEnabled: Boolean
+    override var isAccessibilityServiceConnected: Boolean
         get() = mutableIsAccessibilityEnabledStateFlow.value
         set(value) {
             mutableIsAccessibilityEnabledStateFlow.value = value
