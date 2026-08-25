@@ -195,9 +195,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         val expected = DEFAULT_STATE.copy(
             viewState = PendingRequestsState.ViewState.Error,
         )
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Loading),
-        )
+        val viewModel = createViewModel()
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             value = AuthRequestsUpdatesResult.Error(error = Throwable()),
         )
@@ -205,21 +203,27 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `getPendingResults failure after a successful load should leave the state in place`() {
+    fun `getPendingResults failure after a successful load should show the error state`() {
         val viewModel = createViewModel(
             state = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Loading),
         )
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             value = AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
         )
-        val expected = DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Empty)
-        assertEquals(expected, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Empty),
+            viewModel.stateFlow.value,
+        )
 
+        // A failed update means the rendered list is stale, so the error state is shown.
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             value = AuthRequestsUpdatesResult.Error(error = Throwable()),
         )
 
-        assertEquals(expected, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE.copy(viewState = PendingRequestsState.ViewState.Error),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test

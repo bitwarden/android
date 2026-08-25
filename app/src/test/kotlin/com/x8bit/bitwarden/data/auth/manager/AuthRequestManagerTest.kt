@@ -1411,18 +1411,3 @@ private val PASSWORDLESS_REQUEST_DATA: PasswordlessRequestData = PasswordlessReq
     loginRequestId = REQUEST_ID,
     userId = USER_ID,
 )
-
-/**
- * An unanswered request created one minute before the [AuthRequestManagerTest] clock, making it
- * neither responded to nor expired.
- */
-private val PENDING_AUTH_REQUEST_RESPONSE: AuthRequestsResponseJson.AuthRequest =
-    AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
-        creationDate = Instant.parse("2023-10-27T11:59:00Z"),
-        requestApproved = false,
-    )
-
-private val PENDING_AUTH_REQUEST: AuthRequest = AUTH_REQUEST.copy(
-    creationDate = Instant.parse("2023-10-27T11:59:00Z"),
-    requestApproved = false,
-)
