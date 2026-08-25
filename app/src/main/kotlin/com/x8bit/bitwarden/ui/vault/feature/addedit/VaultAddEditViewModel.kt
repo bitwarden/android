@@ -1988,11 +1988,16 @@ class VaultAddEditViewModel @Inject constructor(
                 dialog = null,
             )
         }
+        val createdFolder = (action.result as? CreateFolderResult.Success)?.folderView
         updateCommonContent {
             it.copy(
-                selectedFolderId = (action.result as? CreateFolderResult.Success)?.folderView?.id,
+                selectedFolderId = createdFolder?.id,
             )
         }
+        if (createdFolder == null) return
+        sendEvent(
+            event = VaultAddEditEvent.ShowSnackbar(BitwardenString.folder_created.asText()),
+        )
     }
 
     private fun handleCreateCipherResultReceive(
