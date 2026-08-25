@@ -4773,6 +4773,33 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `AddNewFolder shows the folder created snackbar on success`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(createdFolderView)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                assertEquals(
+                    VaultAddEditEvent.ShowSnackbar(BitwardenString.folder_created.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `AddNewFolder does not show the folder created snackbar on error`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Error(error = Throwable("Fail"))
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                expectNoEvents()
+            }
+        }
+
+        @Test
         fun `State updates when available folders state is updated`() {
             mutableFolderStateFlow.update {
                 DataState.Loaded(
