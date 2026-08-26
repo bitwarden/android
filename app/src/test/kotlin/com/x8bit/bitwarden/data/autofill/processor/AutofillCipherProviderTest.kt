@@ -17,8 +17,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
-import com.x8bit.bitwarden.data.autofill.util.card
-import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.identityAutofillAddress
@@ -55,7 +53,6 @@ class AutofillCipherProviderTest {
         every { brand } returns "Visa"
     }
     private val cardCipherListView: CipherListView = mockk {
-        every { card } returns cardListView
         every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns CARD_CIPHER_ID
@@ -89,7 +86,6 @@ class AutofillCipherProviderTest {
         every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITHOUT_TOTP_CIPHER_ID
-        every { login } returns loginListViewWithoutTotp
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherListViewType.Login(v1 = loginListViewWithoutTotp)
@@ -102,7 +98,6 @@ class AutofillCipherProviderTest {
         every { archivedDate } returns null
         every { deletedDate } returns null
         every { id } returns LOGIN_WITH_TOTP_CIPHER_ID
-        every { login } returns loginListViewWithTotp
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherListViewType.Login(v1 = loginListViewWithTotp)
