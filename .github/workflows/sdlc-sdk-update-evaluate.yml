@@ -142,13 +142,14 @@ jobs:
             prerequisite — use it directly.
 
             If step 7 turns up anything to resolve, dispatch a single subagent on the
-            `bitwarden-software-engineer` agent to carry out the skill's Resolve steps (8-10) for
-            every finding in one pass — decide the fix, implement it, and commit on the current
-            branch (already checked out) using `Skill(bitwarden-delivery-tools:committing-changes)`
-            for the message. Hand the subagent all the findings (commit, symbol, call sites for
-            each) rather than having it redo the investigation, and rather than spawning one
-            subagent per finding. Do not push; the workflow pushes separately. Skip the subagent
-            entirely if step 7 finds nothing to resolve.
+            `bitwarden-software-engineer` agent to invoke `Skill(evaluating-sdk-internal-updates)`
+            itself and carry out its Resolve steps (8-10) for every finding in one pass — decide
+            the fix, implement it, and commit on the current branch (already checked out) using
+            `Skill(bitwarden-delivery-tools:committing-changes)` for the message. Hand the
+            subagent all the findings (commit, symbol, call sites for each) so it doesn't redo the
+            investigation, dispatching it once for every finding rather than once per finding. Do
+            not push; the workflow pushes separately. Have it report back the commit SHA and each
+            finding's disposition. Skip the subagent entirely if step 7 finds nothing to resolve.
 
             Once the subagent has reported back — or immediately, if there was nothing to resolve —
             update the sticky PR comment yourself with the step 7 report,
