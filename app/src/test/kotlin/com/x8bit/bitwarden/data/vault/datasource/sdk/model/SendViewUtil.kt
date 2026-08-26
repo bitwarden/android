@@ -42,6 +42,7 @@ fun createMockSendView(
         type = type,
         file = file.takeIf { type == SendType.FILE },
         text = text.takeIf { type == SendType.TEXT },
+        data = null,
         maxAccessCount = maxAccessCount,
         accessCount = accessCount,
         disabled = disabled,
