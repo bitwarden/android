@@ -157,7 +157,28 @@ val PolicyView.policyInformation: PolicyInformation?
                 JSON.decodeFromStringOrNull<PolicyInformation.SendControls>(it)
             }
 
-            else -> null
+            PolicyType.ORGANIZATION_USER_NOTIFICATION -> {
+                JSON.decodeFromStringOrNull<PolicyInformation.OrganizationUserNotification>(it)
+            }
+
+            PolicyType.TWO_FACTOR_AUTHENTICATION,
+            PolicyType.SINGLE_ORG,
+            PolicyType.REQUIRE_SSO,
+            PolicyType.ORGANIZATION_DATA_OWNERSHIP,
+            PolicyType.DISABLE_SEND,
+            PolicyType.RESET_PASSWORD,
+            PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
+            PolicyType.ACTIVATE_AUTOFILL,
+            PolicyType.AUTOMATIC_APP_LOG_IN,
+            PolicyType.FREE_FAMILIES_SPONSORSHIP,
+            PolicyType.REMOVE_UNLOCK_WITH_PIN,
+            PolicyType.RESTRICTED_ITEM_TYPES,
+            PolicyType.URI_MATCH_DEFAULTS,
+            PolicyType.AUTOTYPE_DEFAULT_SETTING,
+            PolicyType.AUTOMATIC_USER_CONFIRMATION,
+            PolicyType.BLOCK_CLAIMED_DOMAIN_ACCOUNT_CREATION,
+            PolicyType.FILL_ASSIST,
+                -> null
         }
     }
 

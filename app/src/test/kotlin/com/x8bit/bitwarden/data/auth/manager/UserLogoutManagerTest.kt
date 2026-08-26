@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -44,6 +45,10 @@ class UserLogoutManagerTest {
         every { storeVaultTimeoutInMinutes(any(), any()) } just runs
         every { storeVaultTimeoutAction(any(), any()) } just runs
         every { storeAppRegisteredForExport(any()) } just runs
+        every { getVaultPolicyBannerDismissedDate(userId = any()) } returns null
+        every {
+            storeVaultPolicyBannerDismissedDate(userId = any(), dismissalRevisionDate = any())
+        } just runs
     }
     private val pushDiskSource: PushDiskSource = mockk {
         coEvery { clearData(any()) } just runs
@@ -63,6 +68,9 @@ class UserLogoutManagerTest {
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
+    private val userNotificationPolicyManager: UserNotificationPolicyManager = mockk {
+        every { shouldClearOnSoftLogout(userId = any()) } returns true
+    }
 
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
@@ -76,6 +84,7 @@ class UserLogoutManagerTest {
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = FakeDispatcherManager(),
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            userNotificationPolicyManager = userNotificationPolicyManager,
         )
 
     @Suppress("MaxLineLength")
@@ -290,6 +299,125 @@ class UserLogoutManagerTest {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softLogout when shouldClearOnSoftLogout is true should not restore the vault policy banner dismissed date`() {
+        val userId = USER_ID_1
+        setupSoftLogoutStubs(userId = userId)
+        every {
+            userNotificationPolicyManager.shouldClearOnSoftLogout(userId = userId)
+        } returns true
+        every {
+            settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId)
+        } returns DISMISSAL_REVISION_DATE
+
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 0) {
+            settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+                userId = any(),
+                dismissalRevisionDate = any(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softLogout when shouldClearOnSoftLogout is false should restore the vault policy banner dismissed date`() {
+        val userId = USER_ID_1
+        setupSoftLogoutStubs(userId = userId)
+        every {
+            userNotificationPolicyManager.shouldClearOnSoftLogout(userId = userId)
+        } returns false
+        every {
+            settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId)
+        } returns DISMISSAL_REVISION_DATE
+
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 1) {
+            userNotificationPolicyManager.shouldClearOnSoftLogout(userId = userId)
+            settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+                userId = userId,
+                dismissalRevisionDate = DISMISSAL_REVISION_DATE,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softLogout when shouldClearOnSoftLogout is false and there is no dismissed date should restore a null vault policy banner dismissed date`() {
+        val userId = USER_ID_1
+        setupSoftLogoutStubs(userId = userId)
+        every {
+            userNotificationPolicyManager.shouldClearOnSoftLogout(userId = userId)
+        } returns false
+        every { settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId) } returns null
+
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 1) {
+            settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+                userId = userId,
+                dismissalRevisionDate = null,
+            )
+        }
+    }
+
+    @Test
+    fun `logout should not restore the vault policy banner dismissed date`() {
+        val userId = USER_ID_1
+        every { authDiskSource.userState } returns SINGLE_USER_STATE_1
+
+        userLogoutManager.logout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 0) {
+            userNotificationPolicyManager.shouldClearOnSoftLogout(userId = any())
+            settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = any())
+            settingsDiskSource.storeVaultPolicyBannerDismissedDate(
+                userId = any(),
+                dismissalRevisionDate = any(),
+            )
+        }
+    }
+
+    private fun setupSoftLogoutStubs(userId: String) {
+        every { settingsDiskSource.getVaultTimeoutInMinutes(userId = userId) } returns 360
+        every {
+            settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        } returns VaultTimeoutAction.LOGOUT
+        every { authDiskSource.getEncryptedPin(userId = userId) } returns "encryptedPin"
+        every {
+            authDiskSource.getPinProtectedUserKey(userId = userId)
+        } returns "pinProtectedUserKey"
+        every {
+            authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
+        } returns "pinProtectedUserKeyEnvelope"
+        every {
+            authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId)
+        } returns "pinProtectedUserKeyEnvelope"
+        every { authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = any()) } just runs
+        every {
+            authDiskSource.storePinProtectedUserKey(userId = userId, pinProtectedUserKey = any())
+        } just runs
+        every {
+            authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = any(),
+            )
+        } just runs
+        every {
+            authDiskSource.storePersistentPinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = any(),
+            )
+        } just runs
+    }
+
     private fun assertDataCleared(userId: String) {
         verify { vaultSdkSource.clearCrypto(userId = userId) }
         verify { authDiskSource.clearData(userId = userId) }
@@ -303,6 +431,7 @@ class UserLogoutManagerTest {
     }
 }
 
+private val DISMISSAL_REVISION_DATE: Instant = Instant.parse("2024-09-13T01:00:00.00Z")
 private const val EMAIL_2 = "test2@bitwarden.com"
 private const val ACCESS_TOKEN = "accessToken"
 private const val ACCESS_TOKEN_2 = "accessToken2"
