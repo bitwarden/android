@@ -133,6 +133,7 @@ jobs:
           plugin_marketplaces: "https://github.com/bitwarden/ai-plugins.git"
           plugins: |
             bitwarden-delivery-tools@bitwarden-marketplace
+            bitwarden-software-engineer@bitwarden-marketplace
           prompt: |
             PR #${{ github.event.pull_request.number }} in ${{ github.repository }} bumps the
             Bitwarden SDK. Evaluate it using the `evaluating-sdk-internal-updates` skill and
@@ -152,6 +153,7 @@ jobs:
             that nothing needs fixing — the comment is the audit trail that the check ran.
           claude_args: |
             --model opus
+            --agent bitwarden-software-engineer
             --allowedTools "Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
       - name: Push any resolved fix
