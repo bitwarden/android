@@ -199,7 +199,9 @@ class ManageDevicesScreenTest : BitwardenComposeTest() {
     @Test
     fun `bottom sheet should not show when permission already granted`() {
         permissionsManager.checkPermissionResult = true
-        mutableStateFlow.value = DEFAULT_STATE
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ManageDevicesState.ViewState.Content(items = emptyList()),
+        )
         composeTestRule.onNodeWithText("Skip for now").assertDoesNotExist()
     }
 
