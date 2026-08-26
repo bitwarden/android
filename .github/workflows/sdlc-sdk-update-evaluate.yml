@@ -133,26 +133,35 @@ jobs:
           plugin_marketplaces: "https://github.com/bitwarden/ai-plugins.git"
           plugins: |
             bitwarden-delivery-tools@bitwarden-marketplace
+            bitwarden-software-engineer@bitwarden-marketplace
           prompt: |
             PR #${{ github.event.pull_request.number }} in ${{ github.repository }} bumps the
-            Bitwarden SDK. Evaluate it using the `evaluating-sdk-internal-updates` skill and
-            resolve anything within scope that needs resolving, per the skill's own Resolve
-            steps. `bitwarden/sdk-internal` is already cloned as a sibling directory at
-            `${{ github.workspace }}/../sdk-internal`, satisfying step 1's prerequisite — use it
-            directly. Commit any fix on the current branch (already checked out) using
-            `Skill(bitwarden-delivery-tools:committing-changes)` for the message — do not push;
-            the workflow pushes separately.
+            Bitwarden SDK. Evaluate it yourself using the `evaluating-sdk-internal-updates`
+            skill's Identify steps (1-7). `bitwarden/sdk-internal` is already cloned as a sibling
+            directory at `${{ github.workspace }}/../sdk-internal`, satisfying step 1's
+            prerequisite — use it directly.
 
-            When done, update the sticky PR comment with the step 7 report, structured as:
-            "## SDK bump evaluated" (old → new version, commit count), "## Compile-time breaks"
-            (found-and-fixed, or "none found"), "## Runtime considerations" (any behavioral notes
-            worth flagging, or omit the section if there are none), "## Everything else in range
-            — confirmed safe" (brief, one line per commit or group), and "## Commit" (the SHA, or
-            "no commit — nothing needed fixing"). Always post this, even when the conclusion is
+            If step 7 turns up anything to resolve, dispatch a single subagent on the
+            `bitwarden-software-engineer` agent to invoke `Skill(evaluating-sdk-internal-updates)`
+            itself and carry out its Resolve steps (8-10) for every finding in one pass — decide
+            the fix, implement it, and commit on the current branch (already checked out) using
+            `Skill(bitwarden-delivery-tools:committing-changes)` for the message. Hand the
+            subagent all the findings (commit, symbol, call sites for each) so it doesn't redo the
+            investigation, dispatching it once for every finding rather than once per finding. Do
+            not push; the workflow pushes separately. Have it report back the commit SHA and each
+            finding's disposition. Skip the subagent entirely if step 7 finds nothing to resolve.
+
+            Once the subagent has reported back — or immediately, if there was nothing to resolve —
+            update the sticky PR comment yourself with the step 7 report,
+            structured as: "## SDK bump evaluated" (old → new version, commit count), "## Compile-time
+            breaks" (found-and-fixed, or "none found"), "## Runtime considerations" (any behavioral
+            notes worth flagging, or omit the section if there are none), "## Everything else in
+            range — confirmed safe" (brief, one line per commit or group), and "## Commit" (the SHA,
+            or "no commit — nothing needed fixing"). Always post this, even when the conclusion is
             that nothing needs fixing — the comment is the audit trail that the check ran.
           claude_args: |
             --model opus
-            --allowedTools "Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
+            --allowedTools "Agent,Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
       - name: Push any resolved fix
         if: steps.gate.outputs.skip == 'false'
