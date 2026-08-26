@@ -3,6 +3,7 @@ package com.bitwarden.network.retrofit
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
+import com.bitwarden.network.interceptor.CustomHeadersInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.model.NetworkResult
@@ -54,6 +55,9 @@ class RetrofitsTest {
     private val cookieInterceptor = mockk<CookieInterceptor> {
         mockIntercept { isCookieInterceptorCalled = true }
     }
+    private val customHeadersInterceptor = mockk<CustomHeadersInterceptor> {
+        mockIntercept { isCustomHeadersInterceptorCalled = true }
+    }
     private val permissionInterceptor = mockk<PermissionInterceptor> {
         mockIntercept { isPermissionInterceptorCalled = true }
     }
@@ -72,6 +76,7 @@ class RetrofitsTest {
         authTokenManager = authTokenManager,
         baseUrlInterceptors = baseUrlInterceptors,
         cookieInterceptor = cookieInterceptor,
+        customHeadersInterceptor = customHeadersInterceptor,
         permissionInterceptor = permissionInterceptor,
         headersInterceptor = headersInterceptors,
         certificateProvider = certificateProvider,
@@ -81,6 +86,7 @@ class RetrofitsTest {
     private var isAuthInterceptorCalled = false
     private var isApiInterceptorCalled = false
     private var isCookieInterceptorCalled = false
+    private var isCustomHeadersInterceptorCalled = false
     private var isPermissionInterceptorCalled = false
     private var isHeadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
@@ -186,6 +192,7 @@ class RetrofitsTest {
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isCustomHeadersInterceptorCalled)
         assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
@@ -206,6 +213,7 @@ class RetrofitsTest {
         assertTrue(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isCustomHeadersInterceptorCalled)
         assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
@@ -226,6 +234,7 @@ class RetrofitsTest {
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isCustomHeadersInterceptorCalled)
         assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
@@ -246,6 +255,7 @@ class RetrofitsTest {
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
         assertTrue(isCookieInterceptorCalled)
+        assertTrue(isCustomHeadersInterceptorCalled)
         assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
@@ -266,6 +276,7 @@ class RetrofitsTest {
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
         assertFalse(isCookieInterceptorCalled)
+        assertTrue(isCustomHeadersInterceptorCalled)
         assertTrue(isPermissionInterceptorCalled)
         assertTrue(isHeadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
@@ -288,6 +299,7 @@ class RetrofitsTest {
             assertTrue(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
             assertTrue(isCookieInterceptorCalled)
+            assertTrue(isCustomHeadersInterceptorCalled)
             assertTrue(isPermissionInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
@@ -309,6 +321,7 @@ class RetrofitsTest {
             assertFalse(isAuthInterceptorCalled)
             assertFalse(isApiInterceptorCalled)
             assertTrue(isCookieInterceptorCalled)
+            assertTrue(isCustomHeadersInterceptorCalled)
             assertTrue(isPermissionInterceptorCalled)
             assertTrue(isHeadersInterceptorCalled)
             assertFalse(isIdentityInterceptorCalled)
@@ -329,6 +342,7 @@ class RetrofitsTest {
                 authTokenManager = authTokenManager,
                 baseUrlInterceptors = baseUrlInterceptors,
                 cookieInterceptor = cookieInterceptor,
+                customHeadersInterceptor = customHeadersInterceptor,
                 headersInterceptor = headersInterceptors,
                 certificateProvider = certificateProvider,
                 permissionInterceptor = permissionInterceptor,

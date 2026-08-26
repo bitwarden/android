@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -35,6 +36,9 @@ class UserLogoutManagerTest {
     private val authDiskSource: AuthDiskSource = mockk {
         every { userState = any() } just runs
         every { clearData(any()) } just runs
+    }
+    private val customHeadersManager: CustomHeadersManager = mockk {
+        every { removeCustomHeadersForUser(any()) } just runs
     }
     private val generatorDiskSource: GeneratorDiskSource = mockk {
         every { clearData(any()) } just runs
@@ -67,6 +71,7 @@ class UserLogoutManagerTest {
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
             authDiskSource = authDiskSource,
+            customHeadersManager = customHeadersManager,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
             pushDiskSource = pushDiskSource,
@@ -91,6 +96,28 @@ class UserLogoutManagerTest {
             credentialExchangeRegistryManager.unregister()
         }
         assertDataCleared(userId = userId)
+    }
+
+    @Test
+    fun `logout should remove the custom headers associated with the given user`() {
+        every { authDiskSource.userState } returns SINGLE_USER_STATE_1
+
+        userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
+
+        verify(exactly = 1) {
+            customHeadersManager.removeCustomHeadersForUser(userId = USER_ID_1)
+        }
+    }
+
+    @Test
+    fun `logout with no user state should do nothing`() {
+        every { authDiskSource.userState } returns null
+
+        userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
+
+        verify(exactly = 0) {
+            customHeadersManager.removeCustomHeadersForUser(userId = any())
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -185,6 +212,9 @@ class UserLogoutManagerTest {
 
         assertDataCleared(userId = userId)
 
+        verify(exactly = 0) {
+            customHeadersManager.removeCustomHeadersForUser(userId = any())
+        }
         verify(exactly = 1) {
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,

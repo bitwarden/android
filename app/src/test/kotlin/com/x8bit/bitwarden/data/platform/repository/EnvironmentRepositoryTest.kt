@@ -10,10 +10,14 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FakeEnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,10 +32,14 @@ class EnvironmentRepositoryTest {
 
     private val fakeEnvironmentDiskSource = FakeEnvironmentDiskSource()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val customHeadersManager: CustomHeadersManager = mockk {
+        every { removeCustomHeaders(id = any()) } just runs
+    }
 
     private val repository: EnvironmentRepository = EnvironmentRepositoryImpl(
         environmentDiskSource = fakeEnvironmentDiskSource,
         authDiskSource = fakeAuthDiskSource,
+        customHeadersManager = customHeadersManager,
         dispatcherManager = dispatcherManager,
     )
 
@@ -146,6 +154,48 @@ class EnvironmentRepositoryTest {
             repository.environment = environment
             assertEquals(environment, awaitItem())
         }
+    }
+
+    @Test
+    fun `setting environment should remove custom headers no longer referenced by the new value`() {
+        fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = EnvironmentUrlDataJson(
+            base = "https://vault.example.com",
+            customHeadersId = "headersId",
+        )
+
+        repository.environment = Environment.Prod.Us
+
+        assertEquals(
+            EnvironmentUrlDataJson.DEFAULT_US,
+            fakeEnvironmentDiskSource.preAuthEnvironmentUrlData,
+        )
+        verify(exactly = 1) { customHeadersManager.removeCustomHeaders(id = "headersId") }
+    }
+
+    @Test
+    fun `setting environment should not remove custom headers still referenced by the new value`() {
+        val environmentUrlData = EnvironmentUrlDataJson(
+            base = "https://vault.example.com",
+            customHeadersId = "headersId",
+        )
+        fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = environmentUrlData
+
+        repository.environment = Environment.SelfHosted(
+            environmentUrlData = environmentUrlData.copy(webVault = "https://web.example.com"),
+        )
+
+        verify(exactly = 0) { customHeadersManager.removeCustomHeaders(id = any()) }
+    }
+
+    @Test
+    fun `setting environment should not remove custom headers when none were referenced`() {
+        fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = EnvironmentUrlDataJson(
+            base = "https://vault.example.com",
+        )
+
+        repository.environment = Environment.Prod.Us
+
+        verify(exactly = 0) { customHeadersManager.removeCustomHeaders(id = any()) }
     }
 
     @Test

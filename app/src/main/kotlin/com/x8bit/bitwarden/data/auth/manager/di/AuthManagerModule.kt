@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -135,6 +136,7 @@ object AuthManagerModule {
     @Singleton
     fun provideUserLogoutManager(
         authDiskSource: AuthDiskSource,
+        customHeadersManager: CustomHeadersManager,
         generatorDiskSource: GeneratorDiskSource,
         passwordHistoryDiskSource: PasswordHistoryDiskSource,
         pushDiskSource: PushDiskSource,
@@ -147,6 +149,7 @@ object AuthManagerModule {
     ): UserLogoutManager =
         UserLogoutManagerImpl(
             authDiskSource = authDiskSource,
+            customHeadersManager = customHeadersManager,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
             pushDiskSource = pushDiskSource,

@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepositoryImpl
@@ -54,11 +55,13 @@ object PlatformRepositoryModule {
     fun provideEnvironmentRepository(
         environmentDiskSource: EnvironmentDiskSource,
         authDiskSource: AuthDiskSource,
+        customHeadersManager: CustomHeadersManager,
         dispatcherManager: DispatcherManager,
     ): EnvironmentRepository =
         EnvironmentRepositoryImpl(
             environmentDiskSource = environmentDiskSource,
             authDiskSource = authDiskSource,
+            customHeadersManager = customHeadersManager,
             dispatcherManager = dispatcherManager,
         )
 

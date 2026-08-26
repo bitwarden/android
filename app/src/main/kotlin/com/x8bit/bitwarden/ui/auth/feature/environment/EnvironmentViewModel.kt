@@ -21,6 +21,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
@@ -33,44 +34,66 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
+private const val HEADER_NAME_ALLOWED_SPECIAL_CHARS = "!#$%&'*+-.^_`|~"
+
 /**
  * View model for the self-hosted/custom environment screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
     private val certificateManager: CertificateManager,
+    private val customHeadersManager: CustomHeadersManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val savedStateHandle: SavedStateHandle,
     buildInfoManager: BuildInfoManager,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val environmentUrlData = when (val environment = environmentRepository.environment) {
-            is Environment.Prod -> EnvironmentUrlDataJson(base = "")
-            is Environment.SelfHosted -> environment.environmentUrlData
-        }
-        val keyUri = environmentUrlData.keyUri?.toUri()
-        val keyAlias = keyUri?.path?.trim('/').orEmpty()
-        val keyHost = MutualTlsKeyHost.entries.find { it.name == keyUri?.authority }
-        EnvironmentState(
-            serverUrl = environmentUrlData.base,
-            webVaultServerUrl = environmentUrlData.webVault.orEmpty(),
-            apiServerUrl = environmentUrlData.api.orEmpty(),
-            identityServerUrl = environmentUrlData.identity.orEmpty(),
-            iconsServerUrl = environmentUrlData.icon.orEmpty(),
-            keyAlias = keyAlias,
-            keyHost = keyHost,
-            dialog = null,
-            isRelease = buildInfoManager.isReleaseBuild,
-        )
-    },
+    initialState = savedStateHandle
+        .get<EnvironmentState>(KEY_STATE)
+        ?.withRestoredCustomHeaderValues(customHeadersManager = customHeadersManager)
+        ?: run {
+            val environmentUrlData = when (val environment = environmentRepository.environment) {
+                is Environment.Prod -> EnvironmentUrlDataJson(base = "")
+                is Environment.SelfHosted -> environment.environmentUrlData
+            }
+            val keyUri = environmentUrlData.keyUri?.toUri()
+            val keyAlias = keyUri?.path?.trim('/').orEmpty()
+            val keyHost = MutualTlsKeyHost.entries.find { it.name == keyUri?.authority }
+            val customHeadersId = environmentUrlData.customHeadersId
+            val customHeaders = customHeadersId
+                ?.let { customHeadersManager.getStoredCustomHeaders(id = it) }
+                .orEmpty()
+                .toSortedMap()
+                .map { (name, value) ->
+                    EnvironmentState.CustomHeaderField(
+                        id = UUID.randomUUID().toString(),
+                        name = name,
+                        value = value,
+                    )
+                }
+            EnvironmentState(
+                serverUrl = environmentUrlData.base,
+                webVaultServerUrl = environmentUrlData.webVault.orEmpty(),
+                apiServerUrl = environmentUrlData.api.orEmpty(),
+                identityServerUrl = environmentUrlData.identity.orEmpty(),
+                iconsServerUrl = environmentUrlData.icon.orEmpty(),
+                keyAlias = keyAlias,
+                customHeaders = customHeaders,
+                customHeadersId = customHeadersId,
+                keyHost = keyHost,
+                dialog = null,
+                isRelease = buildInfoManager.isReleaseBuild,
+            )
+        },
 ) {
 
     init {
@@ -88,6 +111,14 @@ class EnvironmentViewModel @Inject constructor(
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
         is EnvironmentAction.IdentityServerUrlChange -> handleIdentityServerUrlChangeAction(action)
         is EnvironmentAction.IconsServerUrlChange -> handleIconsServerUrlChangeAction(action)
+        is EnvironmentAction.AddHeaderClick -> handleAddHeaderClickAction()
+        is EnvironmentAction.HeaderNameChange -> handleHeaderNameChangeAction(action)
+        is EnvironmentAction.HeaderValueChange -> handleHeaderValueChangeAction(action)
+        is EnvironmentAction.HeaderValueVisibilityChange -> {
+            handleHeaderValueVisibilityChangeAction(action)
+        }
+
+        is EnvironmentAction.RemoveHeaderClick -> handleRemoveHeaderClickAction(action)
         is EnvironmentAction.ImportCertificateClick -> handleImportCertificateClick()
         is EnvironmentAction.ImportCertificateFilePickerResultReceive -> {
             handleCertificateFilePickerResultReceive(action)
@@ -146,12 +177,20 @@ class EnvironmentViewModel @Inject constructor(
             return
         }
 
+        if (!state.customHeadersAreAllValid) {
+            showErrorDialog(
+                message = BitwardenString.one_or_more_custom_headers_are_invalid.asText(),
+            )
+            return
+        }
+
         // Ensure all non-null/non-empty values have "http(s)://" prefixed.
         val updatedServerUrl = state.serverUrl.prefixHttpsIfNecessaryOrNull() ?: ""
         val updatedWebVaultServerUrl = state.webVaultServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedApiServerUrl = state.apiServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIdentityServerUrl = state.identityServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIconsServerUrl = state.iconsServerUrl.prefixHttpsIfNecessaryOrNull()
+        val updatedCustomHeadersId = saveCustomHeaders()
         environmentRepository.environment = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson(
                 base = updatedServerUrl,
@@ -160,8 +199,11 @@ class EnvironmentViewModel @Inject constructor(
                 icon = updatedIconsServerUrl,
                 webVault = updatedWebVaultServerUrl,
                 keyUri = state.keyUri,
+                customHeadersId = updatedCustomHeadersId,
             ),
         )
+
+        mutableStateFlow.update { it.copy(customHeadersId = updatedCustomHeadersId) }
 
         snackbarRelayManager.sendSnackbarData(
             data = BitwardenSnackbarData(message = BitwardenString.environment_saved.asText()),
@@ -250,6 +292,74 @@ class EnvironmentViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(iconsServerUrl = action.iconsServerUrl)
+        }
+    }
+
+    private fun handleAddHeaderClickAction() {
+        mutableStateFlow.update {
+            it.copy(
+                customHeaders = it.customHeaders +
+                    EnvironmentState.CustomHeaderField(id = UUID.randomUUID().toString()),
+            )
+        }
+    }
+
+    private fun handleHeaderNameChangeAction(
+        action: EnvironmentAction.HeaderNameChange,
+    ) {
+        updateHeaderField(id = action.id) { it.copy(name = action.name) }
+    }
+
+    private fun handleHeaderValueChangeAction(
+        action: EnvironmentAction.HeaderValueChange,
+    ) {
+        updateHeaderField(id = action.id) { it.copy(value = action.value) }
+    }
+
+    private fun handleHeaderValueVisibilityChangeAction(
+        action: EnvironmentAction.HeaderValueVisibilityChange,
+    ) {
+        updateHeaderField(id = action.id) { it.copy(isValueVisible = action.isVisible) }
+    }
+
+    private fun handleRemoveHeaderClickAction(
+        action: EnvironmentAction.RemoveHeaderClick,
+    ) {
+        mutableStateFlow.update { state ->
+            state.copy(customHeaders = state.customHeaders.filterNot { it.id == action.id })
+        }
+    }
+
+    private fun updateHeaderField(
+        id: String,
+        transform: (EnvironmentState.CustomHeaderField) -> EnvironmentState.CustomHeaderField,
+    ) {
+        mutableStateFlow.update { state ->
+            state.copy(
+                customHeaders = state.customHeaders.map {
+                    if (it.id == id) transform(it) else it
+                },
+            )
+        }
+    }
+
+    /**
+     * Persists the edited custom headers and returns the identifier to store in the environment
+     * URLs, reusing the existing identifier when the headers are unchanged.
+     */
+    private fun saveCustomHeaders(): String? {
+        val headers = state.customHeadersMap
+        val previousId = state.customHeadersId
+
+        if (headers.isEmpty()) return null
+
+        return if (
+            previousId != null &&
+            customHeadersManager.getStoredCustomHeaders(id = previousId) == headers
+        ) {
+            previousId
+        } else {
+            customHeadersManager.saveCustomHeaders(headers = headers)
         }
     }
 
@@ -448,6 +558,8 @@ data class EnvironmentState(
     val identityServerUrl: String,
     val iconsServerUrl: String,
     val keyAlias: String,
+    val customHeaders: List<CustomHeaderField>,
+    val customHeadersId: String?,
     val dialog: DialogState?,
     // internal
     private val keyHost: MutualTlsKeyHost?,
@@ -466,6 +578,51 @@ data class EnvironmentState(
     val keyUri: String?
         get() = "cert://$keyHost/$keyAlias"
             .takeUnless { keyHost == null || keyAlias.isEmpty() }
+
+    /**
+     * The custom header fields as a map of trimmed, non-empty name/value pairs.
+     */
+    val customHeadersMap: Map<String, String>
+        get() = customHeaders
+            .mapNotNull { field ->
+                val name = field.name.trim()
+                val value = field.value.trim()
+                (name to value).takeUnless { name.isEmpty() || value.isEmpty() }
+            }
+            .toMap()
+
+    /**
+     * Whether the custom header fields that would be saved all have valid names and values and
+     * no duplicate names.
+     */
+    val customHeadersAreAllValid: Boolean
+        get() {
+            val fields = customHeaders
+                .map { it.name.trim() to it.value.trim() }
+                .filterNot { (name, value) -> name.isEmpty() && value.isEmpty() }
+            return fields.all { (name, value) ->
+                name.isValidHeaderName && value.isValidHeaderValue
+            } &&
+                fields.distinctBy { (name, _) -> name }.size == fields.size
+        }
+
+    /**
+     * A single editable custom header name/value pair.
+     *
+     * @property id A unique identifier for the field, used to target edits and removals.
+     * @property name The header name.
+     * @property value The header value. Not persisted in the saved state, since it may contain
+     * a credential; stored values are restored from encrypted storage instead.
+     * @property isValueVisible Whether the header value, which may contain a credential, is
+     * shown in plain text.
+     */
+    @Parcelize
+    data class CustomHeaderField(
+        val id: String,
+        val name: String = "",
+        @IgnoredOnParcel val value: String = "",
+        val isValueVisible: Boolean = false,
+    ) : Parcelable
 
     /**
      * Models the dialog states of the environment screen.
@@ -636,6 +793,42 @@ sealed class EnvironmentAction {
     ) : EnvironmentAction()
 
     /**
+     * User clicked the add custom header button.
+     */
+    data object AddHeaderClick : EnvironmentAction()
+
+    /**
+     * Indicates that the name of a custom header field has changed.
+     */
+    data class HeaderNameChange(
+        val id: String,
+        val name: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the value of a custom header field has changed.
+     */
+    data class HeaderValueChange(
+        val id: String,
+        val value: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the visibility of a custom header field's value has changed.
+     */
+    data class HeaderValueVisibilityChange(
+        val id: String,
+        val isVisible: Boolean,
+    ) : EnvironmentAction()
+
+    /**
+     * User clicked the remove button of a custom header field.
+     */
+    data class RemoveHeaderClick(
+        val id: String,
+    ) : EnvironmentAction()
+
+    /**
      * Indicates that the certificate file selection result was received.
      */
     data class ImportCertificateFilePickerResultReceive(
@@ -680,3 +873,39 @@ sealed class EnvironmentAction {
         ) : Internal()
     }
 }
+
+/**
+ * Restores the custom header values from encrypted storage, since they may contain credentials
+ * and are excluded from the saved state.
+ */
+private fun EnvironmentState.withRestoredCustomHeaderValues(
+    customHeadersManager: CustomHeadersManager,
+): EnvironmentState {
+    if (customHeaders.none { it.value.isEmpty() }) return this
+    val storedHeaders = customHeadersId
+        ?.let { customHeadersManager.getStoredCustomHeaders(id = it) }
+        .orEmpty()
+    return copy(
+        customHeaders = customHeaders.map { field ->
+            field.takeUnless { it.value.isEmpty() }
+                ?: field.copy(value = storedHeaders[field.name].orEmpty())
+        },
+    )
+}
+
+/**
+ * Whether this is a valid HTTP header name, meaning a non-empty RFC 7230 token.
+ */
+private val String.isValidHeaderName: Boolean
+    get() = isNotEmpty() &&
+        all { it.isAsciiLetterOrDigit() || it in HEADER_NAME_ALLOWED_SPECIAL_CHARS }
+
+/**
+ * Whether this is a valid HTTP header value, meaning non-empty and containing only printable
+ * ASCII characters or tabs, which is what OkHttp accepts.
+ */
+private val String.isValidHeaderValue: Boolean
+    get() = isNotEmpty() && all { it == '\t' || it.code in ' '.code..'~'.code }
+
+private fun Char.isAsciiLetterOrDigit(): Boolean =
+    this in 'a'..'z' || this in 'A'..'Z' || this in '0'..'9'
