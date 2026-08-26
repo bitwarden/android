@@ -99,6 +99,30 @@ class SaveInfoBuilderTest {
         assertNull(actual)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should return null for an identity partition since it never supports save requests`() {
+        // Setup
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        val autofillPartitionIdentity = AutofillPartition.Identity(
+            views = listOf(
+                AutofillView.Identity.Email(
+                    data = autofillViewDataValid,
+                ),
+            ),
+        )
+
+        // Test
+        val actual = saveInfoBuilder.build(
+            autofillPartition = autofillPartitionIdentity,
+            fillRequest = fillRequest,
+            packageName = PACKAGE_NAME,
+        )
+
+        // Verify
+        assertNull(actual)
+    }
+
     @Test
     fun `build should return null if autofill enabled and can't perform autofill`() {
         // Setup

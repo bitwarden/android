@@ -10,6 +10,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
+import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -20,6 +21,8 @@ import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
+import com.x8bit.bitwarden.data.platform.util.identityAutofillAddress
+import com.x8bit.bitwarden.data.platform.util.identityAutofillName
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -131,6 +134,42 @@ class AutofillCipherProviderTest {
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.LOGIN
+    }
+    private val identityCipherListView: CipherListView = mockk {
+        every { archivedDate } returns null
+        every { deletedDate } returns null
+        every { id } returns IDENTITY_CIPHER_ID
+        every { name } returns IDENTITY_NAME
+        every { reprompt } returns CipherRepromptType.NONE
+        every { type } returns CipherListViewType.Identity
+    }
+    private val identityView: IdentityView = mockk {
+        every { title } returns IDENTITY_TITLE
+        every { firstName } returns IDENTITY_FIRST_NAME
+        every { middleName } returns IDENTITY_MIDDLE_NAME
+        every { lastName } returns IDENTITY_LAST_NAME
+        every { address1 } returns IDENTITY_ADDRESS_1
+        every { address2 } returns IDENTITY_ADDRESS_2
+        every { address3 } returns IDENTITY_ADDRESS_3
+        every { city } returns IDENTITY_CITY
+        every { state } returns IDENTITY_STATE
+        every { postalCode } returns IDENTITY_POSTAL_CODE
+        every { country } returns IDENTITY_COUNTRY
+        every { company } returns IDENTITY_COMPANY
+        every { email } returns IDENTITY_EMAIL
+        every { phone } returns IDENTITY_PHONE
+        every { ssn } returns IDENTITY_SSN
+        every { passportNumber } returns IDENTITY_PASSPORT_NUMBER
+        every { licenseNumber } returns IDENTITY_LICENSE_NUMBER
+    }
+    private val identityCipherView: CipherView = mockk {
+        every { identity } returns identityView
+        every { archivedDate } returns null
+        every { deletedDate } returns null
+        every { id } returns IDENTITY_CIPHER_ID
+        every { name } returns IDENTITY_NAME
+        every { reprompt } returns CipherRepromptType.NONE
+        every { type } returns CipherType.IDENTITY
     }
     private val authRepository: AuthRepository = mockk {
         every { activeUserId } returns ACTIVE_USER_ID
@@ -538,6 +577,97 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `getIdentityAutofillCiphers when unlocked should return empty list when retrieving ciphers times out`() =
+        runTest {
+            coEvery { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns true
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loading
+
+            // Test
+            val actual = async {
+                autofillCipherProvider.getIdentityAutofillCiphers()
+            }
+
+            testScheduler.runCurrent()
+            assertFalse(actual.isCompleted)
+            testScheduler.advanceTimeBy(delayTimeMillis = 2_000L)
+            testScheduler.runCurrent()
+
+            // Verify
+            assertTrue(actual.isCompleted)
+            assertEquals(emptyList<AutofillCipher.Identity>(), actual.await())
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getIdentityAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, and non-reprompt identity ciphers`() =
+        runTest {
+            val archivedIdentityCipherView: CipherListView = mockk {
+                every { archivedDate } returns mockk()
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Identity
+            }
+            val deletedIdentityCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
+                every { deletedDate } returns mockk()
+                every { type } returns CipherListViewType.Identity
+            }
+            val repromptIdentityCipherView: CipherListView = mockk {
+                every { archivedDate } returns null
+                every { deletedDate } returns null
+                every { reprompt } returns CipherRepromptType.PASSWORD
+                every { type } returns CipherListViewType.Identity
+            }
+            val decryptCipherListViewsResult = DecryptCipherListResult(
+                successes = listOf(
+                    identityCipherListView,
+                    archivedIdentityCipherView,
+                    deletedIdentityCipherView,
+                    repromptIdentityCipherView,
+                    loginCipherListViewWithTotp,
+                    loginCipherListViewWithoutTotp,
+                ),
+                failures = emptyList(),
+            )
+
+            coEvery {
+                vaultRepository.getCipher(IDENTITY_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = identityCipherView,
+            )
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = decryptCipherListViewsResult,
+            )
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+            every { identityCipherView.subtitle } returns IDENTITY_SUBTITLE
+            every { identityView.identityAutofillName } returns IDENTITY_FULL_NAME
+            every { identityView.identityAutofillAddress } returns IDENTITY_FULL_ADDRESS
+            val expected = listOf(IDENTITY_AUTOFILL_CIPHER)
+
+            // Test & Verify
+            val actual = autofillCipherProvider.getIdentityAutofillCiphers()
+
+            coVerify(exactly = 1) { vaultRepository.getCipher(IDENTITY_CIPHER_ID) }
+            assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `getIdentityAutofillCiphers when locked should return an empty list`() = runTest {
+        mutableVaultStateFlow.value = emptyList()
+
+        // Test & Verify
+        val actual = autofillCipherProvider.getIdentityAutofillCiphers()
+
+        assertEquals(emptyList<AutofillCipher.Identity>(), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `getLoginAutofillCiphers when decryption result is CipherNotFound should log the error and omit cipher from results`() =
         runTest {
             mockkObject(Timber.Forest)
@@ -643,4 +773,50 @@ private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
     website = URI,
+)
+private const val IDENTITY_CIPHER_ID = "IDENTITY_CIPHER_ID"
+private const val IDENTITY_NAME = "John's Identity"
+private const val IDENTITY_TITLE = "IDENTITY_TITLE"
+private const val IDENTITY_FIRST_NAME = "IDENTITY_FIRST_NAME"
+private const val IDENTITY_MIDDLE_NAME = "IDENTITY_MIDDLE_NAME"
+private const val IDENTITY_LAST_NAME = "IDENTITY_LAST_NAME"
+private const val IDENTITY_ADDRESS_1 = "IDENTITY_ADDRESS_1"
+private const val IDENTITY_ADDRESS_2 = "IDENTITY_ADDRESS_2"
+private const val IDENTITY_ADDRESS_3 = "IDENTITY_ADDRESS_3"
+private const val IDENTITY_CITY = "IDENTITY_CITY"
+private const val IDENTITY_STATE = "IDENTITY_STATE"
+private const val IDENTITY_POSTAL_CODE = "IDENTITY_POSTAL_CODE"
+private const val IDENTITY_COUNTRY = "IDENTITY_COUNTRY"
+private const val IDENTITY_COMPANY = "IDENTITY_COMPANY"
+private const val IDENTITY_EMAIL = "IDENTITY_EMAIL"
+private const val IDENTITY_PHONE = "IDENTITY_PHONE"
+private const val IDENTITY_SSN = "IDENTITY_SSN"
+private const val IDENTITY_PASSPORT_NUMBER = "IDENTITY_PASSPORT_NUMBER"
+private const val IDENTITY_LICENSE_NUMBER = "IDENTITY_LICENSE_NUMBER"
+private const val IDENTITY_SUBTITLE = "IDENTITY_SUBTITLE"
+private const val IDENTITY_FULL_NAME = "IDENTITY_FULL_NAME"
+private const val IDENTITY_FULL_ADDRESS = "IDENTITY_FULL_ADDRESS"
+private val IDENTITY_AUTOFILL_CIPHER = AutofillCipher.Identity(
+    cipherId = IDENTITY_CIPHER_ID,
+    name = IDENTITY_NAME,
+    subtitle = IDENTITY_SUBTITLE,
+    fullName = IDENTITY_FULL_NAME,
+    fullAddress = IDENTITY_FULL_ADDRESS,
+    title = IDENTITY_TITLE,
+    firstName = IDENTITY_FIRST_NAME,
+    middleName = IDENTITY_MIDDLE_NAME,
+    lastName = IDENTITY_LAST_NAME,
+    address1 = IDENTITY_ADDRESS_1,
+    address2 = IDENTITY_ADDRESS_2,
+    address3 = IDENTITY_ADDRESS_3,
+    city = IDENTITY_CITY,
+    state = IDENTITY_STATE,
+    postalCode = IDENTITY_POSTAL_CODE,
+    country = IDENTITY_COUNTRY,
+    company = IDENTITY_COMPANY,
+    email = IDENTITY_EMAIL,
+    phone = IDENTITY_PHONE,
+    ssn = IDENTITY_SSN,
+    passportNumber = IDENTITY_PASSPORT_NUMBER,
+    licenseNumber = IDENTITY_LICENSE_NUMBER,
 )
