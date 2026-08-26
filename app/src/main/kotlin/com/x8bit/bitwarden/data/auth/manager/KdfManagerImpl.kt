@@ -96,6 +96,7 @@ class KdfManagerImpl(
                 kdf = unlockData.kdf.toKdfRequestModel(),
                 masterKeyWrappedUserKey = unlockData.masterKeyWrappedUserKey,
                 salt = unlockData.salt,
+                containedKeyId = unlockData.containedKeyId,
             ),
         )
     }

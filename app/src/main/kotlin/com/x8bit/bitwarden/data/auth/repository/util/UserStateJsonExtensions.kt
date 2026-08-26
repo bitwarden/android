@@ -139,6 +139,7 @@ fun UserStateJson.updateMasterPasswordUnlock(
             salt = it.salt,
             kdf = it.kdf.toKdfRequestModel(),
             masterKeyWrappedUserKey = it.masterKeyWrappedUserKey,
+            containedKeyId = it.containedKeyId,
         )
     }
     val updatedProfile = profile.copy(

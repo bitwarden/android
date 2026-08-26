@@ -24,6 +24,7 @@ fun createMockSdkSend(
         type = type,
         file = createMockSdkFile(number = number),
         text = createMockSdkText(number = number),
+        data = null,
         maxAccessCount = 1u,
         accessCount = 1u,
         disabled = false,
