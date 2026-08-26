@@ -150,6 +150,14 @@
     <string name="select">Select</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Item saved</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Submitting…</string>
     <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Syncing complete</string>
