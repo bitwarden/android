@@ -961,7 +961,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
@@ -1131,7 +1131,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertNotNull(specialCircumstanceManager.specialCircumstance)
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
@@ -1514,8 +1514,84 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_CREATED,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode with a card, createCipherInOrganization success should send the card saved snackbar`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(),
+            )
+
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.card_saved.asText()),
+                    relay = SnackbarRelay.CIPHER_CREATED,
+                )
+            }
+        }
+
+    @Test
+    fun `in edit mode with a card, updateCipher success should send the card saved snackbar`() =
+        runTest {
+            val cipherView = createMockCipherListView(1)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(),
+            )
+
+            mutableVaultDataFlow.value =
+                DataState.Loaded(createVaultData(cipherListView = cipherView))
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.updateCipher(any(), any())
+            } returns UpdateCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.card_saved.asText()),
+                    relay = SnackbarRelay.CIPHER_UPDATED,
                 )
             }
         }
@@ -1855,7 +1931,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_UPDATED,
                 )
             }

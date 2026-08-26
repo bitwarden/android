@@ -2033,7 +2033,7 @@ class VaultAddEditViewModel @Inject constructor(
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
                     snackbarRelayManager.sendSnackbarData(
-                        data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                        data = BitwardenSnackbarData(state.savedSnackbarMessage),
                         relay = SnackbarRelay.CIPHER_CREATED,
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
@@ -2066,7 +2066,7 @@ class VaultAddEditViewModel @Inject constructor(
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
                     snackbarRelayManager.sendSnackbarData(
-                        data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                        data = BitwardenSnackbarData(state.savedSnackbarMessage),
                         relay = SnackbarRelay.CIPHER_UPDATED,
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
@@ -2808,6 +2808,21 @@ data class VaultAddEditState(
                 VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.edit_license.asText()
                 VaultItemCipherType.PASSPORT -> BitwardenString.edit_passport.asText()
             }
+        }
+
+    /**
+     * Helper to determine the snackbar message shown after the item is successfully saved.
+     */
+    val savedSnackbarMessage: Text
+        get() = when (cipherType) {
+            VaultItemCipherType.LOGIN -> BitwardenString.login_saved.asText()
+            VaultItemCipherType.CARD -> BitwardenString.card_saved.asText()
+            VaultItemCipherType.IDENTITY -> BitwardenString.identity_saved.asText()
+            VaultItemCipherType.SECURE_NOTE -> BitwardenString.secure_note_saved.asText()
+            VaultItemCipherType.SSH_KEY -> BitwardenString.ssh_key_saved.asText()
+            VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.bank_account_saved.asText()
+            VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.license_saved.asText()
+            VaultItemCipherType.PASSPORT -> BitwardenString.passport_saved.asText()
         }
 
     /**
