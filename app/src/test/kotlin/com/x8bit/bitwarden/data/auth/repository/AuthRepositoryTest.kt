@@ -124,6 +124,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
@@ -5099,11 +5100,13 @@ class AuthRepositoryTest {
             .asSuccess()
         coEvery {
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson.V1(
+                body = ResetPasswordRequestJson(
                     currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    key = newKey,
+                    kdf = ACCOUNT_1.profile.toKdfRequestModel(),
+                    salt = email,
+                    masterPasswordAuthenticationHash = newPasswordHash,
+                    masterKeyWrappedUserKey = newKey,
                 ),
             )
         } returns Unit.asSuccess()
@@ -5138,11 +5141,13 @@ class AuthRepositoryTest {
                 newPassword = newPassword,
             )
             accountsService.resetPassword(
-                body = ResetPasswordRequestJson.V1(
+                body = ResetPasswordRequestJson(
                     currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    key = newKey,
+                    kdf = ACCOUNT_1.profile.toKdfRequestModel(),
+                    salt = email,
+                    masterPasswordAuthenticationHash = newPasswordHash,
+                    masterKeyWrappedUserKey = newKey,
                 ),
             )
         }
@@ -5598,16 +5603,14 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson.V1(
-                passwordHash = passwordHash,
-                passwordHint = passwordHint,
+            val setPasswordRequestJson = SetPasswordRequestJson(
                 organizationIdentifier = organizationId,
-                kdfIterations = profile.kdfIterations,
-                kdfMemory = profile.kdfMemory,
-                kdfParallelism = profile.kdfParallelism,
-                kdfType = profile.kdfType,
-                key = encryptedUserKey,
-                keys = SetPasswordRequestJson.V1.Keys(
+                passwordHint = passwordHint,
+                kdf = profile.toKdfRequestModel(),
+                salt = profile.email,
+                masterPasswordAuthenticationHash = passwordHash,
+                masterKeyWrappedUserKey = encryptedUserKey,
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5656,16 +5659,14 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson.V1(
-                passwordHash = passwordHash,
-                passwordHint = passwordHint,
+            val setPasswordRequestJson = SetPasswordRequestJson(
                 organizationIdentifier = organizationIdentifier,
-                kdfIterations = profile.kdfIterations,
-                kdfMemory = profile.kdfMemory,
-                kdfParallelism = profile.kdfParallelism,
-                kdfType = profile.kdfType,
-                key = encryptedUserKey,
-                keys = SetPasswordRequestJson.V1.Keys(
+                passwordHint = passwordHint,
+                kdf = profile.toKdfRequestModel(),
+                salt = profile.email,
+                masterPasswordAuthenticationHash = passwordHash,
+                masterKeyWrappedUserKey = encryptedUserKey,
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5765,15 +5766,13 @@ class AuthRepositoryTest {
             passwordHash = passwordHash,
             newKey = encryptedUserKey,
         )
-        val setPasswordRequestJson = SetPasswordRequestJson.V1(
-            passwordHint = passwordHint,
+        val setPasswordRequestJson = SetPasswordRequestJson(
             organizationIdentifier = organizationIdentifier,
-            kdfType = profile.kdfType,
-            kdfIterations = profile.kdfIterations,
-            kdfMemory = profile.kdfMemory,
-            kdfParallelism = profile.kdfParallelism,
-            passwordHash = passwordHash,
-            key = encryptedUserKey,
+            passwordHint = passwordHint,
+            kdf = profile.toKdfRequestModel(),
+            salt = profile.email,
+            masterPasswordAuthenticationHash = passwordHash,
+            masterKeyWrappedUserKey = encryptedUserKey,
             keys = null,
         )
         fakeAuthDiskSource.userState = userState
@@ -5865,16 +5864,14 @@ class AuthRepositoryTest {
                 encryptedUserKey = encryptedUserKey,
                 keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
             )
-            val setPasswordRequestJson = SetPasswordRequestJson.V1(
-                passwordHash = passwordHash,
-                passwordHint = passwordHint,
+            val setPasswordRequestJson = SetPasswordRequestJson(
                 organizationIdentifier = organizationIdentifier,
-                kdfIterations = profile.kdfIterations,
-                kdfMemory = profile.kdfMemory,
-                kdfParallelism = profile.kdfParallelism,
-                kdfType = profile.kdfType,
-                key = encryptedUserKey,
-                keys = SetPasswordRequestJson.V1.Keys(
+                passwordHint = passwordHint,
+                kdf = profile.toKdfRequestModel(),
+                salt = profile.email,
+                masterPasswordAuthenticationHash = passwordHash,
+                masterKeyWrappedUserKey = encryptedUserKey,
+                keys = SetPasswordRequestJson.Keys(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),

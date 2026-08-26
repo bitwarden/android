@@ -99,6 +99,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
+import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toPolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -997,11 +998,13 @@ internal class AuthRepositoryImpl(
             )
             .flatMap { response ->
                 accountsService.resetPassword(
-                    body = ResetPasswordRequestJson.V1(
+                    body = ResetPasswordRequestJson(
                         currentPasswordHash = currentPasswordHash,
-                        newPasswordHash = response.passwordHash,
                         passwordHint = passwordHint,
-                        key = response.newKey,
+                        kdf = profile.toKdfRequestModel(),
+                        salt = profile.email,
+                        masterPasswordAuthenticationHash = response.passwordHash,
+                        masterKeyWrappedUserKey = response.newKey,
                     ),
                 )
             }
@@ -1060,15 +1063,13 @@ internal class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson.V1(
-                            passwordHint = passwordHint,
+                        body = SetPasswordRequestJson(
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = profile.kdfIterations,
-                            kdfMemory = profile.kdfMemory,
-                            kdfParallelism = profile.kdfParallelism,
-                            kdfType = profile.kdfType,
-                            key = response.newKey,
-                            passwordHash = response.passwordHash,
+                            passwordHint = passwordHint,
+                            kdf = profile.toKdfRequestModel(),
+                            salt = profile.email,
+                            masterPasswordAuthenticationHash = response.passwordHash,
+                            masterKeyWrappedUserKey = response.newKey,
                             keys = null,
                         ),
                     )
@@ -1183,16 +1184,14 @@ internal class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson.V1(
-                            passwordHash = response.masterPasswordHash,
-                            passwordHint = passwordHint,
+                        body = SetPasswordRequestJson(
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = profile.kdfIterations,
-                            kdfMemory = profile.kdfMemory,
-                            kdfParallelism = profile.kdfParallelism,
-                            kdfType = profile.kdfType,
-                            key = response.encryptedUserKey,
-                            keys = SetPasswordRequestJson.V1.Keys(
+                            passwordHint = passwordHint,
+                            kdf = profile.toKdfRequestModel(),
+                            salt = profile.email,
+                            masterPasswordAuthenticationHash = response.masterPasswordHash,
+                            masterKeyWrappedUserKey = response.encryptedUserKey,
+                            keys = SetPasswordRequestJson.Keys(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),
