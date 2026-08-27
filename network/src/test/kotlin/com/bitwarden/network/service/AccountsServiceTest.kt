@@ -9,6 +9,7 @@ import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
@@ -226,7 +227,7 @@ class AccountsServiceTest : BaseServiceTest() {
                 salt = "sample@bitwarden.com",
                 masterPasswordAuthenticationHash = "passwordHash",
                 masterKeyWrappedUserKey = "encryptedUserKey",
-                keys = SetPasswordRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),
@@ -271,7 +272,7 @@ class AccountsServiceTest : BaseServiceTest() {
                 kdfParallelism = 2,
                 kdfType = KdfTypeJson.ARGON2_ID,
                 userKey = "encryptedUserKey",
-                keys = KeyConnectorKeyRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),

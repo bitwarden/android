@@ -7,6 +7,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
@@ -140,7 +141,7 @@ class KeyConnectorManagerImpl(
                             accessToken = accessToken,
                             body = KeyConnectorKeyRequestJson(
                                 userKey = keyConnectorResponse.encryptedUserKey,
-                                keys = KeyConnectorKeyRequestJson.Keys(
+                                keys = KeysJson(
                                     publicKey = keyConnectorResponse.keys.public,
                                     encryptedPrivateKey = keyConnectorResponse.keys.private,
                                 ),
