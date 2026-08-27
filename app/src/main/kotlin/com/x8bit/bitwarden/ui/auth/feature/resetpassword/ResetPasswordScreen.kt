@@ -45,8 +45,8 @@ import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthIndicator
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import kotlinx.collections.immutable.persistentListOf
 
 /**

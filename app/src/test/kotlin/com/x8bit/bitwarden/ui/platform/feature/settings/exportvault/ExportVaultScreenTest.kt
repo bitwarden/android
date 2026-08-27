@@ -18,7 +18,7 @@ import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import io.mockk.every

@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthIndicator
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import org.junit.Test
 

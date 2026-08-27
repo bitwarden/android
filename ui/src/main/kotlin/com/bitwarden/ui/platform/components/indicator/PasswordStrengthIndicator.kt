@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.auth.feature.completeregistration
+package com.bitwarden.ui.platform.components.indicator
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
