@@ -1637,6 +1637,41 @@ class ViewNodeExtensionsTest {
 
     //endregion Identity: official autofillHints dispatch (toAutofillView)
 
+    @Test
+    fun `toAutofillView should map every identity heuristic to its Identity view`() {
+        // Each idEntry uses a different term from the isXxxField tests below.
+        val expectedByIdEntry = mapOf(
+            "fullname" to AutofillView.Identity.PersonNameFull(data = autofillViewData),
+            "nameprefix" to AutofillView.Identity.PersonNamePrefix(data = autofillViewData),
+            "givenname" to AutofillView.Identity.PersonNameGiven(data = autofillViewData),
+            "middlename" to AutofillView.Identity.PersonNameMiddle(data = autofillViewData),
+            "surname" to AutofillView.Identity.PersonNameFamily(data = autofillViewData),
+            "mailingaddress" to AutofillView.Identity.PostalAddressFull(data = autofillViewData),
+            "addressline" to AutofillView.Identity.AddressStreet(data = autofillViewData),
+            "town" to AutofillView.Identity.AddressLocality(data = autofillViewData),
+            "province" to AutofillView.Identity.AddressRegion(data = autofillViewData),
+            "country" to AutofillView.Identity.AddressCountry(data = autofillViewData),
+            "postalcode" to AutofillView.Identity.PostalCode(data = autofillViewData),
+            "mobile" to AutofillView.Identity.PhoneFull(data = autofillViewData),
+            "company" to AutofillView.Identity.Company(data = autofillViewData),
+            "socialsecurity" to AutofillView.Identity.Ssn(data = autofillViewData),
+            "passport" to AutofillView.Identity.PassportNumber(data = autofillViewData),
+            "licensenumber" to AutofillView.Identity.LicenseNumber(data = autofillViewData),
+        )
+
+        expectedByIdEntry.forEach { (idEntry, expected) ->
+            setupUnsupportedInputFieldViewNode()
+            every { viewNode.idEntry } returns idEntry
+
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
+
+            assertEquals(expected, actual, "idEntry \"$idEntry\" mapped to the wrong view")
+        }
+    }
+
     //region Identity: flag-off gate (isIdentityAutofillEnabled = false)
 
     @Suppress("MaxLineLength")

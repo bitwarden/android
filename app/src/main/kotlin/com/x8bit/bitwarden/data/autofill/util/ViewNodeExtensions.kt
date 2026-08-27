@@ -158,32 +158,34 @@ private fun AssistStructure.ViewNode.supportedAutofillHint(
     isIdentityAutofillEnabled = isIdentityAutofillEnabled,
 )
     ?: when {
-        this.isUsernameField -> AutofillHint.USERNAME
-        this.isPasswordField -> AutofillHint.PASSWORD
-        this.isCardExpirationMonthField -> AutofillHint.CARD_EXPIRATION_MONTH
-        this.isCardExpirationYearField -> AutofillHint.CARD_EXPIRATION_YEAR
-        this.isCardExpirationDateField -> AutofillHint.CARD_EXPIRATION_DATE
-        this.isCardNumberField -> AutofillHint.CARD_NUMBER
-        this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
-        this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
-        this.isCardBrandField -> AutofillHint.CARD_BRAND
+        this.isUsernameField -> AutofillHint.Login.USERNAME
+        this.isPasswordField -> AutofillHint.Login.PASSWORD
+        this.isCardExpirationMonthField -> AutofillHint.Card.EXPIRATION_MONTH
+        this.isCardExpirationYearField -> AutofillHint.Card.EXPIRATION_YEAR
+        this.isCardExpirationDateField -> AutofillHint.Card.EXPIRATION_DATE
+        this.isCardNumberField -> AutofillHint.Card.NUMBER
+        this.isCardSecurityCodeField -> AutofillHint.Card.SECURITY_CODE
+        this.isCardholderNameField -> AutofillHint.Card.CARDHOLDER
+        this.isCardBrandField -> AutofillHint.Card.BRAND
+        // Identity heuristics only below here; anything else would stop matching when the flag
+        // is off. Add non-identity heuristics above this branch.
         !isIdentityAutofillEnabled -> null
-        this.isPersonNameFullField -> AutofillHint.IDENTITY_PERSON_NAME_FULL
-        this.isPersonNamePrefixField -> AutofillHint.IDENTITY_PERSON_NAME_PREFIX
-        this.isPersonNameGivenField -> AutofillHint.IDENTITY_PERSON_NAME_GIVEN
-        this.isPersonNameMiddleField -> AutofillHint.IDENTITY_PERSON_NAME_MIDDLE
-        this.isPersonNameFamilyField -> AutofillHint.IDENTITY_PERSON_NAME_FAMILY
-        this.isPostalAddressFullField -> AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL
-        this.isAddressStreetField -> AutofillHint.IDENTITY_ADDRESS_STREET
-        this.isAddressLocalityField -> AutofillHint.IDENTITY_ADDRESS_LOCALITY
-        this.isAddressRegionField -> AutofillHint.IDENTITY_ADDRESS_REGION
-        this.isAddressCountryField -> AutofillHint.IDENTITY_ADDRESS_COUNTRY
-        this.isPostalCodeField -> AutofillHint.IDENTITY_POSTAL_CODE
-        this.isPhoneField -> AutofillHint.IDENTITY_PHONE_FULL
-        this.isCompanyField -> AutofillHint.IDENTITY_COMPANY
-        this.isSsnField -> AutofillHint.IDENTITY_SSN
-        this.isPassportNumberField -> AutofillHint.IDENTITY_PASSPORT_NUMBER
-        this.isLicenseNumberField -> AutofillHint.IDENTITY_LICENSE_NUMBER
+        this.isPersonNameFullField -> AutofillHint.Identity.PERSON_NAME_FULL
+        this.isPersonNamePrefixField -> AutofillHint.Identity.PERSON_NAME_PREFIX
+        this.isPersonNameGivenField -> AutofillHint.Identity.PERSON_NAME_GIVEN
+        this.isPersonNameMiddleField -> AutofillHint.Identity.PERSON_NAME_MIDDLE
+        this.isPersonNameFamilyField -> AutofillHint.Identity.PERSON_NAME_FAMILY
+        this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
+        this.isAddressStreetField -> AutofillHint.Identity.ADDRESS_STREET
+        this.isAddressLocalityField -> AutofillHint.Identity.ADDRESS_LOCALITY
+        this.isAddressRegionField -> AutofillHint.Identity.ADDRESS_REGION
+        this.isAddressCountryField -> AutofillHint.Identity.ADDRESS_COUNTRY
+        this.isPostalCodeField -> AutofillHint.Identity.POSTAL_CODE
+        this.isPhoneField -> AutofillHint.Identity.PHONE_FULL
+        this.isCompanyField -> AutofillHint.Identity.COMPANY
+        this.isSsnField -> AutofillHint.Identity.SSN
+        this.isPassportNumberField -> AutofillHint.Identity.PASSPORT_NUMBER
+        this.isLicenseNumberField -> AutofillHint.Identity.LICENSE_NUMBER
         else -> null
     }
 
@@ -207,100 +209,76 @@ private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(
 
 private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
     when (this) {
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.CARD_EXPIRATION_MONTH
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.CARD_EXPIRATION_YEAR
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.CARD_EXPIRATION_DATE
-        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.CARD_NUMBER
-        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.CARD_SECURITY_CODE
-        View.AUTOFILL_HINT_PASSWORD -> AutofillHint.PASSWORD
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.Card.EXPIRATION_MONTH
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.Card.EXPIRATION_YEAR
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.Card.EXPIRATION_DATE
+        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.Card.NUMBER
+        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.Card.SECURITY_CODE
+        View.AUTOFILL_HINT_PASSWORD -> AutofillHint.Login.PASSWORD
         View.AUTOFILL_HINT_EMAIL_ADDRESS,
         View.AUTOFILL_HINT_USERNAME,
-            -> AutofillHint.USERNAME
+            -> AutofillHint.Login.USERNAME
 
-        HintConstants.AUTOFILL_HINT_PERSON_NAME -> AutofillHint.IDENTITY_PERSON_NAME_FULL
-        HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX -> AutofillHint.IDENTITY_PERSON_NAME_PREFIX
-        HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN -> AutofillHint.IDENTITY_PERSON_NAME_GIVEN
-        HintConstants.AUTOFILL_HINT_PERSON_NAME_MIDDLE -> AutofillHint.IDENTITY_PERSON_NAME_MIDDLE
-        HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY -> AutofillHint.IDENTITY_PERSON_NAME_FAMILY
-        View.AUTOFILL_HINT_POSTAL_ADDRESS -> AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL
+        HintConstants.AUTOFILL_HINT_PERSON_NAME -> AutofillHint.Identity.PERSON_NAME_FULL
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX -> AutofillHint.Identity.PERSON_NAME_PREFIX
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN -> AutofillHint.Identity.PERSON_NAME_GIVEN
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_MIDDLE -> AutofillHint.Identity.PERSON_NAME_MIDDLE
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY -> AutofillHint.Identity.PERSON_NAME_FAMILY
+        View.AUTOFILL_HINT_POSTAL_ADDRESS -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
         HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS -> {
-            AutofillHint.IDENTITY_ADDRESS_STREET
+            AutofillHint.Identity.ADDRESS_STREET
         }
 
         HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY -> {
-            AutofillHint.IDENTITY_ADDRESS_LOCALITY
+            AutofillHint.Identity.ADDRESS_LOCALITY
         }
 
-        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION -> AutofillHint.IDENTITY_ADDRESS_REGION
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION -> AutofillHint.Identity.ADDRESS_REGION
         HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_COUNTRY -> {
-            AutofillHint.IDENTITY_ADDRESS_COUNTRY
+            AutofillHint.Identity.ADDRESS_COUNTRY
         }
 
-        View.AUTOFILL_HINT_POSTAL_CODE -> AutofillHint.IDENTITY_POSTAL_CODE
-        View.AUTOFILL_HINT_PHONE -> AutofillHint.IDENTITY_PHONE_FULL
+        View.AUTOFILL_HINT_POSTAL_CODE -> AutofillHint.Identity.POSTAL_CODE
+        View.AUTOFILL_HINT_PHONE -> AutofillHint.Identity.PHONE_FULL
 
         else -> null
     }
 
 /**
- * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
- * Dispatches to a type-specific builder ([buildCardView], [buildLoginView], [buildIdentityView])
- * based on which category [autofillHint] belongs to. This `when` intentionally lists every
- * [AutofillHint] value (rather than a single fallback per category) so the compiler still forces a
- * decision here whenever a new hint is added, even though the actual construction logic lives in
- * the category-specific builder.
+ * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView],
+ * dispatching to [buildCardView], [buildLoginView] or [buildIdentityView] by [autofillHint]
+ * category.
  */
 private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     autofillHint: AutofillHint?,
 ): AutofillView = when (autofillHint) {
-    AutofillHint.CARD_EXPIRATION_MONTH,
-    AutofillHint.CARD_EXPIRATION_YEAR,
-    AutofillHint.CARD_EXPIRATION_DATE,
-    AutofillHint.CARD_NUMBER,
-    AutofillHint.CARD_SECURITY_CODE,
-    AutofillHint.CARD_CARDHOLDER,
-    AutofillHint.CARD_BRAND,
-        -> buildCardView(
-        autofillOptions = autofillOptions,
-        autofillViewData = autofillViewData,
-        autofillHint = autofillHint,
-    )
-        ?: AutofillView.Unused(data = autofillViewData)
+    is AutofillHint.Card -> {
+        buildCardView(
+            autofillOptions = autofillOptions,
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
+        )
+    }
 
-    AutofillHint.PASSWORD,
-    AutofillHint.USERNAME,
-        -> buildLoginView(
-        autofillViewData = autofillViewData,
-        autofillHint = autofillHint,
-    )
-        ?: AutofillView.Unused(data = autofillViewData)
+    is AutofillHint.Login -> {
+        buildLoginView(
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
+        )
+    }
 
-    AutofillHint.IDENTITY_PERSON_NAME_FULL,
-    AutofillHint.IDENTITY_PERSON_NAME_PREFIX,
-    AutofillHint.IDENTITY_PERSON_NAME_GIVEN,
-    AutofillHint.IDENTITY_PERSON_NAME_MIDDLE,
-    AutofillHint.IDENTITY_PERSON_NAME_FAMILY,
-    AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL,
-    AutofillHint.IDENTITY_ADDRESS_STREET,
-    AutofillHint.IDENTITY_ADDRESS_LOCALITY,
-    AutofillHint.IDENTITY_ADDRESS_REGION,
-    AutofillHint.IDENTITY_ADDRESS_COUNTRY,
-    AutofillHint.IDENTITY_POSTAL_CODE,
-    AutofillHint.IDENTITY_PHONE_FULL,
-    AutofillHint.IDENTITY_COMPANY,
-    AutofillHint.IDENTITY_EMAIL,
-    AutofillHint.IDENTITY_SSN,
-    AutofillHint.IDENTITY_PASSPORT_NUMBER,
-    AutofillHint.IDENTITY_LICENSE_NUMBER,
-        -> buildIdentityView(
-        autofillViewData = autofillViewData,
-        autofillHint = autofillHint,
-    )
-        ?: AutofillView.Unused(data = autofillViewData)
+    is AutofillHint.Identity -> {
+        buildIdentityView(
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
+        )
+    }
 
-    null -> AutofillView.Unused(data = autofillViewData)
+    null -> {
+        AutofillView.Unused(data = autofillViewData)
+    }
 }
 
 /**

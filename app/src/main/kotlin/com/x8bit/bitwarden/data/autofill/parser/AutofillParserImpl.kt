@@ -266,8 +266,7 @@ class AutofillParserImpl(
                     rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
                         rule.category in CARD_FILL_ASSIST_CATEGORIES
                 }
-                // Fill-assist category coverage for Identity is added in a later phase; this is a
-                // no-op today since nothing yet classifies a view as Identity.
+                // Identity fill-assist categories land in a later phase.
                 is AutofillView.Identity -> false
             }
         }
