@@ -59,7 +59,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
@@ -866,16 +866,16 @@ internal class AuthRepositoryImpl(
                 identityService.registerFinish(
                     body = RegisterFinishRequestJson(
                         email = email,
-                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                        masterPasswordHint = masterPasswordHint,
                         emailVerificationToken = emailVerificationToken,
-                        userSymmetricKey = registerKeyResponse.encryptedUserKey,
+                        masterPasswordHint = masterPasswordHint,
                         userAsymmetricKeys = KeysJson(
                             publicKey = registerKeyResponse.keys.public,
                             encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
-                        kdfType = kdf.toKdfTypeJson(),
-                        kdfIterations = kdf.iterations,
+                        kdf = kdf.toKdfRequestModel(),
+                        salt = email,
+                        masterPasswordAuthenticationHash = registerKeyResponse.masterPasswordHash,
+                        masterKeyWrappedUserKey = registerKeyResponse.encryptedUserKey,
                     ),
                 )
             }

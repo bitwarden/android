@@ -6,14 +6,12 @@ import kotlinx.serialization.Serializable
 /**
  * Request body for register.
  *
- * @param email the email to be registered.
- * @param emailVerificationToken token used to finish the registration process.
- * @param masterPasswordHash the master password (encrypted).
- * @param masterPasswordHint the hint for the master password (nullable).
- * @param userSymmetricKey the user key for the request (encrypted).
- * @param userAsymmetricKeys a [KeysJson] object containing public and private keys.
- * @param kdfType the kdf type represented as an [Int].
- * @param kdfIterations the number of kdf iterations.
+ * @property email the email to be registered.
+ * @property emailVerificationToken token used to finish the registration process.
+ * @property masterPasswordHint the hint for the master password (nullable).
+ * @property userAsymmetricKeys a [KeysJson] object containing public and private keys.
+ * @property authenticationData The data to authenticate with a master password.
+ * @property unlockData The data to unlock with a master password.
  */
 @Serializable
 data class RegisterFinishRequestJson(
@@ -23,21 +21,42 @@ data class RegisterFinishRequestJson(
     @SerialName("emailVerificationToken")
     val emailVerificationToken: String,
 
-    @SerialName("masterPasswordHash")
-    val masterPasswordHash: String,
-
     @SerialName("masterPasswordHint")
     val masterPasswordHint: String?,
-
-    @SerialName("userSymmetricKey")
-    val userSymmetricKey: String,
 
     @SerialName("userAsymmetricKeys")
     val userAsymmetricKeys: KeysJson,
 
-    @SerialName("kdf")
-    val kdfType: KdfTypeJson,
+    @SerialName("MasterPasswordAuthentication")
+    val authenticationData: MasterPasswordAuthenticationDataJson,
 
-    @SerialName("kdfIterations")
-    val kdfIterations: UInt,
-)
+    @SerialName("MasterPasswordUnlock")
+    val unlockData: MasterPasswordUnlockDataJson,
+) {
+    constructor(
+        email: String,
+        emailVerificationToken: String,
+        masterPasswordHint: String?,
+        userAsymmetricKeys: KeysJson,
+        kdf: KdfJson,
+        salt: String,
+        masterPasswordAuthenticationHash: String,
+        masterKeyWrappedUserKey: String,
+    ) : this(
+        email = email,
+        emailVerificationToken = emailVerificationToken,
+        masterPasswordHint = masterPasswordHint,
+        userAsymmetricKeys = userAsymmetricKeys,
+        authenticationData = MasterPasswordAuthenticationDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterPasswordAuthenticationHash = masterPasswordAuthenticationHash,
+        ),
+        unlockData = MasterPasswordUnlockDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterKeyWrappedUserKey = masterKeyWrappedUserKey,
+            containedKeyId = null,
+        ),
+    )
+}
