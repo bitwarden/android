@@ -73,16 +73,31 @@ interface AuthenticatorRepository {
     suspend fun hardDeleteItem(itemId: String): DeleteItemResult
 
     /**
-     *  Attempt to get the user's data for export.
+     * Scores the given [password], returning a strength level in the range `[0, 4]`.
      */
-    suspend fun exportVaultData(format: ExportVaultFormat, fileUri: Uri): ExportDataResult
+    suspend fun getPasswordStrength(password: String): Result<UByte>
 
     /**
-     * Attempt to read the user's data from a file
+     *  Attempt to get the user's data for export.
+     *
+     *  [password] is required by [ExportVaultFormat.JSON_ENCRYPTED] and ignored by every other
+     *  format.
+     */
+    suspend fun exportVaultData(
+        format: ExportVaultFormat,
+        fileUri: Uri,
+        password: String? = null,
+    ): ExportDataResult
+
+    /**
+     * Attempt to read the user's data from a file.
+     *
+     * [password] is required by password-protected files and ignored by every other file.
      */
     suspend fun importVaultData(
         format: ImportFileFormat,
         fileData: FileData,
+        password: String? = null,
     ): ImportDataResult
 
     /**

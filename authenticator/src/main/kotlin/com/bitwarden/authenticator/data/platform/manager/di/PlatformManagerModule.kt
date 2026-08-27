@@ -17,6 +17,8 @@ import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
+import com.bitwarden.authenticator.data.platform.manager.crypto.ExportEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.crypto.ExportEncryptionManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.lock.AppLockManager
@@ -37,6 +39,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.security.SecureRandom
 import javax.inject.Singleton
 
 /**
@@ -117,9 +120,22 @@ object PlatformManagerModule {
     @Singleton
     fun provideImportManager(
         authenticatorDiskSource: AuthenticatorDiskSource,
+        exportEncryptionManager: ExportEncryptionManager,
         uuidManager: UuidManager,
     ): ImportManager = ImportManagerImpl(
         authenticatorDiskSource = authenticatorDiskSource,
+        exportEncryptionManager = exportEncryptionManager,
+        uuidManager = uuidManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideExportEncryptionManager(
+        dispatcherManager: DispatcherManager,
+        uuidManager: UuidManager,
+    ): ExportEncryptionManager = ExportEncryptionManagerImpl(
+        dispatcherManager = dispatcherManager,
+        secureRandom = SecureRandom(),
         uuidManager = uuidManager,
     )
 
