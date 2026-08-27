@@ -1292,7 +1292,6 @@ class AuthRequestManagerTest {
         assertEquals(expected, result)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getAuthRequestsWithUpdates should re-read on a push and ignore a non-active user push`() =
         runTest {
