@@ -7,6 +7,7 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
 import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -413,7 +414,7 @@ class IdentityServiceTest : BaseServiceTest() {
             masterPasswordHint = "mockk_masterPasswordHint",
             emailVerificationToken = "mock_emailVerificationToken",
             userSymmetricKey = "mockk_key",
-            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+            userAsymmetricKeys = KeysJson(
                 publicKey = "mockk_publicKey",
                 encryptedPrivateKey = "mockk_encryptedPrivateKey",
             ),

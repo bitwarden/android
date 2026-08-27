@@ -23,6 +23,7 @@ import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
@@ -869,7 +870,7 @@ internal class AuthRepositoryImpl(
                         masterPasswordHint = masterPasswordHint,
                         emailVerificationToken = emailVerificationToken,
                         userSymmetricKey = registerKeyResponse.encryptedUserKey,
-                        userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                        userAsymmetricKeys = KeysJson(
                             publicKey = registerKeyResponse.keys.public,
                             encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
@@ -1191,7 +1192,7 @@ internal class AuthRepositoryImpl(
                             salt = profile.email,
                             masterPasswordAuthenticationHash = response.masterPasswordHash,
                             masterKeyWrappedUserKey = response.encryptedUserKey,
-                            keys = SetPasswordRequestJson.Keys(
+                            keys = KeysJson(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),

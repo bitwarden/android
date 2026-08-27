@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * @property passwordHint The hint for the master password (nullable).
  * @property authenticationData The data to authenticate with a master password.
  * @property unlockData The data to unlock with a master password.
- * @property keys A [Keys] object containing public and private keys.
+ * @property keys A [KeysJson] object containing public and private keys.
  */
 @Serializable
 data class SetPasswordRequestJson(
@@ -27,7 +27,7 @@ data class SetPasswordRequestJson(
     val unlockData: MasterPasswordUnlockDataJson,
 
     @SerialName("keys")
-    val keys: Keys?,
+    val keys: KeysJson?,
 ) {
     constructor(
         organizationIdentifier: String,
@@ -36,7 +36,7 @@ data class SetPasswordRequestJson(
         salt: String,
         masterPasswordAuthenticationHash: String,
         masterKeyWrappedUserKey: String,
-        keys: Keys?,
+        keys: KeysJson?,
     ) : this(
         organizationIdentifier = organizationIdentifier,
         passwordHint = passwordHint,
@@ -52,20 +52,5 @@ data class SetPasswordRequestJson(
             containedKeyId = null,
         ),
         keys = keys,
-    )
-
-    /**
-     * A keys object containing public and private keys.
-     *
-     * @param publicKey the public key (encrypted).
-     * @param encryptedPrivateKey the private key (encrypted).
-     */
-    @Serializable
-    data class Keys(
-        @SerialName("publicKey")
-        val publicKey: String,
-
-        @SerialName("encryptedPrivateKey")
-        val encryptedPrivateKey: String,
     )
 }

@@ -40,6 +40,7 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
@@ -4854,7 +4855,7 @@ class AuthRepositoryTest {
                     masterPasswordHint = null,
                     emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
                     userSymmetricKey = ENCRYPTED_USER_KEY,
-                    userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                    userAsymmetricKeys = KeysJson(
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
@@ -5610,7 +5611,7 @@ class AuthRepositoryTest {
                 salt = profile.email,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5666,7 +5667,7 @@ class AuthRepositoryTest {
                 salt = profile.email,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
@@ -5871,7 +5872,7 @@ class AuthRepositoryTest {
                 salt = profile.email,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
-                keys = SetPasswordRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = publicRsaKey,
                     encryptedPrivateKey = privateRsaKey,
                 ),
