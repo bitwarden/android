@@ -329,9 +329,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_NUMBER_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
+            // Flag off pins the identity gate below the card heuristics.
             val actual = viewNode.toAutofillView(
                 parentWebsite = null,
-                isIdentityAutofillEnabled = true,
+                isIdentityAutofillEnabled = false,
             )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
@@ -567,9 +568,10 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
+        // Flag off pins the identity gate below the username heuristic.
         val actual = viewNode.toAutofillView(
             parentWebsite = null,
-            isIdentityAutofillEnabled = true,
+            isIdentityAutofillEnabled = false,
         )
 
         // Verify
