@@ -38,14 +38,14 @@ on:
   #   # congestion at :00, and the close countdown is only as precise as the cadence.
   #   - cron: '30 7 * * *'
   workflow_dispatch:
-    inputs:
-      run-mode:
-        description: 'Run mode'
-        type: choice
-        default: dry-run
-        options:
-          - dry-run
-          - live
+    # inputs:
+    #   run-mode:
+    #     description: 'Run mode'
+    #     type: choice
+    #     default: dry-run
+    #     options:
+    #       - dry-run
+    #       - live
 
 permissions: {}
 
