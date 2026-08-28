@@ -33,10 +33,10 @@ run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 # Comments come from github-actions[bot] via GITHUB_TOKEN, not the closebot-bw PAT.
 
 on:
-  schedule:
-    # Run daily at 07:30 UTC. Off the hour: GitHub delays scheduled runs during the
-    # congestion at :00, and the close countdown is only as precise as the cadence.
-    - cron: '30 7 * * *'
+  # schedule:
+  #   # Run daily at 07:30 UTC. Off the hour: GitHub delays scheduled runs during the
+  #   # congestion at :00, and the close countdown is only as precise as the cadence.
+  #   - cron: '30 7 * * *'
   workflow_dispatch:
     inputs:
       run-mode:
