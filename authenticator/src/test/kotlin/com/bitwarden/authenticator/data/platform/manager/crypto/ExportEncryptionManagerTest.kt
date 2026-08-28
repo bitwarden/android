@@ -34,6 +34,8 @@ class ExportEncryptionManagerTest {
     private val plaintextExport = readResource("password_protected_export_plaintext.json")
     private val fastKdfEnvelope = readResource("password_protected_export_fast_kdf.json")
     private val defaultKdfEnvelope = readResource("password_protected_export_default_kdf.json")
+    private val omittedKdfFieldsEnvelope =
+        readResource("password_protected_export_omitted_kdf_fields.json")
 
     @Test
     fun `isPasswordProtected returns true for a password protected export`() {
@@ -55,6 +57,21 @@ class ExportEncryptionManagerTest {
         assertEquals(
             DecryptExportResult.Success(json = plaintextExport),
             createManager().decrypt(json = fastKdfEnvelope, password = PASSWORD),
+        )
+    }
+
+    @Test
+    fun `isPasswordProtected returns true when the kdf fields are omitted`() {
+        assertTrue(createManager().isPasswordProtected(json = omittedKdfFieldsEnvelope))
+    }
+
+    @Test
+    fun `decrypt accepts an envelope that omits the argon2 kdf fields entirely`() = runTest {
+        // The web vault leaves kdfMemory and kdfParallelism out for PBKDF2 rather than
+        // writing them as null the way the SDK does.
+        assertEquals(
+            DecryptExportResult.Success(json = plaintextExport),
+            createManager().decrypt(json = omittedKdfFieldsEnvelope, password = PASSWORD),
         )
     }
 
