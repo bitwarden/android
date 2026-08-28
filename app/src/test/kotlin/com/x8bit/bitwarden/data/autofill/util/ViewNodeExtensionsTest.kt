@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewStructure.HtmlInfo
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
+import androidx.autofill.HintConstants
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import io.mockk.every
 import io.mockk.mockk
@@ -99,7 +100,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -127,7 +131,10 @@ class ViewNodeExtensionsTest {
         } returns monthValue
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -143,7 +150,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_MONTH_HINTS
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -158,7 +168,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.forEach { idEntry ->
             every { viewNode.idEntry } returns idEntry
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for idEntry: $idEntry")
         }
@@ -173,7 +186,10 @@ class ViewNodeExtensionsTest {
         )
         SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
     }
@@ -188,7 +204,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -203,7 +222,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_YEAR_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -219,7 +241,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_YEAR_HINTS
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -233,7 +258,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
         every { mockHtmlInfo.isInputField } returns true
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -247,7 +275,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_EXP_DATE_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -262,7 +293,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_DATE_HINTS
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -277,7 +311,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -292,7 +329,11 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_NUMBER_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            // Flag off pins the identity gate below the card heuristics.
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = false,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -306,7 +347,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_NUMBER_HINTS
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -321,7 +365,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -336,7 +383,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -350,7 +400,10 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
         assertEquals(expected, actual)
     }
 
@@ -363,7 +416,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach { idEntry ->
             every { viewNode.idEntry } returns idEntry
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for idEntry: $idEntry")
         }
@@ -378,7 +434,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -392,7 +451,10 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARDHOLDER_NAME_HINTS
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
         assertEquals(expected, actual)
     }
 
@@ -405,7 +467,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -419,7 +484,10 @@ class ViewNodeExtensionsTest {
         SUPPORTED_RAW_PASSWORD_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
 
-            val actual = viewNode.toAutofillView(parentWebsite = null)
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
 
             assertEquals(expected, actual, "Failed for hint: $hint")
         }
@@ -434,7 +502,10 @@ class ViewNodeExtensionsTest {
         )
         every { viewNode.htmlInfo.isPasswordField() } returns true
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -453,7 +524,10 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -472,7 +546,10 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = website)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = website,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -491,7 +568,11 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        // Flag off pins the identity gate below the username heuristic.
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -510,7 +591,10 @@ class ViewNodeExtensionsTest {
         every { any<Int>().isUsernameInputType } returns true
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -525,7 +609,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.htmlInfo.isInputField } returns false
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertNull(actual)
@@ -539,7 +626,10 @@ class ViewNodeExtensionsTest {
             data = autofillViewData,
         )
 
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         assertEquals(expected, actual)
     }
@@ -556,7 +646,10 @@ class ViewNodeExtensionsTest {
         every { viewNode.autofillHints } returns arrayOf(autofillHintOne, autofillHintTwo)
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -1263,7 +1356,10 @@ class ViewNodeExtensionsTest {
         )
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -1302,7 +1398,10 @@ class ViewNodeExtensionsTest {
         )
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -1330,11 +1429,574 @@ class ViewNodeExtensionsTest {
         )
 
         // Test
-        val actual = viewNode.toAutofillView(parentWebsite = null)
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
 
         // Verify
         assertEquals(expected, actual)
     }
+
+    //region Identity: official autofillHints dispatch (toAutofillView)
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PersonNameFull when autofillHints match`() {
+        every { viewNode.autofillHints } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PersonNameFull(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PersonNamePrefix when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PersonNamePrefix(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PersonNameGiven when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PersonNameGiven(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PersonNameMiddle when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_MIDDLE)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PersonNameMiddle(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PersonNameFamily when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PersonNameFamily(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity PostalAddressFull when autofillHints match`() {
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_POSTAL_ADDRESS)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.PostalAddressFull(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressStreet when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressStreet(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressLocality when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressLocality(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressRegion when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(AutofillView.Identity.AddressRegion(data = autofillViewData), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressCountry when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_COUNTRY)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressCountry(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toAutofillView should return AutofillView Identity PostalCode when autofillHints match`() {
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_POSTAL_CODE)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(AutofillView.Identity.PostalCode(data = autofillViewData), actual)
+    }
+
+    @Test
+    fun `toAutofillView should return AutofillView Identity PhoneFull when autofillHints match`() {
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PHONE)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(AutofillView.Identity.PhoneFull(data = autofillViewData), actual)
+    }
+
+    //endregion Identity: official autofillHints dispatch (toAutofillView)
+
+    @Test
+    fun `toAutofillView should map every identity heuristic to its Identity view`() {
+        // Each idEntry uses a different term from the isXxxField tests below.
+        val expectedByIdEntry = mapOf(
+            "fullname" to AutofillView.Identity.PersonNameFull(data = autofillViewData),
+            "nameprefix" to AutofillView.Identity.PersonNamePrefix(data = autofillViewData),
+            "givenname" to AutofillView.Identity.PersonNameGiven(data = autofillViewData),
+            "middlename" to AutofillView.Identity.PersonNameMiddle(data = autofillViewData),
+            "surname" to AutofillView.Identity.PersonNameFamily(data = autofillViewData),
+            "mailingaddress" to AutofillView.Identity.PostalAddressFull(data = autofillViewData),
+            "addressline" to AutofillView.Identity.AddressStreet(data = autofillViewData),
+            "town" to AutofillView.Identity.AddressLocality(data = autofillViewData),
+            "province" to AutofillView.Identity.AddressRegion(data = autofillViewData),
+            "country" to AutofillView.Identity.AddressCountry(data = autofillViewData),
+            "postalcode" to AutofillView.Identity.PostalCode(data = autofillViewData),
+            "mobile" to AutofillView.Identity.PhoneFull(data = autofillViewData),
+            "company" to AutofillView.Identity.Company(data = autofillViewData),
+            "socialsecurity" to AutofillView.Identity.Ssn(data = autofillViewData),
+            "passport" to AutofillView.Identity.PassportNumber(data = autofillViewData),
+            "licensenumber" to AutofillView.Identity.LicenseNumber(data = autofillViewData),
+        )
+
+        expectedByIdEntry.forEach { (idEntry, expected) ->
+            setupUnsupportedInputFieldViewNode()
+            every { viewNode.idEntry } returns idEntry
+
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
+
+            assertEquals(expected, actual, "idEntry \"$idEntry\" mapped to the wrong view")
+        }
+    }
+
+    //region Identity: flag-off gate (isIdentityAutofillEnabled = false)
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when autofillHints contain an identity hint and IdentityAutofill is disabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when hint is First name and IdentityAutofill is disabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.hint } returns "First name"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Unused when hint is Mobile number and IdentityAutofill is disabled`() {
+        // "Mobile number" only matches the phone identity heuristic (SUPPORTED_RAW_PHONE_HINTS),
+        // not isUsernameField's raw hint list, so with the flag off this must fall through to
+        // Unused -- not become the focused view via Identity.PhoneFull -- so
+        // updateForMissingUsernameFields can still promote it, per the regression this gate
+        // guards against.
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.hint } returns "Mobile number"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    //endregion Identity: flag-off gate (isIdentityAutofillEnabled = false)
+
+    //region Identity: heuristic idEntry fallback + all-null guard (isXxxField)
+
+    @Test
+    fun `isPersonNameFullField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "fullname"
+
+        assertTrue(viewNode.isPersonNameFullField)
+    }
+
+    @Test
+    fun `isPersonNameFullField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPersonNameFullField)
+    }
+
+    @Test
+    fun `isPersonNamePrefixField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "honorificPrefix"
+
+        assertTrue(viewNode.isPersonNamePrefixField)
+    }
+
+    @Test
+    fun `isPersonNamePrefixField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPersonNamePrefixField)
+    }
+
+    @Test
+    fun `isPersonNameGivenField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "first_name"
+
+        assertTrue(viewNode.isPersonNameGivenField)
+    }
+
+    @Test
+    fun `isPersonNameGivenField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPersonNameGivenField)
+    }
+
+    @Test
+    fun `isPersonNameMiddleField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "middle_name"
+
+        assertTrue(viewNode.isPersonNameMiddleField)
+    }
+
+    @Test
+    fun `isPersonNameMiddleField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPersonNameMiddleField)
+    }
+
+    @Test
+    fun `isPersonNameFamilyField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "last_name"
+
+        assertTrue(viewNode.isPersonNameFamilyField)
+    }
+
+    @Test
+    fun `isPersonNameFamilyField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPersonNameFamilyField)
+    }
+
+    @Test
+    fun `isPostalAddressFullField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "shipping_address"
+
+        assertTrue(viewNode.isPostalAddressFullField)
+    }
+
+    @Test
+    fun `isPostalAddressFullField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPostalAddressFullField)
+    }
+
+    @Test
+    fun `isAddressStreetField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "street_address"
+
+        assertTrue(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressStreetField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressLocalityField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "city"
+
+        assertTrue(viewNode.isAddressLocalityField)
+    }
+
+    @Test
+    fun `isAddressLocalityField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isAddressLocalityField)
+    }
+
+    @Test
+    fun `isAddressRegionField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "state"
+
+        assertTrue(viewNode.isAddressRegionField)
+    }
+
+    @Test
+    fun `isAddressRegionField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isAddressRegionField)
+    }
+
+    @Test
+    fun `isAddressCountryField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "country"
+
+        assertTrue(viewNode.isAddressCountryField)
+    }
+
+    @Test
+    fun `isAddressCountryField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isAddressCountryField)
+    }
+
+    @Test
+    fun `isPostalCodeField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "zip_code"
+
+        assertTrue(viewNode.isPostalCodeField)
+    }
+
+    @Test
+    fun `isPostalCodeField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPostalCodeField)
+    }
+
+    @Test
+    fun `isPhoneField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "telephone"
+
+        assertTrue(viewNode.isPhoneField)
+    }
+
+    @Test
+    fun `isPhoneField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPhoneField)
+    }
+
+    @Test
+    fun `isCompanyField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "organization"
+
+        assertTrue(viewNode.isCompanyField)
+    }
+
+    @Test
+    fun `isCompanyField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isCompanyField)
+    }
+
+    @Test
+    fun `isSsnField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "ssn"
+
+        assertTrue(viewNode.isSsnField)
+    }
+
+    @Test
+    fun `isSsnField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isSsnField)
+    }
+
+    @Test
+    fun `isPassportNumberField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "passport_number"
+
+        assertTrue(viewNode.isPassportNumberField)
+    }
+
+    @Test
+    fun `isPassportNumberField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isPassportNumberField)
+    }
+
+    @Test
+    fun `isLicenseNumberField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "drivers_license"
+
+        assertTrue(viewNode.isLicenseNumberField)
+    }
+
+    @Test
+    fun `isLicenseNumberField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isLicenseNumberField)
+    }
+
+    //endregion Identity: heuristic idEntry fallback + all-null guard (isXxxField)
+
+    //region Identity: isEmailField (dual-classification trigger)
+
+    @Test
+    fun `isEmailField returns true when autofillHints match`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_EMAIL_ADDRESS)
+
+        assertTrue(viewNode.isEmailField)
+    }
+
+    @Test
+    fun `isEmailField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "email"
+
+        assertTrue(viewNode.isEmailField)
+    }
+
+    @Test
+    fun `isEmailField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isEmailField)
+    }
+
+    //endregion Identity: isEmailField (dual-classification trigger)
 
     /**
      * Set up [viewNode] to be an input field but not supported.

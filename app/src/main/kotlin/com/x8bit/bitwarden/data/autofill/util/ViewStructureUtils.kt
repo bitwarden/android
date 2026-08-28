@@ -147,3 +147,153 @@ val SUPPORTED_RAW_CARD_BRAND_HINTS: List<String> = listOf(
     "creditcardbrand",
     "ccbrand",
 )
+
+/**
+ * The supported email autofill hints. Kept separate from [SUPPORTED_RAW_USERNAME_HINTS] (which
+ * also matches "email") so identity email detection can be checked independently of the username
+ * heuristic — an email field is offered as both a [SUPPORTED_RAW_USERNAME_HINTS]-driven Login
+ * candidate and an identity candidate, since the two partitions aren't mutually exclusive here.
+ */
+val SUPPORTED_RAW_EMAIL_HINTS: List<String> = listOf(
+    "email",
+)
+
+/**
+ * The supported full person name autofill hints.
+ */
+val SUPPORTED_RAW_PERSON_NAME_FULL_HINTS: List<String> = listOf(
+    "fullname",
+)
+
+/**
+ * The supported person name prefix (e.g. "Mr.", "Dr.") autofill hints.
+ */
+val SUPPORTED_RAW_PERSON_NAME_PREFIX_HINTS: List<String> = listOf(
+    "honorificprefix",
+    "nameprefix",
+)
+
+/**
+ * The supported given (first) name autofill hints.
+ */
+val SUPPORTED_RAW_PERSON_NAME_GIVEN_HINTS: List<String> = listOf(
+    "firstname",
+    "givenname",
+)
+
+/**
+ * The supported middle name autofill hints.
+ */
+val SUPPORTED_RAW_PERSON_NAME_MIDDLE_HINTS: List<String> = listOf(
+    "middlename",
+)
+
+/**
+ * The supported family (last) name autofill hints.
+ */
+val SUPPORTED_RAW_PERSON_NAME_FAMILY_HINTS: List<String> = listOf(
+    "lastname",
+    "familyname",
+    "surname",
+)
+
+/**
+ * The supported full postal address autofill hints.
+ */
+val SUPPORTED_RAW_POSTAL_ADDRESS_FULL_HINTS: List<String> = listOf(
+    "mailingaddress",
+    "shippingaddress",
+    "billingaddress",
+    "fulladdress",
+)
+
+/**
+ * The supported street address autofill hints.
+ */
+val SUPPORTED_RAW_ADDRESS_STREET_HINTS: List<String> = listOf(
+    "streetaddress",
+    "addressline",
+)
+
+/**
+ * The supported locality (city) autofill hints.
+ */
+val SUPPORTED_RAW_ADDRESS_LOCALITY_HINTS: List<String> = listOf(
+    "locality",
+    "city",
+    "town",
+)
+
+/**
+ * The supported region (state/province) autofill hints.
+ */
+val SUPPORTED_RAW_ADDRESS_REGION_HINTS: List<String> = listOf(
+    "addressregion",
+    "province",
+    "state",
+)
+
+/**
+ * The supported country autofill hints.
+ */
+val SUPPORTED_RAW_ADDRESS_COUNTRY_HINTS: List<String> = listOf(
+    "country",
+)
+
+/**
+ * The supported postal code autofill hints.
+ */
+val SUPPORTED_RAW_POSTAL_CODE_HINTS: List<String> = listOf(
+    "postalcode",
+    "zipcode",
+    "zip",
+)
+
+/**
+ * The supported phone number autofill hints.
+ */
+val SUPPORTED_RAW_PHONE_HINTS: List<String> = listOf(
+    "phonenumber",
+    "telephone",
+    "mobilephone",
+    "mobile",
+)
+
+/**
+ * The supported company autofill hints.
+ */
+val SUPPORTED_RAW_COMPANY_HINTS: List<String> = listOf(
+    "company",
+    "organization",
+    "employer",
+)
+
+/**
+ * The supported social security number autofill hints. Narrower than most other identity hints
+ * since there is no official Android or HTML signal for this field — false positives here expose
+ * a more sensitive field than a false positive on, say, a company name.
+ */
+val SUPPORTED_RAW_SSN_HINTS: List<String> = listOf(
+    "ssn",
+    "socialsecuritynumber",
+    "socialsecurity",
+)
+
+/**
+ * The supported passport number autofill hints. See [SUPPORTED_RAW_SSN_HINTS] for why this list
+ * is kept narrow.
+ */
+val SUPPORTED_RAW_PASSPORT_HINTS: List<String> = listOf(
+    "passportnumber",
+    "passport",
+)
+
+/**
+ * The supported license number autofill hints. See [SUPPORTED_RAW_SSN_HINTS] for why this list
+ * is kept narrow.
+ */
+val SUPPORTED_RAW_LICENSE_HINTS: List<String> = listOf(
+    "licensenumber",
+    "driverslicense",
+    "driverlicense",
+)

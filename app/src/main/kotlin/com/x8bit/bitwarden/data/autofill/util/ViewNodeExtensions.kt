@@ -5,6 +5,7 @@ import android.view.View
 import android.view.autofill.AutofillId
 import android.widget.EditText
 import androidx.annotation.VisibleForTesting
+import androidx.autofill.HintConstants
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.AutofillHint
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
@@ -15,7 +16,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 private const val DEFAULT_SCHEME: String = "https"
 
 /**
- * The supported autofill Android View hints.
+ * The supported autofill Android View hints that predate identity autofill.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH,
@@ -26,6 +27,26 @@ private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_EMAIL_ADDRESS,
     View.AUTOFILL_HINT_PASSWORD,
     View.AUTOFILL_HINT_USERNAME,
+)
+
+/**
+ * The supported autofill Android View hints that are only meaningful for identity autofill.
+ * Consulted only when identity autofill is enabled --
+ * see [AssistStructure.ViewNode.toAutofillView].
+ */
+private val SUPPORTED_IDENTITY_VIEW_HINTS: List<String> = listOf(
+    HintConstants.AUTOFILL_HINT_PERSON_NAME,
+    HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX,
+    HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN,
+    HintConstants.AUTOFILL_HINT_PERSON_NAME_MIDDLE,
+    HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY,
+    View.AUTOFILL_HINT_POSTAL_ADDRESS,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_COUNTRY,
+    View.AUTOFILL_HINT_POSTAL_CODE,
+    View.AUTOFILL_HINT_PHONE,
 )
 
 /**
@@ -52,9 +73,10 @@ private val AssistStructure.ViewNode.isInputField: Boolean
  */
 fun AssistStructure.ViewNode.toAutofillView(
     parentWebsite: String?,
+    isIdentityAutofillEnabled: Boolean,
 ): AutofillView? {
     val nonNullAutofillId = this.autofillId ?: return null
-    val hint = this.supportedAutofillHint
+    val hint = this.supportedAutofillHint(isIdentityAutofillEnabled = isIdentityAutofillEnabled)
     val isInput = this.isInputField
     if (hint == null && !isInput) return null
 
@@ -124,158 +146,138 @@ internal fun AssistStructure.ViewNode.toAutofillViewData(
 )
 
 /**
- * The first supported autofill hint for this view node, or null if none are found.
+ * The first supported autofill hint for this view node, or null if none are found. Identity
+ * classification is gated on [isIdentityAutofillEnabled] so that, until identity fulfillment
+ * ships, a node classifies exactly as it did before identity heuristics existed -- e.g. falling
+ * through to [isUsernameField] rather than being claimed by an identity heuristic.
  */
-private val AssistStructure.ViewNode.supportedAutofillHint: AutofillHint?
-    get() = firstSupportedAutofillHintOrNull()
-        ?: when {
-            this.isUsernameField -> AutofillHint.USERNAME
-            this.isPasswordField -> AutofillHint.PASSWORD
-            this.isCardExpirationMonthField -> AutofillHint.CARD_EXPIRATION_MONTH
-            this.isCardExpirationYearField -> AutofillHint.CARD_EXPIRATION_YEAR
-            this.isCardExpirationDateField -> AutofillHint.CARD_EXPIRATION_DATE
-            this.isCardNumberField -> AutofillHint.CARD_NUMBER
-            this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
-            this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
-            this.isCardBrandField -> AutofillHint.CARD_BRAND
-            else -> null
-        }
+@Suppress("CyclomaticComplexMethod")
+private fun AssistStructure.ViewNode.supportedAutofillHint(
+    isIdentityAutofillEnabled: Boolean,
+): AutofillHint? = firstSupportedAutofillHintOrNull(
+    isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+)
+    ?: when {
+        this.isUsernameField -> AutofillHint.Login.USERNAME
+        this.isPasswordField -> AutofillHint.Login.PASSWORD
+        this.isCardExpirationMonthField -> AutofillHint.Card.EXPIRATION_MONTH
+        this.isCardExpirationYearField -> AutofillHint.Card.EXPIRATION_YEAR
+        this.isCardExpirationDateField -> AutofillHint.Card.EXPIRATION_DATE
+        this.isCardNumberField -> AutofillHint.Card.NUMBER
+        this.isCardSecurityCodeField -> AutofillHint.Card.SECURITY_CODE
+        this.isCardholderNameField -> AutofillHint.Card.CARDHOLDER
+        this.isCardBrandField -> AutofillHint.Card.BRAND
+        // Identity heuristics only below here; anything else would stop matching when the flag
+        // is off. Add non-identity heuristics above this branch.
+        !isIdentityAutofillEnabled -> null
+        this.isPersonNameFullField -> AutofillHint.Identity.PERSON_NAME_FULL
+        this.isPersonNamePrefixField -> AutofillHint.Identity.PERSON_NAME_PREFIX
+        this.isPersonNameGivenField -> AutofillHint.Identity.PERSON_NAME_GIVEN
+        this.isPersonNameMiddleField -> AutofillHint.Identity.PERSON_NAME_MIDDLE
+        this.isPersonNameFamilyField -> AutofillHint.Identity.PERSON_NAME_FAMILY
+        this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
+        this.isAddressStreetField -> AutofillHint.Identity.ADDRESS_STREET
+        this.isAddressLocalityField -> AutofillHint.Identity.ADDRESS_LOCALITY
+        this.isAddressRegionField -> AutofillHint.Identity.ADDRESS_REGION
+        this.isAddressCountryField -> AutofillHint.Identity.ADDRESS_COUNTRY
+        this.isPostalCodeField -> AutofillHint.Identity.POSTAL_CODE
+        this.isPhoneField -> AutofillHint.Identity.PHONE_FULL
+        this.isCompanyField -> AutofillHint.Identity.COMPANY
+        this.isSsnField -> AutofillHint.Identity.SSN
+        this.isPassportNumberField -> AutofillHint.Identity.PASSPORT_NUMBER
+        this.isLicenseNumberField -> AutofillHint.Identity.LICENSE_NUMBER
+        else -> null
+    }
 
 /**
  * Get the first supported autofill hint from the view node's autofillHints, or null if none are
- * found.
+ * found. [SUPPORTED_IDENTITY_VIEW_HINTS] is only consulted when [isIdentityAutofillEnabled] is
+ * true.
  */
-private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(): AutofillHint? =
-    autofillHints
-        ?.firstOrNull { SUPPORTED_VIEW_HINTS.contains(it) }
+private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(
+    isIdentityAutofillEnabled: Boolean,
+): AutofillHint? {
+    val supportedHints = if (isIdentityAutofillEnabled) {
+        SUPPORTED_VIEW_HINTS + SUPPORTED_IDENTITY_VIEW_HINTS
+    } else {
+        SUPPORTED_VIEW_HINTS
+    }
+    return autofillHints
+        ?.firstOrNull { supportedHints.contains(it) }
         ?.toBitwardenAutofillHintOrNull()
+}
 
 private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
     when (this) {
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.CARD_EXPIRATION_MONTH
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.CARD_EXPIRATION_YEAR
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.CARD_EXPIRATION_DATE
-        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.CARD_NUMBER
-        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.CARD_SECURITY_CODE
-        View.AUTOFILL_HINT_PASSWORD -> AutofillHint.PASSWORD
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.Card.EXPIRATION_MONTH
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.Card.EXPIRATION_YEAR
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.Card.EXPIRATION_DATE
+        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.Card.NUMBER
+        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.Card.SECURITY_CODE
+        View.AUTOFILL_HINT_PASSWORD -> AutofillHint.Login.PASSWORD
         View.AUTOFILL_HINT_EMAIL_ADDRESS,
         View.AUTOFILL_HINT_USERNAME,
-            -> AutofillHint.USERNAME
+            -> AutofillHint.Login.USERNAME
+
+        HintConstants.AUTOFILL_HINT_PERSON_NAME -> AutofillHint.Identity.PERSON_NAME_FULL
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_PREFIX -> AutofillHint.Identity.PERSON_NAME_PREFIX
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_GIVEN -> AutofillHint.Identity.PERSON_NAME_GIVEN
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_MIDDLE -> AutofillHint.Identity.PERSON_NAME_MIDDLE
+        HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY -> AutofillHint.Identity.PERSON_NAME_FAMILY
+        View.AUTOFILL_HINT_POSTAL_ADDRESS -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS -> {
+            AutofillHint.Identity.ADDRESS_STREET
+        }
+
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY -> {
+            AutofillHint.Identity.ADDRESS_LOCALITY
+        }
+
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION -> AutofillHint.Identity.ADDRESS_REGION
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_COUNTRY -> {
+            AutofillHint.Identity.ADDRESS_COUNTRY
+        }
+
+        View.AUTOFILL_HINT_POSTAL_CODE -> AutofillHint.Identity.POSTAL_CODE
+        View.AUTOFILL_HINT_PHONE -> AutofillHint.Identity.PHONE_FULL
 
         else -> null
     }
 
 /**
- * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
+ * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView],
+ * dispatching to [buildCardView], [buildLoginView] or [buildIdentityView] by [autofillHint]
+ * category.
  */
-@Suppress("LongMethod")
 private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     autofillHint: AutofillHint?,
 ): AutofillView = when (autofillHint) {
-    AutofillHint.CARD_EXPIRATION_MONTH -> {
-        val monthValue = this
-            .autofillValue
-            ?.extractMonthValue(
-                autofillOptions = autofillOptions,
-            )
-
-        AutofillView.Card.ExpirationMonth(
-            data = autofillViewData,
-            monthValue = monthValue,
+    is AutofillHint.Card -> {
+        buildCardView(
+            autofillOptions = autofillOptions,
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
         )
     }
 
-    AutofillHint.CARD_EXPIRATION_YEAR -> {
-        val yearValue = this
-            .autofillValue
-            ?.extractYearValue(
-                autofillOptions = autofillOptions,
-            )
-
-        AutofillView.Card.ExpirationYear(
-            data = autofillViewData,
-            yearValue = yearValue,
+    is AutofillHint.Login -> {
+        buildLoginView(
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
         )
     }
 
-    AutofillHint.CARD_EXPIRATION_DATE -> {
-        AutofillView.Card.ExpirationDate(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_NUMBER -> {
-        AutofillView.Card.Number(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_SECURITY_CODE -> {
-        AutofillView.Card.SecurityCode(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_CARDHOLDER -> {
-        AutofillView.Card.CardholderName(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.PASSWORD -> {
-        AutofillView.Login.Password(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.USERNAME -> {
-        AutofillView.Login.Username(
-            data = autofillViewData,
-        )
-    }
-
-    AutofillHint.CARD_BRAND -> {
-        val brandValue = this.autofillValue
-            ?.extractCardBrandValue(
-                autofillOptions = autofillOptions,
-            )
-        AutofillView.Card.Brand(
-            data = autofillViewData,
-            brandValue = brandValue,
+    is AutofillHint.Identity -> {
+        buildIdentityView(
+            autofillViewData = autofillViewData,
+            autofillHint = autofillHint,
         )
     }
 
     null -> {
-        AutofillView.Unused(
-            data = autofillViewData,
-        )
-    }
-
-    // Identity hint detection/dispatch is wired up in a later phase; treating these as Unused for
-    // now is a no-op since nothing yet produces an IDENTITY_* hint.
-    AutofillHint.IDENTITY_PERSON_NAME_FULL,
-    AutofillHint.IDENTITY_PERSON_NAME_PREFIX,
-    AutofillHint.IDENTITY_PERSON_NAME_GIVEN,
-    AutofillHint.IDENTITY_PERSON_NAME_MIDDLE,
-    AutofillHint.IDENTITY_PERSON_NAME_FAMILY,
-    AutofillHint.IDENTITY_POSTAL_ADDRESS_FULL,
-    AutofillHint.IDENTITY_ADDRESS_STREET,
-    AutofillHint.IDENTITY_ADDRESS_LOCALITY,
-    AutofillHint.IDENTITY_ADDRESS_REGION,
-    AutofillHint.IDENTITY_ADDRESS_COUNTRY,
-    AutofillHint.IDENTITY_POSTAL_CODE,
-    AutofillHint.IDENTITY_PHONE_FULL,
-    AutofillHint.IDENTITY_COMPANY,
-    AutofillHint.IDENTITY_EMAIL,
-    AutofillHint.IDENTITY_SSN,
-    AutofillHint.IDENTITY_PASSPORT_NUMBER,
-    AutofillHint.IDENTITY_LICENSE_NUMBER,
-        -> {
-        AutofillView.Unused(
-            data = autofillViewData,
-        )
+        AutofillView.Unused(data = autofillViewData)
     }
 }
 
@@ -384,6 +386,230 @@ internal val AssistStructure.ViewNode.isCardBrandField: Boolean
             ?.toLowerCaseAndStripNonAlpha()
             ?.containsAnyTerms(SUPPORTED_RAW_CARD_BRAND_HINTS) == true ||
         htmlInfo.isCardBrandField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents an email field. Kept separate from
+ * [isUsernameField] so an email-hinted or email-heuristic field can be independently offered as
+ * an identity candidate alongside the existing username classification.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isEmailField: Boolean
+    get() = autofillHints?.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS) == true ||
+        idEntry
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_EMAIL_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_EMAIL_HINTS) == true ||
+        htmlInfo.isEmailField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a full person name field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPersonNameFullField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FULL_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FULL_HINTS) == true ||
+        htmlInfo.isPersonNameFullField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a person name prefix field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPersonNamePrefixField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_PREFIX_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_PREFIX_HINTS) == true ||
+        htmlInfo.isPersonNamePrefixField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a given (first) name field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPersonNameGivenField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_GIVEN_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_GIVEN_HINTS) == true ||
+        htmlInfo.isPersonNameGivenField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a middle name field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPersonNameMiddleField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_MIDDLE_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_MIDDLE_HINTS) == true ||
+        htmlInfo.isPersonNameMiddleField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a family (last) name field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPersonNameFamilyField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FAMILY_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PERSON_NAME_FAMILY_HINTS) == true ||
+        htmlInfo.isPersonNameFamilyField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a full postal address field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPostalAddressFullField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_POSTAL_ADDRESS_FULL_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_POSTAL_ADDRESS_FULL_HINTS) == true ||
+        htmlInfo.isPostalAddressFullField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a street address field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isAddressStreetField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS) == true ||
+        htmlInfo.isAddressStreetField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a locality (city) field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isAddressLocalityField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_LOCALITY_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_LOCALITY_HINTS) == true ||
+        htmlInfo.isAddressLocalityField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a region (state/province) field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isAddressRegionField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_REGION_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_REGION_HINTS) == true ||
+        htmlInfo.isAddressRegionField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a country field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isAddressCountryField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_COUNTRY_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_COUNTRY_HINTS) == true ||
+        htmlInfo.isAddressCountryField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a postal code field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPostalCodeField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_POSTAL_CODE_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_POSTAL_CODE_HINTS) == true ||
+        htmlInfo.isPostalCodeField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a phone number field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPhoneField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS) == true ||
+        htmlInfo.isPhoneField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a company field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCompanyField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_COMPANY_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_COMPANY_HINTS) == true ||
+        htmlInfo.isCompanyField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a social security number field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isSsnField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_SSN_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_SSN_HINTS) == true ||
+        htmlInfo.isSsnField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a passport number field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPassportNumberField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_PASSPORT_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PASSPORT_HINTS) == true ||
+        htmlInfo.isPassportNumberField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a license number field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isLicenseNumberField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_LICENSE_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_LICENSE_HINTS) == true ||
+        htmlInfo.isLicenseNumberField()
 
 /**
  * Check whether this [AssistStructure.ViewNode] contains any ignored hint terms.
