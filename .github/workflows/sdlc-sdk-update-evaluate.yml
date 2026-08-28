@@ -168,9 +168,17 @@ jobs:
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
+          # claude-code-action treats the PR head as untrusted and restores these exact paths from
+          # origin/main before running Claude, regardless of whether this branch's copy is stale.
+          # This job never has a legitimate reason to change them, so a diff here is that restore,
+          # not Claude — exclude them rather than flag it.
+          _TRUSTED_CONFIG_PATHSPEC=(
+            ':!.claude' ':!.mcp.json' ':!.claude.json' ':!.gitmodules' ':!.ripgreprc'
+            ':!CLAUDE.md' ':!CLAUDE.local.md' ':!.husky'
+          )
+          if [ -n "$(git status --porcelain -- . "${_TRUSTED_CONFIG_PATHSPEC[@]}")" ]; then
             echo "::error::Claude left uncommitted changes; nothing was pushed."
-            git status --porcelain
+            git status --porcelain -- . "${_TRUSTED_CONFIG_PATHSPEC[@]}"
             exit 1
           fi
 
