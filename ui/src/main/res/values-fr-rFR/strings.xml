@@ -120,7 +120,6 @@
     <string name="min_numbers">Chiffres minimum</string>
     <string name="min_special">Caractères spéciaux minimum</string>
     <string name="never">Jamais</string>
-    <string name="new_item_created">Élément ajouté</string>
     <string name="no_cards">Il n\'y a pas de carte de paiement dans votre coffre.</string>
     <string name="add_card">Ajouter une carte de paiement</string>
     <string name="no_logins">Il n\'y a pas d\'identifiants dans votre coffre.</string>
@@ -150,6 +149,14 @@
     <string name="select">Sélectionner</string>
     <string name="item_details">Détails de l\'élément</string>
     <string name="item_updated">Élément sauvegardé</string>
+    <string name="bank_account_saved">Compte bancaire enregistré</string>
+    <string name="card_saved">Carte de paiement enregistrée</string>
+    <string name="identity_saved">Identité enregistrée</string>
+    <string name="license_saved">Licence enregistrée</string>
+    <string name="login_saved">Identifiant enregistré</string>
+    <string name="passport_saved">Passeport enregistré</string>
+    <string name="secure_note_saved">Note sécurisée enregistrée</string>
+    <string name="ssh_key_saved">Clé SSH enregistrée</string>
     <string name="submitting">Soumission en cours…</string>
     <string name="syncing">Synchronisation…</string>
     <string name="syncing_complete">Synchronisation achevée</string>

@@ -120,7 +120,6 @@
     <string name="min_numbers">අවම සංඛ්‍යා</string>
     <string name="min_special">අවම විශේෂ</string>
     <string name="never">කිසිදා</string>
-    <string name="new_item_created">අයිතමය එකතු කරන ලදී</string>
     <string name="no_cards">ඔබගේ සුරක්ෂිතාගාරයේ කාඩ්පත් නොමැත.</string>
     <string name="add_card">කාඩ්පත එක් කරන්න</string>
     <string name="no_logins">ඔබගේ සුරක්ෂිතාගාරයේ පිවිසුම් නොමැත.</string>
@@ -150,6 +149,14 @@
     <string name="select">තෝරන්න</string>
     <string name="item_details">අයිතම විස්තර</string>
     <string name="item_updated">අයිතමය සුරකින ලදී</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">ඉදිරිපත් කරමින්...</string>
     <string name="syncing">සමමුහුර්ත කරමින්...</string>
     <string name="syncing_complete">සමමුහුර්තකරණය සම්පූර්ණයි</string>

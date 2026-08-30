@@ -120,7 +120,6 @@
     <string name="min_numbers">न्यूनतम संख्याहरू</string>
     <string name="min_special">न्यूनतम विशेष</string>
     <string name="never">कहिल्यै</string>
-    <string name="new_item_created">वस्तु थपियो</string>
     <string name="no_cards">तपाईंको भल्टमा कुनै कार्डहरू छैनन्।</string>
     <string name="add_card">कार्ड थप्नुहोस्</string>
     <string name="no_logins">तपाईंको भल्टमा कुनै लगइनहरू छैनन्।</string>
@@ -150,6 +149,14 @@
     <string name="select">चयन गर्नुहोस्</string>
     <string name="item_details">वस्तु विवरण</string>
     <string name="item_updated">वस्तु बचत गरियो</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">पेश गर्दै…</string>
     <string name="syncing">सिङ्क गर्दै…</string>
     <string name="syncing_complete">सिङ्क पूरा भयो</string>

@@ -120,7 +120,6 @@
     <string name="min_numbers">Legalább ennyi szám</string>
     <string name="min_special">Legalább ennyi speciális karakter</string>
     <string name="never">Soha</string>
-    <string name="new_item_created">Az új elem létrejött.</string>
     <string name="no_cards">Nincsenek kártyák a széfben.</string>
     <string name="add_card">Kártya hozzáadása</string>
     <string name="no_logins">Nincsenek bejelentkezések a széfben.</string>
@@ -150,6 +149,14 @@
     <string name="select">Kijelölés</string>
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
+    <string name="bank_account_saved">A bankszámla mentésre került.</string>
+    <string name="card_saved">A kártya mentésre került.</string>
+    <string name="identity_saved">A személyazonosság mentésre került.</string>
+    <string name="license_saved">A licensz mentésre került.</string>
+    <string name="login_saved">A bejelentkezés mentésre került.</string>
+    <string name="passport_saved">Az útlevél mentésre került.</string>
+    <string name="secure_note_saved">A biztonságos jegyzet mentésre került.</string>
+    <string name="ssh_key_saved">Az SSH kulcs mentésre került.</string>
     <string name="submitting">Beküldés…</string>
     <string name="syncing">Szinkronizálás…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>

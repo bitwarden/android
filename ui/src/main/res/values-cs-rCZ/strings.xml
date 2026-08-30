@@ -122,7 +122,6 @@
     <string name="min_numbers">Minimální počet číslic</string>
     <string name="min_special">Minimální počet speciálních znaků</string>
     <string name="never">Nikdy</string>
-    <string name="new_item_created">Položka byla přidána</string>
     <string name="no_cards">Žádné karty ve Vašem trezoru.</string>
     <string name="add_card">Přidat kartu</string>
     <string name="no_logins">Žádné přihlašovací údaje ve Vašem trezoru.</string>
@@ -152,6 +151,14 @@
     <string name="select">Vybrat</string>
     <string name="item_details">Detaily položky</string>
     <string name="item_updated">Položka byla uložena</string>
+    <string name="bank_account_saved">Bankovní účet byl uložen</string>
+    <string name="card_saved">Karta byla uložena</string>
+    <string name="identity_saved">Občanský průkaz byl uložen</string>
+    <string name="license_saved">Řidičský průkaz byl uložen</string>
+    <string name="login_saved">Přihlašovací údaje byly uloženy</string>
+    <string name="passport_saved">Pas byl uložen</string>
+    <string name="secure_note_saved">Zabezpečená poznámka byla uložena</string>
+    <string name="ssh_key_saved">SSH klíč byl uložen</string>
     <string name="submitting">Odesílání…</string>
     <string name="syncing">Synchronizování…</string>
     <string name="syncing_complete">Synchronizace byla dokončena</string>

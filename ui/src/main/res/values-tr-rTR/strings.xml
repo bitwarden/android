@@ -120,7 +120,6 @@
     <string name="min_numbers">En az rakam</string>
     <string name="min_special">En az özel karakter</string>
     <string name="never">Asla</string>
-    <string name="new_item_created">Kayıt eklendi</string>
     <string name="no_cards">Kasanızda hiç kart yok.</string>
     <string name="add_card">Kart ekle</string>
     <string name="no_logins">Kasanızda hiç hesap yok.</string>
@@ -150,6 +149,14 @@
     <string name="select">Seç</string>
     <string name="item_details">Kayıt ayrıntıları</string>
     <string name="item_updated">Öğe kaydedildi</string>
+    <string name="bank_account_saved">Banka hesabı kaydedildi</string>
+    <string name="card_saved">Kart kaydedildi</string>
+    <string name="identity_saved">Kimlik kaydedildi</string>
+    <string name="license_saved">Ehliyet kaydedildi</string>
+    <string name="login_saved">Hesap kaydedildi</string>
+    <string name="passport_saved">Pasaport kaydedildi</string>
+    <string name="secure_note_saved">Güvenli not kaydedildi</string>
+    <string name="ssh_key_saved">SSH anahtarı kaydedildi</string>
     <string name="submitting">Gönderiliyor…</string>
     <string name="syncing">Eşitleniyor…</string>
     <string name="syncing_complete">Eşitleme tamamlandı</string>

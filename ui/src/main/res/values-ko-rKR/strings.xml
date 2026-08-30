@@ -119,7 +119,6 @@
     <string name="min_numbers">숫자 최소 개수</string>
     <string name="min_special">특수 문자 최소 개수</string>
     <string name="never">잠그지 않음</string>
-    <string name="new_item_created">새 항목을 만들었습니다.</string>
     <string name="no_cards">보관함에 카드가 없습니다.</string>
     <string name="add_card">카드 추가</string>
     <string name="no_logins">보관함에 로그인이 없습니다.</string>
@@ -149,6 +148,14 @@
     <string name="select">선택</string>
     <string name="item_details">항목 세부사항</string>
     <string name="item_updated">항목을 업데이트했습니다.</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">제출 중</string>
     <string name="syncing">동기화 중...</string>
     <string name="syncing_complete">동기화를 완료했습니다.</string>

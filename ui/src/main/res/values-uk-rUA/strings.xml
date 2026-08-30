@@ -122,7 +122,6 @@
     <string name="min_numbers">Мінімум цифр</string>
     <string name="min_special">Мінімум спеціальних символів</string>
     <string name="never">Ніколи</string>
-    <string name="new_item_created">Запис додано</string>
     <string name="no_cards">У вашому сховищі немає карток.</string>
     <string name="add_card">Додати картку</string>
     <string name="no_logins">У вашому сховищі немає записів входу.</string>
@@ -152,6 +151,14 @@
     <string name="select">Обрати</string>
     <string name="item_details">Подробиці запису</string>
     <string name="item_updated">Запис збережено</string>
+    <string name="bank_account_saved">Банківський рахунок збережено</string>
+    <string name="card_saved">Картку збережено</string>
+    <string name="identity_saved">Особистість збережено</string>
+    <string name="license_saved">Ліцензію збережено</string>
+    <string name="login_saved">Дані входу збережено</string>
+    <string name="passport_saved">Паспорт збережено</string>
+    <string name="secure_note_saved">Захищена нотатка збережена</string>
+    <string name="ssh_key_saved">SSH ключ збережено</string>
     <string name="submitting">Відправлення…</string>
     <string name="syncing">Синхронізація…</string>
     <string name="syncing_complete">Синхронізацію завершено</string>

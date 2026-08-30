@@ -122,7 +122,6 @@
     <string name="min_numbers">Minimalna liczba cyfr</string>
     <string name="min_special">Minimalna liczba znaków specjalnych</string>
     <string name="never">Nigdy</string>
-    <string name="new_item_created">Element został dodany</string>
     <string name="no_cards">Brak kart w sejfie.</string>
     <string name="add_card">Dodaj kartę</string>
     <string name="no_logins">Brak danych logowania w sejfie.</string>
@@ -152,6 +151,14 @@
     <string name="select">Wybierz</string>
     <string name="item_details">Szczegóły elementu</string>
     <string name="item_updated">Element został zapisany</string>
+    <string name="bank_account_saved">Konto bankowe zostało zapisane</string>
+    <string name="card_saved">Karta została zapisana</string>
+    <string name="identity_saved">Tożsamość została zapisana</string>
+    <string name="license_saved">Prawo jazdy zostało zapisane</string>
+    <string name="login_saved">Dane logowania zostały zapisane</string>
+    <string name="passport_saved">Paszport został zapisany</string>
+    <string name="secure_note_saved">Notatka została zapisana</string>
+    <string name="ssh_key_saved">Klucz SSH został zapisany</string>
     <string name="submitting">Wysyłanie…</string>
     <string name="syncing">Synchronizacja…</string>
     <string name="syncing_complete">Synchronizacja została zakończona</string>
@@ -340,7 +347,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="types">Rodzaje</string>
     <string name="no_passwords_to_list">Brak haseł do wyświetlenia.</string>
     <string name="search_file_sends">Szukaj w wysyłkach pliku</string>
-    <string name="search_text_sends">Szukaj w wysyłkach tekstu</string>
+    <string name="search_text_sends">Szukaj w wysyłkach tekstów</string>
     <string name="type">Rodzaj</string>
     <string name="move_down">Przenieś w dół</string>
     <string name="move_up">Przenieś w górę</string>
@@ -469,7 +476,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="deletion_date">Data usunięcia</string>
     <string name="deletion_time">Czas usunięcia</string>
     <string name="deletion_date_info">Wysyłka zostanie trwale usunięta w określonym czasie.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Data została narzucona przez organizację</string>
     <string name="who_can_view">Kto może odczytać</string>
     <string name="anyone_with_the_link">Każdy, kto ma link</string>
     <string name="anyone_with_link_can_view_send">Każdy, kto ma link, może odczytać wysyłkę</string>
@@ -516,9 +523,9 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="about_send">O wysyłkach</string>
     <string name="hide_email">Ukryj mój adres e-mail przed odbiorcami</string>
     <string name="send_options_policy_in_effect">Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="organization_policy_restriction">Ograniczenie przez zasadę organizacji</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Wysyłka nie jest zgodna z zasadami organizacji i wygaśnie automatycznie w dacie jej usunięcia.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Wysyłki tekstów nie są dozwolone w organizacji. Wysyłka wygaśnie automatycznie w dacie jej usunięcia.</string>
     <string name="to_edit_this_send_make_a_copy">Aby edytować wysyłkę, utwórz jej kopię. Jeśli wysyłka może wygasnąć w dacie usunięcia, nie musisz nic robić.</string>
     <string name="make_a_copy">Utwórz kopię</string>
     <string name="send_file_premium_required">Darmowe konta są ograniczone do udostępniania tylko tekstu. Konto Premium jest wymagane do udostępniania plików.</string>
@@ -1272,7 +1279,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="invalid_email_addresses">Adres e-mail jest nieprawidłowy</string>
     <string name="one_or_more_email_addresses_are_incorrect">Co najmniej jeden adres e-mail jest nieprawidłowy. Sprawdź je i spróbuj ponownie.</string>
     <string name="no_email_addresses_entered">Brak adresu e-mail</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Dozwolone domeny: %1$s. Sprawdź i spróbuj ponownie</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Dozwolone domeny: %1$s. Sprawdź i spróbuj ponownie.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Wpisz co najmniej jeden prawidłowy adres e-mail, aby udostępnić wysyłkę.</string>
     <string name="sync_with_browser">Synchronizuj z przeglądarką</string>
     <string name="sync_with_browser_description">Aby połączyć się z %1$s, zsynchronizuj domyślną przeglądarkę z aplikacją mobilną Bitwarden. Zaloguj się do przeglądarki, jeśli to będzie konieczne.\nPo zakończeniu synchronizacji nastąpi powrót do aplikacji.</string>
