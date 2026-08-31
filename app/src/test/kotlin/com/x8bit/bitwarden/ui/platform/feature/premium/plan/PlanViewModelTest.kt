@@ -436,37 +436,6 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `premium status flip should show snackbar when in WaitingForPayment`() =
-        runTest {
-            val viewModel = createViewModel(
-                initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Content.Free.Cloud(
-                        rate = "$1.67",
-                        checkoutUrl = null,
-                        isAwaitingPremiumStatus = true,
-                        isPremiumUpgradePending = false,
-                    ),
-                    dialogState = PlanState.DialogState.WaitingForPayment,
-                ),
-                pricingResult = null,
-            )
-
-            viewModel.eventFlow.test {
-                // Simulate premium status flip while WaitingForPayment.
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACCOUNT.copy(isPremium = true),
-                    ),
-                )
-
-                assertEquals(
-                    PlanEvent.NavigateToUpgradedToPremium,
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
     fun `premium flip via canceled special circumstance should navigate to UpgradedToPremium`() =
         runTest {
             val viewModel = createViewModel()
@@ -610,38 +579,6 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `UserStateUpdateReceive premium during Loading should navigate to UpgradedToPremium`() =
-        runTest {
-            val viewModel = createViewModel(
-                initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Content.Free.Cloud(
-                        rate = "$1.67",
-                        checkoutUrl = null,
-                        isAwaitingPremiumStatus = true,
-                        isPremiumUpgradePending = false,
-                    ),
-                    dialogState = PlanState.DialogState.Loading(
-                        message = BitwardenString.confirming_your_upgrade.asText(),
-                    ),
-                ),
-                pricingResult = null,
-            )
-
-            viewModel.eventFlow.test {
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACCOUNT.copy(isPremium = true),
-                    ),
-                )
-
-                assertEquals(
-                    PlanEvent.NavigateToUpgradedToPremium,
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
     fun `premium status flip should not emit event when not in WaitingForPayment`() =
         runTest {
             val viewModel = createViewModel()
@@ -654,6 +591,92 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `premium status flip should promote off Free view when not awaiting checkout`() =
+        runTest {
+            val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(DEFAULT_FREE_STATE, stateFlow.awaitItem())
+
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        DEFAULT_ACCOUNT.copy(isPremium = true),
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                        showsPremiumView = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+                eventFlow.expectNoEvents()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SubscriptionStatusUpdateReceive with trouble status while awaiting checkout should promote without celebration event`() =
+        runTest {
+            val viewModel = createViewModel(
+                initialState = DEFAULT_FREE_STATE.copy(
+                    viewState = PlanState.ViewState.Content.Free.Cloud(
+                        rate = "$1.67",
+                        checkoutUrl = null,
+                        isAwaitingPremiumStatus = true,
+                        isPremiumUpgradePending = false,
+                    ),
+                    dialogState = PlanState.DialogState.WaitingForPayment,
+                ),
+                pricingResult = null,
+                subscriptionResult = SubscriptionResult.Success(
+                    subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDate = Instant.parse("2026-04-21T00:00:00Z"),
+                    ),
+                ),
+            )
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(
+                    PlanState.DialogState.WaitingForPayment,
+                    stateFlow.awaitItem().dialogState,
+                )
+
+                mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.CANCELED,
+                )
+
+                val loadingState = stateFlow.awaitItem()
+                assertEquals(
+                    PlanState.ViewState.Loading(
+                        message = BitwardenString.loading_subscription.asText(),
+                    ),
+                    loadingState.viewState,
+                )
+                assertEquals(PlanState.DialogState.WaitingForPayment, loadingState.dialogState)
+
+                val loadedState = stateFlow.awaitItem()
+                assertEquals(
+                    DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                        status = PremiumSubscriptionStatus.CANCELED,
+                        canceledDateText = "April 21, 2026",
+                        showCancelButton = false,
+                    ),
+                    loadedState.viewState,
+                )
+                assertEquals(null, loadedState.dialogState)
+
+                eventFlow.expectNoEvents()
             }
         }
 
