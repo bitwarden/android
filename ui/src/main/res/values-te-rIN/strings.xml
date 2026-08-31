@@ -120,7 +120,6 @@
     <string name="min_numbers">కనీస సంఖ్యలు</string>
     <string name="min_special">కనీస ప్రత్యేక అక్షరాలు</string>
     <string name="never">ఎప్పుడూ</string>
-    <string name="new_item_created">అంశం జోడించబడింది</string>
     <string name="no_cards">మీ ఖజానాలో కార్డ్‌లు లేవు.</string>
     <string name="add_card">కార్డ్ జోడించు</string>
     <string name="no_logins">మీ ఖజానాలో లాగిన్‌లు లేవు.</string>
@@ -150,6 +149,14 @@
     <string name="select">ఎంచుకోండి</string>
     <string name="item_details">అంశం వివరాలు</string>
     <string name="item_updated">అంశం భద్రపరచబడింది</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">సమర్పిస్తోంది…</string>
     <string name="syncing">సింక్ అవుతోంది…</string>
     <string name="syncing_complete">సింక్ పూర్తయింది</string>

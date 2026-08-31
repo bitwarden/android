@@ -122,7 +122,6 @@
     <string name="min_numbers">Minimum číslic</string>
     <string name="min_special">Minimum špeciálnych</string>
     <string name="never">Nikdy</string>
-    <string name="new_item_created">Položka bola pridaná</string>
     <string name="no_cards">V trezore sa nenachádzajú žiadne karty.</string>
     <string name="add_card">Pridať kartu</string>
     <string name="no_logins">Vo vašom trezore nie sú žiadne prihlasovacie údaje.</string>
@@ -152,6 +151,14 @@
     <string name="select">Vybrať</string>
     <string name="item_details">Podrobnosti o položke</string>
     <string name="item_updated">Položka bola aktualizovaná.</string>
+    <string name="bank_account_saved">Bankový účet bol uložený</string>
+    <string name="card_saved">Karta bola uložená</string>
+    <string name="identity_saved">Identita bola uložená</string>
+    <string name="license_saved">Vodičský preukaz bol uložený</string>
+    <string name="login_saved">Prihlasovacie údaje boli uložené</string>
+    <string name="passport_saved">Pas bol uložený</string>
+    <string name="secure_note_saved">Zabezpečená poznámka bola uložená</string>
+    <string name="ssh_key_saved">Kľúč SSH bol uložený</string>
     <string name="submitting">Odosiela sa…</string>
     <string name="syncing">Synchronizuje sa…</string>
     <string name="syncing_complete">Synchronizácia kompletná.</string>

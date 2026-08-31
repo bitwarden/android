@@ -120,7 +120,6 @@
     <string name="min_numbers">Mínimo de números</string>
     <string name="min_special">Mínimo de caracteres especiais</string>
     <string name="never">Nunca</string>
-    <string name="new_item_created">Item adicionado</string>
     <string name="no_cards">Não há cartões no seu cofre.</string>
     <string name="add_card">Adicionar cartão</string>
     <string name="no_logins">Não há credenciais no seu cofre.</string>
@@ -150,6 +149,14 @@
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
     <string name="item_updated">Item salvo</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Enviando…</string>
     <string name="syncing">Sincronizando…</string>
     <string name="syncing_complete">Sincronização concluída</string>
@@ -464,7 +471,7 @@
     <string name="deletion_date">Data de apagamento</string>
     <string name="deletion_time">Horário de apagamento</string>
     <string name="deletion_date_info">O Send será apagado permanentemente no horário especificado.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Esta data é aplicada pela sua organização</string>
     <string name="who_can_view">Quem pode visualizar</string>
     <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
     <string name="anyone_with_link_can_view_send">Qualquer um com este link pode ver este Send</string>
@@ -511,11 +518,11 @@
     <string name="about_send">Sobre o Send</string>
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="organization_policy_restriction">Restrição de políticas da organização</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Este Send não está em conformidade com a política de envio de sua organização e irá expirar automaticamente na data de exclusão definida.</string>
     <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
     <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="make_a_copy">Fazer uma cópia</string>
     <string name="send_file_premium_required">Contas gratuitas são limitadas para compartilhar apenas texto. É necessário um plano Premium para usar arquivos com o Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">O compartilhamento com pessoas específicas é um recurso do Premium. O seu plano atual não inclui acesso a este recurso.</string>
     <string name="password_prompt">Resolicitar senha principal</string>
@@ -1254,7 +1261,7 @@ Deseja trocar para esta conta?</string>
     <string name="invalid_email_addresses">Endereços de e-mail inválidos</string>
     <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Revise e tente novamente.</string>
     <string name="no_email_addresses_entered">Nenhum endereço de e-mail digitado</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Só inclua os seguintes domínios: %1$s. Por favor, revise e tente novamente.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Digite pelo menos um endereço de e-mail válido para compartilhar este Send.</string>
     <string name="sync_with_browser">Sincronizar com o navegador</string>
     <string name="sync_with_browser_description">Para conectar ao %1$s, sincronize o seu navegador padrão com o aplicativo do Bitwarden. Quando seu navegador abrir, conclua a autenticação se necessário.\nNa conclusão da sincronização, você voltará ao aplicativo.</string>

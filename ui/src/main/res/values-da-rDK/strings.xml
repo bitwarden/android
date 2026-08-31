@@ -120,7 +120,6 @@
     <string name="min_numbers">Minnimumsantal cifre</string>
     <string name="min_special">Minnimumsantal specialtegn</string>
     <string name="never">Aldrig</string>
-    <string name="new_item_created">Emne tilføjet</string>
     <string name="no_cards">Der er ingen kort i din vault.</string>
     <string name="add_card">Tilføj kort</string>
     <string name="no_logins">Der er ingen logins i din vault.</string>
@@ -150,6 +149,14 @@
     <string name="select">Vælg</string>
     <string name="item_details">Emnedetaljer</string>
     <string name="item_updated">Emne gemt</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Indsender…</string>
     <string name="syncing">Synkroniserer…</string>
     <string name="syncing_complete">Synkning fuldført</string>

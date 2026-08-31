@@ -119,7 +119,6 @@
     <string name="min_numbers">အနည်းဆုံး ဂဏန်းများ</string>
     <string name="min_special">အနည်းဆုံး အထူးစာလုံးများ</string>
     <string name="never">ဘယ်တော့မှ မဟုတ်</string>
-    <string name="new_item_created">ပစ္စည်း ထည့်ပြီးပါပြီ</string>
     <string name="no_cards">သင့်ဗော်လ်တ်တွင် ကဒ်များ မရှိပါ။</string>
     <string name="add_card">ကဒ်ထည့်ပါ</string>
     <string name="no_logins">သင့်ဗော်လ်တ်တွင် ဝင်ရောက်မှုများ မရှိပါ။</string>
@@ -149,6 +148,14 @@
     <string name="select">ရွေးပါ</string>
     <string name="item_details">ပစ္စည်းအသေးစိတ်</string>
     <string name="item_updated">ပစ္စည်း သိမ်းဆည်းပြီးပါပြီ</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">တင်သွင်းနေသည်…</string>
     <string name="syncing">ထပ်တူပြုနေသည်…</string>
     <string name="syncing_complete">ထပ်တူပြုခြင်း ပြီးဆုံးပါပြီ</string>

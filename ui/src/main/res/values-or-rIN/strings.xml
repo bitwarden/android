@@ -120,7 +120,6 @@
     <string name="min_numbers">ସର୍ବନିମ୍ନ ସଂଖ୍ୟା</string>
     <string name="min_special">ସର୍ବନିମ୍ନ ବିଶେଷ</string>
     <string name="never">କେବେ ନୁହେଁ</string>
-    <string name="new_item_created">ଆଇଟମ୍ ଯୋଡ଼ାଗଲା</string>
     <string name="no_cards">ଆପଣଙ୍କ ତିଜୋରିରେ କୌଣସି କାର୍ଡ ନାହିଁ।</string>
     <string name="add_card">କାର୍ଡ ଯୋଡନ୍ତୁ</string>
     <string name="no_logins">ଆପଣଙ୍କ ତିଜୋରିରେ କୌଣସି ପ୍ରବେଶ ନାହିଁ।</string>
@@ -150,6 +149,14 @@
     <string name="select">ବାଛନ୍ତୁ</string>
     <string name="item_details">ଆଇଟମ୍ ବିବରଣୀ</string>
     <string name="item_updated">ଆଇଟମ୍ ସଞ୍ଚୟ</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">ଦାଖଲ କରୁଛି…</string>
     <string name="syncing">ସିଙ୍କ କରୁଛି…</string>
     <string name="syncing_complete">ସିଙ୍କ ସମ୍ପୂର୍ଣ୍ଣ</string>

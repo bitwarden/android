@@ -120,7 +120,6 @@
     <string name="min_numbers">সর্বনিম্ন সংখ্যা</string>
     <string name="min_special">ন্যূনতম বিশেষ</string>
     <string name="never">কখনই না</string>
-    <string name="new_item_created">আইটেম যোগ করা হয়েছে</string>
     <string name="no_cards">আপনার ভল্টে কোনও কার্ড নেই।</string>
     <string name="add_card">কার্ড যোগ করুন</string>
     <string name="no_logins">আপনার ভল্টে কোনও লগইন নেই।</string>
@@ -150,6 +149,14 @@
     <string name="select">নির্বাচন করুন</string>
     <string name="item_details">আইটেম বিবরণ</string>
     <string name="item_updated">আইটেম সংরক্ষণ করা হয়েছে</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">জমা দেওয়া হচ্ছে…</string>
     <string name="syncing">সিঙ্ক করা হচ্ছে…</string>
     <string name="syncing_complete">সিঙ্ক সম্পূর্ণ হয়েছে</string>

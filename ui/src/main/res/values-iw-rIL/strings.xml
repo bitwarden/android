@@ -116,13 +116,11 @@
     <plurals name="master_password_length_val_message_x">
         <item quantity="one">אורך הסיסמה הראשית חייב להיות לפחות %d תווים.</item>
         <item quantity="two">אורך הסיסמה הראשית חייב להיות לפחות %d תווים.</item>
-        <item quantity="many">אורך הסיסמה הראשית חייב להיות לפחות %d תווים.</item>
         <item quantity="other">אורך הסיסמה הראשית חייב להיות לפחות %d תווים.</item>
     </plurals>
     <string name="min_numbers">מינימום מספרים</string>
     <string name="min_special">מינימום מיוחדים</string>
     <string name="never">לעולם לא</string>
-    <string name="new_item_created">הפריט נוסף</string>
     <string name="no_cards">אין כרטיסים בכספת שלך.</string>
     <string name="add_card">הוסף כרטיס</string>
     <string name="no_logins">אין כניסות בכספת שלך.</string>
@@ -152,6 +150,14 @@
     <string name="select">בחר</string>
     <string name="item_details">פרטי הפריט</string>
     <string name="item_updated">הפריט נשמר</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">שולח…</string>
     <string name="syncing">מסנכרן…</string>
     <string name="syncing_complete">הסנכרון הושלם</string>
@@ -329,7 +335,6 @@
     <plurals name="password_exposed">
         <item quantity="one">סיסמה זו נחשפה %d פעמים בנתוני פרצות. כדאי לך לשנות אותה.</item>
         <item quantity="two">סיסמה זו נחשפה %d פעמים בנתוני פרצות. כדאי לך לשנות אותה.</item>
-        <item quantity="many">סיסמה זו נחשפה %d פעמים בנתוני פרצות. כדאי לך לשנות אותה.</item>
         <item quantity="other">סיסמה זו נחשפה %d פעמים בנתוני פרצות. כדאי לך לשנות אותה.</item>
     </plurals>
     <string name="password_safe">סיסמה זו לא נמצאה בפרצות נתונים ידועות. היא אמורה להיות בטוחה לשימוש.</string>
@@ -543,13 +548,11 @@
     <plurals name="hours_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">שעה %1$d</item>
         <item quantity="two">%1$d שעות</item>
-        <item quantity="many">%1$d שעות</item>
         <item quantity="other">%1$d שעות</item>
     </plurals>
     <plurals name="minutes_format" comment="Can be injected into a sentence with %1$s and %2$s">
         <item quantity="one">דקה %1$d</item>
         <item quantity="two">%1$d דקות</item>
-        <item quantity="many">%1$d דקות</item>
         <item quantity="other">%1$d דקות</item>
     </plurals>
     <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">הארגון שלך הגדיר את פסק הזמן המרבי להפעלה ל־%1$s ו־%2$s.</string>
@@ -815,7 +818,6 @@
     <plurals name="minimum_characters">
         <item quantity="one">תוו %d</item>
         <item quantity="two">%d תווים</item>
-        <item quantity="many">%d תווים</item>
         <item quantity="other">%d תווים</item>
     </plurals>
     <string name="expired_link">קישור פג תוקף</string>
@@ -903,7 +905,6 @@
     <plurals name="notifications_content_description">
         <item quantity="one">%d notification</item>
         <item quantity="two">%d התראות</item>
-        <item quantity="many">%d התראות</item>
         <item quantity="other">%d התראות</item>
     </plurals>
     <string name="log_in_quickly_and_easily_across_devices">היכנס במהירות ובקלות בין מכשירים</string>
@@ -1085,7 +1086,6 @@
     <plurals name="refresh_period_seconds">
         <item quantity="one">שנייה %d</item>
         <item quantity="two">%d שניות</item>
-        <item quantity="many">%d שניות</item>
         <item quantity="other">%d שניות</item>
     </plurals>
     <string name="item_saved">הפריט נשמר</string>
@@ -1165,7 +1165,6 @@
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="one">Bitwarden לא יכל לפענח פריט כספת %1$d. העתק ושתף דוח שגיאה זה עם הצלחת לקוח כדי להימנע מאיבוד נתונים נוסף.</item>
         <item quantity="two">Bitwarden לא יכל לפענח %1$d פריטי כספת. העתק ושתף דוח שגיאה זה עם הצלחת לקוח כדי להימנע מאיבוד נתונים נוסף.</item>
-        <item quantity="many">Bitwarden לא יכל לפענח %1$d פריטי כספת. העתק ושתף דוח שגיאה זה עם הצלחת לקוח כדי להימנע מאיבוד נתונים נוסף.</item>
         <item quantity="other">Bitwarden לא יכל לפענח %1$d פריטי כספת. העתק ושתף דוח שגיאה זה עם הצלחת לקוח כדי להימנע מאיבוד נתונים נוסף.</item>
     </plurals>
     <string name="select_a_card_for_x">בחר כרטיס עבור %s</string>
@@ -1198,7 +1197,6 @@
     <plurals name="x_items_have_been_imported_to_your_vault">
         <item quantity="one">פריט %1$d יובא אל הכספת שלך.</item>
         <item quantity="two">%1$d פריטים יובאו אל הכספת שלך.</item>
-        <item quantity="many">%1$d פריטים יובאו אל הכספת שלך.</item>
         <item quantity="other">%1$d פריטים יובאו אל הכספת שלך.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">הפעל מילוי אוטומטי בדפדפן כדי להמשך למלא סיסמאות</string>
@@ -1362,7 +1360,6 @@
     <plurals name="subscription_past_due_description">
         <item quantity="one">יש לך תקופת חסד של <annotation arg="0">%1$d</annotation> יום ממועד פקיעת המנוי שלך. אנא פתור את החשבוניות באיחור עד <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
         <item quantity="two">יש לך תקופת חסד של <annotation arg="0">%1$d</annotation> ימים ממועד פקיעת המנוי שלך. אנא פתור את החשבוניות באיחור עד <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="many">יש לך תקופת חסד של <annotation arg="0">%1$d</annotation> ימים ממועד פקיעת המנוי שלך. אנא פתור את החשבוניות באיחור עד <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
         <item quantity="other">יש לך תקופת חסד של <annotation arg="0">%1$d</annotation> ימים ממועד פקיעת המנוי שלך. אנא פתור את החשבוניות באיחור עד <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">המנוי שלך מושהה. חידש כדי להמשיך להשתמש בתכונות הפרימיום.</string>

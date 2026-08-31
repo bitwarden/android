@@ -122,7 +122,6 @@
     <string name="min_numbers">Минимум цифр</string>
     <string name="min_special">Минимум символов</string>
     <string name="never">Никогда</string>
-    <string name="new_item_created">Элемент добавлен</string>
     <string name="no_cards">В вашем хранилище нет карт.</string>
     <string name="add_card">Добавить карту</string>
     <string name="no_logins">В вашем хранилище нет логинов.</string>
@@ -152,6 +151,14 @@
     <string name="select">Выбрать</string>
     <string name="item_details">Информация об элементе</string>
     <string name="item_updated">Элемент сохранен</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Отправка…</string>
     <string name="syncing">Синхронизация…</string>
     <string name="syncing_complete">Синхронизация выполнена</string>
