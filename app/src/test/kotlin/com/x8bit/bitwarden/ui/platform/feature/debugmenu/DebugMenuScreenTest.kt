@@ -54,6 +54,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on generate crash click should send GenerateCrashClick action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText(text = "Generate crash")
             .performScrollTo()
@@ -64,6 +65,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on generate error report click should send GenerateErrorReportClick action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText(text = "Generate error report")
             .performScrollTo()
@@ -74,7 +76,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `feature flag content should not display if the state is empty`() {
-        mutableStateFlow.update { DebugMenuState(featureFlags = persistentMapOf()) }
+        mutableStateFlow.update { it.copy(featureFlags = persistentMapOf()) }
         composeTestRule
             .onNodeWithText(text = "dummy-boolean")
             .assertDoesNotExist()
@@ -83,7 +85,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     @Test
     fun `feature flag content should display if the state is not empty`() {
         mutableStateFlow.update {
-            DebugMenuState(
+            it.copy(
                 featureFlags = persistentMapOf(
                     FlagKey.DummyBoolean to true,
                 ),
@@ -97,7 +99,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     @Test
     fun `boolean feature flag content should send action when clicked`() {
         mutableStateFlow.update {
-            DebugMenuState(
+            it.copy(
                 featureFlags = persistentMapOf(
                     FlagKey.DummyBoolean to true,
                 ),
@@ -120,7 +122,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     @Test
     fun `reset feature flag values should send action when clicked`() {
         composeTestRule
-            .onNodeWithText("Reset Values", ignoreCase = true)
+            .onNodeWithText("Reset values")
             .performScrollTo()
             .performClick()
 
@@ -129,6 +131,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `restart onboarding should send action when clicked`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText("Restart Onboarding", ignoreCase = true)
             .performScrollTo()
@@ -140,8 +143,9 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Show onboarding carousel should send action when enabled and clicked`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
-            .onNodeWithText("Show Onboarding Carousel", ignoreCase = true)
+            .onNodeWithText("Show Onboarding Carousel")
             .performScrollTo()
             .assertIsEnabled()
             .performClick()
@@ -151,6 +155,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `clear SSO cookies should send ClearSsoCookies action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText("Clear SSO cookies")
             .performScrollTo()
@@ -161,6 +166,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `reset Premium upgrade banner should send ResetPremiumUpgradeBanner action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText("Reset Premium upgrade banner")
             .performScrollTo()
@@ -173,6 +179,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `reset accessibility disclaimer should send ResetAccessibilityDisclaimer action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText("Reset accessibility disclaimer")
             .performScrollTo()
@@ -185,6 +192,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `reset all coach mark tours should send ResetCoachMarkTourStatuses action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
         composeTestRule
             .onNodeWithText("Reset all coach mark tours")
             .performScrollTo()
@@ -198,4 +206,5 @@ private val DEFAULT_STATE: DebugMenuState = DebugMenuState(
     featureFlags = persistentMapOf(
         FlagKey.DummyBoolean to true,
     ),
+    mainTypeOption = DebugMenuState.MainTypeOption.FLAGS,
 )

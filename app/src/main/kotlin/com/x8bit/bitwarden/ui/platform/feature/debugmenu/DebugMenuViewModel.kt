@@ -4,6 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -37,7 +40,10 @@ class DebugMenuViewModel @Inject constructor(
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
-    initialState = DebugMenuState(featureFlags = persistentMapOf()),
+    initialState = DebugMenuState(
+        featureFlags = persistentMapOf(),
+        mainTypeOption = DebugMenuState.MainTypeOption.FLAGS,
+    ),
 ) {
 
     private var featureFlagResetJob: Job? = null
@@ -68,7 +74,12 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
             DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
             DebugMenuAction.ResetAccessibilityDisclaimer -> handleResetAccessibilityDisclaimer()
+            is DebugMenuAction.MainTypeOptionClick -> handleMainTypeOptionClick(action)
         }
+    }
+
+    private fun handleMainTypeOptionClick(action: DebugMenuAction.MainTypeOptionClick) {
+        mutableStateFlow.update { it.copy(mainTypeOption = action.option) }
     }
 
     private fun handleResetAccessibilityDisclaimer() {
@@ -148,7 +159,20 @@ class DebugMenuViewModel @Inject constructor(
  */
 data class DebugMenuState(
     val featureFlags: ImmutableMap<FlagKey<Any>, Any>,
-)
+    val mainTypeOption: MainTypeOption,
+) {
+    /**
+     * Enum representing the main type options for the debug menu, such as Feature flags and
+     * options.
+     */
+    enum class MainTypeOption(
+        val label: Text,
+        val testTag: String,
+    ) {
+        FLAGS(label = BitwardenString.feature_flags.asText(), testTag = "feature_flags"),
+        OPTIONS(label = BitwardenString.debug_options.asText(), testTag = "debug_options"),
+    }
+}
 
 /**
  * Models event for the [DebugMenuViewModel] to send to the UI.
@@ -164,6 +188,12 @@ sealed class DebugMenuEvent {
  * Models action for the [DebugMenuViewModel] to handle.
  */
 sealed class DebugMenuAction {
+    /**
+     * Indicates that the main option type has been changed by the user.
+     */
+    data class MainTypeOptionClick(
+        val option: DebugMenuState.MainTypeOption,
+    ) : DebugMenuAction()
 
     /**
      * Updates a feature flag for the given [FlagKey] to the given [newValue].
