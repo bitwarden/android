@@ -37,19 +37,27 @@ private const val FIELD_KEY_LICENSE_NUMBER = "licenseNumber"
  * Traverses the [AssistStructure] and returns a list of [AutofillView]s classified by the
  * provided [hostRules]. Only view nodes whose [android.view.ViewStructure.HtmlInfo] attributes
  * match a [FillAssistRules.SelectorClause] are included; unmatched nodes are omitted (no
- * heuristic fallback).
+ * heuristic fallback). All identity classification is gated behind [isIdentityAutofillEnabled].
  */
 internal fun AssistStructure.buildFillAssistViews(
     hostRules: List<FillAssistRules.HostRule>,
     urlBarWebsite: String?,
+    isIdentityAutofillEnabled: Boolean,
 ): List<AutofillView> =
     (0 until windowNodeCount)
         .mapNotNull { getWindowNodeAt(it).rootViewNode }
-        .flatMap { it.traverseForFillAssist(hostRules = hostRules, parentWebsite = urlBarWebsite) }
+        .flatMap {
+            it.traverseForFillAssist(
+                hostRules = hostRules,
+                parentWebsite = urlBarWebsite,
+                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+            )
+        }
 
 private fun AssistStructure.ViewNode.traverseForFillAssist(
     hostRules: List<FillAssistRules.HostRule>,
     parentWebsite: String?,
+    isIdentityAutofillEnabled: Boolean,
 ): List<AutofillView> {
     val website = this.website ?: parentWebsite
     val ownViews = autofillId?.let { id ->
@@ -64,24 +72,34 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
             ?.let { matchingEntries ->
                 val data = toAutofillViewData(autofillId = id, website = website)
                 val candidateViews = matchingEntries.mapNotNull { (key, _) ->
-                    key.toAutofillViewForFieldKey(data = data)?.let { key to it }
+                    key.toAutofillViewForFieldKey(
+                        data = data,
+                        isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                    )?.let { key to it }
                 }
-                // A single field can legitimately match both the "email" and "phone"/"username"
-                // keys (e.g. a combined phone-or-email login field). Login.Username has no format
-                // gate and fills any stored value, while Login.Email rejects non-email values via
-                // isValidEmail(). Preferring Username when both match avoids rejecting a phone
-                // number credential on a field that would have accepted it.
-                candidateViews.firstOrNull { (_, view) -> view is AutofillView.Login.Username }
-                    ?: candidateViews.firstOrNull()
-            }
-            ?.let { (key, view) ->
-                // An email field key is offered as both a Login candidate (primary) and an
-                // Identity candidate, mirroring the same dual-classification used by heuristic
-                // detection, since the two partitions aren't mutually exclusive for this field.
-                if (key == FIELD_KEY_EMAIL) {
-                    listOf(view, AutofillView.Identity.Email(data = view.data))
-                } else {
-                    listOf(view)
+                // Prefer Username: it has no format gate, while Login.Email rejects non-email
+                // values via isValidEmail().
+                val view = candidateViews
+                    .firstOrNull { (_, view) -> view is AutofillView.Login.Username }
+                    ?.second
+                    ?: candidateViews.firstOrNull()?.second
+                    ?: return@let null
+
+                // Dual-classify off the full matched-key set, not just the winning key, so a
+                // field matched under both "email" and "phone" gets both Identity views.
+                val isLoginIdentifierView = view is AutofillView.Login.Username ||
+                    view is AutofillView.Login.Email
+                buildList<AutofillView> {
+                    add(view)
+                    if (isIdentityAutofillEnabled && isLoginIdentifierView) {
+                        val matchedKeys = candidateViews.mapTo(mutableSetOf()) { it.first }
+                        if (FIELD_KEY_EMAIL in matchedKeys) {
+                            add(AutofillView.Identity.Email(data = view.data))
+                        }
+                        if (FIELD_KEY_PHONE in matchedKeys) {
+                            add(AutofillView.Identity.PhoneFull(data = view.data))
+                        }
+                    }
                 }
             }
     }.orEmpty()
@@ -90,6 +108,7 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
             getChildAt(index).traverseForFillAssist(
                 hostRules = hostRules,
                 parentWebsite = website,
+                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
         }
     return ownViews + childViews
@@ -100,10 +119,13 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
  * Delegates to a type-specific mapper ([toLoginViewForFieldKey], [toCardViewForFieldKey],
  * [toIdentityViewForFieldKey]) grouped by the category the field key belongs to.
  */
-private fun String.toAutofillViewForFieldKey(data: AutofillView.Data): AutofillView? =
+private fun String.toAutofillViewForFieldKey(
+    data: AutofillView.Data,
+    isIdentityAutofillEnabled: Boolean,
+): AutofillView? =
     toLoginViewForFieldKey(data = data)
         ?: toCardViewForFieldKey(data = data)
-        ?: toIdentityViewForFieldKey(data = data)
+        ?: if (isIdentityAutofillEnabled) toIdentityViewForFieldKey(data = data) else null
 
 private fun String.toLoginViewForFieldKey(data: AutofillView.Data): AutofillView.Login? =
     when (this) {
