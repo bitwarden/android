@@ -44,9 +44,9 @@ import com.bitwarden.ui.util.asText
  * button, and leading icon content.
  *
  * @param cardTitle The title of the card.
+ * @param modifier The [Modifier] to be applied to the card.
  * @param actionButton The data for the CTA button, or `null` to omit it, which suits a card that
  * only explains something.
- * @param modifier The [Modifier] to be applied to the card.
  * @param onDismissClick Optional action to perform when the dismiss button is clicked.
  * @param cardSubtitle The subtitle of the card.
  * @param secondaryButton The optional data for a secondary button.
@@ -118,12 +118,16 @@ fun BitwardenActionCard(
                     }
                 }
             }
-            onDismissClick?.let {
+            if (onDismissClick != null) {
                 BitwardenStandardIconButton(
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     contentDescription = stringResource(id = BitwardenString.close),
-                    onClick = it,
+                    onClick = onDismissClick,
                 )
+            } else {
+                // The dismiss button normally supplies the trailing inset, so without it the
+                // content would otherwise run to the edge of the card.
+                Spacer(modifier = Modifier.width(width = 16.dp))
             }
         }
         if (actionButton != null || secondaryButton != null) {
