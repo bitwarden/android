@@ -66,13 +66,29 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `handleMainTypeOptionClick should update the main option state`() {
+        val viewModel = createViewModel()
+        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE)
+        viewModel.trySendAction(
+            DebugMenuAction.MainTypeOptionClick(DebugMenuState.MainTypeOption.OPTIONS),
+        )
+        assertEquals(
+            viewModel.stateFlow.value,
+            DEFAULT_STATE.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS),
+        )
+    }
+
+    @Test
     fun `handleUpdateFeatureFlag should update the feature flag`() {
         val viewModel = createViewModel()
         assertEquals(viewModel.stateFlow.value, DEFAULT_STATE)
         viewModel.trySendAction(
             DebugMenuAction.Internal.UpdateFeatureFlagMap(UPDATED_MAP_VALUE),
         )
-        assertEquals(viewModel.stateFlow.value, DebugMenuState(UPDATED_MAP_VALUE))
+        assertEquals(
+            viewModel.stateFlow.value,
+            DEFAULT_STATE.copy(featureFlags = UPDATED_MAP_VALUE),
+        )
     }
 
     @Test
@@ -218,4 +234,5 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
 
 private val DEFAULT_STATE = DebugMenuState(
     featureFlags = DEFAULT_MAP_VALUE,
+    mainTypeOption = DebugMenuState.MainTypeOption.FLAGS,
 )
