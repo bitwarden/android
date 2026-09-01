@@ -177,6 +177,7 @@ class AutofillParserImpl(
                 uri = uri,
                 focusedView = focusedView,
                 urlBarWebsite = urlBarWebsite,
+                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
         } else {
             autofillViews
@@ -248,6 +249,7 @@ class AutofillParserImpl(
         uri: String?,
         focusedView: AutofillView,
         urlBarWebsite: String?,
+        isIdentityAutofillEnabled: Boolean,
     ): List<AutofillView> {
         val hostRules = uri
             ?.takeUnless { it.startsWith("androidapp://") }
@@ -275,6 +277,7 @@ class AutofillParserImpl(
         val fillAssistViews = assistStructure.buildFillAssistViews(
             hostRules = hostRules,
             urlBarWebsite = urlBarWebsite,
+            isIdentityAutofillEnabled = isIdentityAutofillEnabled,
         )
         // Fill-assist is authoritative for a partition its rules cover (guarded by
         // coversCurrentPartition above), so its views are used even when empty: for Login/Card
@@ -531,13 +534,25 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.LicenseNumber -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PassportNumber -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNameFamily -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameFamily -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+
         is AutofillView.Identity.PersonNameFull -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PersonNameGiven -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNameMiddle -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNamePrefix -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameMiddle -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+
+        is AutofillView.Identity.PersonNamePrefix -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+
         is AutofillView.Identity.PhoneFull -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PostalAddressFull -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PostalAddressFull -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+
         is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))

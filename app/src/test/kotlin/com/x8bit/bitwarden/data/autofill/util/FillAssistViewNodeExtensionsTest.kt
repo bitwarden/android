@@ -42,6 +42,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = emptyList(),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -55,6 +56,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -72,6 +74,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -101,6 +104,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(
@@ -112,8 +116,39 @@ class FillAssistViewNodeExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `buildFillAssistViews should return Login Username when htmlInfo matches phone clause`() {
+    fun `buildFillAssistViews should return only Login Email when htmlInfo matches email clause and IdentityAutofill is disabled`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val data = autofillData()
+        every {
+            viewNode.toAutofillViewData(
+                autofillId = autofillId,
+                website = null,
+            )
+        } returns data
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = mapOf(
+                "email" to listOf(selectorClause(tag = "input", id = "email")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(listOf(AutofillView.Login.Email(data = data)), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should return Login Username and Identity PhoneFull when htmlInfo matches phone clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -135,9 +170,16 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(
+            listOf(
+                AutofillView.Login.Username(data = data),
+                AutofillView.Identity.PhoneFull(data = data),
+            ),
+            actual,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -159,6 +201,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Password(data = data)), actual)
@@ -183,6 +226,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Password(data = data)), actual)
@@ -225,6 +269,7 @@ class FillAssistViewNodeExtensionsTest {
             val actual = assistStructure.buildFillAssistViews(
                 hostRules = listOf(hostRule),
                 urlBarWebsite = null,
+                isIdentityAutofillEnabled = true,
             )
 
             assertEquals(
@@ -276,6 +321,7 @@ class FillAssistViewNodeExtensionsTest {
             val actual = assistStructure.buildFillAssistViews(
                 hostRules = listOf(hostRule),
                 urlBarWebsite = null,
+                isIdentityAutofillEnabled = true,
             )
 
             assertEquals(
@@ -284,6 +330,32 @@ class FillAssistViewNodeExtensionsTest {
                 "Failed for field key: $fieldKey",
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should exclude identity field key when IdentityAutofill is disabled`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        every {
+            viewNode.toAutofillViewData(autofillId = autofillId, website = null)
+        } returns autofillData()
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "identity-form",
+            fields = mapOf(
+                "personNameFull" to listOf(selectorClause(tag = "input", id = "name")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(emptyList<AutofillView>(), actual)
     }
 
     @Test
@@ -305,6 +377,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -316,7 +389,7 @@ class FillAssistViewNodeExtensionsTest {
         // Two field keys ("email" and "username") both match the same node, e.g. a combined
         // phone-or-email login field. Login.Username has no format gate and fills any stored
         // value, while Login.Email rejects non-email values, so Username is preferred even
-        // though "email" is listed first.
+        // though "email" is listed first. The "email" key is still dual-classified as Identity.
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -334,16 +407,24 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(
+            listOf(
+                AutofillView.Login.Username(data = data),
+                AutofillView.Identity.Email(data = data),
+            ),
+            actual,
+        )
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `buildFillAssistViews should prefer Login Username over Login Email when phone and email keys match the same node`() {
         // Mirrors a real fill-assist rule where a single combined phone-or-email field is
-        // declared under both the "email" and "phone" keys.
+        // declared under both the "email" and "phone" keys. Both keys are dual-classified as
+        // Identity, regardless of which key won the Username-preference tie-break above.
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
         val assistStructure = createAssistStructure(viewNode)
@@ -361,9 +442,17 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
-        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+        assertEquals(
+            listOf(
+                AutofillView.Login.Username(data = data),
+                AutofillView.Identity.Email(data = data),
+                AutofillView.Identity.PhoneFull(data = data),
+            ),
+            actual,
+        )
     }
 
     @Test
@@ -386,6 +475,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = childData)), actual)
@@ -406,6 +496,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = urlBarWebsite,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -426,6 +517,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = urlBarWebsite,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -440,6 +532,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -454,6 +547,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -486,6 +580,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -501,6 +596,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -517,6 +613,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -531,6 +628,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -563,6 +661,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -593,6 +692,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(emptyList<AutofillView>(), actual)
@@ -610,6 +710,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -641,6 +742,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(hostRule),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
@@ -669,6 +771,7 @@ class FillAssistViewNodeExtensionsTest {
         val actual = assistStructure.buildFillAssistViews(
             hostRules = listOf(usernameHostRule(tag = "input", id = "user")),
             urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
         )
 
         assertEquals(
