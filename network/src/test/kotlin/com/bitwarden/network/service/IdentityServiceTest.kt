@@ -5,6 +5,7 @@ import com.bitwarden.network.api.UnauthenticatedIdentityApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.KeysJson
@@ -410,16 +411,21 @@ class IdentityServiceTest : BaseServiceTest() {
         private const val PASSWORD_HASH = "passwordHash"
         private val registerFinishRequestBody = RegisterFinishRequestJson(
             email = EMAIL,
-            masterPasswordHash = "mockk_masterPasswordHash",
-            masterPasswordHint = "mockk_masterPasswordHint",
             emailVerificationToken = "mock_emailVerificationToken",
-            userSymmetricKey = "mockk_key",
+            masterPasswordHint = "mockk_masterPasswordHint",
             userAsymmetricKeys = KeysJson(
                 publicKey = "mockk_publicKey",
                 encryptedPrivateKey = "mockk_encryptedPrivateKey",
             ),
-            kdfType = KdfTypeJson.PBKDF2_SHA256,
-            kdfIterations = 600000U,
+            kdf = KdfJson(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = 600000,
+                memory = null,
+                parallelism = null,
+            ),
+            salt = EMAIL,
+            masterPasswordAuthenticationHash = "mockk_masterPasswordHash",
+            masterKeyWrappedUserKey = "mockk_key",
         )
     }
 }

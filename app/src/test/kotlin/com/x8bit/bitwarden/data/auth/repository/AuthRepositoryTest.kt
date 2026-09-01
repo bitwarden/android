@@ -4851,16 +4851,21 @@ class AuthRepositoryTest {
             identityService.registerFinish(
                 body = RegisterFinishRequestJson(
                     email = EMAIL,
-                    masterPasswordHash = PASSWORD_HASH,
-                    masterPasswordHint = null,
                     emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
-                    userSymmetricKey = ENCRYPTED_USER_KEY,
+                    masterPasswordHint = null,
                     userAsymmetricKeys = KeysJson(
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = KdfTypeJson.PBKDF2_SHA256,
-                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                    kdf = KdfJson(
+                        kdfType = KdfTypeJson.PBKDF2_SHA256,
+                        iterations = DEFAULT_KDF_ITERATIONS,
+                        memory = null,
+                        parallelism = null,
+                    ),
+                    salt = EMAIL,
+                    masterPasswordAuthenticationHash = PASSWORD_HASH,
+                    masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
                 ),
             )
         } returns RegisterResponseJson.Success.asSuccess()
