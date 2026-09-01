@@ -44,9 +44,9 @@ import com.bitwarden.ui.util.asText
  * button, and leading icon content.
  *
  * @param cardTitle The title of the card.
+ * @param modifier The [Modifier] to be applied to the card.
  * @param actionButton The data for the CTA button, or `null` to omit it, which suits a card that
  * only explains something.
- * @param modifier The [Modifier] to be applied to the card.
  * @param onDismissClick Optional action to perform when the dismiss button is clicked.
  * @param cardSubtitle The subtitle of the card.
  * @param secondaryButton The optional data for a secondary button.
