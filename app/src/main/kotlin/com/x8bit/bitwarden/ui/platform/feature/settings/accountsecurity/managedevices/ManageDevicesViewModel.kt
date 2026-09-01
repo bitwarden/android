@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -18,6 +17,7 @@ import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
+import com.x8bit.bitwarden.data.auth.manager.util.filterRespondedAndExpired
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
@@ -63,15 +63,13 @@ class ManageDevicesViewModel @Inject constructor(
         isRefreshing = false,
         internalHideBottomSheet = false,
         isFdroid = buildInfoManager.isFdroid,
-        devicesLoaded = false,
-        authRequestsLoaded = false,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
+    private var devicesJob: Job = Job().apply { complete() }
 
     init {
         updateAuthRequestList()
-        fetchAllDevices()
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { ManageDevicesAction.Internal.PullToRefreshEnableReceive(it) }
@@ -111,17 +109,8 @@ class ManageDevicesViewModel @Inject constructor(
     }
 
     private fun handleRefreshPull() {
-        val shouldRefetchDevices = !state.devicesLoaded
-        mutableStateFlow.update {
-            it.copy(
-                isRefreshing = true,
-                authRequestsLoaded = false,
-            )
-        }
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         updateAuthRequestList()
-        if (shouldRefetchDevices) {
-            fetchAllDevices()
-        }
     }
 
     private fun handlePendingRequestRowClicked(
@@ -174,7 +163,10 @@ class ManageDevicesViewModel @Inject constructor(
     }
 
     private fun fetchAllDevices() {
-        viewModelScope.launch {
+        // Canceled first so a slower earlier read cannot land after a newer one and render a
+        // stale list or dismiss the pull-to-refresh indicator early.
+        devicesJob.cancel()
+        devicesJob = viewModelScope.launch {
             sendAction(
                 ManageDevicesAction.Internal.GetDevicesResultReceive(
                     devicesResult = authRepository.getDevices(),
@@ -193,16 +185,10 @@ class ManageDevicesViewModel @Inject constructor(
 
             is AuthRequestsUpdatesResult.Error -> emptyList()
         }
-        mutableStateFlow.update {
-            it.copy(
-                authRequests = filteredRequests.toImmutableList(),
-                authRequestsLoaded = true,
-                isRefreshing = if (state.devicesLoaded) false else it.isRefreshing,
-            )
-        }
-        if (state.devicesLoaded) {
-            updateContentWithCurrentData()
-        }
+        mutableStateFlow.update { it.copy(authRequests = filteredRequests.toImmutableList()) }
+        // The device list is the only source that reports which device owns a pending request, so
+        // it is re-read before the new list can be rendered against it.
+        fetchAllDevices()
     }
 
     private fun handleGetDevicesResultReceived(
@@ -211,7 +197,10 @@ class ManageDevicesViewModel @Inject constructor(
         val devicesResult = action.devicesResult as? GetDevicesResult.Success
             ?: run {
                 mutableStateFlow.update {
-                    it.copy(viewState = ManageDevicesState.ViewState.Error, isRefreshing = false)
+                    it.copy(
+                        viewState = ManageDevicesState.ViewState.Error,
+                        isRefreshing = false,
+                    )
                 }
                 return
             }
@@ -219,13 +208,10 @@ class ManageDevicesViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 devices = devicesResult.devices.toImmutableList(),
-                devicesLoaded = true,
-                isRefreshing = if (state.authRequestsLoaded) false else it.isRefreshing,
+                isRefreshing = false,
             )
         }
-        if (state.authRequestsLoaded) {
-            updateContentWithCurrentData()
-        }
+        updateContentWithCurrentData()
     }
 
     private fun updateContentWithCurrentData() {
@@ -285,8 +271,6 @@ data class ManageDevicesState(
     val isRefreshing: Boolean,
     private val internalHideBottomSheet: Boolean,
     private val isFdroid: Boolean,
-    val devicesLoaded: Boolean,
-    val authRequestsLoaded: Boolean,
 ) : Parcelable {
 
     /**
@@ -457,16 +441,3 @@ enum class DeviceSessionStatus {
     Pending,
     None,
 }
-
-/**
- * Filters out [AuthRequest]s that match one of the following criteria:
- * * The request has been approved.
- * * The request has been declined (indicated by it not being approved & having a responseDate).
- * * The request has expired (it is at least 5 minutes old).
- */
-private fun List<AuthRequest>.filterRespondedAndExpired(clock: Clock) =
-    filterNot { request ->
-        request.requestApproved ||
-            request.responseDate != null ||
-            request.creationDate.isOverFiveMinutesOld(clock)
-    }
