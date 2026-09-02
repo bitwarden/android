@@ -1788,6 +1788,114 @@ class AutofillParserTests {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `parse should choose AutofillPartition Login when fill-assist resolves the focused view to Identity but a Login view is fillable elsewhere`() {
+        // A host rule pools an identity field with a login field under one category, so
+        // fill-assist reclassifies the focused Unused node as Identity while a fillable Login
+        // view exists elsewhere -- this must not force Unfillable.
+        mutableFillAssistFlagFlow.value = true
+        mutableIdentityAutofillFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+
+        val usernameSelectorClause = FillAssistRules.SelectorClause(
+            tag = "input", id = "user", name = null, type = null, role = null,
+        )
+        val nameSelectorClause = FillAssistRules.SelectorClause(
+            tag = "input", id = "fname", name = null, type = null, role = null,
+        )
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-creation",
+                        fields = mapOf(
+                            "username" to listOf(usernameSelectorClause),
+                            "personNameFull" to listOf(nameSelectorClause),
+                        ),
+                    ),
+                ),
+            ),
+        )
+
+        val identityAutofillId: AutofillId = mockk()
+        val identityHtmlInfo: HtmlInfo = mockk(relaxed = true)
+        val identityViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns identityAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.htmlInfo } returns identityHtmlInfo
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns null
+        }
+        val identityWindowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns identityViewNode
+        }
+        every { identityHtmlInfo.matchesSelectorClause(nameSelectorClause) } returns true
+        every { loginViewNode.htmlInfo!!.matchesSelectorClause(usernameSelectorClause) } returns true
+
+        val unusedIdentityView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = identityAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        val unusedLoginView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        every { assistStructure.windowNodeCount } returns 2
+        every { assistStructure.getWindowNodeAt(0) } returns identityWindowNode
+        every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
+        every {
+            identityViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns unusedIdentityView
+        every {
+            loginViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns unusedLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: falls through to the fillable Login view instead of becoming Unfillable.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(
+                views = listOf(
+                    AutofillView.Login.Username(
+                        data = AutofillView.Data(
+                            autofillId = loginAutofillId,
+                            autofillOptions = emptyList(),
+                            autofillType = AUTOFILL_TYPE,
+                            isFocused = false,
+                            textValue = null,
+                            hasPasswordTerms = false,
+                            website = WEBSITE,
+                        ),
+                    ),
+                ),
+            ),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `parse should promote a phone-hinted field to Login Username via updateForMissingUsernameFields when IdentityAutofill is disabled`() {
         // Setup: a node that heuristics would classify as Identity PhoneFull once identity
         // detection is active, sitting directly above a password field. Before identity
