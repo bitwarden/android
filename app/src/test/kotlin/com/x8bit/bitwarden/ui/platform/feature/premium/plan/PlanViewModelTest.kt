@@ -627,16 +627,17 @@ class PlanViewModelTest : BaseViewModelTest() {
     @Test
     fun `SubscriptionStatusUpdateReceive with trouble status while awaiting checkout should promote without celebration event`() =
         runTest {
-            val viewModel = createViewModel(
-                initialState = DEFAULT_FREE_STATE.copy(
-                    viewState = PlanState.ViewState.Content.Free.Cloud(
-                        rate = "$1.67",
-                        checkoutUrl = null,
-                        isAwaitingPremiumStatus = true,
-                        isPremiumUpgradePending = false,
-                    ),
-                    dialogState = PlanState.DialogState.WaitingForPayment,
+            val initialState = DEFAULT_FREE_STATE.copy(
+                viewState = PlanState.ViewState.Content.Free.Cloud(
+                    rate = "$1.67",
+                    checkoutUrl = null,
+                    isAwaitingPremiumStatus = true,
+                    isPremiumUpgradePending = false,
                 ),
+                dialogState = PlanState.DialogState.WaitingForPayment,
+            )
+            val viewModel = createViewModel(
+                initialState = initialState,
                 pricingResult = null,
                 subscriptionResult = SubscriptionResult.Success(
                     subscription = SUBSCRIPTION_INFO_ACTIVE.copy(
@@ -647,34 +648,32 @@ class PlanViewModelTest : BaseViewModelTest() {
             )
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(
-                    PlanState.DialogState.WaitingForPayment,
-                    stateFlow.awaitItem().dialogState,
-                )
+                assertEquals(initialState, stateFlow.awaitItem())
 
                 mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
                     status = PremiumSubscriptionStatus.CANCELED,
                 )
 
-                val loadingState = stateFlow.awaitItem()
                 assertEquals(
-                    PlanState.ViewState.Loading(
-                        message = BitwardenString.loading_subscription.asText(),
+                    initialState.copy(
+                        viewState = PlanState.ViewState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
                     ),
-                    loadingState.viewState,
+                    stateFlow.awaitItem(),
                 )
-                assertEquals(PlanState.DialogState.WaitingForPayment, loadingState.dialogState)
 
-                val loadedState = stateFlow.awaitItem()
                 assertEquals(
-                    DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
-                        status = PremiumSubscriptionStatus.CANCELED,
-                        canceledDateText = "April 21, 2026",
-                        showCancelButton = false,
+                    initialState.copy(
+                        viewState = DEFAULT_PREMIUM_ACTIVE_VIEW_STATE.copy(
+                            status = PremiumSubscriptionStatus.CANCELED,
+                            canceledDateText = "April 21, 2026",
+                            showCancelButton = false,
+                        ),
+                        dialogState = null,
                     ),
-                    loadedState.viewState,
+                    stateFlow.awaitItem(),
                 )
-                assertEquals(null, loadedState.dialogState)
 
                 eventFlow.expectNoEvents()
             }
