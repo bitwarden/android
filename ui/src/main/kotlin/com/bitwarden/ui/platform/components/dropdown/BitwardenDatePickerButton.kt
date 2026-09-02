@@ -2,22 +2,30 @@ package com.bitwarden.ui.platform.components.dropdown
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.dialog.BitwardenDatePickerDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalClock
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import java.time.Clock
 import java.time.LocalDate
@@ -36,10 +44,10 @@ import java.time.format.FormatStyle
  * @param helpData An optional [BitwardenHelpButtonData], representing the help button.
  * @param insets Inner padding to be applied within the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
- * @param actionsPadding Padding to be applied to the [actions] block.
- * @param actions A lambda containing the set of actions (usually icons or similar) to display
- * in the trailing side. This lambda extends [RowScope], allowing flexibility in defining the
- * layout of the actions.
+ * @param allowPastDates Indicates that the date picker allows past dates.
+ * @param allowFutureDates Indicates that the date picker allows future dates.
+ * @param allowToday Indicates that this date picker allows this date to be selected.
+ * @param clock The system clock.
  */
 @Composable
 fun BitwardenDatePickerButton(
@@ -53,11 +61,13 @@ fun BitwardenDatePickerButton(
     helpData: BitwardenHelpButtonData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
-    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    allowPastDates: Boolean = true,
+    allowFutureDates: Boolean = true,
+    allowToday: Boolean = true,
     clock: Clock = LocalClock.current,
-    actions: @Composable RowScope.() -> Unit = {},
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
+    val openCalendarString = stringResource(id = BitwardenString.open_calendar)
     BitwardenTextSelectionButton(
         label = label,
         selectedOption = currentDate?.toFormattedDateStyle(
@@ -67,14 +77,29 @@ fun BitwardenDatePickerButton(
         onClick = { shouldShowDialog = true },
         cardStyle = cardStyle,
         enabled = isEnabled,
-        showChevron = true,
+        showChevron = false,
         supportingContent = supportingContent,
         helpData = helpData,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
-        actionsPadding = actionsPadding,
-        actions = actions,
-        modifier = modifier,
+        actions = {
+            AnimateNullableContentVisibility(targetState = currentDate) {
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_clear,
+                    contentDescription = stringResource(id = BitwardenString.clear),
+                    onClick = { onDateSelect(null) },
+                    isEnabled = isEnabled,
+                )
+            }
+            Icon(
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
+                contentDescription = null,
+                modifier = Modifier.minimumInteractiveComponentSize(),
+            )
+        },
+        modifier = modifier.semantics(mergeDescendants = true) {
+            this.onClick(label = openCalendarString, action = null)
+        },
     )
     if (shouldShowDialog) {
         BitwardenDatePickerDialog(
@@ -84,6 +109,10 @@ fun BitwardenDatePickerButton(
                 shouldShowDialog = false
             },
             onDismissRequest = { shouldShowDialog = false },
+            allowPastDates = allowPastDates,
+            allowFutureDates = allowFutureDates,
+            allowToday = allowToday,
+            clock = clock,
         )
     }
 }

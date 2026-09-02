@@ -2922,7 +2922,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the date of birth should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .onNodeWithContentDescriptionAfterScroll(label = "Date of birth")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2939,13 +2939,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    dateOfBirth = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Date of birth")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Date of birth"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -2959,7 +2967,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the issue date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Issue date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2976,13 +2984,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the issue date clear button should trigger IssueDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    issueDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Issue date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Issue date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -2997,7 +3013,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the expiration date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3014,13 +3030,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    expirationDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Expiration date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Expiration date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3201,7 +3225,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Passport the date of birth should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .onNodeWithContentDescriptionAfterScroll(label = "Date of birth")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3218,13 +3242,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    dateOfBirth = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Date of birth")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Date of birth"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3234,12 +3266,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport the issue date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Issue date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3256,13 +3287,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the issue date clear button should trigger IssueDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    issueDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Issue date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Issue date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3277,7 +3316,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Passport the expiration date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3294,13 +3333,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    expirationDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Expiration date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Expiration date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {

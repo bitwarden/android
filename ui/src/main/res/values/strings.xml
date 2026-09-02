@@ -363,6 +363,7 @@ Scanning will happen automatically.</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Word separator</string>
     <string name="clear">Clear</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">There are no folders to list.</string>
     <string name="fingerprint_phrase">Fingerprint phrase</string>
