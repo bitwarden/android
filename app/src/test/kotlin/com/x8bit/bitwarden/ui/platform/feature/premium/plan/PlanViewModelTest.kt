@@ -579,22 +579,6 @@ class PlanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `premium status flip should not emit event when not in WaitingForPayment`() =
-        runTest {
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                // Flip premium while in Content state.
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = listOf(
-                        DEFAULT_ACCOUNT.copy(isPremium = true),
-                    ),
-                )
-                expectNoEvents()
-            }
-        }
-
-    @Test
     fun `premium status flip should promote off Free view when not awaiting checkout`() =
         runTest {
             val viewModel = createViewModel(subscriptionResult = SUBSCRIPTION_SUCCESS_ACTIVE)
@@ -995,6 +979,43 @@ class PlanViewModelTest : BaseViewModelTest() {
                     ),
                     loadedState.viewState,
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SubscriptionStatusUpdateReceive with ACTIVE status promotes premium account off Free view`() =
+        runTest {
+            markUserPremium()
+            val viewModel = createViewModel(subscriptionResult = SubscriptionResult.NotFound)
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                // The NotFound fallback leaves the account premium while the view is still
+                // showing Free.Cloud content.
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(showsPremiumView = true),
+                    stateFlow.awaitItem(),
+                )
+
+                coEvery {
+                    mockBillingRepository.getSubscription()
+                } returns SUBSCRIPTION_SUCCESS_ACTIVE
+                mutableSubscriptionStatusStateFlow.value = SubscriptionStatusState.Available(
+                    status = PremiumSubscriptionStatus.ACTIVE,
+                )
+
+                assertEquals(
+                    DEFAULT_FREE_STATE.copy(
+                        viewState = PlanState.ViewState.Loading(
+                            message = BitwardenString.loading_subscription.asText(),
+                        ),
+                        showsPremiumView = true,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+                assertEquals(DEFAULT_PREMIUM_LOADED_STATE, stateFlow.awaitItem())
+
+                eventFlow.expectNoEvents()
             }
         }
 
