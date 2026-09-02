@@ -605,12 +605,12 @@ class PlanViewModel @Inject constructor(
     // Fires the celebration event only when isConfirmedPremium and a checkout was actually
     // in flight; otherwise this is a silent state recovery.
     private fun promoteFreeCloudToPremiumView(isConfirmedPremium: Boolean) {
-        val isAwaitingPremiumStatus = (state.viewState as? PlanState.ViewState.Content.Free.Cloud)
-            ?.isAwaitingPremiumStatus == true
-        if (isConfirmedPremium && isAwaitingPremiumStatus) {
-            onPremiumUpgradeSuccess()
-        } else {
-            promoteToPremiumView()
+        onFreeCloudContent { freeState ->
+            if (isConfirmedPremium && freeState.isAwaitingPremiumStatus) {
+                onPremiumUpgradeSuccess()
+            } else {
+                promoteToPremiumView()
+            }
         }
     }
 
