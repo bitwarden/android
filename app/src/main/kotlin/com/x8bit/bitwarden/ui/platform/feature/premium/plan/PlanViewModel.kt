@@ -483,14 +483,14 @@ class PlanViewModel @Inject constructor(
         action: PlanAction.Internal.UserStateUpdateReceive,
     ) {
         val isPremium = action.userState?.activeAccount?.isPremium == true
+        val wasShowingPremiumView = state.showsPremiumView
         mutableStateFlow.update {
             it.copy(
                 showsPremiumView = isPremium ||
                     premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible(),
             )
         }
-        // Promote unconditionally, not only while `isAwaitingPremiumStatus`.
-        if (isPremium) {
+        if (isPremium && !wasShowingPremiumView) {
             promoteFreeCloudToPremiumView(isConfirmedPremium = true)
         }
     }
