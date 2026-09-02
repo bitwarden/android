@@ -183,7 +183,9 @@ class AutofillParserImpl(
             autofillViews
         }
 
-        val effectiveFocusedView = effectiveViews.firstFocusedOrNull()
+        val effectiveFocusedView = effectiveViews
+            .filterNot { it is AutofillView.Identity }
+            .firstFocusedOrNull()
             ?: return AutofillRequest.Unfillable
 
         // Choose the first focused partition of data for fulfillment.
