@@ -1994,10 +1994,6 @@ class VaultAddEditViewModel @Inject constructor(
                 selectedFolderId = createdFolder?.id,
             )
         }
-        if (createdFolder == null) return
-        sendEvent(
-            event = VaultAddEditEvent.ShowSnackbar(BitwardenString.folder_created.asText()),
-        )
     }
 
     private fun handleCreateCipherResultReceive(
