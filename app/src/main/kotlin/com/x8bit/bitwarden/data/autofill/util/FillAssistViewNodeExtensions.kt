@@ -78,10 +78,14 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
                     )?.let { key to it }
                 }
                 // Prefer Username: it has no format gate, while Login.Email rejects non-email
-                // values via isValidEmail().
+                // values via isValidEmail(). Prefer any non-Identity view next, since Identity
+                // partitions are unbuilt and Login/Card must remain authoritative while the
+                // flag is on.
                 val view = candidateViews
                     .firstOrNull { (_, view) -> view is AutofillView.Login.Username }
                     ?.second
+                    ?: candidateViews.firstOrNull { (_, view) -> view !is AutofillView.Identity }
+                        ?.second
                     ?: candidateViews.firstOrNull()?.second
                     ?: return@let null
 

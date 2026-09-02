@@ -455,6 +455,42 @@ class FillAssistViewNodeExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should prefer Login Email over Identity PersonNameFull when identity key is listed first and matches the same node`() {
+        // Identity has no built partition yet, so it must never outrank a Login/Card
+        // classification for the same node, even when the Identity key is listed first.
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val autoFillData = autofillData()
+        every {
+            viewNode.toAutofillViewData(autofillId = autofillId, website = null)
+        } returns autoFillData
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = linkedMapOf(
+                "personNameFull" to listOf(selectorClause(tag = "input", id = "shared")),
+                "email" to listOf(selectorClause(tag = "input", id = "shared")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            listOf(
+                AutofillView.Login.Email(data = autoFillData),
+                AutofillView.Identity.Email(data = autoFillData),
+            ),
+            actual,
+        )
+    }
+
     @Test
     fun `buildFillAssistViews should traverse child nodes recursively`() {
         val childHtmlInfo = createHtmlInfo()
