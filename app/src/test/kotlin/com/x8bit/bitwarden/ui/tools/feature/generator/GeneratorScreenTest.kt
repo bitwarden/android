@@ -1010,7 +1010,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "null. Service")
+            .onNodeWithContentDescription(label = "Service")
             .performScrollTo()
             .performClick()
 
