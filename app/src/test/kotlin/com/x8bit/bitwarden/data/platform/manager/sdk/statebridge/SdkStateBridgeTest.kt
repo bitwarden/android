@@ -215,6 +215,48 @@ class SdkStateBridgeTest {
     }
 
     @Test
+    fun `setV2EncryptedMigrationsGracePeriodStart should store the grace period start`() = runTest {
+        stateBridge.setV2EncryptedMigrationsGracePeriodStart(value = GRACE_PERIOD_START)
+
+        authDiskSource.assertV2EncryptedMigrationsGracePeriodStart(
+            userId = USER_ID,
+            gracePeriodStart = GRACE_PERIOD_START,
+        )
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should return the stored grace period start`() =
+        runTest {
+            assertNull(stateBridge.getV2EncryptedMigrationsGracePeriodStart())
+
+            authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = GRACE_PERIOD_START,
+            )
+
+            assertEquals(
+                GRACE_PERIOD_START,
+                stateBridge.getV2EncryptedMigrationsGracePeriodStart(),
+            )
+        }
+
+    @Test
+    fun `clearV2EncryptedMigrationsGracePeriodStart should clear the grace period start`() =
+        runTest {
+            authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = GRACE_PERIOD_START,
+            )
+
+            stateBridge.clearV2EncryptedMigrationsGracePeriodStart()
+
+            authDiskSource.assertV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = null,
+            )
+        }
+
+    @Test
     fun `setAccountCryptographicState should store the account cryptographic state`() = runTest {
         val state = createMockWrappedAccountCryptographicState(number = 1)
 
@@ -492,6 +534,8 @@ private val V2_UPGRADE_TOKEN_JSON: V2UpgradeTokenJson = V2UpgradeTokenJson(
     wrappedUserKey1 = "wrappedUserKey1",
     wrappedUserKey2 = "wrappedUserKey2",
 )
+
+private val GRACE_PERIOD_START: Instant = Instant.parse("2024-09-13T01:00:00.00Z")
 
 private val MASTER_PASSWORD_UNLOCK_DATA: MasterPasswordUnlockData = MasterPasswordUnlockData(
     kdf = Kdf.Pbkdf2(iterations = 600_000u),
