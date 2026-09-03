@@ -570,6 +570,14 @@ platform :android do
       release_options[:version_name] = options[:versionName]
     end
 
+    # Only override json_key if an explicit credentials file is provided (e.g. when this
+    # lane is invoked for a package whose credentials aren't at the Appfile default path,
+    # such as com.bitwarden.authenticator). When omitted, supply() falls back to the
+    # Appfile default (secrets/play_creds.json), preserving existing behavior.
+    if options[:serviceCredentialsFile]
+      release_options[:json_key] = options[:serviceCredentialsFile]
+    end
+
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true
     else

@@ -334,6 +334,22 @@ jobs:
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
 
+      - name: Pin release to Source Fastlane track
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && env.PUBLISH_TO_PLAY_STORE == 'true' }}
+        env:
+          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/play_creds.json
+          VERSION_CODE: ${{ needs.version.outputs.version_number || github.run_number }}
+          VERSION_NAME: ${{ needs.version.outputs.version_name }}
+        run: |
+          bundle exec fastlane promoteToProduction \
+          packageName:"com.x8bit.bitwarden" \
+          serviceCredentialsFile:"$PLAY_STORE_CREDS_FILE" \
+          track:"internal" \
+          trackPromoteTo:"Source Fastlane" \
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME" \
+          rolloutPercentage:"1"
+
   publish_fdroid:
     name: Publish F-Droid artifacts
     needs:
