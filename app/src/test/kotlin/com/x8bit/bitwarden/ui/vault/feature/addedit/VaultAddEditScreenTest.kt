@@ -11,6 +11,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
@@ -3419,6 +3420,30 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `clicking a Ownership option should clear focus from the focused text field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        updateStateWithOwners()
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "My vault. Vault",
+            )
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsNotFocused()
+    }
+
+    @Test
     fun `should show owner selection bottom sheet when state updates to OwnerSelection`() {
         mutableStateFlow.update {
             it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
@@ -3617,6 +3642,28 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 VaultAddEditAction.Common.SelectOrAddFolderForItem,
             )
         }
+    }
+
+    @Test
+    fun `clicking a Folder Option should clear focus from the focused text field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        updateStateWithFolders()
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsNotFocused()
     }
 
     @Test
