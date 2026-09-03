@@ -306,6 +306,11 @@ class SettingsRepositoryImpl(
             }
             ?: flowOf(false)
 
+    override val isPasswordOnRestartRequiredWithPin: Boolean
+        get() = activeUserId
+            ?.let { authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = it) != null }
+            ?: false
+
     override var isInlineAutofillEnabled: Boolean
         get() = activeUserId
             ?.let { settingsDiskSource.getInlineAutofillEnabled(userId = it) }

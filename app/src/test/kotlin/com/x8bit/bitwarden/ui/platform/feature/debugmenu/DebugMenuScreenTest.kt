@@ -7,9 +7,12 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,10 +29,15 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
     }
+    private val intentManager = mockk<IntentManager> {
+        every { shareText(text = any()) } just runs
+    }
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             DebugMenuScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -50,6 +58,25 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(DebugMenuAction.NavigateBack) }
+    }
+
+    @Test
+    fun `on ShareText event should share the text via the IntentManager`() {
+        mutableEventFlow.tryEmit(DebugMenuEvent.ShareText(text = "settingsLogData"))
+
+        verify(exactly = 1) { intentManager.shareText(text = "settingsLogData") }
+    }
+
+    @Test
+    fun `on share settings click should send ShareSettingsClick action`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
+        composeTestRule
+            .onNodeWithText(text = "Share settings")
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ShareSettingsClick) }
     }
 
     @Test

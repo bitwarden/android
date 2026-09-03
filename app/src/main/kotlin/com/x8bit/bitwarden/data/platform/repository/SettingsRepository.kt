@@ -141,6 +141,12 @@ interface SettingsRepository : FlightRecorderManager {
     val isUnlockWithPinEnabledFlow: Flow<Boolean>
 
     /**
+     * Whether Master Password is required on restart when PIN unlocking is enabled for the
+     * current user.
+     */
+    val isPasswordOnRestartRequiredWithPin: Boolean
+
+    /**
      * Whether inline autofill is enabled for the current user.
      */
     var isInlineAutofillEnabled: Boolean
