@@ -24,6 +24,7 @@ class DebugMenuHandler(
     val onClearSsoCookies: () -> Unit,
     val onResetPremiumUpgradeBanner: () -> Unit,
     val onShowUpgradedToPremiumCard: () -> Unit,
+    val onShareSettingsClick: () -> Unit,
     val onGenerateErrorReportClick: () -> Unit,
     val onGenerateCrashClick: () -> Unit,
 ) {
@@ -63,6 +64,7 @@ class DebugMenuHandler(
             onShowUpgradedToPremiumCard = {
                 viewModel.trySendAction(DebugMenuAction.ShowUpgradedToPremiumCard)
             },
+            onShareSettingsClick = { viewModel.trySendAction(DebugMenuAction.ShareSettingsClick) },
             onGenerateErrorReportClick = {
                 viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick)
             },
@@ -86,6 +88,7 @@ class DebugMenuHandler(
             onClearSsoCookies = { },
             onResetPremiumUpgradeBanner = { },
             onShowUpgradedToPremiumCard = { },
+            onShareSettingsClick = { },
             onGenerateErrorReportClick = { },
             onGenerateCrashClick = { },
         )

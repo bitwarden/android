@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -50,6 +51,9 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 
     private val logsManager = mockk<LogsManager> {
         every { trackNonFatalException(throwable = any()) } just runs
+    }
+    private val settingsLogManager = mockk<SettingsLogManager> {
+        every { data } returns "settingsLogData"
     }
 
     private val mockCookieAcquisitionRequestManager =
@@ -212,11 +216,25 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test { expectNoEvents() }
         }
 
+    @Test
+    fun `ShareSettingsClick should emit ShareText with the settings log data`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(DebugMenuAction.ShareSettingsClick)
+            assertEquals(
+                DebugMenuEvent.ShareText(text = "settingsLogData"),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun createViewModel(): DebugMenuViewModel = DebugMenuViewModel(
         featureFlagManager = mockFeatureFlagManager,
         debugMenuRepository = mockDebugMenuRepository,
         authRepository = mockAuthRepository,
         logsManager = logsManager,
+        settingsLogManager = settingsLogManager,
         cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
         environmentRepository = fakeEnvironmentRepository,
     )

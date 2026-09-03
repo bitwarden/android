@@ -33,6 +33,7 @@
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>
+    <string name="share_settings">Share settings</string>
     <string name="cookies">Cookies</string>
     <string name="premium">Premium</string>
     <string name="reset_premium_upgrade_banner">Reset Premium upgrade banner</string>

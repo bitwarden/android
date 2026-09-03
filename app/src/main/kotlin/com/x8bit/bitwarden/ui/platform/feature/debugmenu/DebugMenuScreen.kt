@@ -40,6 +40,8 @@ import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.bitwarden.ui.platform.components.segment.transition.segmentedContentTransform
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -57,6 +59,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun DebugMenuScreen(
     onNavigateBack: () -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: DebugMenuViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -64,6 +67,7 @@ fun DebugMenuScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             DebugMenuEvent.NavigateBack -> onNavigateBack()
+            is DebugMenuEvent.ShareText -> intentManager.shareText(text = event.text)
         }
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -321,6 +325,15 @@ private fun ReportsSection(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenFilledButton(
+            label = stringResource(id = BitwardenString.share_settings),
+            onClick = handler.onShareSettingsClick,
+            isEnabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 12.dp))
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.generate_error_report),
             onClick = handler.onGenerateErrorReportClick,

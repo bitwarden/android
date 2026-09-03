@@ -71,6 +71,8 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -504,5 +506,21 @@ object PlatformManagerModule {
     ): NetworkPermissionManager = NetworkPermissionManagerImpl(
         context = context,
         resourceManager = resourceManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSettingsLogManager(
+        settingsRepository: SettingsRepository,
+        logsManager: LogsManager,
+        autofillEnabledManager: AutofillEnabledManager,
+        accessibilityEnabledManager: AccessibilityEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    ): SettingsLogManager = SettingsLogManagerImpl(
+        settingsRepository = settingsRepository,
+        logsManager = logsManager,
+        autofillEnabledManager = autofillEnabledManager,
+        accessibilityEnabledManager = accessibilityEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
     )
 }

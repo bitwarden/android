@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -30,13 +31,14 @@ import javax.inject.Inject
 /**
  * ViewModel for the [DebugMenuScreen]
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
+    private val settingsLogManager: SettingsLogManager,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
@@ -74,6 +76,7 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
             DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
             DebugMenuAction.ResetAccessibilityDisclaimer -> handleResetAccessibilityDisclaimer()
+            DebugMenuAction.ShareSettingsClick -> onShareSettingsClick()
             is DebugMenuAction.MainTypeOptionClick -> handleMainTypeOptionClick(action)
         }
     }
@@ -84,6 +87,10 @@ class DebugMenuViewModel @Inject constructor(
 
     private fun handleResetAccessibilityDisclaimer() {
         debugMenuRepository.resetAccessibilityDisclaimer()
+    }
+
+    private fun onShareSettingsClick() {
+        sendEvent(DebugMenuEvent.ShareText(text = settingsLogManager.data))
     }
 
     private fun handleShowUpgradedToPremiumCard() {
@@ -182,6 +189,11 @@ sealed class DebugMenuEvent {
      * Navigates back to previous screen.
      */
     data object NavigateBack : DebugMenuEvent()
+
+    /**
+     * Shares the given [text].
+     */
+    data class ShareText(val text: String) : DebugMenuEvent()
 }
 
 /**
@@ -262,6 +274,11 @@ sealed class DebugMenuAction {
      * User has clicked to force the "Upgraded to Premium" action card to display.
      */
     data object ShowUpgradedToPremiumCard : DebugMenuAction()
+
+    /**
+     * User has clicked the share settings button.
+     */
+    data object ShareSettingsClick : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

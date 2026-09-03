@@ -669,6 +669,33 @@ class SettingsRepositoryTest {
         assertTrue(settingsRepository.isUnlockWithPinEnabled)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordOnRestartRequiredWithPin should return a value that tracks the existence of an ephemeral PIN protected user key envelope for the current user`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = null,
+        )
+        assertFalse(settingsRepository.isPasswordOnRestartRequiredWithPin)
+
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = "ephemeralPinProtectedUserKeyEnvelope",
+        )
+        assertTrue(settingsRepository.isPasswordOnRestartRequiredWithPin)
+    }
+
+    @Test
+    fun `isPasswordOnRestartRequiredWithPin should return false when there is no active user`() {
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = "ephemeralPinProtectedUserKeyEnvelope",
+        )
+
+        assertFalse(settingsRepository.isPasswordOnRestartRequiredWithPin)
+    }
+
     @Test
     fun `isInlineAutofillEnabled should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
