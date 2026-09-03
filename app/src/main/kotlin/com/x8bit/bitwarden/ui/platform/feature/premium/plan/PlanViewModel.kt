@@ -466,24 +466,13 @@ class PlanViewModel @Inject constructor(
         action: PlanAction.Internal.SubscriptionStatusUpdateReceive,
     ) {
         val status = (action.state as? SubscriptionStatusState.Available)?.status ?: return
-        if (!status.isPremiumViewEligible()) return
-        onFreeCloudContent { freeState ->
-            if (freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = PlanState.ViewState.Loading(
-                        message = BitwardenString.loading_subscription.asText(),
-                    ),
-                )
-            }
-            viewModelScope.launch {
-                sendAction(
-                    PlanAction.Internal.SubscriptionResultReceive(
-                        result = billingRepository.getSubscription(),
-                    ),
-                )
-            }
+        // ACTIVE status for a premium account must promote too, not just trouble statuses.
+        val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
+        if (!isPremium && !status.isPremiumViewEligible()) {
+            return
         }
+        // Only a confirmed-premium signal celebrates; a trouble status promotes silently.
+        promoteFreeCloudToPremiumView(isConfirmedPremium = isPremium)
     }
 
     // endregion Premium user handlers
@@ -494,17 +483,15 @@ class PlanViewModel @Inject constructor(
         action: PlanAction.Internal.UserStateUpdateReceive,
     ) {
         val isPremium = action.userState?.activeAccount?.isPremium == true
+        val wasShowingPremiumView = state.showsPremiumView
         mutableStateFlow.update {
             it.copy(
                 showsPremiumView = isPremium ||
                     premiumStateManager.subscriptionStatusStateFlow.value.isPremiumViewEligible(),
             )
         }
-        onFreeCloudContent { freeState ->
-            if (!freeState.isAwaitingPremiumStatus) return@onFreeCloudContent
-            if (isPremium) {
-                onPremiumUpgradeSuccess()
-            }
+        if (isPremium && !wasShowingPremiumView) {
+            promoteFreeCloudToPremiumView(isConfirmedPremium = true)
         }
     }
 
@@ -615,7 +602,19 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun onPremiumUpgradeSuccess() {
+    // Fires the celebration event only when isConfirmedPremium and a checkout was actually
+    // in flight; otherwise this is a silent state recovery.
+    private fun promoteFreeCloudToPremiumView(isConfirmedPremium: Boolean) {
+        onFreeCloudContent { freeState ->
+            if (isConfirmedPremium && freeState.isAwaitingPremiumStatus) {
+                onPremiumUpgradeSuccess()
+            } else {
+                promoteToPremiumView()
+            }
+        }
+    }
+
+    private fun promoteToPremiumView() {
         onFreeCloudContent {
             mutableStateFlow.update {
                 it.copy(
@@ -632,9 +631,10 @@ class PlanViewModel @Inject constructor(
                 )
             }
         }
-        // The Upgraded to Premium route uses `launchSingleTop = true` so a duplicate event is a
-        // no-op for the user. The event itself is harmless to re-emit; the state mutation above
-        // is what's guarded by `onFreeCloudContent`.
+    }
+
+    private fun onPremiumUpgradeSuccess() {
+        promoteToPremiumView()
         sendEvent(PlanEvent.NavigateToUpgradedToPremium)
     }
 
