@@ -431,4 +431,23 @@ interface AuthDiskSource : AppIdProvider {
      * Stores the v2 upgrade token for the given [userId].
      */
     fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?)
+
+    /**
+     * Gets the start of the v2 encrypted migrations grace period for the given [userId].
+     *
+     * This value is retained across logout and lock and is only removed when explicitly stored as
+     * `null`.
+     */
+    fun getV2EncryptedMigrationsGracePeriodStart(userId: String): Instant?
+
+    /**
+     * Stores the start of the v2 encrypted migrations grace period for the given [userId].
+     *
+     * This value is retained across logout and lock and is only removed when explicitly stored as
+     * `null`.
+     */
+    fun storeV2EncryptedMigrationsGracePeriodStart(
+        userId: String,
+        gracePeriodStart: Instant?,
+    )
 }
