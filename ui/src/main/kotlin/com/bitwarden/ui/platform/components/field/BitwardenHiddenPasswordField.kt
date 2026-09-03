@@ -8,7 +8,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -16,6 +15,7 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.passwordVisualTransformation
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -42,9 +42,9 @@ fun BitwardenHiddenPasswordField(
                 .nullableTestTag(tag = passwordFieldTestTag),
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             label = label?.let { { Text(text = it) } },
-            value = if (value.isNotEmpty()) MASKED_PASSWORD_VALUE else value,
+            value = value,
             onValueChange = { },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = passwordVisualTransformation(staticCharacterCount = 8),
             singleLine = true,
             enabled = false,
             readOnly = true,

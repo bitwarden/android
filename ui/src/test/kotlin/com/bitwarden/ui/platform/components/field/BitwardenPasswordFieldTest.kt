@@ -24,7 +24,6 @@ class BitwardenPasswordFieldTest : BaseComposeTest() {
                     showPasswordChange = { },
                     onValueChange = { },
                     readOnly = true,
-                    useFixedLengthMask = true,
                     cardStyle = CardStyle.Full,
                 )
             }
@@ -48,7 +47,6 @@ class BitwardenPasswordFieldTest : BaseComposeTest() {
                     showPasswordChange = { },
                     onValueChange = { },
                     readOnly = true,
-                    useFixedLengthMask = true,
                     cardStyle = CardStyle.Full,
                 )
             }
@@ -60,7 +58,7 @@ class BitwardenPasswordFieldTest : BaseComposeTest() {
     }
 
     @Test
-    fun `read only hidden password preserves value length by default`() {
+    fun `read only hidden password always uses fixed length mask`() {
         setTestContent {
             BitwardenTheme {
                 BitwardenPasswordField(
@@ -70,6 +68,27 @@ class BitwardenPasswordFieldTest : BaseComposeTest() {
                     showPasswordChange = { },
                     onValueChange = { },
                     readOnly = true,
+                    cardStyle = CardStyle.Full,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "••••••••")
+    }
+
+    @Test
+    fun `editable hidden password preserves value length`() {
+        setTestContent {
+            BitwardenTheme {
+                BitwardenPasswordField(
+                    label = "Password",
+                    value = "12345",
+                    showPassword = false,
+                    showPasswordChange = { },
+                    onValueChange = { },
+                    readOnly = false,
                     cardStyle = CardStyle.Full,
                 )
             }
@@ -93,7 +112,6 @@ class BitwardenPasswordFieldTest : BaseComposeTest() {
                     showPasswordChange = { },
                     onValueChange = { emitted += it },
                     readOnly = true,
-                    useFixedLengthMask = true,
                     cardStyle = CardStyle.Full,
                 )
             }
