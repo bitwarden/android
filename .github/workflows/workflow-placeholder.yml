@@ -1,21 +1,163 @@
-# This placeholder workflow file is used for testing entirely new workflows before they are
-# merged into the main branch. It should only be modified in feature branches for testing.
-# Once the new workflow is ready to be merged, it should be copied to a new file with an
-# appropriate name (e.g., ci-bwpm.yml) in the .github/workflows directory and the placeholder
-# should be reverted to this baseline no-op state — the minimal `placeholder` job below is
-# required for workflow linting to pass — before merging the feature branch.
+name: Cron / Stale Issue Cleanup
+run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 
-name: Workflow Placeholder
+# Replaces the manual bitwarden/misc scripts/github-issues-cleanup/stale-issue-cleanup.py pass.
+#
+# The script's three-stage lifecycle is reproduced by chaining two actions/stale steps that
+# hand off through labels, since a single step supports only one warning comment:
+#
+#   day 0   "stale" label + 2-week warning              (stage 1: 240 days of inactivity)
+#   day 11  "stale-final-notice" label + 3-day warning  (stage 2, gated on "stale")
+#   day 14  closed as not_planned                       (stage 2, 3 days after its own warning)
+#
+# 11 + 3 must equal the 14-day window the stage 1 message promises. The 3 mirrors the
+# script's SECONDARY_WARNING_THRESHOLD_DAYS. Both boundaries are approximate: daily polling
+# plus GitHub's schedule delays push each step 0-1 days later, never earlier, so issues only
+# ever get more time than the messages promise.
+#
+# Staleness is a rolling inactivity window (actions/stale reads updated_at) rather than the
+# script's fixed cutoff date chosen per run. Any human comment at any point clears both
+# labels and restarts the 240-day clock. The action's own comments never count as activity;
+# it only considers comments whose author type is User, so github-actions[bot] is ignored.
+#
+# Stage 2 runs FIRST, deliberately. When someone replies to an escalated issue, stage 2 must
+# strip "stale-final-notice" while "stale" is still present (it is gated on that label);
+# stage 1 then strips "stale" in the same run. The reverse order would orphan
+# "stale-final-notice" and, because stage 1 exempts that label, permanently exempt the issue.
+# It also gives the time-critical closes first claim on the per-step operations budget.
+#
+# Labels required: stale, stale-final-notice, never-stale. The script's EXCLUDED_ISSUES
+# number list has no equivalent, so apply "never-stale" to the Renovate dependency dashboard
+# issue (#3306) and anything else that should never be swept.
+#
+# Comments come from github-actions[bot] via GITHUB_TOKEN, not the closebot-bw PAT.
 
 on:
+  # schedule:
+  #   # Run daily at 07:30 UTC. Off the hour: GitHub delays scheduled runs during the
+  #   # congestion at :00, and the close countdown is only as precise as the cadence.
+  #   - cron: '30 7 * * *'
   workflow_dispatch:
+    inputs:
+      run-mode:
+        description: 'Run mode'
+        type: choice
+        default: dry-run
+        options:
+          - dry-run
+          - live
+
+permissions: {}
+
+env:
+  # Scheduled runs are dry-run only: actions/stale logs every comment and closure it would
+  # make without touching an issue. Change this to 'live' once a dry-run log has been
+  # reviewed and the sweep looks correct.
+  #
+  # Note that a dry run only ever exercises stage 1, because stage 2 is gated on a "stale"
+  # label that a dry run never actually applies.
+  SCHEDULED_RUN_MODE: dry-run
 
 jobs:
-  placeholder:
-    name: Placeholder
-    runs-on: ubuntu-22.04
+  stale-issue-cleanup:
+    name: Stale Issue Cleanup
+    runs-on: ubuntu-24.04
     permissions:
-      contents: read
+      issues: write
+
     steps:
-      - name: Placeholder step
-        run: echo "Placeholder workflow"
+      # Stage 2 - see the ordering note in the header.
+      - name: Post final notice and close stale issues
+        uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
+        with:
+          # Default GITHUB_TOKEN, scoped by the issues: write permission above. No PAT
+          # and no dedicated bot account required.
+          repo-token: ${{ github.token }}
+
+          # Dry run unless a workflow_dispatch explicitly asked for 'live', or
+          # SCHEDULED_RUN_MODE above has been flipped to 'live'.
+          debug-only: ${{ (inputs.run-mode || env.SCHEDULED_RUN_MODE) != 'live' }}
+
+          # Only issues already carrying stage 1's label are eligible.
+          only-issue-labels: stale
+          exempt-issue-labels: never-stale
+
+          # 11 days after stage 1's comment, then close 3 days after this one.
+          days-before-issue-stale: 11
+          days-before-issue-close: 3
+          stale-issue-label: stale-final-notice
+          close-issue-reason: not_planned
+
+          # A human reply clears stale-final-notice and stops the escalation.
+          remove-issue-stale-when-updated: true
+
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+
+          ascending: true
+          # Cheap: non-matching issues are skipped before any per-issue API call.
+          operations-per-run: 100
+          enable-statistics: true
+
+          stale-issue-message: |
+            🔔 **Final Notice - Issue Will Be Closed Soon**
+
+            This issue was previously marked as stale and will be automatically closed in **3 days** if no further activity occurs.
+
+            If you're still experiencing this issue or believe it should remain open, please comment below to prevent automatic closure.
+
+            We appreciate your understanding and contribution to keeping our issue tracker organized! 📋
+
+          close-issue-message: |
+            🔒 **Issue Closed Due to Inactivity**
+
+            This issue has been automatically closed due to lack of activity for an extended period. We periodically review and close inactive issues to help maintain our issue tracker and focus on current priorities.
+
+            **If this issue is still relevant:**
+            - Please create a new issue with updated information
+            - Include steps to reproduce the problem if it's a bug report
+            - Mention if this issue still occurs in the latest version
+
+            Thank you for your contribution to this project. Your feedback helps us improve! 🙏
+
+      # Stage 1 - the initial 2-week warning. Never closes anything; stage 2 owns closure.
+      - name: Post first stale warning
+        uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
+        with:
+          repo-token: ${{ github.token }}
+          debug-only: ${{ (inputs.run-mode || env.SCHEDULED_RUN_MODE) != 'live' }}
+
+          # Warn after 240 days (8 months) of inactivity. Issues already escalated to
+          # stage 2 are exempt so the two steps never process the same issue in one run.
+          days-before-issue-stale: 240
+          days-before-issue-close: -1
+          stale-issue-label: stale
+          exempt-issue-labels: never-stale,stale-final-notice
+
+          # A human reply clears the stale label and restarts the 240-day clock.
+          remove-issue-stale-when-updated: true
+
+          # The script skipped pull requests entirely.
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+
+          # Oldest issues first, so a capped run still makes forward progress on the
+          # backlog; a daily cadence drains it at up to 300 operations per day. Runs
+          # that hit this cap log the remaining operations.
+          ascending: true
+          operations-per-run: 300
+
+          # Logs the per-run summary of issues staled, closed, and skipped.
+          enable-statistics: true
+
+          stale-issue-message: |
+            ⚠️ **Stale Issue Notice**
+
+            This issue has been automatically marked as stale due to inactivity. It will be closed in **2 weeks** if no further activity occurs.
+
+            If this issue is still relevant and you would like to keep it open, please:
+            - Comment on this issue to show continued interest
+            - Provide any additional information or updates
+            - Confirm that the issue still exists in the latest version
+
+            Thank you for your contribution to this project! 🙏
