@@ -1677,7 +1677,7 @@ class AutofillParserTests {
                         FillAssistRules.HostRule(
                             category = category,
                             fields = mapOf(
-                                "personNameGiven" to listOf(
+                                "firstName" to listOf(
                                     FillAssistRules.SelectorClause(
                                         tag = "input",
                                         id = "first-name",
@@ -1746,6 +1746,88 @@ class AutofillParserTests {
             )
             assertEquals(expected, actual, "Failed for category: $category")
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should use fill-assist views when rules cover account-creation and a login view is focused with IdentityAutofill disabled`() {
+        // Account-creation and account-update were Login categories before identity autofill
+        // split them out; with IdentityAutofill disabled they must still count as Login
+        // categories so fill-assist coverage on these hosts is unchanged.
+        mutableIdentityAutofillFlagFlow.value = false
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-creation",
+                        fields = mapOf(
+                            "username" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "user",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val heuristicLoginView = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = FILL_ASSIST_URI,
+            ),
+        )
+        val fillAssistAutofillId: AutofillId = mockk()
+        val fillAssistLoginData = AutofillView.Data(
+            autofillId = fillAssistAutofillId,
+            autofillOptions = emptyList(),
+            autofillType = AUTOFILL_TYPE,
+            isFocused = true,
+            textValue = null,
+            hasPasswordTerms = false,
+            website = WEBSITE,
+        )
+        every { any<HtmlInfo>().matchesSelectorClause(any()) } returns true
+        every {
+            loginViewNode.toAutofillViewData(autofillId = loginAutofillId, website = WEBSITE)
+        } returns fillAssistLoginData
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns heuristicLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify: fill-assist views used — partition contains fillAssistAutofillId.
+        // Heuristics would have produced loginAutofillId.
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(
+                views = listOf(AutofillView.Login.Username(data = fillAssistLoginData)),
+            ),
+            uri = FILL_ASSIST_URI,
+        )
+        assertEquals(expected, actual)
     }
 
     @Suppress("MaxLineLength")
