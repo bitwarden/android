@@ -2,8 +2,6 @@ package com.bitwarden.network.api
 
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.NetworkResult
-import com.bitwarden.network.model.PreLoginRequestJson
-import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -63,9 +61,6 @@ internal interface UnauthenticatedIdentityApi {
         @Field(value = "refresh_token") refreshToken: String,
         @Field(value = "grant_type") grantType: String,
     ): Call<RefreshTokenResponseJson.Success>
-
-    @POST("/accounts/prelogin")
-    suspend fun preLogin(@Body body: PreLoginRequestJson): NetworkResult<PreLoginResponseJson>
 
     @POST("/accounts/register/finish")
     suspend fun registerFinish(

@@ -108,7 +108,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
-import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -520,13 +519,13 @@ internal class AuthRepositoryImpl(
     override suspend fun login(
         email: String,
         password: String,
-    ): LoginResult = identityService
+    ): LoginResult = authSdkSource
         .preLogin(email = email)
         .flatMap {
             authSdkSource.hashPassword(
-                email = email,
+                email = it.salt,
                 password = password,
-                kdf = it.kdfParams.toSdkParams(),
+                kdf = it.kdf,
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         }

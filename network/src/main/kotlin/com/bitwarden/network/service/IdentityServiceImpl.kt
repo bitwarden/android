@@ -3,8 +3,6 @@ package com.bitwarden.network.service
 import com.bitwarden.network.api.UnauthenticatedIdentityApi
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
-import com.bitwarden.network.model.PreLoginRequestJson
-import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -28,12 +26,6 @@ internal class IdentityServiceImpl(
     private val json: Json,
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
-
-    override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
-        unauthenticatedIdentityApi
-            .preLogin(PreLoginRequestJson(email = email))
-            .toResult()
-
     override suspend fun getToken(
         uniqueAppId: String,
         deeplinkScheme: String,

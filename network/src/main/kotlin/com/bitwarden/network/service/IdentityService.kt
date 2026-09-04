@@ -2,7 +2,6 @@ package com.bitwarden.network.service
 
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
-import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -17,12 +16,6 @@ import com.bitwarden.network.model.VerifyEmailTokenResponseJson
  * Provides an API for querying identity endpoints.
  */
 interface IdentityService {
-
-    /**
-     * Make pre login request to get KDF params.
-     */
-    suspend fun preLogin(email: String): Result<PreLoginResponseJson>
-
     /**
      * Make request to get an access token.
      *
