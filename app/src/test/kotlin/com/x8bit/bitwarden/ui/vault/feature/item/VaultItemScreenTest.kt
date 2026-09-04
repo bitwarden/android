@@ -1156,7 +1156,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "correct horse battery staple",
+                            password = "p@ssw0rd",
                             isVisible = false,
                             canViewPassword = true,
                         ),
@@ -1184,7 +1184,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "correct horse battery staple",
+                            password = "p@ssw0rd",
                             isVisible = true,
                             canViewPassword = true,
                         ),
@@ -1195,7 +1195,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Password")
-            .assertTextEquals("Password", "correct horse battery staple")
+            .assertTextEquals("Password", "p@ssw0rd")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Check password for data breaches")
@@ -1212,7 +1212,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                 viewState = EMPTY_LOGIN_VIEW_STATE.copy(
                     type = EMPTY_LOGIN_TYPE.copy(
                         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                            password = "correct horse battery staple",
+                            password = "p@ssw0rd",
                             isVisible = true,
                             canViewPassword = false,
                         ),

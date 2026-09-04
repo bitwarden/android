@@ -193,6 +193,7 @@ fun BitwardenPasswordField(
                     !showPassword -> passwordVisualTransformation(
                         staticCharacterCount = 8.takeIf { readOnly },
                     )
+
                     readOnly -> nonLetterColorVisualTransformation()
                     else -> VisualTransformation.None
                 },
