@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.util
 
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import java.util.Locale
 
 /**
