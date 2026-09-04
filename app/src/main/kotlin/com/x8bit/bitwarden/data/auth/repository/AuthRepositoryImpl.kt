@@ -314,7 +314,7 @@ internal class AuthRepositoryImpl(
         userStateManager.hasPendingAccountDeletion = true
         return authSdkSource
             .hashPassword(
-                email = profile.email,
+                salt = profile.email,
                 password = masterPassword,
                 kdf = profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -524,7 +524,7 @@ internal class AuthRepositoryImpl(
         .preLogin(email = email)
         .flatMap {
             authSdkSource.hashPassword(
-                email = email,
+                salt = email,
                 password = password,
                 kdf = it.kdfParams.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -981,7 +981,7 @@ internal class AuthRepositoryImpl(
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
-                    email = profile.email,
+                    salt = profile.email,
                     password = password,
                     kdf = profile.toSdkParams(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -1705,7 +1705,7 @@ internal class AuthRepositoryImpl(
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
-                    email = email,
+                    salt = email,
                     password = it,
                     kdf = profile.toSdkParams(),
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,

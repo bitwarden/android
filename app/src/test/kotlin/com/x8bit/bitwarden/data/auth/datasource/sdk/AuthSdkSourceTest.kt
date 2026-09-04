@@ -337,14 +337,14 @@ class AuthSdkSourceTest {
         coEvery {
             sdkClientManager.singleUseClient(block = capture(slot))
         } coAnswers { slot.captured(client) }
-        val email = "email"
+        val salt = "salt"
         val password = "password"
         val kdf = mockk<Kdf>()
         val purpose = mockk<HashPurpose>()
         val expectedResult = "hashedPassword"
         coEvery {
             clientAuth.hashPassword(
-                email = email,
+                email = salt,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,
@@ -352,7 +352,7 @@ class AuthSdkSourceTest {
         } returns expectedResult
 
         val result = authSkdSource.hashPassword(
-            email = email,
+            salt = salt,
             password = password,
             kdf = kdf,
             purpose = purpose,
@@ -363,7 +363,7 @@ class AuthSdkSourceTest {
         )
         coVerify {
             clientAuth.hashPassword(
-                email = email,
+                email = salt,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,

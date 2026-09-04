@@ -84,10 +84,10 @@ interface AuthSdkSource {
     ): Result<String>
 
     /**
-     * Creates a hashed password provided the given [email], [password], [kdf], and [purpose].
+     * Creates a hashed password provided the given [salt], [password], [kdf], and [purpose].
      */
     suspend fun hashPassword(
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
         purpose: HashPurpose,

@@ -82,7 +82,7 @@ class VaultLockManagerTest {
     private val authSdkSource: AuthSdkSource = mockk {
         coEvery {
             hashPassword(
-                email = MOCK_PROFILE.email,
+                salt = MOCK_PROFILE.email,
                 password = "mockValue",
                 kdf = MOCK_PROFILE.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,

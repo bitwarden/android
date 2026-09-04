@@ -152,14 +152,15 @@ class AuthSdkSourceImpl(
     }
 
     override suspend fun hashPassword(
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String> = runCatchingWithLogs {
         useClient {
+            // Under the hood, the "email" parameter is the salt.
             auth().hashPassword(
-                email = email,
+                email = salt,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,

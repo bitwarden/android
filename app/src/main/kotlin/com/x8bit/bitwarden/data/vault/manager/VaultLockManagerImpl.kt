@@ -273,7 +273,7 @@ internal class VaultLockManagerImpl(
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
-                    email = email,
+                    salt = email,
                     password = password,
                     kdf = kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
