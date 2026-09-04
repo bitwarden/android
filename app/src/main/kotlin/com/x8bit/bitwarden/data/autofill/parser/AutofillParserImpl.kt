@@ -141,12 +141,7 @@ class AutofillParserImpl(
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
         // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
-        // falling back to all fillable views when nothing has focus. Identity is also excluded
-        // here for now -- Identity partition construction lands in Phase D, so until then a field
-        // classified as Identity must keep falling through exactly as it would have as Unused
-        // (e.g. resolving to a sibling Login/Card field on the same form, or its Unused-only
-        // promotion in updateForMissingUsernameFields), not become the focused view and force this
-        // request to Unfillable.
+        // falling back to all fillable views when nothing has focus.
         val autofillViews = traversalDataList
             .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
                 it !is AutofillView.Unused
@@ -560,13 +555,21 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.LicenseNumber -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PassportNumber -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNameFamily -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameFamily -> {
+            this.copy(data = this.data.copy(website = site))
+        }
         is AutofillView.Identity.PersonNameFull -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PersonNameGiven -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNameMiddle -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PersonNamePrefix -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameMiddle -> {
+            this.copy(data = this.data.copy(website = site))
+        }
+        is AutofillView.Identity.PersonNamePrefix -> {
+            this.copy(data = this.data.copy(website = site))
+        }
         is AutofillView.Identity.PhoneFull -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.PostalAddressFull -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PostalAddressFull -> {
+            this.copy(data = this.data.copy(website = site))
+        }
         is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
