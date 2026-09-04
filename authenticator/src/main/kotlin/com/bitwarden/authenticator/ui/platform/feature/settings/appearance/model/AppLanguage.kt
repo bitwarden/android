@@ -63,6 +63,10 @@ enum class AppLanguage(
         localeName = "et",
         text = "eesti".asText(),
     ),
+    BASQUE(
+        localeName = "eu",
+        text = "Euskara".asText(),
+    ),
     PERSIAN(
         localeName = "fa",
         text = "فارسی".asText(),
