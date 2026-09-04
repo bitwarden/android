@@ -257,6 +257,7 @@ private fun ViewStateContent(
                 actionButton = BitwardenButtonData(
                     label = BitwardenString.make_a_copy.asText(),
                     onClick = onMakeACopyClick,
+                    testTag = "SendMakeACopyButton",
                 )
                     .takeIf { _ -> it.isCopyable },
                 leadingContent = {
