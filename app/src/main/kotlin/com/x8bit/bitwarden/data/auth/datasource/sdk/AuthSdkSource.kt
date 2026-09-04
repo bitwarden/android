@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
@@ -21,6 +22,11 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  */
 @Suppress("TooManyFunctions")
 interface AuthSdkSource {
+    /**
+     * Performs the pre-login request for the given email address.
+     */
+    suspend fun preLogin(email: String): Result<PasswordPreloginResponse>
+
     /**
      * Enrolls the user to master password unlock.
      */

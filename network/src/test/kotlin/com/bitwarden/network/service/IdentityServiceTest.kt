@@ -10,7 +10,6 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
-import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -48,91 +47,6 @@ class IdentityServiceTest : BaseServiceTest() {
         json = json,
         deviceModelProvider = deviceModelProvider,
     )
-
-    @Test
-    fun `preLogin with unknown kdf type be failure`() = runTest {
-        val json = """
-            {
-              "kdf": 2,
-              "kdfIterations": 1,
-            }
-            """
-        val response = MockResponse().setBody(json)
-        server.enqueue(response)
-        assertTrue(identityService.preLogin(EMAIL).isFailure)
-    }
-
-    @Test
-    fun `preLogin Argon2 without memory property should be failure`() = runTest {
-        val json = """
-            {
-              "kdf": 1,
-              "kdfIterations": 1,
-              "kdfParallelism": 1
-            }
-            """
-        val response = MockResponse().setBody(json)
-        server.enqueue(response)
-        assertTrue(identityService.preLogin(EMAIL).isFailure)
-    }
-
-    @Test
-    fun `preLogin Argon2 without parallelism property should be failure`() = runTest {
-        val json = """
-            {
-              "kdf": 1,
-              "kdfIterations": 1,
-              "kdfMemory": 1
-            }
-            """
-        val response = MockResponse().setBody(json)
-        server.enqueue(response)
-        assertTrue(identityService.preLogin(EMAIL).isFailure)
-    }
-
-    @Test
-    fun `preLogin Argon2 should be success`() = runTest {
-        val json = """
-            {
-              "kdf": 1,
-              "kdfIterations": 1,
-              "kdfMemory": 1,
-              "kdfParallelism": 1
-            }
-            """
-        val expectedResponse = PreLoginResponseJson(
-            kdfParams = PreLoginResponseJson.KdfParams.Argon2ID(
-                iterations = 1u,
-                memory = 1u,
-                parallelism = 1u,
-            ),
-        )
-        val response = MockResponse().setBody(json)
-        server.enqueue(response)
-        assertEquals(
-            expectedResponse.asSuccess(),
-            identityService.preLogin(EMAIL),
-        )
-    }
-
-    @Test
-    fun `preLogin Pbkdf2 should be success`() = runTest {
-        val json = """
-            {
-              "kdf": 0,
-              "kdfIterations": 1
-            }
-            """
-        val expectedResponse = PreLoginResponseJson(
-            kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(1u),
-        )
-        val response = MockResponse().setBody(json)
-        server.enqueue(response)
-        assertEquals(
-            expectedResponse.asSuccess(),
-            identityService.preLogin(EMAIL),
-        )
-    }
 
     @Test
     fun `getToken when request response is Success should return Success`() = runTest {

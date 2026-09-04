@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestMethod
@@ -47,7 +48,6 @@ import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
-import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.model.RegisterFinishRequestJson
@@ -130,7 +130,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
-import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -205,7 +204,15 @@ class AuthRepositoryTest {
             hashPassword(
                 email = EMAIL,
                 password = PASSWORD,
-                kdf = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
+                kdf = PRE_LOGIN_SUCCESS.kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns PASSWORD_HASH.asSuccess()
+        coEvery {
+            hashPassword(
+                email = PRE_LOGIN_SUCCESS.salt,
+                password = PASSWORD,
+                kdf = PRE_LOGIN_SUCCESS.kdf,
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         } returns PASSWORD_HASH.asSuccess()
@@ -1630,12 +1637,10 @@ class AuthRepositoryTest {
     @Test
     fun `login when pre login fails should return Error with no message`() = runTest {
         val error = RuntimeException()
-        coEvery {
-            identityService.preLogin(email = EMAIL)
-        } returns error.asFailure()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns error.asFailure()
         val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Error(error = error), result)
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
     }
 
     @Suppress("MaxLineLength")
@@ -1643,9 +1648,7 @@ class AuthRepositoryTest {
     fun `login get token fails should return Error with no message when server is an official Bitwarden server`() =
         runTest {
             val error = RuntimeException()
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1659,7 +1662,7 @@ class AuthRepositoryTest {
             } returns error.asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Error(error = error), result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -1678,9 +1681,7 @@ class AuthRepositoryTest {
     fun `login get token fails should return UnofficialServerError when server is an unofficial Bitwarden server`() =
         runTest {
             configDiskSource.serverConfig = SERVER_CONFIG_UNOFFICIAL
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1694,16 +1695,14 @@ class AuthRepositoryTest {
             } returns RuntimeException().asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.UnofficialServerError, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `login get token fails should return CertificateError when SSLHandshakeException is thrown`() =
         runTest {
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1717,25 +1716,23 @@ class AuthRepositoryTest {
             } returns SSLHandshakeException("error").asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.CertificateError, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
         }
 
     @Test
     fun `prelogin fails should return CertificateError when SSLHandshakeException is thrown`() =
         runTest {
             coEvery {
-                identityService.preLogin(email = EMAIL)
+                authSdkSource.preLogin(email = EMAIL)
             } returns SSLHandshakeException("error").asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.CertificateError, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
         }
 
     @Test
     fun `login get token returns Invalid should return Error with correct message`() = runTest {
-        coEvery {
-            identityService.preLogin(email = EMAIL)
-        } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -1756,7 +1753,7 @@ class AuthRepositoryTest {
 
         val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Error(errorMessage = "mock_error_message", error = null), result)
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -1774,9 +1771,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login get token should return InvalidType NewDeviceVerification when message is new device verification needed`() =
         runTest {
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1807,9 +1802,7 @@ class AuthRepositoryTest {
     fun `login get token succeeds should return Success, unlockVault, update AuthState, update stored keys, and sync`() =
         runTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1844,7 +1837,7 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
@@ -1910,9 +1903,7 @@ class AuthRepositoryTest {
                     policyInfo = MASTER_PASSWORD_POLICY_INFORMATION,
                 )
             } returns false
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -1971,9 +1962,7 @@ class AuthRepositoryTest {
                     policyInfo = MASTER_PASSWORD_POLICY_INFORMATION,
                 )
             } returns true
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2023,9 +2012,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login get token succeeds without master password policy options should not check the password against any policy`() =
         runTest {
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2126,9 +2113,7 @@ class AuthRepositoryTest {
             val accountCryptographicState = WrappedAccountCryptographicState.V1(
                 privateKey = "mockWrappedPrivateKey-1",
             )
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2163,7 +2148,7 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = accountCryptographicState,
@@ -2212,9 +2197,7 @@ class AuthRepositoryTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             val expectedErrorMessage = "crypto key failure"
 
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2256,7 +2239,7 @@ class AuthRepositoryTest {
                 LoginResult.Error(errorMessage = expectedErrorMessage, error = error),
                 result,
             )
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = null,
@@ -2315,9 +2298,7 @@ class AuthRepositoryTest {
                     masterPasswordUnlock = null,
                 ),
             )
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2342,7 +2323,7 @@ class AuthRepositoryTest {
                 password = PASSWORD,
             )
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertMasterPasswordHash(
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
@@ -2390,9 +2371,7 @@ class AuthRepositoryTest {
 
             // Set up login for User 1
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2441,7 +2420,7 @@ class AuthRepositoryTest {
             val result = repository.login(email = EMAIL, password = PASSWORD)
 
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
@@ -2484,7 +2463,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `login get token returns two factor request should return TwoFactorRequired`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2512,7 +2491,7 @@ class AuthRepositoryTest {
                 ssoToken = null,
             ),
         )
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -2530,7 +2509,7 @@ class AuthRepositoryTest {
     fun `login two factor with remember saves two factor auth token`() = runTest {
         // Attempt a normal login with a two factor error first, so that the auth
         // data will be cached.
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2550,7 +2529,7 @@ class AuthRepositoryTest {
             .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -2628,7 +2607,7 @@ class AuthRepositoryTest {
             )
             // Attempt a normal login with a two factor error first, so that the auth
             // data will be cached.
-            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2647,7 +2626,7 @@ class AuthRepositoryTest {
             )
 
             assertEquals(LoginResult.TwoFactorRequired, firstResult)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -2725,9 +2704,7 @@ class AuthRepositoryTest {
             remember = false,
         )
         val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-        coEvery {
-            identityService.preLogin(email = EMAIL)
-        } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2763,7 +2740,7 @@ class AuthRepositoryTest {
         } returns SINGLE_USER_STATE_1
         val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Success, result)
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
         fakeAuthDiskSource.assertAccountCryptographicState(
             userId = USER_ID_1,
             accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
@@ -2821,7 +2798,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login get token returns invalid request should return EncryptionKeyMigrationRequired`() =
         runTest {
-            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2844,7 +2821,7 @@ class AuthRepositoryTest {
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.EncryptionKeyMigrationRequired, result)
             coVerify {
-                identityService.preLogin(email = EMAIL)
+                authSdkSource.preLogin(email = EMAIL)
                 identityService.getToken(
                     email = EMAIL,
                     authModel = IdentityTokenAuthModel.MasterPassword(
@@ -4846,7 +4823,7 @@ class AuthRepositoryTest {
     @Test
     fun `register with email token Success should return Success with v1 encryption`() = runTest {
         every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionPassword) } returns false
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.registerFinish(
                 body = RegisterFinishRequestJson(
@@ -6183,7 +6160,7 @@ class AuthRepositoryTest {
     fun `resendVerificationCodeEmail uses cached request data to make api call`() = runTest {
         // Attempt a normal login with a two factor error first, so that the necessary
         // data will be cached.
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -6203,7 +6180,7 @@ class AuthRepositoryTest {
             .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
-        coVerify { identityService.preLogin(email = EMAIL) }
+        coVerify { authSdkSource.preLogin(email = EMAIL) }
         coVerify {
             identityService.getToken(
                 email = EMAIL,
@@ -6246,7 +6223,7 @@ class AuthRepositoryTest {
         runTest {
             // Attempt a normal login with a two factor error first, so that the necessary
             // data will be cached.
-            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -6266,7 +6243,7 @@ class AuthRepositoryTest {
                 .asSuccess()
             val firstResult = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.TwoFactorRequired, firstResult)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -7055,9 +7032,7 @@ class AuthRepositoryTest {
     fun `on successful login a new user should have onboarding status set if has not previously logged in`() =
         runTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -7093,7 +7068,7 @@ class AuthRepositoryTest {
             every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns false
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
@@ -7113,9 +7088,7 @@ class AuthRepositoryTest {
     fun `on successful login does not set onboarding status if user has previously logged in`() =
         runTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery { authSdkSource.preLogin(email = EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -7151,7 +7124,7 @@ class AuthRepositoryTest {
             every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns true
             val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
-            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify { authSdkSource.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
@@ -7199,6 +7172,7 @@ class AuthRepositoryTest {
         private const val EMAIL_VERIFICATION_TOKEN = "thisisanawesometoken"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
+        private const val SALT = "salt"
         private const val ACCESS_TOKEN = "accessToken"
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"
@@ -7240,8 +7214,9 @@ class AuthRepositoryTest {
             ),
             TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
         )
-        private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
-            kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
+        private val PRE_LOGIN_SUCCESS = PasswordPreloginResponse(
+            kdf = Kdf.Pbkdf2(iterations = 1u),
+            salt = SALT,
         )
         private val AUTH_REQUEST_RESPONSE = AuthRequestResponse(
             privateKey = PRIVATE_KEY,
