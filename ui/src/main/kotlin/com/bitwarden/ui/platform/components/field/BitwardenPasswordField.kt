@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,6 +57,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.bitwarden.ui.platform.components.util.passwordVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -190,7 +190,10 @@ fun BitwardenPasswordField(
                     }
                 },
                 visualTransformation = when {
-                    !showPassword -> PasswordVisualTransformation()
+                    !showPassword -> passwordVisualTransformation(
+                        staticCharacterCount = 8.takeIf { readOnly },
+                    )
+
                     readOnly -> nonLetterColorVisualTransformation()
                     else -> VisualTransformation.None
                 },
