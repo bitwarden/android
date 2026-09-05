@@ -2946,7 +2946,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Number")
-            .assertTextEquals("Number", "••••••")
+            .assertTextEquals("Number", "••••••••")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Number")
@@ -2986,7 +2986,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Number")
-            .assertTextEquals("Number", "••••••")
+            .assertTextEquals("Number", "••••••••")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithTextAfterScroll("Number")
@@ -3102,7 +3102,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Security code")
-            .assertTextEquals("Security code", "•••")
+            .assertTextEquals("Security code", "••••••••")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithContentDescription("Copy security code")
@@ -3139,7 +3139,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Security code")
-            .assertTextEquals("Security code", "•••")
+            .assertTextEquals("Security code", "••••••••")
             .assertIsEnabled()
         composeTestRule
             .onNodeWithContentDescription("Copy security code")
