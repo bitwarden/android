@@ -363,6 +363,7 @@ La numérisation se fera automatiquement.</string>
     <string name="passphrase">Phrase de passe</string>
     <string name="word_separator">Séparateur de mots</string>
     <string name="clear">Effacer</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Générateur</string>
     <string name="no_folders_to_list">Il n\'y a aucun dossier à lister.</string>
     <string name="fingerprint_phrase">Phrase d\'empreinte</string>

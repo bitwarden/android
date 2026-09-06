@@ -363,6 +363,7 @@ Skanning skjer automatisk.</string>
     <string name="passphrase">Passfrase</string>
     <string name="word_separator">Orddeler</string>
     <string name="clear">Tøm</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Det er ingen mapper å vise</string>
     <string name="fingerprint_phrase">Fingeravtrykksfrase</string>

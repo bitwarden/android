@@ -363,6 +363,7 @@
     <string name="passphrase">Συνθηματικό</string>
     <string name="word_separator">Διαχωριστής λέξεων</string>
     <string name="clear">Εκκαθάριση</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Γεννήτρια</string>
     <string name="no_folders_to_list">Δεν υπάρχουν φάκελοι προς εμφάνιση.</string>
     <string name="fingerprint_phrase">Φράση δακτυλικών αποτυπωμάτων</string>

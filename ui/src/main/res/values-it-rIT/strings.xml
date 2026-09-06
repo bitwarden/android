@@ -362,6 +362,7 @@
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Separatore delle parole</string>
     <string name="clear">Cancella</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generatore</string>
     <string name="no_folders_to_list">Nessuna cartella</string>
     <string name="fingerprint_phrase">Frase impronta</string>

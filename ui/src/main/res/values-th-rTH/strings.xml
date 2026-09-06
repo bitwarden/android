@@ -361,6 +361,7 @@
     <string name="passphrase">ข้อความรหัสผ่าน</string>
     <string name="word_separator">ตัวคั่นคำ</string>
     <string name="clear">ล้าง</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">สุ่มรหัส</string>
     <string name="no_folders_to_list">ไม่มีโฟลเดอร์ให้แสดง</string>
     <string name="fingerprint_phrase">วลีลายนิ้วมือ</string>

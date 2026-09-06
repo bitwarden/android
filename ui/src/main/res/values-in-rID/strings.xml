@@ -361,6 +361,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="passphrase">Frasa Sandi</string>
     <string name="word_separator">Pemisah kata</string>
     <string name="clear">Bersihkan</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Pembuat Sandi</string>
     <string name="no_folders_to_list">Tidak ada folder yang dapat dicantumkan.</string>
     <string name="fingerprint_phrase">Frase Sidik Jari</string>

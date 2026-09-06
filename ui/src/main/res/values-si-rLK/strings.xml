@@ -363,6 +363,7 @@
     <string name="passphrase">වාක්‍යාංශ මුරපදය</string>
     <string name="word_separator">වචන වෙන් කරන්නා</string>
     <string name="clear">හිස් කරන්න</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">උත්පාදක යන්ත්‍රය</string>
     <string name="no_folders_to_list">ලැයිස්තුගත කිරීමට ෆෝල්ඩර නොමැත.</string>
     <string name="fingerprint_phrase">ඇඟිලි සලකුණු වාක්‍යාංශය</string>

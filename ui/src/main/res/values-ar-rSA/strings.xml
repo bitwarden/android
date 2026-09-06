@@ -371,6 +371,7 @@
     <string name="passphrase">جملة المرور</string>
     <string name="word_separator">فاصل الكلمات</string>
     <string name="clear">مسح</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">المولّد</string>
     <string name="no_folders_to_list">لا توجد مجلّدات لسردها.</string>
     <string name="fingerprint_phrase">عبارة بصمة الإصبع</string>

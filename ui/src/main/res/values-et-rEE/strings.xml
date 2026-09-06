@@ -363,6 +363,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="passphrase">Paroolifraas</string>
     <string name="word_separator">Sõna eraldaja</string>
     <string name="clear">Tühjenda</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Genereerija</string>
     <string name="no_folders_to_list">Puuduvad kaustad, mida kuvada.</string>
     <string name="fingerprint_phrase">Sõrmejälje fraas</string>

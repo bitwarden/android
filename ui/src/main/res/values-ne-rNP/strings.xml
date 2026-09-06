@@ -363,6 +363,7 @@
     <string name="passphrase">पासफ्रेज</string>
     <string name="word_separator">शब्द विभाजक</string>
     <string name="clear">खाली गर्नुहोस्</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">जेनरेटर</string>
     <string name="no_folders_to_list">सूचीकरण गर्न कुनै फोल्डरहरू छैनन्।</string>
     <string name="fingerprint_phrase">औंठाछाप वाक्यांश</string>

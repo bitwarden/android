@@ -362,6 +362,7 @@
     <string name="passphrase">Kulcsszó</string>
     <string name="word_separator">Szóelválasztó</string>
     <string name="clear">Törlés</string>
+    <string name="open_calendar">naptár megnyitása</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Nincsenek megjeleníthető mappák.</string>
     <string name="fingerprint_phrase">Ujjlenyomat mondat</string>

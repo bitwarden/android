@@ -363,6 +363,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="passphrase">Wachtwoordzin</string>
     <string name="word_separator">Scheidingsteken</string>
     <string name="clear">Wissen</string>
+    <string name="open_calendar">agenda openen</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Er zijn geen mappen om weer te geven.</string>
     <string name="fingerprint_phrase">Vingerafdrukzin</string>

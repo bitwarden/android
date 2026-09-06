@@ -366,6 +366,7 @@
     <string name="passphrase">Парольная фраза</string>
     <string name="word_separator">Раздзяляльнік слоў</string>
     <string name="clear">Ачысціць</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Генератар</string>
     <string name="no_folders_to_list">У спісе адсутнічаюць папкі.</string>
     <string name="fingerprint_phrase">Фраза адбітка пальца</string>

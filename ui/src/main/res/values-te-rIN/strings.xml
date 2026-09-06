@@ -363,6 +363,7 @@
     <string name="passphrase">పాస్ఫ్రేజ్</string>
     <string name="word_separator">పద విభజన</string>
     <string name="clear">క్లియర్ చేయి</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">జనరేటర్</string>
     <string name="no_folders_to_list">జాబితా చేయడానికి ఫోల్డర్‌లు లేవు.</string>
     <string name="fingerprint_phrase">వేలిముద్ర పదబంధం</string>

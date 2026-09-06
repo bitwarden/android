@@ -363,6 +363,7 @@
     <string name="passphrase">ფრაზა</string>
     <string name="word_separator">სიტყვების გამყოფი</string>
     <string name="clear">გასუფთავება</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">გენერატორი</string>
     <string name="no_folders_to_list">გამოსატანი პაპკები არ არის.</string>
     <string name="fingerprint_phrase">თითის ანაბეჭდის ფრაზა</string>

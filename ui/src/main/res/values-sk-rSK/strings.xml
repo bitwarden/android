@@ -367,6 +367,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="passphrase">Prístupová fráza</string>
     <string name="word_separator">Oddeľovač slov</string>
     <string name="clear">Vyčistiť</string>
+    <string name="open_calendar">otvoriť kalendár</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Neexistujú žiadne zložky.</string>
     <string name="fingerprint_phrase">Fráza odtlačku</string>

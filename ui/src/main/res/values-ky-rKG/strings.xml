@@ -363,6 +363,7 @@
     <string name="passphrase">Шифрфраза</string>
     <string name="word_separator">Сөз бөлгүч</string>
     <string name="clear">Тазалоо</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Тизмеге алынуучу папкалар жок.</string>
     <string name="fingerprint_phrase">Манжа изи фразасы</string>

@@ -363,6 +363,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="passphrase">Parola cümlesi</string>
     <string name="word_separator">Kelime ayracı</string>
     <string name="clear">Temizle</string>
+    <string name="open_calendar">takvimi aç</string>
     <string name="generator">Üreteç</string>
     <string name="no_folders_to_list">Listelenecek klasör yok.</string>
     <string name="fingerprint_phrase">Parmak izi ifadesi</string>

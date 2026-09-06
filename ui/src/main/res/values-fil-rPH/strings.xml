@@ -363,6 +363,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Panghiwalay sa mga salita</string>
     <string name="clear">Burahin</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Tagagawa</string>
     <string name="no_folders_to_list">Walang maililistang folder.</string>
     <string name="fingerprint_phrase">Parirala ng fingerprint</string>

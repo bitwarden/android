@@ -365,6 +365,7 @@ Scanarea se va face automat.</string>
     <string name="passphrase">Frază de acces</string>
     <string name="word_separator">Separator de cuvinte</string>
     <string name="clear">Ștergere</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Nu există dosare de afișat.</string>
     <string name="fingerprint_phrase">Frază amprentă</string>

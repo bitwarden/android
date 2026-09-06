@@ -362,6 +362,7 @@
     <string name="passphrase">पासफ्रेज़</string>
     <string name="word_separator">वर्ड सेपरेटर</string>
     <string name="clear">साफ करें</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">जेनरेटर</string>
     <string name="no_folders_to_list">सूचीबद्ध करने के लिए कोई फ़ोल्डर नहीं हैं।</string>
     <string name="fingerprint_phrase">फिंगरप्रिंट फ्रेज़</string>

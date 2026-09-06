@@ -152,7 +152,7 @@
     <string name="card_saved">Card saved</string>
     <string name="identity_saved">Identity saved</string>
     <string name="license_saved">License saved</string>
-    <string name="login_saved">Login saved</string>
+    <string name="login_saved">登入項目已儲存</string>
     <string name="passport_saved">Passport saved</string>
     <string name="secure_note_saved">Secure note saved</string>
     <string name="ssh_key_saved">SSH key saved</string>
@@ -361,6 +361,7 @@
     <string name="passphrase">密碼短語</string>
     <string name="word_separator">單字分隔字元</string>
     <string name="clear">清除</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">產生器</string>
     <string name="no_folders_to_list">沒有可列出的資料夾。</string>
     <string name="fingerprint_phrase">指紋短語</string>

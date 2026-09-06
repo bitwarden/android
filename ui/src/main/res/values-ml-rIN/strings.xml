@@ -363,6 +363,7 @@
     <string name="passphrase">രഹസ്യ വാചകം</string>
     <string name="word_separator">വേര്‍പെടുത്തുക</string>
     <string name="clear">മായ്ക്കുക</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">സ്രഷ്ടാവ്</string>
     <string name="no_folders_to_list">പ്രദർശിപ്പിക്കാൻ ഫോൾഡറുകളൊന്നുമില്ല.</string>
     <string name="fingerprint_phrase">ഫിംഗർപ്രിന്റ് ഫ്രേസ്‌</string>

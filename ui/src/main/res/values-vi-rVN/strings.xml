@@ -362,6 +362,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="passphrase">Cụm mật khẩu</string>
     <string name="word_separator">Dấu phân cách từ</string>
     <string name="clear">Xóa</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Trình tạo</string>
     <string name="no_folders_to_list">Không có thư mục nào.</string>
     <string name="fingerprint_phrase">Cụm từ xác thực</string>

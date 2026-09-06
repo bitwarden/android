@@ -361,6 +361,7 @@
     <string name="passphrase">စကားစု</string>
     <string name="word_separator">စကားလုံးခွဲခြားကိရိယာ</string>
     <string name="clear">ရှင်းလင်းပါ</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">ဂျင်နရေတာ</string>
     <string name="no_folders_to_list">စာရင်းပြုရန် ဖိုလ်ဒါများ မရှိပါ။</string>
     <string name="fingerprint_phrase">လက်ဗွေ စကားစု</string>

@@ -367,6 +367,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="passphrase">Slaptafrazė</string>
     <string name="word_separator">Žodžių skirtukas</string>
     <string name="clear">Išvalyti</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generatorius</string>
     <string name="no_folders_to_list">Aplankų nėra.</string>
     <string name="fingerprint_phrase">Pirštų atspaudų frazė</string>

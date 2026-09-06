@@ -371,6 +371,7 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="passphrase">Cyfrinymadrodd</string>
     <string name="word_separator">Gwahanydd geiriau</string>
     <string name="clear">Clirio</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Cynhyrchydd</string>
     <string name="no_folders_to_list">Does dim ffolderi i\'w rhestru.</string>
     <string name="fingerprint_phrase">Ymadrodd ôl bys</string>

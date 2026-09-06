@@ -363,6 +363,7 @@
     <string name="passphrase">Парола-фраза</string>
     <string name="word_separator">Разделител за думи</string>
     <string name="clear">Изчистване</string>
+    <string name="open_calendar">отваряне на календара</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Няма папки за показване.</string>
     <string name="fingerprint_phrase">Уникална фраза</string>
