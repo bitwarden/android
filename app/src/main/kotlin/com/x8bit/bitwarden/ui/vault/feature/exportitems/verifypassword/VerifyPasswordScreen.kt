@@ -29,10 +29,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -47,12 +51,14 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.component.AccountSummaryListItem
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.component.ExportItemsScaffold
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.handlers.VerifyPasswordHandlers
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.handlers.rememberVerifyPasswordHandler
 
 /**
  * Top level composable for the Verify Password screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun VerifyPasswordScreen(
     onNavigateBack: () -> Unit,
@@ -60,6 +66,8 @@ fun VerifyPasswordScreen(
     viewModel: VerifyPasswordViewModel = hiltViewModel(),
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
+    credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
+        LocalCredentialExchangeRequestValidator.current,
     snackbarHostState: BitwardenSnackbarHostState = rememberBitwardenSnackbarHostState(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -78,6 +86,16 @@ fun VerifyPasswordScreen(
                             ),
                         ),
                     )
+            }
+
+            is VerifyPasswordEvent.ValidateImportRequest -> {
+                viewModel.trySendAction(
+                    VerifyPasswordAction.ValidateImportRequestResultReceive(
+                        isValid = credentialExchangeRequestValidator.validate(
+                            importCredentialsRequestData = event.importCredentialsRequestData,
+                        ),
+                    ),
+                )
             }
 
             is VerifyPasswordEvent.PasswordVerified -> {
@@ -108,13 +126,30 @@ fun VerifyPasswordScreen(
         scrollBehavior = scrollBehavior,
         modifier = Modifier.fillMaxSize(),
     ) {
-        VerifyPasswordContent(
-            state = state,
-            onInputChanged = handler.onInputChanged,
-            onContinueClick = handler.onContinueClick,
-            onResendCodeClick = handler.onSendCodeClick,
-            modifier = Modifier.fillMaxSize(),
-        )
+        when (val viewState = state.viewState) {
+            is VerifyPasswordState.ViewState.Content -> {
+                VerifyPasswordContent(
+                    viewState = viewState,
+                    accountSummaryListItem = state.accountSummaryListItem,
+                    handler = handler,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            is VerifyPasswordState.ViewState.Error -> {
+                BitwardenErrorContent(
+                    message = viewState.message(),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            VerifyPasswordState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    text = stringResource(id = BitwardenString.loading),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
     }
 }
 
@@ -144,10 +179,9 @@ private fun VerifyPasswordDialogs(
 @Suppress("LongMethod")
 @Composable
 private fun VerifyPasswordContent(
-    state: VerifyPasswordState,
-    onInputChanged: (String) -> Unit,
-    onContinueClick: () -> Unit,
-    onResendCodeClick: () -> Unit,
+    viewState: VerifyPasswordState.ViewState.Content,
+    accountSummaryListItem: AccountSelectionListItem,
+    handler: VerifyPasswordHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -158,7 +192,7 @@ private fun VerifyPasswordContent(
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = state.title(),
+            text = viewState.title(),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.titleMedium,
             modifier = Modifier
@@ -166,7 +200,7 @@ private fun VerifyPasswordContent(
                 .standardHorizontalMargin(),
         )
 
-        state.subtext?.let { subtext ->
+        viewState.subtext?.let { subtext ->
             Spacer(Modifier.height(8.dp))
             Text(
                 text = subtext(),
@@ -181,7 +215,7 @@ private fun VerifyPasswordContent(
         Spacer(Modifier.height(16.dp))
 
         AccountSummaryListItem(
-            item = state.accountSummaryListItem,
+            item = accountSummaryListItem,
             cardStyle = CardStyle.Full,
             clickable = false,
             modifier = Modifier
@@ -191,17 +225,17 @@ private fun VerifyPasswordContent(
 
         Spacer(Modifier.height(16.dp))
 
-        if (state.showResendCodeButton) {
+        if (viewState.showResendCodeButton) {
             BitwardenPasswordField(
                 label = stringResource(id = BitwardenString.verification_code),
-                value = state.input,
-                onValueChange = onInputChanged,
+                value = viewState.input,
+                onValueChange = handler.onInputChanged,
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        if (state.isContinueButtonEnabled) {
-                            onContinueClick()
+                        if (viewState.isContinueButtonEnabled) {
+                            handler.onContinueClick()
                         } else {
                             defaultKeyboardAction(ImeAction.Done)
                         }
@@ -218,14 +252,14 @@ private fun VerifyPasswordContent(
         } else {
             BitwardenPasswordField(
                 label = stringResource(BitwardenString.master_password),
-                value = state.input,
-                onValueChange = onInputChanged,
+                value = viewState.input,
+                onValueChange = handler.onInputChanged,
                 showPasswordTestTag = "PasswordVisibilityToggle",
                 imeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        if (state.isContinueButtonEnabled) {
-                            onContinueClick()
+                        if (viewState.isContinueButtonEnabled) {
+                            handler.onContinueClick()
                         } else {
                             defaultKeyboardAction(ImeAction.Done)
                         }
@@ -245,18 +279,18 @@ private fun VerifyPasswordContent(
 
         BitwardenFilledButton(
             label = stringResource(BitwardenString.continue_text),
-            onClick = onContinueClick,
-            isEnabled = state.isContinueButtonEnabled,
+            onClick = handler.onContinueClick,
+            isEnabled = viewState.isContinueButtonEnabled,
             modifier = Modifier
                 .testTag("ContinueImportButton")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
 
-        if (state.showResendCodeButton) {
+        if (viewState.showResendCodeButton) {
             BitwardenOutlinedButton(
                 label = stringResource(BitwardenString.resend_code),
-                onClick = onResendCodeClick,
+                onClick = handler.onSendCodeClick,
                 modifier = Modifier
                     .testTag("ResendTOTPCodeButton")
                     .fillMaxWidth()
@@ -273,35 +307,28 @@ private fun VerifyPasswordContent(
 @Preview(showBackground = true)
 @Composable
 private fun VerifyPasswordContent_MasterPassword_preview() {
-    val accountSummaryListItem = AccountSelectionListItem(
-        userId = "userId",
-        isItemRestricted = false,
-        avatarColorHex = "#FF0000",
-        initials = "JD",
-        email = "john.doe@example.com",
-    )
-    val state = VerifyPasswordState(
-        title = BitwardenString.verify_your_master_password.asText(),
-        subtext = null,
-        hasOtherAccounts = true,
-        accountSummaryListItem = accountSummaryListItem,
-    )
     ExportItemsScaffold(
-        navIcon = rememberVectorPainter(
-            BitwardenDrawable.ic_back,
-        ),
+        navIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
         onNavigationIconClick = {},
         navigationIconContentDescription = stringResource(BitwardenString.back),
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
         modifier = Modifier.fillMaxSize(),
     ) {
         VerifyPasswordContent(
-            state = state,
-            onInputChanged = {},
-            onContinueClick = {},
-            onResendCodeClick = {},
-            modifier = Modifier
-                .fillMaxSize(),
+            viewState = VerifyPasswordState.ViewState.Content(
+                title = BitwardenString.verify_your_master_password.asText(),
+                subtext = null,
+                showResendCodeButton = false,
+            ),
+            accountSummaryListItem = AccountSelectionListItem(
+                userId = "userId",
+                isItemRestricted = false,
+                avatarColorHex = "#FF0000",
+                initials = "JD",
+                email = "john.doe@example.com",
+            ),
+            handler = VerifyPasswordHandlers.createEmpty(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -310,38 +337,30 @@ private fun VerifyPasswordContent_MasterPassword_preview() {
 @Preview(showBackground = true)
 @Composable
 private fun VerifyPasswordContent_Otp_preview() {
-    val accountSummaryListItem = AccountSelectionListItem(
-        userId = "userId",
-        isItemRestricted = false,
-        avatarColorHex = "#FF0000",
-        initials = "JD",
-        email = "john.doe@example.com",
-    )
-    val state = VerifyPasswordState(
-        title = BitwardenString.verify_your_account_email_address.asText(),
-        subtext = BitwardenString
-            .enter_the_6_digit_code_that_was_emailed_to_the_address_below
-            .asText(),
-        accountSummaryListItem = accountSummaryListItem,
-        showResendCodeButton = true,
-        hasOtherAccounts = true,
-    )
     ExportItemsScaffold(
-        navIcon = rememberVectorPainter(
-            BitwardenDrawable.ic_back,
-        ),
+        navIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
         onNavigationIconClick = {},
         navigationIconContentDescription = stringResource(BitwardenString.back),
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
         modifier = Modifier.fillMaxSize(),
     ) {
         VerifyPasswordContent(
-            state = state,
-            onInputChanged = {},
-            onContinueClick = {},
-            onResendCodeClick = {},
-            modifier = Modifier
-                .fillMaxSize(),
+            viewState = VerifyPasswordState.ViewState.Content(
+                title = BitwardenString.verify_your_account_email_address.asText(),
+                subtext = BitwardenString
+                    .enter_the_6_digit_code_that_was_emailed_to_the_address_below
+                    .asText(),
+                showResendCodeButton = true,
+            ),
+            accountSummaryListItem = AccountSelectionListItem(
+                userId = "userId",
+                isItemRestricted = false,
+                avatarColorHex = "#FF0000",
+                initials = "JD",
+                email = "john.doe@example.com",
+            ),
+            handler = VerifyPasswordHandlers.createEmpty(),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
