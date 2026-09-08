@@ -2074,13 +2074,12 @@ class AutofillParserTests {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `parse should choose AutofillPartition Login when an Identity view is focused but a Login view is fillable elsewhere`() {
+    fun `parse should choose AutofillPartition Identity when an Identity view is focused even though a Login view is fillable in another window`() {
         // Setup: a focused field heuristics classify as Identity (e.g. "First name" on a signup
         // form) sits in one window, while a fillable, unfocused Login.Username field exists in
-        // another window on the same screen. Before Phase D's Identity partition exists, a
-        // focused Identity view must not force the whole request to Unfillable when a fillable
-        // Login/Card partition exists elsewhere -- it should be excluded from candidates exactly
-        // like Unused, falling through to the other fillable view.
+        // another window on the same screen. The Login view never enters the candidate pool --
+        // selectCandidateAutofillViews only considers a window whose own views have a focused
+        // entry -- so the focused Identity view wins and builds a real Identity partition.
         val identityAutofillId: AutofillId = mockk()
         val identityViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns emptyArray()
@@ -2130,13 +2129,14 @@ class AutofillParserTests {
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
 
-        // Verify: falls through to the fillable Login view instead of becoming Unfillable.
+        // Verify: the focused Identity view wins; the Login view in the other window is never a
+        // candidate.
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             packageName = PACKAGE_NAME,
-            partition = AutofillPartition.Login(views = listOf(loginAutofillView)),
+            partition = AutofillPartition.Identity(views = listOf(identityAutofillView)),
             uri = URI,
         )
         assertEquals(expected, actual)
