@@ -480,9 +480,8 @@ private fun AssistStructure.ViewNode.traverse(
                     mutableAutofillViewList.add(AutofillView.Identity.Email(data = view.data))
                 }
 
-                // Some phone hints (e.g. "mobilephone") also match the username heuristic's
-                // "phone" term and resolve to Login.Username above, so they need the same
-                // dual-classification as email.
+                // A phone-hinted or phone-heuristic field resolves to Login.Username above (see
+                // supportedAutofillHint), so it needs the same dual-classification as email.
                 if (view is AutofillView.Login.Username && this.isPhoneField) {
                     mutableAutofillViewList.add(AutofillView.Identity.PhoneFull(data = view.data))
                 }
@@ -499,6 +498,11 @@ private fun AssistStructure.ViewNode.traverse(
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
             .let { viewNodeTraversalData ->
+                // Ids already claimed by an ancestor's own view (e.g. a container-redirect
+                // target) before this child's results are considered. A primary always precedes
+                // its Identity dual-classification sibling in this same child's results, so the
+                // sibling's id is still fresh here and passes the check below.
+                val idsClaimedByAncestor = claimedAutofillIds.toSet()
                 // Flatten child views into this node, keeping the first view seen for each autofill
                 // id and dropping later duplicates (e.g. a container-redirect leftover).
                 viewNodeTraversalData.autofillViews
@@ -507,13 +511,13 @@ private fun AssistStructure.ViewNode.traverse(
                         when (view) {
                             // Never claims an id, so a real view for that id can still be kept.
                             is AutofillView.Unused -> id !in claimedAutofillIds
-                            // Always kept: a primary field, or the email/phone dual-classification
-                            // sibling that intentionally shares a Login primary's already-claimed
-                            // id. Claims the id when it is the primary. Container redirect never
-                            // produces an Identity view, so keeping a claimed id is always safe.
+                            // Kept if the id is fresh, i.e. it's a dual-classification sibling of
+                            // a primary view from this same child. Dropped if the id was already
+                            // claimed by an ancestor's own view -- that means this is a stale
+                            // container-redirect leftover, not an intentional sibling.
                             is AutofillView.Identity -> {
-                                claimedAutofillIds.add(id)
-                                true
+                                (id !in idsClaimedByAncestor)
+                                    .also { keep -> if (keep) claimedAutofillIds.add(id) }
                             }
                             // Kept only the first time its id is seen (add returns false if known).
                             else -> claimedAutofillIds.add(id)

@@ -2322,22 +2322,29 @@ class AutofillParserTests {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `parse should resolve a phone-hinted field to an Identity partition instead of promoting it to Login Username when IdentityAutofill is enabled`() {
-        // Setup: same shape as the disabled case above, but IdentityAutofill is enabled, so
-        // toAutofillView resolves the field to Identity.PhoneFull instead of Unused before
-        // updateForMissingUsernameFields ever runs. The promotion is skipped -- but unlike before
-        // Phase D landed, the field isn't lost: it resolves through a real Identity partition
-        // instead. The trade-off is that it's no longer offered together with the password field
-        // in the same fill action, since they now belong to different partition types.
+    fun `parse should classify a phone-hinted field as Login Username with an Identity PhoneFull sibling when IdentityAutofill is enabled`() {
+        // Setup: same shape as the disabled case above, but IdentityAutofill is enabled and the
+        // node genuinely declares the phone autofill hint, so the real isPhoneField check (not a
+        // mocked toAutofillView return) fires. The phone hint always maps to Login.Username, so
+        // traverse() adds an Identity.PhoneFull dual-classification sibling alongside it. That
+        // sibling doesn't change partition selection here -- Login.Username is focused and
+        // precedes it in the views list, so it still wins, producing the same Login partition as
+        // the disabled-flag case.
         mutableIdentityAutofillFlagFlow.value = true
         val (rootViewNode, phoneHintedViewNode, passwordViewNode, passwordAutofillId) =
             setupPhoneHintedFieldAbovePassword()
+        every { phoneHintedViewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PHONE)
+        // isEmailField is also checked alongside isPhoneField now that the real toAutofillView
+        // return (Login.Username) is used instead of a mocked bypass.
+        every { phoneHintedViewNode.idEntry } returns null
+        every { phoneHintedViewNode.hint } returns null
+        every { phoneHintedViewNode.htmlInfo } returns mockk(relaxed = true)
         val windowNode: AssistStructure.WindowNode = mockk {
             every { this@mockk.rootViewNode } returns rootViewNode
         }
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns windowNode
-        val identityPhoneView = AutofillView.Identity.PhoneFull(
+        val loginUsernameAutofillView = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 autofillOptions = emptyList(),
@@ -2364,7 +2371,7 @@ class AutofillParserTests {
                 parentWebsite = any(),
                 isIdentityAutofillEnabled = true,
             )
-        } returns identityPhoneView
+        } returns loginUsernameAutofillView
         every {
             passwordViewNode.toAutofillView(
                 parentWebsite = any(),
@@ -2375,14 +2382,15 @@ class AutofillParserTests {
         // Test
         val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
 
-        // Verify: no promotion -- the focused view resolves to a real Identity partition instead,
-        // and the (unfocused, different-partition-type) password field is excluded from it.
+        // Verify: Login.Username still wins partition selection, same as the disabled-flag case.
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = listOf(rootViewNode.autofillId!!),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             packageName = PACKAGE_NAME,
-            partition = AutofillPartition.Identity(views = listOf(identityPhoneView)),
+            partition = AutofillPartition.Login(
+                views = listOf(loginUsernameAutofillView, loginPasswordAutofillView),
+            ),
             uri = URI,
         )
         assertEquals(expected, actual)
