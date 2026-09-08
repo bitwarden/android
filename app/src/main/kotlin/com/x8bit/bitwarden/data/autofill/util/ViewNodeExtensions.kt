@@ -181,7 +181,7 @@ private fun AssistStructure.ViewNode.supportedAutofillHint(
         this.isAddressRegionField -> AutofillHint.Identity.ADDRESS_REGION
         this.isAddressCountryField -> AutofillHint.Identity.ADDRESS_COUNTRY
         this.isPostalCodeField -> AutofillHint.Identity.POSTAL_CODE
-        this.isPhoneField -> AutofillHint.Identity.PHONE_FULL
+        this.isPhoneField -> AutofillHint.Login.USERNAME
         this.isCompanyField -> AutofillHint.Identity.COMPANY
         this.isSsnField -> AutofillHint.Identity.SSN
         this.isPassportNumberField -> AutofillHint.Identity.PASSPORT_NUMBER
@@ -239,7 +239,7 @@ private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
         }
 
         View.AUTOFILL_HINT_POSTAL_CODE -> AutofillHint.Identity.POSTAL_CODE
-        View.AUTOFILL_HINT_PHONE -> AutofillHint.Identity.PHONE_FULL
+        View.AUTOFILL_HINT_PHONE -> AutofillHint.Login.USERNAME
 
         else -> null
     }
@@ -551,9 +551,10 @@ internal val AssistStructure.ViewNode.isPostalCodeField: Boolean
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal val AssistStructure.ViewNode.isPhoneField: Boolean
-    get() = idEntry
-        ?.toLowerCaseAndStripNonAlpha()
-        ?.containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS) == true ||
+    get() = autofillHints?.contains(View.AUTOFILL_HINT_PHONE) == true ||
+        idEntry
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS) == true ||
         hint
             ?.toLowerCaseAndStripNonAlpha()
             ?.containsAnyTerms(SUPPORTED_RAW_PHONE_HINTS) == true ||
