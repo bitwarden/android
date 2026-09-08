@@ -187,9 +187,7 @@ class AutofillParserImpl(
             autofillViews
         }
 
-        val effectiveFocusedView = effectiveViews
-            .filterNot { it is AutofillView.Identity }
-            .firstFocusedOrNull()
+        val effectiveFocusedView = effectiveViews.effectiveFocusedViewOrNull()
             ?: return AutofillRequest.Unfillable
 
         // Choose the first focused partition of data for fulfillment.
@@ -284,8 +282,11 @@ class AutofillParserImpl(
                 is AutofillView.Login -> rule.category in loginCategories
                 is AutofillView.Identity -> rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
                 is AutofillView.Unused -> {
+                    val identityCoversRule = isIdentityAutofillEnabled &&
+                        rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
                     rule.category in loginCategories ||
-                        rule.category in CARD_FILL_ASSIST_CATEGORIES
+                        rule.category in CARD_FILL_ASSIST_CATEGORIES ||
+                        identityCoversRule
                 }
             }
         }
@@ -351,6 +352,18 @@ private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
  */
 private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? =
     firstOrNull { it.data.isFocused } ?: firstOrNull()
+
+/**
+ * Returns the [AutofillView] that should win partition selection: a focused Login/Card view
+ * first, then any focused view (so a real Identity partition can still be built when Identity is
+ * the only classification available), then any Login/Card view, then any view at all.
+ */
+private fun List<AutofillView>.effectiveFocusedViewOrNull(): AutofillView? {
+    val focusedNonIdentity = firstOrNull { it.data.isFocused && it !is AutofillView.Identity }
+    val focusedAny = firstOrNull { it.data.isFocused }
+    val nonIdentity = firstOrNull { it !is AutofillView.Identity }
+    return focusedNonIdentity ?: focusedAny ?: nonIdentity ?: firstOrNull()
+}
 
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
