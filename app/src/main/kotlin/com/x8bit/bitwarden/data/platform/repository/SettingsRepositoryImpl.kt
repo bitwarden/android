@@ -7,6 +7,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.policies.PolicyType
 import com.bitwarden.policies.PolicyView
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -24,7 +25,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

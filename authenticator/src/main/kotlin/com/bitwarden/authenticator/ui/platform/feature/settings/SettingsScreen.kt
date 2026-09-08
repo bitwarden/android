@@ -48,7 +48,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.feature.settings.security.util.displayLabel
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
@@ -73,6 +72,7 @@ import com.bitwarden.ui.platform.components.support.BitwardenSupportingText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
