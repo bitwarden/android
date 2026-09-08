@@ -1810,7 +1810,7 @@ class AutofillParserTests {
                         category = "account-creation",
                         fields = mapOf(
                             "username" to listOf(usernameSelectorClause),
-                            "personNameFull" to listOf(nameSelectorClause),
+                            "fullName" to listOf(nameSelectorClause),
                         ),
                     ),
                 ),
