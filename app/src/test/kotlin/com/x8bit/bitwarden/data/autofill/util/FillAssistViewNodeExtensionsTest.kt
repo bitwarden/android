@@ -184,6 +184,62 @@ class FillAssistViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `buildFillAssistViews should return only Login Username when htmlInfo matches phone clause and IdentityAutofill is disabled`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        val data = autofillData()
+        every {
+            viewNode.toAutofillViewData(
+                autofillId = autofillId,
+                website = null,
+            )
+        } returns data
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "account-login",
+            fields = mapOf(
+                "phone" to listOf(selectorClause(tag = "input", id = "phone")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(listOf(AutofillView.Login.Username(data = data)), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFillAssistViews should exclude identity-only field key when IdentityAutofill is disabled`() {
+        val htmlInfo = createHtmlInfo()
+        val viewNode = createViewNode(htmlInfo = htmlInfo)
+        val assistStructure = createAssistStructure(viewNode)
+        every {
+            viewNode.toAutofillViewData(autofillId = autofillId, website = null)
+        } returns autofillData()
+
+        val hostRule = FillAssistRules.HostRule(
+            category = "identity-form",
+            fields = mapOf(
+                "firstName" to listOf(selectorClause(tag = "input", id = "first-name")),
+            ),
+        )
+
+        val actual = assistStructure.buildFillAssistViews(
+            hostRules = listOf(hostRule),
+            urlBarWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(emptyList<AutofillView>(), actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `buildFillAssistViews should return Login Password when htmlInfo matches password clause`() {
         val htmlInfo = createHtmlInfo()
         val viewNode = createViewNode(htmlInfo = htmlInfo)
