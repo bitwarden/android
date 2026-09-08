@@ -363,6 +363,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="passphrase">Salalause</string>
     <string name="word_separator">Sanojen erotin</string>
     <string name="clear">Tyhjennä</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generaattori</string>
     <string name="no_folders_to_list">Ei näytettäviä kansioita.</string>
     <string name="fingerprint_phrase">Tunnistelause</string>

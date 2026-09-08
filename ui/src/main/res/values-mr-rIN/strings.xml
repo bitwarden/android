@@ -363,6 +363,7 @@
     <string name="passphrase">वाक्यांश-संकेतशब्द</string>
     <string name="word_separator">शब्द विभाजक</string>
     <string name="clear">साफ करा</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">जनित्र</string>
     <string name="no_folders_to_list">यादी करण्यासाठी कोणतेही फोल्डर नाहीत.</string>
     <string name="fingerprint_phrase">अंगुलिमुद्रा वाक्यांश</string>

@@ -362,6 +362,7 @@
     <string name="passphrase">Pasaesaldia</string>
     <string name="word_separator">Hitz banatzailea</string>
     <string name="clear">Ezabatu</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Sortzailea</string>
     <string name="no_folders_to_list">Ez dago erakusteko karpetarik.</string>
     <string name="fingerprint_phrase">Hatz-marka digitalaren esaldia</string>

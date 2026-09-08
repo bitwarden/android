@@ -363,6 +363,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Worttrennzeichen</string>
     <string name="clear">Leeren</string>
+    <string name="open_calendar">Kalender öffnen</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Keine Ordner zum Auflisten vorhanden.</string>
     <string name="fingerprint_phrase">Fingerabdruck-Phrase</string>
@@ -1389,12 +1390,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="copy_swift_code">SWIFT-Code kopieren</string>
     <string name="copy_iban">IBAN kopieren</string>
     <string name="copy_bank_contact_phone">Telefonnummer der Bank kopieren</string>
-    <string name="checking">Wird überprüft</string>
-    <string name="savings">Ersparnisse</string>
+    <string name="checking">Girokonto</string>
+    <string name="savings">Sparkonto</string>
     <string name="certificate_of_deposit">Einlagenzertifikat</string>
-    <string name="line_of_credit">Kreditrahmen</string>
-    <string name="investment_brokerage">Anlage/Wertpapierhandel</string>
-    <string name="money_market">Finanzmarkt</string>
+    <string name="line_of_credit">Kreditlinie</string>
+    <string name="investment_brokerage">Anlage-/Maklerkonto</string>
+    <string name="money_market">Geldmarktkonto</string>
     <string name="issuing_country">Ausstellendes Land</string>
     <string name="issuing_state">Ausstellendes Bundesland/Stadt/Landkreis</string>
     <string name="license_class">Führerscheinklasse</string>

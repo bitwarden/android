@@ -361,6 +361,7 @@
     <string name="passphrase">密码短语</string>
     <string name="word_separator">单词分隔符</string>
     <string name="clear">清除</string>
+    <string name="open_calendar">打开日历</string>
     <string name="generator">生成器</string>
     <string name="no_folders_to_list">没有可列出的文件夹。</string>
     <string name="fingerprint_phrase">指纹短语</string>

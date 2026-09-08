@@ -361,6 +361,7 @@
     <string name="passphrase">패스프레이즈</string>
     <string name="word_separator">구분 기호</string>
     <string name="clear">삭제</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">생성기</string>
     <string name="no_folders_to_list">폴더가 없습니다.</string>
     <string name="fingerprint_phrase">지문 구절</string>

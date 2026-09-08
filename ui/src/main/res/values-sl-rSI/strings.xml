@@ -367,6 +367,7 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="passphrase">Večbesedno geslo</string>
     <string name="word_separator">Ločilo besed</string>
     <string name="clear">Počisti</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Ni map za prikazat.</string>
     <string name="fingerprint_phrase">Identifikacijsko geslo</string>

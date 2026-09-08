@@ -21,7 +21,7 @@
     <string name="enter_pin">Wpisz kod PIN</string>
     <string name="favorites">Ulubione</string>
     <string name="folder">Folder</string>
-    <string name="folder_created">Folder został utworzony.</string>
+    <string name="folder_created">Folder został utworzony</string>
     <string name="folder_deleted">Folder został usunięty.</string>
     <string name="folder_none">Nieprzypisane</string>
     <string name="folder_updated">Folder został zapisany</string>
@@ -367,6 +367,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="passphrase">Hasło wyrazowe</string>
     <string name="word_separator">Separator słów</string>
     <string name="clear">Wyczyść</string>
+    <string name="open_calendar">otwórz kalendarz</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Brak folderów do wyświetlenia.</string>
     <string name="fingerprint_phrase">Unikalny identyfikator konta</string>

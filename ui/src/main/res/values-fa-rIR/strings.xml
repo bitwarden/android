@@ -363,6 +363,7 @@
     <string name="passphrase">عبارت عبور</string>
     <string name="word_separator">جداکننده کلمات</string>
     <string name="clear">پاک کردن</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">تولید کننده</string>
     <string name="no_folders_to_list">هیچ پوشه‌ای برای نمایش وجود ندارد.</string>
     <string name="fingerprint_phrase">عبارت اثر انگشت</string>

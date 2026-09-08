@@ -2,7 +2,7 @@
 <resources>
     <string name="about">Quant a</string>
     <string name="add_folder">Afig carpeta</string>
-    <string name="add_item">Afegeix element</string>
+    <string name="add_item">Afig element</string>
     <string name="an_error_has_occurred">S\'ha produït un error.</string>
     <string name="apply">Aplica</string>
     <string name="back">Arrere</string>
@@ -44,8 +44,8 @@
     <string name="master_password_required">Contrasenya mestra (obligatòria)</string>
     <string name="new_master_password_required">Nova contrasenya mestra (obligatòria)</string>
     <string name="more_options">Més opcions</string>
-    <string name="my_folder">La meva carpeta</string>
-    <string name="my_folders">Les meves carpetes</string>
+    <string name="my_folder">La meua carpeta</string>
+    <string name="my_folders">Les meues carpetes</string>
     <string name="my_vault">Caixa forta</string>
     <string name="name">Nom</string>
     <string name="item_name_required">Nom de l\'element (obligatori)</string>
@@ -67,7 +67,7 @@
     <string name="website_uri">Lloc web (URI)</string>
     <string name="username">Nom d\'usuari</string>
     <string name="validation_field_required">El camp %1$s és obligatori.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">Has d\'adjuntar un fitxer per desar aquest enviament.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">Has d\'adjuntar un fitxer per guardar aquest enviament.</string>
     <string name="value_has_been_copied">S\'ha copiat \'%1$s\'.</string>
     <string name="verify_master_password">Verifica la contrasenya mestra</string>
     <string name="verify_pin">Verifica el PIN</string>
@@ -92,7 +92,7 @@
     <string name="edit_ssh_key">Editar la clau SSH</string>
     <string name="enter_email_for_hint">Introduïu l\'adreça electrònica del vostre compte per rebre la contrasenya mestra.</string>
     <string name="favorite">Preferit</string>
-    <string name="unfavorite">Desfavorit</string>
+    <string name="unfavorite">Trau dels preferits</string>
     <string name="fingerprint">Empremta digital</string>
     <string name="generate_password">Genera contrasenya</string>
     <string name="get_password_hint">Obteniu la pista de contrasenya mestra</string>
@@ -106,7 +106,7 @@
     <string name="four_hours">4 hores</string>
     <string name="immediately">Immediatament</string>
     <string name="vault_timeout_log_out_confirmation_title">Establir el temps d\'espera de la sessió a “Tancar sessió”?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Després del període d\'inactivitat, es tancarà la sessió. Haureu d\'estar connectat a Internet per iniciar sessió i accedir de nou al vostre cofre. La configuració i el PIN desats en aquest dispositiu no canviaran.</string>
+    <string name="vault_timeout_log_out_confirmation_message">Després del període d\'inactivitat, es tancarà la sessió. Haureu d\'estar connectat a Internet per iniciar sessió i accedir de nou a la caixa forta. La configuració i el PIN guardats en aquest dispositiu no canviaran.</string>
     <string name="logging_in">S\'està iniciant sessió…</string>
     <string name="login_to_bitwarden">Inicia sessió a Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmació de la contrasenya no és correcta.</string>
@@ -120,8 +120,8 @@
     <string name="min_numbers">Mínim de caràcters numèrics</string>
     <string name="min_special">Mínim de caràcters especials</string>
     <string name="never">Mai</string>
-    <string name="no_cards">No hi ha targetes al teu cofre.</string>
-    <string name="add_card">Afegeix targeta</string>
+    <string name="no_cards">No hi ha targetes a la vostra caixa forta.</string>
+    <string name="add_card">Afig una targeta</string>
     <string name="no_logins">No hi ha inicis de sessió al teu cofre.</string>
     <string name="no_identities">No hi ha identitats al teu cofre.</string>
     <string name="add_identity">Afegeix identitat</string>
@@ -363,6 +363,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="passphrase">Frase de pas</string>
     <string name="word_separator">Separador de paraules</string>
     <string name="clear">Esborra</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generador</string>
     <string name="no_folders_to_list">No hi ha carpetes per llistar.</string>
     <string name="fingerprint_phrase">Frase d\'empremta digital</string>

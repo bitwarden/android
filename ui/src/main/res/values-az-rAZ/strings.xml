@@ -249,7 +249,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="april">Aprel</string>
     <string name="august">Avqust</string>
     <string name="brand">Brend</string>
-    <string name="card_details">Kart detalları</string>
+    <string name="card_details">Kart məlumatları</string>
     <string name="card_scanned">Kart skan edildi</string>
     <string name="cardholder_name">Kart sahibinin adı</string>
     <string name="city_town">Şəhər/Rayon</string>
@@ -328,7 +328,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="identification">İdentifikasiya</string>
     <string name="logins">Girişlər</string>
     <string name="secure_notes">Güvənli qeydlər</string>
-    <string name="personal_details">Fərdi detallar</string>
+    <string name="personal_details">Fərdi məlumatlar</string>
     <string name="contact_info">Əlaqə məlumatı</string>
     <string name="check_password_for_data_breaches">Parolları veri pozuntularına qarşı yoxla</string>
     <plurals name="password_exposed">
@@ -363,6 +363,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="passphrase">Uzun ifadə</string>
     <string name="word_separator">Söz ayırıcı</string>
     <string name="clear">Təmizlə</string>
+    <string name="open_calendar">təqvimi aç</string>
     <string name="generator">Yaradıcı</string>
     <string name="no_folders_to_list">Sadalanacaq heç bir qovluq yoxdur.</string>
     <string name="fingerprint_phrase">Barmaq izi ifadəsi</string>
@@ -462,7 +463,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək üçün tələb olunur.</string>
     <string name="personal_ownership_policy_in_effect">Bir təşkilat siyasəti, sahiblik seçimlərinizə təsir edir.</string>
     <string name="send">Göndər</string>
-    <string name="send_details">Send detalları</string>
+    <string name="send_details">Send ayrıntıları</string>
     <string name="all_sends">Bütün \"Send\"lər</string>
     <string name="text">Mətn</string>
     <string name="text_to_share">Paylaşılacaq mətn</string>
@@ -1005,7 +1006,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
 Jurnala yazma, bu müddətdən sonra avtomatik söndürüləcək, hər hansısa problemi yenidən yaradarkən
 fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Qeydlər 30 gün sonra avtomatik silinəcək. Bitwarden, jurnal verilərinizə yalnız siz paylaşdığınız zaman erişə bilər.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">Nəyin yazılıb-yazılmadığını öyrənmək üçün \n<annotation link="helpCenter">Bitwarden kömək mərkəzini</annotation> ziyarət edin.</string>
+    <string name="for_details_on_what_is_and_isnt_logged">Nəyin yazılıb-yazılmadığını barədə ayrıntılı məlumat üçün \n<annotation link="helpCenter">Bitwarden kömək mərkəzini ziyarət edin.</annotation></string>
     <string name="logging_duration">Jurnala yazma müddəti</string>
     <string name="flight_recorder_one_hour">1 saat</string>
     <string name="flight_recorder_eight_hours">8 saat</string>
@@ -1247,7 +1248,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium abunəliyinizi idarə etmək üçün kompüterinizdə veb seyfinizə giriş etməlisiniz.</string>
     <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
     <string name="your_subscription_needs_attention">Abunəliyinizə nəzər salın</string>
-    <string name="check_your_plan_for_details">Detallar üçün planınızı yoxlayın.</string>
+    <string name="check_your_plan_for_details">Ayrıntılar üçün planınızı yoxlayın.</string>
     <string name="view_plan">Plana bax</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium plan, güvəndə qalmağınız və nəzarəti əlinizdə saxlamağınız üçün sizə daha çox alət verir</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
@@ -1256,7 +1257,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="go_to_archive">Arxivə get</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Bu element arxivləndi. Dəyişiklikləri saxlamaq, onu seyfinizə bərpa edəcək.</string>
     <string name="your_premium_subscription_ended">Premium abunəliyiniz bitdi</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin detallarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin ayrıntılarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
     <string name="items_transferred">Elementlər köçürüldü</string>
     <string name="updated_master_password">Güncəllənmiş ana parol</string>
@@ -1408,7 +1409,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="issuing_authority">Təqdim edən orqan</string>
     <string name="issue_date">Təqdim edilmə tarixi</string>
     <string name="expiration_date">Bitmə tarixi</string>
-    <string name="details">Detallar</string>
+    <string name="details">Ayrıntılar</string>
     <string name="account_details">Hesab məlumatları</string>
     <string name="no_bank_accounts">Seyfinizdə heç bir bank hesabı yoxdur.</string>
     <string name="license_details">Sür. vəs. məlumatları</string>

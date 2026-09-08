@@ -363,6 +363,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="passphrase">Frase de acesso</string>
     <string name="word_separator">Separador de palavras</string>
     <string name="clear">Limpar</string>
+    <string name="open_calendar">abrir calendário</string>
     <string name="generator">Gerador</string>
     <string name="no_folders_to_list">Não existem pastas para apresentar.</string>
     <string name="fingerprint_phrase">Frase de impressão digital</string>

@@ -302,7 +302,7 @@
     <string name="custom_field_name">カスタムフィールド名</string>
     <string name="field_type_boolean">真偽値</string>
     <string name="field_type_hidden">非表示</string>
-    <string name="field_type_linked">リンク済</string>
+    <string name="field_type_linked">リンクされたフィールド</string>
     <string name="field_type_text">テキスト</string>
     <string name="select_type_field">どのタイプのカスタムフィールドを追加しますか？</string>
     <string name="remove">削除</string>
@@ -361,6 +361,7 @@
     <string name="passphrase">パスフレーズ</string>
     <string name="word_separator">単語の区切り</string>
     <string name="clear">消去する</string>
+    <string name="open_calendar">カレンダーを開く</string>
     <string name="generator">パス生成</string>
     <string name="no_folders_to_list">表示するフォルダーがありません。</string>
     <string name="fingerprint_phrase">パスフレーズ</string>

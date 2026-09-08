@@ -21,7 +21,7 @@
     <string name="enter_pin">Zadejte PIN kód</string>
     <string name="favorites">Oblíbené</string>
     <string name="folder">Složka</string>
-    <string name="folder_created">Nová složka byla vytvořena.</string>
+    <string name="folder_created">Nová složka byla vytvořena</string>
     <string name="folder_deleted">Složka byla smazána.</string>
     <string name="folder_none">Žádná složka</string>
     <string name="folder_updated">Složka byla uložena</string>
@@ -367,6 +367,7 @@ Načtení proběhne automaticky.</string>
     <string name="passphrase">Heslová fráze</string>
     <string name="word_separator">Oddělovač slov</string>
     <string name="clear">Vymazat</string>
+    <string name="open_calendar">otevřít kalendář</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Nejsou k dispozici žádné složky k zobrazení.</string>
     <string name="fingerprint_phrase">Fráze otisku prstu</string>

@@ -363,6 +363,7 @@ Skanningen sker automatiskt.</string>
     <string name="passphrase">Lösenfras</string>
     <string name="word_separator">Ordavgränsare</string>
     <string name="clear">Rensa</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Det finns inga mappar att lista.</string>
     <string name="fingerprint_phrase">Fingeravtrycksfras</string>

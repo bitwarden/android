@@ -365,6 +365,7 @@
     <string name="passphrase">ביטוי סיסמה</string>
     <string name="word_separator">מפריד מילים</string>
     <string name="clear">נקה</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">מחולל</string>
     <string name="no_folders_to_list">אין תיקיות להצגה ברשימה.</string>
     <string name="fingerprint_phrase">ביטוי טביעת אצבע</string>

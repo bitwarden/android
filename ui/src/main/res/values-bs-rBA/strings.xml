@@ -365,6 +365,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="passphrase">Šifra</string>
     <string name="word_separator">Odvajač riječi</string>
     <string name="clear">Obriši</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Nema foldera za prikazati.</string>
     <string name="fingerprint_phrase">Jedinstvena fraza</string>

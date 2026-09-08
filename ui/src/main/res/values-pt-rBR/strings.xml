@@ -362,6 +362,7 @@
     <string name="passphrase">Frase secreta</string>
     <string name="word_separator">Separador das palavras</string>
     <string name="clear">Limpar</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Gerador</string>
     <string name="no_folders_to_list">Não há pastas para listar.</string>
     <string name="fingerprint_phrase">Frase biométrica</string>

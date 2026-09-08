@@ -365,6 +365,7 @@
     <string name="passphrase">Фраза лозинка</string>
     <string name="word_separator">Одвајач речи</string>
     <string name="clear">Очисти</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Нема фасцикле у листи.</string>
     <string name="fingerprint_phrase">Сигурносна Фраза Сефа</string>

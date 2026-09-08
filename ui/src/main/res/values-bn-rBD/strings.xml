@@ -363,6 +363,7 @@
     <string name="passphrase">গুপ্ত-বাক্যাংশ</string>
     <string name="word_separator">শব্দ বিভাজক</string>
     <string name="clear">পরিষ্কার করুন</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">জেনারেটর</string>
     <string name="no_folders_to_list">তালিকাভুক্ত করার মতো কোনও ফোল্ডার নেই।</string>
     <string name="fingerprint_phrase">ফিঙ্গারপ্রিন্ট ফ্রেজ</string>

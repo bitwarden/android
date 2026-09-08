@@ -363,6 +363,7 @@ Skanning vil ske automatisk.</string>
     <string name="passphrase">Adgangssætning</string>
     <string name="word_separator">Ordseparator</string>
     <string name="clear">Ryd</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Ingen mapper at vise.</string>
     <string name="fingerprint_phrase">Fingeraftrykssætning</string>
