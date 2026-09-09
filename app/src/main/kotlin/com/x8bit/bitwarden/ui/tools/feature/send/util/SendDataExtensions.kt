@@ -46,6 +46,7 @@ private fun List<SendView>.toSendContent(
                     iconList = sendView.toLabelIcons(),
                     shareUrl = sendView.toSendUrl(baseWebSendUrl),
                     hasPassword = sendView.hasPassword,
+                    isDisabled = sendView.disabled,
                 )
             },
     )

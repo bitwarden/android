@@ -54,8 +54,8 @@ class SendDataExtensionsTest {
 
     @Test
     fun `toViewState should return Content when SendData is not empty`() {
-        val textSendView = createMockSendView(number = 2, type = SendType.TEXT)
-        val fileSendView = createMockSendView(number = 1, type = SendType.FILE)
+        val textSendView = createMockSendView(number = 2, type = SendType.TEXT, disabled = true)
+        val fileSendView = createMockSendView(number = 1, type = SendType.FILE, disabled = false)
         val list = listOf(
             fileSendView,
             textSendView,
@@ -83,6 +83,7 @@ class SendDataExtensionsTest {
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
                         hasPassword = true,
+                        isDisabled = false,
                     ),
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-2",
@@ -92,6 +93,7 @@ class SendDataExtensionsTest {
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-2/mockKey-2",
                         hasPassword = true,
+                        isDisabled = true,
                     ),
                 ),
             ),
