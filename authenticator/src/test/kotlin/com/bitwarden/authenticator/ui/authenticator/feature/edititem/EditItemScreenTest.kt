@@ -1,10 +1,15 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -319,24 +324,110 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
+            .onAllNodes(isSelectable() and hasAnyAncestor(isDialog()))
+            .assertCountEquals(3)
+        listOf(30, 60, 90).forEach { period ->
+            composeTestRule
+                .onAllNodesWithText(text = "$period seconds")
+                .filter(hasAnyAncestor(isDialog()))
+                .assertCountEquals(1)
+        }
+        composeTestRule
             .onNodeWithText(text = "60 seconds")
             .performClick()
         composeTestRule.assertNoDialogExists()
 
         verify(exactly = 1) {
             viewModel.trySendAction(
-                EditItemAction.RefreshPeriodOptionClick(AuthenticatorRefreshPeriodOption.SIXTY),
+                EditItemAction.RefreshPeriodOptionClick(60),
             )
         }
     }
 
     @Test
-    fun `refresh period click should display dialog and cancel should dismiss the dialog`() {
+    fun `custom refresh period should remain selectable after choosing a preset`() {
+        val content = DEFAULT_CONTENT.copy(
+            isAdvancedOptionsExpanded = true,
+            itemData = DEFAULT_ITEM_DATA.copy(refreshPeriod = 45, originalRefreshPeriod = 45),
+        )
+        mutableStateFlow.update { it.copy(viewState = content) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "45 seconds. Refresh period")
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "45 seconds").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(label = "45 seconds. Refresh period")
+            .performClick()
+
+        val options = composeTestRule
+            .onAllNodes(isSelectable() and hasAnyAncestor(isDialog()))
+            .assertCountEquals(4)
+        listOf(30, 45, 60, 90).forEachIndexed { index, period ->
+            options[index].assert(hasText("$period seconds"))
+        }
+        options[1].assertIsSelected()
+        options[2].performClick()
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(60))
+        }
+
         mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_CONTENT.copy(isAdvancedOptionsExpanded = true))
+            it.copy(viewState = content.copy(itemData = content.itemData.copy(refreshPeriod = 60)))
         }
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "30 seconds. Refresh period")
+            .onNodeWithContentDescriptionAfterScroll(label = "60 seconds. Refresh period")
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "60 seconds")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsSelected()
+        composeTestRule.onNodeWithText(text = "45 seconds").performClick()
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(45))
+        }
+
+        mutableStateFlow.update { it.copy(viewState = content) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "45 seconds. Refresh period")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `restored selection should be included alongside the original custom period`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    isAdvancedOptionsExpanded = true,
+                    itemData = DEFAULT_ITEM_DATA.copy(
+                        refreshPeriod = 120,
+                        originalRefreshPeriod = 45,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "120 seconds. Refresh period")
+            .performClick()
+        val options = composeTestRule
+            .onAllNodes(isSelectable() and hasAnyAncestor(isDialog()))
+            .assertCountEquals(5)
+        listOf(30, 45, 60, 90, 120).forEachIndexed { index, period ->
+            options[index].assert(hasText("$period seconds"))
+        }
+        options[4].assertIsSelected()
+    }
+
+    @Test
+    fun `refresh period click should display dialog and cancel should dismiss the dialog`() {
+        val content = DEFAULT_CONTENT.copy(
+            isAdvancedOptionsExpanded = true,
+            itemData = DEFAULT_ITEM_DATA.copy(refreshPeriod = 45, originalRefreshPeriod = 45),
+        )
+        mutableStateFlow.update { it.copy(viewState = content) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "45 seconds. Refresh period")
             .performClick()
 
         composeTestRule
@@ -347,6 +438,36 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
             .onNodeWithText(text = "Cancel")
             .performClick()
         composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+        mutableStateFlow.update {
+            it.copy(viewState = content.copy(isAdvancedOptionsExpanded = false))
+        }
+        composeTestRule.onNodeWithText(text = "45 seconds").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Name")
+            .performTextInput(text = "New issuer")
+        val renamedContent = content.copy(itemData = content.itemData.copy(issuer = "New issuer"))
+        mutableStateFlow.update {
+            it.copy(viewState = renamedContent.copy(isAdvancedOptionsExpanded = false))
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+        mutableStateFlow.update { it.copy(viewState = renamedContent) }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "45 seconds. Refresh period")
+            .assertIsDisplayed()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any<EditItemAction.RefreshPeriodOptionClick>())
+        }
+        verify(exactly = 2) {
+            viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
+        }
+        verify(exactly = 1) {
+            viewModel.trySendAction(EditItemAction.IssuerNameTextChange("New issuer"))
+        }
     }
 
     @Test
@@ -391,7 +512,8 @@ private val DEFAULT_STATE: EditItemState =
 
 private val DEFAULT_ITEM_DATA: EditItemData =
     EditItemData(
-        refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
+        refreshPeriod = 30,
+        originalRefreshPeriod = 30,
         totpCode = "",
         type = AuthenticatorItemType.TOTP,
         username = null,
