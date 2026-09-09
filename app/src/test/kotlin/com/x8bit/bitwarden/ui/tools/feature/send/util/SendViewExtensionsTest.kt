@@ -101,6 +101,26 @@ class SendViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return overflow options without Edit when the send is disabled`() {
+        val baseWebSendUrl = "www.test.com"
+        val sendView = createMockSendView(
+            number = 1,
+            // Make sure the send is disabled to remove the edit action
+            disabled = true,
+        )
+
+        val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
+
+        assertEquals(
+            ALL_SEND_OVERFLOW_OPTIONS.filter {
+                it !is ListingItemOverflowAction.SendAction.EditClick
+            },
+            result,
+        )
+    }
+
     @Test
     fun `toOverflowActions should return no overflow options when the id is null`() {
         val baseWebSendUrl = "www.test.com"

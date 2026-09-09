@@ -47,7 +47,8 @@ fun SendView.toOverflowActions(
                     sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
                 ),
                 ListingItemOverflowAction.SendAction.ViewClick(sendId = sendId, sendType = type),
-                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type),
+                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type)
+                    .takeUnless { this.disabled },
                 ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId).takeIf {
                     hasPassword
                 },
