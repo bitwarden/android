@@ -108,10 +108,13 @@ fun SendContent(
                         .standardHorizontalMargin(),
                 )
             }
+
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.all_sends),
                 supportingLabel = state.sendItems.size.toString(),
@@ -129,6 +132,7 @@ fun SendContent(
                 label = it.name,
                 supportingLabel = it.deletionDate,
                 trailingLabelIcons = it.iconList,
+                isDisabled = it.isDisabled,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
                 onViewClick = { sendHandlers.onViewSendClick(it) },

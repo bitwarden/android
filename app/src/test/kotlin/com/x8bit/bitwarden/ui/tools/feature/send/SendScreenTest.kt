@@ -622,6 +622,40 @@ class SendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on send item overflow dialog edit should not be displayed when the send is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(
+                        DEFAULT_SEND_ITEM.copy(isDisabled = true),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
+                    ),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
+        composeTestRule
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Edit")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on send item overflow dialog copy click should send CopyClick`() {
         mutableStateFlow.update {
             it.copy(
@@ -1144,6 +1178,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         iconList = persistentListOf(),
         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
         hasPassword = true,
+        isDisabled = false,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.ViewState.Content(
@@ -1159,6 +1194,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             iconList = persistentListOf(),
             shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
             hasPassword = true,
+            isDisabled = false,
         ),
     ),
 )

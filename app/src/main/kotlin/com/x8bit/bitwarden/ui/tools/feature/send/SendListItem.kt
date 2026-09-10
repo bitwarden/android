@@ -26,8 +26,9 @@ import kotlinx.collections.immutable.toPersistentList
  * A Composable function that displays a row send item.
  *
  * @param label The primary text label to display for the item.
- * @param supportingLabel An secondary text label to display beneath the label.
+ * @param supportingLabel A secondary text label to display beneath the label.
  * @param startIcon The [Painter] object used to draw the icon at the start of the item.
+ * @param isDisabled  Whether the item is disabled or not.
  * @param showMoreOptions Whether to show the button for the overflow options.
  * @param onClick The lambda to be invoked when the item is clicked.
  * @param onViewClick The lambda to be invoked when the view option is clicked from the menu.
@@ -47,6 +48,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: IconData,
+    isDisabled: Boolean,
     trailingLabelIcons: ImmutableList<IconData>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
@@ -86,7 +88,8 @@ fun SendListItem(
             SelectionItemData(
                 text = stringResource(id = BitwardenString.edit),
                 onClick = onEditClick,
-            ),
+            )
+                .takeUnless { isDisabled },
             onRemovePasswordClick?.let {
                 SelectionItemData(
                     text = stringResource(id = BitwardenString.remove_password),
@@ -130,6 +133,7 @@ private fun SendListItem_preview() {
             supportingLabel = "Jan 3, 2024, 10:35 AM",
             startIcon = IconData.Local(BitwardenDrawable.ic_file_text),
             trailingLabelIcons = persistentListOf(),
+            isDisabled = false,
             showMoreOptions = true,
             onClick = {},
             onCopyClick = {},
