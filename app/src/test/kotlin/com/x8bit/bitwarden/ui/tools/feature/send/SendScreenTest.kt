@@ -23,6 +23,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
@@ -34,11 +35,13 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -621,6 +624,69 @@ class SendScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on send item overflow dialog only the overflow items present on the send should be displayed`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(
+                        DEFAULT_SEND_ITEM.copy(
+                            // A disabled send has no edit action available.
+                            overflowItems = persistentListOf(
+                                ListingItemOverflowAction.SendAction.ViewClick(
+                                    sendId = "mockId-1",
+                                    sendType = SendType.FILE,
+                                ),
+                                ListingItemOverflowAction.SendAction.DeleteClick(
+                                    sendId = "mockId-1",
+                                ),
+                            ),
+                        ),
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2", name = "mockName-2"),
+                    ),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
+        composeTestRule
+            .onNodeWithText("mockName-2")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("mockName-1")
+            .onChildren()
+            .filterToOne(hasContentDescription("More options"))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("View")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Edit")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Copy link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Share link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assertDoesNotExist()
+    }
+
     @Test
     fun `on send item overflow dialog copy click should send CopyClick`() {
         mutableStateFlow.update {
@@ -1135,6 +1201,26 @@ private val DEFAULT_STATE: SendState = SendState(
     isPremiumUser = false,
 )
 
+private val DEFAULT_SEND_OVERFLOW_ITEMS: ImmutableList<ListingItemOverflowAction.SendAction> =
+    persistentListOf(
+        ListingItemOverflowAction.SendAction.CopyUrlClick(
+            sendUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.ShareUrlClick(
+            sendUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.ViewClick(
+            sendId = "mockId-1",
+            sendType = SendType.FILE,
+        ),
+        ListingItemOverflowAction.SendAction.EditClick(
+            sendId = "mockId-1",
+            sendType = SendType.FILE,
+        ),
+        ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-1"),
+        ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-1"),
+    )
+
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
     SendState.ViewState.Content.SendItem(
         id = "mockId-1",
@@ -1144,6 +1230,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         iconList = persistentListOf(),
         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
         hasPassword = true,
+        overflowItems = DEFAULT_SEND_OVERFLOW_ITEMS,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.ViewState.Content(
@@ -1159,6 +1246,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             iconList = persistentListOf(),
             shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
             hasPassword = true,
+            overflowItems = DEFAULT_SEND_OVERFLOW_ITEMS,
         ),
     ),
 )

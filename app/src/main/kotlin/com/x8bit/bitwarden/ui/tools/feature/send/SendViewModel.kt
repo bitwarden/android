@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
@@ -66,7 +67,8 @@ class SendViewModel @Inject constructor(
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
-        ?: policyManager.getEffectiveSendPolicy().let { effectiveSendPolicy ->
+        ?: run {
+            val effectiveSendPolicy = policyManager.getEffectiveSendPolicy()
             SendState(
                 viewState = SendState.ViewState.Loading,
                 dialogState = null,
@@ -565,7 +567,7 @@ data class SendState(
             override val shouldDisplayFab: Boolean get() = true
 
             /**
-             * Represents the an individual send item to be displayed.
+             * Represents an individual send item to be displayed.
              */
             @Parcelize
             data class SendItem(
@@ -576,6 +578,7 @@ data class SendState(
                 val iconList: ImmutableList<IconData>,
                 val shareUrl: String,
                 val hasPassword: Boolean,
+                val overflowItems: ImmutableList<ListingItemOverflowAction.SendAction>,
             ) : Parcelable {
                 /**
                  * Indicates the type of send this, a text or file.

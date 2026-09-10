@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -31,6 +32,7 @@ class SendDataExtensionsTest {
     fun setup() {
         mockkStatic(
             SendView::toLabelIcons,
+            SendView::toOverflowActions,
             SendView::toSendUrl,
         )
     }
@@ -39,6 +41,7 @@ class SendDataExtensionsTest {
     fun tearDown() {
         unmockkStatic(
             SendView::toLabelIcons,
+            SendView::toOverflowActions,
             SendView::toSendUrl,
         )
     }
@@ -67,6 +70,12 @@ class SendDataExtensionsTest {
         every { fileSendView.toSendUrl(DEFAULT_BASE_URL) } returns textSendViewUrl1
         every { textSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
         every { fileSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
+        every {
+            textSendView.toOverflowActions(DEFAULT_BASE_URL)
+        } returns TEXT_SEND_OVERFLOW_ACTIONS
+        every {
+            fileSendView.toOverflowActions(DEFAULT_BASE_URL)
+        } returns FILE_SEND_OVERFLOW_ACTIONS
 
         val result = sendData.toViewState(DEFAULT_BASE_URL, fixedClock)
 
@@ -83,6 +92,7 @@ class SendDataExtensionsTest {
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
                         hasPassword = true,
+                        overflowItems = FILE_SEND_OVERFLOW_ACTIONS,
                     ),
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-2",
@@ -92,6 +102,7 @@ class SendDataExtensionsTest {
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-2/mockKey-2",
                         hasPassword = true,
+                        overflowItems = TEXT_SEND_OVERFLOW_ACTIONS,
                     ),
                 ),
             ),
@@ -101,6 +112,24 @@ class SendDataExtensionsTest {
 }
 
 private const val DEFAULT_BASE_URL: String = "www.test.com/"
+
+private val FILE_SEND_OVERFLOW_ACTIONS: ImmutableList<ListingItemOverflowAction.SendAction> =
+    persistentListOf(
+        ListingItemOverflowAction.SendAction.ViewClick(
+            sendId = "mockId-1",
+            sendType = SendType.FILE,
+        ),
+        ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-1"),
+    )
+
+private val TEXT_SEND_OVERFLOW_ACTIONS: ImmutableList<ListingItemOverflowAction.SendAction> =
+    persistentListOf(
+        ListingItemOverflowAction.SendAction.ViewClick(
+            sendId = "mockId-2",
+            sendType = SendType.TEXT,
+        ),
+        ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-2"),
+    )
 
 private val DEFAULT_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
     IconData.Local(
