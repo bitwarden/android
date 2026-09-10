@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ fun BitwardenExpandingHeader(
                     },
                 ),
                 onClick = onClick,
+                role = Role.Button,
             )
             .minimumInteractiveComponentSize()
             .padding(horizontal = 16.dp)

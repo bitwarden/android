@@ -164,7 +164,7 @@ fun ItemListingScreen(
                         label = BitwardenString.scan_a_qr_code.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_camera_small,
-                            contentDescription = BitwardenString.scan_a_qr_code.asText(),
+                            contentDescription = null,
                             testTag = "ScanQRCodeButton",
                         ),
                         onFabOptionClick = { launcher.launch(Manifest.permission.CAMERA) },
@@ -173,7 +173,7 @@ fun ItemListingScreen(
                         label = BitwardenString.enter_key_manually.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_lock_encrypted_small,
-                            contentDescription = BitwardenString.enter_key_manually.asText(),
+                            contentDescription = null,
                             testTag = "EnterSetupKeyButton",
                         ),
                         onFabOptionClick = {

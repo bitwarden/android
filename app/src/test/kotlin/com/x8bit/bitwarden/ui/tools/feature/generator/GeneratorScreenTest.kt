@@ -302,7 +302,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -310,7 +310,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -433,7 +433,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -454,7 +454,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -479,7 +479,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -499,7 +499,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -515,7 +515,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -536,7 +536,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -562,7 +562,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -571,7 +571,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Password state, decrementing the minimum special characters above 9 should do nothing`() {
+    fun `in Password state, incrementing the minimum special characters above 9 should do nothing`() {
         val initialSpecialChars = 9
         updateState(
             DEFAULT_STATE.copy(
@@ -582,7 +582,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum special"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -675,7 +675,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -706,7 +706,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "7")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
     }
@@ -726,7 +726,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -756,7 +756,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "7")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
     }
@@ -806,7 +806,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
 
@@ -836,7 +836,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
 
@@ -863,7 +863,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -884,7 +884,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Number of words"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -905,7 +905,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "3")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Number of words"))
             .performScrollTo()
             .performClick()
 

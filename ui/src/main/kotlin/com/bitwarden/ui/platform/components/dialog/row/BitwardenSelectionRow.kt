@@ -1,19 +1,15 @@
 package com.bitwarden.ui.platform.components.dialog.row
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -37,16 +33,11 @@ fun BitwardenSelectionRow(
         modifier = modifier
             .fillMaxWidth()
             .testTag("AlertRadioButtonOption")
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+            .selectable(
+                selected = isSelected,
                 onClick = onClick,
-            )
-            .semantics(mergeDescendants = true) {
-                selected = isSelected
-            },
+                role = Role.RadioButton,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BitwardenRadioButton(

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -38,6 +39,7 @@ fun BitwardenBasicDialogRow(
                     color = BitwardenTheme.colorScheme.background.pressed,
                 ),
                 onClick = onClick,
+                role = Role.Button,
             )
             .padding(
                 vertical = 16.dp,

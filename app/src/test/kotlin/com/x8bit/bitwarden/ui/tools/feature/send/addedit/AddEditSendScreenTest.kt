@@ -758,7 +758,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("\u2212")
+            .onNodeWithContentDescription("Decrease Maximum access count")
             .performScrollTo()
             .performClick()
     }
@@ -779,7 +779,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("\u2212")
+            .onNodeWithContentDescription("Decrease Maximum access count")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(2)) }
@@ -794,7 +794,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("+")
+            .onNodeWithContentDescription("Increase Maximum access count")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(1)) }
