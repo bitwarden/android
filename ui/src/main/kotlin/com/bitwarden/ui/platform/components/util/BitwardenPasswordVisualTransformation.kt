@@ -6,10 +6,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 
 /**
  * Returns a [VisualTransformation] that masks text with [mask]. When [staticCharacterCount] is
- * non-null, the transformed text always contains that number of mask characters.
+ * non-null and the text is non-empty, the transformed text contains that number of mask
+ * characters. Blank text is never masked.
  */
 @Composable
 fun passwordVisualTransformation(
@@ -30,10 +32,11 @@ private class BitwardenPasswordVisualTransformation(
     override fun filter(
         text: AnnotatedString,
     ): TransformedText = TransformedText(
-        AnnotatedString(
-            mask.toString().repeat(n = staticCharacterCount ?: text.text.length),
-        ),
-        object : OffsetMapping {
+        text = mask
+            .toString()
+            .repeat(staticCharacterCount?.takeIf { text.text.isNotEmpty() } ?: text.text.length)
+            .toAnnotatedString(),
+        offsetMapping = object : OffsetMapping {
             override fun originalToTransformed(
                 offset: Int,
             ): Int = staticCharacterCount?.let { offset.coerceAtMost(it) } ?: offset
