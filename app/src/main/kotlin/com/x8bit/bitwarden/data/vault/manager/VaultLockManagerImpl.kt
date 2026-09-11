@@ -231,8 +231,6 @@ internal class VaultLockManagerImpl(
                                 .also {
                                     processMasterPassword(
                                         initUserCryptoMethod = initUserCryptoMethod,
-                                        email = email,
-                                        kdf = kdf,
                                         userId = userId,
                                     )
                                     if (it is VaultUnlockResult.Success) {
@@ -265,30 +263,27 @@ internal class VaultLockManagerImpl(
      */
     private suspend fun processMasterPassword(
         initUserCryptoMethod: InitUserCryptoMethod,
-        email: String,
-        kdf: Kdf,
         userId: String,
     ) {
-        initUserCryptoMethod.password?.let { password ->
-            // Save the master password hash.
+        (initUserCryptoMethod as? InitUserCryptoMethod.MasterPasswordUnlock)?.let {
             authSdkSource
                 .hashPassword(
-                    salt = email,
-                    password = password,
-                    kdf = kdf,
+                    salt = it.masterPasswordUnlock.salt,
+                    password = it.password,
+                    kdf = it.masterPasswordUnlock.kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
-                .onSuccess {
+                .onSuccess { passwordHash ->
                     authDiskSource.storeMasterPasswordHash(
                         userId = userId,
-                        passwordHash = it,
+                        passwordHash = passwordHash,
                     )
                 }
 
             // If there is currently no forcePasswordResetReason, then we want to check to see if
             // the password is strong enough based on known policies.
             if (userState?.accounts[userId]?.profile?.forcePasswordResetReason == null &&
-                !passwordPolicyManager.validatePasswordAgainstPolicies(password, false)
+                !passwordPolicyManager.validatePasswordAgainstPolicies(it.password, false)
             ) {
                 authDiskSource.userState = userState?.updateForcePasswordReset(
                     userId = userId,

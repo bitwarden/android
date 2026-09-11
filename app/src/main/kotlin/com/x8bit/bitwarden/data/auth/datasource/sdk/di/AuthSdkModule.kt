@@ -4,6 +4,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +23,10 @@ object AuthSdkModule {
     fun provideAuthSdkSource(
         dispatcherManager: DispatcherManager,
         sdkClientManager: SdkClientManager,
+        sdkRepoFactory: SdkRepositoryFactory,
     ): AuthSdkSource = AuthSdkSourceImpl(
         dispatcherManager = dispatcherManager,
+        sdkRepoFactory = sdkRepoFactory,
         sdkClientManager = sdkClientManager,
     )
 }
