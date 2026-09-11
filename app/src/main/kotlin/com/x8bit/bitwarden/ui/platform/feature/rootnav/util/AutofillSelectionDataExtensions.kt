@@ -10,4 +10,5 @@ fun AutofillSelectionData.Type.toVaultItemListingType(): VaultItemListingType =
     when (this) {
         AutofillSelectionData.Type.CARD -> VaultItemListingType.Card
         AutofillSelectionData.Type.LOGIN -> VaultItemListingType.Login
+        AutofillSelectionData.Type.IDENTITY -> VaultItemListingType.Identity
     }
