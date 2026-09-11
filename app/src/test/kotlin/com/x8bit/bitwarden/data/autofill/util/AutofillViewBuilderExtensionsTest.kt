@@ -74,6 +74,8 @@ class AutofillViewBuilderExtensionsTest {
                 AutofillView.Identity.AddressRegion(data = data),
             AutofillHint.Identity.ADDRESS_STREET to
                 AutofillView.Identity.AddressStreet(data = data),
+            AutofillHint.Identity.ADDRESS_EXTENDED to
+                AutofillView.Identity.AddressExtended(data = data),
             AutofillHint.Identity.COMPANY to AutofillView.Identity.Company(data = data),
             AutofillHint.Identity.EMAIL to AutofillView.Identity.Email(data = data),
             AutofillHint.Identity.LICENSE_NUMBER to
