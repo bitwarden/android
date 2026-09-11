@@ -19,6 +19,14 @@ private const val DEFAULT_SCHEME: String = "https"
  * The supported autofill Android View hints that predate identity autofill.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
+    // Chromium can pass HTML autocomplete tokens directly as Android autofill hints.
+    "cc-exp-month",
+    "cc-exp-year",
+    "cc-exp",
+    "cc-number",
+    "cc-csc",
+    "cc-name",
+    "cc-type",
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH,
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR,
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE,
@@ -209,11 +217,28 @@ private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(
 
 private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
     when (this) {
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.Card.EXPIRATION_MONTH
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.Card.EXPIRATION_YEAR
-        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.Card.EXPIRATION_DATE
-        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.Card.NUMBER
-        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.Card.SECURITY_CODE
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH,
+        "cc-exp-month",
+            -> AutofillHint.Card.EXPIRATION_MONTH
+
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR,
+        "cc-exp-year",
+            -> AutofillHint.Card.EXPIRATION_YEAR
+
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE,
+        "cc-exp",
+            -> AutofillHint.Card.EXPIRATION_DATE
+
+        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER,
+        "cc-number",
+            -> AutofillHint.Card.NUMBER
+
+        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE,
+        "cc-csc",
+            -> AutofillHint.Card.SECURITY_CODE
+
+        "cc-name" -> AutofillHint.Card.CARDHOLDER
+        "cc-type" -> AutofillHint.Card.BRAND
         View.AUTOFILL_HINT_PASSWORD -> AutofillHint.Login.PASSWORD
         View.AUTOFILL_HINT_EMAIL_ADDRESS,
         View.AUTOFILL_HINT_USERNAME,
