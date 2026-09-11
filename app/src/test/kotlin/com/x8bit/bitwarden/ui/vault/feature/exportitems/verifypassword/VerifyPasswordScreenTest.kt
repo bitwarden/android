@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword
 
+import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -12,10 +13,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
+import com.bitwarden.cxf.manager.model.ExportCredentialsResult
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
@@ -27,6 +33,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -41,6 +48,13 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
     private var onPasswordVerifiedClicked: Boolean = false
     private val onPasswordVerifiedArgSlot = mutableListOf<String>()
 
+    private val credentialExchangeCompletionManager =
+        mockk<CredentialExchangeCompletionManager> {
+            every { completeCredentialExport(exportResult = any()) } just runs
+        }
+    private val credentialExchangeRequestValidator = mockk<CredentialExchangeRequestValidator> {
+        every { validate(importCredentialsRequestData = any()) } returns true
+    }
     private val mockStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mockEventFlow = bufferedMutableSharedFlow<VerifyPasswordEvent>()
     private val viewModel = mockk<VerifyPasswordViewModel> {
@@ -51,7 +65,10 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
     @Before
     fun verifyPasswordScreen() {
-        setContent {
+        setContent(
+            credentialExchangeCompletionManager = credentialExchangeCompletionManager,
+            credentialExchangeRequestValidator = credentialExchangeRequestValidator,
+        ) {
             VerifyPasswordScreen(
                 onNavigateBack = { onNavigateBackClicked = true },
                 onPasswordVerified = { userId ->
@@ -83,16 +100,44 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `otp state should be correct`() = runTest {
+    fun `loading state should be correct`() = runTest {
+        mockStateFlow.emit(
+            DEFAULT_STATE.copy(viewState = VerifyPasswordState.ViewState.Loading),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Loading")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Verify your master password")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `error state should be correct`() = runTest {
         mockStateFlow.emit(
             DEFAULT_STATE.copy(
-                title = BitwardenString.verify_your_account_email_address.asText(),
-                subtext = BitwardenString
-                    .enter_the_6_digit_code_that_was_emailed_to_the_address_below
-                    .asText(),
-                showResendCodeButton = true,
+                viewState = VerifyPasswordState.ViewState.Error(
+                    message = BitwardenString
+                        .the_import_request_could_not_be_processed
+                        .asText(),
+                ),
             ),
         )
+
+        composeTestRule
+            .onNodeWithText(text = "The import request could not be processed.")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `otp state should be correct`() = runTest {
+        mockStateFlow.emit(DEFAULT_STATE.copy(viewState = OTP_CONTENT_VIEW_STATE))
 
         composeTestRule
             .onNodeWithText("Verify your account email address")
@@ -125,7 +170,11 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Continue")
             .assertIsNotEnabled()
 
-        mockStateFlow.emit(DEFAULT_STATE.copy(input = "abc123"))
+        mockStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "abc123"),
+            ),
+        )
 
         composeTestRule
             .onNodeWithText("Continue")
@@ -134,7 +183,11 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Continue button should send ContinueClick action`() = runTest {
-        mockStateFlow.emit(DEFAULT_STATE.copy(input = "abc123"))
+        mockStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "abc123"),
+            ),
+        )
         composeTestRule
             .onNodeWithText("Continue")
             .performClick()
@@ -145,7 +198,7 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Resend code button should send SendCodeClick action`() = runTest {
-        mockStateFlow.emit(DEFAULT_STATE.copy(showResendCodeButton = true))
+        mockStateFlow.emit(DEFAULT_STATE.copy(viewState = OTP_CONTENT_VIEW_STATE))
         composeTestRule
             .onNodeWithText("Resend code")
             .performClick()
@@ -179,7 +232,68 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `CancelExport event should complete credential exchange with cancellation error`() =
+        runTest {
+            val exportResultSlot = slot<ExportCredentialsResult>()
+            every {
+                credentialExchangeCompletionManager.completeCredentialExport(
+                    exportResult = capture(exportResultSlot),
+                )
+            } just runs
+
+            mockEventFlow.emit(VerifyPasswordEvent.CancelExport)
+
+            verify {
+                credentialExchangeCompletionManager.completeCredentialExport(
+                    exportResult = exportResultSlot.captured,
+                )
+            }
+            assertTrue(exportResultSlot.captured is ExportCredentialsResult.Failure)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ValidateImportRequest event should send ValidateImportRequestResultReceive with validation result`() =
+        runTest {
+            mockEventFlow.emit(
+                VerifyPasswordEvent.ValidateImportRequest(
+                    importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+                ),
+            )
+
+            verify {
+                credentialExchangeRequestValidator.validate(
+                    importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+                )
+                viewModel.trySendAction(
+                    VerifyPasswordAction.ValidateImportRequestResultReceive(isValid = true),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ValidateImportRequest event should send ValidateImportRequestResultReceive when request is invalid`() =
+        runTest {
+            every { credentialExchangeRequestValidator.validate(any()) } returns false
+
+            mockEventFlow.emit(
+                VerifyPasswordEvent.ValidateImportRequest(
+                    importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+                ),
+            )
+
+            verify {
+                viewModel.trySendAction(
+                    VerifyPasswordAction.ValidateImportRequestResultReceive(isValid = false),
+                )
+            }
+        }
+
+    @Test
     fun `General dialog should display based on state`() = runTest {
+        composeTestRule.assertNoDialogExists()
+
         mockStateFlow.emit(
             DEFAULT_STATE.copy(
                 dialog = VerifyPasswordState.DialogState.General(
@@ -217,6 +331,8 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Loading dialog should display based on state`() = runTest {
+        composeTestRule.assertNoDialogExists()
+
         mockStateFlow.emit(
             DEFAULT_STATE.copy(
                 dialog = VerifyPasswordState.DialogState.Loading("message".asText()),
@@ -231,6 +347,11 @@ class VerifyPasswordScreenTest : BitwardenComposeTest() {
 
 private const val DEFAULT_USER_ID: String = "activeUserId"
 private const val DEFAULT_ORGANIZATION_ID: String = "activeOrganizationId"
+private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
+    uri = mockk<Uri>(),
+    credentialTypes = setOf("mockCredentialType-1"),
+    knownExtensions = setOf(),
+)
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = DEFAULT_USER_ID,
     accounts = listOf(
@@ -273,11 +394,25 @@ private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
     isItemRestricted = false,
     initials = DEFAULT_USER_STATE.activeAccount.initials,
 )
-private val DEFAULT_STATE = VerifyPasswordState(
+private val DEFAULT_CONTENT_VIEW_STATE = VerifyPasswordState.ViewState.Content(
     title = BitwardenString.verify_your_master_password.asText(),
     subtext = null,
-    accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
+    showResendCodeButton = false,
     input = "",
+)
+private val OTP_CONTENT_VIEW_STATE = VerifyPasswordState.ViewState.Content(
+    title = BitwardenString.verify_your_account_email_address.asText(),
+    subtext = BitwardenString
+        .enter_the_6_digit_code_that_was_emailed_to_the_address_below
+        .asText(),
+    showResendCodeButton = true,
+    input = "",
+)
+private val DEFAULT_STATE = VerifyPasswordState(
+    importRequest = DEFAULT_IMPORT_REQUEST,
+    viewState = DEFAULT_CONTENT_VIEW_STATE,
     dialog = null,
+    accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
     hasOtherAccounts = true,
+    hasMasterPassword = true,
 )

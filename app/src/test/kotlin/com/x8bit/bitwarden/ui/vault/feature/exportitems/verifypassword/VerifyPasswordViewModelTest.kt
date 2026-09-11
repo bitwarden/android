@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.policies.PolicyType
@@ -17,7 +20,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -38,6 +43,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
@@ -61,6 +67,11 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             ),
         )
     }
+    private val specialCircumstanceManager = mockk<SpecialCircumstanceManager> {
+        every {
+            specialCircumstance
+        } returns SpecialCircumstance.CredentialExchangeExport(data = DEFAULT_IMPORT_REQUEST)
+    }
 
     @BeforeEach
     fun setUp() {
@@ -79,6 +90,25 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
     @Nested
     inner class State {
         @Test
+        fun `initial state should be correct when account has a master password`() = runTest {
+            createViewModel()
+                .also {
+                    assertEquals(
+                        VerifyPasswordState(
+                            importRequest = DEFAULT_IMPORT_REQUEST,
+                            viewState = VerifyPasswordState.ViewState.Loading,
+                            dialog = null,
+                            accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
+                            hasOtherAccounts = true,
+                            hasMasterPassword = true,
+                        ),
+                        it.stateFlow.value,
+                    )
+                    coVerify(exactly = 0) { authRepository.requestOneTimePasscode() }
+                }
+        }
+
+        @Test
         fun `initial state should be correct when account has no master password`() = runTest {
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = DEFAULT_USER_STATE.accounts.map {
@@ -91,45 +121,16 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                 .also {
                     assertEquals(
                         VerifyPasswordState(
-                            title = BitwardenString.verify_your_account_email_address.asText(),
-                            subtext = BitwardenString
-                                .enter_the_6_digit_code_that_was_emailed_to_the_address_below
-                                .asText(),
-                            accountSummaryListItem = AccountSelectionListItem(
-                                userId = DEFAULT_USER_ID,
-                                email = DEFAULT_USER_STATE.activeAccount.email,
-                                avatarColorHex = DEFAULT_USER_STATE.activeAccount.avatarColorHex,
-                                isItemRestricted = false,
-                                initials = DEFAULT_USER_STATE.activeAccount.initials,
-                            ),
-                            showResendCodeButton = true,
+                            importRequest = DEFAULT_IMPORT_REQUEST,
+                            viewState = VerifyPasswordState.ViewState.Loading,
+                            dialog = null,
+                            accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
                             hasOtherAccounts = true,
+                            hasMasterPassword = false,
                         ),
                         it.stateFlow.value,
                     )
-                    coVerify { authRepository.requestOneTimePasscode() }
-                }
-        }
-
-        @Test
-        fun `initial state should be correct when account is not restricted`() = runTest {
-            createViewModel()
-                .also {
-                    assertEquals(
-                        VerifyPasswordState(
-                            title = BitwardenString.verify_your_master_password.asText(),
-                            subtext = null,
-                            hasOtherAccounts = true,
-                            accountSummaryListItem = AccountSelectionListItem(
-                                userId = DEFAULT_USER_ID,
-                                email = DEFAULT_USER_STATE.activeAccount.email,
-                                avatarColorHex = DEFAULT_USER_STATE.activeAccount.avatarColorHex,
-                                isItemRestricted = false,
-                                initials = DEFAULT_USER_STATE.activeAccount.initials,
-                            ),
-                        ),
-                        it.stateFlow.value,
-                    )
+                    coVerify(exactly = 1) { authRepository.requestOneTimePasscode() }
                 }
         }
 
@@ -147,10 +148,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             createViewModel()
                 .also {
                     assertEquals(
-                        VerifyPasswordState(
-                            title = BitwardenString.verify_your_master_password.asText(),
-                            subtext = null,
-                            hasOtherAccounts = true,
+                        DEFAULT_LOADING_STATE.copy(
                             accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM
                                 .copy(isItemRestricted = true),
                         ),
@@ -158,19 +156,116 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                     )
                 }
         }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `initial state should throw when special circumstance is not a credential exchange export`() {
+            every { specialCircumstanceManager.specialCircumstance } returns null
+
+            assertThrows<IllegalArgumentException> { createViewModel() }
+        }
+
+        @Test
+        fun `initial state should throw when the account cannot be found`() {
+            assertThrows<IllegalStateException> { createViewModel(userId = "unknownUserId") }
+        }
+
+        @Test
+        fun `initial state should be restored from the saved state handle`() = runTest {
+            val savedState = DEFAULT_STATE.copy(hasOtherAccounts = false)
+
+            createViewModel(state = savedState)
+                .also { assertEquals(savedState, it.stateFlow.value) }
+        }
+    }
+
+    @Nested
+    inner class ImportRequestValidation {
+        @Test
+        fun `initial load should emit ValidateImportRequest event`() = runTest {
+            createViewModel().also { viewModel ->
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VerifyPasswordEvent.ValidateImportRequest(
+                            importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ValidateImportRequestResultReceive with valid request should show master password content`() =
+            runTest {
+                createViewModel().also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.ValidateImportRequestResultReceive(isValid = true),
+                    )
+
+                    assertEquals(
+                        DEFAULT_LOADING_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE),
+                        viewModel.stateFlow.value,
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ValidateImportRequestResultReceive with valid request should show otp content when account has no master password`() =
+            runTest {
+                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                    accounts = DEFAULT_USER_STATE.accounts.map {
+                        it.copy(hasMasterPassword = false)
+                    },
+                )
+
+                createViewModel().also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.ValidateImportRequestResultReceive(isValid = true),
+                    )
+
+                    assertEquals(
+                        DEFAULT_LOADING_STATE.copy(
+                            viewState = OTP_CONTENT_VIEW_STATE,
+                            hasMasterPassword = false,
+                        ),
+                        viewModel.stateFlow.value,
+                    )
+                }
+            }
+
+        @Test
+        fun `ValidateImportRequestResultReceive with invalid request should show error content`() =
+            runTest {
+                createViewModel().also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.ValidateImportRequestResultReceive(isValid = false),
+                    )
+
+                    assertEquals(
+                        DEFAULT_LOADING_STATE.copy(
+                            viewState = VerifyPasswordState.ViewState.Error(
+                                message = BitwardenString
+                                    .the_import_request_could_not_be_processed
+                                    .asText(),
+                            ),
+                        ),
+                        viewModel.stateFlow.value,
+                    )
+                }
+            }
     }
 
     @Nested
     inner class ViewActions {
 
         @Test
-        fun `SendCodeClick should request otp code`() = runTest {
+        fun `SendCodeClick should show loading dialog and request otp code`() = runTest {
             val initialState = DEFAULT_STATE.copy(
-                title = BitwardenString.verify_your_account_email_address.asText(),
-                subtext = BitwardenString
-                    .enter_the_6_digit_code_that_was_emailed_to_the_address_below
-                    .asText(),
-                showResendCodeButton = true,
+                viewState = OTP_CONTENT_VIEW_STATE,
+                hasMasterPassword = false,
             )
             coEvery { authRepository.requestOneTimePasscode() } returns RequestOtpResult.Success
             createViewModel(state = initialState).also { viewModel ->
@@ -181,14 +276,16 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `SendOtpCodeResultReceive success should show snackbar`() = runTest {
-            createViewModel().also { viewModel ->
-                viewModel.trySendAction(
-                    VerifyPasswordAction.Internal.SendOtpCodeResultReceive(
-                        RequestOtpResult.Success,
-                    ),
-                )
-
+            createViewModel(state = DEFAULT_STATE).also { viewModel ->
                 viewModel.eventFlow.test {
+                    awaitValidateImportRequestEvent()
+
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.Internal.SendOtpCodeResultReceive(
+                            RequestOtpResult.Success,
+                        ),
+                    )
+
                     assertEquals(
                         VerifyPasswordEvent.ShowSnackbar(BitwardenString.code_sent.asText()),
                         awaitItem(),
@@ -199,7 +296,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `SendOtpCodeResultReceive error should show dialog`() = runTest {
-            createViewModel().also { viewModel ->
+            createViewModel(state = DEFAULT_STATE).also { viewModel ->
                 viewModel.trySendAction(
                     VerifyPasswordAction.Internal.SendOtpCodeResultReceive(
                         RequestOtpResult.Error(
@@ -221,7 +318,10 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ContinueClick with otp should verify otp`() = runTest {
-            val initialState = DEFAULT_STATE.copy(showResendCodeButton = true, input = "123456")
+            val initialState = DEFAULT_STATE.copy(
+                viewState = OTP_CONTENT_VIEW_STATE.copy(input = "123456"),
+                hasMasterPassword = false,
+            )
             coEvery {
                 authRepository.verifyOneTimePasscode("123456")
             } returns VerifyOtpResult.Verified
@@ -235,30 +335,33 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `VerifyOtpResultReceive verified should send event and clear input`() = runTest {
-            createViewModel(state = DEFAULT_STATE.copy(input = "123"))
+            val initialState = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "123"),
+            )
+            createViewModel(state = initialState)
                 .also { viewModel ->
-                    viewModel.trySendAction(
-                        VerifyPasswordAction.Internal.VerifyOtpResultReceive(
-                            VerifyOtpResult.Verified,
-                        ),
-                    )
-
                     viewModel.eventFlow.test {
+                        awaitValidateImportRequestEvent()
+
+                        viewModel.trySendAction(
+                            VerifyPasswordAction.Internal.VerifyOtpResultReceive(
+                                VerifyOtpResult.Verified,
+                            ),
+                        )
+
                         assertEquals(
                             VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
                             awaitItem(),
                         )
                     }
 
-                    viewModel.stateFlow.test {
-                        assertEquals(DEFAULT_STATE, awaitItem())
-                    }
+                    assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
                 }
         }
 
         @Test
         fun `VerifyOtpResultReceive not verified should show dialog`() = runTest {
-            createViewModel().also { viewModel ->
+            createViewModel(state = DEFAULT_STATE).also { viewModel ->
                 viewModel.trySendAction(
                     VerifyPasswordAction.Internal.VerifyOtpResultReceive(
                         VerifyOtpResult.NotVerified(
@@ -280,9 +383,12 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `NavigateBackClick should send NavigateBack event`() = runTest {
-            createViewModel().also {
-                it.trySendAction(VerifyPasswordAction.NavigateBackClick)
-                it.eventFlow.test {
+            createViewModel(state = DEFAULT_STATE).also { viewModel ->
+                viewModel.eventFlow.test {
+                    awaitValidateImportRequestEvent()
+
+                    viewModel.trySendAction(VerifyPasswordAction.NavigateBackClick)
+
                     assertEquals(
                         VerifyPasswordEvent.NavigateBack,
                         awaitItem(),
@@ -295,9 +401,12 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `NavigateBackClick should send CancelExport event when hasOtherAccounts is false`() =
             runTest {
                 val initialState = DEFAULT_STATE.copy(hasOtherAccounts = false)
-                createViewModel(state = initialState).also {
-                    it.trySendAction(VerifyPasswordAction.NavigateBackClick)
-                    it.eventFlow.test {
+                createViewModel(state = initialState).also { viewModel ->
+                    viewModel.eventFlow.test {
+                        awaitValidateImportRequestEvent()
+
+                        viewModel.trySendAction(VerifyPasswordAction.NavigateBackClick)
+
                         assertEquals(
                             VerifyPasswordEvent.CancelExport,
                             awaitItem(),
@@ -308,7 +417,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ContinueClick with empty input should show error dialog`() = runTest {
-            createViewModel().also {
+            createViewModel(state = DEFAULT_STATE).also {
                 it.trySendAction(VerifyPasswordAction.ContinueClick)
                 it.stateFlow.test {
                     assertEquals(
@@ -331,11 +440,27 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             }
         }
 
+        @Test
+        fun `ContinueClick should do nothing when the view state is not Content`() = runTest {
+            createViewModel(state = DEFAULT_LOADING_STATE).also { viewModel ->
+                viewModel.trySendAction(VerifyPasswordAction.ContinueClick)
+
+                assertEquals(DEFAULT_LOADING_STATE, viewModel.stateFlow.value)
+                coVerify(exactly = 0) {
+                    authRepository.validatePassword(password = any())
+                    authRepository.switchAccount(userId = any())
+                    vaultRepository.unlockVaultWithMasterPassword(masterPassword = any())
+                }
+            }
+        }
+
         @Suppress("MaxLineLength")
         @Test
         fun `ContinueClick with non-empty input should show loading dialog, validate password and send validates password`() =
             runTest {
-                val initialState = DEFAULT_STATE.copy(input = "mockInput")
+                val initialState = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "mockInput"),
+                )
                 coEvery { authRepository.validatePassword(password = "mockInput") } just awaits
 
                 createViewModel(state = initialState).also { viewModel ->
@@ -367,9 +492,9 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `ContinueClick with non-empty input should show loading dialog, switch accounts, then validate password when selected account is not active and switch is successful`() =
             runTest {
                 val initialState = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "mockInput"),
                     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM
                         .copy(userId = "otherUserId"),
-                    input = "mockInput",
                 )
                 every {
                     authRepository.switchAccount("otherUserId")
@@ -400,9 +525,9 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `ContinueClick with non-empty input should show error dialog when switch account is unsuccessful`() =
             runTest {
                 val initialState = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "mockInput"),
                     accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM
                         .copy(userId = "otherUserId"),
-                    input = "mockInput",
                 )
                 every {
                     authRepository.switchAccount("otherUserId")
@@ -438,7 +563,9 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         @Test
         fun `ContinueClick with non-empty input should show loading dialog, then unlock vault when vault is locked`() =
             runTest {
-                val initialState = DEFAULT_STATE.copy(input = "mockInput")
+                val initialState = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "mockInput"),
+                )
                 every { vaultRepository.isVaultUnlocked(any()) } returns false
                 coEvery {
                     vaultRepository.unlockVaultWithMasterPassword(masterPassword = "mockInput")
@@ -455,7 +582,9 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                             awaitItem(),
                         )
                         coVerify {
-                            vaultRepository.unlockVaultWithMasterPassword(masterPassword = "mockInput")
+                            vaultRepository.unlockVaultWithMasterPassword(
+                                masterPassword = "mockInput",
+                            )
                         }
                     }
                 }
@@ -468,11 +597,24 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
                     VerifyPasswordAction.PasswordInputChangeReceive("mockInput"),
                 )
                 assertEquals(
-                    DEFAULT_STATE.copy(input = "mockInput"),
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_CONTENT_VIEW_STATE.copy(input = "mockInput"),
+                    ),
                     viewModel.stateFlow.value,
                 )
             }
         }
+
+        @Test
+        fun `PasswordInputChangeReceive should do nothing when the view state is not Content`() =
+            runTest {
+                createViewModel(state = DEFAULT_LOADING_STATE).also { viewModel ->
+                    viewModel.trySendAction(
+                        VerifyPasswordAction.PasswordInputChangeReceive("mockInput"),
+                    )
+                    assertEquals(DEFAULT_LOADING_STATE, viewModel.stateFlow.value)
+                }
+            }
 
         @Test
         fun `DismissDialog should update state`() = runTest {
@@ -495,13 +637,16 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         @Test
         fun `ValidatePasswordResultReceive should send PasswordVerified event when result is Success and isValid is true`() =
             runTest {
-                createViewModel().also { viewModel ->
-                    viewModel.trySendAction(
-                        VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
-                            ValidatePasswordResult.Success(isValid = true),
-                        ),
-                    )
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.eventFlow.test {
+                        awaitValidateImportRequestEvent()
+
+                        viewModel.trySendAction(
+                            VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
+                                ValidatePasswordResult.Success(isValid = true),
+                            ),
+                        )
+
                         assertEquals(
                             VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
                             awaitItem(),
@@ -514,7 +659,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         @Test
         fun `ValidatePasswordResultReceive should show error dialog when result is Success and isValid is false`() =
             runTest {
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
                             ValidatePasswordResult.Success(isValid = false),
@@ -535,7 +680,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `ValidatePasswordResultReceive should show error dialog when result is Error`() =
             runTest {
                 val throwable = Throwable()
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.ValidatePasswordResultReceive(
                             ValidatePasswordResult.Error(error = throwable),
@@ -556,13 +701,16 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         @Test
         fun `UnlockVaultResultReceive should send PasswordVerified event when vault unlock result is Success`() =
             runTest {
-                createViewModel().also { viewModel ->
-                    viewModel.trySendAction(
-                        VerifyPasswordAction.Internal.UnlockVaultResultReceive(
-                            VaultUnlockResult.Success,
-                        ),
-                    )
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.eventFlow.test {
+                        awaitValidateImportRequestEvent()
+
+                        viewModel.trySendAction(
+                            VerifyPasswordAction.Internal.UnlockVaultResultReceive(
+                                VaultUnlockResult.Success,
+                            ),
+                        )
+
                         assertEquals(
                             VerifyPasswordEvent.PasswordVerified(DEFAULT_USER_ID),
                             awaitItem(),
@@ -573,34 +721,10 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UnlockVaultResultReceive should show error dialog when vault unlock result is Error`() =
-            runTest {
-                val throwable = Throwable()
-                createViewModel().also { viewModel ->
-                    viewModel.trySendAction(
-                        VerifyPasswordAction.Internal.UnlockVaultResultReceive(
-                            VaultUnlockResult.GenericError(error = throwable),
-                        ),
-                    )
-                    assertEquals(
-                        DEFAULT_STATE.copy(
-                            dialog = VerifyPasswordState.DialogState.General(
-                                title = BitwardenString.an_error_has_occurred.asText(),
-                                message = BitwardenString.generic_error_message.asText(),
-                                error = throwable,
-                            ),
-                        ),
-                        viewModel.stateFlow.value,
-                    )
-                }
-            }
-
-        @Suppress("MaxLineLength")
-        @Test
         fun `UnlockVaultResultReceive should show error dialog when vault unlock result is AuthenticationError`() =
             runTest {
                 val throwable = Throwable()
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.UnlockVaultResultReceive(
                             VaultUnlockResult.AuthenticationError(error = throwable),
@@ -624,7 +748,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `UnlockVaultResultReceive should show error dialog when vault unlock result is BiometricDecodingError`() =
             runTest {
                 val throwable = Throwable()
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.UnlockVaultResultReceive(
                             VaultUnlockResult.BiometricDecodingError(error = throwable),
@@ -648,7 +772,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `UnlockVaultResultReceive should show error dialog when vault unlock result is InvalidStateError`() =
             runTest {
                 val throwable = Throwable()
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.UnlockVaultResultReceive(
                             VaultUnlockResult.InvalidStateError(error = throwable),
@@ -672,7 +796,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         fun `UnlockVaultResultReceive should show error dialog when vault unlock result is GenericError`() =
             runTest {
                 val throwable = Throwable()
-                createViewModel().also { viewModel ->
+                createViewModel(state = DEFAULT_STATE).also { viewModel ->
                     viewModel.trySendAction(
                         VerifyPasswordAction.Internal.UnlockVaultResultReceive(
                             VaultUnlockResult.GenericError(error = throwable),
@@ -692,6 +816,19 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             }
     }
 
+    /**
+     * Awaits the [VerifyPasswordEvent.ValidateImportRequest] event that is always emitted when the
+     * ViewModel is initialized.
+     */
+    private suspend fun TurbineTestContext<VerifyPasswordEvent>.awaitValidateImportRequestEvent() {
+        assertEquals(
+            VerifyPasswordEvent.ValidateImportRequest(
+                importCredentialsRequestData = DEFAULT_IMPORT_REQUEST,
+            ),
+            awaitItem(),
+        )
+    }
+
     private fun createViewModel(
         state: VerifyPasswordState? = null,
         userId: String = DEFAULT_USER_ID,
@@ -699,13 +836,14 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         policyManager = policyManager,
+        specialCircumstanceManager = specialCircumstanceManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             set("userId", userId)
             every {
                 toVerifyPasswordArgs()
             } returns VerifyPasswordArgs(
-                userId = DEFAULT_USER_ID,
+                userId = userId,
                 hasOtherAccounts = true,
             )
         },
@@ -714,6 +852,11 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
 
 private const val DEFAULT_USER_ID: String = "activeUserId"
 private const val DEFAULT_ORGANIZATION_ID: String = "activeOrganizationId"
+private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
+    uri = mockk<Uri>(),
+    credentialTypes = setOf("mockCredentialType-1"),
+    knownExtensions = setOf(),
+)
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = DEFAULT_USER_ID,
     accounts = listOf(
@@ -787,11 +930,28 @@ private val DEFAULT_ACCOUNT_SELECTION_LIST_ITEM = AccountSelectionListItem(
     isItemRestricted = false,
     initials = DEFAULT_USER_STATE.activeAccount.initials,
 )
-private val DEFAULT_STATE = VerifyPasswordState(
+private val DEFAULT_CONTENT_VIEW_STATE = VerifyPasswordState.ViewState.Content(
     title = BitwardenString.verify_your_master_password.asText(),
     subtext = null,
-    hasOtherAccounts = true,
-    accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
+    showResendCodeButton = false,
     input = "",
+)
+private val OTP_CONTENT_VIEW_STATE = VerifyPasswordState.ViewState.Content(
+    title = BitwardenString.verify_your_account_email_address.asText(),
+    subtext = BitwardenString
+        .enter_the_6_digit_code_that_was_emailed_to_the_address_below
+        .asText(),
+    showResendCodeButton = true,
+    input = "",
+)
+private val DEFAULT_LOADING_STATE = VerifyPasswordState(
+    importRequest = DEFAULT_IMPORT_REQUEST,
+    viewState = VerifyPasswordState.ViewState.Loading,
     dialog = null,
+    accountSummaryListItem = DEFAULT_ACCOUNT_SELECTION_LIST_ITEM,
+    hasOtherAccounts = true,
+    hasMasterPassword = true,
+)
+private val DEFAULT_STATE = DEFAULT_LOADING_STATE.copy(
+    viewState = DEFAULT_CONTENT_VIEW_STATE,
 )
