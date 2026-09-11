@@ -39,19 +39,17 @@ fun SendView.toOverflowActions(
     this
         .id
         ?.let { sendId ->
+            val sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl)
             listOfNotNull(
-                ListingItemOverflowAction.SendAction.CopyUrlClick(
-                    sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
-                ),
-                ListingItemOverflowAction.SendAction.ShareUrlClick(
-                    sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
-                ),
+                ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl)
+                    .takeUnless { this.disabled },
+                ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = sendUrl)
+                    .takeUnless { this.disabled },
                 ListingItemOverflowAction.SendAction.ViewClick(sendId = sendId, sendType = type),
                 ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type)
                     .takeUnless { this.disabled },
-                ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId).takeIf {
-                    hasPassword
-                },
+                ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId)
+                    .takeIf { this.hasPassword && !this.disabled },
                 ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
             )
         }
