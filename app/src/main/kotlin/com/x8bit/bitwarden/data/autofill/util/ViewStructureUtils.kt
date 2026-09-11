@@ -216,6 +216,28 @@ val SUPPORTED_RAW_ADDRESS_STREET_HINTS: List<String> = listOf(
 )
 
 /**
+ * Street-address hints matched *exactly* against a field's normalized hint, rather than as a
+ * substring. "address" alone is too generic for substring matching: browsers label every address
+ * subfield with an "ADDRESS_HOME_CITY"/"ADDRESS_HOME_STATE"/... value, so a substring "address"
+ * would mis-detect those as the street field. An exact match only catches a field literally
+ * named/labelled "address" (e.g. a street line on a form with no `autocomplete` attribute).
+ */
+val SUPPORTED_EXACT_ADDRESS_STREET_HINTS: List<String> = listOf(
+    "address",
+)
+
+/**
+ * The supported extended/secondary address (e.g. apartment, suite, unit -- "address line 2")
+ * autofill hints. Matched digit-preserving (see [toLowerCaseAndStripNonAlphanumeric]) so
+ * "addressline2"/"address2" don't collide with the street-address terms below.
+ */
+val SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS: List<String> = listOf(
+    "addressext",
+    "addressline2",
+    "address2",
+)
+
+/**
  * The supported locality (city) autofill hints.
  */
 val SUPPORTED_RAW_ADDRESS_LOCALITY_HINTS: List<String> = listOf(

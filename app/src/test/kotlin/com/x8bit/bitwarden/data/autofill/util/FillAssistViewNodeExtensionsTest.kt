@@ -346,6 +346,7 @@ class FillAssistViewNodeExtensionsTest {
             "middleName" to AutofillView.Identity.PersonNameMiddle(data = autofillData()),
             "lastName" to AutofillView.Identity.PersonNameFamily(data = autofillData()),
             "addressLine1" to AutofillView.Identity.AddressStreet(data = autofillData()),
+            "addressLine2" to AutofillView.Identity.AddressExtended(data = autofillData()),
             "addressLevel2" to AutofillView.Identity.AddressLocality(data = autofillData()),
             "addressLevel1" to AutofillView.Identity.AddressRegion(data = autofillData()),
             "country" to AutofillView.Identity.AddressCountry(data = autofillData()),
