@@ -570,6 +570,20 @@ platform :android do
       release_options[:version_name] = options[:versionName]
     end
 
+    # Resolve json_key the same way getLivePlayStoreVersion/getLatestPlayStoreVersion do:
+    # honor an explicit override, otherwise map from packageName. Needed so existing callers
+    # that never pass serviceCredentialsFile (e.g. bitwarden/deploy's production-promotion
+    # workflow) still authenticate with the right key for com.bitwarden.authenticator instead
+    # of silently falling through to the Appfile default (secrets/play_creds.json).
+    if options[:serviceCredentialsFile]
+      release_options[:json_key] = options[:serviceCredentialsFile]
+    else
+      case options[:packageName]
+      when "com.bitwarden.authenticator"
+        release_options[:json_key] = "secrets/authenticator_play_store-creds.json"
+      end
+    end
+
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true
     else
