@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -294,6 +295,7 @@ private fun AccountSummaryItem(
                 ),
                 onClick = { onSwitchAccountClick(accountSummary) },
                 onLongClick = { onSwitchAccountLongClick(accountSummary) },
+                role = Role.Button,
             )
             .padding(vertical = 8.dp)
             .then(modifier),
@@ -422,6 +424,7 @@ private fun AddAccountItem(
                     color = BitwardenTheme.colorScheme.background.pressed,
                 ),
                 onClick = onClick,
+                role = Role.Button,
             )
             .padding(vertical = 8.dp)
             .then(modifier),

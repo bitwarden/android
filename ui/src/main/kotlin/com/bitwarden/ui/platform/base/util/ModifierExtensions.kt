@@ -44,6 +44,7 @@ import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -145,6 +146,7 @@ fun Modifier.nullableClickable(
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
     enabled: Boolean = true,
     onClick: (() -> Unit)?,
+    role: Role? = null,
 ): Modifier =
     onClick
         ?.let {
@@ -153,6 +155,7 @@ fun Modifier.nullableClickable(
                 indication = ripple(color = indicationColor),
                 onClick = it,
                 enabled = enabled,
+                role = role,
             )
         }
         ?: this
@@ -394,6 +397,7 @@ private data class StandardHorizontalMarginElement(
 fun Modifier.cardStyle(
     cardStyle: CardStyle?,
     onClick: (() -> Unit)? = null,
+    role: Role? = null,
     clickEnabled: Boolean = true,
     paddingHorizontal: Dp = 0.dp,
     paddingVertical: Dp = 12.dp,
@@ -403,6 +407,7 @@ fun Modifier.cardStyle(
     this.cardStyle(
         cardStyle = cardStyle,
         onClick = onClick,
+        role = role,
         clickEnabled = clickEnabled,
         padding = PaddingValues(
             horizontal = paddingHorizontal,
@@ -421,6 +426,7 @@ fun Modifier.cardStyle(
 fun Modifier.cardStyle(
     cardStyle: CardStyle?,
     onClick: (() -> Unit)? = null,
+    role: Role? = null,
     clickEnabled: Boolean = true,
     paddingStart: Dp = 0.dp,
     paddingTop: Dp = 12.dp,
@@ -432,6 +438,7 @@ fun Modifier.cardStyle(
     this.cardStyle(
         cardStyle = cardStyle,
         onClick = onClick,
+        role = role,
         clickEnabled = clickEnabled,
         padding = PaddingValues(
             start = paddingStart,
@@ -452,6 +459,7 @@ fun Modifier.cardStyle(
 fun Modifier.cardStyle(
     cardStyle: CardStyle?,
     onClick: (() -> Unit)? = null,
+    role: Role? = null,
     clickEnabled: Boolean = true,
     padding: PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 12.dp),
     containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
@@ -466,6 +474,7 @@ fun Modifier.cardStyle(
             onClick = onClick,
             enabled = clickEnabled,
             indicationColor = indicationColor,
+            role = role,
         )
         .cardPadding(
             cardStyle = cardStyle,
