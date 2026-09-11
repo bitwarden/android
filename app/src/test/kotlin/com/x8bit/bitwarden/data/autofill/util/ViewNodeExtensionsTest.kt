@@ -1652,6 +1652,23 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when idEntry is addressLine2`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "addressLine2"
+
+        val resolvedView = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            resolvedView,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `toAutofillView should return AutofillView Identity AddressLocality when autofillHints match`() {
         every {
             viewNode.autofillHints

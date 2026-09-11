@@ -228,12 +228,13 @@ val SUPPORTED_EXACT_ADDRESS_STREET_HINTS: List<String> = listOf(
 
 /**
  * The supported extended/secondary address (e.g. apartment, suite, unit -- "address line 2")
- * autofill hints. Intentionally excludes any purely numeric line-number term (e.g. "line2"): raw
- * hint values are digit-stripped before comparison (see [toLowerCaseAndStripNonAlpha]), so a term
- * containing a digit can never match.
+ * autofill hints. Matched digit-preserving (see [toLowerCaseAndStripNonAlphanumeric]) so
+ * "addressline2"/"address2" don't collide with the street-address terms below.
  */
 val SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS: List<String> = listOf(
     "addressext",
+    "addressline2",
+    "address2",
 )
 
 /**

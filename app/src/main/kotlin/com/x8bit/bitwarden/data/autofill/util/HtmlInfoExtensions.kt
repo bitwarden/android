@@ -121,7 +121,7 @@ fun HtmlInfo?.isAddressStreetField(): Boolean = isInputField &&
  * field.
  */
 fun HtmlInfo?.isAddressExtendedField(): Boolean = isInputField &&
-    hints().containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS)
+    hints().containsAnyTermsPreservingDigits(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS)
 
 /**
  * Whether this [HtmlInfo] represents a locality (city) field.
@@ -265,6 +265,16 @@ private fun List<String>.containsAnyTerms(terms: List<String>): Boolean =
     this.any { string ->
         string
             .toLowerCaseAndStripNonAlpha()
+            .containsAnyTerms(terms)
+    }
+
+/**
+ * Checks if the list of strings, normalized digit-preserving, contains any of the [terms].
+ */
+private fun List<String>.containsAnyTermsPreservingDigits(terms: List<String>): Boolean =
+    this.any { string ->
+        string
+            .toLowerCaseAndStripNonAlphanumeric()
             .containsAnyTerms(terms)
     }
 

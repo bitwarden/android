@@ -188,11 +188,11 @@ private fun AssistStructure.ViewNode.supportedAutofillHint(
         this.isPersonNameMiddleField -> AutofillHint.Identity.PERSON_NAME_MIDDLE
         this.isPersonNameFamilyField -> AutofillHint.Identity.PERSON_NAME_FAMILY
         this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
+        this.isAddressExtendedField -> AutofillHint.Identity.ADDRESS_EXTENDED
         this.isAddressStreetField -> AutofillHint.Identity.ADDRESS_STREET
         this.isAddressLocalityField -> AutofillHint.Identity.ADDRESS_LOCALITY
         this.isAddressRegionField -> AutofillHint.Identity.ADDRESS_REGION
         this.isAddressCountryField -> AutofillHint.Identity.ADDRESS_COUNTRY
-        this.isAddressExtendedField -> AutofillHint.Identity.ADDRESS_EXTENDED
         this.isPostalCodeField -> AutofillHint.Identity.POSTAL_CODE
         this.isPhoneField -> AutofillHint.Identity.PHONE_FULL
         this.isCompanyField -> AutofillHint.Identity.COMPANY
@@ -521,10 +521,10 @@ internal val AssistStructure.ViewNode.isAddressStreetField: Boolean
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal val AssistStructure.ViewNode.isAddressExtendedField: Boolean
     get() = idEntry
-        ?.toLowerCaseAndStripNonAlpha()
+        ?.toLowerCaseAndStripNonAlphanumeric()
         ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS) == true ||
         hint
-            ?.toLowerCaseAndStripNonAlpha()
+            ?.toLowerCaseAndStripNonAlphanumeric()
             ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS) == true ||
         htmlInfo.isAddressExtendedField()
 

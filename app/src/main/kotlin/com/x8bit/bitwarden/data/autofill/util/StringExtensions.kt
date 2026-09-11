@@ -33,3 +33,10 @@ fun String.matchesAnyExpressions(
 fun String.toLowerCaseAndStripNonAlpha(): String = this
     .lowercase()
     .replace(Regex("[^a-z]"), "")
+
+/**
+ * Convert this [String] to lowercase and remove all non-alphanumeric characters, keeping digits.
+ */
+fun String.toLowerCaseAndStripNonAlphanumeric(): String = this
+    .lowercase()
+    .replace(Regex("[^a-z0-9]"), "")
