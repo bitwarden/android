@@ -82,9 +82,9 @@ class VaultLockManagerTest {
     private val authSdkSource: AuthSdkSource = mockk {
         coEvery {
             hashPassword(
-                salt = MOCK_PROFILE.email,
+                salt = MOCK_MASTER_PASSWORD_UNLOCK_DATA.salt,
                 password = "mockValue",
-                kdf = MOCK_PROFILE.toSdkParams(),
+                kdf = MOCK_MASTER_PASSWORD_UNLOCK_DATA.kdf,
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
         } returns "hashedPassword".asSuccess()
@@ -1848,6 +1848,12 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(password = masterPassword)
+                authSdkSource.hashPassword(
+                    salt = MOCK_MASTER_PASSWORD_UNLOCK_DATA.salt,
+                    password = masterPassword,
+                    kdf = MOCK_MASTER_PASSWORD_UNLOCK_DATA.kdf,
+                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                )
             }
         }
 
@@ -2088,10 +2094,19 @@ class VaultLockManagerTest {
 
             assertEquals(VaultUnlockResult.Success, result)
             fakeAuthDiskSource.assertUserState(userState = MOCK_USER_STATE)
+            fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID, passwordHash = null)
             verify(exactly = 0) {
                 passwordPolicyManager.validatePasswordAgainstPolicies(
                     password = any(),
                     isCreation = any(),
+                )
+            }
+            coVerify(exactly = 0) {
+                authSdkSource.hashPassword(
+                    salt = any(),
+                    password = any(),
+                    kdf = any(),
+                    purpose = any(),
                 )
             }
         }
