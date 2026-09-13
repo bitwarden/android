@@ -21,7 +21,7 @@
     <string name="enter_pin">Digite seu código PIN</string>
     <string name="favorites">Favoritos</string>
     <string name="folder">Pasta</string>
-    <string name="folder_created">Nova pasta criada.</string>
+    <string name="folder_created">Nova pasta criada</string>
     <string name="folder_deleted">Pasta apagada.</string>
     <string name="folder_none">Sem pasta</string>
     <string name="folder_updated">Pasta salva</string>
@@ -149,14 +149,14 @@
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
     <string name="item_updated">Item salvo</string>
-    <string name="bank_account_saved">Bank account saved</string>
-    <string name="card_saved">Card saved</string>
-    <string name="identity_saved">Identity saved</string>
-    <string name="license_saved">License saved</string>
-    <string name="login_saved">Login saved</string>
-    <string name="passport_saved">Passport saved</string>
-    <string name="secure_note_saved">Secure note saved</string>
-    <string name="ssh_key_saved">SSH key saved</string>
+    <string name="bank_account_saved">Conta bancária salva</string>
+    <string name="card_saved">Cartão salvo</string>
+    <string name="identity_saved">Identidade salva</string>
+    <string name="license_saved">Habilitação salva</string>
+    <string name="login_saved">Credencial salva</string>
+    <string name="passport_saved">Passaporte salvo</string>
+    <string name="secure_note_saved">Anotação segura salva</string>
+    <string name="ssh_key_saved">Chave SSH salva</string>
     <string name="submitting">Enviando…</string>
     <string name="syncing">Sincronizando…</string>
     <string name="syncing_complete">Sincronização concluída</string>
@@ -292,7 +292,7 @@
     <string name="go_to_my_vault">Ir ao meu cofre</string>
     <string name="collections">Conjuntos</string>
     <string name="shared_folders">Pastas compartilhadas</string>
-    <string name="no_items_collection">Não há itens nessa coleção.</string>
+    <string name="no_items_collection">Não há itens neste conjunto.</string>
     <string name="there_are_no_items_in_this_shared_folder">Não há itens nesta pasta compartilhada.</string>
     <string name="no_items_folder">Não há itens nesta pasta.</string>
     <string name="no_items_trash">Não há itens na lixeira.</string>
@@ -362,7 +362,7 @@
     <string name="passphrase">Frase secreta</string>
     <string name="word_separator">Separador das palavras</string>
     <string name="clear">Limpar</string>
-    <string name="open_calendar">open calendar</string>
+    <string name="open_calendar">calendário aberto</string>
     <string name="generator">Gerador</string>
     <string name="no_folders_to_list">Não há pastas para listar.</string>
     <string name="fingerprint_phrase">Frase biométrica</string>
@@ -395,7 +395,7 @@
     <string name="ask_to_add_item">Pedir para adicionar item</string>
     <string name="ask_to_add_item_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
     <string name="turn_on_fill_assist">Ativar assistência de preenchimento</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">O recurso de preenchimento assistido melhora a precisão do preenchimento automático em sites compatíveis, utilizando regras específicas para cada site.</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">A assistência de preenchimento melhora a precisão do preenchimento automático, usando regras específicas aos sites.</string>
     <string name="on_restart">No reinício do aplicativo</string>
     <string name="capitalize">Iniciais maiúsculas</string>
     <string name="include_number">Incluir número</string>
@@ -520,9 +520,9 @@
     <string name="hide_email">Ocultar meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão afetando as suas opções de Send.</string>
     <string name="organization_policy_restriction">Restrição de políticas da organização</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Este Send não está em conformidade com a política de envio de sua organização e irá expirar automaticamente na data de exclusão definida.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Este Send não está em conformidade com a política de Send de sua organização e irá expirar automaticamente na data de apagamento configurada.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Sends de texto não são permitidos na sua organização e este Send expirará automaticamente na data de apagamento configurada.</string>
+    <string name="to_edit_this_send_make_a_copy">Para editar este Send, crie uma cópia. Se este Send pode expirar na data de apagamento, nenhuma ação é necessária.</string>
     <string name="make_a_copy">Fazer uma cópia</string>
     <string name="send_file_premium_required">Contas gratuitas são limitadas para compartilhar apenas texto. É necessário um plano Premium para usar arquivos com o Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">O compartilhamento com pessoas específicas é um recurso do Premium. O seu plano atual não inclui acesso a este recurso.</string>
@@ -1262,7 +1262,7 @@ Deseja trocar para esta conta?</string>
     <string name="invalid_email_addresses">Endereços de e-mail inválidos</string>
     <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Revise e tente novamente.</string>
     <string name="no_email_addresses_entered">Nenhum endereço de e-mail digitado</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Só inclua os seguintes domínios: %1$s. Por favor, revise e tente novamente.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Inclua apenas os seguintes domínios: %1$s. Revise e tente novamente.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Digite pelo menos um endereço de e-mail válido para compartilhar este Send.</string>
     <string name="sync_with_browser">Sincronizar com o navegador</string>
     <string name="sync_with_browser_description">Para conectar ao %1$s, sincronize o seu navegador padrão com o aplicativo do Bitwarden. Quando seu navegador abrir, conclua a autenticação se necessário.\nNa conclusão da sincronização, você voltará ao aplicativo.</string>
@@ -1429,9 +1429,9 @@ Deseja trocar para esta conta?</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sua solicitação foi interrompida porque o aplicativo precisa de acesso à rede local. Você pode ativar isso nas configurações do seu dispositivo.</string>
     <string name="continue_to_stripe">Continuar no Stripe?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Você será levado para o Stripe para gerenciar o cancelamento de sua assinatura.</string>
-    <string name="unlock_advanced_protection">Desbloquear proteção avançada</string>
+    <string name="unlock_advanced_protection">Desbloqueie proteção avançada</string>
     <string name="breeze_through_2fa_with_built_in_codes">Passe direto pela 2FA com códigos embutidos</string>
-    <string name="run_reports_to_find_risky_passwords">Execute relatorios para encontrar senhas em risco</string>
+    <string name="run_reports_to_find_risky_passwords">Execute relatórios para encontrar senhas em risco</string>
     <string name="add_a_trusted_emergency_contact">Adicione um contato confiado de emergência</string>
     <string name="identify_unsecure_websites">Identifique sites inseguros</string>
     <string name="flag_accounts_with_inactive_2fa">Sinalize contas sem 2FA ativo</string>
@@ -1440,4 +1440,6 @@ Deseja trocar para esta conta?</string>
     <string name="receive_24_7_priority_support">Receba suporte 24h com prioridade</string>
     <string name="account_creation_restricted">Criação de conta restrita</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s permite apenas que usuários convidados criem contas.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Diminuir %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Aumentar %1$s</string>
 </resources>

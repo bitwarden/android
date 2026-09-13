@@ -1440,4 +1440,6 @@ Vuoi passare a questo account?</string>
     <string name="receive_24_7_priority_support">Ricevi supporto prioritario 24 ore su 24, 7 giorni su 7</string>
     <string name="account_creation_restricted">Creazione dell\'account limitata</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s consente solo agli utenti invitati di creare account.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

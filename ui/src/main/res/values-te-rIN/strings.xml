@@ -1441,4 +1441,6 @@
     <string name="receive_24_7_priority_support">24/7 ప్రాధాన్యత మద్దతు పొందండి</string>
     <string name="account_creation_restricted">ఖాతా సృష్టి పరిమితం చేయబడింది</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ఆహ్వానించబడిన వినియోగదారులు మాత్రమే ఖాతాలను సృష్టించడానికి అనుమతిస్తుంది.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>
