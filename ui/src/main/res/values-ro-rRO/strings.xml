@@ -1451,4 +1451,6 @@ Doriți să comutați la acest cont?</string>
     <string name="receive_24_7_priority_support">Primește asistență prioritară 24/7</string>
     <string name="account_creation_restricted">Crearea contului este restricționată</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s permite doar utilizatorilor invitați să creeze conturi.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

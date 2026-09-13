@@ -1441,4 +1441,6 @@ Pretende mudar para esta conta?</string>
     <string name="receive_24_7_priority_support">Receba suporte prioritário 24/7</string>
     <string name="account_creation_restricted">Criação de conta restringida</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s apenas permite que utilizadores convidados criem contas.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Diminuir %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Aumentar %1$s</string>
 </resources>

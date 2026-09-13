@@ -1431,4 +1431,6 @@
     <string name="receive_24_7_priority_support">연중무휴 우선 지원 받기</string>
     <string name="account_creation_restricted">계정 생성 제한됨</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s은(는) 초대된 사용자만 계정을 생성할 수 있습니다.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

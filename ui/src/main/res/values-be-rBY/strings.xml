@@ -1459,4 +1459,6 @@
     <string name="receive_24_7_priority_support">Атрымлівайце прыярытэтную падтрымку 24/7</string>
     <string name="account_creation_restricted">Стварэнне ўліковых запісаў абмежаванае</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s дазваляе ствараць уліковыя запісы толькі запрошаным карыстальнікам.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

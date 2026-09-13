@@ -1431,4 +1431,6 @@
     <string name="receive_24_7_priority_support">24時間年中無休の優先サポートを受ける</string>
     <string name="account_creation_restricted">アカウントの作成が制限されています</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s は招待されたユーザーのみアカウントを作成できます。</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s を減らす</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s を増やす</string>
 </resources>

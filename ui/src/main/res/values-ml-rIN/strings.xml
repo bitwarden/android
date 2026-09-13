@@ -1441,4 +1441,6 @@
     <string name="receive_24_7_priority_support">24/7 മുൻഗണനാ പിന്തുണ സ്വീകരിക്കുക</string>
     <string name="account_creation_restricted">അക്കൗണ്ട് സൃഷ്ടിക്കൽ നിയന്ത്രിച്ചിരിക്കുന്നു</string>
     <string name="only_allows_invited_users_to_create_accounts">ക്ഷണിക്കപ്പെട്ട ഉപയോക്താക്കളെ മാത്രമേ %1$s അക്കൗണ്ടുകൾ സൃഷ്ടിക്കാൻ അനുവദിക്കൂ.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

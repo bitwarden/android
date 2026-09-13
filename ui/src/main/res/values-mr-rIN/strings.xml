@@ -1441,4 +1441,6 @@
     <string name="receive_24_7_priority_support">२४/७ प्राधान्य समर्थन मिळवा</string>
     <string name="account_creation_restricted">खाते निर्मिती प्रतिबंधित</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s फक्त आमंत्रित वापरकर्त्यांना खाती तयार करण्याची परवानगी देते.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

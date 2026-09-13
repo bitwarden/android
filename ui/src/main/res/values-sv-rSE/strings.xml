@@ -1157,8 +1157,8 @@ Vill du byta till detta konto?</string>
     <string name="copy_error_report">Kopiera felrapport</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kunde inte avkryptera detta valvobjekt. Kopiera och dela denna felrapport med kundtjänst för att undvika ytterligare dataförlust.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden kunde inte dekryptera %1$d valvobjekt. Kopiera och dela denna felrapport med kund framgång för att undvika ytterligare dataförlust.</item>
-        <item quantity="other">Bitwarden kunde inte dekryptera %1$d valvobjekt. Kopiera och dela denna felrapport med kund framgång för att undvika ytterligare dataförlust.</item>
+        <item quantity="one">Bitwarden kunde inte dekryptera %1$d objekt i valvet. Kopiera och dela den här felrapporten med kundsupport för att undvika ytterligare dataförlust.</item>
+        <item quantity="other">Bitwarden kunde inte dekryptera %1$d objekt i valvet. Kopiera och dela den här felrapporten med kundsupport för att undvika ytterligare dataförlust.</item>
     </plurals>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
     <string name="advanced_options">Avancerade inställningar</string>
@@ -1441,4 +1441,6 @@ Vill du byta till detta konto?</string>
     <string name="receive_24_7_priority_support">Få 24/7 prioritetssupport</string>
     <string name="account_creation_restricted">Kontoskapande begränsat</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s tillåter endast inbjudna användare att skapa konton.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>
