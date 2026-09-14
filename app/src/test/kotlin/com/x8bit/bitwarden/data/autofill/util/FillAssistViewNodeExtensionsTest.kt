@@ -292,6 +292,7 @@ class FillAssistViewNodeExtensionsTest {
             "addressLine1" to AutofillView.Identity.AddressStreet(data = autofillData()),
             "addressLevel2" to AutofillView.Identity.AddressLocality(data = autofillData()),
             "addressLevel1" to AutofillView.Identity.AddressRegion(data = autofillData()),
+            "streetAddress" to AutofillView.Identity.AddressStreet(data = autofillData()),
             "country" to AutofillView.Identity.AddressCountry(data = autofillData()),
             "postalCode" to AutofillView.Identity.PostalCode(data = autofillData()),
             "organization" to AutofillView.Identity.Company(data = autofillData()),
