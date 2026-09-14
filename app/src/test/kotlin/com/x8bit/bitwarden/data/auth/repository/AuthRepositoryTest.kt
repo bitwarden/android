@@ -407,13 +407,36 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `delete account fails if not logged in`() = runTest {
+    fun `delete account fails if there is no master password unlock data`() = runTest {
         val masterPassword = "hello world"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = ACCOUNT_1.profile.copy(userDecryptionOptions = null),
+                ),
+            ),
+        )
+
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
+
         assertEquals(
-            DeleteAccountResult.Error(message = null, error = NoActiveUserException()),
+            DeleteAccountResult.Error(
+                message = null,
+                error = MissingPropertyException("Master Password Unlock"),
+            ),
             result,
         )
+        verify(exactly = 0) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
+        coVerify(exactly = 0) {
+            authSdkSource.hashPassword(
+                salt = any(),
+                password = any(),
+                kdf = any(),
+                purpose = any(),
+            )
+        }
     }
 
     @Test
@@ -503,36 +526,73 @@ class AuthRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `deleteAccountWithMasterPassword succeeds`() = runTest {
-        val masterPassword = "hello world"
-        val hashedMasterPassword = "hashed password"
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
-        coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-        } returns hashedMasterPassword.asSuccess()
-        coEvery {
-            accountsService.deleteAccount(
-                masterPasswordHash = hashedMasterPassword,
-                oneTimePassword = null,
+    fun `deleteAccountWithMasterPassword succeeds and uses the master password unlock salt and kdf`() =
+        runTest {
+            val masterPassword = "hello world"
+            val hashedMasterPassword = "hashed password"
+            // Deliberately differs from the profile email and KDF to verify the unlock data is used
+            // instead.
+            val masterPasswordUnlock = MasterPasswordUnlockDataJson(
+                kdf = KdfJson(
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
+                    iterations = 500_000,
+                    memory = null,
+                    parallelism = null,
+                ),
+                masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
+                salt = SALT,
             )
-        } returns DeleteAccountResponseJson.Success.asSuccess()
-
-        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
-
-        assertEquals(DeleteAccountResult.Success, result)
-        verify(exactly = 1) {
-            userStateManager.hasPendingAccountDeletion = true
-        }
-        coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-            accountsService.deleteAccount(
-                masterPasswordHash = hashedMasterPassword,
-                oneTimePassword = null,
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = ACCOUNT_1.profile.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                                masterPasswordUnlock = masterPasswordUnlock,
+                            ),
+                        ),
+                    ),
+                ),
             )
+            val kdf = Kdf.Pbkdf2(iterations = 500000u)
+            coEvery {
+                authSdkSource.hashPassword(
+                    salt = SALT,
+                    password = masterPassword,
+                    kdf = kdf,
+                    purpose = HashPurpose.SERVER_AUTHORIZATION,
+                )
+            } returns hashedMasterPassword.asSuccess()
+            coEvery {
+                accountsService.deleteAccount(
+                    masterPasswordHash = hashedMasterPassword,
+                    oneTimePassword = null,
+                )
+            } returns DeleteAccountResponseJson.Success.asSuccess()
+
+            val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
+
+            assertEquals(DeleteAccountResult.Success, result)
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountDeletion = true
+            }
+            coVerify(exactly = 1) {
+                authSdkSource.hashPassword(
+                    salt = SALT,
+                    password = masterPassword,
+                    kdf = kdf,
+                    purpose = HashPurpose.SERVER_AUTHORIZATION,
+                )
+                accountsService.deleteAccount(
+                    masterPasswordHash = hashedMasterPassword,
+                    oneTimePassword = null,
+                )
+            }
         }
-    }
 
     @Test
     fun `deleteAccountWithOneTimePassword succeeds`() = runTest {
@@ -1848,10 +1908,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
             )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -2167,10 +2223,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountCryptographicState = accountCryptographicState,
             )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -2342,10 +2394,6 @@ class AuthRepositoryTest {
             )
             assertEquals(LoginResult.Success, result)
             coVerify { identityService.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
@@ -7097,10 +7145,6 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
             )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
             // This should only be set after they complete a registration and not based on login.
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
             verify(exactly = 1) {
@@ -7154,10 +7198,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertAccountCryptographicState(
                 userId = USER_ID_1,
                 accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
             )
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false

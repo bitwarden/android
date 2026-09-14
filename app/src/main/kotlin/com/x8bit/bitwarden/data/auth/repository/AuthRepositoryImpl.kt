@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
@@ -309,14 +310,22 @@ internal class AuthRepositoryImpl(
     override suspend fun deleteAccountWithMasterPassword(
         masterPassword: String,
     ): DeleteAccountResult {
-        val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return DeleteAccountResult.Error(message = null, error = NoActiveUserException())
+        val masterPasswordUnlock = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?.userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?: return DeleteAccountResult.Error(
+                message = null,
+                error = MissingPropertyException("Master Password Unlock"),
+            )
         userStateManager.hasPendingAccountDeletion = true
         return authSdkSource
             .hashPassword(
-                salt = profile.email,
+                salt = masterPasswordUnlock.salt,
                 password = masterPassword,
-                kdf = profile.toSdkParams(),
+                kdf = masterPasswordUnlock.kdf.toKdf(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
             .flatMap { hashedPassword ->
@@ -978,12 +987,14 @@ internal class AuthRepositoryImpl(
     ): ResetPasswordResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return ResetPasswordResult.Error(error = NoActiveUserException())
+        val masterPasswordUnlock = profile.userDecryptionOptions?.masterPasswordUnlock
+            ?: return ResetPasswordResult.Error(MissingPropertyException("Master Password Unlock"))
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
-                    salt = profile.email,
+                    salt = masterPasswordUnlock.salt,
                     password = password,
-                    kdf = profile.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
@@ -1002,8 +1013,8 @@ internal class AuthRepositoryImpl(
                     body = ResetPasswordRequestJson(
                         currentPasswordHash = currentPasswordHash,
                         passwordHint = passwordHint,
-                        kdf = profile.toKdfRequestModel(),
-                        salt = profile.email,
+                        kdf = masterPasswordUnlock.kdf,
+                        salt = masterPasswordUnlock.salt,
                         masterPasswordAuthenticationHash = response.passwordHash,
                         masterKeyWrappedUserKey = response.newKey,
                     ),
@@ -1699,23 +1710,6 @@ internal class AuthRepositoryImpl(
                     password = password,
                 )
             }
-        }
-
-        password?.let {
-            // Save the master password hash.
-            authSdkSource
-                .hashPassword(
-                    salt = email,
-                    password = it,
-                    kdf = profile.toSdkParams(),
-                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                )
-                .onSuccess { passwordHash ->
-                    authDiskSource.storeMasterPasswordHash(
-                        userId = userId,
-                        passwordHash = passwordHash,
-                    )
-                }
         }
 
         settingsRepository.hasUserLoggedInOrCreatedAccount = true
