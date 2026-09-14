@@ -56,7 +56,7 @@ jobs:
           permission-pull-requests: write # for creating pull request
 
       - name: Download translations
-        uses: crowdin/github-action@52aa776766211d83d975df51f3b9c53c2f8ba35f # v2.16.3
+        uses: crowdin/github-action@0d5670f539973aea2f01abce61a8989934df0025 # v3.0.2
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.CROWDIN-API-TOKEN }}
