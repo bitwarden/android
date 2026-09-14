@@ -1451,4 +1451,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="receive_24_7_priority_support">Saņemt 24/7 atbalstu</string>
     <string name="account_creation_restricted">Konta izveide ir ierobežota</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ļauj izveidot kontus tikai uzaicinātiem lietotājiem.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Samazināt %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Palielināt %1$s</string>
 </resources>

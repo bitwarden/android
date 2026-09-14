@@ -1433,4 +1433,6 @@
     <string name="receive_24_7_priority_support">享有全年無休的優先支援</string>
     <string name="account_creation_restricted">帳戶建立受到限制</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s 僅允許受邀使用者建立帳戶。</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

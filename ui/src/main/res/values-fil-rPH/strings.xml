@@ -1441,4 +1441,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="receive_24_7_priority_support">Makatanggap ng 24/7 priority support</string>
     <string name="account_creation_restricted">Pinaghihigpitan ang paggawa ng account</string>
     <string name="only_allows_invited_users_to_create_accounts">Ang %1$s ay nagpapahintulot lamang sa mga inimbitahang user na lumikha ng mga account.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

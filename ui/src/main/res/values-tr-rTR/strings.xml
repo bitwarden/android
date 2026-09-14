@@ -1440,4 +1440,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
 </resources>

@@ -1461,4 +1461,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="receive_24_7_priority_support">Získajte nonstop prioritnú podporu</string>
     <string name="account_creation_restricted">Vytvorenie účtu je obmedzené</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvárať účty iba pozvaným používateľom.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Znížiť o %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zvýšiť o %1$s</string>
 </resources>

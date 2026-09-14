@@ -122,12 +122,12 @@
     <string name="never">Mai</string>
     <string name="no_cards">No hi ha targetes a la vostra caixa forta.</string>
     <string name="add_card">Afig una targeta</string>
-    <string name="no_logins">No hi ha inicis de sessió al teu cofre.</string>
-    <string name="no_identities">No hi ha identitats al teu cofre.</string>
-    <string name="add_identity">Afegeix identitat</string>
+    <string name="no_logins">No hi ha inicis de sessió a la caixa forta.</string>
+    <string name="no_identities">No hi ha identitats a la caixa forta.</string>
+    <string name="add_identity">Afig identitat</string>
     <string name="no_notes">No hi ha notes al teu cofre.</string>
-    <string name="add_note">Afegeix nota</string>
-    <string name="add_ssh_key">Afegeix clau SSH</string>
+    <string name="add_note">Afig nota</string>
+    <string name="add_ssh_key">Afig clau SSH</string>
     <string name="no_text_sends">No hi ha enviaments de text al teu cofre.</string>
     <string name="no_file_sends">No hi ha enviaments de fitxer al teu cofre.</string>
     <string name="no_ssh_keys">No hi ha cap clau SSH a la caixa forta.</string>
@@ -249,7 +249,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="april">Abril</string>
     <string name="august">Agost</string>
     <string name="brand">Marca</string>
-    <string name="card_details">Detalls de la targeta</string>
+    <string name="card_details">Dades de la targeta</string>
     <string name="card_scanned">Targeta escanejada</string>
     <string name="cardholder_name">Nom del titular de la targeta</string>
     <string name="city_town">Localitat</string>
@@ -328,7 +328,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="identification">Identificació</string>
     <string name="logins">Inicis de sessió</string>
     <string name="secure_notes">Notes segures</string>
-    <string name="personal_details">Detalls personals</string>
+    <string name="personal_details">Dades personals</string>
     <string name="contact_info">Informació de contacte</string>
     <string name="check_password_for_data_breaches">Comprova la contrasenya per a violacions de dades</string>
     <plurals name="password_exposed">
@@ -1441,4 +1441,6 @@ Voleu canviar a aquest compte?</string>
     <string name="receive_24_7_priority_support">Rep suport prioritari 24/7</string>
     <string name="account_creation_restricted">Creació de compte restringida</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s només permet als usuaris convidats crear comptes.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

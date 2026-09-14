@@ -1431,4 +1431,6 @@
     <string name="receive_24_7_priority_support">၂၄/၇ ဦးစားပေး အကူအညီ ရယူပါ</string>
     <string name="account_creation_restricted">အကောင့်ဖန်တီးမှု ကန့်သတ်ထားသည်</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s သည် ဖိတ်ကြားထားသော အသုံးပြုသူများကိုသာ အကောင့်ဖန်တီးခွင့်ပြုသည်။</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>

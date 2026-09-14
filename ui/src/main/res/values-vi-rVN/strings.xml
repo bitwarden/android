@@ -1436,4 +1436,6 @@ các vấn đề.</string>
     <string name="receive_24_7_priority_support">Nhận hỗ trợ ưu tiên 24/7</string>
     <string name="account_creation_restricted">Hạn chế đăng ký tài khoản</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s chỉ cho phép người được mời tạo tài khoản.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
 </resources>
