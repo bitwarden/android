@@ -22,6 +22,7 @@ private const val FIELD_KEY_PERSON_NAME_GIVEN = "firstName"
 private const val FIELD_KEY_PERSON_NAME_MIDDLE = "middleName"
 private const val FIELD_KEY_PERSON_NAME_FAMILY = "lastName"
 private const val FIELD_KEY_ADDRESS_STREET = "addressLine1"
+private const val FIELD_KEY_ADDRESS_STREET_COMBINED = "streetAddress"
 private const val FIELD_KEY_ADDRESS_LOCALITY = "addressLevel2"
 private const val FIELD_KEY_ADDRESS_REGION = "addressLevel1"
 private const val FIELD_KEY_ADDRESS_COUNTRY = "country"
@@ -170,7 +171,9 @@ private fun String.toIdentityViewForFieldKey(data: AutofillView.Data): AutofillV
         FIELD_KEY_PERSON_NAME_GIVEN -> AutofillView.Identity.PersonNameGiven(data = data)
         FIELD_KEY_PERSON_NAME_MIDDLE -> AutofillView.Identity.PersonNameMiddle(data = data)
         FIELD_KEY_PERSON_NAME_FAMILY -> AutofillView.Identity.PersonNameFamily(data = data)
-        FIELD_KEY_ADDRESS_STREET -> AutofillView.Identity.AddressStreet(data = data)
+        FIELD_KEY_ADDRESS_STREET, FIELD_KEY_ADDRESS_STREET_COMBINED -> {
+            AutofillView.Identity.AddressStreet(data = data)
+        }
         FIELD_KEY_ADDRESS_LOCALITY -> AutofillView.Identity.AddressLocality(data = data)
         FIELD_KEY_ADDRESS_REGION -> AutofillView.Identity.AddressRegion(data = data)
         FIELD_KEY_ADDRESS_COUNTRY -> AutofillView.Identity.AddressCountry(data = data)
