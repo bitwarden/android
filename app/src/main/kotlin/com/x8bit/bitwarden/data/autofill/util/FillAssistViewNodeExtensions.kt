@@ -58,53 +58,59 @@ private fun AssistStructure.ViewNode.traverseForFillAssist(
     isIdentityAutofillEnabled: Boolean,
 ): List<AutofillView> {
     val website = this.website ?: parentWebsite
-    val ownViews = autofillId?.let { id ->
-        hostRules
-            .flatMap { it.fields.entries }
-            .filter { (_, alternatives) ->
-                alternatives.any {
-                    htmlInfo?.matchesSelectorClause(it) ?: false
+    val ownViews = autofillId
+        ?.let { id ->
+            hostRules
+                .flatMap { it.fields.entries }
+                .filter { (_, alternatives) ->
+                    alternatives.any {
+                        htmlInfo?.matchesSelectorClause(it) ?: false
+                    }
                 }
-            }
-            .takeIf { it.isNotEmpty() }
-            ?.let { matchingEntries ->
-                val data = toAutofillViewData(autofillId = id, website = website)
-                val candidateViews = matchingEntries.mapNotNull { (key, _) ->
-                    key.toAutofillViewForFieldKey(
-                        data = data,
-                        isIdentityAutofillEnabled = isIdentityAutofillEnabled,
-                    )?.let { key to it }
-                }
-                // Prefer Username: it has no format gate, while Login.Email rejects non-email
-                // values via isValidEmail(). Prefer any non-Identity view next, since Identity
-                // partitions are unbuilt and Login/Card must remain authoritative while the
-                // flag is on.
-                val view = candidateViews
-                    .firstOrNull { (_, view) -> view is AutofillView.Login.Username }
-                    ?.second
-                    ?: candidateViews.firstOrNull { (_, view) -> view !is AutofillView.Identity }
+                .takeIf { it.isNotEmpty() }
+                ?.let { matchingEntries ->
+                    val data = toAutofillViewData(autofillId = id, website = website)
+                    val candidateViews = matchingEntries.mapNotNull { (key, _) ->
+                        key
+                            .toAutofillViewForFieldKey(
+                                data = data,
+                                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                            )
+                            ?.let { key to it }
+                    }
+                    // Prefer Username: it has no format gate, while Login.Email rejects non-email
+                    // values via isValidEmail(). Prefer any non-Identity view next, since Identity
+                    // partitions are unbuilt and Login/Card must remain authoritative while the
+                    // flag is on.
+                    val view = candidateViews
+                        .firstOrNull { (_, view) -> view is AutofillView.Login.Username }
                         ?.second
-                    ?: candidateViews.firstOrNull()?.second
-                    ?: return@let null
+                        ?: candidateViews
+                            .firstOrNull { (_, view) -> view !is AutofillView.Identity }
+                            ?.second
+                        ?: candidateViews.firstOrNull()?.second
+                        ?: return@let null
 
-                // Dual-classify off the full matched-key set, not just the winning key, so a
-                // field matched under both "email" and "phone" gets both Identity views.
-                val isLoginIdentifierView = view is AutofillView.Login.Username ||
-                    view is AutofillView.Login.Email
-                buildList<AutofillView> {
-                    add(view)
-                    if (isIdentityAutofillEnabled && isLoginIdentifierView) {
-                        val matchedKeys = candidateViews.mapTo(mutableSetOf()) { it.first }
-                        if (FIELD_KEY_EMAIL in matchedKeys) {
-                            add(AutofillView.Identity.Email(data = view.data))
-                        }
-                        if (FIELD_KEY_PHONE in matchedKeys) {
-                            add(AutofillView.Identity.PhoneFull(data = view.data))
+                    // Dual-classify off the full matched-key set, not just the winning key, so a
+                    // field matched under both "email" and "phone" gets both Identity views.
+                    val isLoginIdentifierView = view is AutofillView.Login.Username ||
+                        view is AutofillView.Login.Email
+                    buildList<AutofillView> {
+                        add(view)
+                        if (isIdentityAutofillEnabled && isLoginIdentifierView) {
+                            val matchedKeys = candidateViews.mapTo(mutableSetOf()) { it.first }
+                            if (FIELD_KEY_EMAIL in matchedKeys) {
+                                add(AutofillView.Identity.Email(data = view.data))
+                            }
+                            if (FIELD_KEY_PHONE in matchedKeys) {
+                                add(AutofillView.Identity.PhoneFull(data = view.data))
+                            }
                         }
                     }
                 }
-            }
-    }.orEmpty()
+        }
+        .orEmpty()
+
     val childViews = (0 until childCount)
         .flatMap { index ->
             getChildAt(index).traverseForFillAssist(
