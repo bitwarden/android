@@ -187,8 +187,10 @@ private fun AssistStructure.ViewNode.supportedAutofillHint(
         this.isPersonNameGivenField -> AutofillHint.Identity.PERSON_NAME_GIVEN
         this.isPersonNameMiddleField -> AutofillHint.Identity.PERSON_NAME_MIDDLE
         this.isPersonNameFamilyField -> AutofillHint.Identity.PERSON_NAME_FAMILY
-        this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
+        // Must be checked before isPostalAddressFullField: a line-2 name like "billing_address_2"
+        // also substring-matches the postal-full terms, so the more specific check has to win.
         this.isAddressExtendedField -> AutofillHint.Identity.ADDRESS_EXTENDED
+        this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
         this.isAddressStreetField -> AutofillHint.Identity.ADDRESS_STREET
         this.isAddressLocalityField -> AutofillHint.Identity.ADDRESS_LOCALITY
         this.isAddressRegionField -> AutofillHint.Identity.ADDRESS_REGION
