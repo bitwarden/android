@@ -49,7 +49,6 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -182,9 +181,6 @@ fun GeneratorScreen(
             }
         }
     }
-    val onRegenerateClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.RegenerateClick) }
-
-    val onCopyClick: () -> Unit = { viewModel.trySendAction(GeneratorAction.CopyClick) }
 
     val onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit = {
         viewModel.trySendAction(GeneratorAction.MainTypeOptionSelect(it))
@@ -225,7 +221,6 @@ fun GeneratorScreen(
                             generatorMode = generatorMode,
                             scrollBehavior = scrollBehavior,
                             onCloseClick = { viewModel.trySendAction(GeneratorAction.CloseClick) },
-                            onSaveClick = { viewModel.trySendAction(GeneratorAction.SaveClick) },
                         )
                     }
 
@@ -259,8 +254,9 @@ fun GeneratorScreen(
         ) {
             ScrollContent(
                 state = state,
-                onRegenerateClick = onRegenerateClick,
-                onCopyClick = onCopyClick,
+                onRegenerateClick = { viewModel.trySendAction(GeneratorAction.RegenerateClick) },
+                onCopyClick = { viewModel.trySendAction(GeneratorAction.CopyClick) },
+                onSaveClick = { viewModel.trySendAction(GeneratorAction.SaveClick) },
                 onUsernameSubStateOptionClicked = onUsernameOptionClicked,
                 passwordHandlers = passwordHandlers,
                 passphraseHandlers = passphraseHandlers,
@@ -328,7 +324,6 @@ private fun ModalAppBar(
     generatorMode: GeneratorMode.Modal,
     scrollBehavior: TopAppBarScrollBehavior,
     onCloseClick: () -> Unit,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTopAppBar(
@@ -340,13 +335,6 @@ private fun ModalAppBar(
         dividerStyle = when (generatorMode) {
             GeneratorMode.Modal.Password -> TopAppBarDividerStyle.NONE
             is GeneratorMode.Modal.Username -> TopAppBarDividerStyle.ON_SCROLL
-        },
-        actions = {
-            BitwardenTextButton(
-                label = stringResource(id = BitwardenString.apply),
-                onClick = onSaveClick,
-                modifier = Modifier.testTag("SaveButton"),
-            )
         },
         modifier = modifier,
     )
@@ -362,6 +350,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     state: GeneratorState,
     onRegenerateClick: () -> Unit,
     onCopyClick: () -> Unit,
+    onSaveClick: () -> Unit,
     onUsernameSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
@@ -461,6 +450,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                 onShowPreviousCoachMark = onShowPreviousCoachMark,
                 onDismissCoachMark = onDismissCoachMark,
                 onShowNextCoachMark = onShowNextCoachMark,
+                onCopyClick = onCopyClick.takeIf { state.generatorMode is GeneratorMode.Modal },
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
@@ -469,40 +459,84 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        @Suppress("MaxLineLength")
-        coachMarkHighlightItem(
-            key = ExploreGeneratorCoachMark.COPY_PASSWORD_BUTTON,
-            title = BitwardenString.coachmark_6_of_6.asText(),
-            description = BitwardenString
-                .after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website
-                .asText(),
-            shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
-            onDismiss = onDismissCoachMark,
-            leftAction = {
-                CoachMarkActionText(
-                    actionLabel = stringResource(BitwardenString.back),
-                    onActionClick = onShowPreviousCoachMark,
-                )
-            },
-            rightAction = {
-                CoachMarkActionText(
-                    actionLabel = stringResource(BitwardenString.done_text),
-                    onActionClick = onCoachMarkComplete,
-                )
-            },
-            modifier = Modifier.standardHorizontalMargin(windowAdaptiveInfo = windowAdaptiveInfo),
-        ) {
-            BitwardenFilledButton(
-                label = stringResource(id = BitwardenString.copy),
-                onClick = onCopyClick,
-                modifier = Modifier
-                    .testTag(tag = "CopyValueButton")
-                    .fillMaxWidth(),
-            )
+        when (state.generatorMode) {
+            GeneratorMode.Default -> {
+                @Suppress("MaxLineLength")
+                coachMarkHighlightItem(
+                    key = ExploreGeneratorCoachMark.COPY_PASSWORD_BUTTON,
+                    title = BitwardenString.coachmark_6_of_6.asText(),
+                    description = BitwardenString
+                        .after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website
+                        .asText(),
+                    shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                    onDismiss = onDismissCoachMark,
+                    leftAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(id = BitwardenString.back),
+                            onActionClick = onShowPreviousCoachMark,
+                        )
+                    },
+                    rightAction = {
+                        CoachMarkActionText(
+                            actionLabel = stringResource(id = BitwardenString.done_text),
+                            onActionClick = onCoachMarkComplete,
+                        )
+                    },
+                    modifier = Modifier
+                        .standardHorizontalMargin(windowAdaptiveInfo = windowAdaptiveInfo),
+                ) {
+                    BitwardenFilledButton(
+                        label = stringResource(id = BitwardenString.copy),
+                        onClick = onCopyClick,
+                        modifier = Modifier
+                            .testTag(tag = "CopyValueButton")
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            is GeneratorMode.Modal -> {
+                item(key = "use_value_button") {
+                    when (state.selectedType) {
+                        is GeneratorState.MainType.Passphrase -> {
+                            BitwardenFilledButton(
+                                label = stringResource(id = BitwardenString.use_this_passphrase),
+                                onClick = onSaveClick,
+                                modifier = Modifier
+                                    .testTag(tag = "UsePassphraseButton")
+                                    .standardHorizontalMargin()
+                                    .fillMaxWidth(),
+                            )
+                        }
+
+                        is GeneratorState.MainType.Password -> {
+                            BitwardenFilledButton(
+                                label = stringResource(id = BitwardenString.use_this_password),
+                                onClick = onSaveClick,
+                                modifier = Modifier
+                                    .testTag(tag = "UsePasswordButton")
+                                    .standardHorizontalMargin()
+                                    .fillMaxWidth(),
+                            )
+                        }
+
+                        is GeneratorState.MainType.Username -> {
+                            BitwardenFilledButton(
+                                label = stringResource(id = BitwardenString.use_this_username),
+                                onClick = onSaveClick,
+                                modifier = Modifier
+                                    .testTag(tag = "UseUsernameButton")
+                                    .standardHorizontalMargin()
+                                    .fillMaxWidth(),
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(height = 24.dp))
         }
 
         when (val selectedType = state.selectedType) {
@@ -574,6 +608,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
     onShowPreviousCoachMark: () -> Unit,
     onDismissCoachMark: () -> Unit,
     onShowNextCoachMark: () -> Unit,
+    onCopyClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
@@ -608,6 +643,14 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
                     contentDescription = stringResource(id = BitwardenString.generate_password),
                     onClick = onRegenerateClick,
                     modifier = Modifier.testTag("RegenerateValueButton"),
+                )
+            }
+            onCopyClick?.let {
+                BitwardenStandardIconButton(
+                    vectorIconRes = BitwardenDrawable.ic_copy,
+                    contentDescription = stringResource(id = BitwardenString.copy),
+                    onClick = it,
+                    modifier = Modifier.testTag(tag = "CopyValueButton"),
                 )
             }
         },
