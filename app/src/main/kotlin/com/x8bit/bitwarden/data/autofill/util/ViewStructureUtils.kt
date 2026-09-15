@@ -224,6 +224,7 @@ val SUPPORTED_RAW_ADDRESS_STREET_HINTS: List<String> = listOf(
  */
 val SUPPORTED_EXACT_ADDRESS_STREET_HINTS: List<String> = listOf(
     "address",
+    "address1",
 )
 
 /**
