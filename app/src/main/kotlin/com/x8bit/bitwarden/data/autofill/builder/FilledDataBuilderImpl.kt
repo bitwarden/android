@@ -296,7 +296,7 @@ private fun AutofillCipher.Identity.getAutofillValueOrNull(
         is AutofillView.Identity.PassportNumber -> passportNumber
         is AutofillView.Identity.LicenseNumber -> licenseNumber
     }
-        ?.takeIf { it.isNotEmpty() }
+        .takeIf { it.isNotEmpty() }
 
 /**
  * Get the item at the [index]. If that fails, return the last item in the list. If that also fails,

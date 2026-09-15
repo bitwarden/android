@@ -270,7 +270,7 @@ class AutofillParserImpl(
 
         // Identity categories were Login categories before identity autofill, so with the flag
         // off they must stay Login's to keep fill-assist coverage unchanged on those hosts.
-        val loginCategories = if (isIdentityAutofillEnabled) {
+        val fillAssistCategories = if (isIdentityAutofillEnabled) {
             LOGIN_FILL_ASSIST_CATEGORIES
         } else {
             LOGIN_FILL_ASSIST_CATEGORIES + IDENTITY_FILL_ASSIST_CATEGORIES
@@ -279,12 +279,12 @@ class AutofillParserImpl(
         val coversCurrentPartition = hostRules.any { rule ->
             when (focusedView) {
                 is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
-                is AutofillView.Login -> rule.category in loginCategories
+                is AutofillView.Login -> rule.category in fillAssistCategories
                 is AutofillView.Identity -> rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
                 is AutofillView.Unused -> {
                     val identityCoversRule = isIdentityAutofillEnabled &&
                         rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
-                    rule.category in loginCategories ||
+                    rule.category in fillAssistCategories ||
                         rule.category in CARD_FILL_ASSIST_CATEGORIES ||
                         identityCoversRule
                 }
@@ -516,8 +516,12 @@ private fun AssistStructure.ViewNode.traverse(
                             // claimed by an ancestor's own view -- that means this is a stale
                             // container-redirect leftover, not an intentional sibling.
                             is AutofillView.Identity -> {
-                                (id !in idsClaimedByAncestor)
-                                    .also { keep -> if (keep) claimedAutofillIds.add(id) }
+                                if (id !in idsClaimedByAncestor) {
+                                    claimedAutofillIds.add(id)
+                                    true
+                                } else {
+                                    false
+                                }
                             }
                             // Kept only the first time its id is seen (add returns false if known).
                             else -> claimedAutofillIds.add(id)
@@ -593,6 +597,7 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Identity.PostalAddressFull -> {
             this.copy(data = this.data.copy(website = site))
         }
+
         is AutofillView.Identity.PostalCode -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Ssn -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Unused -> this.copy(data = this.data.copy(website = site))
