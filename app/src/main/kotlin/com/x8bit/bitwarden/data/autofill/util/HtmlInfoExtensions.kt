@@ -279,12 +279,12 @@ private fun List<String>.containsAnyTermsPreservingDigits(terms: List<String>): 
     }
 
 /**
- * Checks if any string in the list, once normalized, is exactly equal to one of the [terms]. Used
- * for terms too generic to match safely as a substring (e.g. "address" -- see
+ * Checks if any string in the list, once normalized digit-preserving, is exactly equal to one of
+ * the [terms]. Used for terms too generic to match safely as a substring (e.g. "address" -- see
  * [SUPPORTED_EXACT_ADDRESS_STREET_HINTS]).
  */
 private fun List<String>.equalsAnyTerms(terms: List<String>): Boolean =
-    this.any { string -> string.toLowerCaseAndStripNonAlpha() in terms }
+    this.any { string -> string.toLowerCaseAndStripNonAlphanumeric() in terms }
 
 /**
  * The supported attribute keys whose value can represent an autofill hint.
