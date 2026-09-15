@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.util.toImportCredentialsRequestDataOrNull
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,11 +37,13 @@ class SelectAccountViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<SelectAccountState, SelectAccountEvent, SelectAccountAction>(
     initialState = run {
-        val importRequest = specialCircumstanceManager.specialCircumstance
-            as SpecialCircumstance.CredentialExchangeExport
-
+        val importRequest = requireNotNull(
+            specialCircumstanceManager
+                .specialCircumstance
+                ?.toImportCredentialsRequestDataOrNull(),
+        )
         SelectAccountState(
-            importRequest = importRequest.data,
+            importRequest = importRequest,
             viewState = SelectAccountState.ViewState.Loading,
         )
     },
