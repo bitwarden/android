@@ -35,7 +35,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -731,6 +730,19 @@ class AutofillParserTests {
         }
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns windowNode
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = listOf(rootAutofillId),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Identity(
+                views = listOf(
+                    nameView,
+                    AutofillView.Identity.Email(data = emailLoginView.data),
+                ),
+            ),
+            uri = URI,
+        )
 
         // Test
         val actual = parser.parse(
@@ -738,18 +750,8 @@ class AutofillParserTests {
             fillRequest = fillRequest,
         )
 
-        // Verify — the Identity partition contains both the focused Name view and the email
-        // field's Identity.Email sibling (reusing the Login.Username view's data).
-        assertTrue(actual is AutofillRequest.Fillable)
-        val partition = (actual as AutofillRequest.Fillable).partition
-        assertTrue(partition is AutofillPartition.Identity)
-        assertEquals(
-            listOf(
-                nameView,
-                AutofillView.Identity.Email(data = emailLoginView.data),
-            ),
-            (partition as AutofillPartition.Identity).views,
-        )
+        // Verify
+        assertEquals(expected, actual)
     }
 
     @Suppress("MaxLineLength")
