@@ -86,10 +86,87 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this password click should send SaveClick`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Password))
 
         composeTestRule
-            .onNodeWithText(text = "Apply")
+            .onNodeWithText(text = "Use this password")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with password mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Password(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
+    }
+
+    @Test
+    fun `ModalAppBar should be displayed for Passphrase Mode`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this passphrase click should send SaveClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Use this passphrase")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with passphrase mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
     }
 
     @Test
@@ -97,16 +174,49 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
             ),
         )
 
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this username click should send SaveClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
 
         composeTestRule
-            .onNodeWithText(text = "Apply")
-            .assertIsDisplayed()
+            .onNodeWithText(text = "Use this username")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with username mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
     }
 
     @Test
@@ -123,23 +233,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(GeneratorAction.CloseClick)
-        }
-    }
-
-    @Test
-    fun `on Apply click should send SaveClick`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                generatorMode = GeneratorMode.Modal.Username(website = null),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText(text = "Apply")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(GeneratorAction.SaveClick)
         }
     }
 
