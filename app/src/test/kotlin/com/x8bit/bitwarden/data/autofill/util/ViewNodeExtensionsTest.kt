@@ -1971,6 +1971,22 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
+    fun `isAddressStreetField returns true when htmlInfo hint is address1`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.hints() } returns listOf("address1")
+
+        assertTrue(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressStreetField returns false when htmlInfo hint is address3`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.hints() } returns listOf("address3")
+
+        assertFalse(viewNode.isAddressStreetField)
+    }
+
+    @Test
     fun `isAddressExtendedField returns true when idEntry is supported`() {
         setupUnsupportedInputFieldViewNode()
         every { viewNode.idEntry } returns "address-ext"
