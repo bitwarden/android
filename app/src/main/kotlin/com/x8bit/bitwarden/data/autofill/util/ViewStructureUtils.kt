@@ -253,6 +253,7 @@ val SUPPORTED_RAW_POSTAL_CODE_HINTS: List<String> = listOf(
  * The supported phone number autofill hints.
  */
 val SUPPORTED_RAW_PHONE_HINTS: List<String> = listOf(
+    "phone",
     "phonenumber",
     "telephone",
     "mobilephone",
