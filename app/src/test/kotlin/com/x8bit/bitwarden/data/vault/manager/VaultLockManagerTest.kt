@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -124,6 +125,10 @@ class VaultLockManagerTest {
     private val passwordPolicyManager: PasswordPolicyManager = mockk {
         every { validatePasswordAgainstPolicies(password = any(), isCreation = any()) } returns true
     }
+    private val keyRotationManager: KeyRotationManager = mockk {
+        coEvery { rotateAutoUnlockKey(userId = any()) } just runs
+        coEvery { rotateAuthenticatorSyncKey(userId = any()) } just runs
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
@@ -140,6 +145,7 @@ class VaultLockManagerTest {
         kdfManager = kdfManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
         passwordPolicyManager = passwordPolicyManager,
+        keyRotationManager = keyRotationManager,
     )
 
     @Test
@@ -1007,6 +1013,8 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1184,6 +1192,8 @@ class VaultLockManagerTest {
                 )
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1755,6 +1765,8 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = USER_ID)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1854,6 +1866,8 @@ class VaultLockManagerTest {
                     kdf = MOCK_MASTER_PASSWORD_UNLOCK_DATA.kdf,
                     purpose = HashPurpose.LOCAL_AUTHORIZATION,
                 )
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 

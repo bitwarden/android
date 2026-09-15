@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.createMockWrappedAccountCr
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAccount
@@ -123,6 +124,11 @@ class VaultRepositoryTest {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.SdkPinUnlock) } returns true
     }
+    private val keyRotationManager: KeyRotationManager = mockk {
+        coEvery {
+            rotateBiometricsKey(userId = any(), decryptedBiometricsUserKey = any())
+        } just runs
+    }
 
     private val vaultRepository: VaultRepository = VaultRepositoryImpl(
         vaultDiskSource = vaultDiskSource,
@@ -137,6 +143,7 @@ class VaultRepositoryTest {
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
+        keyRotationManager = keyRotationManager,
         featureFlagManager = featureFlagManager,
     )
 
@@ -261,6 +268,7 @@ class VaultRepositoryTest {
             val biometricsKey = "asdf1234"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val encryptedBytes = byteArrayOf(1, 1)
+            val decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1)
             val initVector = byteArrayOf(2, 2)
             val cipher = mockk<Cipher> {
                 every { doFinal(any()) } returns encryptedBytes
@@ -272,7 +280,7 @@ class VaultRepositoryTest {
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                        decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+                        decryptedUserKey = decryptedUserKey,
                     ),
                     organizationKeys = null,
                 )
@@ -296,9 +304,13 @@ class VaultRepositoryTest {
                     email = "email",
                     kdf = MOCK_PROFILE.toSdkParams(),
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                        decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
+                        decryptedUserKey = decryptedUserKey,
                     ),
                     organizationKeys = null,
+                )
+                keyRotationManager.rotateBiometricsKey(
+                    userId = userId,
+                    decryptedBiometricsUserKey = decryptedUserKey,
                 )
             }
         }
@@ -353,6 +365,10 @@ class VaultRepositoryTest {
                 )
                 pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                     userId = userId,
+                )
+                keyRotationManager.rotateBiometricsKey(
+                    userId = userId,
+                    decryptedBiometricsUserKey = biometricsKey,
                 )
             }
             fakeAuthDiskSource.apply {
