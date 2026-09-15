@@ -84,6 +84,10 @@ class FlagKeyTest {
             FlagKey.SdkPinUnlock.keyName,
             "pm-31059-sdk-pin-unlock",
         )
+        assertEquals(
+            FlagKey.SdkPreLogin.keyName,
+            "pm-27060-password-prelogin-from-sdk",
+        )
     }
 
     @Test
@@ -109,6 +113,7 @@ class FlagKeyTest {
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
+                FlagKey.SdkPreLogin,
             ).all {
                 !it.defaultValue
             },

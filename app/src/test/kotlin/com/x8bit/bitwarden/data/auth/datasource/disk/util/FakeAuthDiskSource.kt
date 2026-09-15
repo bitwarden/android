@@ -446,7 +446,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the given [userState] matches the currently tracked value.
      */
-    fun assertUserState(userState: UserStateJson) {
+    fun assertUserState(userState: UserStateJson?) {
         assertEquals(userState, this.userState)
     }
 

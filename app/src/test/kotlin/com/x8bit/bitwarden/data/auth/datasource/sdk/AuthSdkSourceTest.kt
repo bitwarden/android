@@ -3,17 +3,20 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationRequest
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationRequest
 import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.ClientSettings
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -22,11 +25,13 @@ import com.bitwarden.policies.PolicyType
 import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
+import com.bitwarden.sdk.LoginClient
 import com.bitwarden.sdk.PlatformClient
 import com.bitwarden.sdk.PoliciesClient
 import com.bitwarden.sdk.RegistrationClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -40,12 +45,18 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
+    private val clientSettings: ClientSettings = mockk()
+    private val sdkRepoFactory: SdkRepositoryFactory = mockk {
+        every { getClientSettings() } returns clientSettings
+    }
+    private val clientLogin = mockk<LoginClient>()
     private val clientRegistration = mockk<RegistrationClient>()
     private val clientAuth = mockk<AuthClient> {
         every { registration() } returns clientRegistration
+        every { login(clientSettings = clientSettings) } returns clientLogin
     }
     private val clientPlatform = mockk<PlatformClient> {
-        coEvery { loadFlags(any()) } just runs
+        coEvery { loadFlags(flags = any()) } just runs
     }
     private val clientPolicies = mockk<PoliciesClient>()
     private val client = mockk<Client> {
@@ -61,7 +72,40 @@ class AuthSdkSourceTest {
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
         dispatcherManager = FakeDispatcherManager(),
         sdkClientManager = sdkClientManager,
+        sdkRepoFactory = sdkRepoFactory,
     )
+
+    @Test
+    fun `preLogin should call SDK and return a Result with correct data`() = runBlocking {
+        val email = "email@example.com"
+        val expectedResult = mockk<PasswordPreloginResponse>()
+        val slot = slot<suspend Client.() -> PasswordPreloginResponse>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
+        coEvery { clientLogin.getPasswordPrelogin(email = email) } returns expectedResult
+
+        val result = authSkdSource.preLogin(email = email)
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify(exactly = 1) { clientLogin.getPasswordPrelogin(email = email) }
+    }
+
+    @Test
+    fun `preLogin should return a failure when the SDK throws`() = runBlocking {
+        val email = "email@example.com"
+        val error = RuntimeException("Fail")
+        val slot = slot<suspend Client.() -> PasswordPreloginResponse>()
+        coEvery {
+            sdkClientManager.singleUseClient(block = capture(slot))
+        } coAnswers { slot.captured(client) }
+        coEvery { clientLogin.getPasswordPrelogin(email = email) } throws error
+
+        val result = authSkdSource.preLogin(email = email)
+
+        assertEquals(error.asFailure(), result)
+        coVerify(exactly = 1) { clientLogin.getPasswordPrelogin(email = email) }
+    }
 
     @Suppress("MaxLineLength")
     @Test
