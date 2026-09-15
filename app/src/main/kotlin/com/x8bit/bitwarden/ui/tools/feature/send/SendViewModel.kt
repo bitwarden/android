@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val KEY_STATE = "state"
 
@@ -493,11 +494,10 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
-    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            delay(250)
+            delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepo.sync(forced = false)
             } else {
