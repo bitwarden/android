@@ -270,5 +270,4 @@ private val SUPPORTED_HTML_ATTRIBUTE_HINTS: List<String> = listOf(
     "type",
     "hint",
     "autofill",
-    "autocomplete",
 )
