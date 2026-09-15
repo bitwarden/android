@@ -174,6 +174,7 @@ private fun String.toIdentityViewForFieldKey(data: AutofillView.Data): AutofillV
         FIELD_KEY_ADDRESS_STREET, FIELD_KEY_ADDRESS_STREET_COMBINED -> {
             AutofillView.Identity.AddressStreet(data = data)
         }
+
         FIELD_KEY_ADDRESS_LOCALITY -> AutofillView.Identity.AddressLocality(data = data)
         FIELD_KEY_ADDRESS_REGION -> AutofillView.Identity.AddressRegion(data = data)
         FIELD_KEY_ADDRESS_COUNTRY -> AutofillView.Identity.AddressCountry(data = data)
