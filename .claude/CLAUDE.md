@@ -78,6 +78,7 @@ User Request (UI Action)
 |---------|-------|
 | `/plan-android-work <task>` | Fetch ticket → refine requirements → design implementation approach |
 | `/work-on-android <task>` | Full workflow: implement → test → verify → preflight → commit → review → PR |
+| `/plan-implement-review <task> [--confirm]` | Agent-team pipeline: plan → implement → 4-reviewer gauntlet → fix cycle (requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
 | `/review-android <PR#>` | Full review workflow: PR context gathering → Android checklist → output |
 
 ---
