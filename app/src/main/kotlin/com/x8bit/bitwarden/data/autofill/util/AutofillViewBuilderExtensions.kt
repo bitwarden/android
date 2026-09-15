@@ -129,6 +129,9 @@ internal fun buildIdentityView(
         AutofillView.Identity.AddressStreet(data = autofillViewData)
     }
 
+    AutofillHint.Identity.ADDRESS_EXTENDED -> {
+        AutofillView.Identity.AddressExtended(data = autofillViewData)
+    }
     AutofillHint.Identity.ADDRESS_LOCALITY -> {
         AutofillView.Identity.AddressLocality(data = autofillViewData)
     }
