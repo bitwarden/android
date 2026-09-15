@@ -1,7 +1,7 @@
 package com.bitwarden.ui.platform.util
 
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.bitwarden.ui.platform.model.WindowSize
@@ -11,7 +11,7 @@ import com.bitwarden.ui.platform.model.WindowSize
  */
 @Composable
 fun rememberWindowSize(
-    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
 ): WindowSize {
     return remember(key1 = windowAdaptiveInfo.windowSizeClass) {
         windowAdaptiveInfo.getWindowSize()

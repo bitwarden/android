@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Default implementation of [BitwardenToolTipState]
@@ -57,7 +58,7 @@ internal class BitwardenToolTipStateImpl(
                 if (isPersistent) {
                     cancellableShow()
                 } else {
-                    withTimeout(BITWARDEN_TOOL_TIP_TIMEOUT) { cancellableShow() }
+                    withTimeout(BITWARDEN_TOOL_TIP_TIMEOUT.milliseconds) { cancellableShow() }
                 }
             } finally {
                 if (mutatePriority != MutatePriority.PreventUserInput) {
