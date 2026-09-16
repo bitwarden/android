@@ -101,7 +101,7 @@ class AutofillParserTests {
     }
     private val fillAssistManager: FillAssistManager = mockk()
     private val mutableFillAssistFlagFlow = MutableStateFlow(false)
-    private val mutableIdentityAutofillFlagFlow = MutableStateFlow(true)
+    private val mutableIdentityAutofillFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlag(FlagKey.FillAssistTargetingRules)
@@ -564,6 +564,7 @@ class AutofillParserTests {
     @Test
     fun `parse should choose AutofillPartition Identity when an Identity view is focused`() {
         // Setup
+        mutableIdentityAutofillFlagFlow.value = true
         val identityAutofillView: AutofillView.Identity = AutofillView.Identity.PersonNameGiven(
             data = AutofillView.Data(
                 autofillId = identityAutofillId,
@@ -658,6 +659,7 @@ class AutofillParserTests {
         // sibling so a whole-identity fill also populates the email field. Regression guard: the
         // container-redirect dedup must not drop that sibling just because its id is already
         // claimed by the Login.Username primary.
+        mutableIdentityAutofillFlagFlow.value = true
         val nameAutofillId: AutofillId = mockk()
         val emailAutofillId: AutofillId = mockk()
         val nameView: AutofillView.Identity = AutofillView.Identity.PersonNameGiven(
@@ -1606,6 +1608,7 @@ class AutofillParserTests {
     @Test
     fun `parse should fall back to heuristics when fill-assist rules exist but only cover account-login and an identity view is focused`() {
         // Setup: fill-assist enabled with login-only rules, but an identity view is focused.
+        mutableIdentityAutofillFlagFlow.value = true
         mutableFillAssistFlagFlow.value = true
         mockIsFillAssistEnabled = true
         every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
@@ -1670,6 +1673,7 @@ class AutofillParserTests {
         // The heuristic and fill-assist paths produce views with DIFFERENT autofillIds so the
         // assertion proves which path was actually taken.
         listOf("account-creation", "account-update").forEach { category ->
+            mutableIdentityAutofillFlagFlow.value = true
             mutableFillAssistFlagFlow.value = true
             mockIsFillAssistEnabled = true
             every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
@@ -2082,6 +2086,7 @@ class AutofillParserTests {
         // another window on the same screen. The Login view never enters the candidate pool --
         // selectCandidateAutofillViews only considers a window whose own views have a focused
         // entry -- so the focused Identity view wins and builds a real Identity partition.
+        mutableIdentityAutofillFlagFlow.value = true
         val identityAutofillId: AutofillId = mockk()
         val identityViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns emptyArray()

@@ -187,7 +187,7 @@ class AutofillParserImpl(
             autofillViews
         }
 
-        val effectiveFocusedView = effectiveViews.effectiveFocusedViewOrNull()
+        val effectiveFocusedView = effectiveViews.firstFocusedOrNull()
             ?: return AutofillRequest.Unfillable
 
         // Choose the first focused partition of data for fulfillment.
@@ -348,17 +348,11 @@ private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
 }
 
 /**
- * Returns the focused [AutofillView], or falls back to the first entry if none is focused.
+ * Returns the focused [AutofillView], preferring a non-Identity view so a real Identity partition
+ * is only built when Identity is the only classification available. Falls back to the first entry
+ * if nothing is focused.
  */
-private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? =
-    firstOrNull { it.data.isFocused } ?: firstOrNull()
-
-/**
- * Returns the [AutofillView] that should win partition selection: a focused Login/Card view
- * first, then any focused view (so a real Identity partition can still be built when Identity is
- * the only classification available), then any Login/Card view, then any view at all.
- */
-private fun List<AutofillView>.effectiveFocusedViewOrNull(): AutofillView? {
+private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? {
     val focusedNonIdentity = firstOrNull { it.data.isFocused && it !is AutofillView.Identity }
     val focusedAny = firstOrNull { it.data.isFocused }
     val nonIdentity = firstOrNull { it !is AutofillView.Identity }
