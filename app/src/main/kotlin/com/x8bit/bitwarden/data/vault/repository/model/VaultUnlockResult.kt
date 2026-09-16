@@ -11,7 +11,10 @@ sealed class VaultUnlockResult {
     data object Success : VaultUnlockResult()
 
     /**
-     * Incorrect password provided.
+     * Authentication failed. This includes an incorrect password as well as other failed
+     * authentication attempts, such as a biometric cipher that is missing its Keystore
+     * authorization token. Callers should display a dismissible error and preserve biometric
+     * eligibility so a user-initiated retry can request a fresh cipher.
      */
     data class AuthenticationError(
         val message: String? = null,
