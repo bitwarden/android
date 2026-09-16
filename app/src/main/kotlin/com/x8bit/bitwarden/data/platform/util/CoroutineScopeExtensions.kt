@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Launch a new coroutine that runs [block] and will safely timeout and invoke [timeoutBlock] after
@@ -17,8 +18,8 @@ fun CoroutineScope.launchWithTimeout(
 ): Job =
     launch {
         try {
-            withTimeout(timeoutDuration, block)
-        } catch (e: TimeoutCancellationException) {
+            withTimeout(timeoutDuration.milliseconds, block)
+        } catch (_: TimeoutCancellationException) {
             timeoutBlock()
         }
     }

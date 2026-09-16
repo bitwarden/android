@@ -126,6 +126,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
@@ -400,11 +401,10 @@ class VaultItemListingViewModel @Inject constructor(
         vaultRepository.sync(forced = true)
     }
 
-    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            delay(250)
+            delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepository.sync(forced = false)
             } else {

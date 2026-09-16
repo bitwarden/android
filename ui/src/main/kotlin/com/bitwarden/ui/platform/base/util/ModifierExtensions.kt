@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -319,7 +319,7 @@ fun Modifier.standardHorizontalMargin(
     standardHorizontalMargin(
         compact = compact,
         medium = medium,
-        windowAdaptiveInfo = currentWindowAdaptiveInfo(),
+        windowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
     )
 
 /**

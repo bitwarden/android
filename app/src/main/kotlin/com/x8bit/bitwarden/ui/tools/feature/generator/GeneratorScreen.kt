@@ -18,7 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -368,7 +368,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     onUpgradedToPremiumCardDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
+    val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
     LazyColumn(
         state = lazyListState,
         modifier = modifier
