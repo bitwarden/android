@@ -4,11 +4,9 @@ package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import android.content.Intent
 import android.content.res.Resources
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,9 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,7 +50,6 @@ import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsMana
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
-import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -697,39 +692,19 @@ private fun CopyRow(
     text: Text,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalResources.current,
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = CardStyle.Bottom, onClick = onClick)
-            .semantics(mergeDescendants = true) {
-                contentDescription = text.toString(resources)
-            },
+    BitwardenTextRow(
+        text = text(),
+        onClick = onClick,
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier,
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                modifier = Modifier
-                    .semantics { hideFromAccessibility() }
-                    .padding(end = 16.dp)
-                    .weight(1f),
-                text = text(),
-                style = BitwardenTheme.typography.bodyLarge,
-                color = BitwardenTheme.colorScheme.text.primary,
-            )
-            Icon(
-                painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
-                contentDescription = stringResource(id = BitwardenString.copy),
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        }
+        Icon(
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
+            contentDescription = stringResource(id = BitwardenString.copy),
+            tint = BitwardenTheme.colorScheme.icon.primary,
+            modifier = Modifier.mirrorIfRtl(),
+        )
     }
 }
 
