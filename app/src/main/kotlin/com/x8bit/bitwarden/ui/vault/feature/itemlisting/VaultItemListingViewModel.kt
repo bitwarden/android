@@ -2872,7 +2872,9 @@ class VaultItemListingViewModel @Inject constructor(
                 this.map { vaultData ->
                     vaultData.copy(
                         decryptCipherListResult = vaultData.decryptCipherListResult.copy(
-                            successes = vaultData.decryptCipherListResult.successes
+                            successes = vaultData
+                                .decryptCipherListResult
+                                .successes
                                 .filter { it.type is CipherListViewType.Identity },
                             failures = emptyList(),
                         ),
