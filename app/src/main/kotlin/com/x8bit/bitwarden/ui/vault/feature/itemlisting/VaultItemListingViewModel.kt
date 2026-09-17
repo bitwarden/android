@@ -3064,7 +3064,7 @@ data class VaultItemListingState(
                             }
 
                             AutofillSelectionData.Type.IDENTITY -> {
-                                BitwardenString.identities_for_x.asText(it)
+                                BitwardenString.choose_an_identity.asText()
                             }
                         }
                     }
