@@ -16,6 +16,14 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 private const val DEFAULT_SCHEME: String = "https"
 
 /**
+ * The W3C HTML `autocomplete="address-line2"` token, surfaced verbatim by Chrome in
+ * [AssistStructure.ViewNode.getAutofillHints]. Kept as a raw string because no androidx
+ * [HintConstants] value equals it — [HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_EXTENDED_ADDRESS]
+ * is "extendedAddress", which Chrome does not emit.
+ */
+private const val AUTOFILL_HINT_ADDRESS_LINE_2: String = "address-line2"
+
+/**
  * The supported autofill Android View hints that predate identity autofill.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
@@ -42,6 +50,10 @@ private val SUPPORTED_IDENTITY_VIEW_HINTS: List<String> = listOf(
     HintConstants.AUTOFILL_HINT_PERSON_NAME_FAMILY,
     View.AUTOFILL_HINT_POSTAL_ADDRESS,
     HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_EXTENDED_ADDRESS,
+    HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_APT_NUMBER,
+    // Raw W3C `autocomplete` token Chrome reports verbatim; no androidx constant equals it.
+    AUTOFILL_HINT_ADDRESS_LINE_2,
     HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY,
     HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_REGION,
     HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_COUNTRY,
@@ -175,6 +187,9 @@ private fun AssistStructure.ViewNode.supportedAutofillHint(
         this.isPersonNameGivenField -> AutofillHint.Identity.PERSON_NAME_GIVEN
         this.isPersonNameMiddleField -> AutofillHint.Identity.PERSON_NAME_MIDDLE
         this.isPersonNameFamilyField -> AutofillHint.Identity.PERSON_NAME_FAMILY
+        // Must be checked before isPostalAddressFullField: a line-2 name like "billing_address_2"
+        // also substring-matches the postal-full terms, so the more specific check has to win.
+        this.isAddressExtendedField -> AutofillHint.Identity.ADDRESS_EXTENDED
         this.isPostalAddressFullField -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
         this.isAddressStreetField -> AutofillHint.Identity.ADDRESS_STREET
         this.isAddressLocalityField -> AutofillHint.Identity.ADDRESS_LOCALITY
@@ -227,6 +242,13 @@ private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
         View.AUTOFILL_HINT_POSTAL_ADDRESS -> AutofillHint.Identity.POSTAL_ADDRESS_FULL
         HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_STREET_ADDRESS -> {
             AutofillHint.Identity.ADDRESS_STREET
+        }
+
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_EXTENDED_ADDRESS,
+        HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_APT_NUMBER,
+        AUTOFILL_HINT_ADDRESS_LINE_2,
+            -> {
+            AutofillHint.Identity.ADDRESS_EXTENDED
         }
 
         HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_LOCALITY -> {
@@ -493,6 +515,20 @@ internal val AssistStructure.ViewNode.isAddressStreetField: Boolean
             ?.toLowerCaseAndStripNonAlpha()
             ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_STREET_HINTS) == true ||
         htmlInfo.isAddressStreetField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents an extended/secondary address (e.g.
+ * apartment, suite, unit) field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isAddressExtendedField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlphanumeric()
+        ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlphanumeric()
+            ?.containsAnyTerms(SUPPORTED_RAW_ADDRESS_EXTENDED_HINTS) == true ||
+        htmlInfo.isAddressExtendedField()
 
 /**
  * Check whether this [AssistStructure.ViewNode] represents a locality (city) field.
