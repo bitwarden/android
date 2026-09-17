@@ -1625,8 +1625,9 @@ class ViewNodeExtensionsTest {
         assertEquals(AutofillView.Identity.PostalCode(data = autofillViewData), actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return AutofillView Identity PhoneFull when autofillHints match`() {
+    fun `toAutofillView should return AutofillView Login Username when phone autofillHints match`() {
         every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PHONE)
 
         val actual = viewNode.toAutofillView(
@@ -1634,7 +1635,7 @@ class ViewNodeExtensionsTest {
             isIdentityAutofillEnabled = true,
         )
 
-        assertEquals(AutofillView.Identity.PhoneFull(data = autofillViewData), actual)
+        assertEquals(AutofillView.Login.Username(data = autofillViewData), actual)
     }
 
     //endregion Identity: official autofillHints dispatch (toAutofillView)
@@ -1654,7 +1655,6 @@ class ViewNodeExtensionsTest {
             "province" to AutofillView.Identity.AddressRegion(data = autofillViewData),
             "country" to AutofillView.Identity.AddressCountry(data = autofillViewData),
             "postalcode" to AutofillView.Identity.PostalCode(data = autofillViewData),
-            "mobile" to AutofillView.Identity.PhoneFull(data = autofillViewData),
             "company" to AutofillView.Identity.Company(data = autofillViewData),
             "socialsecurity" to AutofillView.Identity.Ssn(data = autofillViewData),
             "passport" to AutofillView.Identity.PassportNumber(data = autofillViewData),
@@ -1672,6 +1672,20 @@ class ViewNodeExtensionsTest {
 
             assertEquals(expected, actual, "idEntry \"$idEntry\" mapped to the wrong view")
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Login Username when idEntry matches phone heuristic and IdentityAutofill is enabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "mobile"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(AutofillView.Login.Username(data = autofillViewData), actual)
     }
 
     //region Identity: flag-off gate (isIdentityAutofillEnabled = false)
