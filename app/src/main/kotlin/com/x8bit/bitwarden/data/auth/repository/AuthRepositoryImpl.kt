@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.MasterPasswordUnlockData
@@ -529,13 +530,18 @@ internal class AuthRepositoryImpl(
     override suspend fun login(
         email: String,
         password: String,
-    ): LoginResult = identityService
-        .preLogin(email = email)
+    ): LoginResult = if (featureFlagManager.getFeatureFlag(key = FlagKey.SdkPreLogin)) {
+        authSdkSource.preLogin(email = email)
+    } else {
+        identityService
+            .preLogin(email = email)
+            .map { PasswordPreloginResponse(salt = email, kdf = it.kdfParams.toSdkParams()) }
+    }
         .flatMap {
             authSdkSource.hashPassword(
-                salt = email,
+                salt = it.salt,
                 password = password,
-                kdf = it.kdfParams.toSdkParams(),
+                kdf = it.kdf,
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         }

@@ -51,6 +51,7 @@ sealed class FlagKey<out T : Any> {
                 SendControlsExistingSends,
                 IdentityAutofill,
                 SdkPinUnlock,
+                SdkPreLogin,
             )
         }
     }
@@ -234,6 +235,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SdkPinUnlock : FlagKey<Boolean>() {
         override val keyName: String = "pm-31059-sdk-pin-unlock"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Pre-Login flow via the SDK.
+     */
+    data object SdkPreLogin : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27060-password-prelogin-from-sdk"
         override val defaultValue: Boolean = false
     }
 
