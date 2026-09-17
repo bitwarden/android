@@ -104,7 +104,7 @@ class CipherManagerImpl(
 
                     is CreateCipherResponseJson.Success -> {
                         vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
-                        CreateCipherResult.Success
+                        CreateCipherResult.Success(cipherId = response.cipher.id)
                     }
                 }
             }
@@ -150,7 +150,7 @@ class CipherManagerImpl(
                             userId = userId,
                             cipher = response.cipher.copy(collectionIds = collectionIds),
                         )
-                        CreateCipherResult.Success
+                        CreateCipherResult.Success(cipherId = response.cipher.id)
                     }
                 }
             }

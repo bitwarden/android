@@ -5,6 +5,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.addEditSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.navigateToViewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.viewSendDestination
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
@@ -66,6 +68,7 @@ import com.x8bit.bitwarden.ui.vault.feature.cardscanner.cardScanDestination
 import com.x8bit.bitwarden.ui.vault.feature.cardscanner.navigateToCardScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
@@ -205,6 +208,15 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 )
             },
             onNavigateToPlan = { navController.navigateToPlanModal() },
+            onNavigateToVaultItem = { cipherId, cipherType ->
+                navController.navigateToVaultItem(
+                    args = VaultItemArgs(
+                        vaultItemId = cipherId,
+                        cipherType = cipherType,
+                    ),
+                    navOptions = navOptions { popUpTo<VaultAddEditRoute> { inclusive = true } },
+                )
+            },
         )
         vaultMoveToOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },

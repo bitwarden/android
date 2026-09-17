@@ -2032,7 +2032,12 @@ class VaultAddEditViewModel @Inject constructor(
                         data = BitwardenSnackbarData(state.savedSnackbarMessage),
                         relay = SnackbarRelay.CIPHER_CREATED,
                     )
-                    sendEvent(event = VaultAddEditEvent.NavigateBack)
+                    sendEvent(
+                        event = VaultAddEditEvent.NavigateToVaultItem(
+                            cipherId = result.cipherId,
+                            cipherType = state.cipherType,
+                        ),
+                    )
                 }
             }
         }
@@ -3524,6 +3529,14 @@ sealed class VaultAddEditEvent {
      */
     data class NavigateToAttachments(
         val cipherId: String,
+    ) : VaultAddEditEvent()
+
+    /**
+     * Navigate to the newly created vault item's detail screen.
+     */
+    data class NavigateToVaultItem(
+        val cipherId: String,
+        val cipherType: VaultItemCipherType,
     ) : VaultAddEditEvent()
 
     /**

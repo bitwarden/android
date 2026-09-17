@@ -104,6 +104,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToVaultItemId: String? = null
+    private var onNavigateToVaultItemType: VaultItemCipherType? = null
     private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
     private var onNavigateToPlanCalled = false
@@ -151,6 +153,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
+                onNavigateToVaultItem = { id, type ->
+                    onNavigateToVaultItemId = id
+                    onNavigateToVaultItemType = type
+                },
                 viewModel = viewModel,
             )
         }
@@ -264,6 +270,15 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         val cipherId = "cipherId-1234"
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAttachments(cipherId))
         assertEquals(cipherId, onNavigateToAttachmentsId)
+    }
+
+    @Test
+    fun `on NavigateToVaultItem event should invoke onNavigateToVaultItem`() {
+        val cipherId = "cipherId-1234"
+        val cipherType = VaultItemCipherType.LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToVaultItem(cipherId, cipherType))
+        assertEquals(cipherId, onNavigateToVaultItemId)
+        assertEquals(cipherType, onNavigateToVaultItemType)
     }
 
     @Test
