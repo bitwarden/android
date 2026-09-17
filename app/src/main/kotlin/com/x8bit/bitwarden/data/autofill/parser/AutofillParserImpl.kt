@@ -353,10 +353,10 @@ private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
  * if nothing is focused.
  */
 private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? {
-    val focusedNonIdentity = firstOrNull { it.data.isFocused && it !is AutofillView.Identity }
-    val focusedAny = firstOrNull { it.data.isFocused }
-    val nonIdentity = firstOrNull { it !is AutofillView.Identity }
-    return focusedNonIdentity ?: focusedAny ?: nonIdentity ?: firstOrNull()
+    return this.firstOrNull { it.data.isFocused && it !is AutofillView.Identity }
+        ?: this.firstOrNull { it.data.isFocused }
+        ?: this.firstOrNull { it !is AutofillView.Identity }
+        ?: this.firstOrNull()
 }
 
 /**
