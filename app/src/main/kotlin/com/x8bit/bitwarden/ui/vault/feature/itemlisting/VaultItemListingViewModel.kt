@@ -3447,7 +3447,7 @@ data class VaultItemListingState(
              * An Identity item listing.
              */
             data object Identity : Vault() {
-                override val titleText: Text get() = BitwardenString.identities.asText()
+                override val titleText: Text get() = BitwardenString.choose_an_identity.asText()
                 override val hasFab: Boolean get() = true
             }
 
