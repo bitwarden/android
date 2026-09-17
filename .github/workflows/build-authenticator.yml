@@ -237,3 +237,24 @@ jobs:
         run: |
           bundle exec fastlane publishAuthenticatorReleaseToGooglePlayStore \
           serviceCredentialsFile:"$PLAY_STORE_CREDS_FILE" \
+
+      - name: Pin release to Source Fastlane track
+        # Gated to release/* branches only: main pushes build continuously and would
+        # otherwise overwrite this track just as often as "internal" does, reintroducing
+        # the exact staleness bug this step exists to fix. Release candidates are cut on
+        # dedicated release/<version>-rcN branches, so pinning only there keeps the
+        # candidate stable on Source Fastlane until the next RC is cut.
+        if: ${{ matrix.variant == 'aab' && env.PUBLISH_TO_PLAY_STORE == 'true' && startsWith(github.ref, 'refs/heads/release/') }}
+        env:
+          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
+          VERSION_CODE: ${{ needs.version.outputs.version_number || github.run_number }}
+          VERSION_NAME: ${{ needs.version.outputs.version_name }}
+        run: |
+          bundle exec fastlane promoteToProduction \
+          packageName:"com.bitwarden.authenticator" \
+          serviceCredentialsFile:"$PLAY_STORE_CREDS_FILE" \
+          track:"internal" \
+          trackPromoteTo:"Source Fastlane" \
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME" \
+          rolloutPercentage:"1"
