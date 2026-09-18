@@ -962,12 +962,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     eventFlow.awaitItem(),
                 )
             }
-            verify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
-                    relay = SnackbarRelay.CIPHER_CREATED,
-                )
-            }
             coVerify(exactly = 1) {
                 vaultRepository.createCipherInOrganization(any(), any())
             }
@@ -1088,7 +1082,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate to vault item not clearing special circumstances`() =
+    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate back without clearing special circumstances`() =
         runTest {
             val autofillData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
@@ -1130,10 +1124,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.NavigateToVaultItem(
-                        cipherId = DEFAULT_ITEM_ID,
-                        cipherType = VaultItemCipherType.LOGIN,
-                    ),
+                    VaultAddEditEvent.NavigateBack,
                     eventTurbine.awaitItem(),
                 )
             }
@@ -1495,8 +1486,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `in add mode, createCipherInOrganization success should send snackbar event and NavigateToVaultItem`() =
+    fun `in add mode, createCipherInOrganization success should send NavigateToVaultItem`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
@@ -1527,17 +1517,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            verify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
-                    relay = SnackbarRelay.CIPHER_CREATED,
-                )
-            }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode with a card, createCipherInOrganization success should send the card saved snackbar`() =
+    fun `in add mode with a card, createCipherInOrganization success should send NavigateToVaultItem`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 vaultItemCipherType = VaultItemCipherType.CARD,
@@ -1568,12 +1552,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         cipherType = VaultItemCipherType.CARD,
                     ),
                     awaitItem(),
-                )
-            }
-            verify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.card_saved.asText()),
-                    relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
         }

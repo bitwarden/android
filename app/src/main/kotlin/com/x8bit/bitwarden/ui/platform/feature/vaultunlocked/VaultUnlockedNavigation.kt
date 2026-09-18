@@ -213,6 +213,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     args = VaultItemArgs(
                         vaultItemId = cipherId,
                         cipherType = cipherType,
+                        showCreatedSnackbar = true,
                     ),
                     navOptions = navOptions { popUpTo<VaultAddEditRoute> { inclusive = true } },
                 )
