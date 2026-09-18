@@ -1341,7 +1341,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Identity)
         }
         composeTestRule
-            .onNodeWithText(text = "Choose an identity")
+            .onNodeWithText(text = "Identities")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
