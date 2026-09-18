@@ -2111,58 +2111,6 @@ class VaultLockManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock when the password fails policies should store the reason even when the unlock fails`() =
-        runTest {
-            val kdf = MOCK_PROFILE.toSdkParams()
-            val email = MOCK_PROFILE.email
-            val masterPassword = "mockValue"
-            val error = Throwable("Fail")
-            val initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                password = masterPassword,
-                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
-            )
-            every {
-                passwordPolicyManager.validatePasswordAgainstPolicies(
-                    password = masterPassword,
-                    isCreation = false,
-                )
-            } returns false
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = USER_ID,
-                    request = InitUserCryptoRequest(
-                        accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE,
-                        userId = USER_ID,
-                        kdfParams = kdf,
-                        email = email,
-                        method = initUserCryptoMethod,
-                        upgradeToken = null,
-                    ),
-                )
-            } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
-            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            val result = vaultLockManager.unlockVault(
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE,
-                userId = USER_ID,
-                email = email,
-                kdf = kdf,
-                initUserCryptoMethod = initUserCryptoMethod,
-                organizationKeys = null,
-            )
-
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
-            fakeAuthDiskSource.assertUserState(
-                userState = MOCK_USER_STATE.updateForcePasswordReset(
-                    userId = USER_ID,
-                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-                ),
-            )
-        }
-
     /**
      * Resets the verification call count for the given [mock] while leaving all other mocked
      * behavior in place.

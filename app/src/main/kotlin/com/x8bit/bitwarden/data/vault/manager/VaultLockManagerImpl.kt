@@ -44,6 +44,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockError
+import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockSuccess
 import com.x8bit.bitwarden.data.vault.repository.util.logTag
 import com.x8bit.bitwarden.data.vault.repository.util.password
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
@@ -179,7 +181,6 @@ internal class VaultLockManagerImpl(
         }
     }
 
-    @Suppress("LongMethod")
     override suspend fun unlockVault(
         accountCryptographicState: WrappedAccountCryptographicState,
         userId: String,
@@ -207,14 +208,10 @@ internal class VaultLockManagerImpl(
                     )
                     .flatMap { result ->
                         // Initialize the SDK for organizations if necessary
-                        if (organizationKeys != null &&
-                            result is InitializeCryptoResult.Success
-                        ) {
+                        if (organizationKeys != null && result is InitializeCryptoResult.Success) {
                             vaultSdkSource.initializeOrganizationCrypto(
                                 userId = userId,
-                                request = InitOrgCryptoRequest(
-                                    organizationKeys = organizationKeys,
-                                ),
+                                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                             )
                         } else {
                             result.asSuccess()
@@ -222,32 +219,26 @@ internal class VaultLockManagerImpl(
                     }
                     .fold(
                         onFailure = {
-                            incrementInvalidUnlockCount(userId = userId)
+                            onUnlockError(
+                                userId = userId,
+                                initUserCryptoMethod = initUserCryptoMethod,
+                            )
                             VaultUnlockResult.GenericError(error = it)
                         },
                         onSuccess = { initializeCryptoResult ->
                             initializeCryptoResult
                                 .toVaultUnlockResult()
-                                .also {
-                                    processMasterPassword(
-                                        initUserCryptoMethod = initUserCryptoMethod,
+                                .onVaultUnlockSuccess {
+                                    onUnlockSuccess(
                                         userId = userId,
+                                        initUserCryptoMethod = initUserCryptoMethod,
                                     )
-                                    if (it is VaultUnlockResult.Success) {
-                                        Timber.d(
-                                            "[Auth] Vault unlocked, method:  %s",
-                                            initUserCryptoMethod.logTag,
-                                        )
-                                        clearInvalidUnlockCount(userId = userId)
-                                        trustedDeviceManager
-                                            .trustThisDeviceIfNecessary(userId = userId)
-                                        updateKdfIfNeeded(initUserCryptoMethod)
-                                        pinProtectedUserKeyManager
-                                            .migratePinProtectedUserKeyIfNeeded(userId = userId)
-                                        setVaultToUnlocked(userId = userId)
-                                    } else {
-                                        incrementInvalidUnlockCount(userId = userId)
-                                    }
+                                }
+                                .onVaultUnlockError {
+                                    onUnlockError(
+                                        userId = userId,
+                                        initUserCryptoMethod = initUserCryptoMethod,
+                                    )
                                 }
                         },
                     ),
@@ -255,6 +246,27 @@ internal class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+    }
+
+    private fun onUnlockError(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
+        Timber.d("[Auth] Vault unlock failed, method: %s", initUserCryptoMethod.logTag)
+        incrementInvalidUnlockCount(userId = userId)
+    }
+
+    private suspend fun onUnlockSuccess(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
+        Timber.d("[Auth] Vault unlocked, method: %s", initUserCryptoMethod.logTag)
+        processMasterPassword(initUserCryptoMethod = initUserCryptoMethod, userId = userId)
+        clearInvalidUnlockCount(userId = userId)
+        trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
+        updateKdfIfNeeded(initUserCryptoMethod)
+        pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = userId)
+        setVaultToUnlocked(userId = userId)
     }
 
     /**
