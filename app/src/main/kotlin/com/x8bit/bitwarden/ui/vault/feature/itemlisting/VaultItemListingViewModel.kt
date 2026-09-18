@@ -2867,6 +2867,20 @@ class VaultItemListingViewModel @Inject constructor(
                     )
                 }
             }
+
+            AutofillSelectionData.Type.IDENTITY -> {
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = vaultData
+                                .decryptCipherListResult
+                                .successes
+                                .filter { it.type is CipherListViewType.Identity },
+                            failures = emptyList(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -3039,6 +3053,9 @@ data class VaultItemListingState(
     val appBarTitle: Text
         get() = autofillSelectionData
             ?.let { data ->
+                if (data.type == AutofillSelectionData.Type.IDENTITY) {
+                    return@let BitwardenString.choose_an_identity.asText()
+                }
                 data.uri
                     ?.toHostOrPathOrNull()
                     ?.let {
@@ -3047,9 +3064,7 @@ data class VaultItemListingState(
                                 BitwardenString.select_a_card_for_x.asText(it)
                             }
 
-                            AutofillSelectionData.Type.LOGIN -> {
-                                BitwardenString.items_for_uri.asText(it)
-                            }
+                            else -> BitwardenString.items_for_uri.asText(it)
                         }
                     }
             }
