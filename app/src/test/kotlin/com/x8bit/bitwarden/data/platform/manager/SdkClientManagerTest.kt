@@ -3,11 +3,16 @@ package com.x8bit.bitwarden.data.platform.manager
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
+import com.bitwarden.sdk.LogLevel
+import com.bitwarden.sdk.initLogger
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.just
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -28,16 +33,21 @@ class SdkClientManagerTest {
     private val sdkPlatformApiFactory: SdkPlatformApiFactory = mockk {
         every { getServerCommunicationConfigPlatformApi() } returns mockk()
     }
+    private val sdkLoggerFactory: SdkLoggerFactory = mockk {
+        every { logLevel } returns LogLevel.INFO
+        every { getLogCallback() } returns mockk()
+    }
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::isBuildVersionAtLeast)
+        mockkStatic(::isBuildVersionAtLeast, ::initLogger)
         every { isBuildVersionAtLeast(any()) } returns true
+        every { initLogger(callback = any(), level = any()) } just runs
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionAtLeast)
+        unmockkStatic(::isBuildVersionAtLeast, ::initLogger)
     }
 
     @Test
@@ -106,5 +116,6 @@ class SdkClientManagerTest {
         featureFlagManager = mockk(),
         sdkRepoFactory = sdkRepoFactory,
         sdkPlatformApiFactory = sdkPlatformApiFactory,
+        sdkLoggerFactory = sdkLoggerFactory,
     )
 }
