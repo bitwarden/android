@@ -6,7 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
-import androidx.core.os.persistableBundleOf
+import android.os.PersistableBundle
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bitwarden.core.util.isBuildVersionAtLeast
@@ -27,13 +27,16 @@ class ClearClipboardWorker(
             ClipData
                 .newPlainText("", "")
                 .apply {
-                    description.extras = persistableBundleOf(
-                        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
-                            ClipDescription.EXTRA_IS_SENSITIVE to true
-                        } else {
-                            "android.content.extra.IS_SENSITIVE" to true
-                        },
-                    )
+                    description.extras = PersistableBundle().apply {
+                        putBoolean(
+                            if (isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
+                                ClipDescription.EXTRA_IS_SENSITIVE
+                            } else {
+                                "android.content.extra.IS_SENSITIVE"
+                            },
+                            true,
+                        )
+                    }
                 },
         )
         clipboardManager.clearPrimaryClip()
