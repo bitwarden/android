@@ -1455,4 +1455,7 @@
     <string name="only_allows_invited_users_to_create_accounts">%1$s dozvoljava samo pozvanim korisnicima da kreiraju naloge.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

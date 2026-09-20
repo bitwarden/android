@@ -1460,6 +1460,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="receive_24_7_priority_support">Priorytetowe wsparcie klienta</string>
     <string name="account_creation_restricted">Tworzenie kont zostało ograniczone</string>
     <string name="only_allows_invited_users_to_create_accounts">Serwer %1$s umożliwia rejestrację tylko zaproszonym użytkownikom.</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Zmniejsz %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zwiększ %1$s</string>
+    <string name="use_this_passphrase">Użyj tego hasła wyrazowego</string>
+    <string name="use_this_password">Użyj tego hasła</string>
+    <string name="use_this_username">Użyj tej nazwy użytkownika</string>
 </resources>

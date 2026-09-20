@@ -1453,4 +1453,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ļauj izveidot kontus tikai uzaicinātiem lietotājiem.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Samazināt %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Palielināt %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

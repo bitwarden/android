@@ -1433,4 +1433,7 @@
     <string name="only_allows_invited_users_to_create_accounts">%1$s は招待されたユーザーのみアカウントを作成できます。</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s を減らす</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s を増やす</string>
+    <string name="use_this_passphrase">このパスフレーズを使用する</string>
+    <string name="use_this_password">このパスワードを使用する</string>
+    <string name="use_this_username">このユーザー名を使用する</string>
 </resources>

@@ -1442,4 +1442,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s csak a meghívott felhasználók számára teszi lehetővé fiókok létrehozását.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Csökkentés %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Növelés %1$s</string>
+    <string name="use_this_passphrase">Jelmondat használata</string>
+    <string name="use_this_password">Jelszó használata</string>
+    <string name="use_this_username">Felhasználónév használata</string>
 </resources>

@@ -21,7 +21,7 @@
     <string name="enter_pin">Ange din PIN-kod</string>
     <string name="favorites">Favoriter</string>
     <string name="folder">Mapp</string>
-    <string name="folder_created">Ny mapp skapad.</string>
+    <string name="folder_created">Ny mapp skapad</string>
     <string name="folder_deleted">Mapp borttagen.</string>
     <string name="folder_none">Ingen mapp</string>
     <string name="folder_updated">Mappen uppdaterades</string>
@@ -44,8 +44,8 @@
     <string name="master_password_required">Huvudlösenord (obligatoriskt)</string>
     <string name="new_master_password_required">Nytt huvudlösenord (krävs)</string>
     <string name="more_options">Fler alternativ</string>
-    <string name="my_folder">My folder</string>
-    <string name="my_folders">My folders</string>
+    <string name="my_folder">Min mapp</string>
+    <string name="my_folders">Mina mappar</string>
     <string name="my_vault">Mitt valv</string>
     <string name="name">Namn</string>
     <string name="item_name_required">Objektnamn (krävs)</string>
@@ -149,14 +149,14 @@
     <string name="select">Välj</string>
     <string name="item_details">Objektinformation</string>
     <string name="item_updated">Objektet uppdaterades</string>
-    <string name="bank_account_saved">Bank account saved</string>
-    <string name="card_saved">Card saved</string>
-    <string name="identity_saved">Identity saved</string>
-    <string name="license_saved">License saved</string>
-    <string name="login_saved">Login saved</string>
-    <string name="passport_saved">Passport saved</string>
-    <string name="secure_note_saved">Secure note saved</string>
-    <string name="ssh_key_saved">SSH key saved</string>
+    <string name="bank_account_saved">Bankkonto sparat</string>
+    <string name="card_saved">Kort sparat</string>
+    <string name="identity_saved">Identitet sparad</string>
+    <string name="license_saved">Licens sparad</string>
+    <string name="login_saved">Inloggning sparad</string>
+    <string name="passport_saved">Pass sparat</string>
+    <string name="secure_note_saved">Säker anteckning sparad</string>
+    <string name="ssh_key_saved">SSH-nyckel sparad</string>
     <string name="submitting">Skickar in…</string>
     <string name="syncing">Synkroniserar…</string>
     <string name="syncing_complete">Synkronisering slutförd</string>
@@ -198,7 +198,7 @@
     <string name="attachments">Bilagor</string>
     <string name="unable_to_download_file">Kunde ej hämta fil.</string>
     <string name="downloading">Hämtar ner…</string>
-    <string name="attachment_large_warning">Denna bilaga är %1$s i storlek. Är du säker på att du vill ladda ner den till din enhet?</string>
+    <string name="attachment_large_warning">Den här filen är <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Vill du hämta den?</string>
     <string name="authenticator_key">Autentiseringsnyckel (TOTP)</string>
     <string name="verification_code_totp">Verifieringskod (TOTP)</string>
     <string name="authenticator_key_added">Autentiseringsnyckel tillagd.</string>
@@ -292,9 +292,9 @@ Skanningen sker automatiskt.</string>
     <string name="vault_is_locked">Valvet är låst</string>
     <string name="go_to_my_vault">Gå till mitt valv</string>
     <string name="collections">Samlingar</string>
-    <string name="shared_folders">Shared folders</string>
+    <string name="shared_folders">Delade mappar</string>
     <string name="no_items_collection">Det finns inga objekt i denna samling.</string>
-    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Det finns inga objekt i den här delade mappen.</string>
     <string name="no_items_folder">Det finns inga objekt i den här mappen.</string>
     <string name="no_items_trash">Det finns inga objekt i papperskorgen.</string>
     <string name="autofill_accessibility_summary">Hjälp med att fylla i fält för användarnamn och lösenord i andra appar och på webben.</string>
@@ -349,21 +349,21 @@ Skanningen sker automatiskt.</string>
     <string name="move_up">Flytta upp</string>
     <string name="owner">Ägare</string>
     <string name="no_collections_to_list">Det finns inga samlingar att visa.</string>
-    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
+    <string name="there_are_no_shared_folders_to_list">Det finns inga delade mappar att lista.</string>
     <string name="moved_item_to_org">%1$s flyttades till %2$s.</string>
     <string name="select_one_collection">Du måste markera minst en samling.</string>
-    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Du måste välja minst en delad mapp.</string>
     <string name="share">Dela</string>
     <string name="move_to_organization">Flytta till organisation</string>
     <string name="no_orgs_to_list">Inga organisationer att lista.</string>
     <string name="move_to_org_desc">Välj en organisation som du vill flytta detta objektet till. Flytt till en organisation överför ägandet av objektet till den organisationen. Du kommer inte längre att vara direkt ägare till detta objekt när det har flyttats.</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="no_vaults_to_list">Det finns inga valv att lista.</string>
+    <string name="move_to_vault_desc">Välj ett valv som du vill flytta objektet till. När objektet flyttas till ett annat valv överförs ägarskapet till den organisationen. Du är inte längre direkt ägare till objektet när det har flyttats.</string>
     <string name="number_of_words">Antal ord</string>
     <string name="passphrase">Lösenfras</string>
     <string name="word_separator">Ordavgränsare</string>
     <string name="clear">Rensa</string>
-    <string name="open_calendar">open calendar</string>
+    <string name="open_calendar">öppna kalender</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Det finns inga mappar att lista.</string>
     <string name="fingerprint_phrase">Fingeravtrycksfras</string>
@@ -473,7 +473,7 @@ Skanningen sker automatiskt.</string>
     <string name="deletion_date">Raderingsdatum</string>
     <string name="deletion_time">Raderingstid</string>
     <string name="deletion_date_info">Denna Send kommer att raderas permanent på angivet datum och klockslag.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Detta datum tillämpas av din organisation</string>
     <string name="who_can_view">Vem kan se</string>
     <string name="anyone_with_the_link">Vem som helst med länken</string>
     <string name="anyone_with_link_can_view_send">Vem som helst med denna länk kan se denna Send</string>
@@ -490,7 +490,7 @@ Skanningen sker automatiskt.</string>
     <string name="maximum_access_count">Maximalt antal åtkomster</string>
     <string name="maximum_access_count_info">Om angivet kommer användare inte längre kunna komma åt denna Send när det maximala antalet åtkomster har uppnåtts.</string>
     <string name="maximum_access_count_reached">Det maximala antalet åtkomster har uppnåtts</string>
-    <string name="current_access_count">Nuvarande antal åtkomster</string>
+    <string name="current_access_count">Nuvarande antal åtkomster: %s</string>
     <string name="remove_password">Ta bort lösenord</string>
     <string name="removing_send_password">Tar bort lösenord</string>
     <string name="password_removed">Lösenordet togs bort</string>
@@ -511,7 +511,7 @@ Skanningen sker automatiskt.</string>
     <string name="two_days">2 dagar</string>
     <string name="three_days">3 dagar</string>
     <string name="seven_days">7 dagar</string>
-    <string name="fourteen_days">14 days</string>
+    <string name="fourteen_days">14 dagar</string>
     <string name="thirty_days">30 dagar</string>
     <string name="custom">Anpassad</string>
     <string name="custom_timeout">Anpassad tidsgräns</string>
@@ -520,11 +520,11 @@ Skanningen sker automatiskt.</string>
     <string name="about_send">Om Send</string>
     <string name="hide_email">Dölj min e-postadress för mottagare</string>
     <string name="send_options_policy_in_effect">En eller flera organisationsriktlinjer påverkar dina Send-inställningar.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="organization_policy_restriction">Begränsning enligt organisationspolicy</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Detta Send uppfyller inte organisationens policy för Send och upphör automatiskt att gälla på det angivna borttagningsdatumet.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text-Send är inte tillåtna för din organisation och detta Send upphör automatiskt att gälla på det angivna borttagningsdatumet.</string>
+    <string name="to_edit_this_send_make_a_copy">Skapa en kopia om du vill redigera detta Send. Om detta Send får upphöra att gälla på det angivna borttagningsdatumet behövs ingen åtgärd.</string>
+    <string name="make_a_copy">Skapa en kopia</string>
     <string name="send_file_premium_required">Gratiskonton är begränsade till att endast dela text. Ett premium-medlemskap krävs för att använda filer med Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Delning med specifika personer är en Premiumfunktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="password_prompt">Återupprepa huvudlösenord</string>
@@ -536,7 +536,7 @@ Skanningen sker automatiskt.</string>
     <string name="remove_master_password">Ta bort huvudlösenord</string>
     <string name="leave_organization">Lämna organisation</string>
     <string name="leave_organization_name">Lämna %1$s?</string>
-    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna [%1$s]?</string>
+    <string name="are_you_sure_you_want_to_leave_organization">Är du säker på att du vill lämna?</string>
     <string name="leave_organization_button">Lämna %1$s</string>
     <string name="leave_organization_warning">Genom att avböja kommer dina personliga saker att finnas kvar på ditt konto, men du kommer att förlora åtkomst till delade objekt och organisationsfunktioner.\n\nKontakta administratören för att återfå åtkomst.</string>
     <string name="contact_your_admin_to_regain_access">Kontakta administratören för att återfå åtkomst.</string>
@@ -710,7 +710,7 @@ Vill du byta till detta konto?</string>
     <string name="logging_in_on">Logga in på</string>
     <string name="logging_in_on_with_colon">Loggar in på:</string>
     <string name="vault">Valv</string>
-    <string name="select_vault">Select vault</string>
+    <string name="select_vault">Välj valv</string>
     <string name="appearance">Utseende</string>
     <string name="account_security">Kontosäkerhet</string>
     <string name="bitwarden_help_center">Bitwarden Hjälpcenter</string>
@@ -857,13 +857,13 @@ Vill du byta till detta konto?</string>
     <string name="give_your_vault_a_head_start">Ge ditt valv ett försprång</string>
     <string name="class_3_biometrics_description">Låsa upp med biometri kräver stark biometrisk autentisering och är kanske inte kompatibelt med alla biometriska alternativ på den här enheten.</string>
     <string name="class_2_biometrics_description">Låsa upp med biometri kräver stark biometrisk autentisering och är inte kompatibelt med de biometriska alternativ som finns tillgängliga på den här enheten.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager"><annotation emphasis="bold">Logga in på</annotation> din dator med <annotation emphasis="bold">din nuvarande webbläsare eller lösenordshanterare.</annotation></string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">På datorn <annotation emphasis="bold">loggar du in på din aktuella webbläsare eller lösenordshanterare.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Exportera dina lösenord.</annotation> Det här alternativet finns vanligtvis i dina inställningar.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Välj Importera data</annotation> i webbappen och sedan Klar nedan för att avsluta synkroniseringen.</string>
     <string name="step_1_of_3">Steg 1 av 3</string>
     <string name="export_your_saved_logins">Exportera dina sparade inloggningar</string>
     <string name="delete_this_file_after_import_is_complete">Du kan ta bort denna fil efter importen är färdig.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Öppna en ny webbläsarflik på din dator och gå till %1$s</string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Öppna en ny webbläsarflik på datorn och <annotation emphasis="bold">gå till <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Logga in på Bitwardens webbapp.</string>
     <string name="step_2_of_3">Steg 2 av 3</string>
     <string name="log_in_to_bitwarden">Logga in på Bitwarden</string>
@@ -1003,7 +1003,7 @@ Vill du byta till detta konto?</string>
     <string name="no_logs_recorded">Inga loggar registrerade</string>
     <string name="experiencing_an_issue">Upplever du ett problem?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Aktivera tillfällig loggning för att samla in och inspektera loggar lokalt. När det är aktiverat kan programstatus och nätverksanrop loggas - aldrig känslig valvinformation.</string>
-    <string name="to_get_started_set_a_logging_duration">För att komma igång ställer du in en loggningsperiod. Loggningen stängs av automatiskt efter denna period, vilket ger dig tid att registrera aktivitet och samtidigt återskapa eventuella problem.</string>
+    <string name="to_get_started_set_a_logging_duration">För att komma igång ställer du in en loggningsperiod. Loggningen  stängs av automatiskt efter denna period, vilket ger dig tid att registrera aktivitet och samtidigt återskapa  eventuella problem.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Loggar raderas automatiskt efter 30 dagar. Bitwarden kan endast komma åt dina loggdata när du delar dem.</string>
     <string name="for_details_on_what_is_and_isnt_logged">För mer information om vad som loggas och inte loggas, besök\nBitwardens<annotation link="helpCenter">hjälpcenter.</annotation></string>
     <string name="logging_duration">Loggningens varaktighet</string>
@@ -1263,7 +1263,7 @@ Vill du byta till detta konto?</string>
     <string name="invalid_email_addresses">Ogiltiga e-postadresser</string>
     <string name="one_or_more_email_addresses_are_incorrect">En eller flera e-postadresser är felaktiga. Granska och försök igen.</string>
     <string name="no_email_addresses_entered">Inga e-postadresser har angetts</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Inkludera endast följande domäner: %1$s. Kontrollera och försök igen.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Ange minst en giltig e-postadress för att dela denna Send.</string>
     <string name="sync_with_browser">Synkronisera med webbläsaren</string>
     <string name="sync_with_browser_description">För att ansluta till %1$s, synkronisera din standardwebbläsare med Bitwarden-mobilappen. När din webbläsare öppnas, slutför inloggningen om du uppmanas.\nNär synkroniseringen är klar kommer du tillbaka till den här appen.</string>
@@ -1441,6 +1441,9 @@ Vill du byta till detta konto?</string>
     <string name="receive_24_7_priority_support">Få 24/7 prioritetssupport</string>
     <string name="account_creation_restricted">Kontoskapande begränsat</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s tillåter endast inbjudna användare att skapa konton.</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Minska %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Öka %1$s</string>
+    <string name="use_this_passphrase">Använd den här lösenordsfrasen</string>
+    <string name="use_this_password">Använd det här lösenordet</string>
+    <string name="use_this_username">Använd det här användarnamnet</string>
 </resources>
