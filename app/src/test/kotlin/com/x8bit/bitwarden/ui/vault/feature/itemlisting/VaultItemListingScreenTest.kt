@@ -1371,7 +1371,6 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `topBar title should be displayed for identity autofill selection regardless of the uri`() {
         mutableStateFlow.update {
