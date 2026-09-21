@@ -3053,23 +3053,18 @@ data class VaultItemListingState(
     val appBarTitle: Text
         get() = autofillSelectionData
             ?.let { data ->
-                if (data.type == AutofillSelectionData.Type.IDENTITY) {
-                    return@let BitwardenString.choose_an_identity.asText()
-                }
-                data.uri
-                    ?.toHostOrPathOrNull()
-                    ?.let {
-                        when (data.type) {
-                            AutofillSelectionData.Type.CARD -> {
-                                BitwardenString.select_a_card_for_x.asText(it)
-                            }
+                when (data.type) {
+                    AutofillSelectionData.Type.IDENTITY ->
+                        BitwardenString.choose_an_identity.asText()
 
-                            AutofillSelectionData.Type.LOGIN,
-                                -> {
-                                BitwardenString.items_for_uri.asText(it)
-                            }
-                        }
-                    }
+                    AutofillSelectionData.Type.CARD -> data.uri
+                        ?.toHostOrPathOrNull()
+                        ?.let { BitwardenString.select_a_card_for_x.asText(it) }
+
+                    AutofillSelectionData.Type.LOGIN -> data.uri
+                        ?.toHostOrPathOrNull()
+                        ?.let { BitwardenString.items_for_uri.asText(it) }
+                }
             }
             ?: createCredentialRequest
                 ?.relyingPartyIdOrNull
