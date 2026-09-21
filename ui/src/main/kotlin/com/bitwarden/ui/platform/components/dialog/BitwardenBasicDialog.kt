@@ -41,9 +41,10 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param title The optional title to be displayed by the dialog.
  * @param message The message to be displayed under the [title] by the dialog.
  * @param confirmButtonLabel The label for the confirm button.
- * @param throwable An optional [Throwable] that can be shared from this dialog.
  * @param onDismissRequest A lambda that is invoked when the user has requested to dismiss the
  * dialog, whether by tapping "OK", tapping outside the dialog, or pressing the back button.
+ * @param throwable An optional [Throwable] that can be shared from this dialog.
+ * @param dismissOnClickOutside Indicates that tapping outside the dialog should dismiss the dialog.
  */
 @Suppress("LongMethod")
 @Composable
@@ -53,11 +54,15 @@ fun BitwardenBasicDialog(
     confirmButtonLabel: String = stringResource(id = BitwardenString.okay),
     onDismissRequest: () -> Unit,
     throwable: Throwable? = null,
+    dismissOnClickOutside: Boolean = true,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnClickOutside = dismissOnClickOutside,
+        ),
     ) {
         val configuration = LocalConfiguration.current
         val scrollState = rememberScrollState()
