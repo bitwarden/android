@@ -3054,16 +3054,21 @@ data class VaultItemListingState(
         get() = autofillSelectionData
             ?.let { data ->
                 when (data.type) {
-                    AutofillSelectionData.Type.IDENTITY ->
+                    AutofillSelectionData.Type.IDENTITY -> {
                         BitwardenString.choose_an_identity.asText()
+                    }
 
-                    AutofillSelectionData.Type.CARD -> data.uri
-                        ?.toHostOrPathOrNull()
-                        ?.let { BitwardenString.select_a_card_for_x.asText(it) }
+                    AutofillSelectionData.Type.CARD -> {
+                        data.uri
+                            ?.toHostOrPathOrNull()
+                            ?.let { BitwardenString.select_a_card_for_x.asText(it) }
+                    }
 
-                    AutofillSelectionData.Type.LOGIN -> data.uri
-                        ?.toHostOrPathOrNull()
-                        ?.let { BitwardenString.items_for_uri.asText(it) }
+                    AutofillSelectionData.Type.LOGIN -> {
+                        data.uri
+                            ?.toHostOrPathOrNull()
+                            ?.let { BitwardenString.items_for_uri.asText(it) }
+                    }
                 }
             }
             ?: createCredentialRequest
@@ -3156,8 +3161,7 @@ data class VaultItemListingState(
          * Displays the overwrite passkey confirmation prompt to the user.
          */
         @Parcelize
-        data class OverwritePasskeyConfirmationPrompt(val cipherViewId: String) :
-            DialogState()
+        data class OverwritePasskeyConfirmationPrompt(val cipherViewId: String) : DialogState()
 
         /**
          * Represents a dialog to prompt the user for their master password as part of the
