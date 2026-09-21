@@ -1434,4 +1434,7 @@
     <string name="only_allows_invited_users_to_create_accounts">%1$s 仅允许受邀用户创建账户。</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">减少 %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">增加 %1$s</string>
+    <string name="use_this_passphrase">使用此密码短语</string>
+    <string name="use_this_password">使用此密码</string>
+    <string name="use_this_username">使用此用户名</string>
 </resources>

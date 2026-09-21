@@ -1442,4 +1442,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
+    <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
+    <string name="use_this_password">Bu parolayı kullan</string>
+    <string name="use_this_username">Bu kullanıcı adını kullan</string>
 </resources>

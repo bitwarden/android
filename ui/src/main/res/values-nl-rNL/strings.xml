@@ -1443,4 +1443,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s staat het aanmaken van accounts alleen toe aan uitgenodigde gebruikers.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s verlagen</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s verhogen</string>
+    <string name="use_this_passphrase">Deze wachtwoordzin gebruiken</string>
+    <string name="use_this_password">Dit wachtwoord gebruiken</string>
+    <string name="use_this_username">Deze gebruikersnaam gebruiken</string>
 </resources>
