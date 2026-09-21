@@ -2111,9 +2111,8 @@ class VaultLockManagerTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock when the password fails policies should store the reason even when the unlock fails`() =
+    fun `unlockVault with initializeCrypto failure should not process the master password`() =
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
@@ -2141,7 +2140,7 @@ class VaultLockManagerTest {
                         upgradeToken = null,
                     ),
                 )
-            } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
+            } returns error.asFailure()
             mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
@@ -2154,13 +2153,23 @@ class VaultLockManagerTest {
                 organizationKeys = null,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
-            fakeAuthDiskSource.assertUserState(
-                userState = MOCK_USER_STATE.updateForcePasswordReset(
-                    userId = USER_ID,
-                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-                ),
-            )
+            assertEquals(VaultUnlockResult.GenericError(error = error), result)
+            fakeAuthDiskSource.assertUserState(userState = MOCK_USER_STATE)
+            fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID, passwordHash = null)
+            verify(exactly = 0) {
+                passwordPolicyManager.validatePasswordAgainstPolicies(
+                    password = any(),
+                    isCreation = any(),
+                )
+            }
+            coVerify(exactly = 0) {
+                authSdkSource.hashPassword(
+                    salt = any(),
+                    password = any(),
+                    kdf = any(),
+                    purpose = any(),
+                )
+            }
         }
 
     /**
