@@ -77,6 +77,7 @@ fun createMockCipherListView(
     subtitle = subtitle,
     hasOldAttachments = hasOldAttachments,
     copyableFields = copyableFields,
+    partial = false,
 )
 
 /**

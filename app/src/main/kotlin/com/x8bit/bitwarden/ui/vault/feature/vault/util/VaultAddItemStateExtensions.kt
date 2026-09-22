@@ -58,6 +58,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(
         revisionDate = common.originalCipher?.revisionDate ?: clock.instant(),
         archivedDate = common.originalCipher?.archivedDate?.takeIf { isPremiumUser },
         attachmentDecryptionFailures = common.originalCipher?.attachmentDecryptionFailures,
+        partial = false,
 
         // Type specific section
         type = type.toCipherType(),
