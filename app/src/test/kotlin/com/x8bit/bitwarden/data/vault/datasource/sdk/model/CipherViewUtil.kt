@@ -115,6 +115,7 @@ fun createMockCipherView(
         viewPassword = true,
         localData = null,
         attachmentDecryptionFailures = null,
+        partial = false,
     )
 
 /**
