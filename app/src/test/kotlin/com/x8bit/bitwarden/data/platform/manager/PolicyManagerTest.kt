@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.platform.manager
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SendAccessTypeJson
@@ -39,15 +38,8 @@ class PolicyManagerTest {
         every { getOrganizationsFlow(USER_ID) } returns mutableOrganizationsFlow
     }
     private val authSdkSource: AuthSdkSource = mockk()
-    private val mutablePoliciesInAcceptedStateFlagFlow = MutableStateFlow(true)
     private val mutableSendControlsFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState)
-        } returns mutablePoliciesInAcceptedStateFlagFlow
-        every { getFeatureFlag(key = FlagKey.PoliciesInAcceptedState) } answers {
-            mutablePoliciesInAcceptedStateFlagFlow.value
-        }
         every {
             getFeatureFlagFlow(key = FlagKey.SendControls)
         } returns mutableSendControlsFlagFlow
@@ -120,124 +112,6 @@ class PolicyManagerTest {
                     mutablePolicyFlow.value = listOf(storedPolicyTwo)
 
                     assertEquals(listOf(expectedPolicyTwo), awaitItem())
-                }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getActivePoliciesFlow when feature flag is false should emit policies using legacy filtering`() =
-        runTest {
-            mutablePoliciesInAcceptedStateFlagFlow.value = false
-
-            val userStateJson = mockk<UserStateJson> {
-                every { activeUserId } returns USER_ID
-            }
-            val organizations = createMockOrganizationNetwork(
-                number = 1,
-                isEnabled = true,
-                shouldUsePolicies = true,
-            )
-            val storedPolicyOne = createMockPolicy(
-                isEnabled = true,
-                number = 1,
-                organizationId = organizations.id,
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            )
-            val expectedPolicyOne = createMockPolicyView(
-                enabled = true,
-                number = 1,
-                organizationId = organizations.id,
-                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
-            )
-            val storedPolicyTwo = createMockPolicy(
-                isEnabled = true,
-                number = 2,
-                organizationId = organizations.id,
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            )
-            val expectedPolicyTwo = createMockPolicyView(
-                enabled = true,
-                number = 2,
-                organizationId = organizations.id,
-                type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
-            )
-
-            mutableUserStateFlow.value = userStateJson
-            mutableOrganizationsFlow.value = listOf(organizations)
-            mutablePolicyFlow.value = listOf(storedPolicyOne)
-
-            policyManager
-                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
-                .test {
-                    assertEquals(listOf(expectedPolicyOne), awaitItem())
-
-                    mutablePolicyFlow.value = listOf(storedPolicyOne, storedPolicyTwo)
-                    assertEquals(listOf(expectedPolicyOne, expectedPolicyTwo), awaitItem())
-                }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getActivePoliciesFlow when feature flag is false should emit empty list when organization status is below ACCEPTED`() =
-        runTest {
-            mutablePoliciesInAcceptedStateFlagFlow.value = false
-
-            val userStateJson = mockk<UserStateJson> {
-                every { activeUserId } returns USER_ID
-            }
-            val organizations = createMockOrganizationNetwork(
-                number = 1,
-                isEnabled = true,
-                shouldUsePolicies = true,
-                status = OrganizationStatusType.INVITED,
-            )
-            val storedPolicy = createMockPolicy(
-                isEnabled = true,
-                number = 1,
-                organizationId = organizations.id,
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            )
-
-            mutableUserStateFlow.value = userStateJson
-            mutableOrganizationsFlow.value = listOf(organizations)
-            mutablePolicyFlow.value = listOf(storedPolicy)
-
-            policyManager
-                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
-                .test {
-                    assertEquals(emptyList<PolicyView>(), awaitItem())
-                }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getActivePoliciesFlow when feature flag is false should emit empty list when organization does not use policies`() =
-        runTest {
-            mutablePoliciesInAcceptedStateFlagFlow.value = false
-
-            val userStateJson = mockk<UserStateJson> {
-                every { activeUserId } returns USER_ID
-            }
-            val organizations = createMockOrganizationNetwork(
-                number = 1,
-                isEnabled = true,
-                shouldUsePolicies = false,
-            )
-            val storedPolicy = createMockPolicy(
-                isEnabled = true,
-                number = 1,
-                organizationId = organizations.id,
-                type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
-            )
-
-            mutableUserStateFlow.value = userStateJson
-            mutableOrganizationsFlow.value = listOf(organizations)
-            mutablePolicyFlow.value = listOf(storedPolicy)
-
-            policyManager
-                .getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
-                .test {
-                    assertEquals(emptyList<PolicyView>(), awaitItem())
                 }
         }
 
@@ -995,76 +869,75 @@ class PolicyManagerTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `getEffectiveSendPolicyFlow should re-emit when the underlying policies change`() = runTest {
-        val userStateJson = mockk<UserStateJson> {
-            every { activeUserId } returns USER_ID
-        }
-        val organizations = createMockOrganizationNetwork(
-            number = 1,
-            isEnabled = true,
-            shouldUsePolicies = true,
-        )
-        every {
-            authSdkSource.filterPolicies(
-                policies = any(),
-                organizations = any(),
-                policyType = PolicyType.SEND_CONTROLS,
-            )
-        } returns emptyList<PolicyView>().asSuccess()
-        every {
-            authSdkSource.filterPolicies(
-                policies = any(),
-                organizations = any(),
-                policyType = PolicyType.SEND_OPTIONS,
-            )
-        } returns emptyList<PolicyView>().asSuccess()
-        every {
-            authSdkSource.filterPolicies(
-                policies = any(),
-                organizations = any(),
-                policyType = PolicyType.DISABLE_SEND,
-            )
-        } returnsMany listOf(
-            emptyList<PolicyView>().asSuccess(),
-            listOf(createMockPolicyView(organizationId = organizations.id, enabled = true))
-                .asSuccess(),
-        )
-
-        mutableUserStateFlow.value = userStateJson
-        mutableOrganizationsFlow.value = listOf(organizations)
-        mutablePolicyFlow.value = listOf(
-            createMockPolicy(organizationId = organizations.id, isEnabled = true),
-        )
-
-        val expectedPolicy = EffectiveSendPolicy(
-            allowedDomains = null,
-            allowedSendTypes = null,
-            deletionHours = null,
-            disableHideEmail = false,
-            disableSend = false,
-            whoCanAccess = null,
-        )
-
-        policyManager
-            .getEffectiveSendPolicyFlow()
-            .test {
-                assertEquals(expectedPolicy, awaitItem())
-
-                mutablePolicyFlow.value = listOf(
-                    createMockPolicy(
-                        number = 2,
-                        organizationId = organizations.id,
-                        isEnabled = true,
-                    ),
-                )
-
-                assertEquals(expectedPolicy.copy(disableSend = true), awaitItem())
+    fun `getEffectiveSendPolicyFlow should re-emit when the underlying policies change`() =
+        runTest {
+            val userStateJson = mockk<UserStateJson> {
+                every { activeUserId } returns USER_ID
             }
-    }
+            val organizations = createMockOrganizationNetwork(
+                number = 1,
+                isEnabled = true,
+                shouldUsePolicies = true,
+            )
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.SEND_CONTROLS,
+                )
+            } returns emptyList<PolicyView>().asSuccess()
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.SEND_OPTIONS,
+                )
+            } returns emptyList<PolicyView>().asSuccess()
+            every {
+                authSdkSource.filterPolicies(
+                    policies = any(),
+                    organizations = any(),
+                    policyType = PolicyType.DISABLE_SEND,
+                )
+            } returnsMany listOf(
+                emptyList<PolicyView>().asSuccess(),
+                listOf(createMockPolicyView(organizationId = organizations.id, enabled = true))
+                    .asSuccess(),
+            )
 
-    @Suppress("MaxLineLength")
+            mutableUserStateFlow.value = userStateJson
+            mutableOrganizationsFlow.value = listOf(organizations)
+            mutablePolicyFlow.value = listOf(
+                createMockPolicy(organizationId = organizations.id, isEnabled = true),
+            )
+
+            val expectedPolicy = EffectiveSendPolicy(
+                allowedDomains = null,
+                allowedSendTypes = null,
+                deletionHours = null,
+                disableHideEmail = false,
+                disableSend = false,
+                whoCanAccess = null,
+            )
+
+            policyManager
+                .getEffectiveSendPolicyFlow()
+                .test {
+                    assertEquals(expectedPolicy, awaitItem())
+
+                    mutablePolicyFlow.value = listOf(
+                        createMockPolicy(
+                            number = 2,
+                            organizationId = organizations.id,
+                            isEnabled = true,
+                        ),
+                    )
+
+                    assertEquals(expectedPolicy.copy(disableSend = true), awaitItem())
+                }
+        }
+
     @Test
     fun `getEffectiveSendPolicyFlow should re-emit when the SendControls feature flag changes`() =
         runTest {
