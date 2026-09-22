@@ -57,10 +57,6 @@ class FlagKeyTest {
             "pm-4516-devices-add-last-activity-date",
         )
         assertEquals(
-            FlagKey.PoliciesInAcceptedState.keyName,
-            "pm-34145-policies-in-accepted-state",
-        )
-        assertEquals(
             FlagKey.FedRamp.keyName,
             "fedramp-gov-region",
         )
@@ -106,7 +102,6 @@ class FlagKeyTest {
                 FlagKey.NewItemTypes,
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
-                FlagKey.PoliciesInAcceptedState,
                 FlagKey.FedRamp,
                 FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
