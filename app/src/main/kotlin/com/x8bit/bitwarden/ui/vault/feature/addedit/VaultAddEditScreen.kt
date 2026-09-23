@@ -97,6 +97,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTy
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.rememberVaultAddEditPassportTypeHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -123,6 +124,7 @@ fun VaultAddEditScreen(
     onNavigateToAttachments: (cipherId: String) -> Unit,
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToPlan: () -> Unit,
+    onCloseAndNavigateToVaultItem: (cipherId: String, cipherType: VaultItemCipherType) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -156,6 +158,10 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
+            is VaultAddEditEvent.CloseAndNavigateToVaultItem -> {
+                onCloseAndNavigateToVaultItem(event.cipherId, event.cipherType)
+            }
+
             is VaultAddEditEvent.NavigateToMoveToOrganization -> {
                 onNavigateToMoveToOrganization(event.cipherId, false)
             }

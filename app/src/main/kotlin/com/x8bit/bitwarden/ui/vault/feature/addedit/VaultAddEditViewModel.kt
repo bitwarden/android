@@ -94,6 +94,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
+import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -2027,12 +2028,23 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 } else if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
-                } else {
+                } else if (!state.shouldClearSpecialCircumstance) {
+                    // An autofill selection is still in progress; return to the item listing
+                    // screen so the user can complete the selection.
                     snackbarRelayManager.sendSnackbarData(
                         data = BitwardenSnackbarData(state.savedSnackbarMessage),
                         relay = SnackbarRelay.CIPHER_CREATED,
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
+                } else {
+                    // The destination VaultItemViewModel doesn't exist yet, so it shows the
+                    // snackbar itself once created, using the showCreatedSnackbar nav arg.
+                    sendEvent(
+                        event = VaultAddEditEvent.CloseAndNavigateToVaultItem(
+                            cipherId = result.cipherId,
+                            cipherType = state.cipherType,
+                        ),
+                    )
                 }
             }
         }
@@ -2810,16 +2822,7 @@ data class VaultAddEditState(
      * Helper to determine the snackbar message shown after the item is successfully saved.
      */
     val savedSnackbarMessage: Text
-        get() = when (cipherType) {
-            VaultItemCipherType.LOGIN -> BitwardenString.login_saved.asText()
-            VaultItemCipherType.CARD -> BitwardenString.card_saved.asText()
-            VaultItemCipherType.IDENTITY -> BitwardenString.identity_saved.asText()
-            VaultItemCipherType.SECURE_NOTE -> BitwardenString.secure_note_saved.asText()
-            VaultItemCipherType.SSH_KEY -> BitwardenString.ssh_key_saved.asText()
-            VaultItemCipherType.BANK_ACCOUNT -> BitwardenString.bank_account_saved.asText()
-            VaultItemCipherType.DRIVERS_LICENSE -> BitwardenString.license_saved.asText()
-            VaultItemCipherType.PASSPORT -> BitwardenString.passport_saved.asText()
-        }
+        get() = cipherType.savedSnackbarMessage
 
     /**
      * Whether the cipher is in a collection.
@@ -3524,6 +3527,14 @@ sealed class VaultAddEditEvent {
      */
     data class NavigateToAttachments(
         val cipherId: String,
+    ) : VaultAddEditEvent()
+
+    /**
+     * Close the add/edit screen and navigate to the newly created vault item's detail screen.
+     */
+    data class CloseAndNavigateToVaultItem(
+        val cipherId: String,
+        val cipherType: VaultItemCipherType,
     ) : VaultAddEditEvent()
 
     /**

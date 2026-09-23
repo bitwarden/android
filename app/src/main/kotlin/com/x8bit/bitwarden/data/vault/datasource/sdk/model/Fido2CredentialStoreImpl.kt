@@ -83,12 +83,12 @@ class Fido2CredentialStoreImpl(
                     ?.let {
                         vaultRepository
                             .updateCipher(it, decryptedCipherView)
-                            .toCreateCipherResult()
+                            .toCreateCipherResult(cipherId = it)
                     }
                     ?: decryptedCipherView.createCipher()
 
                 when (result) {
-                    CreateCipherResult.Success -> Unit
+                    is CreateCipherResult.Success -> Unit
                     is CreateCipherResult.Error -> {
                         throw result.error ?: IllegalStateException(
                             result.errorMessage ?: "Failed to save credential",
@@ -111,9 +111,9 @@ class Fido2CredentialStoreImpl(
         }
     }
 
-    private fun UpdateCipherResult.toCreateCipherResult(): CreateCipherResult =
+    private fun UpdateCipherResult.toCreateCipherResult(cipherId: String): CreateCipherResult =
         when (this) {
-            UpdateCipherResult.Success -> CreateCipherResult.Success
+            UpdateCipherResult.Success -> CreateCipherResult.Success(cipherId = cipherId)
             is UpdateCipherResult.Error -> CreateCipherResult.Error(
                 error = error,
                 errorMessage = errorMessage,
