@@ -918,7 +918,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit NavigateToVaultItem`() =
+    fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit CloseAndNavigateToVaultItem`() =
         runTest {
             val stateWithDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
@@ -955,7 +955,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
-                    VaultAddEditEvent.NavigateToVaultItem(
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
                         cipherId = DEFAULT_ITEM_ID,
                         cipherType = VaultItemCipherType.LOGIN,
                     ),
@@ -1485,8 +1485,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, createCipherInOrganization success should send NavigateToVaultItem`() =
+    fun `in add mode, createCipherInOrganization success should send CloseAndNavigateToVaultItem`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
@@ -1510,7 +1511,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(
-                    VaultAddEditEvent.NavigateToVaultItem(
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
                         cipherId = DEFAULT_ITEM_ID,
                         cipherType = VaultItemCipherType.LOGIN,
                     ),
@@ -1521,7 +1522,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode with a card, createCipherInOrganization success should send NavigateToVaultItem`() =
+    fun `in add mode with a card, createCipherInOrganization success should send CloseAndNavigateToVaultItem`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 vaultItemCipherType = VaultItemCipherType.CARD,
@@ -1547,7 +1548,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(
-                    VaultAddEditEvent.NavigateToVaultItem(
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
                         cipherId = DEFAULT_ITEM_ID,
                         cipherType = VaultItemCipherType.CARD,
                     ),

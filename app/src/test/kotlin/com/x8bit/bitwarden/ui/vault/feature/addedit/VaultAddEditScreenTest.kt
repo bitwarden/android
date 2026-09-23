@@ -104,8 +104,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
-    private var onNavigateToVaultItemId: String? = null
-    private var onNavigateToVaultItemType: VaultItemCipherType? = null
+    private var onCloseAndNavigateToVaultItemId: String? = null
+    private var onCloseAndNavigateToVaultItemType: VaultItemCipherType? = null
     private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
     private var onNavigateToPlanCalled = false
@@ -153,9 +153,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
-                onNavigateToVaultItem = { id, type ->
-                    onNavigateToVaultItemId = id
-                    onNavigateToVaultItemType = type
+                onCloseAndNavigateToVaultItem = { id, type ->
+                    onCloseAndNavigateToVaultItemId = id
+                    onCloseAndNavigateToVaultItemType = type
                 },
                 viewModel = viewModel,
             )
@@ -273,12 +273,14 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on NavigateToVaultItem event should invoke onNavigateToVaultItem`() {
+    fun `on CloseAndNavigateToVaultItem event should invoke onCloseAndNavigateToVaultItem`() {
         val cipherId = "cipherId-1234"
         val cipherType = VaultItemCipherType.LOGIN
-        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToVaultItem(cipherId, cipherType))
-        assertEquals(cipherId, onNavigateToVaultItemId)
-        assertEquals(cipherType, onNavigateToVaultItemType)
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.CloseAndNavigateToVaultItem(cipherId, cipherType),
+        )
+        assertEquals(cipherId, onCloseAndNavigateToVaultItemId)
+        assertEquals(cipherType, onCloseAndNavigateToVaultItemType)
     }
 
     @Test

@@ -2037,8 +2037,10 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
                 } else {
+                    // The destination VaultItemViewModel doesn't exist yet, so it shows the
+                    // snackbar itself once created, using the showCreatedSnackbar nav arg.
                     sendEvent(
-                        event = VaultAddEditEvent.NavigateToVaultItem(
+                        event = VaultAddEditEvent.CloseAndNavigateToVaultItem(
                             cipherId = result.cipherId,
                             cipherType = state.cipherType,
                         ),
@@ -3528,9 +3530,9 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
-     * Navigate to the newly created vault item's detail screen.
+     * Close the add/edit screen and navigate to the newly created vault item's detail screen.
      */
-    data class NavigateToVaultItem(
+    data class CloseAndNavigateToVaultItem(
         val cipherId: String,
         val cipherType: VaultItemCipherType,
     ) : VaultAddEditEvent()

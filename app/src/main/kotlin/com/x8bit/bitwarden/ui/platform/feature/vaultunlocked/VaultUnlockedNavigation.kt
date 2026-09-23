@@ -208,7 +208,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 )
             },
             onNavigateToPlan = { navController.navigateToPlanModal() },
-            onNavigateToVaultItem = { cipherId, cipherType ->
+            onCloseAndNavigateToVaultItem = { cipherId, cipherType ->
                 navController.navigateToVaultItem(
                     args = VaultItemArgs(
                         vaultItemId = cipherId,

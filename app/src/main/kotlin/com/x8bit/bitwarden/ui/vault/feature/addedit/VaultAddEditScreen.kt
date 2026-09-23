@@ -124,7 +124,7 @@ fun VaultAddEditScreen(
     onNavigateToAttachments: (cipherId: String) -> Unit,
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToPlan: () -> Unit,
-    onNavigateToVaultItem: (cipherId: String, cipherType: VaultItemCipherType) -> Unit,
+    onCloseAndNavigateToVaultItem: (cipherId: String, cipherType: VaultItemCipherType) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -158,8 +158,8 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
-            is VaultAddEditEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItem(event.cipherId, event.cipherType)
+            is VaultAddEditEvent.CloseAndNavigateToVaultItem -> {
+                onCloseAndNavigateToVaultItem(event.cipherId, event.cipherType)
             }
 
             is VaultAddEditEvent.NavigateToMoveToOrganization -> {
