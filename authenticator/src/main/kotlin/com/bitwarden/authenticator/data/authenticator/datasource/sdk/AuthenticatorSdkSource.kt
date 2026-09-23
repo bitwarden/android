@@ -20,4 +20,9 @@ interface AuthenticatorSdkSource {
      * Generate a random key for seeding biometrics.
      */
     suspend fun generateBiometricsKey(): Result<String>
+
+    /**
+     * Scores the given [password], returning a strength level in the range `[0, 4]`.
+     */
+    suspend fun passwordStrength(password: String): Result<UByte>
 }

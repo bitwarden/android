@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.importing
 
-import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
@@ -22,6 +21,7 @@ import javax.inject.Inject
 /**
  * View model for the Importing screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ImportingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
@@ -52,6 +52,14 @@ class ImportingViewModel @Inject constructor(
                 handleImportLocationReceive(action)
             }
 
+            ImportAction.PasswordPromptDismiss -> {
+                handlePasswordPromptDismiss()
+            }
+
+            is ImportAction.PasswordSubmit -> {
+                handlePasswordSubmit(action)
+            }
+
             is ImportAction.Internal -> {
                 handleInternalAction(action)
             }
@@ -75,12 +83,28 @@ class ImportingViewModel @Inject constructor(
     }
 
     private fun handleImportLocationReceive(action: ImportAction.ImportLocationReceive) {
-        mutableStateFlow.update { it.copy(dialogState = ImportState.DialogState.Loading()) }
+        mutableStateFlow.update {
+            it.copy(fileData = action.fileUri, dialogState = ImportState.DialogState.Loading())
+        }
+        importVaultData(fileData = action.fileUri, password = null)
+    }
 
+    private fun handlePasswordPromptDismiss() {
+        mutableStateFlow.update { it.copy(fileData = null, dialogState = null) }
+    }
+
+    private fun handlePasswordSubmit(action: ImportAction.PasswordSubmit) {
+        val fileData = state.fileData ?: return
+        mutableStateFlow.update { it.copy(dialogState = ImportState.DialogState.Loading()) }
+        importVaultData(fileData = fileData, password = action.password)
+    }
+
+    private fun importVaultData(fileData: FileData, password: String?) {
         viewModelScope.launch {
             val result = authenticatorRepository.importVaultData(
                 format = state.importFileFormat,
-                fileData = action.fileUri,
+                fileData = fileData,
+                password = password,
             )
 
             sendAction(
@@ -99,9 +123,28 @@ class ImportingViewModel @Inject constructor(
 
     private fun handleSaveImportDataToUriResultReceive(result: ImportDataResult) {
         when (result) {
+            ImportDataResult.PasswordRequired -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = ImportState.DialogState.PasswordPrompt())
+                }
+            }
+
+            ImportDataResult.IncorrectPassword -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = ImportState.DialogState.PasswordPrompt(
+                            errorMessage = BitwardenString
+                                .the_password_you_entered_is_incorrect
+                                .asText(),
+                        ),
+                    )
+                }
+            }
+
             is ImportDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
+                        fileData = null,
                         dialogState = ImportState.DialogState.Error(
                             title = result.title ?: BitwardenString.an_error_has_occurred.asText(),
                             message = result.message
@@ -112,7 +155,7 @@ class ImportingViewModel @Inject constructor(
             }
 
             ImportDataResult.Success -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
+                mutableStateFlow.update { it.copy(fileData = null, dialogState = null) }
                 snackbarRelayManager.sendSnackbarData(
                     data = BitwardenSnackbarData(message = BitwardenString.import_success.asText()),
                     relay = SnackbarRelay.IMPORT_SUCCESS,
@@ -128,7 +171,7 @@ class ImportingViewModel @Inject constructor(
  */
 data class ImportState(
     @IgnoredOnParcel
-    val fileUri: Uri? = null,
+    val fileData: FileData? = null,
     val dialogState: DialogState? = null,
     val importFileFormat: ImportFileFormat,
 ) {
@@ -151,6 +194,14 @@ data class ImportState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a prompt for the password of a password-protected file, optionally showing an
+         * [errorMessage] from a previous incorrect attempt.
+         */
+        data class PasswordPrompt(
+            val errorMessage: Text? = null,
         ) : DialogState()
     }
 }
@@ -200,6 +251,16 @@ sealed class ImportAction {
      * Indicates the user selected a file to import.
      */
     data class ImportLocationReceive(val fileUri: FileData) : ImportAction()
+
+    /**
+     * Indicates the user dismissed the password prompt.
+     */
+    data object PasswordPromptDismiss : ImportAction()
+
+    /**
+     * Indicates the user submitted a [password] for a password-protected file.
+     */
+    data class PasswordSubmit(val password: String) : ImportAction()
 
     /**
      * Models actions the [ImportingScreen] itself may send.

@@ -12,6 +12,16 @@ sealed class ImportDataResult {
     data object Success : ImportDataResult()
 
     /**
+     * Indicates the selected file is password protected and a password is needed to continue.
+     */
+    data object PasswordRequired : ImportDataResult()
+
+    /**
+     * Indicates the password provided for a password-protected file was incorrect.
+     */
+    data object IncorrectPassword : ImportDataResult()
+
+    /**
      * Indicates import was not successful.
      *
      * @property title An optional [Text] providing a brief title of the reason the import failed.

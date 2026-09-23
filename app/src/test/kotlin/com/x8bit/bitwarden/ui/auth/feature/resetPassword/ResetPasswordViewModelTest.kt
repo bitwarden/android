@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordState

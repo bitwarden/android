@@ -5,6 +5,7 @@ import android.text.TextUtils
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
+import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockAuthenticatorItem
@@ -15,6 +16,8 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDat
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
+import com.bitwarden.authenticator.data.platform.manager.crypto.ExportEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.crypto.model.EncryptExportResult
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -56,7 +59,9 @@ class AuthenticatorRepositoryTest {
     private val mockAuthenticatorBridgeManager: AuthenticatorBridgeManager = mockk {
         every { accountSyncStateFlow } returns mutableAccountSyncStateFlow
     }
+    private val mockAuthenticatorSdkSource = mockk<AuthenticatorSdkSource>()
     private val mockTotpCodeManager = mockk<TotpCodeManager>(relaxed = true)
+    private val mockExportEncryptionManager = mockk<ExportEncryptionManager>()
     private val mockFileManager = mockk<FileManager>()
     private val mockImportManager = mockk<ImportManager>()
     private val mockDispatcherManager = FakeDispatcherManager()
@@ -67,7 +72,9 @@ class AuthenticatorRepositoryTest {
     private val authenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorDiskSource = fakeAuthenticatorDiskSource,
         authenticatorBridgeManager = mockAuthenticatorBridgeManager,
+        authenticatorSdkSource = mockAuthenticatorSdkSource,
         totpCodeManager = mockTotpCodeManager,
+        exportEncryptionManager = mockExportEncryptionManager,
         fileManager = mockFileManager,
         importManager = mockImportManager,
         dispatcherManager = mockDispatcherManager,
@@ -468,4 +475,62 @@ class AuthenticatorRepositoryTest {
 
         assertEquals(ImportDataResult.Error(), result)
     }
+
+    @Test
+    fun `exportVaultData with JSON_ENCRYPTED should write the encrypted envelope`() = runTest {
+        val mockUri = mockk<Uri>()
+        coEvery {
+            mockExportEncryptionManager.encrypt(json = any(), password = "pass")
+        } returns EncryptExportResult.Success(json = ENCRYPTED_ENVELOPE)
+        coEvery {
+            mockFileManager.stringToUri(fileUri = mockUri, dataString = ENCRYPTED_ENVELOPE)
+        } returns true
+
+        val result = authenticatorRepository.exportVaultData(
+            format = ExportVaultFormat.JSON_ENCRYPTED,
+            fileUri = mockUri,
+            password = "pass",
+        )
+
+        assertEquals(ExportDataResult.Success, result)
+        coVerify {
+            mockFileManager.stringToUri(fileUri = mockUri, dataString = ENCRYPTED_ENVELOPE)
+        }
+    }
+
+    @Test
+    fun `exportVaultData with JSON_ENCRYPTED and encryption failure should return Error`() =
+        runTest {
+            val mockUri = mockk<Uri>()
+            coEvery {
+                mockExportEncryptionManager.encrypt(json = any(), password = "pass")
+            } returns EncryptExportResult.Error
+
+            val result = authenticatorRepository.exportVaultData(
+                format = ExportVaultFormat.JSON_ENCRYPTED,
+                fileUri = mockUri,
+                password = "pass",
+            )
+
+            assertEquals(ExportDataResult.Error, result)
+            coVerify(exactly = 0) {
+                mockFileManager.stringToUri(fileUri = any(), dataString = any())
+            }
+        }
+
+    @Test
+    fun `exportVaultData with JSON_ENCRYPTED and no password should return Error`() = runTest {
+        val result = authenticatorRepository.exportVaultData(
+            format = ExportVaultFormat.JSON_ENCRYPTED,
+            fileUri = mockk(),
+            password = null,
+        )
+
+        assertEquals(ExportDataResult.Error, result)
+        coVerify(exactly = 0) {
+            mockExportEncryptionManager.encrypt(json = any(), password = any())
+        }
+    }
 }
+
+private const val ENCRYPTED_ENVELOPE: String = """{"encrypted":true}"""

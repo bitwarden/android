@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text

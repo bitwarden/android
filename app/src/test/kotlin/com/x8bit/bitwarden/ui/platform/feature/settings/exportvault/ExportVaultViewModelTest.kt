@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import io.mockk.coEvery
 import io.mockk.coVerify

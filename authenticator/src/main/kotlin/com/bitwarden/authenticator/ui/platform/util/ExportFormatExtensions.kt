@@ -12,6 +12,9 @@ val ExportVaultFormat.displayLabel: Text
     get() = when (this) {
         ExportVaultFormat.JSON -> BitwardenString.json_extension.asText()
         ExportVaultFormat.CSV -> BitwardenString.csv_extension.asText()
+        ExportVaultFormat.JSON_ENCRYPTED -> BitwardenString.json_extension_formatted.asText(
+            BitwardenString.password_protected.asText(),
+        )
     }
 
 /**
@@ -19,6 +22,6 @@ val ExportVaultFormat.displayLabel: Text
  */
 val ExportVaultFormat.fileExtension: String
     get() = when (this) {
-        ExportVaultFormat.JSON -> "json"
+        ExportVaultFormat.JSON, ExportVaultFormat.JSON_ENCRYPTED -> "json"
         ExportVaultFormat.CSV -> "csv"
     }

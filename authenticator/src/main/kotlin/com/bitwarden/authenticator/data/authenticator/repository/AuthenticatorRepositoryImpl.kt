@@ -3,6 +3,7 @@ package com.bitwarden.authenticator.data.authenticator.repository
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
@@ -15,6 +16,8 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.util.sortAlphabetically
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
+import com.bitwarden.authenticator.data.platform.manager.crypto.ExportEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.crypto.model.EncryptExportResult
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -62,7 +65,9 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val authenticatorDiskSource: AuthenticatorDiskSource,
+    private val authenticatorSdkSource: AuthenticatorSdkSource,
     private val totpCodeManager: TotpCodeManager,
+    private val exportEncryptionManager: ExportEncryptionManager,
     private val fileManager: FileManager,
     private val importManager: ImportManager,
     private val settingRepository: SettingsRepository,
@@ -237,25 +242,34 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPasswordStrength(password: String): Result<UByte> =
+        authenticatorSdkSource.passwordStrength(password = password)
+
     override suspend fun exportVaultData(
         format: ExportVaultFormat,
         fileUri: Uri,
+        password: String?,
     ): ExportDataResult {
         return when (format) {
             ExportVaultFormat.JSON -> encodeVaultDataToJson(fileUri)
             ExportVaultFormat.CSV -> encodeVaultDataToCsv(fileUri)
+            ExportVaultFormat.JSON_ENCRYPTED -> password
+                ?.let { encodeVaultDataToEncryptedJson(fileUri = fileUri, password = it) }
+                ?: ExportDataResult.Error
         }
     }
 
     override suspend fun importVaultData(
         format: ImportFileFormat,
         fileData: FileData,
+        password: String?,
     ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
         .map {
             importManager
                 .import(
                     importFileFormat = format,
                     byteArray = it,
+                    password = password,
                 )
         }
         .fold(
@@ -319,29 +333,42 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     private fun AuthenticatorItemEntity.toCsvFormat() =
         ",,1,$issuer,,${toOtpAuthUriString()},$issuer,$period,$digits"
 
-    private suspend fun encodeVaultDataToJson(fileUri: Uri): ExportDataResult {
-        val dataString: String = Json.encodeToString(
-            ExportJsonData(
-                encrypted = false,
-                items = authenticatorDiskSource
-                    .getItems()
-                    .firstOrNull()
-                    .orEmpty()
-                    .map { it.toExportJsonItem() },
-            ),
-        )
+    private suspend fun encodeVaultDataToJson(fileUri: Uri): ExportDataResult =
+        writeToUri(fileUri = fileUri, dataString = buildExportJson())
 
-        return if (
-            fileManager.stringToUri(
-                fileUri = fileUri,
-                dataString = dataString,
+    private suspend fun encodeVaultDataToEncryptedJson(
+        fileUri: Uri,
+        password: String,
+    ): ExportDataResult =
+        when (
+            val result = exportEncryptionManager.encrypt(
+                json = buildExportJson(),
+                password = password,
             )
         ) {
+            EncryptExportResult.Error -> ExportDataResult.Error
+            is EncryptExportResult.Success -> {
+                writeToUri(fileUri = fileUri, dataString = result.json)
+            }
+        }
+
+    private suspend fun buildExportJson(): String = Json.encodeToString(
+        ExportJsonData(
+            encrypted = false,
+            items = authenticatorDiskSource
+                .getItems()
+                .firstOrNull()
+                .orEmpty()
+                .map { it.toExportJsonItem() },
+        ),
+    )
+
+    private suspend fun writeToUri(fileUri: Uri, dataString: String): ExportDataResult =
+        if (fileManager.stringToUri(fileUri = fileUri, dataString = dataString)) {
             ExportDataResult.Success
         } else {
             ExportDataResult.Error
         }
-    }
 
     private fun AuthenticatorItemEntity.toExportJsonItem() = ExportJsonData.ExportItem(
         id = id,

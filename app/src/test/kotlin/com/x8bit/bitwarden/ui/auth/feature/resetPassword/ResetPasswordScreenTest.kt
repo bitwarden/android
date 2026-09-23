@@ -15,7 +15,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordScreen

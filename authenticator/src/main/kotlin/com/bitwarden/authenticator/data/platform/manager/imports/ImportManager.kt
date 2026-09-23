@@ -10,9 +10,12 @@ interface ImportManager {
 
     /**
      * Imports the selected file.
+     *
+     * [password] is required to open password-protected files and ignored by every other file.
      */
     suspend fun import(
         importFileFormat: ImportFileFormat,
         byteArray: ByteArray,
+        password: String? = null,
     ): ImportDataResult
 }

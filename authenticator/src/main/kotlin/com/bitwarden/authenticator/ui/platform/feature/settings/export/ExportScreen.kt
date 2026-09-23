@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,6 +39,8 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -93,9 +96,11 @@ fun ExportScreen(
     if (shouldShowConfirmationPrompt) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = BitwardenString.export_confirmation_title),
-            message = stringResource(
-                id = BitwardenString.export_vault_warning,
-            ),
+            message = if (state.exportVaultFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+                stringResource(id = BitwardenString.export_vault_file_pw_protect_info)
+            } else {
+                stringResource(id = BitwardenString.export_vault_warning)
+            },
             confirmButtonText = stringResource(id = BitwardenString.export),
             dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
@@ -145,16 +150,25 @@ fun ExportScreen(
             onExportFormatOptionSelected = {
                 viewModel.trySendAction(ExportAction.ExportFormatOptionSelect(it))
             },
+            onFilePasswordInputChanged = {
+                viewModel.trySendAction(ExportAction.FilePasswordInputChange(it))
+            },
+            onConfirmFilePasswordInputChanged = {
+                viewModel.trySendAction(ExportAction.ConfirmFilePasswordInputChange(it))
+            },
             onExportClick = { shouldShowConfirmationPrompt = true },
         )
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ExportScreenContent(
     modifier: Modifier = Modifier,
     state: ExportState,
     onExportFormatOptionSelected: (ExportVaultFormat) -> Unit,
+    onFilePasswordInputChanged: (String) -> Unit,
+    onConfirmFilePasswordInputChanged: (String) -> Unit,
     onExportClick: () -> Unit,
 ) {
     Column(
@@ -206,6 +220,54 @@ private fun ExportScreenContent(
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
+
+        if (state.exportVaultFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            var showPassword by rememberSaveable { mutableStateOf(false) }
+            BitwardenPasswordField(
+                label = stringResource(id = BitwardenString.file_password),
+                value = state.filePasswordInput,
+                onValueChange = onFilePasswordInputChanged,
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
+                supportingContent = {
+                    PasswordStrengthIndicator(
+                        state = state.passwordStrengthState,
+                        currentCharacterCount = state.filePasswordInput.length,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Text(
+                        text = stringResource(id = BitwardenString.password_used_to_export),
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                },
+                showPasswordTestTag = "FilePasswordVisibilityToggle",
+                passwordFieldTestTag = "FilePasswordEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            BitwardenPasswordField(
+                label = stringResource(id = BitwardenString.confirm_file_password),
+                value = state.confirmFilePasswordInput,
+                onValueChange = onConfirmFilePasswordInputChanged,
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
+                showPasswordTestTag = "ConfirmFilePasswordVisibilityToggle",
+                passwordFieldTestTag = "ConfirmFilePasswordEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
 

@@ -6,4 +6,5 @@ package com.bitwarden.authenticator.ui.platform.feature.settings.export.model
 enum class ExportVaultFormat {
     JSON,
     CSV,
+    JSON_ENCRYPTED,
 }

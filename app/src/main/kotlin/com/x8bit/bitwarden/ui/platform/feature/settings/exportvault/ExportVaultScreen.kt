@@ -49,7 +49,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
+import com.bitwarden.ui.platform.components.indicator.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList

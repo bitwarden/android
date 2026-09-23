@@ -1447,4 +1447,8 @@ Do you want to switch to this account?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="this_file_is_password_protected">This file is password protected</string>
+    <string name="enter_the_password_used_to_encrypt_this_file">Enter the password used to encrypt this file.</string>
+    <string name="the_password_you_entered_is_incorrect">The password you entered is incorrect.</string>
+    <string name="the_file_uses_an_unsupported_encryption_setting">The file uses an unsupported encryption setting.</string>
 </resources>

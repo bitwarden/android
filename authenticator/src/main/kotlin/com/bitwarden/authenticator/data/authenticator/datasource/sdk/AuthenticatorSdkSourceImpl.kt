@@ -46,5 +46,16 @@ class AuthenticatorSdkSourceImpl @Inject constructor(
                 )
         }
 
+    override suspend fun passwordStrength(password: String): Result<UByte> = runCatching {
+        getClient()
+            .auth()
+            .passwordStrength(
+                password = password,
+                // The authenticator has no account, so there is no email to penalize against.
+                email = "",
+                additionalInputs = emptyList(),
+            )
+    }
+
     private suspend fun getClient(): Client = sdkClientManager.getOrCreateClient()
 }

@@ -1,9 +1,11 @@
 package com.bitwarden.authenticator.data.authenticator.repository.di
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepositoryImpl
+import com.bitwarden.authenticator.data.platform.manager.crypto.ExportEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
@@ -27,7 +29,9 @@ object AuthenticatorRepositoryModule {
     fun provideAuthenticatorRepository(
         authenticatorBridgeManager: AuthenticatorBridgeManager,
         authenticatorDiskSource: AuthenticatorDiskSource,
+        authenticatorSdkSource: AuthenticatorSdkSource,
         dispatcherManager: DispatcherManager,
+        exportEncryptionManager: ExportEncryptionManager,
         fileManager: FileManager,
         importManager: ImportManager,
         totpCodeManager: TotpCodeManager,
@@ -35,7 +39,9 @@ object AuthenticatorRepositoryModule {
     ): AuthenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorBridgeManager = authenticatorBridgeManager,
         authenticatorDiskSource = authenticatorDiskSource,
+        authenticatorSdkSource = authenticatorSdkSource,
         dispatcherManager = dispatcherManager,
+        exportEncryptionManager = exportEncryptionManager,
         fileManager = fileManager,
         importManager = importManager,
         totpCodeManager = totpCodeManager,
