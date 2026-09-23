@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager.policy
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
@@ -88,7 +88,7 @@ internal class UserNotificationPolicyManagerImpl(
             }
             ?.showAfterEveryLogin != false
 
-    private fun dismissBanner(policy: PolicyView) {
+    private fun dismissBanner(policy: Policy) {
         activeUserId?.let { userId ->
             settingsDiskSource.storeVaultPolicyBannerDismissedDate(
                 userId = userId,
@@ -98,7 +98,7 @@ internal class UserNotificationPolicyManagerImpl(
     }
 }
 
-private val PolicyView.userNotificationPolicyData: UserNotificationPolicyData?
+private val Policy.userNotificationPolicyData: UserNotificationPolicyData?
     get() = (this.policyInformation as? PolicyInformation.OrganizationUserNotification)?.let {
         UserNotificationPolicyData(
             organizationId = this.organizationId,

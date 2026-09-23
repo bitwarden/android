@@ -6,8 +6,8 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -375,7 +375,7 @@ class PasswordPolicyManagerTest {
         every {
             policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD)
         } returns policyDataJson.map { data ->
-            createMockPolicyView(
+            createMockSdkPolicy(
                 type = PolicyType.MASTER_PASSWORD,
                 enabled = true,
                 data = data,
@@ -385,7 +385,7 @@ class PasswordPolicyManagerTest {
 }
 
 /**
- * Builds the `data` payload of a master password [PolicyView].
+ * Builds the `data` payload of a master password [Policy].
  */
 @Suppress("LongParameterList")
 private fun createPolicyJson(

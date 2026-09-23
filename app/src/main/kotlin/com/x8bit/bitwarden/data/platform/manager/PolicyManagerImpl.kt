@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkOrganizationPolicyContext
-import com.x8bit.bitwarden.data.vault.repository.util.toSdkPolicyViews
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkPolicies
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -31,17 +31,17 @@ class PolicyManagerImpl(
     private val featureFlagManager: FeatureFlagManager,
 ) : PolicyManager {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getActivePoliciesFlow(type: PolicyType): Flow<List<PolicyView>> =
+    override fun getActivePoliciesFlow(type: PolicyType): Flow<List<Policy>> =
         authDiskSource
             .activeUserIdChangesFlow
             .flatMapLatest { activeUserId ->
                 activeUserId
-                    ?.let { userId -> getAppliedPolicyViewsFlow(userId = userId, type = type) }
+                    ?.let { userId -> getAppliedPoliciesFlow(userId = userId, type = type) }
                     ?: emptyFlow()
             }
             .distinctUntilChanged()
 
-    override fun getActivePolicies(type: PolicyType): List<PolicyView> =
+    override fun getActivePolicies(type: PolicyType): List<Policy> =
         authDiskSource
             .userState
             ?.activeUserId
@@ -75,13 +75,13 @@ class PolicyManagerImpl(
     override fun getUserPolicies(
         userId: String,
         type: PolicyType,
-    ): List<PolicyView> =
+    ): List<Policy> =
         this
             .filterPolicies(
                 type = type,
                 policies = authDiskSource
                     .getPolicies(userId = userId)
-                    ?.toSdkPolicyViews(),
+                    ?.toSdkPolicies(),
                 organizations = authDiskSource
                     .getOrganizations(userId = userId)
                     ?.map { it.toSdkOrganizationPolicyContext() },
@@ -95,13 +95,13 @@ class PolicyManagerImpl(
             .firstOrNull()
             ?.organizationId
 
-    private fun getAppliedPolicyViewsFlow(
+    private fun getAppliedPoliciesFlow(
         userId: String,
         type: PolicyType,
-    ): Flow<List<PolicyView>> = combine(
+    ): Flow<List<Policy>> = combine(
         authDiskSource
             .getPoliciesFlow(userId = userId)
-            .map { it?.toSdkPolicyViews() },
+            .map { it?.toSdkPolicies() },
         authDiskSource
             .getOrganizationsFlow(userId = userId)
             .map { organizations -> organizations?.map { it.toSdkOrganizationPolicyContext() } },
@@ -117,9 +117,9 @@ class PolicyManagerImpl(
 
     private fun filterPolicies(
         type: PolicyType,
-        policies: List<PolicyView>?,
+        policies: List<Policy>?,
         organizations: List<OrganizationUserPolicyContext>?,
-    ): List<PolicyView>? =
+    ): List<Policy>? =
         when {
             policies == null -> null
             policies.isEmpty() -> emptyList()
@@ -142,10 +142,10 @@ class PolicyManagerImpl(
      * policies, while other organizations' legacy policies remain in effect.
      */
     private fun resolveEffectiveSendPolicy(
-        disableSendPolicies: List<PolicyView>,
+        disableSendPolicies: List<Policy>,
         isSendControlsEnabled: Boolean,
-        sendControlsPolicies: List<PolicyView>,
-        sendOptionsPolicies: List<PolicyView>,
+        sendControlsPolicies: List<Policy>,
+        sendOptionsPolicies: List<Policy>,
     ): EffectiveSendPolicy {
         if (!isSendControlsEnabled) {
             return EffectiveSendPolicy(

@@ -4,55 +4,55 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import com.bitwarden.policies.Policy as SdkPolicy
 
 class VaultSdkPolicyExtensionsTest {
 
     @Test
-    fun `toSdkPolicyViews should return empty list when given empty list`() {
+    fun `toSdkPolicies should return empty list when given empty list`() {
         assertEquals(
-            emptyList<PolicyView>(),
-            emptyList<SyncResponseJson.Policy>().toSdkPolicyViews(),
+            emptyList<SdkPolicy>(),
+            emptyList<SyncResponseJson.Policy>().toSdkPolicies(),
         )
     }
 
     @Test
-    fun `toSdkPolicyViews should convert all policies in a list`() {
+    fun `toSdkPolicies should convert all policies in a list`() {
         assertEquals(
             listOf(
-                createMockPolicyView(number = 1),
-                createMockPolicyView(number = 2),
+                createMockSdkPolicy(number = 1),
+                createMockSdkPolicy(number = 2),
             ),
             listOf(
                 createMockPolicy(number = 1),
                 createMockPolicy(number = 2),
             )
-                .toSdkPolicyViews(),
+                .toSdkPolicies(),
         )
     }
 
     @Test
-    fun `toSdkPolicyViews should serialize JsonObject data to a JSON string`() {
+    fun `toSdkPolicies should serialize JsonObject data to a JSON string`() {
         assertEquals(
-            listOf(createMockPolicyView(data = """{"key":"value"}""")),
+            listOf(createMockSdkPolicy(data = """{"key":"value"}""")),
             listOf(
                 createMockPolicy(data = buildJsonObject { put("key", JsonPrimitive("value")) }),
             )
-                .toSdkPolicyViews(),
+                .toSdkPolicies(),
         )
     }
 
     @Test
-    fun `toSdkPolicyViews should map all PolicyTypeJson values to their SDK equivalents`() {
+    fun `toSdkPolicies should map all PolicyTypeJson values to their SDK equivalents`() {
         POLICY_TYPE_MAP.forEach { (inputType, expectedType) ->
             assertEquals(
-                listOf(createMockPolicyView(type = expectedType)),
-                listOf(createMockPolicy(type = inputType)).toSdkPolicyViews(),
+                listOf(createMockSdkPolicy(type = expectedType)),
+                listOf(createMockPolicy(type = inputType)).toSdkPolicies(),
             )
         }
     }

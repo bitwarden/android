@@ -5,8 +5,8 @@ import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.BuildConfig
@@ -723,7 +723,7 @@ class SettingsRepositoryImpl(
      * settings to determine whether to update the user's settings.
      */
     private fun updateVaultUnlockSettingsIfNecessary(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
     ) {
         // The vault timeout policy can only be implemented in organizations that have
         // the single organization policy, meaning that if this is enabled, the user is

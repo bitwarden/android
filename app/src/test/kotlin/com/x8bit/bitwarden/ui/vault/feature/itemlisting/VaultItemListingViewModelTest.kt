@@ -25,8 +25,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
@@ -96,8 +96,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLice
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -219,7 +219,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
-    private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<Policy>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
@@ -397,7 +397,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -1683,7 +1683,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -1723,7 +1723,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,

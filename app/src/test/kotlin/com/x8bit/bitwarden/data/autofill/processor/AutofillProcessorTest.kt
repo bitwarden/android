@@ -11,8 +11,8 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
@@ -306,7 +306,7 @@ class AutofillProcessorTest {
             every { onSuccess() } just runs
         }
         val saveRequest: SaveRequest = mockk()
-        val policies: List<PolicyView> = listOf(mockk())
+        val policies: List<Policy> = listOf(mockk())
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
             policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)

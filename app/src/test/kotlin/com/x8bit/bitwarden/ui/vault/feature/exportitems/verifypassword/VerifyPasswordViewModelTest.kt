@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
@@ -61,7 +61,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
     }
     private val policyManager = mockk<PolicyManager> {
         every { getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES) } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = DEFAULT_ORGANIZATION_ID,
                 enabled = false,
             ),
@@ -137,7 +137,7 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
             every {
                 policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = DEFAULT_ORGANIZATION_ID,
                     enabled = true,
                 ),

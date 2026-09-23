@@ -25,7 +25,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.awaits
 import io.mockk.coEvery
@@ -187,7 +187,7 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 every {
                     policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
                         enabled = true,
                     ),

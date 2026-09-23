@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -250,7 +250,7 @@ sealed class SelectAccountAction {
          */
         data class SelectionDataReceive(
             val userState: UserState?,
-            val itemRestrictedOrgs: List<PolicyView>,
+            val itemRestrictedOrgs: List<Policy>,
         ) : Internal()
     }
 }
