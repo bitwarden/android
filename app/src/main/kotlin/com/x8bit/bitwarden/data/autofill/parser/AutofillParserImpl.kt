@@ -62,8 +62,6 @@ private val URL_BARS: Map<String, String> = mapOf(
  */
 private val LOGIN_FILL_ASSIST_CATEGORIES: List<String> = listOf(
     "account-login",
-    "account-creation",
-    "account-update",
 )
 
 /**
@@ -71,6 +69,17 @@ private val LOGIN_FILL_ASSIST_CATEGORIES: List<String> = listOf(
  */
 private val CARD_FILL_ASSIST_CATEGORIES: List<String> = listOf(
     "payment-card",
+)
+
+/**
+ * A list of categories from Fill Assist that are used for [AutofillView.Identity].
+ *
+ * Account creation and account update flows are where identity fields (name, address, phone,
+ * etc.) are curated alongside credential fields.
+ */
+private val IDENTITY_FILL_ASSIST_CATEGORIES: List<String> = listOf(
+    "account-creation",
+    "account-update",
 )
 
 /**
@@ -132,15 +141,10 @@ class AutofillParserImpl(
             .flatMap { it.urlBarWebsites }
             .firstOrNull()
         // Heuristic views: the focused node's candidates with unfillable (Unused) fields removed,
-        // falling back to all fillable views when nothing has focus. Identity is also excluded
-        // here for now -- Identity partition construction lands in Phase D, so until then a field
-        // classified as Identity must keep falling through exactly as it would have as Unused
-        // (e.g. resolving to a sibling Login/Card field on the same form, or its Unused-only
-        // promotion in updateForMissingUsernameFields), not become the focused view and force this
-        // request to Unfillable.
+        // falling back to all fillable views when nothing has focus.
         val autofillViews = traversalDataList
             .selectCandidateAutofillViews(urlBarWebsite = urlBarWebsite) {
-                it !is AutofillView.Unused && it !is AutofillView.Identity
+                it !is AutofillView.Unused
             }
 
         val isFillAssistEnabled = featureFlagManager
@@ -177,6 +181,7 @@ class AutofillParserImpl(
                 uri = uri,
                 focusedView = focusedView,
                 urlBarWebsite = urlBarWebsite,
+                isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
         } else {
             autofillViews
@@ -200,8 +205,12 @@ class AutofillParserImpl(
             }
 
             is AutofillView.Identity -> {
-                // Identity partition construction lands in Phase D. Unfillable until then.
-                return AutofillRequest.Unfillable
+                // Gated behind FlagKey.IdentityAutofill until the feature is ready for
+                // production; disabled matches this partition's pre-feature behavior.
+                if (!isIdentityAutofillEnabled) return AutofillRequest.Unfillable
+                AutofillPartition.Identity(
+                    views = effectiveViews.filterIsInstance<AutofillView.Identity>(),
+                )
             }
 
             is AutofillView.Unused -> {
@@ -248,6 +257,7 @@ class AutofillParserImpl(
         uri: String?,
         focusedView: AutofillView,
         urlBarWebsite: String?,
+        isIdentityAutofillEnabled: Boolean,
     ): List<AutofillView> {
         val hostRules = uri
             ?.takeUnless { it.startsWith("androidapp://") }
@@ -258,16 +268,26 @@ class AutofillParserImpl(
             }
             ?: return this
 
+        // Identity categories were Login categories before identity autofill, so with the flag
+        // off they must stay Login's to keep fill-assist coverage unchanged on those hosts.
+        val fillAssistCategories = if (isIdentityAutofillEnabled) {
+            LOGIN_FILL_ASSIST_CATEGORIES
+        } else {
+            LOGIN_FILL_ASSIST_CATEGORIES + IDENTITY_FILL_ASSIST_CATEGORIES
+        }
+
         val coversCurrentPartition = hostRules.any { rule ->
             when (focusedView) {
                 is AutofillView.Card -> rule.category in CARD_FILL_ASSIST_CATEGORIES
-                is AutofillView.Login -> rule.category in LOGIN_FILL_ASSIST_CATEGORIES
+                is AutofillView.Login -> rule.category in fillAssistCategories
+                is AutofillView.Identity -> rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
                 is AutofillView.Unused -> {
-                    rule.category in LOGIN_FILL_ASSIST_CATEGORIES ||
-                        rule.category in CARD_FILL_ASSIST_CATEGORIES
+                    val identityCoversRule = isIdentityAutofillEnabled &&
+                        rule.category in IDENTITY_FILL_ASSIST_CATEGORIES
+                    rule.category in fillAssistCategories ||
+                        rule.category in CARD_FILL_ASSIST_CATEGORIES ||
+                        identityCoversRule
                 }
-                // Identity fill-assist categories land in a later phase.
-                is AutofillView.Identity -> false
             }
         }
         if (!coversCurrentPartition) return this
@@ -275,6 +295,7 @@ class AutofillParserImpl(
         val fillAssistViews = assistStructure.buildFillAssistViews(
             hostRules = hostRules,
             urlBarWebsite = urlBarWebsite,
+            isIdentityAutofillEnabled = isIdentityAutofillEnabled,
         )
         // Fill-assist is authoritative for a partition its rules cover (guarded by
         // coversCurrentPartition above), so its views are used even when empty: for Login/Card
@@ -327,10 +348,16 @@ private fun List<ViewNodeTraversalData>.selectCandidateAutofillViews(
 }
 
 /**
- * Returns the focused [AutofillView], or falls back to the first entry if none is focused.
+ * Returns the focused [AutofillView], preferring a non-Identity view so a real Identity partition
+ * is only built when Identity is the only classification available. Falls back to the first entry
+ * if nothing is focused.
  */
-private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? =
-    firstOrNull { it.data.isFocused } ?: firstOrNull()
+private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? {
+    return this.firstOrNull { it.data.isFocused && it !is AutofillView.Identity }
+        ?: this.firstOrNull { it.data.isFocused }
+        ?: this.firstOrNull { it !is AutofillView.Identity }
+        ?: this.firstOrNull()
+}
 
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
@@ -447,9 +474,8 @@ private fun AssistStructure.ViewNode.traverse(
                     mutableAutofillViewList.add(AutofillView.Identity.Email(data = view.data))
                 }
 
-                // Some phone hints (e.g. "mobilephone") also match the username heuristic's
-                // "phone" term and resolve to Login.Username above, so they need the same
-                // dual-classification as email.
+                // A phone-hinted or phone-heuristic field resolves to Login.Username above (see
+                // supportedAutofillHint), so it needs the same dual-classification as email.
                 if (view is AutofillView.Login.Username && this.isPhoneField) {
                     mutableAutofillViewList.add(AutofillView.Identity.PhoneFull(data = view.data))
                 }
@@ -466,17 +492,33 @@ private fun AssistStructure.ViewNode.traverse(
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
             )
             .let { viewNodeTraversalData ->
+                // Ids already claimed by an ancestor's own view (e.g. a container-redirect
+                // target) before this child's results are considered. A primary always precedes
+                // its Identity dual-classification sibling in this same child's results, so the
+                // sibling's id is still fresh here and passes the check below.
+                val idsClaimedByAncestor = claimedAutofillIds.toSet()
+                // Flatten child views into this node, keeping the first view seen for each autofill
+                // id and dropping later duplicates (e.g. a container-redirect leftover).
                 viewNodeTraversalData.autofillViews
-                    // filter out existing AutofillIds to avoid duplicates
                     .filter { view ->
                         val id = view.data.autofillId
-                        if (id in claimedAutofillIds) {
-                            false
-                        } else if (view !is AutofillView.Unused) {
-                            claimedAutofillIds.add(id)
-                            true
-                        } else {
-                            true
+                        when (view) {
+                            // Never claims an id, so a real view for that id can still be kept.
+                            is AutofillView.Unused -> id !in claimedAutofillIds
+                            // Kept if the id is fresh, i.e. it's a dual-classification sibling of
+                            // a primary view from this same child. Dropped if the id was already
+                            // claimed by an ancestor's own view -- that means this is a stale
+                            // container-redirect leftover, not an intentional sibling.
+                            is AutofillView.Identity -> {
+                                if (id !in idsClaimedByAncestor) {
+                                    claimedAutofillIds.add(id)
+                                    true
+                                } else {
+                                    false
+                                }
+                            }
+                            // Kept only the first time its id is seen (add returns false if known).
+                            else -> claimedAutofillIds.add(id)
                         }
                     }
                     .forEach(mutableAutofillViewList::add)
@@ -508,7 +550,7 @@ private fun AssistStructure.ViewNode.traverse(
  * This updates the underlying [AutofillView.data] with the given [website] if it does not already
  * have a website associated with it.
  */
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillView {
     val site = website ?: return this
     if (this.data.website != null) return this
@@ -523,44 +565,21 @@ private fun AutofillView.updateWebsiteIfNecessary(website: String?): AutofillVie
         is AutofillView.Login.Email -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Password -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Login.Username -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.AddressCountry -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressLocality -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressRegion -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.AddressStreet -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.AddressCountry -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressLocality -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressRegion -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressStreet -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.AddressExtended -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Company -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.Email -> this.copy(data = this.data.copy(website = site))
-        is AutofillView.Identity.LicenseNumber -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PassportNumber -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.LicenseNumber -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PassportNumber -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PersonNameFamily -> {
             this.copy(data = this.data.copy(website = site))
         }
 
-        is AutofillView.Identity.PersonNameFull -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
-        is AutofillView.Identity.PersonNameGiven -> {
-            this.copy(data = this.data.copy(website = site))
-        }
-
+        is AutofillView.Identity.PersonNameFull -> this.copy(data = this.data.copy(website = site))
+        is AutofillView.Identity.PersonNameGiven -> this.copy(data = this.data.copy(website = site))
         is AutofillView.Identity.PersonNameMiddle -> {
             this.copy(data = this.data.copy(website = site))
         }

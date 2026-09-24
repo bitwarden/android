@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -92,8 +93,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         },
     )
 
+    val focusManager = LocalFocusManager.current
     val isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
-    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
+    val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
     LazyColumn(modifier = modifier, state = lazyListState) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -193,7 +195,12 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     id = vfo1Foundation(BitwardenString.my_folder, BitwardenString.folder),
                 ),
                 selectedOption = state.common.selectedFolder?.name,
-                onClick = commonTypeHandlers.onSelectOrAddFolderForItem,
+                onClick = {
+                    // Clear any current focused item, such as an unrelated text field, so the
+                    // soft keyboard is not animating away while the bottom sheet animates in.
+                    focusManager.clearFocus()
+                    commonTypeHandlers.onSelectOrAddFolderForItem()
+                },
                 cardStyle = if (isAddItemMode && state.common.hasOrganizations) {
                     CardStyle.Top(dividerPadding = 0.dp)
                 } else {
@@ -214,7 +221,12 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                         id = vfo1Foundation(BitwardenString.vault, BitwardenString.owner),
                     ),
                     selectedOption = state.common.selectedOwner?.name?.invoke(),
-                    onClick = commonTypeHandlers.onPresentOwnerOptions,
+                    onClick = {
+                        // Clear any current focused item, such as an unrelated text field, so the
+                        // soft keyboard is not animating away while the bottom sheet animates in.
+                        focusManager.clearFocus()
+                        commonTypeHandlers.onPresentOwnerOptions()
+                    },
                     cardStyle = if (collections.isNotEmpty()) {
                         CardStyle.Middle()
                     } else {

@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -186,6 +187,7 @@ object VaultManagerModule {
         kdfManager: KdfManager,
         pinProtectedUserKeyManager: PinProtectedUserKeyManager,
         passwordPolicyManager: PasswordPolicyManager,
+        keyRotationManager: KeyRotationManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -202,6 +204,7 @@ object VaultManagerModule {
             kdfManager = kdfManager,
             pinProtectedUserKeyManager = pinProtectedUserKeyManager,
             passwordPolicyManager = passwordPolicyManager,
+            keyRotationManager = keyRotationManager,
         )
 
     @Provides

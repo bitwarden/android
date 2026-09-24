@@ -7,6 +7,7 @@ import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.ReinitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
@@ -50,6 +51,11 @@ interface VaultSdkSource {
      * the associated vault.
      */
     fun clearCrypto(userId: String)
+
+    /**
+     * Returns the Key ID for the given raw user key.
+     */
+    fun getKeyId(userKey: String): Result<String>
 
     /**
      * Gets the data to authenticate with trusted device encryption.
@@ -139,6 +145,15 @@ interface VaultSdkSource {
      * Gets the user's fingerprint.
      */
     suspend fun getUserFingerprint(userId: String): Result<String>
+
+    /**
+     * Attempts to reinitialize cryptography functionality for an individual user with the given
+     * [userId] for the Bitwarden SDK with a given [ReinitUserCryptoRequest].
+     */
+    suspend fun reinitializeCrypto(
+        userId: String,
+        request: ReinitUserCryptoRequest,
+    ): Result<Unit>
 
     /**
      * Attempts to initialize cryptography functionality for an individual user with the given

@@ -371,6 +371,7 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="passphrase">Cyfrinymadrodd</string>
     <string name="word_separator">Gwahanydd geiriau</string>
     <string name="clear">Clirio</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Cynhyrchydd</string>
     <string name="no_folders_to_list">Does dim ffolderi i\'w rhestru.</string>
     <string name="fingerprint_phrase">Ymadrodd ôl bys</string>
@@ -1480,4 +1481,9 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="receive_24_7_priority_support">Derbyn cymorth blaenoriaeth 24/7</string>
     <string name="account_creation_restricted">Creu cyfrif wedi\'i gyfyngu</string>
     <string name="only_allows_invited_users_to_create_accounts">Dim ond defnyddwyr sydd wedi\'u gwahodd all greu cyfrifon yn %1$s.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

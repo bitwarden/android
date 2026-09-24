@@ -367,6 +367,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="passphrase">Prístupová fráza</string>
     <string name="word_separator">Oddeľovač slov</string>
     <string name="clear">Vyčistiť</string>
+    <string name="open_calendar">otvoriť kalendár</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Neexistujú žiadne zložky.</string>
     <string name="fingerprint_phrase">Fráza odtlačku</string>
@@ -1460,4 +1461,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="receive_24_7_priority_support">Získajte nonstop prioritnú podporu</string>
     <string name="account_creation_restricted">Vytvorenie účtu je obmedzené</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvárať účty iba pozvaným používateľom.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Znížiť o %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zvýšiť o %1$s</string>
+    <string name="use_this_passphrase">Použiť túto prístupovú frázu</string>
+    <string name="use_this_password">Použiť toto heslo</string>
+    <string name="use_this_username">Použiť toto používateľské meno</string>
 </resources>

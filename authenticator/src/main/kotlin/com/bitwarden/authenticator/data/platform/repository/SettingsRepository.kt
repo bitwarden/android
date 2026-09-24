@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

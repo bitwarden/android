@@ -21,7 +21,7 @@
     <string name="enter_pin">Zadejte PIN kód</string>
     <string name="favorites">Oblíbené</string>
     <string name="folder">Složka</string>
-    <string name="folder_created">Nová složka byla vytvořena.</string>
+    <string name="folder_created">Nová složka byla vytvořena</string>
     <string name="folder_deleted">Složka byla smazána.</string>
     <string name="folder_none">Žádná složka</string>
     <string name="folder_updated">Složka byla uložena</string>
@@ -367,6 +367,7 @@ Načtení proběhne automaticky.</string>
     <string name="passphrase">Heslová fráze</string>
     <string name="word_separator">Oddělovač slov</string>
     <string name="clear">Vymazat</string>
+    <string name="open_calendar">otevřít kalendář</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Nejsou k dispozici žádné složky k zobrazení.</string>
     <string name="fingerprint_phrase">Fráze otisku prstu</string>
@@ -1461,4 +1462,9 @@ při opakování problémů.</string>
     <string name="receive_24_7_priority_support">Získejte přednostní podporu 24/7</string>
     <string name="account_creation_restricted">Vytvoření účtu omezeno</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvářet účty jen pozvaným uživatelům.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Snížit %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zvýšit %1$s</string>
+    <string name="use_this_passphrase">Použít tuto heslovou frázi</string>
+    <string name="use_this_password">Použít toto heslo</string>
+    <string name="use_this_username">Použít toto uživatelské jméno</string>
 </resources>

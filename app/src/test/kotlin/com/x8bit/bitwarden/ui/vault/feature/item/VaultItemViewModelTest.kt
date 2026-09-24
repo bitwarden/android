@@ -201,6 +201,70 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `init should send ShowSnackbar when showCreatedSnackbar is true`() = runTest {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE,
+            vaultItemCipherType = VaultItemCipherType.LOGIN,
+            showCreatedSnackbar = true,
+        )
+        viewModel.eventFlow.test {
+            assertEquals(
+                VaultItemEvent.ShowSnackbar(message = BitwardenString.login_saved.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `init should not send ShowSnackbar when showCreatedSnackbar is false`() = runTest {
+        val viewModel = createViewModel(state = DEFAULT_STATE, showCreatedSnackbar = false)
+        viewModel.eventFlow.test {
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `init should not resend ShowSnackbar when recreated with the same SavedStateHandle`() =
+        runTest {
+            val savedStateHandle = SavedStateHandle().apply {
+                every {
+                    toVaultItemArgs()
+                } returns VaultItemArgs(
+                    vaultItemId = VAULT_ITEM_ID,
+                    cipherType = VaultItemCipherType.LOGIN,
+                    showCreatedSnackbar = true,
+                )
+            }
+
+            fun createViewModelWithHandle(): VaultItemViewModel = VaultItemViewModel(
+                savedStateHandle = savedStateHandle,
+                clipboardManager = clipboardManager,
+                authRepository = authRepo,
+                vaultRepository = vaultRepo,
+                fileManager = mockFileManager,
+                organizationEventManager = organizationEventManager,
+                environmentRepository = mockEnvironmentRepository,
+                settingsRepository = mockSettingsRepository,
+                snackbarRelayManager = snackbarRelayManager,
+                premiumStateManager = premiumStateManager,
+                featureFlagManager = featureFlagManager,
+            )
+
+            val firstViewModel = createViewModelWithHandle()
+            firstViewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemEvent.ShowSnackbar(message = BitwardenString.login_saved.asText()),
+                    awaitItem(),
+                )
+            }
+
+            val secondViewModel = createViewModelWithHandle()
+            secondViewModel.eventFlow.test {
+                expectNoEvents()
+            }
+        }
+
     @Nested
     inner class CommonActions {
         private lateinit var viewModel: VaultItemViewModel
@@ -3894,6 +3958,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         state: VaultItemState?,
         vaultItemId: String = VAULT_ITEM_ID,
         vaultItemCipherType: VaultItemCipherType = VaultItemCipherType.LOGIN,
+        showCreatedSnackbar: Boolean = false,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         authRepository: AuthRepository = authRepo,
         vaultRepository: VaultRepository = vaultRepo,
@@ -3908,7 +3973,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             set("tempAttachmentFile", tempAttachmentFile)
             every {
                 toVaultItemArgs()
-            } returns VaultItemArgs(vaultItemId = vaultItemId, cipherType = vaultItemCipherType)
+            } returns VaultItemArgs(
+                vaultItemId = vaultItemId,
+                cipherType = vaultItemCipherType,
+                showCreatedSnackbar = showCreatedSnackbar,
+            )
         },
         clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,

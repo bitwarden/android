@@ -3,7 +3,7 @@
     <string name="about">About</string>
     <string name="add_folder">Add folder</string>
     <string name="add_item">Add item</string>
-    <string name="an_error_has_occurred">An error has occurred.</string>
+    <string name="an_error_has_occurred">An error has occurred</string>
     <string name="apply">Apply</string>
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
@@ -18,7 +18,7 @@
     <string name="edit_folder">Edit folder</string>
     <string name="email">Email</string>
     <string name="email_address">Email address</string>
-    <string name="enter_pin">Enter your PIN code.</string>
+    <string name="enter_pin">Enter your PIN code</string>
     <string name="favorites">Favourites</string>
     <string name="folder">Folder</string>
     <string name="folder_created">New folder created.</string>
@@ -53,7 +53,7 @@
     <string name="no">No</string>
     <string name="notes">Notes</string>
     <string name="private_notes">Private notes</string>
-    <string name="okay">OK</string>
+    <string name="okay">Okay</string>
     <string name="password">Password</string>
     <string name="save">Save</string>
     <string name="move">Move</string>
@@ -363,6 +363,7 @@ Scanning will happen automatically.</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Word separator</string>
     <string name="clear">Clear</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">There are no folders to list.</string>
     <string name="fingerprint_phrase">Fingerprint phrase</string>
@@ -1442,4 +1443,9 @@ any issues.</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

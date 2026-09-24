@@ -71,6 +71,7 @@ fun createMockSdkCipher(
         viewPassword = false,
         localData = null,
         data = "mockData-$number",
+        partialData = null,
     )
 
 /**

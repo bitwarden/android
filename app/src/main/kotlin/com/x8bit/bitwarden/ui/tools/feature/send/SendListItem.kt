@@ -7,17 +7,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -26,8 +24,9 @@ import kotlinx.collections.immutable.toPersistentList
  * A Composable function that displays a row send item.
  *
  * @param label The primary text label to display for the item.
- * @param supportingLabel An secondary text label to display beneath the label.
+ * @param supportingLabel A secondary text label to display beneath the label.
  * @param startIcon The [Painter] object used to draw the icon at the start of the item.
+ * @param isDisabled  Whether the item is disabled or not.
  * @param showMoreOptions Whether to show the button for the overflow options.
  * @param onClick The lambda to be invoked when the item is clicked.
  * @param onViewClick The lambda to be invoked when the view option is clicked from the menu.
@@ -50,54 +49,33 @@ fun SendListItem(
     trailingLabelIcons: ImmutableList<IconData>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
-    onViewClick: () -> Unit,
-    onEditClick: () -> Unit,
-    onCopyClick: () -> Unit,
-    onShareClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onRemovePasswordClick: (() -> Unit)?,
+    onOverflowAction: (ListingItemOverflowAction.SendAction) -> Unit,
+    overflowOptions: ImmutableList<ListingItemOverflowAction.SendAction>,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+    var speedBumpAction: ListingItemOverflowAction.SendAction? by rememberSaveable {
+        mutableStateOf(null)
+    }
     BitwardenListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
         trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
-        selectionDataList = persistentListOfNotNull(
-            SelectionItemData(
-                text = stringResource(id = BitwardenString.copy_link),
-                onClick = onCopyClick,
-            ),
-            SelectionItemData(
-                text = stringResource(id = BitwardenString.share_link),
-                contentDescription = stringResource(
-                    id = BitwardenString.external_link_format,
-                    formatArgs = arrayOf(stringResource(id = BitwardenString.share_link)),
-                ),
-                onClick = onShareClick,
-            ),
-            SelectionItemData(
-                text = stringResource(id = BitwardenString.view),
-                onClick = onViewClick,
-            ),
-            SelectionItemData(
-                text = stringResource(id = BitwardenString.edit),
-                onClick = onEditClick,
-            ),
-            onRemovePasswordClick?.let {
+        selectionDataList = overflowOptions
+            .map { action ->
                 SelectionItemData(
-                    text = stringResource(id = BitwardenString.remove_password),
-                    onClick = it,
+                    text = action.title(),
+                    onClick = {
+                        action
+                            .speedBump
+                            ?.let { speedBumpAction = action }
+                            ?: onOverflowAction(action)
+                    },
+                    contentDescription = action.contentDescription(),
                 )
-            },
-            SelectionItemData(
-                text = stringResource(id = BitwardenString.delete),
-                onClick = { shouldShowDeleteConfirmationDialog = true },
-            ),
-        )
+            }
             // Only show options if allowed
             .filter { showMoreOptions }
             .toPersistentList(),
@@ -105,19 +83,25 @@ fun SendListItem(
         cardStyle = cardStyle,
         modifier = modifier,
     )
-    if (shouldShowDeleteConfirmationDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.delete),
-            message = stringResource(id = BitwardenString.are_you_sure_delete_send),
-            confirmButtonText = stringResource(id = BitwardenString.yes),
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onConfirmClick = {
-                shouldShowDeleteConfirmationDialog = false
-                onDeleteClick()
-            },
-            onDismissClick = { shouldShowDeleteConfirmationDialog = false },
-            onDismissRequest = { shouldShowDeleteConfirmationDialog = false },
-        )
+    speedBumpAction?.let { action ->
+        action
+            .speedBump
+            ?.let { speedBump ->
+                BitwardenTwoButtonDialog(
+                    twoButtonDialogData = speedBump,
+                    onConfirmClick = {
+                        speedBumpAction = null
+                        onOverflowAction(action)
+                    },
+                    onDismissClick = { speedBumpAction = null },
+                    onDismissRequest = { speedBumpAction = null },
+                )
+            }
+            ?: run {
+                // If we somehow get here and there is no speed bump, then we should keep on going.
+                speedBumpAction = null
+                onOverflowAction(action)
+            }
     }
 }
 
@@ -131,13 +115,9 @@ private fun SendListItem_preview() {
             startIcon = IconData.Local(BitwardenDrawable.ic_file_text),
             trailingLabelIcons = persistentListOf(),
             showMoreOptions = true,
+            overflowOptions = persistentListOf(),
+            onOverflowAction = { },
             onClick = {},
-            onCopyClick = {},
-            onViewClick = {},
-            onEditClick = {},
-            onShareClick = {},
-            onDeleteClick = {},
-            onRemovePasswordClick = null,
             cardStyle = CardStyle.Full,
         )
     }

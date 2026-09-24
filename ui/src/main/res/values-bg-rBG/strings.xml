@@ -363,6 +363,7 @@
     <string name="passphrase">Парола-фраза</string>
     <string name="word_separator">Разделител за думи</string>
     <string name="clear">Изчистване</string>
+    <string name="open_calendar">отваряне на календара</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Няма папки за показване.</string>
     <string name="fingerprint_phrase">Уникална фраза</string>
@@ -1442,4 +1443,9 @@
     <string name="receive_24_7_priority_support">Получавайте 24-часова приоритетна поддръжка</string>
     <string name="account_creation_restricted">Създаването на акаунти е ограничено</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s разрешава само на поканените потребители да създават акаунти.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Намалявена %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Увеличаване %1$s</string>
+    <string name="use_this_passphrase">Използване на тази парола-фраза</string>
+    <string name="use_this_password">Използване на тази парола</string>
+    <string name="use_this_username">Използване на това потребителско име</string>
 </resources>

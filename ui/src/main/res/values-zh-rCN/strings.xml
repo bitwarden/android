@@ -361,6 +361,7 @@
     <string name="passphrase">密码短语</string>
     <string name="word_separator">单词分隔符</string>
     <string name="clear">清除</string>
+    <string name="open_calendar">打开日历</string>
     <string name="generator">生成器</string>
     <string name="no_folders_to_list">没有可列出的文件夹。</string>
     <string name="fingerprint_phrase">指纹短语</string>
@@ -1431,4 +1432,9 @@
     <string name="receive_24_7_priority_support">享受 7×24 小时优先支持</string>
     <string name="account_creation_restricted">账户创建受限</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s 仅允许受邀用户创建账户。</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">减少 %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">增加 %1$s</string>
+    <string name="use_this_passphrase">使用此密码短语</string>
+    <string name="use_this_password">使用此密码</string>
+    <string name="use_this_username">使用此用户名</string>
 </resources>

@@ -1,0 +1,21 @@
+# This placeholder workflow file is used for testing entirely new workflows before they are
+# merged into the main branch. It should only be modified in feature branches for testing.
+# Once the new workflow is ready to be merged, it should be copied to a new file with an
+# appropriate name (e.g., ci-bwpm.yml) in the .github/workflows directory and the placeholder
+# should be reverted to this baseline no-op state — the minimal `placeholder` job below is
+# required for workflow linting to pass — before merging the feature branch.
+
+name: Workflow Placeholder
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    name: Placeholder
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Placeholder step
+        run: echo "Placeholder workflow"

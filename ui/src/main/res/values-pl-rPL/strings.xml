@@ -21,7 +21,7 @@
     <string name="enter_pin">Wpisz kod PIN</string>
     <string name="favorites">Ulubione</string>
     <string name="folder">Folder</string>
-    <string name="folder_created">Folder został utworzony.</string>
+    <string name="folder_created">Folder został utworzony</string>
     <string name="folder_deleted">Folder został usunięty.</string>
     <string name="folder_none">Nieprzypisane</string>
     <string name="folder_updated">Folder został zapisany</string>
@@ -367,6 +367,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="passphrase">Hasło wyrazowe</string>
     <string name="word_separator">Separator słów</string>
     <string name="clear">Wyczyść</string>
+    <string name="open_calendar">otwórz kalendarz</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Brak folderów do wyświetlenia.</string>
     <string name="fingerprint_phrase">Unikalny identyfikator konta</string>
@@ -1459,4 +1460,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="receive_24_7_priority_support">Priorytetowe wsparcie klienta</string>
     <string name="account_creation_restricted">Tworzenie kont zostało ograniczone</string>
     <string name="only_allows_invited_users_to_create_accounts">Serwer %1$s umożliwia rejestrację tylko zaproszonym użytkownikom.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Zmniejsz %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zwiększ %1$s</string>
+    <string name="use_this_passphrase">Użyj tego hasła wyrazowego</string>
+    <string name="use_this_password">Użyj tego hasła</string>
+    <string name="use_this_username">Użyj tej nazwy użytkownika</string>
 </resources>

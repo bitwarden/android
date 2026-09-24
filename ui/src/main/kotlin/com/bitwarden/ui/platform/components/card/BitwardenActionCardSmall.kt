@@ -21,6 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.VectorPainter
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.card.color.bitwardenCardColors
@@ -45,10 +48,10 @@ fun BitwardenActionCardSmall(
     Card(
         onClick = onCardClicked,
         shape = BitwardenTheme.shapes.actionCard,
-        modifier = modifier,
         colors = colors,
         elevation = CardDefaults.elevatedCardElevation(),
         border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
+        modifier = modifier.semantics { this.role = Role.Button },
     ) {
         Row(
             modifier = Modifier

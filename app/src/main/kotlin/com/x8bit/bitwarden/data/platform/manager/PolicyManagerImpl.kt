@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.model.FlagKey
-import com.bitwarden.organizations.OrganizationUserStatusType
-import com.bitwarden.organizations.OrganizationUserType
 import com.bitwarden.policies.OrganizationUserPolicyContext
 import com.bitwarden.policies.PolicyType
 import com.bitwarden.policies.PolicyView
@@ -86,14 +84,7 @@ class PolicyManagerImpl(
                     ?.toSdkPolicyViews(),
                 organizations = authDiskSource
                     .getOrganizations(userId = userId)
-                    ?.map {
-                        OrganizationPolicyData(
-                            organizationUserPolicyContext = it.toSdkOrganizationPolicyContext(),
-                            organizationShouldUsePolicies = it.permissions.shouldManagePolicies,
-                        )
-                    },
-                isPoliciesInAcceptedStateEnabled = featureFlagManager
-                    .getFeatureFlag(key = FlagKey.PoliciesInAcceptedState),
+                    ?.map { it.toSdkOrganizationPolicyContext() },
             )
             .orEmpty()
 
@@ -113,21 +104,12 @@ class PolicyManagerImpl(
             .map { it?.toSdkPolicyViews() },
         authDiskSource
             .getOrganizationsFlow(userId = userId)
-            .map { organizations ->
-                organizations?.map {
-                    OrganizationPolicyData(
-                        organizationUserPolicyContext = it.toSdkOrganizationPolicyContext(),
-                        organizationShouldUsePolicies = it.permissions.shouldManagePolicies,
-                    )
-                }
-            },
-        featureFlagManager.getFeatureFlagFlow(key = FlagKey.PoliciesInAcceptedState),
-    ) { policies, organizations, isEnabled ->
+            .map { organizations -> organizations?.map { it.toSdkOrganizationPolicyContext() } },
+    ) { policies, organizations ->
         filterPolicies(
             type = type,
             policies = policies,
             organizations = organizations,
-            isPoliciesInAcceptedStateEnabled = isEnabled,
         )
     }
         // We do not have any policies yet if it is null, so do not emit at all.
@@ -136,65 +118,19 @@ class PolicyManagerImpl(
     private fun filterPolicies(
         type: PolicyType,
         policies: List<PolicyView>?,
-        organizations: List<OrganizationPolicyData>?,
-        isPoliciesInAcceptedStateEnabled: Boolean,
+        organizations: List<OrganizationUserPolicyContext>?,
     ): List<PolicyView>? =
         when {
             policies == null -> null
             policies.isEmpty() -> emptyList()
-            isPoliciesInAcceptedStateEnabled -> {
+            else -> {
                 authSdkSource
                     .filterPolicies(
                         policies = policies,
                         policyType = type,
-                        organizations = organizations
-                            ?.map { it.organizationUserPolicyContext }
-                            .orEmpty(),
+                        organizations = organizations.orEmpty(),
                     )
                     .getOrElse { emptyList() }
-            }
-
-            else -> {
-                // Legacy flow
-                val organizationIdsWithActivePolicies = organizations
-                    ?.filter {
-                        @Suppress("MaxLineLength")
-                        it.organizationUserPolicyContext.usePolicies &&
-                            (it.organizationUserPolicyContext.status == OrganizationUserStatusType.ACCEPTED ||
-                                it.organizationUserPolicyContext.status == OrganizationUserStatusType.CONFIRMED) &&
-                            !it.isOrganizationExemptFromPolicies(policyType = type)
-                    }
-                    ?.map { it.organizationUserPolicyContext.id }
-                    .orEmpty()
-                return policies.filter {
-                    it.type == type &&
-                        it.enabled &&
-                        organizationIdsWithActivePolicies.contains(it.organizationId)
-                }
-            }
-        }
-
-    /**
-     * A helper method to determine if the organization is exempt from policies.
-     */
-    private fun OrganizationPolicyData.isOrganizationExemptFromPolicies(
-        policyType: PolicyType,
-    ): Boolean =
-        when (policyType) {
-            PolicyType.MAXIMUM_VAULT_TIMEOUT -> {
-                this.organizationUserPolicyContext.role == OrganizationUserType.OWNER
-            }
-
-            PolicyType.MASTER_PASSWORD,
-            PolicyType.PASSWORD_GENERATOR,
-            PolicyType.REMOVE_UNLOCK_WITH_PIN,
-            PolicyType.RESTRICTED_ITEM_TYPES,
-                -> false
-
-            else -> {
-                this.organizationUserPolicyContext.role == OrganizationUserType.OWNER ||
-                    this.organizationUserPolicyContext.role == OrganizationUserType.ADMIN ||
-                    this.organizationShouldUsePolicies
             }
         }
 
@@ -254,8 +190,3 @@ class PolicyManagerImpl(
         )
     }
 }
-
-private data class OrganizationPolicyData(
-    val organizationUserPolicyContext: OrganizationUserPolicyContext,
-    val organizationShouldUsePolicies: Boolean,
-)

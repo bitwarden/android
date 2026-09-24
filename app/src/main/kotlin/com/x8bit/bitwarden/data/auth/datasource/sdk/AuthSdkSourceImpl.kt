@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationRequest
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationRequest
@@ -37,6 +38,14 @@ class AuthSdkSourceImpl(
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     AuthSdkSource {
+
+    override suspend fun preLogin(
+        email: String,
+    ): Result<PasswordPreloginResponse> = runCatchingWithLogs {
+        withContext(context = dispatcherManager.io) {
+            useClient { auth().login().getPasswordPrelogin(email = email) }
+        }
+    }
 
     override suspend fun postKeysForJitPasswordRegistration(
         userId: String,
@@ -152,14 +161,15 @@ class AuthSdkSourceImpl(
     }
 
     override suspend fun hashPassword(
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String> = runCatchingWithLogs {
         useClient {
+            // Under the hood, the "email" parameter is the salt.
             auth().hashPassword(
-                email = email,
+                email = salt,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,

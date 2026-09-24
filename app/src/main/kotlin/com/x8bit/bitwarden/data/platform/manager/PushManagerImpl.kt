@@ -48,7 +48,7 @@ private val PUSH_TOKEN_UPDATE_DELAY: Duration = 7.days
  * Primary implementation of [PushManager].
  */
 @Suppress("LongParameterList")
-class PushManagerImpl @Inject constructor(
+internal class PushManagerImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
     private val pushDiskSource: PushDiskSource,
     private val pushService: PushService,
@@ -162,19 +162,7 @@ class PushManagerImpl @Inject constructor(
             }
 
             NotificationType.LOG_OUT -> {
-                json
-                    .decodeFromString<NotificationPayload.UserNotification>(
-                        string = notification.payload,
-                    )
-                    .takeUnless {
-                        featureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange) &&
-                            it.pushNotificationLogOutReason ==
-                            PushNotificationLogOutReason.KDF_CHANGE
-                    }
-                    ?.userId
-                    ?.let {
-                        mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = it))
-                    }
+                handleLogoutPayload(payload = json.decodeFromString(string = notification.payload))
             }
 
             NotificationType.SYNC_CIPHER_CREATE,
@@ -337,6 +325,31 @@ class PushManagerImpl @Inject constructor(
                     }
             }
         }
+    }
+
+    private fun handleLogoutPayload(payload: NotificationPayload.UserNotification) {
+        payload
+            .takeUnless { it.userId == null }
+            ?.let {
+                val userId = requireNotNull(it.userId)
+                when (it.logOutReason) {
+                    PushNotificationLogOutReason.KEY_ROTATION -> {
+                        // We do not want to log out, we need to sync to help
+                        // facilitate the key rotation.
+                        mutableFullSyncSharedFlow.tryEmit(userId)
+                    }
+
+                    PushNotificationLogOutReason.KDF_CHANGE -> {
+                        if (!featureFlagManager.getFeatureFlag(key = FlagKey.NoLogoutOnKdfChange)) {
+                            mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = userId))
+                        }
+                    }
+
+                    null -> {
+                        mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = userId))
+                    }
+                }
+            }
     }
 
     override fun registerPushTokenIfNecessary(token: String) {

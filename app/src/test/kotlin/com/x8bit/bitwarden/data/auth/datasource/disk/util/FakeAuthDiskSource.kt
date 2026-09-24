@@ -74,6 +74,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<String?>>()
     private val storedV2UpgradeTokens = mutableMapOf<String, V2UpgradeTokenJson?>()
     private val storedUserKeyIds = mutableMapOf<String, String?>()
+    private val storedV2EncryptedMigrationsGracePeriodStarts = mutableMapOf<String, Instant?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -109,6 +110,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableAccountTokensFlowMap.remove(userId)
         mutableEphemeralPinProtectedUserKeyEnvelopesFlowMap.remove(userId)
         mutablePersistentPinProtectedUserKeyEnvelopesFlowMap.remove(userId)
+
+        // Certain values are never removed as required by the feature requirements:
+        // * DeviceKey
+        // * PendingAuthRequest
+        // * OnboardingStatus
+        // * V2EncryptedMigrationsGracePeriodStart
     }
 
     override fun getShouldUseKeyConnectorFlow(
@@ -176,6 +183,16 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeV2UpgradeToken(userId: String, v2UpgradeToken: V2UpgradeTokenJson?) {
         storedV2UpgradeTokens[userId] = v2UpgradeToken
+    }
+
+    override fun getV2EncryptedMigrationsGracePeriodStart(userId: String): Instant? =
+        storedV2EncryptedMigrationsGracePeriodStarts[userId]
+
+    override fun storeV2EncryptedMigrationsGracePeriodStart(
+        userId: String,
+        gracePeriodStart: Instant?,
+    ) {
+        storedV2EncryptedMigrationsGracePeriodStarts[userId] = gracePeriodStart
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -429,7 +446,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the given [userState] matches the currently tracked value.
      */
-    fun assertUserState(userState: UserStateJson) {
+    fun assertUserState(userState: UserStateJson?) {
         assertEquals(userState, this.userState)
     }
 
@@ -472,10 +489,24 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [gracePeriodStart] was stored successfully using the [userId].
+     */
+    fun assertV2EncryptedMigrationsGracePeriodStart(userId: String, gracePeriodStart: Instant?) {
+        assertEquals(gracePeriodStart, storedV2EncryptedMigrationsGracePeriodStarts[userId])
+    }
+
+    /**
      * Assert that the [twoFactorToken] was stored successfully using the [email].
      */
     fun assertTwoFactorToken(email: String, twoFactorToken: String?) {
         assertEquals(twoFactorToken, storedTwoFactorTokens[email])
+    }
+
+    /**
+     * Assert that the [authenticatorSyncKey] was stored successfully using the [userId].
+     */
+    fun assertAuthenticatorSyncKey(userId: String, authenticatorSyncKey: String?) {
+        assertEquals(authenticatorSyncKey, storedAuthenticationSyncKeys[userId])
     }
 
     /**

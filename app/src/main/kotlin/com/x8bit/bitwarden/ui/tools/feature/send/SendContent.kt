@@ -23,6 +23,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 
 private const val SEND_TYPES_COUNT: Int = 2
 
@@ -108,10 +109,13 @@ fun SendContent(
                         .standardHorizontalMargin(),
                 )
             }
+
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.all_sends),
                 supportingLabel = state.sendItems.size.toString(),
@@ -131,16 +135,34 @@ fun SendContent(
                 trailingLabelIcons = it.iconList,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
-                onViewClick = { sendHandlers.onViewSendClick(it) },
-                onCopyClick = { sendHandlers.onCopySendClick(it) },
-                onEditClick = { sendHandlers.onEditSendClick(it) },
-                onShareClick = { sendHandlers.onShareSendClick(it) },
-                onDeleteClick = { sendHandlers.onDeleteSendClick(it) },
-                onRemovePasswordClick = if (it.hasPassword) {
-                    { sendHandlers.onRemovePasswordClick(it) }
-                } else {
-                    null
+                onOverflowAction = { action ->
+                    when (action) {
+                        is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
+                            sendHandlers.onCopySendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.DeleteClick -> {
+                            sendHandlers.onDeleteSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.EditClick -> {
+                            sendHandlers.onEditSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.RemovePasswordClick -> {
+                            sendHandlers.onRemovePasswordClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.ShareUrlClick -> {
+                            sendHandlers.onShareSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.ViewClick -> {
+                            sendHandlers.onViewSendClick(it)
+                        }
+                    }
                 },
+                overflowOptions = it.overflowItems,
                 cardStyle = state
                     .sendItems
                     .toListItemCardStyle(index = index, dividerPadding = 56.dp),

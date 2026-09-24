@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -82,9 +83,9 @@ class VaultLockManagerTest {
     private val authSdkSource: AuthSdkSource = mockk {
         coEvery {
             hashPassword(
-                email = MOCK_PROFILE.email,
+                salt = MOCK_MASTER_PASSWORD_UNLOCK_DATA.salt,
                 password = "mockValue",
-                kdf = MOCK_PROFILE.toSdkParams(),
+                kdf = MOCK_MASTER_PASSWORD_UNLOCK_DATA.kdf,
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
         } returns "hashedPassword".asSuccess()
@@ -124,6 +125,10 @@ class VaultLockManagerTest {
     private val passwordPolicyManager: PasswordPolicyManager = mockk {
         every { validatePasswordAgainstPolicies(password = any(), isCreation = any()) } returns true
     }
+    private val keyRotationManager: KeyRotationManager = mockk {
+        coEvery { rotateAutoUnlockKey(userId = any()) } just runs
+        coEvery { rotateAuthenticatorSyncKey(userId = any()) } just runs
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
@@ -140,6 +145,7 @@ class VaultLockManagerTest {
         kdfManager = kdfManager,
         pinProtectedUserKeyManager = pinProtectedUserKeyManager,
         passwordPolicyManager = passwordPolicyManager,
+        keyRotationManager = keyRotationManager,
     )
 
     @Test
@@ -1007,6 +1013,8 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1184,6 +1192,8 @@ class VaultLockManagerTest {
                 )
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1755,6 +1765,8 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = USER_ID)
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -1848,6 +1860,14 @@ class VaultLockManagerTest {
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
                 kdfManager.updateKdfToMinimumsIfNeeded(password = masterPassword)
+                authSdkSource.hashPassword(
+                    salt = MOCK_MASTER_PASSWORD_UNLOCK_DATA.salt,
+                    password = masterPassword,
+                    kdf = MOCK_MASTER_PASSWORD_UNLOCK_DATA.kdf,
+                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                )
+                keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
+                keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
         }
 
@@ -2088,17 +2108,25 @@ class VaultLockManagerTest {
 
             assertEquals(VaultUnlockResult.Success, result)
             fakeAuthDiskSource.assertUserState(userState = MOCK_USER_STATE)
+            fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID, passwordHash = null)
             verify(exactly = 0) {
                 passwordPolicyManager.validatePasswordAgainstPolicies(
                     password = any(),
                     isCreation = any(),
                 )
             }
+            coVerify(exactly = 0) {
+                authSdkSource.hashPassword(
+                    salt = any(),
+                    password = any(),
+                    kdf = any(),
+                    purpose = any(),
+                )
+            }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock when the password fails policies should store the reason even when the unlock fails`() =
+    fun `unlockVault with initializeCrypto failure should not process the master password`() =
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
@@ -2126,7 +2154,7 @@ class VaultLockManagerTest {
                         upgradeToken = null,
                     ),
                 )
-            } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
+            } returns error.asFailure()
             mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
@@ -2139,13 +2167,23 @@ class VaultLockManagerTest {
                 organizationKeys = null,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
-            fakeAuthDiskSource.assertUserState(
-                userState = MOCK_USER_STATE.updateForcePasswordReset(
-                    userId = USER_ID,
-                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-                ),
-            )
+            assertEquals(VaultUnlockResult.GenericError(error = error), result)
+            fakeAuthDiskSource.assertUserState(userState = MOCK_USER_STATE)
+            fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID, passwordHash = null)
+            verify(exactly = 0) {
+                passwordPolicyManager.validatePasswordAgainstPolicies(
+                    password = any(),
+                    isCreation = any(),
+                )
+            }
+            coVerify(exactly = 0) {
+                authSdkSource.hashPassword(
+                    salt = any(),
+                    password = any(),
+                    kdf = any(),
+                    purpose = any(),
+                )
+            }
         }
 
     /**

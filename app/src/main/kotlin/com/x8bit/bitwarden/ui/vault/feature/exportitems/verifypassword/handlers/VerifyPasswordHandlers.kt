@@ -42,6 +42,19 @@ data class VerifyPasswordHandlers(
                     viewModel.trySendAction(VerifyPasswordAction.DismissDialog)
                 },
             )
+
+        /**
+         * Creates an empty [VerifyPasswordHandlers] that does nothing. This should only be used
+         * for previews.
+         */
+        fun createEmpty(): VerifyPasswordHandlers =
+            VerifyPasswordHandlers(
+                onNavigateBackClick = { },
+                onContinueClick = { },
+                onInputChanged = { },
+                onSendCodeClick = { },
+                onDismissDialog = { },
+            )
     }
 }
 

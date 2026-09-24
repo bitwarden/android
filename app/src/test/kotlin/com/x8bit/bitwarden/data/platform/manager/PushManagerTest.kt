@@ -165,6 +165,66 @@ class PushManagerTest {
             }
 
         @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with kdf change as reason and disabled flag should emit to logoutFlow`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                } returns false
+
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
+                    assertEquals(
+                        NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with key rotation as reason should emit to fullSyncFlow`() =
+            runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KEY_ROTATION_NOTIFICATION_MAP)
+                    assertEquals("078966a2-93c2-4618-ae2a-0a2394c88d37", awaitItem())
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with key rotation as reason should not emit to logoutFlow`() =
+            runTest {
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KEY_ROTATION_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `onMessageReceived with logout with key rotation as reason and enabled flag should emit to fullSyncFlow`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange)
+                } returns true
+
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_KEY_ROTATION_NOTIFICATION_MAP)
+                    assertEquals("078966a2-93c2-4618-ae2a-0a2394c88d37", awaitItem())
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with logout with null user ID should not emit to logoutFlow`() =
+            runTest {
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_NULL_USER_ID_NOTIFICATION_MAP)
+                    expectNoEvents()
+                }
+            }
+
+        @Test
         fun `onMessageReceived with Premium status changed emits to premiumStatusChangedFlow`() =
             runTest {
                 pushManager.premiumStatusChangedFlow.test {
@@ -236,6 +296,15 @@ class PushManagerTest {
                     pushManager.logoutFlow.test {
                         pushManager.onMessageReceived(LOGOUT_KDF_NOTIFICATION_MAP)
                         expectNoEvents()
+                    }
+                }
+
+            @Test
+            fun `onMessageReceived with logout with key rotation reason emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KEY_ROTATION_NOTIFICATION_MAP)
+                        assertEquals("078966a2-93c2-4618-ae2a-0a2394c88d37", awaitItem())
                     }
                 }
 
@@ -643,6 +712,15 @@ class PushManagerTest {
                 }
 
             @Test
+            fun `onMessageReceived with logout with key rotation reason emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(LOGOUT_KEY_ROTATION_NOTIFICATION_MAP)
+                        assertEquals("078966a2-93c2-4618-ae2a-0a2394c88d37", awaitItem())
+                    }
+                }
+
+            @Test
             fun `onMessageReceived with sync ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
@@ -972,6 +1050,25 @@ private val LOGOUT_KDF_NOTIFICATION_MAP = mapOf(
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
       "Date": "2023-10-27T12:00:00.000Z",
       "Reason": 0
+    }""",
+)
+
+private val LOGOUT_KEY_ROTATION_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "11",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z",
+      "Reason": 1
+    }""",
+)
+
+private val LOGOUT_NULL_USER_ID_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "11",
+    "payload" to """{
+      "UserId": null,
+      "Date": "2023-10-27T12:00:00.000Z"
     }""",
 )
 

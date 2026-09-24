@@ -357,7 +357,7 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Number of digits")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Number of digits"))
             .performClick()
 
         verify(exactly = 1) {
@@ -373,7 +373,7 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Number of digits")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of digits"))
             .performClick()
 
         verify(exactly = 1) {

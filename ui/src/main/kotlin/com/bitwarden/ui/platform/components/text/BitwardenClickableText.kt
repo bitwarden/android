@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -72,6 +73,7 @@ fun BitwardenClickableText(
                 interactionSource = remember { MutableInteractionSource() },
                 enabled = isEnabled,
                 onClick = onClick,
+                role = Role.Button,
             )
             .padding(paddingValues = innerPadding)
             .semantics(mergeDescendants = true) {

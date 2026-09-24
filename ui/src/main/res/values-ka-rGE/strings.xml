@@ -363,6 +363,7 @@
     <string name="passphrase">ფრაზა</string>
     <string name="word_separator">სიტყვების გამყოფი</string>
     <string name="clear">გასუფთავება</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">გენერატორი</string>
     <string name="no_folders_to_list">გამოსატანი პაპკები არ არის.</string>
     <string name="fingerprint_phrase">თითის ანაბეჭდის ფრაზა</string>
@@ -1440,4 +1441,9 @@
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

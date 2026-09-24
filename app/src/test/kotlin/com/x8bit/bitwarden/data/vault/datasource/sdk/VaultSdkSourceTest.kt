@@ -10,6 +10,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.MasterPasswordAuthenticationData
 import com.bitwarden.core.MasterPasswordUnlockData
+import com.bitwarden.core.ReinitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
@@ -113,6 +114,7 @@ class VaultSdkSourceTest {
         every { exporters() } returns clientExporters
     }
     private val sdkClientManager = mockk<SdkClientManager> {
+        every { globalClient } returns client
         coEvery { getOrCreateClient(any()) } returns client
         every { destroyClient(any()) } just runs
     }
@@ -130,6 +132,48 @@ class VaultSdkSourceTest {
         vaultSdkSource.clearCrypto(userId = userId)
 
         verify { sdkClientManager.destroyClient(userId = userId) }
+    }
+
+    @Test
+    fun `getKeyId should return success with the key ID returned by the SDK`() {
+        val userKey = "userKey"
+        val keyId = "keyId"
+        every { clientCrypto.getKeyIdForSymmetricKey(key = userKey) } returns keyId
+
+        val result = vaultSdkSource.getKeyId(userKey = userKey)
+
+        assertEquals(keyId.asSuccess(), result)
+        verify(exactly = 1) {
+            clientCrypto.getKeyIdForSymmetricKey(key = userKey)
+        }
+    }
+
+    @Test
+    fun `getKeyId should return a failure when the SDK returns a null key ID`() {
+        val userKey = "userKey"
+        every { clientCrypto.getKeyIdForSymmetricKey(key = userKey) } returns null
+
+        val result = vaultSdkSource.getKeyId(userKey = userKey)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+        verify(exactly = 1) {
+            clientCrypto.getKeyIdForSymmetricKey(key = userKey)
+        }
+    }
+
+    @Test
+    fun `getKeyId should return a failure when the SDK throws an exception`() {
+        val userKey = "userKey"
+        val error = Throwable("Fail")
+        every { clientCrypto.getKeyIdForSymmetricKey(key = userKey) } throws error
+
+        val result = vaultSdkSource.getKeyId(userKey = userKey)
+
+        assertEquals(error.asFailure(), result)
+        verify(exactly = 1) {
+            clientCrypto.getKeyIdForSymmetricKey(key = userKey)
+        }
     }
 
     @Test
@@ -499,6 +543,43 @@ class VaultSdkSourceTest {
             clientPlatform.userFingerprint(
                 fingerprintMaterial = userId,
             )
+        }
+    }
+
+    @Test
+    fun `reinitializeCrypto should call SDK and return a Result with correct data`() = runTest {
+        val userId = "userId"
+        val mockReinitCryptoRequest = mockk<ReinitUserCryptoRequest>()
+        coEvery { clientCrypto.reinitUserCrypto(req = mockReinitCryptoRequest) } just runs
+
+        val result = vaultSdkSource.reinitializeCrypto(
+            userId = userId,
+            request = mockReinitCryptoRequest,
+        )
+
+        assertEquals(Unit.asSuccess(), result)
+        coVerify(exactly = 1) {
+            sdkClientManager.getOrCreateClient(userId = userId)
+            clientCrypto.reinitUserCrypto(req = mockReinitCryptoRequest)
+        }
+    }
+
+    @Test
+    fun `reinitializeCrypto should return a Failure when the SDK throws an exception`() = runTest {
+        val userId = "userId"
+        val mockReinitCryptoRequest = mockk<ReinitUserCryptoRequest>()
+        val error = BitwardenException.Crypto(CryptoException.MissingKey("mockException"))
+        coEvery { clientCrypto.reinitUserCrypto(req = mockReinitCryptoRequest) } throws error
+
+        val result = vaultSdkSource.reinitializeCrypto(
+            userId = userId,
+            request = mockReinitCryptoRequest,
+        )
+
+        assertEquals(error.asFailure(), result)
+        coVerify(exactly = 1) {
+            sdkClientManager.getOrCreateClient(userId = userId)
+            clientCrypto.reinitUserCrypto(req = mockReinitCryptoRequest)
         }
     }
 

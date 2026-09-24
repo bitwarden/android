@@ -62,6 +62,8 @@ private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
 private const val V2_UPGRADE_TOKEN = "v2UpgradeToken"
 private const val USER_KEY_ID_KEY = "userKeyId"
+private const val V2_ENCRYPTED_MIGRATIONS_GRACE_PERIOD_START =
+    "v2EncryptedMigrationsGracePeriodStart"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -208,6 +210,7 @@ class AuthDiskSourceImpl(
         // * DeviceKey
         // * PendingAuthRequest
         // * OnboardingStatus
+        // * V2EncryptedMigrationsGracePeriodStart
     }
 
     override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
@@ -629,6 +632,20 @@ class AuthDiskSourceImpl(
         putString(
             key = V2_UPGRADE_TOKEN.appendIdentifier(identifier = userId),
             value = v2UpgradeToken?.let { json.encodeToString(value = it) },
+        )
+    }
+
+    override fun getV2EncryptedMigrationsGracePeriodStart(userId: String): Instant? =
+        getLong(key = V2_ENCRYPTED_MIGRATIONS_GRACE_PERIOD_START.appendIdentifier(userId))
+            ?.let { Instant.ofEpochMilli(it) }
+
+    override fun storeV2EncryptedMigrationsGracePeriodStart(
+        userId: String,
+        gracePeriodStart: Instant?,
+    ) {
+        putLong(
+            key = V2_ENCRYPTED_MIGRATIONS_GRACE_PERIOD_START.appendIdentifier(userId),
+            value = gracePeriodStart?.toEpochMilli(),
         )
     }
 

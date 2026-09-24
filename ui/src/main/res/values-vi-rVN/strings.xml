@@ -362,6 +362,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="passphrase">Cụm mật khẩu</string>
     <string name="word_separator">Dấu phân cách từ</string>
     <string name="clear">Xóa</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Trình tạo</string>
     <string name="no_folders_to_list">Không có thư mục nào.</string>
     <string name="fingerprint_phrase">Cụm từ xác thực</string>
@@ -1435,4 +1436,9 @@ các vấn đề.</string>
     <string name="receive_24_7_priority_support">Nhận hỗ trợ ưu tiên 24/7</string>
     <string name="account_creation_restricted">Hạn chế đăng ký tài khoản</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s chỉ cho phép người được mời tạo tài khoản.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

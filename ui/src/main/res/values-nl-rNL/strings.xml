@@ -363,6 +363,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="passphrase">Wachtwoordzin</string>
     <string name="word_separator">Scheidingsteken</string>
     <string name="clear">Wissen</string>
+    <string name="open_calendar">agenda openen</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Er zijn geen mappen om weer te geven.</string>
     <string name="fingerprint_phrase">Vingerafdrukzin</string>
@@ -1440,4 +1441,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="receive_24_7_priority_support">Ontvang 24/7 prioriteitsondersteuning</string>
     <string name="account_creation_restricted">Account aanmaken beperkt</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s staat het aanmaken van accounts alleen toe aan uitgenodigde gebruikers.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s verlagen</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s verhogen</string>
+    <string name="use_this_passphrase">Deze wachtwoordzin gebruiken</string>
+    <string name="use_this_password">Dit wachtwoord gebruiken</string>
+    <string name="use_this_username">Deze gebruikersnaam gebruiken</string>
 </resources>

@@ -1564,6 +1564,128 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toAutofillView should return AutofillView Identity AddressStreet when html info hint equals address exactly`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.hints() } returns listOf("address")
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressStreet(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should not treat an ADDRESS_HOME_CITY html hint as street when address is exact-matched`() {
+        setupUnsupportedInputFieldViewNode()
+        // Regression guard: the exact "address" street term must not swallow other address
+        // subfields, whose browser-computed hints all contain the substring "address".
+        every { viewNode.htmlInfo.hints() } returns listOf("ADDRESS_HOME_CITY")
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressLocality(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when address-line2 autofillHint matches`() {
+        every { viewNode.autofillHints } returns arrayOf("address-line2")
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when autofillHints match`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_EXTENDED_ADDRESS)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when apt number autofillHint matches`() {
+        every {
+            viewNode.autofillHints
+        } returns arrayOf(HintConstants.AUTOFILL_HINT_POSTAL_ADDRESS_APT_NUMBER)
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when idEntry is addressLine2`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "addressLine2"
+
+        val resolvedView = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            resolvedView,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Identity AddressExtended when idEntry is billing_address_2`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "billing_address_2"
+
+        val resolvedView = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(
+            AutofillView.Identity.AddressExtended(data = autofillViewData),
+            resolvedView,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `toAutofillView should return AutofillView Identity AddressLocality when autofillHints match`() {
         every {
             viewNode.autofillHints
@@ -1625,8 +1747,9 @@ class ViewNodeExtensionsTest {
         assertEquals(AutofillView.Identity.PostalCode(data = autofillViewData), actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return AutofillView Identity PhoneFull when autofillHints match`() {
+    fun `toAutofillView should return AutofillView Login Username when phone autofillHints match`() {
         every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PHONE)
 
         val actual = viewNode.toAutofillView(
@@ -1634,7 +1757,7 @@ class ViewNodeExtensionsTest {
             isIdentityAutofillEnabled = true,
         )
 
-        assertEquals(AutofillView.Identity.PhoneFull(data = autofillViewData), actual)
+        assertEquals(AutofillView.Login.Username(data = autofillViewData), actual)
     }
 
     //endregion Identity: official autofillHints dispatch (toAutofillView)
@@ -1654,7 +1777,6 @@ class ViewNodeExtensionsTest {
             "province" to AutofillView.Identity.AddressRegion(data = autofillViewData),
             "country" to AutofillView.Identity.AddressCountry(data = autofillViewData),
             "postalcode" to AutofillView.Identity.PostalCode(data = autofillViewData),
-            "mobile" to AutofillView.Identity.PhoneFull(data = autofillViewData),
             "company" to AutofillView.Identity.Company(data = autofillViewData),
             "socialsecurity" to AutofillView.Identity.Ssn(data = autofillViewData),
             "passport" to AutofillView.Identity.PassportNumber(data = autofillViewData),
@@ -1672,6 +1794,20 @@ class ViewNodeExtensionsTest {
 
             assertEquals(expected, actual, "idEntry \"$idEntry\" mapped to the wrong view")
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Login Username when idEntry matches phone heuristic and IdentityAutofill is enabled`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "mobile"
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        assertEquals(AutofillView.Login.Username(data = autofillViewData), actual)
     }
 
     //region Identity: flag-off gate (isIdentityAutofillEnabled = false)
@@ -1832,6 +1968,37 @@ class ViewNodeExtensionsTest {
         setupUnsupportedInputFieldViewNode()
 
         assertFalse(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressStreetField returns true when htmlInfo hint is address1`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.hints() } returns listOf("address1")
+
+        assertTrue(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressStreetField returns false when htmlInfo hint is address3`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.hints() } returns listOf("address3")
+
+        assertFalse(viewNode.isAddressStreetField)
+    }
+
+    @Test
+    fun `isAddressExtendedField returns true when idEntry is supported`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.idEntry } returns "address-ext"
+
+        assertTrue(viewNode.isAddressExtendedField)
+    }
+
+    @Test
+    fun `isAddressExtendedField returns false when idEntry, hint, and htmlInfo are all null`() {
+        setupUnsupportedInputFieldViewNode()
+
+        assertFalse(viewNode.isAddressExtendedField)
     }
 
     @Test

@@ -378,6 +378,11 @@ class AuthDiskSourceTest {
             ),
         )
         authDiskSource.storeUserKeyId(userId = userId, userKeyId = "userKeyId")
+        val gracePeriodStart = Instant.parse("2025-01-13T12:00:00Z")
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = gracePeriodStart,
+        )
 
         authDiskSource.clearData(userId = userId)
 
@@ -388,6 +393,10 @@ class AuthDiskSourceTest {
         assertEquals(
             OnboardingStatus.AUTOFILL_SETUP,
             authDiskSource.getOnboardingStatus(userId = userId),
+        )
+        assertEquals(
+            gracePeriodStart,
+            authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = userId),
         )
 
         // These should be cleared
@@ -1556,6 +1565,61 @@ class AuthDiskSourceTest {
         )
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertNull(actual)
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:v2EncryptedMigrationsGracePeriodStart"
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+        fakeSharedPreferences.edit {
+            putLong("${storeKey}_$mockUserId", expectedState.toEpochMilli())
+        }
+
+        val actual = authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId)
+
+        assertEquals(expectedState, actual)
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should pull null when there is no data`() {
+        val mockUserId = "mockUserId"
+
+        val actual = authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId)
+
+        assertNull(actual)
+    }
+
+    @Test
+    fun `storeV2EncryptedMigrationsGracePeriodStart should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = expectedState,
+        )
+
+        assertEquals(
+            expectedState,
+            authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeV2EncryptedMigrationsGracePeriodStart should clear the value when null is passed`() {
+        val mockUserId = "mockUserId"
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = Instant.parse("2025-01-13T12:00:00Z"),
+        )
+
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = null,
+        )
+
+        assertNull(authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId))
     }
 }
 
