@@ -71,6 +71,8 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
@@ -98,6 +100,7 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -522,5 +525,15 @@ object PlatformManagerModule {
         autofillEnabledManager = autofillEnabledManager,
         accessibilityEnabledManager = accessibilityEnabledManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideKeyRotationManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+    ): KeyRotationManager = KeyRotationManagerImpl(
+        authDiskSource = authDiskSource,
+        vaultSdkSource = vaultSdkSource,
     )
 }

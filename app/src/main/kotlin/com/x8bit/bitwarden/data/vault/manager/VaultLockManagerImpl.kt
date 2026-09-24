@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.updateForcePasswordReset
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -102,6 +103,7 @@ internal class VaultLockManagerImpl(
     private val kdfManager: KdfManager,
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
     private val passwordPolicyManager: PasswordPolicyManager,
+    private val keyRotationManager: KeyRotationManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : VaultLockManager {
@@ -267,6 +269,8 @@ internal class VaultLockManagerImpl(
         updateKdfIfNeeded(initUserCryptoMethod)
         pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = userId)
         setVaultToUnlocked(userId = userId)
+        keyRotationManager.rotateAutoUnlockKey(userId = userId)
+        keyRotationManager.rotateAuthenticatorSyncKey(userId = userId)
     }
 
     /**

@@ -503,6 +503,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [authenticatorSyncKey] was stored successfully using the [userId].
+     */
+    fun assertAuthenticatorSyncKey(userId: String, authenticatorSyncKey: String?) {
+        assertEquals(authenticatorSyncKey, storedAuthenticationSyncKeys[userId])
+    }
+
+    /**
      * Assert that the [userAutoUnlockKey] was stored successfully using the [userId].
      */
     fun assertUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?) {

@@ -9,6 +9,7 @@ import com.bitwarden.core.EncryptionSettingsException
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.ReinitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -70,6 +71,11 @@ class VaultSdkSourceImpl(
 
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
+    }
+
+    override fun getKeyId(userKey: String): Result<String> = runCatchingWithLogs {
+        // This can never be null, the SDK team needs to update the return type to match.
+        requireNotNull(value = globalClient.crypto().getKeyIdForSymmetricKey(key = userKey))
     }
 
     override suspend fun getTrustDevice(
@@ -185,6 +191,13 @@ class VaultSdkSourceImpl(
                 .platform()
                 .userFingerprint(fingerprintMaterial = userId)
         }
+
+    override suspend fun reinitializeCrypto(
+        userId: String,
+        request: ReinitUserCryptoRequest,
+    ): Result<Unit> = runCatchingWithLogs {
+        getClient(userId = userId).crypto().reinitUserCrypto(req = request)
+    }
 
     override suspend fun initializeCrypto(
         userId: String,

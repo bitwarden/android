@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.overlaynav
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +27,10 @@ class OverlayNavViewModelTest : BaseViewModelTest() {
     private val mutableCookieAcquisitionFlow = MutableStateFlow<CookieAcquisitionRequest?>(null)
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager = mockk {
         every { cookieAcquisitionRequestFlow } returns mutableCookieAcquisitionFlow
+    }
+    private val mutableShouldRotateBiometricKeyFlow = bufferedMutableSharedFlow<Unit>()
+    private val vaultRepository: VaultRepository = mockk {
+        every { shouldRotateBiometricKey } returns mutableShouldRotateBiometricKeyFlow
     }
 
     @Suppress("MaxLineLength")
@@ -63,9 +69,21 @@ class OverlayNavViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `when the biometric key should be rotated should emit NavigateToUpdateBiometrics`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                expectNoEvents()
+                mutableShouldRotateBiometricKeyFlow.tryEmit(Unit)
+                assertEquals(OverlayNavEvent.NavigateToUpdateBiometrics, awaitItem())
+            }
+        }
+
     private fun createViewModel(): OverlayNavViewModel = OverlayNavViewModel(
         cookieAcquisitionRequestManager = cookieAcquisitionRequestManager,
         networkPermissionManager = networkPermissionManager,
+        vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
     )
 }

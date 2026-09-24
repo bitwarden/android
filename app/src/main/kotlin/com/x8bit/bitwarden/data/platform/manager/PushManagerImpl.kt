@@ -166,14 +166,28 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.UserNotification>(
                         string = notification.payload,
                     )
-                    .takeUnless {
+                    .takeUnless { it.userId == null }
+                    ?.takeUnless {
                         featureFlagManager.getFeatureFlag(FlagKey.NoLogoutOnKdfChange) &&
-                            it.pushNotificationLogOutReason ==
-                            PushNotificationLogOutReason.KDF_CHANGE
+                            it.logOutReason == PushNotificationLogOutReason.KDF_CHANGE
                     }
-                    ?.userId
                     ?.let {
-                        mutableLogoutSharedFlow.tryEmit(NotificationLogoutData(userId = it))
+                        val userId = requireNotNull(it.userId)
+                        when (it.logOutReason) {
+                            PushNotificationLogOutReason.KEY_ROTATION -> {
+                                // We do not want to logout, we need to sync to help
+                                // facilitate the key rotation.
+                                mutableFullSyncSharedFlow.tryEmit(userId)
+                            }
+
+                            PushNotificationLogOutReason.KDF_CHANGE,
+                            null,
+                                -> {
+                                mutableLogoutSharedFlow.tryEmit(
+                                    NotificationLogoutData(userId = userId),
+                                )
+                            }
+                        }
                     }
             }
 
