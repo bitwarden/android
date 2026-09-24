@@ -1443,7 +1443,7 @@ class VaultSdkSourceTest {
         val autofillViews = listOf(mockAutofillView)
 
         coEvery {
-            clientFido2.decryptFido2AutofillCredentials(mockCipherView)
+            clientFido2.getFido2AutofillCredentials(mockCipherView)
         } returns autofillViews
 
         val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
@@ -1463,7 +1463,7 @@ class VaultSdkSourceTest {
         runTest {
             val mockCipherView = createMockCipherView(number = 1)
             coEvery {
-                clientFido2.decryptFido2AutofillCredentials(mockCipherView)
+                clientFido2.getFido2AutofillCredentials(mockCipherView)
             } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>("mockException"))
 
             val result = vaultSdkSource.decryptFido2CredentialAutofillViews(

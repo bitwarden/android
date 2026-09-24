@@ -644,7 +644,7 @@ class VaultSdkSourceImpl(
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         val fido2 = getClient(userId = userId).platform().fido2()
-        cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
+        cipherViews.flatMap { fido2.getFido2AutofillCredentials(cipherView = it) }
     }
 
     override suspend fun silentlyDiscoverCredentials(

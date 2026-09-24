@@ -838,7 +838,6 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds,
-        key = key,
         name = name.orEmpty(),
         subtitle = "",
         type = when (type) {

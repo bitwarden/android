@@ -14,7 +14,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.Fido2CredentialView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
@@ -318,7 +318,7 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential.getCreationDateText(clock: Clock): Text =
+private fun Fido2CredentialView.getCreationDateText(clock: Clock): Text =
     BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,
