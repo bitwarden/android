@@ -186,8 +186,14 @@ jobs:
           _OPEN_ISSUES: ${{ steps.snapshot.outputs.open_issues }}
           _IN_WARNING: ${{ steps.snapshot.outputs.in_warning }}
           _EXEMPT: ${{ steps.snapshot.outputs.exempt }}
-          _NEW_WARNINGS_JSON: ${{ steps.stale.outputs.staled-issues-prs }}
-          _CLOSED_JSON: ${{ steps.stale.outputs.closed-issues-prs }}
+          # The stale outputs carry full issue objects, several KB each, and Linux caps a
+          # single environment variable at 128 KiB, so passing them whole fails the step
+          # with "Argument list too long" once a run touches a few dozen issues. Only the
+          # number and title of each issue cross the env boundary; they are re-zipped below.
+          _NEW_WARNING_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.number) }}
+          _NEW_WARNING_TITLES: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.title) }}
+          _CLOSED_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.closed-issues-prs || '[]').*.number) }}
+          _CLOSED_TITLES: ${{ toJSON(fromJSON(steps.stale.outputs.closed-issues-prs || '[]').*.title) }}
         run: |
           len() {
             if [ -z "${1:-}" ]; then
@@ -197,6 +203,15 @@ jobs:
             fi
           }
           row() { printf '  %-36s %5s\n' "$1" "$2"; }
+
+          # $1 = numbers JSON, $2 = titles JSON -> [{number, title}]
+          zip() {
+            jq -cn --argjson n "$1" --argjson t "$2" \
+              '[$n, $t] | transpose | map({number: .[0], title: .[1]})'
+          }
+
+          _NEW_WARNINGS_JSON="$(zip "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES")"
+          _CLOSED_JSON="$(zip "$_CLOSED_NUMBERS" "$_CLOSED_TITLES")"
 
           # $1 = issues JSON, $2 = md|slack
           #
