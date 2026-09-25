@@ -80,11 +80,6 @@ class AutofillProcessorImpl(
             return
         }
 
-        if (policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any()) {
-            saveCallback.onSuccess()
-            return
-        }
-
         request
             .fillContexts
             .lastOrNull()
