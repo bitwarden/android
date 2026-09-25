@@ -114,7 +114,7 @@ private fun BitwardenDropdownMenuItem(
                 this.contentDescription = contentDescriptionText
                 this.role = Role.Button
             }
-            .testTag(tag = "FloatingOptionsItem"),
+            .testTag(tag = data.testTag),
         colors = bitwardenMenuItemColors(
             textColor = data
                 .color
@@ -126,9 +126,7 @@ private fun BitwardenDropdownMenuItem(
             Text(
                 text = data.text,
                 style = BitwardenTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .semantics { hideFromAccessibility() }
-                    .testTag(tag = "FloatingOptionsItemName"),
+                modifier = Modifier.semantics { hideFromAccessibility() },
             )
         },
         onClick = {
