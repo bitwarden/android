@@ -8,8 +8,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.AccountSecurityAction.AuthenticatorSyncToggle
@@ -93,8 +93,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
     }
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
-    private val mutableRemovePinPolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
+    private val mutableRemovePinPolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
@@ -142,7 +142,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         mutableActivePolicyFlow.emit(
             listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     enabled = true,
                     type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                     data = Json.encodeToString(policyInformation),
@@ -170,7 +170,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     enabled = true,
                     type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
                     organizationId = "organizationUser",
@@ -194,7 +194,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "organizationAdmin",
                     enabled = true,
                     type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
@@ -218,7 +218,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "organizationOwner",
                     enabled = true,
                     type = PolicyType.REMOVE_UNLOCK_WITH_PIN,
@@ -242,7 +242,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         mutableRemovePinPolicyFlow.emit(
             listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "organizationCustom",
                     enabled = true,
                     type = PolicyType.REMOVE_UNLOCK_WITH_PIN,

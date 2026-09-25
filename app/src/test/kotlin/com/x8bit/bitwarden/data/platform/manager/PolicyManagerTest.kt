@@ -9,13 +9,13 @@ import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockOrganizationNetwork
 import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,13 +77,13 @@ class PolicyManagerTest {
                 organizationId = organizations.id,
                 type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
             )
-            val expectedPolicyOne = createMockPolicyView(
+            val expectedPolicyOne = createMockSdkPolicy(
                 enabled = true,
                 number = 1,
                 organizationId = organizations.id,
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
             )
-            val expectedPolicyTwo = createMockPolicyView(
+            val expectedPolicyTwo = createMockSdkPolicy(
                 enabled = true,
                 number = 2,
                 organizationId = organizations.id,
@@ -150,7 +150,7 @@ class PolicyManagerTest {
                 organizations = any(),
                 policyType = any(),
             )
-        } returns emptyList<PolicyView>().asSuccess()
+        } returns emptyList<Policy>().asSuccess()
 
         assertTrue(policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD).isEmpty())
     }
@@ -183,7 +183,7 @@ class PolicyManagerTest {
                 organizations = any(),
                 policyType = any(),
             )
-        } returns emptyList<PolicyView>().asSuccess()
+        } returns emptyList<Policy>().asSuccess()
 
         assertTrue(policyManager.getActivePolicies(type = PolicyType.MASTER_PASSWORD).isEmpty())
     }
@@ -194,7 +194,7 @@ class PolicyManagerTest {
             every { activeUserId } returns USER_ID
         }
         val storedPolicy = createMockPolicy(organizationId = "mockId-3", isEnabled = true)
-        val expectedPolicy = createMockPolicyView(organizationId = "mockId-3", enabled = true)
+        val expectedPolicy = createMockSdkPolicy(organizationId = "mockId-3", enabled = true)
         every { authDiskSource.userState } returns userState
         every {
             authDiskSource.getOrganizations(USER_ID)
@@ -244,7 +244,7 @@ class PolicyManagerTest {
         every {
             authSdkSource.filterPolicies(any(), any(), any())
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "mockId-3",
                 enabled = true,
                 type = PolicyType.PASSWORD_GENERATOR,
@@ -282,7 +282,7 @@ class PolicyManagerTest {
         every {
             authSdkSource.filterPolicies(any(), any(), any())
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "mockId-3",
                 enabled = true,
                 type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -302,7 +302,7 @@ class PolicyManagerTest {
         every { authDiskSource.getOrganizations(USER_ID) } returns null
 
         assertEquals(
-            emptyList<PolicyView>(),
+            emptyList<Policy>(),
             policyManager.getUserPolicies(
                 userId = USER_ID,
                 type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
@@ -335,7 +335,7 @@ class PolicyManagerTest {
             ),
         )
         val expectedListOfPolicies = listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "mockId-3",
                 enabled = true,
                 type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
@@ -407,7 +407,7 @@ class PolicyManagerTest {
                 organizations = any(),
                 policyType = any(),
             )
-        } returns emptyList<PolicyView>().asSuccess()
+        } returns emptyList<Policy>().asSuccess()
 
         assertNull(policyManager.getPersonalOwnershipPolicyOrganizationId())
     }
@@ -441,7 +441,7 @@ class PolicyManagerTest {
         every {
             authSdkSource.filterPolicies(any(), any(), any())
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = expectedOrganizationId,
                 enabled = true,
             ),
@@ -517,19 +517,19 @@ class PolicyManagerTest {
         every {
             authSdkSource.filterPolicies(any(), any(), any())
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 3,
                 organizationId = "mockId-3",
                 enabled = true,
                 revisionDate = latestRevisionDate,
             ),
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 1,
                 organizationId = expectedOrganizationId,
                 enabled = true,
                 revisionDate = earliestRevisionDate,
             ),
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 2,
                 organizationId = "mockId-2",
                 enabled = true,
@@ -592,7 +592,7 @@ class PolicyManagerTest {
         every {
             authSdkSource.filterPolicies(any(), any(), any())
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 2,
                 organizationId = expectedOrganizationId,
                 enabled = true,
@@ -612,7 +612,7 @@ class PolicyManagerTest {
     fun `getEffectiveSendPolicy should mirror legacy DisableSend policy when flag is off`() {
         setUpSendPolicies(
             disableSendPolicies = listOf(
-                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+                createMockSdkPolicy(organizationId = "mockId-1", enabled = true),
             ),
         )
 
@@ -633,7 +633,7 @@ class PolicyManagerTest {
     fun `getEffectiveSendPolicy should mirror legacy SendOptions policy when flag is off`() {
         setUpSendPolicies(
             sendOptionsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_OPTIONS,
@@ -659,7 +659,7 @@ class PolicyManagerTest {
     fun `getEffectiveSendPolicy should ignore an active SendControls policy when flag is off`() {
         setUpSendPolicies(
             sendControlsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -667,7 +667,7 @@ class PolicyManagerTest {
                 ),
             ),
             disableSendPolicies = listOf(
-                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+                createMockSdkPolicy(organizationId = "mockId-1", enabled = true),
             ),
         )
 
@@ -690,7 +690,7 @@ class PolicyManagerTest {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies(
             sendControlsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -698,7 +698,7 @@ class PolicyManagerTest {
                 ),
             ),
             disableSendPolicies = listOf(
-                createMockPolicyView(organizationId = "mockId-1", enabled = true),
+                createMockSdkPolicy(organizationId = "mockId-1", enabled = true),
             ),
         )
 
@@ -721,7 +721,7 @@ class PolicyManagerTest {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies(
             sendControlsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -730,8 +730,8 @@ class PolicyManagerTest {
             ),
             disableSendPolicies = listOf(
                 // mockId-1 has SendControls (exclusion applies), mockId-2 does not.
-                createMockPolicyView(organizationId = "mockId-1", enabled = true),
-                createMockPolicyView(organizationId = "mockId-2", enabled = true),
+                createMockSdkPolicy(organizationId = "mockId-1", enabled = true),
+                createMockSdkPolicy(organizationId = "mockId-2", enabled = true),
             ),
         )
 
@@ -754,7 +754,7 @@ class PolicyManagerTest {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies(
             sendControlsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -762,7 +762,7 @@ class PolicyManagerTest {
                 ),
             ),
             sendOptionsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-2",
                     enabled = true,
                     type = PolicyType.SEND_OPTIONS,
@@ -790,7 +790,7 @@ class PolicyManagerTest {
         mutableSendControlsFlagFlow.value = true
         setUpSendPolicies(
             sendControlsPolicies = listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "mockId-1",
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -825,7 +825,7 @@ class PolicyManagerTest {
         setUpSendPolicies(
             sendControlsPolicies = listOf(
                 // Listed first, but revised later, so it should lose to the policy below.
-                createMockPolicyView(
+                createMockSdkPolicy(
                     number = 2,
                     organizationId = "mockId-2",
                     enabled = true,
@@ -833,7 +833,7 @@ class PolicyManagerTest {
                     data = """{"allowedDomains":"later.example.com"}""",
                     revisionDate = Instant.parse("2026-06-01T00:00:00Z"),
                 ),
-                createMockPolicyView(
+                createMockSdkPolicy(
                     number = 1,
                     organizationId = "mockId-1",
                     enabled = true,
@@ -886,14 +886,14 @@ class PolicyManagerTest {
                     organizations = any(),
                     policyType = PolicyType.SEND_CONTROLS,
                 )
-            } returns emptyList<PolicyView>().asSuccess()
+            } returns emptyList<Policy>().asSuccess()
             every {
                 authSdkSource.filterPolicies(
                     policies = any(),
                     organizations = any(),
                     policyType = PolicyType.SEND_OPTIONS,
                 )
-            } returns emptyList<PolicyView>().asSuccess()
+            } returns emptyList<Policy>().asSuccess()
             every {
                 authSdkSource.filterPolicies(
                     policies = any(),
@@ -901,8 +901,8 @@ class PolicyManagerTest {
                     policyType = PolicyType.DISABLE_SEND,
                 )
             } returnsMany listOf(
-                emptyList<PolicyView>().asSuccess(),
-                listOf(createMockPolicyView(organizationId = organizations.id, enabled = true))
+                emptyList<Policy>().asSuccess(),
+                listOf(createMockSdkPolicy(organizationId = organizations.id, enabled = true))
                     .asSuccess(),
             )
 
@@ -956,7 +956,7 @@ class PolicyManagerTest {
                     policyType = PolicyType.SEND_CONTROLS,
                 )
             } returns listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = organizations.id,
                     enabled = true,
                     type = PolicyType.SEND_CONTROLS,
@@ -971,7 +971,7 @@ class PolicyManagerTest {
                     policyType = PolicyType.DISABLE_SEND,
                 )
             } returns listOf(
-                createMockPolicyView(organizationId = organizations.id, enabled = true),
+                createMockSdkPolicy(organizationId = organizations.id, enabled = true),
             )
                 .asSuccess()
             every {
@@ -980,7 +980,7 @@ class PolicyManagerTest {
                     organizations = any(),
                     policyType = PolicyType.SEND_OPTIONS,
                 )
-            } returns emptyList<PolicyView>().asSuccess()
+            } returns emptyList<Policy>().asSuccess()
 
             mutableUserStateFlow.value = userStateJson
             mutableOrganizationsFlow.value = listOf(organizations)
@@ -1013,12 +1013,12 @@ class PolicyManagerTest {
     /**
      * Sets up the mocks required for [PolicyManagerImpl.getEffectiveSendPolicy] /
      * [PolicyManagerImpl.getEffectiveSendPolicyFlow] to return, per policy type, the given lists
-     * of already-decoded [PolicyView]s.
+     * of already-decoded [Policy]s.
      */
     private fun setUpSendPolicies(
-        disableSendPolicies: List<PolicyView> = emptyList(),
-        sendControlsPolicies: List<PolicyView> = emptyList(),
-        sendOptionsPolicies: List<PolicyView> = emptyList(),
+        disableSendPolicies: List<Policy> = emptyList(),
+        sendControlsPolicies: List<Policy> = emptyList(),
+        sendOptionsPolicies: List<Policy> = emptyList(),
     ) {
         val userState: UserStateJson = mockk {
             every { activeUserId } returns USER_ID

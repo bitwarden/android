@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.DriversLicense
+import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.Identity
@@ -241,8 +242,43 @@ fun createMockSdkLogin(number: Int, clock: Clock): Login =
         autofillOnPageLoad = false,
         uris = listOf(createMockSdkUri(number = number)),
         totp = "mockTotp-$number",
-        fido2Credentials = createMockSdkFido2CredentialList(number, clock),
+        fido2Credentials = createMockSdkEncryptedFido2CredentialList(
+            number = number,
+            clock = clock,
+        ),
     )
+
+/**
+ * Create a list of mock encrypted [Fido2Credential] with a given [number].
+ */
+fun createMockSdkEncryptedFido2CredentialList(
+    number: Int,
+    clock: Clock,
+): List<Fido2Credential> = listOf(
+    createMockSdkEncryptedFido2Credential(number = number, clock = clock),
+)
+
+/**
+ * Create a mock encrypted [Fido2Credential] with a given [number].
+ */
+fun createMockSdkEncryptedFido2Credential(
+    number: Int,
+    clock: Clock,
+): Fido2Credential = Fido2Credential(
+    credentialId = "mockCredentialId-$number",
+    keyType = "mockKeyType-$number",
+    keyAlgorithm = "mockKeyAlgorithm-$number",
+    keyCurve = "mockKeyCurve-$number",
+    keyValue = "mockKeyValue-$number",
+    rpId = "mockRpId-$number",
+    userHandle = "mockUserHandle-$number",
+    userName = "mockUserName-$number",
+    counter = "mockCounter-$number",
+    rpName = "mockRpName-$number",
+    userDisplayName = "mockUserDisplayName-$number",
+    discoverable = "mockDiscoverable-$number",
+    creationDate = clock.instant(),
+)
 
 /**
  * Create a mock [LoginUri] with a given [number].

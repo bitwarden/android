@@ -8,7 +8,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DriversLicenseView
-import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.Fido2CredentialView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
@@ -54,7 +54,7 @@ fun createMockCipherView(
     notes: String? = "mockNotes-$number",
     password: String? = "mockPassword-$number",
     clock: Clock = FIXED_CLOCK,
-    fido2Credentials: List<Fido2Credential>? = null,
+    fido2Credentials: List<Fido2CredentialView>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
@@ -128,7 +128,7 @@ fun createMockLoginView(
     clock: Clock = FIXED_CLOCK,
     hasUris: Boolean = true,
     uris: List<LoginUriView>? = listOf(createMockUriView(number = number)),
-    fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
+    fido2Credentials: List<Fido2CredentialView>? = createMockSdkFido2CredentialList(number, clock),
     username: String? = "mockUsername-$number",
     password: String? = "mockPassword-$number",
 ): LoginView =
@@ -143,21 +143,21 @@ fun createMockLoginView(
     )
 
 /**
- * Create a list of mock [Fido2Credential] with a given [number].
+ * Create a list of mock [Fido2CredentialView] with a given [number].
  */
 fun createMockSdkFido2CredentialList(
     number: Int,
     clock: Clock = FIXED_CLOCK,
-): List<Fido2Credential> = listOf(createMockSdkFido2Credential(number = number, clock = clock))
+): List<Fido2CredentialView> = listOf(createMockSdkFido2Credential(number = number, clock = clock))
 
 /**
- * Create a mock [Fido2Credential] with a given [number].
+ * Create a mock [Fido2CredentialView] with a given [number].
  */
 fun createMockSdkFido2Credential(
     number: Int,
     rpId: String = "mockRpId-$number",
     clock: Clock = FIXED_CLOCK,
-): Fido2Credential = Fido2Credential(
+): Fido2CredentialView = Fido2CredentialView(
     credentialId = "mockCredentialId-$number",
     keyType = "mockKeyType-$number",
     keyAlgorithm = "mockKeyAlgorithm-$number",

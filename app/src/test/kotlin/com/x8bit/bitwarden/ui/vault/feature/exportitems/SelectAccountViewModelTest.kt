@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -17,7 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountAction
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountEvent
@@ -36,8 +36,8 @@ import org.junit.jupiter.api.Test
 class SelectAccountViewModelTest : BaseViewModelTest() {
 
     private val mutableUserUserStateFlow = MutableStateFlow(DEFAULT_USER_STATE)
-    private val mutableRestrictItemTypesFlow = bufferedMutableSharedFlow<List<PolicyView>>()
-    private val mutablePersonalOwnershipPolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutableRestrictItemTypesFlow = bufferedMutableSharedFlow<List<Policy>>()
+    private val mutablePersonalOwnershipPolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
 
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserUserStateFlow
@@ -215,7 +215,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                 SelectAccountAction.Internal.SelectionDataReceive(
                     userState = DEFAULT_USER_STATE.copy(accounts = listOf(accountInOrg)),
                     itemRestrictedOrgs = listOf(
-                        createMockPolicyView(
+                        createMockSdkPolicy(
                             id = organizationId,
                             enabled = true,
                         ),

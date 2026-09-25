@@ -70,9 +70,9 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectio
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -337,7 +337,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "Test Org",
                 id = "testId",
                 type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
@@ -5390,7 +5390,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 every {
                     policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Org",
                         id = "testId",
                         type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,

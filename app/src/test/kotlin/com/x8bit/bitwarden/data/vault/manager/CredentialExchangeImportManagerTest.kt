@@ -16,8 +16,8 @@ import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import io.mockk.awaits
@@ -349,7 +349,7 @@ class CredentialExchangeImportManagerTest {
                 every {
                     policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "mockId-1",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
                         enabled = true,
@@ -444,7 +444,7 @@ class CredentialExchangeImportManagerTest {
                 every {
                     policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "mockId-1",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
                         enabled = false,
@@ -495,7 +495,7 @@ class CredentialExchangeImportManagerTest {
                 every {
                     policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "mockId-1",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
                         enabled = true,

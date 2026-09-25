@@ -20,8 +20,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.LoginClient
@@ -564,10 +564,10 @@ class AuthSdkSourceTest {
 
     @Test
     fun `filterPolicies should call SDK and return a Result with the correct data`() {
-        val policies = listOf(mockk<PolicyView>())
+        val policies = listOf(mockk<Policy>())
         val organizations = listOf(mockk<OrganizationUserPolicyContext>())
         val policyType = mockk<PolicyType>()
-        val expectedResult = listOf(mockk<PolicyView>())
+        val expectedResult = listOf(mockk<Policy>())
         every {
             clientPolicies.filterByType(
                 policies = policies,
