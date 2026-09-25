@@ -30,8 +30,9 @@ run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 # Each run reports a summary modelled on the script's final report. actions/stale's own
 # enable-statistics output is log-only, so the counts are assembled from its two step outputs
 # (staled-issues-prs, closed-issues-prs) plus a pre-run search snapshot of the label state.
-# The summary always lands in the job summary and the run log, and is posted to Slack: live
-# runs to #team-eng-mobile-notifications, dry runs to the automations test channel.
+# The summary always lands in the job summary and the run log. A run that warned or closed
+# at least one issue also posts it to Slack: live runs to #team-eng-mobile-notifications,
+# dry runs to the automations test channel.
 #
 # The script's "skipped due to creation after cutoff" and "skipped due to activity after
 # cutoff" counters have no equivalent here and are omitted rather than approximated.
@@ -68,6 +69,10 @@ jobs:
     name: Stale Issue Cleanup
     runs-on: ubuntu-24.04
     permissions:
+      # actions/stale saves how far a run got in an Actions cache (key "_state") so a run
+      # cut short by operations-per-run resumes there. Listing and replacing that cache
+      # needs this; without it the saved progress is either never read or never replaced.
+      actions: write
       contents: read
       # Required by azure-login below to fetch the Slack webhook via OIDC.
       id-token: write
@@ -322,7 +327,16 @@ jobs:
             '{text: (":broom: *Stale Issue Cleanup* - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
             > slack-payload.json
 
+          # A run that warned and closed nothing posts nothing; the job summary still has it.
+          if [ $(( NEW_WARNINGS + CLOSED )) -gt 0 ]; then
+            echo "notify=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "notify=false" >> "$GITHUB_OUTPUT"
+            echo "No issue was warned or closed, so Slack will be skipped."
+          fi
+
       - name: Log in to Azure
+        if: steps.stats.outputs.notify == 'true'
         uses: bitwarden/gh-actions/azure-login@main
         with:
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -331,15 +345,18 @@ jobs:
 
       - name: Retrieve Slack secrets
         id: retrieve-slack-secrets
+        if: steps.stats.outputs.notify == 'true'
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
           secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS,SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL"
 
       - name: Log out from Azure
+        if: steps.stats.outputs.notify == 'true'
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Send Slack notification
+        if: steps.stats.outputs.notify == 'true'
         uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           # Live runs, scheduled or manual, report to #team-eng-mobile-notifications; dry
