@@ -3,13 +3,13 @@ package com.bitwarden.authenticator.ui.authenticator.feature.edititem.model
 import android.os.Parcelable
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
-import com.bitwarden.authenticator.ui.authenticator.feature.edititem.AuthenticatorRefreshPeriodOption
 import kotlinx.parcelize.Parcelize
 
 /**
  * The data relating to the verification code.
  *
- * @property refreshPeriod The period for the verification code.
+ * @property refreshPeriod The selected period for the verification code in seconds.
+ * @property originalRefreshPeriod The loaded period in seconds, retained as a picker option.
  * @property totpCode The totp code for the item.
  * @property username Account or username for this item.
  * @property issuer Name of the item provider.
@@ -18,7 +18,8 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class EditItemData(
-    val refreshPeriod: AuthenticatorRefreshPeriodOption,
+    val refreshPeriod: Int,
+    val originalRefreshPeriod: Int,
     val totpCode: String,
     val type: AuthenticatorItemType,
     val username: String?,
