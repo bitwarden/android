@@ -97,7 +97,7 @@ sealed class Environment {
             "https://vault.qa.bitwarden.pw",
             "https://qa-team.sh.bitwarden.pw",
             "https://vault.usdev.bitwarden.pw",
-            "https://fedramp.usdev.bitwarden.pw",
+            "https://vault.fedramp.usdev.bitwarden.pw",
             "https://gw.dev.bitwarden.pw",
             "https://gw.stg.bitwarden.pw",
         )
