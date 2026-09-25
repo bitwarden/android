@@ -14,9 +14,11 @@ run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 # 0-1 days later, never earlier, so issues only ever get more time than the message promises.
 #
 # Staleness is a rolling inactivity window (actions/stale reads updated_at) rather than the
-# script's fixed cutoff date chosen per run. Any human comment before the close clears the
-# label and restarts the 240-day clock. The action's own comments never count as activity; it
-# only considers comments whose author type is User, so github-actions[bot] is ignored.
+# script's fixed cutoff date chosen per run. Any activity before the close clears the label and
+# restarts the 240-day clock: a human comment, or any other update to the issue (an edit, a
+# label change, another automation touching it) beyond the stale label itself being added.
+# Comments count only when their author type is User, so the action's own comments from
+# github-actions[bot] are ignored.
 #
 # The script's SECONDARY_WARNING_THRESHOLD_DAYS second warning is deliberately not reproduced.
 # One warning, one closure.
@@ -53,6 +55,13 @@ on:
           - live
 
 permissions: {}
+
+# One run at a time. Overlapping runs could both warn the same issue, posting the comment
+# twice, and would race on actions/stale's saved progress. A second run queues rather than
+# cancelling the first, since a cancelled live run stops partway through.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 env:
   # Scheduled runs are dry-run only: actions/stale logs every comment and closure it would
@@ -108,7 +117,6 @@ jobs:
             gh api -X GET search/issues -f q="repo:$_REPO $1" --jq '.total_count'
           }
           {
-            echo "started_at=$(date -u +%s)"
             echo "open_issues=$(count 'is:issue is:open')"
             echo "in_warning=$(count 'is:issue is:open label:stale')"
             echo "exempt=$(count 'is:issue is:open label:never-stale')"
@@ -187,7 +195,6 @@ jobs:
           _MODE: ${{ steps.mode.outputs.mode }}
           _SERVER_URL: ${{ github.server_url }}
           _RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          _STARTED_AT: ${{ steps.snapshot.outputs.started_at }}
           _OPEN_ISSUES: ${{ steps.snapshot.outputs.open_issues }}
           _IN_WARNING: ${{ steps.snapshot.outputs.in_warning }}
           _EXEMPT: ${{ steps.snapshot.outputs.exempt }}
@@ -212,9 +219,10 @@ jobs:
           # $1 = numbers JSON, $2 = titles JSON (same order), $3 = md|slack
           #
           # Lists every issue, uncapped. Safe because operations-per-run already bounds how
-          # many issues one run can touch (~150 at roughly two operations each), keeping even
-          # a full sweep inside Slack's 40,000-character text limit. Raise that budget a lot
-          # and this is the thing to re-check.
+          # many issues one run can touch (~75 at roughly four operations per warning; 56
+          # warnings took 227), keeping even a full sweep near 10,000 characters, well inside
+          # Slack's 40,000-character text limit. Raise that budget a lot and this is the thing
+          # to re-check.
           issue_list() {
             jq -rn \
               --argjson numbers "$1" \
@@ -253,20 +261,6 @@ jobs:
           NEW_WARNINGS="$(len "$_NEW_WARNING_NUMBERS")"
           CLOSED="$(len "$_CLOSED_NUMBERS")"
 
-          # Formatted like the script's get_elapsed_time().
-          ELAPSED=$(( $(date -u +%s) - ${_STARTED_AT} ))
-          HOURS=$(( ELAPSED / 3600 ))
-          MINUTES=$(( (ELAPSED % 3600) / 60 ))
-          REMAINDER=$(( ELAPSED % 60 ))
-          ELAPSED_TEXT=""
-          if [ "$HOURS" -gt 0 ]; then
-            ELAPSED_TEXT="${HOURS} hours, "
-          fi
-          if [ "$MINUTES" -gt 0 ] || [ "$HOURS" -gt 0 ]; then
-            ELAPSED_TEXT="${ELAPSED_TEXT}${MINUTES} minutes, "
-          fi
-          ELAPSED_TEXT="${ELAPSED_TEXT}${REMAINDER} seconds"
-
           if [ "$_MODE" = "live" ]; then
             MODE_TEXT="live"
           else
@@ -274,10 +268,8 @@ jobs:
           fi
 
           BODY="$(
-            printf 'Stale Issue Cleanup - %s\n' "$_REPO"
+            printf 'Repo: %s\n' "$_REPO"
             printf 'Mode: %s\n' "$MODE_TEXT"
-            printf 'Completed: %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            printf 'Elapsed: %s\n' "$ELAPSED_TEXT"
             printf '\nPipeline at start of run\n'
             row 'Open issues:' "$_OPEN_ISSUES"
             row 'Awaiting closure (2-week warning):' "$_IN_WARNING"
@@ -285,11 +277,6 @@ jobs:
             printf '\nActions this run\n'
             row 'New 2-week warnings posted:' "$NEW_WARNINGS"
             row 'Issues closed:' "$CLOSED"
-            if [ "$_MODE" != "live" ]; then
-              printf '\nA dry run projects closures only for issues already carrying a real\n'
-              printf '"stale" label, so the closed count reads 0 until a live run has\n'
-              printf 'labelled some.\n'
-            fi
           )"
 
           # Most consequential first: closures, then new warnings.
