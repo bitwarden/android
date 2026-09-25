@@ -12,7 +12,12 @@ interface AccessibilityEnabledManager {
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
 
     /**
-     * Gets the accessibility enabled state from the system settings.
+     * Whether this app's accessibility service is currently connected.
+     *
+     * The service reports its own connection state because the platform cannot be asked: from
+     * Android 16 onwards neither `Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES` nor
+     * `AccessibilityManager.getEnabledAccessibilityServiceList` reveals this app's own service to
+     * the app itself, so any check based on them always answers false.
      */
-    fun refreshAccessibilityEnabledFromSettings()
+    var isAccessibilityServiceConnected: Boolean
 }
