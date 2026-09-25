@@ -206,8 +206,10 @@ jobs:
 
           # $1 = numbers JSON, $2 = titles JSON (same order), $3 = md|slack
           #
-          # Lists every issue, uncapped. The job summary always gets the full list; Slack gets
-          # it only up to SLACK_LIST_LIMIT issues and a pointer to the run otherwise.
+          # Lists every issue, uncapped. Safe because operations-per-run already bounds how
+          # many issues one run can touch (~150 at roughly two operations each), keeping even
+          # a full sweep inside Slack's 40,000-character text limit. Raise that budget a lot
+          # and this is the thing to re-check.
           issue_list() {
             jq -rn \
               --argjson numbers "$1" \
@@ -291,23 +293,11 @@ jobs:
             section 'New 2-week warnings posted' "$NEW_WARNINGS" \
               "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" md
           )"
-
-          # Past this many issues, combined, the Slack message links to the run instead of
-          # listing them; a long list buries the counts and makes the channel hard to scan.
-          SLACK_LIST_LIMIT=30
-          TOTAL=$(( NEW_WARNINGS + CLOSED ))
-          if [ "$TOTAL" -gt "$SLACK_LIST_LIMIT" ]; then
-            SECTIONS_SLACK="$(
-              printf '\n_%s issues this run, too many to list here. ' "$TOTAL"
-              printf 'See the job summary in <%s|run details> for the full list._\n' "$_RUN_URL"
-            )"
-          else
-            SECTIONS_SLACK="$(
-              section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" slack
-              section 'New 2-week warnings posted' "$NEW_WARNINGS" \
-                "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" slack
-            )"
-          fi
+          SECTIONS_SLACK="$(
+            section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" slack
+            section 'New 2-week warnings posted' "$NEW_WARNINGS" \
+              "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" slack
+          )"
 
           echo "$BODY"
           if [ -n "$SECTIONS_MD" ]; then
