@@ -3,20 +3,20 @@ package com.x8bit.bitwarden.data.vault.repository.util
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import com.bitwarden.policies.Policy as SdkPolicy
 
 class VaultSdkPolicyExtensionsTest {
 
     @Test
     fun `toSdkPolicies should return empty list when given empty list`() {
         assertEquals(
-            emptyList<SdkPolicy>(),
+            emptyList<Policy>(),
             emptyList<SyncResponseJson.Policy>().toSdkPolicies(),
         )
     }
