@@ -30,8 +30,8 @@ run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 # Each run reports a summary modelled on the script's final report. actions/stale's own
 # enable-statistics output is log-only, so the counts are assembled from its two step outputs
 # (staled-issues-prs, closed-issues-prs) plus a pre-run search snapshot of the label state.
-# The summary always lands in the job summary and the run log; a live run also posts it to
-# Slack.
+# The summary always lands in the job summary and the run log, and is posted to Slack: live
+# runs to #team-eng-mobile-notifications, dry runs to the automations test channel.
 #
 # The script's "skipped due to creation after cutoff" and "skipped due to activity after
 # cutoff" counters have no equivalent here and are omitted rather than approximated.
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       # Single source of truth for the run mode, so the stale step's debug-only and the
-      # Slack steps' if: conditions can never disagree.
+      # Slack webhook choice can never disagree.
       - name: Resolve run mode
         id: mode
         env:
@@ -88,7 +88,7 @@ jobs:
           else
             echo "mode=dry-run" >> "$GITHUB_OUTPUT"
             echo "debug_only=true" >> "$GITHUB_OUTPUT"
-            echo "👀 Dry run: no issue will be modified and Slack will be skipped."
+            echo "👀 Dry run: no issue will be modified; Slack goes to the test channel."
           fi
 
       # Taken before the stale step runs, so the counts are never affected by this run's
@@ -314,7 +314,6 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # Built even on a dry run so the payload is inspectable; only the send is gated.
           # payload-templated is off by default, so nothing in BODY is re-evaluated.
           jq -n \
             --arg body "$BODY" \
@@ -324,7 +323,6 @@ jobs:
             > slack-payload.json
 
       - name: Log in to Azure
-        if: steps.mode.outputs.mode == 'live'
         uses: bitwarden/gh-actions/azure-login@main
         with:
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -333,22 +331,19 @@ jobs:
 
       - name: Retrieve Slack secrets
         id: retrieve-slack-secrets
-        if: steps.mode.outputs.mode == 'live'
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS"
+          secrets: "SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS,SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL"
 
       - name: Log out from Azure
-        if: steps.mode.outputs.mode == 'live'
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Send Slack notification
-        if: steps.mode.outputs.mode == 'live'
         uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
-          # Every live run reports to #team-eng-mobile-notifications, scheduled or manual.
-          # Dry runs never reach this step at all.
-          webhook: ${{ steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS }}
+          # Live runs, scheduled or manual, report to #team-eng-mobile-notifications; dry
+          # runs go to the automations test channel so a projection never reaches the team.
+          webhook: ${{ steps.mode.outputs.mode == 'live' && steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS || steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL }}
           webhook-type: incoming-webhook
           payload-file-path: slack-payload.json
