@@ -1,18 +1,14 @@
 package com.bitwarden.ui.platform.components.field
 
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
@@ -26,13 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.res.stringResource
@@ -45,17 +37,15 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.tabNavigation
-import com.bitwarden.ui.platform.components.button.BitwardenHelpIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
-import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.bitwarden.ui.platform.components.field.label.BitwardenTextFieldLabel
 import com.bitwarden.ui.platform.components.field.model.TextToolbarType
-import com.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
-import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
+import com.bitwarden.ui.platform.components.field.support.BitwardenTextFieldSupportingContent
+import com.bitwarden.ui.platform.components.field.util.toTextToolbar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
-import com.bitwarden.ui.platform.components.support.BitwardenSupportingContent
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.components.util.passwordVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -75,6 +65,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param supportingContent An optional supporting content that will appear below the text input.
  * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param modifier Modifier for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
@@ -105,6 +97,7 @@ fun BitwardenPasswordField(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -129,18 +122,12 @@ fun BitwardenPasswordField(
             textFieldValueState = textFieldValue
         }
     }
-    val textToolbar = when (textToolbarType) {
-        TextToolbarType.DEFAULT -> BitwardenCutCopyTextToolbar(
-            value = textFieldValue,
-            onValueChange = onValueChange,
-            defaultTextToolbar = LocalTextToolbar.current,
-            clipboardManager = LocalClipboard.current.nativeClipboard,
-            focusManager = LocalFocusManager.current,
-        )
-
-        TextToolbarType.NONE -> BitwardenEmptyTextToolbar
-    }
+    val textToolbar = textToolbarType.toTextToolbar(
+        textFieldValue = textFieldValue,
+        onValueChange = onValueChange,
+    )
     var lastTextValue by remember(value) { mutableStateOf(value = value) }
+    val isFocused by interactionSource.collectIsFocusedAsState()
     CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
         Column(
             modifier = modifier
@@ -150,34 +137,19 @@ fun BitwardenPasswordField(
                     paddingTop = 6.dp,
                     paddingBottom = 0.dp,
                 )
-                .tabNavigation()
-                .focusRequester(focusRequester = focusRequester),
+                .tabNavigation(),
         ) {
-            var focused by remember { mutableStateOf(value = false) }
             TextField(
                 colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
                 label = label?.let {
                     {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = it)
-                            helpData?.let { helpButtonData ->
-                                val targetSize = if (textFieldValue.text.isEmpty() || focused) {
-                                    16.dp
-                                } else {
-                                    12.dp
-                                }
-                                val size by animateDpAsState(
-                                    targetValue = targetSize,
-                                    label = "${helpButtonData.contentDescription}_animation",
-                                )
-                                Spacer(modifier = Modifier.width(width = 8.dp))
-                                BitwardenHelpIconButton(
-                                    helpData = helpButtonData,
-                                    modifier = Modifier.size(size = size),
-                                )
-                            }
-                        }
+                        BitwardenTextFieldLabel(
+                            label = it,
+                            textFieldValue = textFieldValue,
+                            helpData = helpData,
+                            isFieldFocused = isFocused,
+                        )
                     }
                 },
                 value = textFieldValue,
@@ -228,26 +200,17 @@ fun BitwardenPasswordField(
                         },
                     )
                 },
+                interactionSource = interactionSource,
                 modifier = Modifier
                     .nullableTestTag(tag = passwordFieldTestTag)
                     .fillMaxWidth()
-                    .onFocusChanged { focusState -> focused = focusState.isFocused },
+                    .focusRequester(focusRequester = focusRequester),
             )
-            supportingContent
-                ?.let { content ->
-                    Spacer(modifier = Modifier.height(height = 6.dp))
-                    BitwardenHorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp),
-                    )
-                    BitwardenSupportingContent(
-                        cardStyle = null,
-                        insets = supportingContentPadding,
-                        content = content,
-                    )
-                }
-                ?: Spacer(modifier = Modifier.height(height = 6.dp))
+            BitwardenTextFieldSupportingContent(
+                content = supportingContent,
+                supportingContentPadding = supportingContentPadding,
+                noContentCardPadding = 6.dp,
+            )
         }
     }
     if (autoFocus) {
@@ -266,6 +229,8 @@ fun BitwardenPasswordField(
  * @param showPasswordChange Lambda that is called when user request show/hide be toggled.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
@@ -295,6 +260,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -317,6 +283,7 @@ fun BitwardenPasswordField(
         showPasswordTestTag = showPasswordTestTag,
         onValueChange = onValueChange,
         modifier = modifier,
+        interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
         singleLine = singleLine,
@@ -351,6 +318,8 @@ fun BitwardenPasswordField(
  * @param value Current next on the text field.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
@@ -382,6 +351,7 @@ fun BitwardenPasswordField(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     initialShowPassword: Boolean = false,
     readOnly: Boolean = false,
@@ -406,6 +376,7 @@ fun BitwardenPasswordField(
         showPasswordTestTag = showPasswordTestTag,
         onValueChange = onValueChange,
         modifier = modifier,
+        interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
         singleLine = singleLine,
@@ -431,6 +402,8 @@ fun BitwardenPasswordField(
  * @param value Current next on the text field.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
@@ -459,6 +432,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -481,6 +455,7 @@ fun BitwardenPasswordField(
         showPassword = showPassword,
         showPasswordChange = { showPassword = !showPassword },
         onValueChange = onValueChange,
+        interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
         singleLine = singleLine,
