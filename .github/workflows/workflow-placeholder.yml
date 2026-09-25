@@ -189,7 +189,7 @@ jobs:
           # The stale outputs carry full issue objects, several KB each, and Linux caps a
           # single environment variable at 128 KiB, so passing them whole fails the step
           # with "Argument list too long" once a run touches a few dozen issues. Only the
-          # number and title of each issue cross the env boundary; they are re-zipped below.
+          # number and title of each issue cross the env boundary, as parallel arrays.
           _NEW_WARNING_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.number) }}
           _NEW_WARNING_TITLES: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.title) }}
           _CLOSED_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.closed-issues-prs || '[]').*.number) }}
@@ -204,27 +204,16 @@ jobs:
           }
           row() { printf '  %-36s %5s\n' "$1" "$2"; }
 
-          # $1 = numbers JSON, $2 = titles JSON -> [{number, title}]
-          zip() {
-            jq -cn --argjson n "$1" --argjson t "$2" \
-              '[$n, $t] | transpose | map({number: .[0], title: .[1]})'
-          }
-
-          _NEW_WARNINGS_JSON="$(zip "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES")"
-          _CLOSED_JSON="$(zip "$_CLOSED_NUMBERS" "$_CLOSED_TITLES")"
-
-          # $1 = issues JSON, $2 = md|slack
+          # $1 = numbers JSON, $2 = titles JSON (same order), $3 = md|slack
           #
-          # Lists every issue, uncapped. Safe because operations-per-run already bounds how
-          # many issues one run can touch (~150 at roughly two operations each), keeping even
-          # a full sweep inside Slack's 40,000-character text limit. Raise that budget a lot
-          # and this is the thing to re-check.
+          # Lists every issue, uncapped. The job summary always gets the full list; Slack gets
+          # it only up to SLACK_LIST_LIMIT issues and a pointer to the run otherwise.
           issue_list() {
-            local json="${1:-}" fmt="$2"
-            if [ -z "$json" ]; then json='[]'; fi
-            printf '%s' "$json" | jq -r \
+            jq -rn \
+              --argjson numbers "$1" \
+              --argjson titles "$2" \
               --arg base "$_SERVER_URL/$_REPO" \
-              --arg fmt "$fmt" '
+              --arg fmt "$3" '
                 # Truncate first, then escape, so a cut never lands inside an entity.
                 # Both targets need the HTML escaping: Slack requires it for mrkdwn, and
                 # GitHub strips raw tags it does not allow, which would otherwise eat part
@@ -237,25 +226,25 @@ jobs:
                   then "• <\($base)/issues/\(.number)|#\(.number)> \(title)"
                   else "- [#\(.number)](\($base)/issues/\(.number)) \(title)"
                   end;
-                .[] | line($fmt)
+                $numbers | to_entries[] | {number: .value, title: $titles[.key]} | line($fmt)
               '
           }
 
-          # $1 = heading, $2 = count, $3 = issues JSON, $4 = md|slack
+          # $1 = heading, $2 = count, $3 = numbers JSON, $4 = titles JSON, $5 = md|slack
           section() {
             if [ "$2" -eq 0 ]; then
               return 0
             fi
-            if [ "$4" = "slack" ]; then
+            if [ "$5" = "slack" ]; then
               printf '\n*%s (%s)*\n' "$1" "$2"
             else
               printf '\n**%s (%s)**\n' "$1" "$2"
             fi
-            issue_list "$3" "$4"
+            issue_list "$3" "$4" "$5"
           }
 
-          NEW_WARNINGS="$(len "$_NEW_WARNINGS_JSON")"
-          CLOSED="$(len "$_CLOSED_JSON")"
+          NEW_WARNINGS="$(len "$_NEW_WARNING_NUMBERS")"
+          CLOSED="$(len "$_CLOSED_NUMBERS")"
 
           # Formatted like the script's get_elapsed_time().
           ELAPSED=$(( $(date -u +%s) - ${_STARTED_AT} ))
@@ -298,13 +287,27 @@ jobs:
 
           # Most consequential first: closures, then new warnings.
           SECTIONS_MD="$(
-            section 'Issues closed' "$CLOSED" "$_CLOSED_JSON" md
-            section 'New 2-week warnings posted' "$NEW_WARNINGS" "$_NEW_WARNINGS_JSON" md
+            section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" md
+            section 'New 2-week warnings posted' "$NEW_WARNINGS" \
+              "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" md
           )"
-          SECTIONS_SLACK="$(
-            section 'Issues closed' "$CLOSED" "$_CLOSED_JSON" slack
-            section 'New 2-week warnings posted' "$NEW_WARNINGS" "$_NEW_WARNINGS_JSON" slack
-          )"
+
+          # Past this many issues, combined, the Slack message links to the run instead of
+          # listing them; a long list buries the counts and makes the channel hard to scan.
+          SLACK_LIST_LIMIT=30
+          TOTAL=$(( NEW_WARNINGS + CLOSED ))
+          if [ "$TOTAL" -gt "$SLACK_LIST_LIMIT" ]; then
+            SECTIONS_SLACK="$(
+              printf '\n_%s issues this run, too many to list here. ' "$TOTAL"
+              printf 'See the job summary in <%s|run details> for the full list._\n' "$_RUN_URL"
+            )"
+          else
+            SECTIONS_SLACK="$(
+              section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" slack
+              section 'New 2-week warnings posted' "$NEW_WARNINGS" \
+                "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" slack
+            )"
+          fi
 
           echo "$BODY"
           if [ -n "$SECTIONS_MD" ]; then
