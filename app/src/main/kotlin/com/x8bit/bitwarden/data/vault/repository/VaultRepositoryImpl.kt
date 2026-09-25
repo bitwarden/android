@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import android.os.Build
+import android.security.KeyStoreException
+import androidx.annotation.RequiresApi
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
@@ -10,6 +13,7 @@ import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -302,7 +306,7 @@ internal class VaultRepositoryImpl(
                         .decodeToString()
                 } catch (e: GeneralSecurityException) {
                     Timber.w(e, "unlockVaultWithBiometrics failed when decrypting biometrics key")
-                    return VaultUnlockResult.BiometricDecodingError(error = e)
+                    return vaultUnlockResultForBiometricSecurityException(error = e)
                 }
             }
             ?: biometricsKey
@@ -316,7 +320,7 @@ internal class VaultRepositoryImpl(
                     .toString(Charsets.ISO_8859_1)
             } catch (e: GeneralSecurityException) {
                 Timber.w(e, "unlockVaultWithBiometrics failed to migrate the user to IV encryption")
-                return VaultUnlockResult.BiometricDecodingError(error = e)
+                return vaultUnlockResultForBiometricSecurityException(error = e)
             }
         } else {
             null
@@ -590,5 +594,48 @@ internal class VaultRepositoryImpl(
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
+    }
+
+    /**
+     * Maps a biometric [Cipher.doFinal] security failure to a vault unlock result.
+     *
+     * A Keystore authorization miss is retryable and must not clear biometric configuration.
+     * All other security failures remain decoding errors.
+     */
+    private fun vaultUnlockResultForBiometricSecurityException(
+        error: GeneralSecurityException,
+    ): VaultUnlockResult = if (isKeystoreUserAuthenticationRequired(error)) {
+        VaultUnlockResult.AuthenticationError(error = error)
+    } else {
+        VaultUnlockResult.BiometricDecodingError(error = error)
+    }
+
+    /**
+     * Returns true when [throwable] or one of its causes is an Android Keystore exception that
+     * reports [KeyStoreException.ERROR_USER_AUTHENTICATION_REQUIRED].
+     *
+     * The public numeric-error API is only queried on API 33+.
+     */
+    private fun isKeystoreUserAuthenticationRequired(throwable: Throwable): Boolean {
+        if (!isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)) {
+            return false
+        }
+        return throwable.hasUserAuthenticationRequiredKeystoreCause()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun Throwable.hasUserAuthenticationRequiredKeystoreCause(): Boolean {
+        val seen = mutableSetOf<Throwable>()
+        var current: Throwable? = this
+        while (current != null && seen.add(current)) {
+            if (
+                current is KeyStoreException &&
+                current.numericErrorCode == KeyStoreException.ERROR_USER_AUTHENTICATION_REQUIRED
+            ) {
+                return true
+            }
+            current = current.cause
+        }
+        return false
     }
 }
