@@ -1177,6 +1177,7 @@ Chcete prepnúť na tento účet?</string>
         <item quantity="other">Bitwarden nedokázal dešifrovať %1$d položiek trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
     </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
+    <string name="choose_an_identity">Vyberte identitu</string>
     <string name="advanced_options">Rozšírené možnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Viac informácií o zisťovaní zhody</annotation></string>
     <string name="keep_your_credential_secure">Udržujte svoje prihlasovacie údaje v bezpečí</string>
@@ -1466,4 +1467,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="use_this_passphrase">Použiť túto prístupovú frázu</string>
     <string name="use_this_password">Použiť toto heslo</string>
     <string name="use_this_username">Použiť toto používateľské meno</string>
+    <string name="keep_unlocking_with_biometrics">Naďalej odomykať pomocou biometrie</string>
+    <string name="weve_made_a_security_update">Vykonali sme bezpečnostnú aktualizáciu. Potvrďte svoje biometrické údaje ešte raz, aby ste ich mohli naďalej používať na odomknutie Bitwardenu.</string>
+    <string name="turn_off">Vypnúť</string>
+    <string name="turn_off_biometric_question">Vypnúť biometriu?</string>
+    <string name="unlocking_will_require_your_master_password">Odomknutie bude vyžadovať vaše hlavné heslo. Biometriu môžete znova zapnúť v nastaveniach.</string>
 </resources>

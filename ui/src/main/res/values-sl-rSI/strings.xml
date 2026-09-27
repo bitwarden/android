@@ -44,8 +44,8 @@
     <string name="master_password_required">Glavno geslo (obvezno)</string>
     <string name="new_master_password_required">Novo glavno geslo (obvezno)</string>
     <string name="more_options">Več možnosti</string>
-    <string name="my_folder">My folder</string>
-    <string name="my_folders">My folders</string>
+    <string name="my_folder">Moja mapa</string>
+    <string name="my_folders">Moje mape</string>
     <string name="my_vault">Moj trezor</string>
     <string name="name">Naziv</string>
     <string name="item_name_required">Ime predmeta (obvezno)</string>
@@ -935,7 +935,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="choose_three_or_four_random_words">Izberite tri ali štiri naključne besede</string>
     <string name="pick_three_or_four_random_unrelated_words">Izberite tri ali štiri naključne, nepovezane besede, ki si jih zlahka zapomnite. Pomislite na <annotation emphasis="bold">predmete, kraje ali stvari</annotation>, ki so vam všeč.</string>
     <string name="combine_those_words_together">Združite te besede skupaj</string>
-    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Besede poljubno združite v geselsko frazo. <annotation emphasis="bold">Uporabite vezaje, presledke ali jih pustite kot eno dolgo besedo</annotation> – po vaši izbiri!</string>
+    <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Besede poljubno združi v geselsko frazo. <annotation emphasis="bold">Uporabi vezaje, presledke ali jih pusti kot eno dolgo besedo</annotation> – po tvoji izbiri!</string>
     <string name="make_it_yours">Naredite jo svojo</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Dodajte številko ali simbol</annotation>, da bo še močnejša. Zdaj imate edinstveno, varno in si zapomniti vredno geselsko frazo!</string>
     <string name="need_some_inspiration">Potrebujete navdih?</string>
@@ -1177,6 +1177,7 @@ Ali želite preklopiti na ta račun?</string>
         <item quantity="other">Bitwarden ni mogel dešifrirati %1$d predmetov v trezorju. Kopirajte in delite to poročilo o napaki s podporo za stranke, da preprečite dodatno izgubo podatkov.</item>
     </plurals>
     <string name="select_a_card_for_x">Izberite kartico za %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Napredne možnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Več o zaznavanju ujemanja</annotation></string>
     <string name="keep_your_credential_secure">Ohranite svoje poverilnice varne</string>
@@ -1463,7 +1464,12 @@ Ali želite preklopiti na ta račun?</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s dovoljuje ustvarjanje računov samo povabljenim uporabnikom.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
-    <string name="use_this_passphrase">Use this passphrase</string>
-    <string name="use_this_password">Use this password</string>
-    <string name="use_this_username">Use this username</string>
+    <string name="use_this_passphrase">Uporabi to geselsko frazo</string>
+    <string name="use_this_password">Uporabi to geslo</string>
+    <string name="use_this_username">Uporabi to uporabniško ime</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

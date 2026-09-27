@@ -1161,6 +1161,7 @@ Wilt u naar dit account wisselen?</string>
         <item quantity="other">Bitwarden kon%1$d kluisitems niet ontsleutelen. Kopieer dit foutenrapport en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
     </plurals>
     <string name="select_a_card_for_x">Kies een kaart voor %s</string>
+    <string name="choose_an_identity">Kies een identiteit</string>
     <string name="advanced_options">Geavanceerde opties</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lees meer over overeenkomstdetectie</annotation></string>
     <string name="keep_your_credential_secure">Houd je inloggegevens veilig</string>
@@ -1446,4 +1447,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="use_this_passphrase">Deze wachtwoordzin gebruiken</string>
     <string name="use_this_password">Dit wachtwoord gebruiken</string>
     <string name="use_this_username">Deze gebruikersnaam gebruiken</string>
+    <string name="keep_unlocking_with_biometrics">Blijf ontgrendelen met biometrische gegevens</string>
+    <string name="weve_made_a_security_update">We hebben een beveiligingsupdate gemaakt. Bevestig je biometrische gegevens opnieuw om deze te blijven gebruiken om Bitwarden te ontgrendelen.</string>
+    <string name="turn_off">Uitschakelen</string>
+    <string name="turn_off_biometric_question">Biometrie uitschakelen?</string>
+    <string name="unlocking_will_require_your_master_password">Ontgrendelen vereist je hoofdwachtwoord. Je kunt biometrie weer inschakelen in Instellingen.</string>
 </resources>

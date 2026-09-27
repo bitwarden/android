@@ -1161,6 +1161,7 @@ Pretende mudar para esta conta?</string>
         <item quantity="other">O Bitwarden não conseguiu desencriptar %1$d itens do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</item>
     </plurals>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="choose_an_identity">Escolher uma identidade</string>
     <string name="advanced_options">Opções avançadas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais informações sobre a deteção de correspondências</annotation></string>
     <string name="keep_your_credential_secure">Mantenha as suas credenciais seguras</string>
@@ -1446,4 +1447,9 @@ Pretende mudar para esta conta?</string>
     <string name="use_this_passphrase">Utilizar esta frase de acesso</string>
     <string name="use_this_password">Utilizar esta palavra-passe</string>
     <string name="use_this_username">Utilizar este nome de utilizador</string>
+    <string name="keep_unlocking_with_biometrics">Continuar a desbloquear com biometria</string>
+    <string name="weve_made_a_security_update">Fizemos uma atualização de segurança. Confirme novamente a sua biometria para continuar a utilizá-la para desbloquear o Bitwarden.</string>
+    <string name="turn_off">Desativar</string>
+    <string name="turn_off_biometric_question">Desativar a biometria?</string>
+    <string name="unlocking_will_require_your_master_password">Para desbloquear, terá de introduzir a sua palavra-passe mestra. Pode voltar a ativar a biometria nas Definições.</string>
 </resources>
