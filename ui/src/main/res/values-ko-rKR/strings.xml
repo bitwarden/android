@@ -1153,6 +1153,7 @@
         <item quantity="other">Bitwarden이 보관함 항목 %1$d개를 복호화할 수 없습니다. 추가 데이터 손실을 막으려면 이 오류 보고서를 복사해 고객 지원 팀과 공유하세요.</item>
     </plurals>
     <string name="select_a_card_for_x">%s에 대한 카드 선택</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">고급 옵션</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">일치 감지에 대한 자세한 내용</annotation></string>
     <string name="keep_your_credential_secure">자격 증명을 안전하게 유지</string>
@@ -1436,4 +1437,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

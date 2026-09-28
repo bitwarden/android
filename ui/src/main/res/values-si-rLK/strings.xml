@@ -1161,6 +1161,7 @@
         <item quantity="other">Bitwarden ට %1$d සුරක්ෂිතාගාර අයිතම විකේතනය කළ නොහැකි විය. අමතර දත්ත පාඩුව වළක්වා ගැනීමට මෙම දෝෂ වාර්තාව පිටපත් කර පාරිභෝගික සාර්ථකත්වය සමඟ බෙදාගන්න.</item>
     </plurals>
     <string name="select_a_card_for_x">%s සඳහා කාඩ්පතක් තෝරන්න</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">උසස් විකල්ප</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ගැළපුම් හඳුනාගැනීම ගැන තවත්</annotation></string>
     <string name="keep_your_credential_secure">ඔබගේ අක්තපත්‍ර ආරක්ෂිතව තබා ගන්න</string>
@@ -1446,4 +1447,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

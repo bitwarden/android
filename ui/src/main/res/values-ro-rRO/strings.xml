@@ -1169,6 +1169,7 @@ Doriți să comutați la acest cont?</string>
         <item quantity="other">Bitwarden nu a putut decripta %1$d elemente ale seifului. Copiază și distribuie acest raport de eroare către departamentul de succes al clienților pentru a evita pierderea suplimentară de date.</item>
     </plurals>
     <string name="select_a_card_for_x">Selectează un card pentru %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opțiuni avansate</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mai multe despre detectarea potrivirilor</annotation></string>
     <string name="keep_your_credential_secure">Menține-ți acreditările în siguranță</string>
@@ -1456,4 +1457,9 @@ Doriți să comutați la acest cont?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

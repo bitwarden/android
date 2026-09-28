@@ -1161,6 +1161,7 @@
         <item quantity="other">Bitwarden %1$d तिजोरी आयटम डिक्रिप्ट करू शकला नाही. अतिरिक्त डेटा नुकसान टाळण्यासाठी हा त्रुटी अहवाल कॉपी करा आणि ग्राहक सफलता टीमशी सामायिक करा.</item>
     </plurals>
     <string name="select_a_card_for_x">%s साठी एक कार्ड निवडा</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">प्रगत पर्याय</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">जुळणी शोधाबद्दल अधिक</annotation></string>
     <string name="keep_your_credential_secure">तुमची क्रेडेन्शियल्स सुरक्षित ठेवा</string>
@@ -1446,4 +1447,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

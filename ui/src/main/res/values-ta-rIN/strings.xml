@@ -1161,6 +1161,7 @@
         <item quantity="other">Bitwarden ஆல் %1$d vault உருப்படிகளை மறைகுறியாக்க முடியவில்லை. கூடுதல் தரவு இழப்பைத் தவிர்க்க, இந்தப் பிழை அறிக்கையை நகலெடுத்து வாடிக்கையாளருடன் பகிர்ந்து கொள்ளுங்கள்.</item>
     </plurals>
     <string name="select_a_card_for_x">%s-க்கு ஒரு கார்டைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">மேம்பட்ட விருப்பங்கள்</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">பொருத்தம் கண்டறிதல் பற்றி மேலும்</annotation></string>
     <string name="keep_your_credential_secure">உங்கள் நற்சான்றிதழ்களைப் பாதுகாப்பாக வைத்திருங்கள்</string>
@@ -1446,4 +1447,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

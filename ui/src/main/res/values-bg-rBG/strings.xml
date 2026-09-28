@@ -1163,6 +1163,7 @@
         <item quantity="other">Битуорден не може да дешифрира %1$d елемента от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
     </plurals>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
+    <string name="choose_an_identity">Изберете самоличност</string>
     <string name="advanced_options">Разширени настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Повече относно разпознаването на съвпадения</annotation></string>
     <string name="keep_your_credential_secure">Защитете данните си за вписване</string>
@@ -1448,4 +1449,9 @@
     <string name="use_this_passphrase">Използване на тази парола-фраза</string>
     <string name="use_this_password">Използване на тази парола</string>
     <string name="use_this_username">Използване на това потребителско име</string>
+    <string name="keep_unlocking_with_biometrics">Продължаване на отключването с биометрични данни</string>
+    <string name="weve_made_a_security_update">Обновихме сигурността. Потвърдете биометричните си данни, за да продължите да ги използвате за отключване на Битуорден.</string>
+    <string name="turn_off">Изключване</string>
+    <string name="turn_off_biometric_question">Изключване на биометричните данни?</string>
+    <string name="unlocking_will_require_your_master_password">Отключването ще изисква главната парола. Можете да включите биометричните данни отново в Настройките.</string>
 </resources>

@@ -1154,6 +1154,7 @@
         <item quantity="other">Bitwarden 无法解密 %1$d 个密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</item>
     </plurals>
     <string name="select_a_card_for_x">为 %s 选择一个支付卡</string>
+    <string name="choose_an_identity">选择身份</string>
     <string name="advanced_options">高级选项</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">更多关于匹配检测</annotation></string>
     <string name="keep_your_credential_secure">保持您的凭据安全</string>
@@ -1437,4 +1438,9 @@
     <string name="use_this_passphrase">使用此密码短语</string>
     <string name="use_this_password">使用此密码</string>
     <string name="use_this_username">使用此用户名</string>
+    <string name="keep_unlocking_with_biometrics">继续使用生物识别解锁</string>
+    <string name="weve_made_a_security_update">我们已进行了一次安全更新。请再次确认您的生物识别，以便继续使用其来解锁 Bitwarden。</string>
+    <string name="turn_off">停用</string>
+    <string name="turn_off_biometric_question">停用生物识别吗？</string>
+    <string name="unlocking_will_require_your_master_password">解锁需要您的主密码。您可以在「设置」中重新启用生物识别。</string>
 </resources>

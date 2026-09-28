@@ -1178,6 +1178,7 @@ při opakování problémů.</string>
         <item quantity="other">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
     </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
+    <string name="choose_an_identity">Zvolte identitu</string>
     <string name="advanced_options">Rozšířené volby</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>
     <string name="keep_your_credential_secure">Uchovávejte Vaše přihlašovací údaje v bezpečí</string>
@@ -1467,4 +1468,9 @@ při opakování problémů.</string>
     <string name="use_this_passphrase">Použít tuto heslovou frázi</string>
     <string name="use_this_password">Použít toto heslo</string>
     <string name="use_this_username">Použít toto uživatelské jméno</string>
+    <string name="keep_unlocking_with_biometrics">Pokračovat v odemykání pomocí biometrie</string>
+    <string name="weve_made_a_security_update">Provedli jsme bezpečnostní aktualizaci. Potvrďte znovu Vaše biometrické údaje pro jejich další používání k odemknutí Bitwardenu.</string>
+    <string name="turn_off">Vypnout</string>
+    <string name="turn_off_biometric_question">Vypnout biometriku?</string>
+    <string name="unlocking_will_require_your_master_password">Odemknutí bude vyžadovat hlavní heslo. V nastavení můžete znovu zapnout biometriku.</string>
 </resources>

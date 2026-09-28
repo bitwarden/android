@@ -1153,6 +1153,7 @@
         <item quantity="other">Bitwardenは %1$d 個のボールトアイテムを復号化できませんでした。このエラーレポートをコピーしてカスタマーサクセスと共有し、さらなるデータ損失を防いでください。</item>
     </plurals>
     <string name="select_a_card_for_x">%s のカードを選択</string>
+    <string name="choose_an_identity">ID を選択してください</string>
     <string name="advanced_options">高度な設定</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">一致検出の詳細</annotation></string>
     <string name="keep_your_credential_secure">資格情報を安全に保つ</string>
@@ -1436,4 +1437,9 @@
     <string name="use_this_passphrase">このパスフレーズを使用する</string>
     <string name="use_this_password">このパスワードを使用する</string>
     <string name="use_this_username">このユーザー名を使用する</string>
+    <string name="keep_unlocking_with_biometrics">生体認証でロック解除を続ける</string>
+    <string name="weve_made_a_security_update">セキュリティを更新しました。生体認証を再度確認して、Bitwarden のロックを解除してください。</string>
+    <string name="turn_off">オフにする</string>
+    <string name="turn_off_biometric_question">生体認証をオフにしますか？</string>
+    <string name="unlocking_will_require_your_master_password">ロックを解除するにはマスターパスワードが必要です。設定で生体認証を再度有効にできます。</string>
 </resources>

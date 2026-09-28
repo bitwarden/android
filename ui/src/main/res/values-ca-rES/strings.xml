@@ -480,7 +480,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="specific_people">Persones específiques</string>
     <string name="specific_people_verification_info">Després de compartir aquest enllaç d\'enviament, les persones hauran de verificar el seu correu electrònic amb un codi per veure aquest enviament</string>
     <string name="anyone_with_password">Qualsevol persona amb una contrasenya establerta per tu</string>
-    <string name="add_email">Afegeix correu electrònic</string>
+    <string name="add_email">Afig correu electrònic</string>
     <string name="pending_delete">Pendent de supressió</string>
     <string name="expired">Caducat</string>
     <string name="expires_at">Caduca a les %s</string>
@@ -842,7 +842,7 @@ Voleu canviar a aquest compte?</string>
     <string name="get_started">Comencem</string>
     <string name="save_and_protect_your_data">Desa i protegeix les teves dades</string>
     <string name="the_vault_protects_more_than_just_passwords">El cofre protegeix més que només contrasenyes. Emmagatzema inicis de sessió segurs, identificacions, targetes i notes de manera segura aquí.</string>
-    <string name="add_login">Afegeix inici de sessió</string>
+    <string name="add_login">Afig inici de sessió</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Comparteix fitxers i dades de manera segura amb qualsevol persona, en qualsevol plataforma. La teua informació romandrà xifrada de principi a fi i alhora limitarà l\'exposició.</string>
     <string name="send_sensitive_information_safely">Envieu informació confidencial, de manera segura</string>
     <string name="import_saved_logins">Importar inicis de sessió desats</string>
@@ -993,7 +993,7 @@ Voleu canviar a aquest compte?</string>
     <string name="show_more">Mostra\'n més</string>
     <string name="no_folder">Sense carpeta</string>
     <string name="show_less">Mostra\'n menys</string>
-    <string name="add_field">Afegeix camp</string>
+    <string name="add_field">Afig camp</string>
     <string name="share_error_details">Comparteix els detalls de l\'error</string>
     <string name="flight_recorder">Registrador al vol</string>
     <string name="flight_recorder_help">Ajuda del Registrador al vol</string>
@@ -1161,6 +1161,7 @@ Voleu canviar a aquest compte?</string>
         <item quantity="other">Bitwarden no ha pogut desxifrar %1$d elements del cofre. Copia i comparteix aquest informe d\'error amb l\'èxit del client per evitar pèrdues de dades addicionals.</item>
     </plurals>
     <string name="select_a_card_for_x">Selecciona una targeta per a %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opcions avançades</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Més sobre la detecció de coincidències</annotation></string>
     <string name="keep_your_credential_secure">Mantén les teves credencials segures</string>
@@ -1363,9 +1364,9 @@ Voleu canviar a aquest compte?</string>
     <string name="view_bank_account">Veure compte bancari</string>
     <string name="view_license">Veure llicència</string>
     <string name="view_passport">Veure passaport</string>
-    <string name="add_bank_account">Afegeix compte bancari</string>
-    <string name="add_license">Afegeix llicència</string>
-    <string name="add_passport">Afegeix passaport</string>
+    <string name="add_bank_account">Afig compte bancari</string>
+    <string name="add_license">Afig llicència</string>
+    <string name="add_passport">Afig passaport</string>
     <string name="edit_bank_account">Edita compte bancari</string>
     <string name="edit_license">Edita llicència</string>
     <string name="edit_passport">Edita passaport</string>
@@ -1446,4 +1447,9 @@ Voleu canviar a aquest compte?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

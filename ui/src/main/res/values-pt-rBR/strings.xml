@@ -1160,6 +1160,7 @@ Deseja trocar para esta conta?</string>
         <item quantity="other">O Bitwarden não pôde descriptografar %1$d itens do cofre. Copie e compartilhe este relatório de erro com o suporte ao cliente para evitar a perda de dados adicionais.</item>
     </plurals>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opções avançadas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais sobre a detecção de correspondência</annotation></string>
     <string name="keep_your_credential_secure">Mantenha suas credenciais seguras</string>
@@ -1445,4 +1446,9 @@ Deseja trocar para esta conta?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

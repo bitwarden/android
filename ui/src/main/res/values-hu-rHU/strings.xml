@@ -1160,6 +1160,7 @@ Szeretnénk átváltani erre a fiókra?</string>
         <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
     </plurals>
     <string name="select_a_card_for_x">Válasszunk egy kártyát %s használatához</string>
+    <string name="choose_an_identity">Válasszunk egy azonosítást.</string>
     <string name="advanced_options">Haladó opciók</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Bővebben az egyezés felismeréséről</annotation></string>
     <string name="keep_your_credential_secure">Tartsuk biztonságban a hitelesítő adatokat.</string>
@@ -1445,4 +1446,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_this_passphrase">Jelmondat használata</string>
     <string name="use_this_password">Jelszó használata</string>
     <string name="use_this_username">Felhasználónév használata</string>
+    <string name="keep_unlocking_with_biometrics">Feloldás folytatása biometrikus adatokkal</string>
+    <string name="weve_made_a_security_update">Biztonsági frissítés történt. Erősítsük meg újra a biometrikus adatokat, hogy továbbra is használjuk azokat a Bitwarden feloldásához.</string>
+    <string name="turn_off">Kikapcsolás</string>
+    <string name="turn_off_biometric_question">Biometria kikapcsolása?</string>
+    <string name="unlocking_will_require_your_master_password">A feloldáshoz a mesterjelszóra lesz szükség. A biometrikus adatokat a Beállításokban kapcsolhatjuk vissza.</string>
 </resources>
