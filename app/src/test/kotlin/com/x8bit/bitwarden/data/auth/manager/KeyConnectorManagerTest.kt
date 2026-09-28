@@ -10,6 +10,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
@@ -281,7 +282,7 @@ class KeyConnectorManagerTest {
                     accessToken = ACCESS_TOKEN,
                     body = KeyConnectorKeyRequestJson(
                         userKey = ENCRYPTED_USER_KEY,
-                        keys = KeyConnectorKeyRequestJson.Keys(
+                        keys = KeysJson(
                             publicKey = PUBLIC_KEY,
                             encryptedPrivateKey = PRIVATE_KEY,
                         ),
@@ -334,7 +335,7 @@ class KeyConnectorManagerTest {
                 accessToken = ACCESS_TOKEN,
                 body = KeyConnectorKeyRequestJson(
                     userKey = ENCRYPTED_USER_KEY,
-                    keys = KeyConnectorKeyRequestJson.Keys(
+                    keys = KeysJson(
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),

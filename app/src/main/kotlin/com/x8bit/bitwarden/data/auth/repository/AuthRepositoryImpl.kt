@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.MasterPasswordUnlockData
@@ -23,9 +24,9 @@ import com.bitwarden.network.model.CreateAccountKeysResponseJson
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
-import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -59,25 +60,25 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.GetDevicesResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
-import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -86,7 +87,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
-import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -100,10 +100,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.CookieCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toAccountCryptographicState
 import com.x8bit.bitwarden.data.auth.repository.util.toDeviceInfo
-import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
+import com.x8bit.bitwarden.data.auth.repository.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.util.toPolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -130,20 +129,13 @@ import com.x8bit.bitwarden.data.vault.repository.model.onVaultUnlockSuccess
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
@@ -177,14 +169,18 @@ internal class AuthRepositoryImpl(
     private val kdfManager: KdfManager,
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
+    authStateManager: AuthStateManager,
+    organizationManager: OrganizationManager,
     passwordPolicyManager: PasswordPolicyManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
+    AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
     /**
@@ -230,29 +226,6 @@ internal class AuthRepositoryImpl(
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val authStateFlow: StateFlow<AuthState> = authDiskSource
-        .activeUserIdChangesFlow
-        .flatMapLatest { activeUserId ->
-            activeUserId
-                ?.let { userId ->
-                    authDiskSource
-                        .getAccountTokensFlow(userId)
-                        .map { accountTokens ->
-                            accountTokens
-                                ?.accessToken
-                                ?.let { AuthState.Authenticated(it) }
-                                ?: AuthState.Unauthenticated
-                        }
-                }
-                ?: flowOf(AuthState.Unauthenticated)
-        }
-        .stateIn(
-            scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
-            initialValue = AuthState.Uninitialized,
-        )
-
     private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> = duoTokenChannel.receiveAsFlow()
 
@@ -284,13 +257,6 @@ internal class AuthRepositoryImpl(
                 authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
             }
         }
-
-    override val organizations: List<Organization>
-        get() = activeUserId
-            ?.let { authDiskSource.getOrganizations(it) }
-            ?.filter { it.status == OrganizationStatusType.CONFIRMED }
-            .orEmpty()
-            .toOrganizations()
 
     override val showWelcomeCarousel: Boolean
         get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
@@ -345,14 +311,22 @@ internal class AuthRepositoryImpl(
     override suspend fun deleteAccountWithMasterPassword(
         masterPassword: String,
     ): DeleteAccountResult {
-        val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return DeleteAccountResult.Error(message = null, error = NoActiveUserException())
+        val masterPasswordUnlock = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?.userDecryptionOptions
+            ?.masterPasswordUnlock
+            ?: return DeleteAccountResult.Error(
+                message = null,
+                error = MissingPropertyException("Master Password Unlock"),
+            )
         userStateManager.hasPendingAccountDeletion = true
         return authSdkSource
             .hashPassword(
-                email = profile.email,
+                salt = masterPasswordUnlock.salt,
                 password = masterPassword,
-                kdf = profile.toSdkParams(),
+                kdf = masterPasswordUnlock.kdf.toKdf(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
             .flatMap { hashedPassword ->
@@ -556,13 +530,18 @@ internal class AuthRepositoryImpl(
     override suspend fun login(
         email: String,
         password: String,
-    ): LoginResult = identityService
-        .preLogin(email = email)
+    ): LoginResult = if (featureFlagManager.getFeatureFlag(key = FlagKey.SdkPreLogin)) {
+        authSdkSource.preLogin(email = email)
+    } else {
+        identityService
+            .preLogin(email = email)
+            .map { PasswordPreloginResponse(salt = email, kdf = it.kdfParams.toSdkParams()) }
+    }
         .flatMap {
             authSdkSource.hashPassword(
-                email = email,
+                salt = it.salt,
                 password = password,
-                kdf = it.kdfParams.toSdkParams(),
+                kdf = it.kdf,
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         }
@@ -902,16 +881,16 @@ internal class AuthRepositoryImpl(
                 identityService.registerFinish(
                     body = RegisterFinishRequestJson(
                         email = email,
-                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                        masterPasswordHint = masterPasswordHint,
                         emailVerificationToken = emailVerificationToken,
-                        userSymmetricKey = registerKeyResponse.encryptedUserKey,
-                        userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                        masterPasswordHint = masterPasswordHint,
+                        userAsymmetricKeys = KeysJson(
                             publicKey = registerKeyResponse.keys.public,
                             encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
-                        kdfType = kdf.toKdfTypeJson(),
-                        kdfIterations = kdf.iterations,
+                        kdf = kdf.toKdfRequestModel(),
+                        salt = email,
+                        masterPasswordAuthenticationHash = registerKeyResponse.masterPasswordHash,
+                        masterKeyWrappedUserKey = registerKeyResponse.encryptedUserKey,
                     ),
                 )
             }
@@ -1014,12 +993,14 @@ internal class AuthRepositoryImpl(
     ): ResetPasswordResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return ResetPasswordResult.Error(error = NoActiveUserException())
+        val masterPasswordUnlock = profile.userDecryptionOptions?.masterPasswordUnlock
+            ?: return ResetPasswordResult.Error(MissingPropertyException("Master Password Unlock"))
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
-                    email = profile.email,
+                    salt = masterPasswordUnlock.salt,
                     password = password,
-                    kdf = profile.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
@@ -1035,11 +1016,13 @@ internal class AuthRepositoryImpl(
             )
             .flatMap { response ->
                 accountsService.resetPassword(
-                    body = ResetPasswordRequestJson.V1(
+                    body = ResetPasswordRequestJson(
                         currentPasswordHash = currentPasswordHash,
-                        newPasswordHash = response.passwordHash,
                         passwordHint = passwordHint,
-                        key = response.newKey,
+                        kdf = masterPasswordUnlock.kdf,
+                        salt = masterPasswordUnlock.salt,
+                        masterPasswordAuthenticationHash = response.passwordHash,
+                        masterKeyWrappedUserKey = response.newKey,
                     ),
                 )
             }
@@ -1098,15 +1081,13 @@ internal class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson.V1(
-                            passwordHint = passwordHint,
+                        body = SetPasswordRequestJson(
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = profile.kdfIterations,
-                            kdfMemory = profile.kdfMemory,
-                            kdfParallelism = profile.kdfParallelism,
-                            kdfType = profile.kdfType,
-                            key = response.newKey,
-                            passwordHash = response.passwordHash,
+                            passwordHint = passwordHint,
+                            kdf = profile.toKdfRequestModel(),
+                            salt = profile.email,
+                            masterPasswordAuthenticationHash = response.passwordHash,
+                            masterKeyWrappedUserKey = response.newKey,
                             keys = null,
                         ),
                     )
@@ -1221,16 +1202,14 @@ internal class AuthRepositoryImpl(
             .flatMap { response ->
                 accountsService
                     .setPassword(
-                        body = SetPasswordRequestJson.V1(
-                            passwordHash = response.masterPasswordHash,
-                            passwordHint = passwordHint,
+                        body = SetPasswordRequestJson(
                             organizationIdentifier = organizationIdentifier,
-                            kdfIterations = profile.kdfIterations,
-                            kdfMemory = profile.kdfMemory,
-                            kdfParallelism = profile.kdfParallelism,
-                            kdfType = profile.kdfType,
-                            key = response.encryptedUserKey,
-                            keys = SetPasswordRequestJson.V1.Keys(
+                            passwordHint = passwordHint,
+                            kdf = profile.toKdfRequestModel(),
+                            salt = profile.email,
+                            masterPasswordAuthenticationHash = response.masterPasswordHash,
+                            masterKeyWrappedUserKey = response.encryptedUserKey,
+                            keys = KeysJson(
                                 publicKey = response.keys.public,
                                 encryptedPrivateKey = response.keys.private,
                             ),
@@ -1530,20 +1509,6 @@ internal class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
-        organizationService.leaveOrganization(organizationId).fold(
-            onSuccess = { LeaveOrganizationResult.Success },
-            onFailure = { LeaveOrganizationResult.Error(error = it) },
-        )
-
-    override suspend fun revokeFromOrganization(
-        organizationId: String,
-    ): RevokeFromOrganizationResult =
-        organizationService.revokeFromOrganization(organizationId).fold(
-            onSuccess = { RevokeFromOrganizationResult.Success },
-            onFailure = { RevokeFromOrganizationResult.Error(error = it) },
-        )
-
     /**
      * Enrolls the active user in password reset if their organization requires it.
      */
@@ -1751,23 +1716,6 @@ internal class AuthRepositoryImpl(
                     password = password,
                 )
             }
-        }
-
-        password?.let {
-            // Save the master password hash.
-            authSdkSource
-                .hashPassword(
-                    email = email,
-                    password = it,
-                    kdf = profile.toSdkParams(),
-                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                )
-                .onSuccess { passwordHash ->
-                    authDiskSource.storeMasterPasswordHash(
-                        userId = userId,
-                        passwordHash = passwordHash,
-                    )
-                }
         }
 
         settingsRepository.hasUserLoggedInOrCreatedAccount = true

@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -84,11 +85,13 @@ internal class VaultRepositoryImpl(
     private val vaultSyncManager: VaultSyncManager,
     private val credentialExchangeImportManager: CredentialExchangeImportManager,
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
+    private val keyRotationManager: KeyRotationManager,
     private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     FolderManager by folderManager,
+    KeyRotationManager by keyRotationManager,
     SendManager by sendManager,
     VaultLockManager by vaultLockManager,
     VaultSyncManager by vaultSyncManager {
@@ -337,6 +340,10 @@ internal class VaultRepositoryImpl(
                 }
                 pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                     userId = userId,
+                )
+                keyRotationManager.rotateBiometricsKey(
+                    userId = userId,
+                    decryptedBiometricsUserKey = decryptedUserKey,
                 )
             }
     }

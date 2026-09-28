@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import kotlinx.coroutines.flow.Flow
 
@@ -12,12 +12,12 @@ interface PolicyManager {
     /**
      * Returns a flow of all the active policies of the given type.
      */
-    fun getActivePoliciesFlow(type: PolicyType): Flow<List<PolicyView>>
+    fun getActivePoliciesFlow(type: PolicyType): Flow<List<Policy>>
 
     /**
      * Get all the policies of the given [type] that are enabled and applicable to the user.
      */
-    fun getActivePolicies(type: PolicyType): List<PolicyView>
+    fun getActivePolicies(type: PolicyType): List<Policy>
 
     /**
      * Returns the current, precedence-resolved [EffectiveSendPolicy] for the active user. When
@@ -38,7 +38,7 @@ interface PolicyManager {
     fun getUserPolicies(
         userId: String,
         type: PolicyType,
-    ): List<PolicyView>
+    ): List<Policy>
 
     /**
      * Get the organization id of the personal ownership policy.

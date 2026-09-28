@@ -25,8 +25,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
@@ -96,8 +96,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLice
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -219,7 +219,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
-    private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<Policy>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every { getEffectiveSendPolicy() } returns DEFAULT_EFFECTIVE_SEND_POLICY
@@ -397,7 +397,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -1683,7 +1683,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -1723,7 +1723,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,
@@ -2895,6 +2895,76 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                     uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
                                     fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                                 ),
+                                isAutofill = true,
+                            ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                )
+                    .copy(autofillSelectionData = autofillSelectionData),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with items and autofill filtering for Identity should update ViewState to Content with filtered data`() =
+        runTest {
+            setupMockUri()
+
+            val cipherView1 = createMockCipherListView(
+                number = 1,
+                type = CipherListViewType.Identity,
+            )
+            val cipherView2 = createMockCipherListView(
+                number = 2,
+                type = CipherListViewType.Login(
+                    createMockLoginListView(number = 2),
+                ),
+            )
+
+            val autofillSelectionData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.IDENTITY,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
+                uri = "https://www.test.com",
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = autofillSelectionData,
+                    shouldFinishWhenComplete = true,
+                )
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(cipherView1, cipherView2),
+                    ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Identity,
+                ),
+            )
+
+            mutableVaultDataStateFlow.value = dataState
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(
+                                number = 1,
+                                cipherType = CipherType.IDENTITY,
+                                subtitle = "mockSubtitle-1",
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitleTestTag = "PasswordName",
                                 isAutofill = true,
                             ),
                         ),

@@ -115,6 +115,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -301,6 +302,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -435,6 +437,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -637,6 +640,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -716,6 +720,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -785,6 +790,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -933,6 +939,7 @@ class VaultAddItemStateExtensionsTest {
                     fingerprint = "mockFingerprint-1",
                 ),
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -1230,6 +1237,7 @@ class VaultAddItemStateExtensionsTest {
                 archivedDate = null,
                 sshKey = null,
                 attachmentDecryptionFailures = null,
+                partial = false,
             ),
             result,
         )
@@ -1380,6 +1388,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     archivedDate = FIXED_CLOCK.instant(),
     sshKey = null,
     attachmentDecryptionFailures = null,
+    partial = false,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

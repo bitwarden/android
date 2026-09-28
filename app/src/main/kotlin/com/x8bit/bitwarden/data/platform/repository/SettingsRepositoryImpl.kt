@@ -5,8 +5,9 @@ import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -24,7 +25,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -305,6 +305,11 @@ class SettingsRepositoryImpl(
                 }
             }
             ?: flowOf(false)
+
+    override val isPasswordOnRestartRequiredWithPin: Boolean
+        get() = activeUserId
+            ?.let { authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = it) != null }
+            ?: false
 
     override var isInlineAutofillEnabled: Boolean
         get() = activeUserId
@@ -718,7 +723,7 @@ class SettingsRepositoryImpl(
      * settings to determine whether to update the user's settings.
      */
     private fun updateVaultUnlockSettingsIfNecessary(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
     ) {
         // The vault timeout policy can only be implemented in organizations that have
         // the single organization policy, meaning that if this is enabled, the user is

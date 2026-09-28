@@ -12,4 +12,5 @@ fun MasterPasswordUnlockDataJson.toSdkMasterPasswordUnlock(): MasterPasswordUnlo
         kdf = kdf.toKdf(),
         masterKeyWrappedUserKey = masterKeyWrappedUserKey,
         salt = salt,
+        containedKeyId = containedKeyId,
     )

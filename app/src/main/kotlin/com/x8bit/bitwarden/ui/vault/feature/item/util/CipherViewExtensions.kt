@@ -14,7 +14,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.Fido2CredentialView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
@@ -318,7 +318,7 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential.getCreationDateText(clock: Clock): Text =
+private fun Fido2CredentialView.getCreationDateText(clock: Clock): Text =
     BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,
@@ -383,6 +383,22 @@ private val CardView.paymentCardBrandIconRes: Int?
             -> null
     }
 
+private val CardView.cardBrand: VaultCardBrand?
+    get() = brand
+        ?.findVaultCardBrandWithNameOrNull()
+        .takeUnless { it == VaultCardBrand.SELECT }
+
+private val CardView.expiration: String?
+    get() = listOfNotNull(
+        expMonth?.padStart(length = 2, padChar = '0'),
+        expYear,
+    )
+        .joinToString("/")
+        .orNullIfBlank()
+
+/**
+ * The full postal address for an [IdentityView], joining its address parts.
+ */
 private val IdentityView.identityAddress: String?
     get() = listOfNotNull(
         address1,
@@ -396,6 +412,9 @@ private val IdentityView.identityAddress: String?
         .joinToString("\n")
         .orNullIfBlank()
 
+/**
+ * The full name for an [IdentityView], joining its name parts.
+ */
 private val IdentityView.identityName: String?
     get() = listOfNotNull(
         title
@@ -408,17 +427,4 @@ private val IdentityView.identityName: String?
         lastName,
     )
         .joinToString(" ")
-        .orNullIfBlank()
-
-private val CardView.cardBrand: VaultCardBrand?
-    get() = brand
-        ?.findVaultCardBrandWithNameOrNull()
-        .takeUnless { it == VaultCardBrand.SELECT }
-
-private val CardView.expiration: String?
-    get() = listOfNotNull(
-        expMonth?.padStart(length = 2, padChar = '0'),
-        expYear,
-    )
-        .joinToString("/")
         .orNullIfBlank()

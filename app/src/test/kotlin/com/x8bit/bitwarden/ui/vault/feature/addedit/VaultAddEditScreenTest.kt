@@ -11,6 +11,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
@@ -103,6 +104,8 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onCloseAndNavigateToVaultItemId: String? = null
+    private var onCloseAndNavigateToVaultItemType: VaultItemCipherType? = null
     private var onNavigateToCardScanScreenCalled = false
     private var onNavigateToMoveToOrganizationId: String? = null
     private var onNavigateToPlanCalled = false
@@ -150,6 +153,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 onNavigateToCardScanScreen = { onNavigateToCardScanScreenCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
+                onCloseAndNavigateToVaultItem = { id, type ->
+                    onCloseAndNavigateToVaultItemId = id
+                    onCloseAndNavigateToVaultItemType = type
+                },
                 viewModel = viewModel,
             )
         }
@@ -263,6 +270,17 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         val cipherId = "cipherId-1234"
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAttachments(cipherId))
         assertEquals(cipherId, onNavigateToAttachmentsId)
+    }
+
+    @Test
+    fun `on CloseAndNavigateToVaultItem event should invoke onCloseAndNavigateToVaultItem`() {
+        val cipherId = "cipherId-1234"
+        val cipherType = VaultItemCipherType.LOGIN
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.CloseAndNavigateToVaultItem(cipherId, cipherType),
+        )
+        assertEquals(cipherId, onCloseAndNavigateToVaultItemId)
+        assertEquals(cipherType, onCloseAndNavigateToVaultItemType)
     }
 
     @Test
@@ -1767,7 +1785,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Title")
             .performClick()
 
         // Choose the option from the menu
@@ -1790,7 +1808,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Identity the Title should display the selected title from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Title")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2435,7 +2453,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Brand")
             .performClick()
 
         // Choose the option from the menu
@@ -2458,7 +2476,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Card the Brand should display the selected brand from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Brand")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2479,7 +2497,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Expiration month")
             .performClick()
 
         // Choose the option from the menu
@@ -2503,7 +2521,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Card the Expiration month should display the selected expiration month from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Expiration month")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2654,7 +2672,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_BANK_ACCOUNT
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Account type")
+            .onNodeWithContentDescriptionAfterScroll(label = "Select. Account type")
             .performClick()
 
         // Choose the option from the menu
@@ -2922,7 +2940,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the date of birth should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .onNodeWithContentDescriptionAfterScroll(label = "Date of birth")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2939,13 +2957,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    dateOfBirth = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Date of birth")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Date of birth"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -2959,7 +2985,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the issue date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Issue date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2976,13 +3002,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the issue date clear button should trigger IssueDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    issueDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Issue date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Issue date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -2997,7 +3031,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_License the expiration date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_LICENSE
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3014,13 +3048,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_License clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_LICENSE
+        mutableStateFlow.value = DEFAULT_STATE_LICENSE.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.License(
+                    expirationDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Expiration date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Expiration date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3201,7 +3243,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Passport the date of birth should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
+            .onNodeWithContentDescriptionAfterScroll(label = "Date of birth")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3218,13 +3260,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the date of birth clear button should trigger DateOfBirthChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    dateOfBirth = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Date of birth")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Date of birth")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Date of birth"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3234,12 +3284,11 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport the issue date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Issue date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3256,13 +3305,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the issue date clear button should trigger IssueDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    issueDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Issue date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Issue date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Issue date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3277,7 +3334,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `in ItemType_Passport the expiration date should display the selected date from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_PASSPORT
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration date")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -3294,13 +3351,21 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Passport clicking the expiration date clear button should trigger ExpirationDateChange with null`() {
-        mutableStateFlow.value = DEFAULT_STATE_PASSPORT
+        mutableStateFlow.value = DEFAULT_STATE_PASSPORT.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Passport(
+                    expirationDate = LocalDate.of(2026, 9, 10),
+                ),
+                isIndividualVaultDisabled = false,
+            ),
+        )
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "null. Expiration date")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText(text = "Clear")
+            .onNodeWithContentDescriptionAfterScroll(label = "September 10, 2026. Expiration date")
+            .onChildren()
+            .filterToOne(matcher = hasText(text = "Expiration date"))
+            .onChildren()
+            .filterToOne(matcher = hasContentDescription(value = "Clear"))
             .performClick()
 
         verify {
@@ -3369,6 +3434,30 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 VaultAddEditAction.Common.SelectOwnerForItem,
             )
         }
+    }
+
+    @Test
+    fun `clicking a Ownership option should clear focus from the focused text field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        updateStateWithOwners()
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "My vault. Vault",
+            )
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsNotFocused()
     }
 
     @Test
@@ -3570,6 +3659,28 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 VaultAddEditAction.Common.SelectOrAddFolderForItem,
             )
         }
+    }
+
+    @Test
+    fun `clicking a Folder Option should clear focus from the focused text field`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        updateStateWithFolders()
+        composeTestRule.waitForIdle()
+        mutableEventFlow.tryEmit(VaultAddEditEvent.FocusCardHolderName)
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsFocused()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. My folder")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("CardholderNameEntry")
+            .performScrollTo()
+            .assertIsNotFocused()
     }
 
     @Test

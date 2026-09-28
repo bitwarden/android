@@ -1372,6 +1372,33 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `topBar title should be displayed for identity autofill selection regardless of the uri`() {
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
+                autofillSelectionData = AUTOFILL_SELECTION_DATA.copy(
+                    type = AutofillSelectionData.Type.IDENTITY,
+                    uri = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Choose an identity")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                autofillSelectionData = AUTOFILL_SELECTION_DATA.copy(
+                    type = AutofillSelectionData.Type.IDENTITY,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Choose an identity")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `on overflow item click should display menu`() {
         composeTestRule
             .onNodeWithContentDescription(label = "More options")

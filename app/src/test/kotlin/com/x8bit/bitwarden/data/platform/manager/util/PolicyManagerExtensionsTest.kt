@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.platform.manager.util
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class PolicyManagerExtensionsTest {
-    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
     private val policyManager: PolicyManager = mockk {
         every { getActivePoliciesFlow(any()) } returns mutablePolicyFlow
     }
@@ -87,7 +87,7 @@ class PolicyManagerExtensionsTest {
     }
 }
 
-private val MASTER_PASSWORD_POLICY = createMockPolicyView(
+private val MASTER_PASSWORD_POLICY = createMockSdkPolicy(
     organizationId = "organizationId",
     id = "master_password_id",
     type = PolicyType.MASTER_PASSWORD,
@@ -115,7 +115,7 @@ private val MASTER_PASSWORD_POLICY_INFO = PolicyInformation.MasterPassword(
     enforceOnLogin = true,
 )
 
-private val PASSWORD_GENERATOR_POLICY = createMockPolicyView(
+private val PASSWORD_GENERATOR_POLICY = createMockSdkPolicy(
     organizationId = "organizationId",
     id = "password_generator_id",
     type = PolicyType.PASSWORD_GENERATOR,

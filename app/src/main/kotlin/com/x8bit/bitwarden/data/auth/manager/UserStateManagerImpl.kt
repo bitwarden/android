@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -169,7 +169,7 @@ class UserStateManagerImpl(
     private fun existingPolicies(
         userId: String,
         policyType: PolicyType,
-    ): List<PolicyView> = policyManager.getUserPolicies(
+    ): List<Policy> = policyManager.getUserPolicies(
         userId = userId,
         type = policyType,
     )

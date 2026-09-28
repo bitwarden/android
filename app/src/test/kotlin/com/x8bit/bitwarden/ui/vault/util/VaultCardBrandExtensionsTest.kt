@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.util
 
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -12,7 +11,7 @@ class VaultCardBrandExtensionsTest {
     @Test
     fun `longName should return the correct value for each VaultCardBrand`() {
         mapOf(
-            VaultCardBrand.SELECT to SELECT_TEXT,
+            VaultCardBrand.SELECT to BitwardenString.select.asText(),
             VaultCardBrand.VISA to "Visa".asText(),
             VaultCardBrand.MASTERCARD to "Mastercard".asText(),
             VaultCardBrand.AMEX to "American Express".asText(),
@@ -35,7 +34,7 @@ class VaultCardBrandExtensionsTest {
     @Test
     fun `shortName should return the correct value for each VaultCardBrand`() {
         mapOf(
-            VaultCardBrand.SELECT to SELECT_TEXT,
+            VaultCardBrand.SELECT to BitwardenString.select.asText(),
             VaultCardBrand.VISA to "Visa".asText(),
             VaultCardBrand.MASTERCARD to "Mastercard".asText(),
             VaultCardBrand.AMEX to "Amex".asText(),

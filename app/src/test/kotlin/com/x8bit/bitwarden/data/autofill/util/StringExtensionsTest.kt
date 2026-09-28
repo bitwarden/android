@@ -106,4 +106,12 @@ class StringExtensionsTest {
         val actual = string.toLowerCaseAndStripNonAlpha()
         assertEquals("", actual)
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toLowerCaseAndStripNonAlphanumeric returns lowercase string with digits kept and other characters removed`() {
+        val string = "Address_Line2!"
+        val actual = string.toLowerCaseAndStripNonAlphanumeric()
+        assertEquals("addressline2", actual)
+    }
 }

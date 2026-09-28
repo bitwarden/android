@@ -121,6 +121,9 @@ enum class OrganizationEventType {
     @SerialName("1504")
     ORGANIZATION_USER_UPDATED_GROUPS,
 
+    @SerialName("1522")
+    ORGANIZATION_USER_NOTIFICATION_BANNER_ACTION_CLICKED,
+
     @SerialName("1600")
     ORGANIZATION_UPDATED,
 

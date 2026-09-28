@@ -10,7 +10,7 @@ sealed class AutofillPartition {
 
     /**
      * [AutofillId]s that are optional for save requests. For example, with cards we require a
-     * phone number too trigger the save request, other card data is optional.
+     * phone number to trigger the save request, other card data is optional.
      */
     abstract val optionalSaveIds: List<AutofillId>
 
@@ -71,5 +71,21 @@ sealed class AutofillPartition {
                 .map { it.data.autofillId }
         override val saveType: Int
             get() = SaveInfo.SAVE_DATA_TYPE_PASSWORD
+    }
+
+    /**
+     * The identity [AutofillPartition] data. Save requests are never offered for this partition
+     * (there are no [requiredSaveIds]) since capturing new identity data from a filled form is out
+     * of scope.
+     */
+    data class Identity(
+        override val views: List<AutofillView.Identity>,
+    ) : AutofillPartition() {
+        override val optionalSaveIds: List<AutofillId>
+            get() = emptyList()
+        override val requiredSaveIds: List<AutofillId>
+            get() = emptyList()
+        override val saveType: Int
+            get() = SaveInfo.SAVE_DATA_TYPE_GENERIC
     }
 }

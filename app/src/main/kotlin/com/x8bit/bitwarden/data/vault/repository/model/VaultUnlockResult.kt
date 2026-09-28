@@ -48,16 +48,21 @@ sealed interface VaultUnlockError {
 }
 
 /**
+ * Invokes the [onError] lambda as a side effect.
+ */
+inline fun VaultUnlockResult.onVaultUnlockError(
+    onError: (VaultUnlockError) -> Unit,
+): VaultUnlockResult = when (this) {
+    is VaultUnlockError -> this.also { onError(this) }
+    is VaultUnlockResult.Success -> this
+}
+
+/**
  * Invokes the [onSuccess] lambda as a side effect.
  */
 inline fun VaultUnlockResult.onVaultUnlockSuccess(
     onSuccess: () -> Unit,
 ): VaultUnlockResult = when (this) {
-    is VaultUnlockResult.AuthenticationError,
-    is VaultUnlockResult.BiometricDecodingError,
-    is VaultUnlockResult.GenericError,
-    is VaultUnlockResult.InvalidStateError,
-        -> this
-
+    is VaultUnlockError -> this
     is VaultUnlockResult.Success -> this.also { onSuccess() }
 }

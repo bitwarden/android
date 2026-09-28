@@ -120,7 +120,6 @@
     <string name="min_numbers">Min. aantal cijfers</string>
     <string name="min_special">Min. aantal speciaal</string>
     <string name="never">Nooit</string>
-    <string name="new_item_created">Nieuw item aangemaakt.</string>
     <string name="no_cards">Er zijn geen kaarten in je kluis.</string>
     <string name="add_card">Kaart toevoegen</string>
     <string name="no_logins">Er zijn geen inloggegevens in je kluis.</string>
@@ -150,6 +149,14 @@
     <string name="select">Selecteren</string>
     <string name="item_details">Itemdetails</string>
     <string name="item_updated">Item bijgewerkt</string>
+    <string name="bank_account_saved">Bankrekening opgeslagen</string>
+    <string name="card_saved">Kaart opgeslagen</string>
+    <string name="identity_saved">Identiteit opgeslagen</string>
+    <string name="license_saved">Rijbewijs opgeslagen</string>
+    <string name="login_saved">Login opgeslagen</string>
+    <string name="passport_saved">Paspoort opgeslagen</string>
+    <string name="secure_note_saved">Beveiligde notitie opgeslagen</string>
+    <string name="ssh_key_saved">SSH-sleutel opgeslagen</string>
     <string name="submitting">Indienen…</string>
     <string name="syncing">Synchroniseren…</string>
     <string name="syncing_complete">Synchronisatie voltooid</string>
@@ -356,6 +363,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="passphrase">Wachtwoordzin</string>
     <string name="word_separator">Scheidingsteken</string>
     <string name="clear">Wissen</string>
+    <string name="open_calendar">agenda openen</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Er zijn geen mappen om weer te geven.</string>
     <string name="fingerprint_phrase">Vingerafdrukzin</string>
@@ -512,11 +520,11 @@ Het scannen gebeurt automatisch.</string>
     <string name="about_send">Over Send</string>
     <string name="hide_email">Verberg mijn e-mailadres voor ontvangers</string>
     <string name="send_options_policy_in_effect">Een of meer organisatiebeleidseisen heeft invloed op de mogelijkheden van je Send.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="organization_policy_restriction">Beperking van het organisatiebeleid</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Deze Send is niet in overeenstemming met het Send-beleid van je organisatie en vervalt automatisch op de aangegeven datum van verwijdering.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Tekst-Sends zijn niet in overeenstemming met het Send-beleid van je organisatie en deze Send vervalt automatisch op de aangegeven datum van verwijdering.</string>
+    <string name="to_edit_this_send_make_a_copy">Maak een kopie om deze Send te bewerken. Als deze Send mag verlopen op de verwijderingsdatum is geen actie nodig.</string>
+    <string name="make_a_copy">Een kopie maken</string>
     <string name="send_file_premium_required">Met een gratis account kun je alleen tekst delen. Voor het delen van bestanden heb je een Premium-abonnement nodig.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Het delen met specifieke mensen is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="password_prompt">Hoofdwachtwoord opnieuw vragen</string>
@@ -1433,4 +1441,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="receive_24_7_priority_support">Ontvang 24/7 prioriteitsondersteuning</string>
     <string name="account_creation_restricted">Account aanmaken beperkt</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s staat het aanmaken van accounts alleen toe aan uitgenodigde gebruikers.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s verlagen</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s verhogen</string>
+    <string name="use_this_passphrase">Deze wachtwoordzin gebruiken</string>
+    <string name="use_this_password">Dit wachtwoord gebruiken</string>
+    <string name="use_this_username">Deze gebruikersnaam gebruiken</string>
 </resources>

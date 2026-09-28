@@ -695,6 +695,7 @@ private val DEFAULT_STATE = LandingState(
     isRememberEmailEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
     selectedEnvironmentLabel = Environment.Prod.Us.label,
+    isSelectedEnvironmentFedRamp = false,
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,

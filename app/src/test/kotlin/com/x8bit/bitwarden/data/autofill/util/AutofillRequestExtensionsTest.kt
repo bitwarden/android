@@ -9,6 +9,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -102,6 +103,21 @@ class AutofillRequestExtensionsTest {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toAutofillSaveItem should return null when identity partition`() {
+        // Setup
+        val autofillPartition: AutofillPartition.Identity = mockk()
+        val autofillRequest: AutofillRequest.Fillable = mockk {
+            every { partition } returns autofillPartition
+        }
+
+        // Test
+        val actual = autofillRequest.toAutofillSaveItem()
+
+        // Verify
+        assertNull(actual)
     }
 }
 

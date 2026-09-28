@@ -9,6 +9,8 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.accessibilityDisclosureDestination
 import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.navigateToAccessibilityDisclosure
+import com.x8bit.bitwarden.ui.platform.feature.biometrics.navigateToUpdateBiometrics
+import com.x8bit.bitwarden.ui.platform.feature.biometrics.updateBiometricsDestination
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.cookieAcquisitionDestination
 import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.navigateToCookieAcquisition
 import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.localNetworkAccessDestination
@@ -50,6 +52,10 @@ fun OverlayNavScreen(
             onDismiss = { navController.popBackStack() },
             onSplashScreenRemoved = onSplashScreenRemoved,
         )
+        updateBiometricsDestination(
+            onDismiss = { navController.popBackStack() },
+            onSplashScreenRemoved = onSplashScreenRemoved,
+        )
     }
 }
 
@@ -60,6 +66,10 @@ private fun OverlayNavEventsEffect(
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            OverlayNavEvent.NavigateToUpdateBiometrics -> {
+                navController.navigateToUpdateBiometrics()
+            }
+
             OverlayNavEvent.NavigateToCookieAcquisition -> {
                 navController.navigateToCookieAcquisition()
             }

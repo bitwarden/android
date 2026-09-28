@@ -56,6 +56,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -72,6 +73,7 @@ import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
+private const val KEY_HAS_SHOWN_CREATED_SNACKBAR = "hasShownCreatedSnackbar"
 
 /**
  * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block, used to free
@@ -126,11 +128,24 @@ class VaultItemViewModel @Inject constructor(
             savedStateHandle[KEY_TEMP_ATTACHMENT] = value
         }
 
+    /**
+     * Whether the "item saved" snackbar has already been shown for this screen instance.
+     */
+    private var hasShownCreatedSnackbar: Boolean
+        get() = savedStateHandle[KEY_HAS_SHOWN_CREATED_SNACKBAR] ?: false
+        set(value) {
+            savedStateHandle[KEY_HAS_SHOWN_CREATED_SNACKBAR] = value
+        }
+
     //region Initialization and Overrides
     init {
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientViewed(cipherId = state.vaultItemId),
         )
+        if (savedStateHandle.toVaultItemArgs().showCreatedSnackbar && !hasShownCreatedSnackbar) {
+            hasShownCreatedSnackbar = true
+            sendEvent(VaultItemEvent.ShowSnackbar(message = state.cipherType.savedSnackbarMessage))
+        }
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,

@@ -12,6 +12,9 @@ import kotlinx.serialization.Serializable
 enum class PushNotificationLogOutReason {
     @SerialName("0")
     KDF_CHANGE,
+
+    @SerialName("1")
+    KEY_ROTATION,
 }
 
 @Keep

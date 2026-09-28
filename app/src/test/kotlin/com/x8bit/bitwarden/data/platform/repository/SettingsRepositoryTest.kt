@@ -14,8 +14,9 @@ import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -36,8 +37,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -69,7 +69,7 @@ class SettingsRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
-    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePoliciesFlow(type = PolicyType.MAXIMUM_VAULT_TIMEOUT)
@@ -667,6 +667,33 @@ class SettingsRepositoryTest {
             encryptedPin = "encryptedPin",
         )
         assertTrue(settingsRepository.isUnlockWithPinEnabled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordOnRestartRequiredWithPin should return a value that tracks the existence of an ephemeral PIN protected user key envelope for the current user`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = null,
+        )
+        assertFalse(settingsRepository.isPasswordOnRestartRequiredWithPin)
+
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = "ephemeralPinProtectedUserKeyEnvelope",
+        )
+        assertTrue(settingsRepository.isPasswordOnRestartRequiredWithPin)
+    }
+
+    @Test
+    fun `isPasswordOnRestartRequiredWithPin should return false when there is no active user`() {
+        fakeAuthDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
+            userId = USER_ID,
+            pinProtectedUserKeyEnvelope = "ephemeralPinProtectedUserKeyEnvelope",
+        )
+
+        assertFalse(settingsRepository.isPasswordOnRestartRequiredWithPin)
     }
 
     @Test
@@ -1428,7 +1455,7 @@ class SettingsRepositoryTest {
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = null)
 
-            mutableActivePolicyFlow.emit(listOf(createMockPolicyView()))
+            mutableActivePolicyFlow.emit(listOf(createMockSdkPolicy()))
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = null)
         }
@@ -1439,7 +1466,7 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             fakeSettingsDiskSource.assertVaultTimeoutAction(userId = USER_ID, expected = null)
 
-            val lockPolicy = createMockPolicyView(
+            val lockPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1453,7 +1480,7 @@ class SettingsRepositoryTest {
                 expected = VaultTimeoutAction.LOCK,
             )
 
-            val logoutPolicy = createMockPolicyView(
+            val logoutPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1479,7 +1506,7 @@ class SettingsRepositoryTest {
                 vaultTimeoutInMinutes = 100,
             )
 
-            val nullTypeWithMinutesPolicy = createMockPolicyView(
+            val nullTypeWithMinutesPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(minutes = 5),
@@ -1488,7 +1515,7 @@ class SettingsRepositoryTest {
             mutableActivePolicyFlow.emit(listOf(nullTypeWithMinutesPolicy))
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 5)
 
-            val customMinutesPolicy = createMockPolicyView(
+            val customMinutesPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1501,7 +1528,7 @@ class SettingsRepositoryTest {
             // No change since 5 is within the range
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 5)
 
-            val onSystemLockPolicy = createMockPolicyView(
+            val onSystemLockPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1514,7 +1541,7 @@ class SettingsRepositoryTest {
             // Set to on app restart
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = -1)
 
-            val onAppRestartPolicy = createMockPolicyView(
+            val onAppRestartPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1527,7 +1554,7 @@ class SettingsRepositoryTest {
             // No change, ON_APP_RESTART is treated the same as ON_SYSTEM_RESTART
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = -1)
 
-            val immediatePolicy = createMockPolicyView(
+            val immediatePolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(
@@ -1540,7 +1567,7 @@ class SettingsRepositoryTest {
             // Set to Immediate
             fakeSettingsDiskSource.assertVaultTimeoutInMinutes(userId = USER_ID, expected = 0)
 
-            val neverPolicy = createMockPolicyView(
+            val neverPolicy = createMockSdkPolicy(
                 type = PolicyType.MAXIMUM_VAULT_TIMEOUT,
                 data = createMockVaultTimeoutPolicyJsonString(
                     vaultTimeout = createMockVaultTimeoutPolicy(

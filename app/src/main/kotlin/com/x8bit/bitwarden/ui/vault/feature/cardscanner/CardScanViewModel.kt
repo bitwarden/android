@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val KEY_STATE = "state"
 
@@ -87,7 +88,7 @@ class CardScanViewModel @Inject constructor(
     private fun startHintTimeout() {
         hintTimeoutJob?.cancel()
         hintTimeoutJob = viewModelScope.launch {
-            delay(SCAN_HINT_TIMEOUT_MS)
+            delay(SCAN_HINT_TIMEOUT_MS.milliseconds)
             sendAction(CardScanAction.Internal.HintTimeoutElapsed)
         }
     }

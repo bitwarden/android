@@ -97,7 +97,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -145,7 +145,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -197,7 +197,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -225,9 +225,9 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ArchiveClick(cipherId = "mockId-$number"),
                 ),
                 optionsTestTag = "CipherOptionsButton",
-                isAutofill = false,
-                isCredentialCreation = false,
-                shouldShowMasterPasswordReprompt = false,
+                isAutofill = isAutofill,
+                isCredentialCreation = isCredentialCreation,
+                shouldShowMasterPasswordReprompt = shouldShowMasterPasswordReprompt,
                 iconTestTag = "IdentityCipherIcon",
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
@@ -241,7 +241,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -285,7 +285,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -329,7 +329,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
@@ -373,7 +373,7 @@ fun createMockDisplayItemForCipher(
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
+                subtitleTestTag = subtitleTestTag,
                 iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(

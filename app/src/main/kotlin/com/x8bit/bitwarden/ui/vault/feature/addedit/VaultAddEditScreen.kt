@@ -4,12 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -32,6 +33,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -92,6 +97,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTy
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.rememberVaultAddEditPassportTypeHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -118,6 +124,7 @@ fun VaultAddEditScreen(
     onNavigateToAttachments: (cipherId: String) -> Unit,
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToPlan: () -> Unit,
+    onCloseAndNavigateToVaultItem: (cipherId: String, cipherType: VaultItemCipherType) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -151,6 +158,10 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
+            is VaultAddEditEvent.CloseAndNavigateToVaultItem -> {
+                onCloseAndNavigateToVaultItem(event.cipherId, event.cipherType)
+            }
+
             is VaultAddEditEvent.NavigateToMoveToOrganization -> {
                 onNavigateToMoveToOrganization(event.cipherId, false)
             }
@@ -724,16 +735,16 @@ private fun FolderSelectionBottomSheetContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(minHeight = 60.dp)
                     .cardStyle(
-                        cardStyle = if (index == 0) {
-                            CardStyle.Top()
-                        } else {
-                            CardStyle.Middle()
-                        },
-                        onClick = {
-                            onOptionSelected(option)
-                        },
-                    ),
+                        cardStyle = if (index == 0) CardStyle.Top() else CardStyle.Middle(),
+                        paddingHorizontal = 16.dp,
+                        onClick = { onOptionSelected(option) },
+                    )
+                    .semantics(mergeDescendants = true) {
+                        this.selected = selectedOption == option
+                        this.role = Role.RadioButton
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -741,15 +752,12 @@ private fun FolderSelectionBottomSheetContent(
                     text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
+                    modifier = Modifier.weight(weight = 1f),
                 )
+                Spacer(modifier = Modifier.width(width = 16.dp))
                 BitwardenRadioButton(
                     isSelected = selectedOption == option,
-                    onClick = {
-                        onOptionSelected(option)
-                    },
+                    onClick = null,
                 )
             }
         }
@@ -866,12 +874,16 @@ private fun OwnerSelectionBottomSheetContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(minHeight = 60.dp)
                     .cardStyle(
                         cardStyle = options.toListItemCardStyle(index = index),
-                        onClick = {
-                            onOptionSelected(option)
-                        },
-                    ),
+                        paddingHorizontal = 16.dp,
+                        onClick = { onOptionSelected(option) },
+                    )
+                    .semantics(mergeDescendants = true) {
+                        this.selected = selectedOwner == option
+                        this.role = Role.RadioButton
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -879,15 +891,12 @@ private fun OwnerSelectionBottomSheetContent(
                     text = option.name(),
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .weight(weight = 1f)
-                        .padding(horizontal = 16.dp),
+                    modifier = Modifier.weight(weight = 1f),
                 )
+                Spacer(modifier = Modifier.width(width = 16.dp))
                 BitwardenRadioButton(
                     isSelected = selectedOwner == option,
-                    onClick = {
-                        onOptionSelected(option)
-                    },
+                    onClick = null,
                 )
             }
         }

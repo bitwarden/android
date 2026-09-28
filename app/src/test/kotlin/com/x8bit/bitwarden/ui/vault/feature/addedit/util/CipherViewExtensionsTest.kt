@@ -918,6 +918,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     archivedDate = null,
     sshKey = null,
     attachmentDecryptionFailures = null,
+    partial = false,
 )
 
 private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

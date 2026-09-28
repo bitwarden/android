@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -151,6 +151,24 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * Emits updates that track [getPremiumUpgradeBannerDismissed] for the given [userId].
      */
     fun getPremiumUpgradeBannerDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored value of whether the vault policy banner has been dismissed.
+     */
+    fun getVaultPolicyBannerDismissedDate(userId: String): Instant?
+
+    /**
+     * Stores whether the vault policy banner has been dismissed.
+     */
+    fun storeVaultPolicyBannerDismissedDate(
+        userId: String,
+        dismissalRevisionDate: Instant?,
+    )
+
+    /**
+     * Emits updates that track [getVaultPolicyBannerDismissedDate] for the given [userId].
+     */
+    fun getVaultPolicyBannerDismissedDateFlow(userId: String): Flow<Instant?>
 
     /**
      * Retrieves the stored value of whether the "Upgraded to Premium" action card has been

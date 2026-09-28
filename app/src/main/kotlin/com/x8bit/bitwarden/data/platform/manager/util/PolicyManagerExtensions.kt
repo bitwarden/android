@@ -36,6 +36,9 @@ inline fun <reified T : PolicyInformation> getPolicyType(): PolicyType =
         PolicyInformation.SendOptions::class.java -> PolicyType.SEND_OPTIONS
         PolicyInformation.SendControls::class.java -> PolicyType.SEND_CONTROLS
         PolicyInformation.VaultTimeout::class.java -> PolicyType.MAXIMUM_VAULT_TIMEOUT
+        PolicyInformation.OrganizationUserNotification::class.java -> {
+            PolicyType.ORGANIZATION_USER_NOTIFICATION
+        }
 
         else -> {
             throw IllegalStateException(

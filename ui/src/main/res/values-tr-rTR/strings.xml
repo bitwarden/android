@@ -120,7 +120,6 @@
     <string name="min_numbers">En az rakam</string>
     <string name="min_special">En az özel karakter</string>
     <string name="never">Asla</string>
-    <string name="new_item_created">Kayıt eklendi</string>
     <string name="no_cards">Kasanızda hiç kart yok.</string>
     <string name="add_card">Kart ekle</string>
     <string name="no_logins">Kasanızda hiç hesap yok.</string>
@@ -150,6 +149,14 @@
     <string name="select">Seç</string>
     <string name="item_details">Kayıt ayrıntıları</string>
     <string name="item_updated">Öğe kaydedildi</string>
+    <string name="bank_account_saved">Banka hesabı kaydedildi</string>
+    <string name="card_saved">Kart kaydedildi</string>
+    <string name="identity_saved">Kimlik kaydedildi</string>
+    <string name="license_saved">Ehliyet kaydedildi</string>
+    <string name="login_saved">Hesap kaydedildi</string>
+    <string name="passport_saved">Pasaport kaydedildi</string>
+    <string name="secure_note_saved">Güvenli not kaydedildi</string>
+    <string name="ssh_key_saved">SSH anahtarı kaydedildi</string>
     <string name="submitting">Gönderiliyor…</string>
     <string name="syncing">Eşitleniyor…</string>
     <string name="syncing_complete">Eşitleme tamamlandı</string>
@@ -356,6 +363,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="passphrase">Parola cümlesi</string>
     <string name="word_separator">Kelime ayracı</string>
     <string name="clear">Temizle</string>
+    <string name="open_calendar">takvimi aç</string>
     <string name="generator">Üreteç</string>
     <string name="no_folders_to_list">Listelenecek klasör yok.</string>
     <string name="fingerprint_phrase">Parmak izi ifadesi</string>
@@ -1432,4 +1440,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
+    <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
+    <string name="use_this_password">Bu parolayı kullan</string>
+    <string name="use_this_username">Bu kullanıcı adını kullan</string>
 </resources>

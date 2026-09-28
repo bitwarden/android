@@ -234,6 +234,36 @@ class AutofillViewExtensionsTest {
         assertNull(actual)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildFilledItemOrNull should return index list value when list type and identity view type`() {
+        // Setup
+        val value = "Acme Corp"
+        val autofillViewData = autofillViewData.copy(
+            autofillType = View.AUTOFILL_TYPE_LIST,
+            autofillOptions = listOf("Other Corp", value, "Third Corp"),
+        )
+        val autofillView = AutofillView.Identity.Company(
+            data = autofillViewData,
+        )
+        val expected = FilledItem(
+            autofillId = autofillId,
+            value = autofillValue,
+        )
+        every { AutofillValue.forList(1) } returns autofillValue
+
+        // Test
+        val actual = autofillView.buildFilledItemOrNull(
+            value = value,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            AutofillValue.forList(1)
+        }
+    }
+
     @Test
     fun `buildFilledItemOrNull should return text value when text type`() {
         // Setup

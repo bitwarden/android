@@ -64,7 +64,7 @@ fun UserState.Account.toVaultFilterData(
                         .map { organization ->
                             VaultFilterType.OrganizationVault(
                                 organizationId = organization.id,
-                                organizationName = organization.name.orEmpty(),
+                                organizationName = organization.name,
                             )
                         }
                         .toTypedArray(),

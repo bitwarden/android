@@ -496,6 +496,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         revisionDate = revisionDate,
         archivedDate = archivedDate,
         data = data,
+        partialData = null,
     )
 
 /**
@@ -837,7 +838,6 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds,
-        key = key,
         name = name.orEmpty(),
         subtitle = "",
         type = when (type) {
@@ -884,4 +884,5 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         revisionDate = revisionDate,
         copyableFields = emptyList(),
         archivedDate = archivedDate,
+        partial = false,
     )

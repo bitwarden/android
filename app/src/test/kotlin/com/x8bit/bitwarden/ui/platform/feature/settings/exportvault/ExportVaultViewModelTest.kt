@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -87,7 +87,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() = runTest {
         every {
             policyManager.getActivePolicies(type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT)
-        } returns listOf(createMockPolicyView())
+        } returns listOf(createMockSdkPolicy())
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -143,7 +143,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ValidatePasswordResult.Success(isValid = true)
         every {
             policyManager.getActivePolicies(type = PolicyType.RESTRICTED_ITEM_TYPES)
-        } returns listOf(createMockPolicyView(enabled = true))
+        } returns listOf(createMockSdkPolicy(enabled = true))
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))

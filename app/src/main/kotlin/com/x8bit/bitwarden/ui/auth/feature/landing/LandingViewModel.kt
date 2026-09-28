@@ -50,13 +50,16 @@ class LandingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: LandingState(
-            emailInput = authRepository.rememberedEmailAddress.orEmpty(),
-            isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
-            isRememberEmailEnabled = authRepository.rememberedEmailAddress != null,
-            selectedEnvironmentType = environmentRepository.environment.type,
-            selectedEnvironmentLabel = environmentRepository.environment.label,
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val environment = environmentRepository.environment
+        val rememberedEmailAddress = authRepository.rememberedEmailAddress
+        LandingState(
+            emailInput = rememberedEmailAddress.orEmpty(),
+            isContinueButtonEnabled = rememberedEmailAddress != null,
+            isRememberEmailEnabled = rememberedEmailAddress != null,
+            selectedEnvironmentType = environment.type,
+            selectedEnvironmentLabel = environment.label,
+            isSelectedEnvironmentFedRamp = environment.isFedRamp,
             dialog = null,
             accountSummaries = authRepository
                 .userStateFlow
@@ -71,7 +74,8 @@ class LandingViewModel @Inject constructor(
                 ?.serverData
                 ?.settings
                 ?.disableUserRegistration == true,
-        ),
+        )
+    },
 ) {
 
     /**
@@ -280,6 +284,7 @@ class LandingViewModel @Inject constructor(
             it.copy(
                 selectedEnvironmentType = action.environment.type,
                 selectedEnvironmentLabel = action.environment.label,
+                isSelectedEnvironmentFedRamp = action.environment.isFedRamp,
             )
         }
     }
@@ -328,6 +333,7 @@ data class LandingState(
     val isRememberEmailEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
     val selectedEnvironmentLabel: String,
+    val isSelectedEnvironmentFedRamp: Boolean,
     val dialog: DialogState?,
     val accountSummaries: ImmutableList<AccountSummary>,
     val isFedRampEnabled: Boolean,
@@ -345,8 +351,7 @@ data class LandingState(
     /**
      * Determines if the user should be allowed to create a new account.
      */
-    val allowCreateAccount: Boolean
-        get() = !disableCreateAccount && selectedEnvironmentType != Environment.Type.FED_RAMP
+    val allowCreateAccount: Boolean get() = !disableCreateAccount && !isSelectedEnvironmentFedRamp
 
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.

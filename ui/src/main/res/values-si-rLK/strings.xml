@@ -120,7 +120,6 @@
     <string name="min_numbers">අවම සංඛ්‍යා</string>
     <string name="min_special">අවම විශේෂ</string>
     <string name="never">කිසිදා</string>
-    <string name="new_item_created">අයිතමය එකතු කරන ලදී</string>
     <string name="no_cards">ඔබගේ සුරක්ෂිතාගාරයේ කාඩ්පත් නොමැත.</string>
     <string name="add_card">කාඩ්පත එක් කරන්න</string>
     <string name="no_logins">ඔබගේ සුරක්ෂිතාගාරයේ පිවිසුම් නොමැත.</string>
@@ -150,6 +149,14 @@
     <string name="select">තෝරන්න</string>
     <string name="item_details">අයිතම විස්තර</string>
     <string name="item_updated">අයිතමය සුරකින ලදී</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">ඉදිරිපත් කරමින්...</string>
     <string name="syncing">සමමුහුර්ත කරමින්...</string>
     <string name="syncing_complete">සමමුහුර්තකරණය සම්පූර්ණයි</string>
@@ -356,6 +363,7 @@
     <string name="passphrase">වාක්‍යාංශ මුරපදය</string>
     <string name="word_separator">වචන වෙන් කරන්නා</string>
     <string name="clear">හිස් කරන්න</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">උත්පාදක යන්ත්‍රය</string>
     <string name="no_folders_to_list">ලැයිස්තුගත කිරීමට ෆෝල්ඩර නොමැත.</string>
     <string name="fingerprint_phrase">ඇඟිලි සලකුණු වාක්‍යාංශය</string>
@@ -1433,4 +1441,9 @@
     <string name="receive_24_7_priority_support">24/7 ප්‍රමුඛ සහාය ලබා ගන්න</string>
     <string name="account_creation_restricted">ගිණුම් සෑදීම සීමා කර ඇත</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ආරාධිත පරිශීලකයින්ට පමණක් ගිණුම් සෑදීමට ඉඩ දෙයි.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

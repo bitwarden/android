@@ -9,8 +9,12 @@ sealed class CreateCipherResult {
 
     /**
      * Cipher created successfully.
+     *
+     * @property cipherId The server-assigned ID of the newly created cipher.
      */
-    data object Success : CreateCipherResult()
+    data class Success(
+        val cipherId: String,
+    ) : CreateCipherResult()
 
     /**
      * Generic error while creating cipher. The optional [errorMessage] may be displayed directly in

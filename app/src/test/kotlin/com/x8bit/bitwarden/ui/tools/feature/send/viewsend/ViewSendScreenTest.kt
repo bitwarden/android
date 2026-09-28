@@ -447,6 +447,19 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `copy, share, and send link should be hidden when the send is disabled`() {
+        composeTestRule.onNodeWithText(text = "Copy").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Share").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Send link").performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(isSendDisabled = true) }
+
+        composeTestRule.onNodeWithText(text = "Copy").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Share").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Send link").assertDoesNotExist()
+    }
+
+    @Test
     fun `on copy notes click should send CopyNotesClick`() {
         composeTestRule
             .onNodeWithText(text = "Additional options")

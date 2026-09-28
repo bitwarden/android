@@ -80,7 +80,7 @@ jobs:
           echo "text=:cherry-pick: ${PR_LINE}\n:bricks: commit: ${COMMIT_LINE}\n:bitwarden-love: ${CC_LINE}" >> "$GITHUB_OUTPUT"
 
       - name: Send slack notification
-        uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ github.event_name == 'workflow_dispatch' && steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL || steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE }}
           webhook-type: incoming-webhook

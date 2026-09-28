@@ -124,7 +124,6 @@
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
     <string name="never">أبداً</string>
-    <string name="new_item_created">تم إنشاء عنصر جديد</string>
     <string name="no_cards">لا توجد بطاقات في خزنتك.</string>
     <string name="add_card">إضافة بطاقة</string>
     <string name="no_logins">لا يوجد أي تسجيل دخول في خزنتك.</string>
@@ -154,6 +153,14 @@
     <string name="select">تحديد</string>
     <string name="item_details">تفاصيل العنصر</string>
     <string name="item_updated">تم تحديث العنصر</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">جاري الإرسال…</string>
     <string name="syncing">جاري المزامنة…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
@@ -364,6 +371,7 @@
     <string name="passphrase">جملة المرور</string>
     <string name="word_separator">فاصل الكلمات</string>
     <string name="clear">مسح</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">المولّد</string>
     <string name="no_folders_to_list">لا توجد مجلّدات لسردها.</string>
     <string name="fingerprint_phrase">عبارة بصمة الإصبع</string>
@@ -1474,4 +1482,9 @@
     <string name="receive_24_7_priority_support">الحصول على دعم ذي أولوية على مدار الساعة طوال أيام الأسبوع</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

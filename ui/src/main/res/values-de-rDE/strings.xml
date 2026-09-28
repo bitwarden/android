@@ -120,7 +120,6 @@
     <string name="min_numbers">Mindestanzahl Ziffern</string>
     <string name="min_special">Mindestanzahl Sonderzeichen</string>
     <string name="never">Niemals</string>
-    <string name="new_item_created">Eintrag erstellt</string>
     <string name="no_cards">Du hast keine Karten in deinem Tresor.</string>
     <string name="add_card">Karte hinzufügen</string>
     <string name="no_logins">Du hast keine Zugangsdaten in deinem Tresor.</string>
@@ -150,6 +149,14 @@
     <string name="select">Auswählen</string>
     <string name="item_details">Eintrag-Details</string>
     <string name="item_updated">Eintrag gespeichert</string>
+    <string name="bank_account_saved">Bankkonto gespeichert</string>
+    <string name="card_saved">Karte gespeichert</string>
+    <string name="identity_saved">Identität gespeichert</string>
+    <string name="license_saved">Führerschein gespeichert</string>
+    <string name="login_saved">Zugangsdaten gespeichert</string>
+    <string name="passport_saved">Reisepass gespeichert</string>
+    <string name="secure_note_saved">Sichere Notiz gespeichert</string>
+    <string name="ssh_key_saved">SSH-Schlüssel gespeichert</string>
     <string name="submitting">Wird übermittelt…</string>
     <string name="syncing">Wird synchronisiert…</string>
     <string name="syncing_complete">Synchronisierung abgeschlossen</string>
@@ -356,6 +363,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="passphrase">Passphrase</string>
     <string name="word_separator">Worttrennzeichen</string>
     <string name="clear">Leeren</string>
+    <string name="open_calendar">Kalender öffnen</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Keine Ordner zum Auflisten vorhanden.</string>
     <string name="fingerprint_phrase">Fingerabdruck-Phrase</string>
@@ -516,7 +524,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Dieses Send entspricht nicht den Send-Richtlinien deiner Organisation und läuft automatisch zum festgelegten Löschdatum ab.</string>
     <string name="text_sends_are_not_allowed_for_your_organization">Text-Sends sind für deine Organisation nicht erlaubt und dieses Senden läuft automatisch zum festgelegten Löschdatum ab.</string>
     <string name="to_edit_this_send_make_a_copy">Erstellle eine Kopie, um diesen Send zu bearbeiten. Wenn dieses Send zum festgelegten Löschdatum ablaufen kann, sind keine Maßnahmen erforderlich.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="make_a_copy">Eine Kopie erstellen</string>
     <string name="send_file_premium_required">Kostenlose Konten sind auf das Teilen von Texten beschränkt. Eine Premium-Mitgliedschaft ist erforderlich, um Dateien mit Send zu verwenden.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Das Teilen mit bestimmten Personen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="password_prompt">Master-Passwort erneut abfragen</string>
@@ -1382,12 +1390,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="copy_swift_code">SWIFT-Code kopieren</string>
     <string name="copy_iban">IBAN kopieren</string>
     <string name="copy_bank_contact_phone">Telefonnummer der Bank kopieren</string>
-    <string name="checking">Wird überprüft</string>
-    <string name="savings">Ersparnisse</string>
+    <string name="checking">Girokonto</string>
+    <string name="savings">Sparkonto</string>
     <string name="certificate_of_deposit">Einlagenzertifikat</string>
-    <string name="line_of_credit">Kreditrahmen</string>
-    <string name="investment_brokerage">Anlage/Wertpapierhandel</string>
-    <string name="money_market">Finanzmarkt</string>
+    <string name="line_of_credit">Kreditlinie</string>
+    <string name="investment_brokerage">Anlage-/Maklerkonto</string>
+    <string name="money_market">Geldmarktkonto</string>
     <string name="issuing_country">Ausstellendes Land</string>
     <string name="issuing_state">Ausstellendes Bundesland/Stadt/Landkreis</string>
     <string name="license_class">Führerscheinklasse</string>
@@ -1432,4 +1440,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="receive_24_7_priority_support">Erhalte 24/7 vorrangigen Support</string>
     <string name="account_creation_restricted">Kontoerstellung eingeschränkt</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s erlaubt es nur eingeladenen Benutzern Konten zu erstellen.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s verringern</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s erhöhen</string>
+    <string name="use_this_passphrase">Diese Passphrase verwenden</string>
+    <string name="use_this_password">Dieses Passwort verwenden</string>
+    <string name="use_this_username">Diesen Benutzernamen verwenden</string>
 </resources>

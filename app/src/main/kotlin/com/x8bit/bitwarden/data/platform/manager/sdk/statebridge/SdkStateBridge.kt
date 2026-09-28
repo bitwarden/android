@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeTokenJson
+import java.time.Instant
 
 /**
  * A user-scoped implementation of a Bitwarden SDK [StateBridgeForeignImpl].
@@ -164,6 +165,23 @@ internal class SdkStateBridge(
         authDiskSource.userState = authDiskSource.userState?.updateKdf(
             userId = userId,
             kdf = null,
+        )
+    }
+
+    override suspend fun setV2EncryptedMigrationsGracePeriodStart(value: Instant) {
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = value,
+        )
+    }
+
+    override suspend fun getV2EncryptedMigrationsGracePeriodStart(): Instant? =
+        authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = userId)
+
+    override suspend fun clearV2EncryptedMigrationsGracePeriodStart() {
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = null,
         )
     }
 

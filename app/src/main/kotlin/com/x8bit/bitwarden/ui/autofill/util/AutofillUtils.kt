@@ -38,4 +38,9 @@ private fun getAutofillSuggestionCipherType(
             autofillAppInfo.context,
             BitwardenString.type_login,
         )
+
+        is AutofillCipher.Identity -> ContextCompat.getString(
+            autofillAppInfo.context,
+            BitwardenString.type_identity,
+        )
     }

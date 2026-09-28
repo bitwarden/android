@@ -165,6 +165,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         archivedDate = null,
         sshKey = createSshKeyView(isEmpty),
         attachmentDecryptionFailures = null,
+        partial = false,
     )
 
 fun createCommonContent(

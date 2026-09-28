@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -213,6 +212,7 @@ private fun ViewSendScreenContent(
             ViewStateContent(
                 state = viewState,
                 policyRestriction = state.policyRestriction,
+                isSendDisabled = state.isSendDisabled,
                 onCopyClick = onCopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
@@ -240,6 +240,7 @@ private fun ViewSendScreenContent(
 private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
     policyRestriction: SendPolicyRestriction?,
+    isSendDisabled: Boolean,
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -258,13 +259,13 @@ private fun ViewStateContent(
                 actionButton = BitwardenButtonData(
                     label = BitwardenString.make_a_copy.asText(),
                     onClick = onMakeACopyClick,
+                    testTag = "SendMakeACopyButton",
                 )
                     .takeIf { _ -> it.isCopyable },
                 leadingContent = {
                     BitwardenIcon(
                         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
-                        tint = BitwardenTheme.colorScheme.text.primary,
-                        modifier = Modifier.size(size = 16.dp),
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
                 modifier = Modifier
@@ -274,37 +275,39 @@ private fun ViewStateContent(
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
         }
-        ShareLinkSection(
-            shareLink = state.shareLink,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-        BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.copy),
-            onClick = onCopyClick,
-            icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
-            cardStyle = CardStyle.Middle(hasDivider = false),
-            cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .testTag(tag = "ViewSendCopyButton"),
-        )
-        BitwardenOutlinedButton(
-            label = stringResource(id = BitwardenString.share),
-            onClick = onShareClick,
-            icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
-            isExternalLink = true,
-            cardStyle = CardStyle.Bottom,
-            cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .testTag(tag = "ViewSendShareButton"),
-        )
+        if (!isSendDisabled) {
+            ShareLinkSection(
+                shareLink = state.shareLink,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            BitwardenFilledButton(
+                label = stringResource(id = BitwardenString.copy),
+                onClick = onCopyClick,
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
+                cardStyle = CardStyle.Middle(hasDivider = false),
+                cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag(tag = "ViewSendCopyButton"),
+            )
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.share),
+                onClick = onShareClick,
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
+                isExternalLink = true,
+                cardStyle = CardStyle.Bottom,
+                cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag(tag = "ViewSendShareButton"),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = BitwardenString.send_details),
             modifier = Modifier

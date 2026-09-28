@@ -350,10 +350,10 @@ class LandingScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .assertIsDisplayed()
 
-        mutableStateFlow.update { it.copy(selectedEnvironmentType = Environment.Type.FED_RAMP) }
+        mutableStateFlow.update { it.copy(isSelectedEnvironmentFedRamp = true) }
         composeTestRule.onNodeWithText(text = "Create an account").assertDoesNotExist()
 
-        mutableStateFlow.update { it.copy(selectedEnvironmentType = Environment.Type.EU) }
+        mutableStateFlow.update { it.copy(isSelectedEnvironmentFedRamp = false) }
         composeTestRule
             .onNodeWithText(text = "Create an account")
             .performScrollTo()
@@ -531,6 +531,7 @@ private val DEFAULT_STATE = LandingState(
     isRememberEmailEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
     selectedEnvironmentLabel = Environment.Prod.Us.label,
+    isSelectedEnvironmentFedRamp = false,
     dialog = null,
     accountSummaries = persistentListOf(),
     isFedRampEnabled = true,

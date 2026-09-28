@@ -287,7 +287,10 @@ class CipherManagerTest {
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
-            assertEquals(CreateCipherResult.Success, result)
+            assertEquals(
+                CreateCipherResult.Success(cipherId = mockCipher.id),
+                result,
+            )
             coVerify(ordering = Ordering.ORDERED) {
                 vaultDiskSource.saveCipher(userId, mockCipher)
                 reviewPromptManager.registerAddCipherAction()
@@ -458,7 +461,10 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(CreateCipherResult.Success, result)
+            assertEquals(
+                CreateCipherResult.Success(cipherId = mockCipher.id),
+                result,
+            )
             coVerify(ordering = Ordering.ORDERED) {
                 vaultDiskSource.saveCipher(
                     userId,

@@ -21,6 +21,8 @@ import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -69,6 +71,10 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -79,6 +85,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManage
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManager
 import com.x8bit.bitwarden.data.platform.manager.policy.PasswordPolicyManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -92,6 +100,7 @@ import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -128,14 +137,18 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideOrganizationEventManager(
-        authRepository: AuthRepository,
+        authStateManager: AuthStateManager,
+        organizationManager: OrganizationManager,
         vaultRepository: VaultRepository,
+        authDiskSource: AuthDiskSource,
         clock: Clock,
         dispatcherManager: DispatcherManager,
         eventDiskSource: EventDiskSource,
         eventService: EventService,
     ): OrganizationEventManager = OrganizationEventManagerImpl(
-        authRepository = authRepository,
+        authStateManager = authStateManager,
+        authDiskSource = authDiskSource,
+        organizationManager = organizationManager,
         vaultRepository = vaultRepository,
         clock = clock,
         dispatcherManager = dispatcherManager,
@@ -285,6 +298,20 @@ object PlatformManagerModule {
         authDiskSource = authDiskSource,
         authSdkSource = authSdkSource,
         policyManager = policyManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideUserNotificationPolicyManager(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        policyManager: PolicyManager,
+        dispatcherManager: DispatcherManager,
+    ): UserNotificationPolicyManager = UserNotificationPolicyManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        policyManager = policyManager,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
@@ -482,5 +509,31 @@ object PlatformManagerModule {
     ): NetworkPermissionManager = NetworkPermissionManagerImpl(
         context = context,
         resourceManager = resourceManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSettingsLogManager(
+        settingsRepository: SettingsRepository,
+        logsManager: LogsManager,
+        autofillEnabledManager: AutofillEnabledManager,
+        accessibilityEnabledManager: AccessibilityEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    ): SettingsLogManager = SettingsLogManagerImpl(
+        settingsRepository = settingsRepository,
+        logsManager = logsManager,
+        autofillEnabledManager = autofillEnabledManager,
+        accessibilityEnabledManager = accessibilityEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideKeyRotationManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+    ): KeyRotationManager = KeyRotationManagerImpl(
+        authDiskSource = authDiskSource,
+        vaultSdkSource = vaultSdkSource,
     )
 }

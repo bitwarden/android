@@ -38,13 +38,13 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.NewItemTypes,
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
-    FlagKey.PoliciesInAcceptedState,
     FlagKey.FedRamp,
     FlagKey.Vfo1Foundation,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
     FlagKey.IdentityAutofill,
     FlagKey.SdkPinUnlock,
+    FlagKey.SdkPreLogin,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -103,7 +103,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.V2EncryptionTde -> stringResource(BitwardenString.v2_encryption_tde)
     FlagKey.NewItemTypes -> stringResource(BitwardenString.new_item_types)
     FlagKey.FillAssistTargetingRules -> stringResource(BitwardenString.fill_assist_targeting_rules)
-    FlagKey.PoliciesInAcceptedState -> stringResource(BitwardenString.policies_in_accepted_state)
     FlagKey.DebugDisableSelfHostPremiumCheck -> {
         stringResource(BitwardenString.debug_disable_self_host_premium_check)
     }
@@ -117,4 +116,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.IdentityAutofill -> stringResource(BitwardenString.identity_autofill)
     FlagKey.SdkPinUnlock -> stringResource(BitwardenString.sdk_pin_unlock)
+    FlagKey.SdkPreLogin -> stringResource(BitwardenString.sdk_pre_login)
 }

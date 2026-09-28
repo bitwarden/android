@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 
 /**
@@ -151,7 +152,9 @@ class AuthenticatorBridgeRepositoryImpl(
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = decryptedUserKey,
                     ),
-                    upgradeToken = null,
+                    upgradeToken = authDiskSource
+                        .getV2UpgradeToken(userId = userId)
+                        ?.toV2UpgradeToken(),
                 ),
             )
             .flatMap { result ->

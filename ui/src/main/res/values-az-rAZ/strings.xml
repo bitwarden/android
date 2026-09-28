@@ -120,7 +120,6 @@
     <string name="min_numbers">Minimum rəqəm</string>
     <string name="min_special">Minimum simvol</string>
     <string name="never">Heç vaxt</string>
-    <string name="new_item_created">Yeni element yaradıldı.</string>
     <string name="no_cards">Seyfinizdə heç bir kart yoxdur.</string>
     <string name="add_card">Kart əlavə et</string>
     <string name="no_logins">Seyfinizdə heç bir giriş məlumatı yoxdur.</string>
@@ -150,6 +149,14 @@
     <string name="select">Seçin</string>
     <string name="item_details">Element detalları</string>
     <string name="item_updated">Element güncəlləndi.</string>
+    <string name="bank_account_saved">Bank hesabı saxlanıldı</string>
+    <string name="card_saved">Kart saxlanıldı</string>
+    <string name="identity_saved">Kimlik saxlanıldı</string>
+    <string name="license_saved">Vəsiqə saxlanıldı</string>
+    <string name="login_saved">Giriş məlumatları saxlanıldı</string>
+    <string name="passport_saved">Pasport saxlanıldı</string>
+    <string name="secure_note_saved">Güvənli qeyd saxlanıldı</string>
+    <string name="ssh_key_saved">SSH açarı saxlanıldı</string>
     <string name="submitting">Təqdim olunur…</string>
     <string name="syncing">Sinxronlaşdırılır…</string>
     <string name="syncing_complete">Sinxr tamamlandı</string>
@@ -214,8 +221,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="required_max_file_size">Tələb olunur. Maksimal fayl həcmi 100 MB-dır.</string>
     <string name="learn_more">Daha ətraflı</string>
     <string name="api_url">API server URL-si</string>
-    <string name="client_certificate_mtls">Client sertifikatı (mTLS)</string>
-    <string name="certificate_used_for_client_authentication">Client kimlik doğrulaması üçün istifadə olunan sertifikat.</string>
+    <string name="client_certificate_mtls">İstəkçi sertifikatı (mTLS)</string>
+    <string name="certificate_used_for_client_authentication">İstəkçi kimlik doğrulaması üçün istifadə olunan sertifikat.</string>
     <string name="custom_environment">Özəl mühit</string>
     <string name="custom_environment_footer">Qabaqcıl istifadəçilər üçündür. Hər xidmətin baza URL-sini müstəqil olaraq müəyyənləşdirə bilərsiniz.</string>
     <string name="environment_saved">Mühit URL-ləri saxlanıldı.</string>
@@ -242,7 +249,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="april">Aprel</string>
     <string name="august">Avqust</string>
     <string name="brand">Brend</string>
-    <string name="card_details">Kart detalları</string>
+    <string name="card_details">Kart məlumatları</string>
     <string name="card_scanned">Kart skan edildi</string>
     <string name="cardholder_name">Kart sahibinin adı</string>
     <string name="city_town">Şəhər/Rayon</string>
@@ -321,7 +328,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="identification">İdentifikasiya</string>
     <string name="logins">Girişlər</string>
     <string name="secure_notes">Güvənli qeydlər</string>
-    <string name="personal_details">Fərdi detallar</string>
+    <string name="personal_details">Fərdi məlumatlar</string>
     <string name="contact_info">Əlaqə məlumatı</string>
     <string name="check_password_for_data_breaches">Parolları veri pozuntularına qarşı yoxla</string>
     <plurals name="password_exposed">
@@ -356,6 +363,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="passphrase">Uzun ifadə</string>
     <string name="word_separator">Söz ayırıcı</string>
     <string name="clear">Təmizlə</string>
+    <string name="open_calendar">təqvimi aç</string>
     <string name="generator">Yaradıcı</string>
     <string name="no_folders_to_list">Sadalanacaq heç bir qovluq yoxdur.</string>
     <string name="fingerprint_phrase">Barmaq izi ifadəsi</string>
@@ -455,7 +463,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək üçün tələb olunur.</string>
     <string name="personal_ownership_policy_in_effect">Bir təşkilat siyasəti, sahiblik seçimlərinizə təsir edir.</string>
     <string name="send">Göndər</string>
-    <string name="send_details">Send detalları</string>
+    <string name="send_details">Send ayrıntıları</string>
     <string name="all_sends">Bütün \"Send\"lər</string>
     <string name="text">Mətn</string>
     <string name="text_to_share">Paylaşılacaq mətn</string>
@@ -652,7 +660,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="decline_all_requests">Bütün tələbləri rədd et</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Gözləyən bütün giriş tələblərini rədd etmək istədiyinizə əminsiniz?</string>
     <string name="no_pending_requests">Gözləyən heç bir tələb yoxdur</string>
-    <string name="enable_camer_permission_to_use_the_scanner">Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</string>
+    <string name="enable_camer_permission_to_use_the_scanner">Skaneri istifadə etmək üçün kamera iznini fəallaşdırın</string>
     <string name="language">Dil</string>
     <string name="language_change_x_description">Dil, %1$s olaraq dəyişdirildi. Dəyişiklikləri görmək üçün lütfən tətbiqi yenidən başladın</string>
     <string name="default_system">İlkin (Sistem)</string>
@@ -816,10 +824,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
     <string name="autofill_setup">Avto-doldurmanı quraşdır</string>
     <string name="turn_on_browser_autofill_integration">Brauzer avto-doldurma inteqrasiyasını işə sal</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">Parollarınızı avto-doldurması məqsədilə Bitwarden üçün xüsusi icazələr tələb edən brauzer istifadə edirsiniz.</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">Parollarınızı avto-doldurması məqsədilə Bitwarden üçün xüsusi icazələr tələb edən brauzerlər istifadə edirsiniz.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Parollarınızı avto-doldurması məqsədilə Bitwarden üçün xüsusi icazələr tələb edən brauzer istifadə edirsiniz. Aşağıda tərcih etdiyiniz avto-doldurma inteqrasiyasını fəallaşdırın.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Parollarınızı avto-doldurması məqsədilə Bitwarden üçün xüsusi icazələr tələb edən brauzerlər istifadə edirsiniz. Quraşdırdığınız bütün brauzerləriniz üçün avto-doldurmanı fəallaşdırıb davam edin.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzer istifadə edirsiniz.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzerlər istifadə edirsiniz.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzer istifadə edirsiniz. Aşağıda tərcih etdiyiniz avto-doldurma inteqrasiyasını fəallaşdırın.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzerlər istifadə edirsiniz. Quraşdırdığınız bütün brauzerləriniz üçün avto-doldurmanı fəallaşdırıb davam edin.</string>
     <string name="use_autofill_to_log_into_your_accounts">Tək toxunuşda hesablarınıza giriş etmək üçün avto-doldurmanı istifadə edin.</string>
     <string name="turn_on_later">Daha sonra işə sal</string>
     <string name="turn_on_autofill_later">Avto-doldurma daha sonra işə salınsın?</string>
@@ -933,8 +941,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Yeni bir giriş əlavə etmək üçün mühüm özəllikləri sizə izah edəcəyik.</string>
     <string name="explore_the_generator">Yaradıcını kəşf et</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Bələdçili tur ilə güvənlik giriş üzrə kimlik məlumatlarının yaradılması barədə ətraflı öyrənin.</string>
-    <string name="import_client_certificate">Client sertifikatını daxilə köçür</string>
-    <string name="enter_the_client_certificate_password_and_alias">Bu sertifikat üçün client sertifikat parolunu və istədiyiniz alias-ı daxil edin.</string>
+    <string name="import_client_certificate">İstəkçi sertifikatını daxilə köçür</string>
+    <string name="enter_the_client_certificate_password_and_alias">Bu sertifikat üçün istəkçi sertifikat parolunu və istədiyiniz alias-ı daxil edin.</string>
     <string name="alias">Alias</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Güvənli parollar, keçid ifadələri və istifadəçi adları yaratmaq üçün yaradıcını istifadə edin.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Keçid ifadələri, adətən təsadüfi parollardan daha asan xatırlanan və yazılan güclü parollardır. TV-nizdəki bir yayım xidməti kimi Avto-doldurma özəlliyinin əlçatan olmadığı hesablara giriş edərkən faydalıdır.</string>
@@ -998,7 +1006,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
 Jurnala yazma, bu müddətdən sonra avtomatik söndürüləcək, hər hansısa problemi yenidən yaradarkən
 fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Qeydlər 30 gün sonra avtomatik silinəcək. Bitwarden, jurnal verilərinizə yalnız siz paylaşdığınız zaman erişə bilər.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">Nəyin yazılıb-yazılmadığını öyrənmək üçün \n<annotation link="helpCenter">Bitwarden kömək mərkəzini</annotation> ziyarət edin.</string>
+    <string name="for_details_on_what_is_and_isnt_logged">Nəyin yazılıb-yazılmadığını barədə ayrıntılı məlumat üçün \n<annotation link="helpCenter">Bitwarden kömək mərkəzini ziyarət edin.</annotation></string>
     <string name="logging_duration">Jurnala yazma müddəti</string>
     <string name="flight_recorder_one_hour">1 saat</string>
     <string name="flight_recorder_eight_hours">8 saat</string>
@@ -1240,7 +1248,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium abunəliyinizi idarə etmək üçün kompüterinizdə veb seyfinizə giriş etməlisiniz.</string>
     <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
     <string name="your_subscription_needs_attention">Abunəliyinizə nəzər salın</string>
-    <string name="check_your_plan_for_details">Detallar üçün planınızı yoxlayın.</string>
+    <string name="check_your_plan_for_details">Ayrıntılar üçün planınızı yoxlayın.</string>
     <string name="view_plan">Plana bax</string>
     <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">Premium plan, güvəndə qalmağınız və nəzarəti əlinizdə saxlamağınız üçün sizə daha çox alət verir</string>
     <string name="this_item_is_archived">Bu element arxivləndi.</string>
@@ -1249,7 +1257,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="go_to_archive">Arxivə get</string>
     <string name="this_item_is_archived_saving_changes_will_restore_it_to_your_vault">Bu element arxivləndi. Dəyişiklikləri saxlamaq, onu seyfinizə bərpa edəcək.</string>
     <string name="your_premium_subscription_ended">Premium abunəliyiniz bitdi</string>
-    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin detallarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
+    <string name="to_regain_access_to_your_archive_restart_your_premium_subscription">Arxivinizə təkrar erişmək üçün Premium abunəliyinizi yenidən başladın. Təkrar başlatmazdan əvvəl arxivlənmiş elementin ayrıntılarına düzəliş etsəniz, həmin element seyfinizə daşınacaq.</string>
     <string name="restart_premium">\"Premium\"u yenidən başlat</string>
     <string name="items_transferred">Elementlər köçürüldü</string>
     <string name="updated_master_password">Güncəllənmiş ana parol</string>
@@ -1401,7 +1409,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="issuing_authority">Təqdim edən orqan</string>
     <string name="issue_date">Təqdim edilmə tarixi</string>
     <string name="expiration_date">Bitmə tarixi</string>
-    <string name="details">Detallar</string>
+    <string name="details">Ayrıntılar</string>
     <string name="account_details">Hesab məlumatları</string>
     <string name="no_bank_accounts">Seyfinizdə heç bir bank hesabı yoxdur.</string>
     <string name="license_details">Sür. vəs. məlumatları</string>
@@ -1418,8 +1426,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="local_network_access_required">Lokal şəbəkənizə erişim tələb olundu</string>
     <string name="ask_again_later">Daha sonra soruş</string>
     <string name="enable_local_network_access">Lokal şəbəkəyə erişimi fəallaşdır</string>
-    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden-in serverinizlə sinxron olması üçün lokal şəbəkəyə erişməsi lazımdır. Bu icazə olmadan, tətbiq bağlantı qura bilməyəcək.</string>
-    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Bu icazə olmadan, Bitwarden bağlantı qura və serverinizlə sinxron ola bilməyəcək. Bunu cihazınızın ayarlarında fəallaşdıra bilərsiniz.</string>
+    <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden-in serverinizlə sinxron olması üçün lokal şəbəkəyə erişməsi lazımdır. Bu izin olmadan, tətbiq bağlantı qura bilməyəcək.</string>
+    <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Bu izin olmadan, Bitwarden serverinizə bağlana bilməyəcək və sinxron ola bilməyəcək. Bunu cihazınızın ayarlarında fəallaşdıra bilərsiniz.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">Sorğunuz yarımçıq dayandırıldı, çünki tətbiqin lokal şəbəkəyə erişməsi lazımdır. Bunu cihazınızın ayarlarında fəallaşdıra bilərsiniz.</string>
     <string name="continue_to_stripe">Stripe ilə davam edilsin?</string>
     <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Abunəliyinizin ləğvi üçün Stripe-a yönləndiriləcəksiniz.</string>
@@ -1434,4 +1442,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="receive_24_7_priority_support">24/7 prioritet dəstək alın</string>
     <string name="account_creation_restricted">Hesab yaratma məhdudlaşdırılıb</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s, yalnız dəvət edilən istifadəçilərin hesab yaratmasına icazə verir.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

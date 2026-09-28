@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationResponse
 import com.bitwarden.core.AuthRequestResponse
@@ -12,8 +13,8 @@ import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 
 /**
@@ -21,6 +22,11 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  */
 @Suppress("TooManyFunctions")
 interface AuthSdkSource {
+    /**
+     * Performs the pre-login request for the given email address.
+     */
+    suspend fun preLogin(email: String): Result<PasswordPreloginResponse>
+
     /**
      * Enrolls the user to master password unlock.
      */
@@ -84,10 +90,10 @@ interface AuthSdkSource {
     ): Result<String>
 
     /**
-     * Creates a hashed password provided the given [email], [password], [kdf], and [purpose].
+     * Creates a hashed password provided the given [salt], [password], [kdf], and [purpose].
      */
     suspend fun hashPassword(
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
         purpose: HashPurpose,
@@ -142,8 +148,8 @@ interface AuthSdkSource {
      * Applies the appropriate filters for determining what policies apply to the user.
      */
     fun filterPolicies(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
         organizations: List<OrganizationUserPolicyContext>,
         policyType: PolicyType,
-    ): Result<List<PolicyView>>
+    ): Result<List<Policy>>
 }

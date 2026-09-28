@@ -121,7 +121,6 @@
     <string name="min_numbers">Najmanje brojeva</string>
     <string name="min_special">Najmanje posebnih</string>
     <string name="never">Nikad</string>
-    <string name="new_item_created">Stavka dodana</string>
     <string name="no_cards">U tvom trezoru nema kartica.</string>
     <string name="add_card">Add card</string>
     <string name="no_logins">U tvom trezoru nema prijava.</string>
@@ -151,6 +150,14 @@
     <string name="select">Odaberi</string>
     <string name="item_details">Detalji stavke</string>
     <string name="item_updated">Stavka spremljena</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Slanje…</string>
     <string name="syncing">Sinkronizacija…</string>
     <string name="syncing_complete">Sinkronizacija dovršena.</string>
@@ -357,6 +364,7 @@
     <string name="passphrase">Frazna lozinka</string>
     <string name="word_separator">Razdjelitelj riječi</string>
     <string name="clear">Očisti</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Nema mapa za prikaz.</string>
     <string name="fingerprint_phrase">Jedinstvena fraza</string>
@@ -1443,4 +1451,9 @@ bilo kakav problem.</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

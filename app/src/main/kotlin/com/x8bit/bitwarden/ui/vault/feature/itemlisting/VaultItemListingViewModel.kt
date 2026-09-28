@@ -126,6 +126,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
@@ -400,11 +401,10 @@ class VaultItemListingViewModel @Inject constructor(
         vaultRepository.sync(forced = true)
     }
 
-    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            delay(250)
+            delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepository.sync(forced = false)
             } else {
@@ -2867,6 +2867,20 @@ class VaultItemListingViewModel @Inject constructor(
                     )
                 }
             }
+
+            AutofillSelectionData.Type.IDENTITY -> {
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = vaultData
+                                .decryptCipherListResult
+                                .successes
+                                .filter { it.type is CipherListViewType.Identity },
+                            failures = emptyList(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -3039,19 +3053,23 @@ data class VaultItemListingState(
     val appBarTitle: Text
         get() = autofillSelectionData
             ?.let { data ->
-                data.uri
-                    ?.toHostOrPathOrNull()
-                    ?.let {
-                        when (data.type) {
-                            AutofillSelectionData.Type.CARD -> {
-                                BitwardenString.select_a_card_for_x.asText(it)
-                            }
-
-                            AutofillSelectionData.Type.LOGIN -> {
-                                BitwardenString.items_for_uri.asText(it)
-                            }
-                        }
+                when (data.type) {
+                    AutofillSelectionData.Type.IDENTITY -> {
+                        BitwardenString.choose_an_identity.asText()
                     }
+
+                    AutofillSelectionData.Type.CARD -> {
+                        data.uri
+                            ?.toHostOrPathOrNull()
+                            ?.let { BitwardenString.select_a_card_for_x.asText(it) }
+                    }
+
+                    AutofillSelectionData.Type.LOGIN -> {
+                        data.uri
+                            ?.toHostOrPathOrNull()
+                            ?.let { BitwardenString.items_for_uri.asText(it) }
+                    }
+                }
             }
             ?: createCredentialRequest
                 ?.relyingPartyIdOrNull

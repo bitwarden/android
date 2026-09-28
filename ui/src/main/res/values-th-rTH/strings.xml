@@ -119,7 +119,6 @@
     <string name="min_numbers">จำนวนตัวเลขต่ำสุด</string>
     <string name="min_special">จำนวนตัวพิเศษขั้นต่ำ</string>
     <string name="never">ไม่เคย</string>
-    <string name="new_item_created">สร้างรายการใหม่แล้ว</string>
     <string name="no_cards">ไม่มีบัตรในตู้นิรภัยของคุณ</string>
     <string name="add_card">เพิ่มบัตร</string>
     <string name="no_logins">ไม่มีข้อมูลเข้าสู่ระบบในตู้นิรภัยของคุณ</string>
@@ -149,6 +148,14 @@
     <string name="select">เลือก</string>
     <string name="item_details">รายละเอียดรายการ</string>
     <string name="item_updated">ปรับปรุงรายการการแล้ว</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">กำลังส่ง…</string>
     <string name="syncing">กำลังซิงค์…</string>
     <string name="syncing_complete">ทำการซิงค์เสร็จสมบูรณ์</string>
@@ -354,6 +361,7 @@
     <string name="passphrase">ข้อความรหัสผ่าน</string>
     <string name="word_separator">ตัวคั่นคำ</string>
     <string name="clear">ล้าง</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">สุ่มรหัส</string>
     <string name="no_folders_to_list">ไม่มีโฟลเดอร์ให้แสดง</string>
     <string name="fingerprint_phrase">วลีลายนิ้วมือ</string>
@@ -1423,4 +1431,9 @@
     <string name="receive_24_7_priority_support">รับการสนับสนุนลำดับความสำคัญ 24/7</string>
     <string name="account_creation_restricted">การสร้างบัญชีถูกจำกัด</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s อนุญาตให้เฉพาะผู้ใช้ที่ได้รับเชิญสร้างบัญชีเท่านั้น</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>

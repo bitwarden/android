@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SendAccessTypeJson
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -198,4 +198,28 @@ sealed class PolicyInformation {
             CUSTOM,
         }
     }
+
+    /**
+     * Represents a policy to display a user notification banner on the main vault screen.
+     *
+     * @property headerText The text to be displayed on the banner header.
+     * @property descriptionText The text to be displayed on the banner description.
+     * @property buttonText The text to be displayed in the banner button.
+     * @property showAfterEveryLogin Indicates if the dismissed status of the banner should persist
+     * after a soft-logout. When `true` the dismissal is not persisted, otherwise, it is persisted.
+     */
+    @Serializable
+    data class OrganizationUserNotification(
+        @SerialName("header")
+        val headerText: String?,
+
+        @SerialName("description")
+        val descriptionText: String,
+
+        @SerialName("buttonText")
+        val buttonText: String?,
+
+        @SerialName("showAfterEveryLogin")
+        val showAfterEveryLogin: Boolean,
+    ) : PolicyInformation()
 }

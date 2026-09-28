@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -8,7 +9,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.Instant
@@ -139,6 +139,12 @@ interface SettingsRepository : FlightRecorderManager {
      * Emits updates whenever there is a change in the user status for PIN unlocking.
      */
     val isUnlockWithPinEnabledFlow: Flow<Boolean>
+
+    /**
+     * Whether Master Password is required on restart when PIN unlocking is enabled for the
+     * current user.
+     */
+    val isPasswordOnRestartRequiredWithPin: Boolean
 
     /**
      * Whether inline autofill is enabled for the current user.

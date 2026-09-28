@@ -120,7 +120,6 @@
     <string name="min_numbers">Legalább ennyi szám</string>
     <string name="min_special">Legalább ennyi speciális karakter</string>
     <string name="never">Soha</string>
-    <string name="new_item_created">Az új elem létrejött.</string>
     <string name="no_cards">Nincsenek kártyák a széfben.</string>
     <string name="add_card">Kártya hozzáadása</string>
     <string name="no_logins">Nincsenek bejelentkezések a széfben.</string>
@@ -150,6 +149,14 @@
     <string name="select">Kijelölés</string>
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
+    <string name="bank_account_saved">A bankszámla mentésre került.</string>
+    <string name="card_saved">A kártya mentésre került.</string>
+    <string name="identity_saved">A személyazonosság mentésre került.</string>
+    <string name="license_saved">A licensz mentésre került.</string>
+    <string name="login_saved">A bejelentkezés mentésre került.</string>
+    <string name="passport_saved">Az útlevél mentésre került.</string>
+    <string name="secure_note_saved">A biztonságos jegyzet mentésre került.</string>
+    <string name="ssh_key_saved">Az SSH kulcs mentésre került.</string>
     <string name="submitting">Beküldés…</string>
     <string name="syncing">Szinkronizálás…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
@@ -355,6 +362,7 @@
     <string name="passphrase">Kulcsszó</string>
     <string name="word_separator">Szóelválasztó</string>
     <string name="clear">Törlés</string>
+    <string name="open_calendar">naptár megnyitása</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Nincsenek megjeleníthető mappák.</string>
     <string name="fingerprint_phrase">Ujjlenyomat mondat</string>
@@ -1432,4 +1440,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="receive_24_7_priority_support">Kiemelt támogatás fogadása a teljes héten 24 órában</string>
     <string name="account_creation_restricted">A fiók létrehozása korlátozott.</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s csak a meghívott felhasználók számára teszi lehetővé fiókok létrehozását.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Csökkentés %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Növelés %1$s</string>
+    <string name="use_this_passphrase">Jelmondat használata</string>
+    <string name="use_this_password">Jelszó használata</string>
+    <string name="use_this_username">Felhasználónév használata</string>
 </resources>

@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -62,9 +64,12 @@ fun BitwardenSegmentedButton(
         Int,
         Dp,
         SegmentedButtonState,
-    ) -> Unit = { _, _, optionState ->
+    ) -> Unit = { _, weightedWidth, optionState ->
         this.SegmentedButtonOptionContent(
             option = optionState,
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(width = weightedWidth),
         )
     },
 ) {

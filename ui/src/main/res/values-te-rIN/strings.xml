@@ -120,7 +120,6 @@
     <string name="min_numbers">కనీస సంఖ్యలు</string>
     <string name="min_special">కనీస ప్రత్యేక అక్షరాలు</string>
     <string name="never">ఎప్పుడూ</string>
-    <string name="new_item_created">అంశం జోడించబడింది</string>
     <string name="no_cards">మీ ఖజానాలో కార్డ్‌లు లేవు.</string>
     <string name="add_card">కార్డ్ జోడించు</string>
     <string name="no_logins">మీ ఖజానాలో లాగిన్‌లు లేవు.</string>
@@ -150,6 +149,14 @@
     <string name="select">ఎంచుకోండి</string>
     <string name="item_details">అంశం వివరాలు</string>
     <string name="item_updated">అంశం భద్రపరచబడింది</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">సమర్పిస్తోంది…</string>
     <string name="syncing">సింక్ అవుతోంది…</string>
     <string name="syncing_complete">సింక్ పూర్తయింది</string>
@@ -356,6 +363,7 @@
     <string name="passphrase">పాస్ఫ్రేజ్</string>
     <string name="word_separator">పద విభజన</string>
     <string name="clear">క్లియర్ చేయి</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">జనరేటర్</string>
     <string name="no_folders_to_list">జాబితా చేయడానికి ఫోల్డర్‌లు లేవు.</string>
     <string name="fingerprint_phrase">వేలిముద్ర పదబంధం</string>
@@ -1433,4 +1441,9 @@
     <string name="receive_24_7_priority_support">24/7 ప్రాధాన్యత మద్దతు పొందండి</string>
     <string name="account_creation_restricted">ఖాతా సృష్టి పరిమితం చేయబడింది</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ఆహ్వానించబడిన వినియోగదారులు మాత్రమే ఖాతాలను సృష్టించడానికి అనుమతిస్తుంది.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
 </resources>
