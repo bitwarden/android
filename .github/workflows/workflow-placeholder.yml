@@ -1,8 +1,6 @@
 name: Cron / Stale Issue Cleanup
 run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 
-# Replaces the manual bitwarden/misc scripts/github-issues-cleanup/stale-issue-cleanup.py pass.
-#
 # A single actions/stale step carries the whole lifecycle:
 #
 #   day 0   "stale" label + 2-week warning   (240 days of inactivity)
@@ -267,17 +265,24 @@ jobs:
             MODE_TEXT="DRY RUN - no issue was modified"
           fi
 
-          BODY="$(
+          # $1 = full|slack. The exempt count is reference detail for the job summary and
+          # log only; the Slack post sticks to the issues that are moving.
+          body() {
             printf 'Repo: %s\n' "$_REPO"
             printf 'Mode: %s\n' "$MODE_TEXT"
             printf '\nPipeline at start of run\n'
             row 'Open issues:' "$_OPEN_ISSUES"
             row 'Awaiting closure (2-week warning):' "$_IN_WARNING"
-            row 'Exempt (never-stale):' "$_EXEMPT"
+            if [ "$1" = "full" ]; then
+              row 'Exempt (never-stale):' "$_EXEMPT"
+            fi
             printf '\nActions this run\n'
             row 'New 2-week warnings posted:' "$NEW_WARNINGS"
             row 'Issues closed:' "$CLOSED"
-          )"
+          }
+
+          BODY="$(body full)"
+          BODY_SLACK="$(body slack)"
 
           # Most consequential first: closures, then new warnings.
           SECTIONS_MD="$(
@@ -306,12 +311,13 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # payload-templated is off by default, so nothing in BODY is re-evaluated.
+          # payload-templated is off by default, so nothing in BODY_SLACK is re-evaluated.
           jq -n \
-            --arg body "$BODY" \
+            --arg body "$BODY_SLACK" \
             --arg sections "$SECTIONS_SLACK" \
             --arg url "$_RUN_URL" \
-            '{text: (":broom: *Stale Issue Cleanup* - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
+            --arg repo "$_REPO" \
+            '{text: (":broom: *Stale Issue Cleanup: \($repo)* - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
             > slack-payload.json
 
           # A run that warned and closed nothing posts nothing; the job summary still has it.
