@@ -266,11 +266,14 @@ jobs:
           fi
 
           # $1 = full|slack. The exempt count is reference detail for the job summary and
-          # log only; the Slack post sticks to the issues that are moving.
+          # log only; the Slack post sticks to the issues that are moving. Slack also drops
+          # the Mode line on live runs, where it's the expected case, but keeps it on dry
+          # runs as the reminder that nothing was modified.
           body() {
-            printf 'Repo: %s\n' "$_REPO"
-            printf 'Mode: %s\n' "$MODE_TEXT"
-            printf '\nPipeline at start of run\n'
+            if [ "$1" = "full" ] || [ "$_MODE" != "live" ]; then
+              printf 'Mode: %s\n\n' "$MODE_TEXT"
+            fi
+            printf 'Pipeline at start of run\n'
             row 'Open issues:' "$_OPEN_ISSUES"
             row 'Awaiting closure (2-week warning):' "$_IN_WARNING"
             if [ "$1" = "full" ]; then
@@ -317,7 +320,7 @@ jobs:
             --arg sections "$SECTIONS_SLACK" \
             --arg url "$_RUN_URL" \
             --arg repo "$_REPO" \
-            '{text: (":broom: *Stale Issue Cleanup: \($repo)* - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
+            '{text: (":broom: *Stale Issue Cleanup:* \($repo) - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
             > slack-payload.json
 
           # A run that warned and closed nothing posts nothing; the job summary still has it.
