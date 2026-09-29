@@ -125,8 +125,9 @@ fun Cipher.toEncryptedNetworkCipherResponse(
     )
 
 /**
- * Updates a [SyncResponseJson.Cipher] with metadata from a
- * [CipherMiniResponseJson.CipherMiniResponse].
+ * Updates a [SyncResponseJson.Cipher] with all values from a
+ * [CipherMiniResponseJson.CipherMiniResponse], keeping only fields the response lacks
+ * (folder, favorite, permissions).
  * This is useful for updating local cipher data after bulk operations that return mini responses.
  *
  * @param miniResponse The mini response containing updated cipher metadata.
@@ -149,6 +150,19 @@ fun SyncResponseJson.Cipher.updateFromMiniResponse(
     shouldOrganizationUseTotp = miniResponse.shouldOrganizationUseTotp,
     type = miniResponse.type,
     data = miniResponse.data,
+    creationDate = miniResponse.creationDate,
+    name = miniResponse.name,
+    notes = miniResponse.notes,
+    login = miniResponse.login,
+    card = miniResponse.card,
+    identity = miniResponse.identity,
+    secureNote = miniResponse.secureNote,
+    sshKey = miniResponse.sshKey,
+    bankAccount = miniResponse.bankAccount,
+    driversLicense = miniResponse.driversLicense,
+    passport = miniResponse.passport,
+    fields = miniResponse.fields,
+    passwordHistory = miniResponse.passwordHistory,
 )
 
 /**

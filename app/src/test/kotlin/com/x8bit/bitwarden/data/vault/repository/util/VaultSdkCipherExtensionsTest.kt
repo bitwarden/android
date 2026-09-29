@@ -578,10 +578,26 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(miniResponse.reprompt, result.reprompt)
         assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
         assertEquals(miniResponse.data, result.data)
-        // Verify unchanged fields remain the same
-        assertEquals(originalCipher.name, result.name)
-        assertEquals(originalCipher.notes, result.notes)
+        assertEquals(miniResponse.creationDate, result.creationDate)
+        assertEquals(miniResponse.name, result.name)
+        assertEquals(miniResponse.notes, result.notes)
+        assertEquals(miniResponse.login, result.login)
+        assertEquals(miniResponse.card, result.card)
+        assertEquals(miniResponse.identity, result.identity)
+        assertEquals(miniResponse.secureNote, result.secureNote)
+        assertEquals(miniResponse.sshKey, result.sshKey)
+        assertEquals(miniResponse.bankAccount, result.bankAccount)
+        assertEquals(miniResponse.driversLicense, result.driversLicense)
+        assertEquals(miniResponse.passport, result.passport)
+        assertEquals(miniResponse.fields, result.fields)
+        assertEquals(miniResponse.passwordHistory, result.passwordHistory)
+        // Verify fields absent from the mini response remain the same
         assertEquals(originalCipher.id, result.id)
+        assertEquals(originalCipher.folderId, result.folderId)
+        assertEquals(originalCipher.isFavorite, result.isFavorite)
+        assertEquals(originalCipher.shouldEdit, result.shouldEdit)
+        assertEquals(originalCipher.permissions, result.permissions)
+        assertEquals(originalCipher.shouldViewPassword, result.shouldViewPassword)
     }
 
     @Test
