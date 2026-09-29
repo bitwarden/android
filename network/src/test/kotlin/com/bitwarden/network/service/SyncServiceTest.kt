@@ -601,7 +601,8 @@ private const val SYNC_SUCCESS_JSON = """
     "v2UpgradeToken": {
       "wrappedUserKey1": "mockWrappedUserKey1-1",
       "wrappedUserKey2": "mockWrappedUserKey2-1"
-    }
+    },
+    "userKeyId": "mockUserKeyId-1"
   }
 }
 """

@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
  * used to decrypt their vault.
  * @property v2UpgradeToken The V2 upgrade token returned when available, allowing vault unlock
  * after V1 → V2 upgrade.
+ * @property userKeyId The id of the user's current user key, when the server has one recorded.
  */
 @Serializable
 data class UserDecryptionJson(
@@ -18,4 +19,7 @@ data class UserDecryptionJson(
 
     @SerialName("v2UpgradeToken")
     val v2UpgradeToken: V2UpgradeTokenJson?,
+
+    @SerialName("userKeyId")
+    val userKeyId: String? = null,
 )

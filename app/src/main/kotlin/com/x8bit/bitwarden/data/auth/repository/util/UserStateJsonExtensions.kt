@@ -29,6 +29,9 @@ import com.x8bit.bitwarden.data.vault.repository.util.statusFor
  * Updates the given [UserStateJson] with the data from the [syncResponse] to return a new
  * [UserStateJson]. The original will be returned if the sync response does not match any accounts
  * in the [UserStateJson].
+ *
+ * The master password unlock data and KDF settings are not updated here; the SDK crypto sync
+ * handler persists them.
  */
 fun UserStateJson.toUpdatedUserStateJson(
     syncResponse: SyncResponseJson,
@@ -37,7 +40,7 @@ fun UserStateJson.toUpdatedUserStateJson(
     val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
-    val masterPasswordUnlockKdf = syncResponse.userDecryption?.masterPasswordUnlock?.kdf
+    // Only used to derive the force password reset reason from the synced unlock methods.
     val userDecryptionOptions = syncResponse
         .userDecryption
         ?.let { syncUserDecryption ->
@@ -72,11 +75,6 @@ fun UserStateJson.toUpdatedUserStateJson(
         hasPremiumFromOrganization = syncProfile.isPremiumFromOrganization,
         isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
         creationDate = syncProfile.creationDate,
-        userDecryptionOptions = userDecryptionOptions,
-        kdfType = masterPasswordUnlockKdf?.kdfType ?: profile.kdfType,
-        kdfIterations = masterPasswordUnlockKdf?.iterations ?: profile.kdfIterations,
-        kdfMemory = masterPasswordUnlockKdf?.memory ?: profile.kdfMemory,
-        kdfParallelism = masterPasswordUnlockKdf?.parallelism ?: profile.kdfParallelism,
     )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this.copy(

@@ -19,6 +19,8 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.CryptoException
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.cryptosynchandler.CryptoSyncData
+import com.bitwarden.cryptosynchandler.CryptoSyncHandlerClient
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
@@ -86,6 +88,7 @@ import java.security.MessageDigest
 class VaultSdkSourceTest {
     private val clientAuth = mockk<AuthClient>()
     private val clientCrypto = mockk<CryptoClient>()
+    private val clientCryptoSyncHandler = mockk<CryptoSyncHandlerClient>()
     private val fido2 = mockk<ClientFido2Client> {
         coEvery { register(any(), any(), any()) }
     }
@@ -111,6 +114,7 @@ class VaultSdkSourceTest {
         every { vault() } returns clientVault
         every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
+        every { cryptoSyncHandler() } returns clientCryptoSyncHandler
         every { exporters() } returns clientExporters
     }
     private val sdkClientManager = mockk<SdkClientManager> {
@@ -581,6 +585,33 @@ class VaultSdkSourceTest {
             sdkClientManager.getOrCreateClient(userId = userId)
             clientCrypto.reinitUserCrypto(req = mockReinitCryptoRequest)
         }
+    }
+
+    @Test
+    fun `handleCryptoSync should call SDK and return a Result with correct data`() = runTest {
+        val userId = "userId"
+        val mockCryptoSyncData = mockk<CryptoSyncData>()
+        coEvery { clientCryptoSyncHandler.onSync(data = mockCryptoSyncData) } just runs
+
+        val result = vaultSdkSource.handleCryptoSync(userId = userId, data = mockCryptoSyncData)
+
+        assertEquals(Unit.asSuccess(), result)
+        coVerify(exactly = 1) {
+            sdkClientManager.getOrCreateClient(userId = userId)
+            clientCryptoSyncHandler.onSync(data = mockCryptoSyncData)
+        }
+    }
+
+    @Test
+    fun `handleCryptoSync should return a Failure when the SDK throws an exception`() = runTest {
+        val userId = "userId"
+        val mockCryptoSyncData = mockk<CryptoSyncData>()
+        val error = Throwable("Fail")
+        coEvery { clientCryptoSyncHandler.onSync(data = mockCryptoSyncData) } throws error
+
+        val result = vaultSdkSource.handleCryptoSync(userId = userId, data = mockCryptoSyncData)
+
+        assertEquals(error.asFailure(), result)
     }
 
     @Test

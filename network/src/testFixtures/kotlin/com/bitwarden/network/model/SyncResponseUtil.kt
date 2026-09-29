@@ -36,10 +36,12 @@ fun createMockUserDecryption(
         number = number,
     ),
     v2UpgradeToken: V2UpgradeTokenJson? = createMockV2UpgradeToken(number = number),
+    userKeyId: String? = "mockUserKeyId-$number",
 ): UserDecryptionJson =
     UserDecryptionJson(
         masterPasswordUnlock = masterPasswordUnlock,
         v2UpgradeToken = v2UpgradeToken,
+        userKeyId = userKeyId,
     )
 
 /**

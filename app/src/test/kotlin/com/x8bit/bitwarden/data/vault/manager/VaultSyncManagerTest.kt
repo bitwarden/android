@@ -11,9 +11,9 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.cryptosynchandler.CryptoSyncData
+import com.bitwarden.cryptosynchandler.CryptoSyncUserDecryption
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import io.mockk.awaits
 import io.mockk.coEvery
@@ -121,6 +122,7 @@ class VaultSyncManagerTest {
         coEvery {
             reinitializeCrypto(userId = any(), request = any())
         } returns Unit.asSuccess()
+        coEvery { handleCryptoSync(userId = any(), data = any()) } returns Unit.asSuccess()
     }
     private val mutableVaultStateFlow = MutableStateFlow<List<VaultUnlockData>>(emptyList())
     private val mutableUnlockedUserIdsStateFlow = MutableStateFlow<Set<String>>(emptySet())
@@ -746,29 +748,29 @@ class VaultSyncManagerTest {
                             avatarColorHex = "mockAvatarColor-1",
                             stamp = "mockSecurityStamp-1",
                             hasPremiumFromOrganization = false,
-                            kdfType = KdfTypeJson.PBKDF2_SHA256,
-                            kdfIterations = 600000,
-                            kdfMemory = null,
-                            kdfParallelism = null,
-                            userDecryptionOptions = UserDecryptionOptionsJson(
-                                hasMasterPassword = true,
-                                masterPasswordUnlock = createMockMasterPasswordUnlock(number = 1),
-                                trustedDeviceUserDecryptionOptions = null,
-                                keyConnectorUserDecryptionOptions = null,
-                            ),
                         ),
                     ),
                 ),
             )
             fakeAuthDiskSource.assertUserState(userState = updatedUserState)
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = userId,
-                accountCryptographicState = createMockWrappedAccountCryptographicState(number = 1),
-            )
-            fakeAuthDiskSource.assertV2UpgradeToken(
-                userId = userId,
-                v2UpgradeToken = createMockV2UpgradeToken(number = 1),
-            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(
+                    userId = userId,
+                    data = CryptoSyncData(
+                        userDecryption = CryptoSyncUserDecryption(
+                            masterPasswordUnlock = createMockMasterPasswordUnlock(number = 1)
+                                .toSdkMasterPasswordUnlock(),
+                            v2UpgradeToken = createMockV2UpgradeToken(number = 1)
+                                .toV2UpgradeToken(),
+                            webAuthnPrfOptions = null,
+                            userKeyId = "mockUserKeyId-1",
+                        ),
+                        accountCryptographicState = createMockWrappedAccountCryptographicState(
+                            number = 1,
+                        ),
+                    ),
+                )
+            }
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = userId,
                 organizationKeys = mapOf(userId to "mockKey-1"),
@@ -866,14 +868,9 @@ class VaultSyncManagerTest {
 
             vaultSyncManager.sync()
 
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = userId,
-                accountCryptographicState = createMockWrappedAccountCryptographicState(number = 1),
-            )
-            fakeAuthDiskSource.assertV2UpgradeToken(
-                userId = userId,
-                v2UpgradeToken = createMockV2UpgradeToken(number = 1),
-            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(userId = userId, data = any())
+            }
             coVerify(exactly = 0) {
                 vaultSdkSource.reinitializeCrypto(userId = any(), request = any())
             }
@@ -911,7 +908,12 @@ class VaultSyncManagerTest {
 
             vaultSyncManager.sync()
 
-            fakeAuthDiskSource.assertV2UpgradeToken(userId = userId, v2UpgradeToken = null)
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(
+                    userId = userId,
+                    data = match { it.userDecryption?.v2UpgradeToken == null },
+                )
+            }
             coVerify(exactly = 0) {
                 vaultSdkSource.reinitializeCrypto(userId = any(), request = any())
             }
@@ -949,13 +951,100 @@ class VaultSyncManagerTest {
 
             vaultSyncManager.sync()
 
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = userId,
-                accountCryptographicState = null,
-            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(
+                    userId = userId,
+                    data = match { it.accountCryptographicState == null },
+                )
+            }
             coVerify(exactly = 0) {
                 vaultSdkSource.reinitializeCrypto(userId = any(), request = any())
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `sync with syncService Success and no master password unlock should pass a null master password unlock to the SDK`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            setupSyncSuccess(
+                syncResponse = createMockSyncResponse(
+                    number = 1,
+                    userDecryption = createMockUserDecryption(
+                        number = 1,
+                        masterPasswordUnlock = null,
+                    ),
+                ),
+            )
+
+            vaultSyncManager.sync()
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(
+                    userId = userId,
+                    data = match {
+                        it.userDecryption != null &&
+                            it.userDecryption?.masterPasswordUnlock == null
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `sync with syncService Success should pass the user key ID to the SDK`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        setupSyncSuccess(
+            syncResponse = createMockSyncResponse(
+                number = 1,
+                userDecryption = createMockUserDecryption(number = 1, userKeyId = "userKeyId"),
+            ),
+        )
+
+        vaultSyncManager.sync()
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.handleCryptoSync(
+                userId = userId,
+                data = match { it.userDecryption?.userKeyId == "userKeyId" },
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `sync with syncService Success and no user decryption should pass a null user decryption to the SDK`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            setupSyncSuccess(
+                syncResponse = createMockSyncResponse(number = 1, userDecryption = null),
+            )
+
+            vaultSyncManager.sync()
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.handleCryptoSync(
+                    userId = userId,
+                    data = match { it.userDecryption == null },
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncForResult with syncService Success and an SDK crypto sync failure should still succeed`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setupSyncSuccess(syncResponse = createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.handleCryptoSync(userId = any(), data = any())
+            } returns Throwable("Fail").asFailure()
+
+            val syncResult = vaultSyncManager.syncForResult()
+
+            assertEquals(SyncVaultDataResult.Success(itemsAvailable = true), syncResult)
         }
 
     @Suppress("MaxLineLength")
@@ -1449,6 +1538,20 @@ class VaultSyncManagerTest {
         }
 
     //region Helper functions
+
+    /**
+     * Sets up a successful sync for the "mockId-1" user returning the given [syncResponse].
+     */
+    private fun setupSyncSuccess(syncResponse: SyncResponseJson) {
+        val userId = "mockId-1"
+        coEvery { syncService.sync() } returns syncResponse.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(userId = userId, request = any())
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+        } just runs
+    }
 
     /**
      * Ensures the vault for the given [userId] is unlocked and can pass any

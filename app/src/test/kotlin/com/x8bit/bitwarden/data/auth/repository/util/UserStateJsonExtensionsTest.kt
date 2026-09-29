@@ -1993,7 +1993,7 @@ class UserStateJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toUpdatedUserStateJson should create UserDecryptionOptionsJson when null and syncResponse has masterPasswordUnlock`() {
+    fun `toUpdatedUserStateJson should not create UserDecryptionOptionsJson or update KDF when syncResponse has masterPasswordUnlock`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -2053,16 +2053,6 @@ class UserStateJsonExtensionsTest {
                             hasPremiumFromOrganization = false,
                             isTwoFactorEnabled = true,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
-                            kdfType = KdfTypeJson.PBKDF2_SHA256,
-                            kdfIterations = 600000,
-                            kdfMemory = 16,
-                            kdfParallelism = 4,
-                            userDecryptionOptions = UserDecryptionOptionsJson(
-                                hasMasterPassword = true,
-                                trustedDeviceUserDecryptionOptions = null,
-                                keyConnectorUserDecryptionOptions = null,
-                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
-                            ),
                         ),
                     ),
                 ),
@@ -2073,7 +2063,7 @@ class UserStateJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toUpdatedUserStateJson should update existing UserDecryptionOptionsJson with masterPasswordUnlock`() {
+    fun `toUpdatedUserStateJson should not update existing UserDecryptionOptionsJson with masterPasswordUnlock`() {
         val trustedDeviceOptions = TrustedDeviceUserDecryptionOptionsJson(
             encryptedPrivateKey = "encryptedPrivateKey",
             encryptedUserKey = "encryptedUserKey",
@@ -2145,16 +2135,6 @@ class UserStateJsonExtensionsTest {
                             hasPremiumFromOrganization = false,
                             isTwoFactorEnabled = true,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
-                            kdfType = KdfTypeJson.PBKDF2_SHA256,
-                            kdfIterations = 600000,
-                            kdfMemory = 16,
-                            kdfParallelism = 4,
-                            userDecryptionOptions = UserDecryptionOptionsJson(
-                                hasMasterPassword = true,
-                                trustedDeviceUserDecryptionOptions = trustedDeviceOptions,
-                                keyConnectorUserDecryptionOptions = null,
-                                masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK_DATA,
-                            ),
                         ),
                     ),
                 ),
@@ -2165,7 +2145,7 @@ class UserStateJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toUpdatedUserStateJson should clear hasMasterPassword and masterPasswordUnlock when syncResponse has no userDecryption`() {
+    fun `toUpdatedUserStateJson should not clear hasMasterPassword and masterPasswordUnlock when syncResponse has no userDecryption`() {
         val keyConnectorOptions = KeyConnectorUserDecryptionOptionsJson("keyConnectorUrl")
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
@@ -2228,12 +2208,6 @@ class UserStateJsonExtensionsTest {
                             hasPremiumFromOrganization = true,
                             isTwoFactorEnabled = false,
                             creationDate = Instant.parse("2024-09-13T01:00:00.00Z"),
-                            userDecryptionOptions = UserDecryptionOptionsJson(
-                                hasMasterPassword = false,
-                                trustedDeviceUserDecryptionOptions = null,
-                                keyConnectorUserDecryptionOptions = keyConnectorOptions,
-                                masterPasswordUnlock = null,
-                            ),
                         ),
                     ),
                 ),
@@ -2244,7 +2218,7 @@ class UserStateJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toUpdatedUserStateJson should update KDF settings when sync response provides updated values`() {
+    fun `toUpdatedUserStateJson should not update KDF settings when sync response provides updated values`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -2304,23 +2278,7 @@ class UserStateJsonExtensionsTest {
                 accounts = mapOf(
                     "activeUserId" to originalAccount.copy(
                         profile = originalProfile.copy(
-                            kdfIterations = DEFAULT_PBKDF2_ITERATIONS,
                             hasPremiumFromOrganization = false,
-                            userDecryptionOptions = UserDecryptionOptionsJson(
-                                hasMasterPassword = true,
-                                masterPasswordUnlock = MasterPasswordUnlockDataJson(
-                                    salt = "mockSalt",
-                                    kdf = KdfJson(
-                                        kdfType = KdfTypeJson.PBKDF2_SHA256,
-                                        iterations = DEFAULT_PBKDF2_ITERATIONS,
-                                        memory = null,
-                                        parallelism = null,
-                                    ),
-                                    masterKeyWrappedUserKey = "mockMasterKeyWrappedUserKey",
-                                ),
-                                trustedDeviceUserDecryptionOptions = null,
-                                keyConnectorUserDecryptionOptions = null,
-                            ),
                         ),
                     ),
                 ),

@@ -12,6 +12,7 @@ import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.cryptosynchandler.CryptoSyncData
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -153,6 +154,17 @@ interface VaultSdkSource {
     suspend fun reinitializeCrypto(
         userId: String,
         request: ReinitUserCryptoRequest,
+    ): Result<Unit>
+
+    /**
+     * Runs the Bitwarden SDK key management sync work for the user with the given [userId],
+     * persisting the key state carried by the given [CryptoSyncData] through the SDK state bridge.
+     *
+     * This does not require the vault to be unlocked.
+     */
+    suspend fun handleCryptoSync(
+        userId: String,
+        data: CryptoSyncData,
     ): Result<Unit>
 
     /**

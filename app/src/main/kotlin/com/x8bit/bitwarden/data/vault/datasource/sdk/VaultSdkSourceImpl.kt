@@ -16,6 +16,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.cryptosynchandler.CryptoSyncData
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -197,6 +198,13 @@ class VaultSdkSourceImpl(
         request: ReinitUserCryptoRequest,
     ): Result<Unit> = runCatchingWithLogs {
         getClient(userId = userId).crypto().reinitUserCrypto(req = request)
+    }
+
+    override suspend fun handleCryptoSync(
+        userId: String,
+        data: CryptoSyncData,
+    ): Result<Unit> = runCatchingWithLogs {
+        getClient(userId = userId).cryptoSyncHandler().onSync(data = data)
     }
 
     override suspend fun initializeCrypto(

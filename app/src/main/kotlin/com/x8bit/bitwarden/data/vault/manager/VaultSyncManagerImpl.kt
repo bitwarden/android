@@ -3,11 +3,14 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.ReinitUserCryptoRequest
+import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
+import com.bitwarden.cryptosynchandler.CryptoSyncData
+import com.bitwarden.cryptosynchandler.CryptoSyncUserDecryption
 import com.bitwarden.network.model.OrganizationStatusType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.service.SyncService
@@ -42,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -387,11 +391,14 @@ internal class VaultSyncManagerImpl(
                 profile.accountKeys.toAccountCryptographicState(privateKey = it)
             }
             val v2UpgradeToken = syncResponse.userDecryption?.v2UpgradeToken
-            storeAccountCryptographicState(
+            // The SDK persists the key state (e.g. refusing a V2 -> V1 downgrade). It parses the
+            // whole request before writing, so a failure is logged and nothing is written.
+            vaultSdkSource.handleCryptoSync(
                 userId = userId,
-                accountCryptographicState = accountCryptographicState,
+                data = syncResponse.toCryptoSyncData(
+                    accountCryptographicState = accountCryptographicState,
+                ),
             )
-            storeV2UpgradeToken(userId = userId, v2UpgradeToken = v2UpgradeToken)
             if (accountCryptographicState != null &&
                 v2UpgradeToken != null &&
                 vaultLockManager.isVaultUnlocked(userId = userId)
@@ -563,6 +570,26 @@ internal class VaultSyncManagerImpl(
             .takeUnless { settingsDiskSource.getLastSyncTime(userId = userId) == null }
             ?: DataState.Loading
 }
+
+/**
+ * Builds the SDK [CryptoSyncData] from this sync response and the given
+ * [accountCryptographicState].
+ */
+private fun SyncResponseJson.toCryptoSyncData(
+    accountCryptographicState: WrappedAccountCryptographicState?,
+): CryptoSyncData =
+    CryptoSyncData(
+        userDecryption = userDecryption?.let {
+            CryptoSyncUserDecryption(
+                masterPasswordUnlock = it.masterPasswordUnlock?.toSdkMasterPasswordUnlock(),
+                v2UpgradeToken = it.v2UpgradeToken?.toV2UpgradeToken(),
+                // WebAuthn PRF unlock is not supported on Android.
+                webAuthnPrfOptions = null,
+                userKeyId = it.userKeyId,
+            )
+        },
+        accountCryptographicState = accountCryptographicState,
+    )
 
 /**
  * Convenience function to extract the private key from the [SyncResponseJson.Profile] response.
