@@ -53,6 +53,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * user interaction or not.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The [Modifier] to be applied to this radio button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param sliderTag The option test tag for the slider component.
  * @param valueTag The option test tag for the value field component.
  */
@@ -65,6 +67,7 @@ fun BitwardenSlider(
     onValueChange: (value: Int, isUserInteracting: Boolean) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     sliderTag: String? = null,
     valueTag: String? = null,
 ) {
@@ -75,7 +78,11 @@ fun BitwardenSlider(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = cardStyle, paddingEnd = 16.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingEnd = 16.dp,
+                interactionSource = interactionSource,
+            )
             .semantics(mergeDescendants = true) {},
     ) {
         TextField(
@@ -97,6 +104,7 @@ fun BitwardenSlider(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = bitwardenTextFieldColors(),
+            interactionSource = interactionSource,
             modifier = Modifier
                 .onPreviewKeyEvent { keyEvent ->
                     when (keyEvent.key) {
@@ -143,6 +151,7 @@ fun BitwardenSlider(
                     thumbTrackGapSize = 0.dp,
                 )
             },
+            interactionSource = interactionSource,
             modifier = Modifier
                 .focusProperties { canFocus = false }
                 .nullableTestTag(tag = sliderTag)

@@ -3,10 +3,13 @@
 package com.bitwarden.ui.platform.base.util
 
 import android.os.Build
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +19,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
@@ -30,6 +34,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
@@ -55,6 +63,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.animation.focusAnimationSpec
 import com.bitwarden.ui.platform.util.getWindowSize
 
 /**
@@ -143,22 +152,23 @@ fun Modifier.scrolledContainerBottomDivider(
 @Stable
 @Composable
 fun Modifier.nullableClickable(
+    onClick: (() -> Unit)?,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
     enabled: Boolean = true,
-    onClick: (() -> Unit)?,
     role: Role? = null,
 ): Modifier =
-    onClick
-        ?.let {
-            this.clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = indicationColor),
-                onClick = it,
-                enabled = enabled,
-                role = role,
-            )
-        }
-        ?: this
+    if (onClick != null) {
+        this.clickable(
+            interactionSource = interactionSource,
+            indication = ripple(color = indicationColor),
+            onClick = onClick,
+            enabled = enabled,
+            role = role,
+        )
+    } else {
+        this
+    }
 
 /**
  * This is a [Modifier] extension for adding an optional test tag to the composable.
@@ -262,6 +272,64 @@ fun Modifier.endDivider(
                 start = Offset(x = startX, y = paddingTop.toPx()),
                 end = Offset(x = startX, y = size.height - paddingBottom.toPx()),
             )
+        }
+    }
+}
+
+/**
+ * This is a [Modifier] extension that applies an interactive border to the content.
+ */
+@OmitFromCoverage
+@Composable
+fun Modifier.interactiveBorder(
+    interactionSource: MutableInteractionSource,
+    shape: Shape,
+    color: Color = BitwardenTheme.colorScheme.stroke.border,
+    width: Dp = 2.dp,
+    inset: Dp = 0.dp,
+    isEnabled: Boolean = true,
+): Modifier = if (isEnabled) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val animatedAlpha by animateFloatAsState(
+        targetValue = if (isFocused) 1f else 0f,
+        animationSpec = focusAnimationSpec(),
+        label = "InteractiveBorderAlpha",
+    )
+    return this.insetBorder(
+        border = BorderStroke(width = width, color = color),
+        shape = shape,
+        inset = inset,
+        alpha = animatedAlpha,
+    )
+} else {
+    this
+}
+
+/**
+ * Draws the provided [border] with the given [inset] around it.
+ */
+fun Modifier.insetBorder(
+    border: BorderStroke,
+    shape: Shape,
+    inset: Dp = 0.dp,
+    alpha: Float = 1f,
+): Modifier = this.drawWithCache {
+    onDrawWithContent {
+        drawContent()
+        if (!this.size.isEmpty()) {
+            val strokeWidth = border.width.toPx()
+            inset(inset = inset.toPx() + (strokeWidth / 2f)) {
+                drawOutline(
+                    outline = shape.createOutline(
+                        size = this.size,
+                        layoutDirection = this.layoutDirection,
+                        density = this,
+                    ),
+                    brush = border.brush,
+                    style = Stroke(width = strokeWidth),
+                    alpha = alpha,
+                )
+            }
         }
     }
 }
@@ -403,6 +471,7 @@ fun Modifier.cardStyle(
     paddingVertical: Dp = 12.dp,
     containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ): Modifier =
     this.cardStyle(
         cardStyle = cardStyle,
@@ -415,6 +484,7 @@ fun Modifier.cardStyle(
         ),
         containerColor = containerColor,
         indicationColor = indicationColor,
+        interactionSource = interactionSource,
     )
 
 /**
@@ -434,6 +504,7 @@ fun Modifier.cardStyle(
     paddingBottom: Dp = 12.dp,
     containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ): Modifier =
     this.cardStyle(
         cardStyle = cardStyle,
@@ -448,6 +519,7 @@ fun Modifier.cardStyle(
         ),
         containerColor = containerColor,
         indicationColor = indicationColor,
+        interactionSource = interactionSource,
     )
 
 /**
@@ -464,15 +536,18 @@ fun Modifier.cardStyle(
     padding: PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 12.dp),
     containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ): Modifier =
     this
         .cardBackground(
             cardStyle = cardStyle,
             color = containerColor,
+            interactionSource = interactionSource,
         )
         .nullableClickable(
             onClick = onClick,
             enabled = clickEnabled,
+            interactionSource = interactionSource,
             indicationColor = indicationColor,
             role = role,
         )
@@ -490,6 +565,7 @@ fun Modifier.cardStyle(
 fun Modifier.cardBackground(
     cardStyle: CardStyle?,
     color: Color = BitwardenTheme.colorScheme.background.secondary,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ): Modifier {
     cardStyle ?: return this
     val shape = if ("robolectric" == Build.FINGERPRINT) {
@@ -508,6 +584,7 @@ fun Modifier.cardBackground(
     return this
         .clip(shape = shape)
         .background(color = color, shape = shape)
+        .interactiveBorder(interactionSource = interactionSource, shape = shape)
         .bottomDivider(
             paddingStart = cardStyle.dividerPadding,
             enabled = cardStyle.hasDivider,

@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.components.appbar.action
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.DropdownMenu
@@ -10,11 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isUnspecified
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -26,6 +28,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
@@ -102,6 +105,7 @@ private fun BitwardenDropdownMenuItem(
     data: OverflowMenuItemData,
     onHideOverflowMenu: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val contentDescriptionText = if (data.isExternalLink) {
         stringResource(id = BitwardenString.external_link_format, formatArgs = arrayOf(data.text))
@@ -114,11 +118,20 @@ private fun BitwardenDropdownMenuItem(
                 this.contentDescription = contentDescriptionText
                 this.role = Role.Button
             }
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.row,
+                color = data
+                    .color
+                    .takeUnless { it.isUnspecified }
+                    ?: BitwardenTheme.colorScheme.stroke.border,
+            )
             .testTag(tag = data.testTag),
+        interactionSource = interactionSource,
         colors = bitwardenMenuItemColors(
             textColor = data
                 .color
-                .takeUnless { it == Color.Unspecified }
+                .takeUnless { it.isUnspecified }
                 ?: BitwardenTheme.colorScheme.text.primary,
         ),
         enabled = data.isEnabled,

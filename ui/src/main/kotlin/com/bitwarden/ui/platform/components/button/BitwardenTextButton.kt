@@ -1,5 +1,9 @@
 package com.bitwarden.ui.platform.components.button
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +12,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -23,6 +29,7 @@ import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.animation.focusAnimationSpec
 
 /**
  * Represents a Bitwarden-styled [TextButton].
@@ -54,6 +61,8 @@ fun BitwardenTextButton(
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param icon The icon for the button.
  * @param isEnabled Whether the button is enabled.
  * @param isExternalLink Indicates that this button launches an external link.
@@ -64,6 +73,7 @@ fun BitwardenTextButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     icon: Painter? = null,
     isEnabled: Boolean = true,
     isExternalLink: Boolean = false,
@@ -77,6 +87,11 @@ fun BitwardenTextButton(
     } else {
         label
     }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val colorAlpha by animateFloatAsState(
+        targetValue = if (isFocused) 1f else 0f,
+        animationSpec = focusAnimationSpec(),
+    )
     TextButton(
         modifier = modifier.semantics(mergeDescendants = true) {
             contentDescription = formattedContentDescription
@@ -90,6 +105,8 @@ fun BitwardenTextButton(
             end = if (icon == null) 12.dp else 16.dp,
         ),
         colors = bitwardenTextButtonColors(contentColor = contentColor),
+        border = BorderStroke(width = 2.dp, color = contentColor.copy(alpha = colorAlpha)),
+        interactionSource = interactionSource,
     ) {
         icon?.let {
             Icon(

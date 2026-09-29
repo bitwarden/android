@@ -1,6 +1,9 @@
 package com.bitwarden.ui.platform.components.card
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -15,8 +18,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,10 +33,13 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.animation.focusAnimationSpec
+import com.bitwarden.ui.platform.theme.ripple.NoFocusRippleConfig
 
 /**
  * A reusable card for displaying actions to the user.
@@ -41,51 +51,64 @@ fun BitwardenActionCardSmall(
     callToActionText: String,
     onCardClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     callToActionTextColor: Color = BitwardenTheme.colorScheme.text.primary,
     colors: CardColors = bitwardenCardColors(),
     trailingContent: (@Composable BoxScope.() -> Unit)? = null,
 ) {
-    Card(
-        onClick = onCardClicked,
-        shape = BitwardenTheme.shapes.actionCard,
-        colors = colors,
-        elevation = CardDefaults.elevatedCardElevation(),
-        border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
-        modifier = modifier.semantics { this.role = Role.Button },
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val borderWidth by animateDpAsState(
+        targetValue = if (isFocused) 2.dp else 1.dp,
+        animationSpec = focusAnimationSpec(),
+    )
+    CompositionLocalProvider(LocalRippleConfiguration provides NoFocusRippleConfig) {
+        Card(
+            onClick = onCardClicked,
+            shape = BitwardenTheme.shapes.actionCard,
+            colors = colors,
+            elevation = CardDefaults.elevatedCardElevation(),
+            border = BorderStroke(
+                width = borderWidth,
+                color = BitwardenTheme.colorScheme.stroke.border,
+            ),
+            interactionSource = interactionSource,
+            modifier = modifier
+                .interactiveBorder(
+                    interactionSource = interactionSource,
+                    shape = BitwardenTheme.shapes.content,
+                    inset = 4.dp,
+                )
+                .semantics { this.role = Role.Button },
         ) {
-            Icon(
-                painter = actionIcon,
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.secondary,
-                modifier = Modifier.size(24.dp),
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier.weight(weight = 1f),
-            ) {
-                Text(
-                    text = actionText,
-                    style = BitwardenTheme.typography.titleMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = callToActionText,
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = callToActionTextColor,
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Box(
+            Row(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically),
+                    .fillMaxWidth()
+                    .padding(16.dp),
             ) {
-                trailingContent?.invoke(this)
+                Icon(
+                    painter = actionIcon,
+                    contentDescription = null,
+                    tint = BitwardenTheme.colorScheme.icon.secondary,
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column(modifier = Modifier.weight(weight = 1f)) {
+                    Text(
+                        text = actionText,
+                        style = BitwardenTheme.typography.titleMedium,
+                        color = BitwardenTheme.colorScheme.text.primary,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = callToActionText,
+                        style = BitwardenTheme.typography.bodyMedium,
+                        color = callToActionTextColor,
+                    )
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Box(modifier = Modifier.align(Alignment.CenterVertically)) {
+                    trailingContent?.invoke(this)
+                }
             }
         }
     }
