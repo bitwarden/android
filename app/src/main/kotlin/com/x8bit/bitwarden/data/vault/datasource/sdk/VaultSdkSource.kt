@@ -161,6 +161,9 @@ interface VaultSdkSource {
      * persisting the key state carried by the given [CryptoSyncData] through the SDK state bridge.
      *
      * This does not require the vault to be unlocked.
+     *
+     * Returns a failure wrapping a `BitwardenException` if the SDK rejects [data] (e.g. a
+     * malformed key from the server). Nothing is written in that case.
      */
     suspend fun handleCryptoSync(
         userId: String,
