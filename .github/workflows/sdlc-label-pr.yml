@@ -31,6 +31,7 @@ jobs:
     permissions:
       pull-requests: write # required to update labels
       contents: read
+      actions: write # required to trigger sdlc-enforce-labels.yml
 
     steps:
       - name: Check out repository
@@ -88,3 +89,9 @@ jobs:
           echo ""
           python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_PR_LABELS" "$_LABEL_MODE" "$_DRY_RUN"
 
+      - name: Trigger label enforcement
+        if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run sdlc-enforce-labels.yml -f pr-number="$_PR_NUMBER"

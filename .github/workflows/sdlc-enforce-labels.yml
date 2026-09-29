@@ -3,7 +3,7 @@ run-name: Enforce labels for PR ${{ github.event.pull_request.number || inputs.p
 
 on:
   pull_request:
-    types: [labeled, unlabeled, opened, reopened, edited, synchronize]
+    types: [labeled, unlabeled, edited]
   workflow_dispatch:
     inputs:
       pr-number:
