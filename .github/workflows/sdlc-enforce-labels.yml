@@ -63,11 +63,11 @@ jobs:
               echo "✅ PR has exactly one Change Type (t:*) label"
               ;;
             0)
-              echo "::error::PR is missing a Change Type (t:*) label. PRs must have exactly one Change Type (t:*) label"
+              echo "::error::PR #$_PR_NUMBER is missing a Change Type (t:*) label. PRs must have exactly one Change Type (t:*) label"
               exit 1
               ;;
             *)
-              echo "::error::PR has $_T_LABEL_COUNT Change Type (t:*) labels. PRs must have exactly one Change Type (t:*) label"
+              echo "::error::PR #$_PR_NUMBER has $_T_LABEL_COUNT Change Type (t:*) labels. PRs must have exactly one Change Type (t:*) label"
               exit 1
               ;;
           esac
