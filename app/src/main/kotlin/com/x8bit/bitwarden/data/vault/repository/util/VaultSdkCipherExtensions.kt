@@ -148,6 +148,7 @@ fun SyncResponseJson.Cipher.updateFromMiniResponse(
     reprompt = miniResponse.reprompt,
     shouldOrganizationUseTotp = miniResponse.shouldOrganizationUseTotp,
     type = miniResponse.type,
+    data = miniResponse.data,
 )
 
 /**

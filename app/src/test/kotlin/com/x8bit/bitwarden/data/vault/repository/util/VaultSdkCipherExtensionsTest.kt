@@ -577,6 +577,7 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(miniResponse.deletedDate, result.deletedDate)
         assertEquals(miniResponse.reprompt, result.reprompt)
         assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
+        assertEquals(miniResponse.data, result.data)
         // Verify unchanged fields remain the same
         assertEquals(originalCipher.name, result.name)
         assertEquals(originalCipher.notes, result.notes)
