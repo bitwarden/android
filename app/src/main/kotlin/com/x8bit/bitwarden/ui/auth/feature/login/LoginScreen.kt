@@ -221,7 +221,7 @@ private fun LoginScreenContent(
                     onClick = onMasterPasswordClick,
                     style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(all = 16.dp),
-                    cornerSize = 0.dp,
+                    shape = BitwardenTheme.shapes.contentBottom,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(tag = "GetMasterPasswordHintLabel"),

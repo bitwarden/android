@@ -136,6 +136,7 @@ fun BitwardenPasswordField(
                     cardStyle = cardStyle,
                     paddingTop = 6.dp,
                     paddingBottom = 0.dp,
+                    interactionSource = interactionSource,
                 )
                 .tabNavigation(),
         ) {

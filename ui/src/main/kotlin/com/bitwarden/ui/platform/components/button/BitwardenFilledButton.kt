@@ -1,5 +1,6 @@
 package com.bitwarden.ui.platform.components.button
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param buttonData The data for the button.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param colors The colors for the button.
  * @param cardStyle The optional card style to surround the button.
  * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
@@ -42,6 +46,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenFilledButton(
     buttonData: BitwardenButtonData,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     colors: ButtonColors = bitwardenFilledButtonColors(),
     cardStyle: CardStyle? = null,
     cardInsets: PaddingValues = PaddingValues(horizontal = 16.dp),
@@ -55,6 +60,7 @@ fun BitwardenFilledButton(
         cardStyle = cardStyle,
         colors = colors,
         cardInsets = cardInsets,
+        interactionSource = interactionSource,
         modifier = modifier.nullableTestTag(tag = buttonData.testTag),
     )
 }
@@ -65,6 +71,8 @@ fun BitwardenFilledButton(
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param icon The icon for the button.
  * @param isEnabled Whether the button is enabled.
  * @param isExternalLink Indicates that this button launches an external link.
@@ -78,6 +86,7 @@ fun BitwardenFilledButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     icon: Painter? = null,
     isEnabled: Boolean = true,
     isExternalLink: Boolean = false,
@@ -93,7 +102,7 @@ fun BitwardenFilledButton(
     } else {
         label
     }
-    Button(
+    BitwardenBaseButton(
         modifier = modifier
             .semantics(mergeDescendants = true) {
                 contentDescription = formattedContentDescription
@@ -107,7 +116,10 @@ fun BitwardenFilledButton(
             start = if (icon == null) 24.dp else 16.dp,
             end = 24.dp,
         ),
+        shape = BitwardenTheme.shapes.button,
         colors = colors,
+        focusColor = colors.contentColor,
+        interactionSource = interactionSource,
     ) {
         icon?.let {
             Icon(

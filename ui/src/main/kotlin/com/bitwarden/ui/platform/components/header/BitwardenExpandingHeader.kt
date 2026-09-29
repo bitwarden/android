@@ -5,6 +5,7 @@ import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +26,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -35,6 +38,9 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param collapsedText Text to display when the content is collapsed.
  * @param expandedText Text to display when the content is expanded.
  * @param showExpansionIndicator Whether to show an indicator to expand or collapse the content.
+ * @param modifier modifier for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  */
 @Suppress("LongMethod")
 @Composable
@@ -42,6 +48,7 @@ fun BitwardenExpandingHeader(
     isExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     collapsedText: String = stringResource(id = BitwardenString.additional_options),
     expandedText: String = collapsedText,
     showExpansionIndicator: Boolean = true,
@@ -52,11 +59,13 @@ fun BitwardenExpandingHeader(
     Row(
         modifier = modifier
             .clip(shape = shape)
+            .interactiveBorder(interactionSource = interactionSource, shape = shape)
             .clickable(
                 onClickLabel = stringResource(
                     id = if (isExpanded) BitwardenString.collapse else BitwardenString.expand,
                 ),
                 onClick = onClick,
+                interactionSource = interactionSource,
                 role = Role.Button,
             )
             .minimumInteractiveComponentSize()
