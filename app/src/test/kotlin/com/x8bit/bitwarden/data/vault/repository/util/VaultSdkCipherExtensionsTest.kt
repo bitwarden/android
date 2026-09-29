@@ -591,8 +591,8 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(miniResponse.passport, result.passport)
         assertEquals(miniResponse.fields, result.fields)
         assertEquals(miniResponse.passwordHistory, result.passwordHistory)
+        assertEquals(miniResponse.id, result.id)
         // Verify fields absent from the mini response remain the same
-        assertEquals(originalCipher.id, result.id)
         assertEquals(originalCipher.folderId, result.folderId)
         assertEquals(originalCipher.isFavorite, result.isFavorite)
         assertEquals(originalCipher.shouldEdit, result.shouldEdit)
