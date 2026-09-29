@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
@@ -308,10 +309,12 @@ class FirstTimeActionManagerTest {
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns null
+                every { type } returns CipherTypeJson.SECURE_NOTE
                 every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
+                every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -357,10 +360,12 @@ class FirstTimeActionManagerTest {
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns null
+                every { type } returns CipherTypeJson.SECURE_NOTE
                 every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
+                every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -383,10 +388,30 @@ class FirstTimeActionManagerTest {
         }
 
     @Test
+    fun `if there are v2 login ciphers without login data we should not show coach marks`() =
+        runTest {
+            val mockV2LoginJson = mockk<SyncResponseJson.Cipher> {
+                every { login } returns null
+                every { type } returns CipherTypeJson.LOGIN
+                every { organizationId } returns null
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            mutableCiphersListFlow.update { listOf(mockV2LoginJson) }
+
+            firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
+                assertFalse(awaitItem())
+            }
+            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
     fun `if there are login ciphers attached to an organization we should show coach marks`() =
         runTest {
             val mockJsonWithLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
+                every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns "1234"
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
