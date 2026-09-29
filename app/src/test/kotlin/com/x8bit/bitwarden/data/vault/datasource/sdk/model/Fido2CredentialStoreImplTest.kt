@@ -87,6 +87,19 @@ class Fido2CredentialStoreImplTest {
     }
 
     @Test
+    fun `findCredentials should match excludeCredentials ids during registration`() = runTest {
+        // Registration passes the exclude list with the new user's handle; a match must be found
+        // so the authenticator reports the credential as already registered.
+        val result = fido2CredentialStore.findCredentials(
+            ids = listOf(UUID.fromString(UUID_CREDENTIAL_ID).toRawBytes()),
+            ripId = RP_ID,
+            userHandle = byteArrayOf(1, 2, 3),
+        )
+
+        assertEquals(listOf("mockId-1"), result.map { it.id })
+    }
+
+    @Test
     fun `findCredentials should skip credential id filtering when ids are null`() = runTest {
         val result = fido2CredentialStore.findCredentials(
             ids = null,
