@@ -27,7 +27,7 @@ on:
 
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
-  _ENFORCE_LABELS_REF: ${{ inputs.enforce-labels-ref || 'vvolkgang/fix-labeler' }} #TODO change to main before merging
+  _ENFORCE_LABELS_REF: ${{ inputs.enforce-labels-ref || 'main' }}
 
 jobs:
   label-pr:
