@@ -308,12 +308,10 @@ class FirstTimeActionManagerTest {
     fun `if there are any login ciphers available for the active user should not show add login coach marks`() =
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
-                every { login } returns null
                 every { type } returns CipherTypeJson.SECURE_NOTE
                 every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
-                every { login } returns mockk()
                 every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns null
             }
@@ -359,12 +357,10 @@ class FirstTimeActionManagerTest {
     fun `if there are any login ciphers available for the active user should not show generator coach marks`() =
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
-                every { login } returns null
                 every { type } returns CipherTypeJson.SECURE_NOTE
                 every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
-                every { login } returns mockk()
                 every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns null
             }
@@ -410,7 +406,6 @@ class FirstTimeActionManagerTest {
     fun `if there are login ciphers attached to an organization we should show coach marks`() =
         runTest {
             val mockJsonWithLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
-                every { login } returns mockk()
                 every { type } returns CipherTypeJson.LOGIN
                 every { organizationId } returns "1234"
             }
