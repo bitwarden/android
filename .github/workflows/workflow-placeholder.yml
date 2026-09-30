@@ -218,6 +218,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
           _MODE: ${{ steps.mode.outputs.mode }}
+          # "true" or "false" on manual runs; empty on scheduled ones, which have no inputs.
+          _SINGLE_CHANGE: ${{ inputs.single-change }}
           _SERVER_URL: ${{ github.server_url }}
           _RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           _OPEN_ISSUES: ${{ steps.snapshot.outputs.open_issues }}
@@ -331,9 +333,21 @@ jobs:
           # log only; the Slack post sticks to the issues that are moving. Slack also drops
           # the Mode line on live runs, where it's the expected case, but keeps it on dry
           # runs as the reminder that nothing was modified.
+          #
+          # The single-change line appears in both, and only on runs that set it, so a capped
+          # run is never mistaken for a full sweep that happened to find one issue.
           body() {
+            local header=false
             if [ "$1" = "full" ] || [ "$_MODE" != "live" ]; then
-              printf 'Mode: %s\n\n' "$MODE_TEXT"
+              printf 'Mode: %s\n' "$MODE_TEXT"
+              header=true
+            fi
+            if [ "$_SINGLE_CHANGE" = "true" ]; then
+              printf 'Single change: on - stopped after the first issue acted on\n'
+              header=true
+            fi
+            if [ "$header" = "true" ]; then
+              printf '\n'
             fi
             printf 'Pipeline at start of run\n'
             row 'Open issues:' "$_OPEN_ISSUES"
