@@ -20,9 +20,14 @@ on:
         description: "Dry Run - Don't apply labels"
         type: boolean
         default: false
+      enforce-labels-ref:
+        description: "Branch of sdlc-enforce-labels.yml to trigger"
+        type: string
+        default: main
 
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
+  _ENFORCE_LABELS_REF: ${{ inputs.enforce-labels-ref || 'vvolkgang/fix-labeler' }} #TODO change to main before merging
 
 jobs:
   label-pr:
@@ -94,4 +99,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run sdlc-enforce-labels.yml -f pr-number="$_PR_NUMBER"
+          gh workflow run sdlc-enforce-labels.yml --ref "$_ENFORCE_LABELS_REF" -f pr-number="$_PR_NUMBER"
