@@ -106,22 +106,41 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
+        # Nothing here may fail the step: it runs before the sweep, so a failed report query
+        # would otherwise skip the whole cleanup. Failures surface in the summary as ? instead.
+        # The default shell is bash -e without pipefail, and set -e ignores substitutions
+        # used as arguments, so each failure is caught explicitly rather than by the shell.
         run: |
           count() {
-            gh api -X GET search/issues -f q="repo:$_REPO $1" --jq '.total_count'
+            gh api -X GET search/issues -f q="repo:$_REPO $1" --jq '.total_count' || echo '?'
           }
+
+          # Taken before the stale listing below, so a label removed between the two can't be
+          # mistaken for one this run removed. A minute early, so runner clock skew can't hide
+          # an update from the stats step's since filter.
+          STARTED_AT="$(date -u -d '-1 minute' +%Y-%m-%dT%H:%M:%SZ)"
+
+          # For the stats step to work out which stale labels this run removed. REST rather
+          # than search, so there's no index lag. The gh call is tested on its own, outside a
+          # pipe, so its exit status isn't lost; an empty value is what makes the stats step
+          # show ? instead of 0.
+          if STALE_BEFORE="$(
+            gh api --paginate "repos/$_REPO/issues?state=open&labels=stale&per_page=100" \
+              --jq '.[] | select(.pull_request | not) | {number, title}'
+          )"; then
+            # jq -c keeps it on one line for GITHUB_OUTPUT.
+            STALE_BEFORE="$(printf '%s\n' "$STALE_BEFORE" | jq -sc '.')"
+          else
+            echo "::warning::Could not list stale issues; the un-stale count will show ?."
+            STALE_BEFORE=''
+          fi
+
           {
             echo "open_issues=$(count 'is:issue is:open')"
             echo "in_warning=$(count 'is:issue is:open label:stale')"
             echo "exempt=$(count 'is:issue is:open label:never-stale')"
-            # For the stats step to work out which stale labels this run removed. REST
-            # rather than search, so there's no index lag; jq -c keeps it on one line.
-            # A minute early, so runner clock skew can't hide an update from the since filter.
-            echo "started_at=$(date -u -d '-1 minute' +%Y-%m-%dT%H:%M:%SZ)"
-            echo "stale_before=$(
-              gh api --paginate "repos/$_REPO/issues?state=open&labels=stale&per_page=100" \
-                --jq '.[] | select(.pull_request | not) | {number, title}' | jq -sc '.'
-            )"
+            echo "started_at=$STARTED_AT"
+            echo "stale_before=$STALE_BEFORE"
           } >> "$GITHUB_OUTPUT"
 
       - name: Warn and close stale issues
