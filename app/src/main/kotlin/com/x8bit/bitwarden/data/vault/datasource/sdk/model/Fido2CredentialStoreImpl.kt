@@ -161,17 +161,20 @@ class Fido2CredentialStoreImpl(
      * are UUIDs (16 big-endian bytes). Returns null when the id is invalid.
      */
     private fun String.toGuidBytesOrNull(): ByteArray? {
-        if (startsWith(B64_PREFIX)) {
-            return runCatching { Base64.getUrlDecoder().decode(removePrefix(B64_PREFIX)) }
+        return if (startsWith(B64_PREFIX)) {
+            runCatching { Base64.getUrlDecoder().decode(removePrefix(B64_PREFIX)) }
+                .getOrNull()
+        } else {
+            runCatching { UUID.fromString(this) }
+                .map {
+                    ByteBuffer
+                        .allocate(UUID_BYTE_COUNT)
+                        .putLong(it.mostSignificantBits)
+                        .putLong(it.leastSignificantBits)
+                        .array()
+                }
                 .getOrNull()
         }
-
-        val uuid = runCatching { UUID.fromString(this) }.getOrNull() ?: return null
-        return ByteBuffer
-            .allocate(UUID_BYTE_COUNT)
-            .putLong(uuid.mostSignificantBits)
-            .putLong(uuid.leastSignificantBits)
-            .array()
     }
 
     private fun GetCipherResult.toCipherViewOrNull(): CipherView? {
