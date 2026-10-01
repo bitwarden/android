@@ -18,8 +18,8 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
@@ -241,10 +241,10 @@ class AuthSdkSourceImpl(
     }
 
     override fun filterPolicies(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
         organizations: List<OrganizationUserPolicyContext>,
         policyType: PolicyType,
-    ): Result<List<PolicyView>> = runCatchingWithLogs {
+    ): Result<List<Policy>> = runCatchingWithLogs {
         globalClient.policies().filterByType(
             policies = policies,
             organizationUserPolicyContexts = organizations,

@@ -9,8 +9,8 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -54,8 +54,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLice
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -118,7 +118,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
 
-    private val mutableActivePoliciesFlow: MutableStateFlow<List<PolicyView>> =
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<Policy>> =
         MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk<PolicyManager> {
         every {
@@ -206,7 +206,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "Test Org",
                 id = "testId",
                 type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
@@ -2294,7 +2294,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Organization",
                         id = "testId",
                         type = PolicyType.RESTRICTED_ITEM_TYPES,

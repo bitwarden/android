@@ -1171,6 +1171,7 @@
         <item quantity="other">Bitwarden није могао да дешифрује %1$d ставке у трезору. Копирајте и поделите овај извештај о грешци са службом за кориснике како бисте избегли додатни губитак података.</item>
     </plurals>
     <string name="select_a_card_for_x">Одабрати картицу за %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Напредне опције</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Више о откривању меча</annotation></string>
     <string name="keep_your_credential_secure">Чувајте своје акредитиве на сигурном</string>
@@ -1458,4 +1459,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

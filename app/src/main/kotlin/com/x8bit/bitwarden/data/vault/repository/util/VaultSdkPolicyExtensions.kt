@@ -2,21 +2,21 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import kotlinx.serialization.json.Json
 
 /**
- * Converts a list of network [SyncResponseJson.Policy] models to a list of SDK [PolicyView].
+ * Converts a list of network [SyncResponseJson.Policy] models to a list of SDK [Policy].
  */
-fun List<SyncResponseJson.Policy>.toSdkPolicyViews(): List<PolicyView> =
-    this.map { it.toSdkPolicyView() }
+fun List<SyncResponseJson.Policy>.toSdkPolicies(): List<Policy> =
+    this.map { it.toSdkPolicy() }
 
 /**
- * Converts a network [SyncResponseJson.Policy] model to an SDK [PolicyView].
+ * Converts a network [SyncResponseJson.Policy] model to an SDK [Policy].
  */
-private fun SyncResponseJson.Policy.toSdkPolicyView(): PolicyView =
-    PolicyView(
+private fun SyncResponseJson.Policy.toSdkPolicy(): Policy =
+    Policy(
         organizationId = this.organizationId,
         id = this.id,
         type = this.type.toSdkPolicyType,

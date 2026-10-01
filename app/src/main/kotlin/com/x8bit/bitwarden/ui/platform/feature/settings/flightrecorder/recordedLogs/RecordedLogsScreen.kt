@@ -321,12 +321,14 @@ private fun LogRow(
                 OverflowMenuItemData(
                     text = stringResource(id = BitwardenString.share),
                     onClick = { onShareItemClick(displayableItem) },
+                    testTag = "LogShareButton",
                 ),
                 OverflowMenuItemData(
                     text = stringResource(id = BitwardenString.delete),
                     onClick = { showDeletionDialog = true },
                     color = BitwardenTheme.colorScheme.status.error,
                     isEnabled = displayableItem.isDeletedEnabled,
+                    testTag = "LogDeleteButton",
                 ),
             ),
             vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,

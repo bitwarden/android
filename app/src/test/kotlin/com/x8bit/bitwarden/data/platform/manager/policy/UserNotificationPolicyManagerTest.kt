@@ -4,15 +4,15 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,8 +29,8 @@ class UserNotificationPolicyManagerTest {
 
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
-    private val mutablePoliciesFlow = MutableStateFlow(emptyList<PolicyView>())
-    private val userPolicies = mutableMapOf<String, List<PolicyView>>()
+    private val mutablePoliciesFlow = MutableStateFlow(emptyList<Policy>())
+    private val userPolicies = mutableMapOf<String, List<Policy>>()
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePolicies(type = PolicyType.ORGANIZATION_USER_NOTIFICATION)
@@ -319,7 +319,7 @@ class UserNotificationPolicyManagerTest {
      * Sets the active organization user notification [policies], each of which should be created
      * via [createPolicy].
      */
-    private fun setPolicies(vararg policies: PolicyView) {
+    private fun setPolicies(vararg policies: Policy) {
         mutablePoliciesFlow.value = policies.toList()
     }
 
@@ -327,19 +327,19 @@ class UserNotificationPolicyManagerTest {
      * Sets the organization user notification [policies] applicable to the given [userId], each of
      * which should be created via [createPolicy].
      */
-    private fun setUserPolicies(userId: String, vararg policies: PolicyView) {
+    private fun setUserPolicies(userId: String, vararg policies: Policy) {
         userPolicies[userId] = policies.toList()
     }
 }
 
 /**
- * Creates an active organization user notification [PolicyView].
+ * Creates an active organization user notification [Policy].
  */
 private fun createPolicy(
     number: Int = 1,
     data: String? = createPolicyJson(),
     revisionDate: Instant? = REVISION_DATE,
-): PolicyView = createMockPolicyView(
+): Policy = createMockSdkPolicy(
     number = number,
     type = PolicyType.ORGANIZATION_USER_NOTIFICATION,
     enabled = true,
@@ -348,7 +348,7 @@ private fun createPolicy(
 )
 
 /**
- * Builds the `data` payload of an organization user notification [PolicyView].
+ * Builds the `data` payload of an organization user notification [Policy].
  */
 private fun createPolicyJson(
     headerText: String? = "mockHeaderText",

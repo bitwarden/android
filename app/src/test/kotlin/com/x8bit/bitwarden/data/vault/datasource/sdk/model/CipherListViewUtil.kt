@@ -42,7 +42,6 @@ fun createMockCipherListView(
     viewPassword: Boolean = true,
     permissions: CipherPermissions? = createMockSdkCipherPermissions(),
     localData: LocalDataView? = null,
-    key: String = "mockKey-$number",
     subtitle: String = "mockSubtitle-$number",
     hasOldAttachments: Boolean = false,
     copyableFields: List<CopyableCipherFields> = listOf(
@@ -73,7 +72,6 @@ fun createMockCipherListView(
     viewPassword = viewPassword,
     permissions = permissions,
     localData = localData,
-    key = key,
     subtitle = subtitle,
     hasOldAttachments = hasOldAttachments,
     copyableFields = copyableFields,

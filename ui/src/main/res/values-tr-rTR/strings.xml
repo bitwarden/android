@@ -1160,6 +1160,7 @@ Bu hesaba geçmek ister misiniz?</string>
         <item quantity="other">Bitwarden, %1$d kasa ögesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s için kart seçin</string>
+    <string name="choose_an_identity">Bir kimlik seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
     <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
@@ -1445,4 +1446,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
     <string name="use_this_password">Bu parolayı kullan</string>
     <string name="use_this_username">Bu kullanıcı adını kullan</string>
+    <string name="keep_unlocking_with_biometrics">Kilidi biyometri ile açmaya devam edin</string>
+    <string name="weve_made_a_security_update">Bir güvenlik güncellemesi yaptık. Bitwarden kilidini açmak için biyometri kullanmaya devam etmek isterseniz biyometrinizi doğrulayın.</string>
+    <string name="turn_off">Devre dışı bırak</string>
+    <string name="turn_off_biometric_question">Biyometri devre dışı bırakılsın mı?</string>
+    <string name="unlocking_will_require_your_master_password">Kilidi açmak için ana parolanızı kullanmanız gerekecek. İstediğiniz zaman Ayarlar menüsünden biyometriyi yeniden etkinleştirebilirsiniz.</string>
 </resources>

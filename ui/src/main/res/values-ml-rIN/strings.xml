@@ -1161,6 +1161,7 @@
         <item quantity="other">%1$d വോൾട്ട് ഇനങ്ങൾ ഡീക്രിപ്റ്റ് ചെയ്യാൻ Bitwarden-ന് കഴിഞ്ഞില്ല. അധിക ഡാറ്റ നഷ്ടം ഒഴിവാക്കാൻ ഈ പിശക് റിപ്പോർട്ട് പകർത്തി ഉപഭോക്തൃ വിജയവുമായി പങ്കിടുക.</item>
     </plurals>
     <string name="select_a_card_for_x">%s-നായി ഒരു കാർഡ് തിരഞ്ഞെടുക്കുക</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">വിപുല ഓപ്ഷനുകൾ</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">മാച്ച് ഡിറ്റക്ഷനെക്കുറിച്ച് കൂടുതൽ</annotation></string>
     <string name="keep_your_credential_secure">നിങ്ങളുടെ യോഗ്യതാവിവരങ്ങൾ സുരക്ഷിതമായി സൂക്ഷിക്കുക</string>
@@ -1446,4 +1447,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

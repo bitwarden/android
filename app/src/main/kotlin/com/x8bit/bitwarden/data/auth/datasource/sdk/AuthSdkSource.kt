@@ -13,8 +13,8 @@ import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 
 /**
@@ -148,8 +148,8 @@ interface AuthSdkSource {
      * Applies the appropriate filters for determining what policies apply to the user.
      */
     fun filterPolicies(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
         organizations: List<OrganizationUserPolicyContext>,
         policyType: PolicyType,
-    ): Result<List<PolicyView>>
+    ): Result<List<Policy>>
 }

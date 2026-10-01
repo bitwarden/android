@@ -70,7 +70,8 @@ data class EnvironmentUrlDataJson(
         /**
          * The base URL used for the Bitwarden FedRAMP development environments.
          */
-        private const val BITWARDEN_FED_RAMP_DEV_BASE_URL: String = "fedramp.usdev.bitwarden.pw"
+        private const val BITWARDEN_FED_RAMP_DEV_BASE_URL: String =
+            "vault.fedramp.usdev.bitwarden.pw"
 
         /**
          * The base URL used for the Game Warden FedRAMP development environments.

@@ -1161,6 +1161,7 @@ Voulez-vous basculer vers ce compte ?</string>
         <item quantity="other">Bitwarden n\'a pu déchiffrer les éléments du coffre %1$d. Copiez et partagez ce rapport d\'erreur avec succès client pour éviter une perte de données supplémentaire.</item>
     </plurals>
     <string name="select_a_card_for_x">Sélectionnez une carte pour %s</string>
+    <string name="choose_an_identity">Choisir une identité</string>
     <string name="advanced_options">Options avancées</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">En savoir plus sur la détection de correspondance</annotation></string>
     <string name="keep_your_credential_secure">Gardez vos identifiants sécurisés</string>
@@ -1441,9 +1442,14 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="receive_24_7_priority_support">Recevoir une assistance prioritaire 24/7</string>
     <string name="account_creation_restricted">Création de compte restreinte</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s ne permet qu\'aux utilisateurs invités de créer des comptes.</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
-    <string name="use_this_passphrase">Use this passphrase</string>
-    <string name="use_this_password">Use this password</string>
-    <string name="use_this_username">Use this username</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Diminuer %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Augmenter %1$s</string>
+    <string name="use_this_passphrase">Utilisez cette phrase secrète</string>
+    <string name="use_this_password">Utiliser ce mot de passe</string>
+    <string name="use_this_username">Utiliser ce nom d\'utilisateur</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

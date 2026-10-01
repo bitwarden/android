@@ -8,8 +8,8 @@ import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -216,7 +216,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
-    getUserPolicies: (userId: String, policy: PolicyType) -> List<PolicyView>,
+    getUserPolicies: (userId: String, policy: PolicyType) -> List<Policy>,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,

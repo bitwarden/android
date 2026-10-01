@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.util.identityAutofillAddress
 import com.x8bit.bitwarden.data.platform.util.identityAutofillName
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -353,7 +353,7 @@ class AutofillCipherProviderTest {
             every {
                 policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicyView(organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS),
+                createMockSdkPolicy(organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS),
             )
             coEvery {
                 vaultRepository.getCipher(CARD_CIPHER_ID)

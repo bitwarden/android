@@ -1161,6 +1161,7 @@
         <item quantity="other">Bitwarden %1$d сейф буюмун чечүү мүмкүн болбой калды. Кошумча маалымат жоготууга жол бербөө үчүн бул ката билдирүүсүн көчүрүп, кардарларды колдоо кызматына бөлүшүңүз.</item>
     </plurals>
     <string name="select_a_card_for_x">%s үчүн картаны тандаңыз</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Кеңейтилген параметрлер</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Дал келүүнү аныктоо жөнүндө көбүрөөк</annotation></string>
     <string name="keep_your_credential_secure">Кыйгам укук маалыматтарыңызды коопсуз сактаңыз</string>
@@ -1446,4 +1447,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

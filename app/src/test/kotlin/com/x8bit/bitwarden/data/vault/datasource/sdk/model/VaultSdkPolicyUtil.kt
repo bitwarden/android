@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import java.time.Instant
 
 /**
- * Create a mock [PolicyView] with a given [number].
+ * Create a mock [Policy] with a given [number].
  */
 @Suppress("LongParameterList")
-fun createMockPolicyView(
+fun createMockSdkPolicy(
     number: Int = 1,
     id: String = "mockId-$number",
     organizationId: String = "mockOrganizationId-$number",
@@ -16,8 +16,8 @@ fun createMockPolicyView(
     data: String? = null,
     enabled: Boolean = false,
     revisionDate: Instant? = null,
-): PolicyView =
-    PolicyView(
+): Policy =
+    Policy(
         id = id,
         organizationId = organizationId,
         type = type,

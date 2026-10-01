@@ -43,7 +43,7 @@
     <string name="master_password">Ana parol</string>
     <string name="master_password_required">Ana parol (tələb olunur)</string>
     <string name="new_master_password_required">Yeni ana parol (tələb olunur)</string>
-    <string name="more_options">Daha çox seçim</string>
+    <string name="more_options">Daha çox seçənək</string>
     <string name="my_folder">Qovluğum</string>
     <string name="my_folders">Qovluqlarım</string>
     <string name="my_vault">Seyfim</string>
@@ -111,7 +111,7 @@
     <string name="login_to_bitwarden">Bitwarden-ə giriş edin</string>
     <string name="master_password_confirmation_val_message">Parol təsdiqləmə doğru deyil.</string>
     <string name="master_password_description">Ana parol, seyfinizə erişmək üçün istifadə edəcəyiniz paroldur. Ana parolu yadda saxlamaq çox vacibdir. Unutsanız, parolu bərpa etməyin heç bir yolu yoxdur.</string>
-    <string name="master_password_hint">Ana parol məsləhəti (ixtiyari)</string>
+    <string name="master_password_hint">Ana parol üçün ipucu (ixtiyari)</string>
     <string name="master_password_hint_description">Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</string>
     <plurals name="master_password_length_val_message_x">
         <item quantity="one">Ana parol ən azı %d xarakter uzunluğunda olmalıdır.</item>
@@ -574,8 +574,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="resend_code">Kodu təkrar göndər</string>
     <string name="a_verification_code_was_sent_to_your_email">Doğrulama kodu e-poçtunuza göndərildi</string>
     <string name="submit_crash_logs">Çökmə jurnallarını göndər</string>
-    <string name="options_expanded">Seçimlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
-    <string name="options_collapsed">Seçimlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
+    <string name="options_expanded">Seçənəklər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
+    <string name="options_collapsed">Seçənəklər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="uppercase_ato_z">Böyük hərf (A-Z)</string>
     <string name="lowercase_ato_z">Kiçik hərf (Z-A)</string>
     <string name="numbers_zero_to_nine">Rəqəmlər (0-9)</string>
@@ -704,7 +704,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="the_urix_is_already_blocked">URI %1$s artıq əngəllənib</string>
     <string name="login_approved">Giriş təsdiqləndi</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Cihazla giriş etmə, Bitwarden tətbiqinin ayarlarında qurulmalıdır.</string>
-    <string name="need_another_option_view_all_login_options">Başqa seçim lazımdır? <annotation link="viewAll">Bütün giriş seçimlərinə bax</annotation></string>
+    <string name="need_another_option_view_all_login_options">Başqa seçənəyə ehtiyacınız var? <annotation link="viewAll">Bütün giriş seçənəklərinə bax</annotation></string>
     <string name="log_in_with_device">Cihazla giriş et</string>
     <string name="logging_in_on">Giriş edilir</string>
     <string name="logging_in_on_with_colon">Giriş edilir:</string>
@@ -735,7 +735,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="learn_about_organizations_description_long">Bitwarden, bir təşkilatı istifadə edərək seyf elementlərinizi başqaları ilə paylaşmağınıza imkan verir. Daha ətraflı məlumat üçün bitwarden.com saytını ziyarət edin.</string>
     <string name="created_x">Yaradıldı: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Təşkilatınız bir ana parol ayarlamağı tələb edir.</string>
-    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Seyf vaxt bitmə əməliyyatınızı dəyişdirmək üçün bir kilid açma seçimi qurun.</string>
+    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Seyf vaxt bitmə əməliyyatınızı dəyişdirmək üçün bir kilid açma seçənəyi qurun.</string>
     <string name="save_passkey_as_new_login">Keçid açarını yeni bir giriş olaraq saxla</string>
     <string name="overwrite_passkey">Keçid açarının üzərinə yazılsın?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Bu elementdə artıq bir keçid açarı var. Hazırkı keçid açarının üzərinə yazmaq istədiyinizə əminsiniz?</string>
@@ -854,10 +854,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="import_logins">Girişləri daxilə köçür</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Kompüterinizdəki brauzerinizdə və ya digər parol menecerində saxlanılan parolları xaricə köçürmək üçün aşağıdakı təlimatları izləyin. Daha sonra, onları güvənli şəkildə Bitwarden-ə köçürün.</string>
     <string name="give_your_vault_a_head_start">Seyfinizə üstünlük verin</string>
-    <string name="class_3_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazdakı bütün biometrik seçimlərlə uyumlu olmaya bilər.</string>
-    <string name="class_2_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazdakı əlçatan biometrik seçimlərlə uyumlu deyil.</string>
+    <string name="class_3_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazdakı bütün biometrik seçənəkləri ilə uyumlu olmaya bilər.</string>
+    <string name="class_2_biometrics_description">Biometriklə kilid açma, güclü biometrik kimlik doğrulaması tələb edir və bu cihazda mövcud olan biometrik seçənəklərlə uyumlu deyil.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Kompüterinizdə <annotation emphasis="bold">hazırkı brauzerinizə və ya parol menecerinizə giriş edin</annotation>.</string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Parollarınızı xaricə köçürün.</annotation> Bu seçim adətən ayarlarınızda tapılır.</string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Parollarınızı xaricə köçürün.</annotation> Bu seçənək adətən ayarlarınızda tapılır.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Veb tətbiqdə <annotation emphasis="bold">\"Veriləri daxilə köçür\"ü</annotation> seçin, sonra sinxronlaşdırmanı bitirmək üçün \"Hazırdır\"a toxunun.</string>
     <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Saxlanılmış girişlərinizi xaricə köçürün</string>
@@ -868,7 +868,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="log_in_to_bitwarden">Bitwarden-ə giriş edin</string>
     <string name="step_3_of_3">Addım 3/3</string>
     <string name="import_logins_to_bitwarden">Girişləri Bitwarden-ə köçür</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwarden naviqasiyasında <annotation emphasis="bold">Alətlər seçimini tapın</annotation> və <annotation emphasis="bold">Veriləri daxilə köçür\"ü</annotation> seçin.</string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwarden naviqasiyasında <annotation emphasis="bold">Alətlər seçənəyini tapın</annotation> və <annotation emphasis="bold">\"Veriləri daxilə köçür\"ü</annotation> seçin.</string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Formu doldurun və <annotation emphasis="bold">saxlanılmış parol faylınızı daxilə köçürün.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Təhlükəsizliyiniz üçün saxlanılmış <annotation emphasis="bold">parol faylınızı sildiyinizə əmin olun.</annotation></string>
     <string name="need_help_check_out_import_help">Kömək lazımdır? <annotation link="importHelp">Daxilə köçürmə üzrə kömək səhifəmizə baxın.</annotation></string>
@@ -930,7 +930,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="we_couldnt_verify_the_servers_certificate">Serverin sertifikatını doğrulaya bilmədik. Cihazınızda və ya Bitwarden serverinizdə sertifikat zənciri və ya proksi ayarları düzgün qurulmamış ola bilər.</string>
     <string name="copy_private_key">Private açarı kopyala</string>
     <string name="login_credentials">Giriş məlumatları</string>
-    <string name="autofill_options">Avto-doldurma seçimləri</string>
+    <string name="autofill_options">Avto-doldurma seçənəkləri</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Yeni və unikal bir parol yaratmaq üçün bu düyməni istifadə edin.</string>
     <string name="coachmark_1_of_3">1/3</string>
     <string name="coachmark_2_of_3">2/3</string>
@@ -1077,7 +1077,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="refresh_period">Təzələmə periodu</string>
     <string name="algorithm">Alqoritm</string>
     <string name="advanced">Qabaqcıl</string>
-    <string name="collapse_advanced_options">Qabaqcıl seçimləri yığcamlaşdır</string>
+    <string name="collapse_advanced_options">Qabaqcıl seçənəkləri yığcamlaşdır</string>
     <string name="number_of_digits">Rəqəm sayı</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d saniyə</item>
@@ -1134,14 +1134,14 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="something_went_wrong">Nəsə səhv getdi</string>
     <string name="please_try_again">Lütfən yenidən sınayın</string>
     <string name="copy_to_bitwarden_vault">Bitwarden-ə seyfinə kopyala</string>
-    <string name="default_save_option">İlkin saxlama seçimi</string>
+    <string name="default_save_option">İlkin saxlama seçənəyi</string>
     <string name="save_to_bitwarden">\"Bitwarden\"də saxla</string>
     <string name="save_here">Burada saxla</string>
     <string name="none">Yoxdur</string>
     <string name="default_save_options_subtitle">Yeni doğrulama kodlarını harada saxlamaq istədiyinizi seçin.</string>
     <string name="verification_code_created">Doğrulama kodu yaradıldı</string>
     <string name="choose_save_location_message">Bu kimlik doğrulayıcı açarı burada saxlayın, ya da onu Bitwarden tətbiqində bir girişə əlavə edin.</string>
-    <string name="save_option_as_default">Seçimi ilkin olaraq saxla</string>
+    <string name="save_option_as_default">Seçənəyi ilkin olaraq saxla</string>
     <string name="account_synced_from_bitwarden_app">Hesab, Bitwarden tətbiqindən sinxronlaşdırıldı</string>
     <string name="local_codes">Lokal kodlar (%1$d)</string>
     <string name="required_information_missing">Tələb olunan məlumat əskikdir</string>
@@ -1149,7 +1149,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="file_could_not_be_processed">Fayl emal oluna bilmədi</string>
     <string name="file_could_not_be_processed_message">Fayl emal edilə bilmədi. Bunun yararlı JSON faylı olduğuna əmin olub yenidən sınayın. Kömək lazımdır? bitwarden.com/help ünvanını ziyarət edin</string>
     <string name="get_help">Kömək al</string>
-    <string name="expand_advanced_options">Qabaqcıl seçimləri genişləndir</string>
+    <string name="expand_advanced_options">Qabaqcıl seçənəkləri genişləndir</string>
     <string name="local_items_are_expanded_click_to_collapse">Lokal elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokal elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="items_expanded_click_to_collapse">Elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
@@ -1162,15 +1162,16 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
         <item quantity="other">Bitwarden, %1$d seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s bir kart seçin</string>
-    <string name="advanced_options">Qabaqcıl seçimlər</string>
+    <string name="choose_an_identity">Bir kimlik seç</string>
+    <string name="advanced_options">Qabaqcıl seçənəklər</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Uyuşma aşkarlaması barədə daha çox</annotation></string>
     <string name="keep_your_credential_secure">Kimlik məlumatlarınızı güvəndə saxlayın</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” istifadə edərək kimlik məlumatlarını necə güvəndə saxlayacağınızı öyrənin.</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” istifadə etmək istədiyinizə əminsiniz?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “Müntəzəm ifadə”, yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “İlə başlayır”, kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"İlə başlayır\", kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Müntəzəm ifadə\", yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “Müntəzəm ifadə”, yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “İlə başlayır”, kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"İlə başlayır\", kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Müntəzəm ifadə\", yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
     <string name="later">Sonra</string>
     <string name="encryption_settings_updated">Şifrələmə ayarları güncəlləndi</string>
     <string name="update_your_encryption_settings">Şifrələmə ayarlarınızı güncəlləyin</string>
@@ -1444,7 +1445,12 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s, yalnız dəvət edilən istifadəçilərin hesab yaratmasına icazə verir.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
-    <string name="use_this_passphrase">Use this passphrase</string>
-    <string name="use_this_password">Use this password</string>
-    <string name="use_this_username">Use this username</string>
+    <string name="use_this_passphrase">Bu keçid ifadəsini istifadə et</string>
+    <string name="use_this_password">Bu parolu istifadə et</string>
+    <string name="use_this_username">Bu istifadəçi adını istifadə et</string>
+    <string name="keep_unlocking_with_biometrics">Kilidi biometriklə açmağa davam et</string>
+    <string name="weve_made_a_security_update">Biz bir təhlükəsizlik güncəlləməsi həyata keçirdik. Bitwarden kilidini biometriklə açmaq istəyirsinizsə, biometrik məlumatlarınızı yenidən təsdiqləməlisiniz.</string>
+    <string name="turn_off">Söndür</string>
+    <string name="turn_off_biometric_question">Biometrik söndürülsün?</string>
+    <string name="unlocking_will_require_your_master_password">Kilidi açmaq üçün ana parolunuzu istifadə edəcəksiniz. Ayarlarda biometriki təkrar işə sala bilərsiniz.</string>
 </resources>

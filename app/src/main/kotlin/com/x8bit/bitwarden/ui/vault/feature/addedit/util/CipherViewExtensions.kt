@@ -12,7 +12,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.Fido2CredentialView
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.FolderView
@@ -424,9 +424,9 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
  * Retrieves the cipher's primary (first) FIDO2 credential, or null if there is no FIDO2 credential
  * assigned.
  */
-private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
+private fun List<Fido2CredentialView>?.getPrimaryFido2CredentialOrNull(
     isClone: Boolean,
-): Fido2Credential? {
+): Fido2CredentialView? {
     if (isNullOrEmpty() || isClone) return null
 
     return first()
@@ -436,10 +436,11 @@ private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
  * Return the creation date and time of the primary FIDO2 credential, formatted as
  * "MMM d, yyyy, hh:mm a".
  */
-private fun Fido2Credential.getCreationDateTime(clock: Clock) = BitwardenString.created_x.asText(
-    creationDate.toFormattedDateTimeStyle(
-        dateStyle = FormatStyle.MEDIUM,
-        timeStyle = FormatStyle.SHORT,
-        clock = clock,
-    ),
-)
+private fun Fido2CredentialView.getCreationDateTime(clock: Clock) =
+    BitwardenString.created_x.asText(
+        creationDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
+    )

@@ -11,8 +11,8 @@ import com.bitwarden.organizations.OrganizationUserStatusType
 import com.bitwarden.organizations.OrganizationUserType
 import com.bitwarden.organizations.Permissions
 import com.bitwarden.organizations.ProfileOrganization
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import kotlinx.serialization.json.Json
@@ -132,9 +132,9 @@ private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): Pr
     }
 
 /**
- * Convert the JSON data of the [PolicyView] object into [PolicyInformation] data.
+ * Convert the JSON data of the [Policy] object into [PolicyInformation] data.
  */
-val PolicyView.policyInformation: PolicyInformation?
+val Policy.policyInformation: PolicyInformation?
     get() = data?.let {
         when (type) {
             PolicyType.MASTER_PASSWORD -> {
