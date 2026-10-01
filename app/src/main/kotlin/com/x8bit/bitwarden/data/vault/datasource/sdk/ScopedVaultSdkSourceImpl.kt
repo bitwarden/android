@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
 
 /**
  * The default instance of the [ScopedVaultSdkSource]. This uses its own instance of the
@@ -19,6 +20,7 @@ class ScopedVaultSdkSourceImpl(
     featureFlagManager: FeatureFlagManager,
     sdkRepositoryFactory: SdkRepositoryFactory,
     sdkPlatformApiFactory: SdkPlatformApiFactory,
+    sdkLoggerFactory: SdkLoggerFactory,
     vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         sdkClientManager = SdkClientManagerImpl(
             dispatcherManager = dispatcherManager,
@@ -30,6 +32,7 @@ class ScopedVaultSdkSourceImpl(
             sdkRepoFactory = sdkRepositoryFactory,
             featureFlagManager = featureFlagManager,
             sdkPlatformApiFactory = sdkPlatformApiFactory,
+            sdkLoggerFactory = sdkLoggerFactory,
         ),
         dispatcherManager = dispatcherManager,
     ),
