@@ -3,10 +3,12 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.serializer
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.core.di.CoreModule
 import io.mockk.mockk
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class WrappedAccountCryptographicStateSerializerTest {
     private val json = CoreModule.providesJson(buildInfoManager = mockk(relaxed = true))
@@ -42,27 +44,6 @@ class WrappedAccountCryptographicStateSerializerTest {
                     privateKey = "mockPrivateKey",
                     signingKey = "mockSigningKey",
                     signedPublicKey = "mockSignedPublicKey",
-                    securityState = "mockSecurityState",
-                ),
-            ),
-        )
-    }
-
-    @Test
-    fun `serialize V2 with null signedPublicKey omits the signedPublicKey key`() {
-        assertEquals(
-            buildJsonObject {
-                put(key = "type", value = "v2")
-                put(key = "privateKey", value = "mockPrivateKey")
-                put(key = "signingKey", value = "mockSigningKey")
-                put(key = "securityState", value = "mockSecurityState")
-            },
-            json.encodeToJsonElement(
-                serializer = serializer,
-                value = WrappedAccountCryptographicState.V2(
-                    privateKey = "mockPrivateKey",
-                    signingKey = "mockSigningKey",
-                    signedPublicKey = null,
                     securityState = "mockSecurityState",
                 ),
             ),
@@ -110,14 +91,8 @@ class WrappedAccountCryptographicStateSerializerTest {
     }
 
     @Test
-    fun `deserialize v2 JSON with missing signedPublicKey produces a V2 state with null`() {
-        assertEquals(
-            WrappedAccountCryptographicState.V2(
-                privateKey = "mockPrivateKey",
-                signingKey = "mockSigningKey",
-                signedPublicKey = null,
-                securityState = "mockSecurityState",
-            ),
+    fun `deserialize v2 JSON with missing signedPublicKey throws a SerializationException`() {
+        assertThrows<SerializationException> {
             json.decodeFromString(
                 deserializer = serializer,
                 string = """
@@ -128,8 +103,8 @@ class WrappedAccountCryptographicStateSerializerTest {
                       "securityState": "mockSecurityState"
                     }
                 """,
-            ),
-        )
+            )
+        }
     }
 
     @Test
