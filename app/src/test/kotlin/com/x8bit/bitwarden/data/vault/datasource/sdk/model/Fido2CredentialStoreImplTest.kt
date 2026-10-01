@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -46,11 +47,12 @@ class Fido2CredentialStoreImplTest {
                 ),
             ),
         )
-        coEvery { vaultRepository.getCipher(cipherId = any()) } answers {
-            GetCipherResult.Success(
-                cipherView = createMockCipherView(number = 1).copy(id = firstArg()),
-            )
-        }
+        coEvery {
+            vaultRepository.getCipher(cipherId = "mockId-1")
+        } returns GetCipherResult.Success(cipherView = UUID_CIPHER_VIEW)
+        coEvery {
+            vaultRepository.getCipher(cipherId = "mockId-2")
+        } returns GetCipherResult.Success(cipherView = B64_CIPHER_VIEW)
     }
 
     @Test
@@ -61,7 +63,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = null,
         )
 
-        assertEquals(listOf("mockId-1"), result.map { it.id })
+        assertEquals(listOf(UUID_CIPHER_VIEW), result)
     }
 
     @Test
@@ -72,7 +74,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = null,
         )
 
-        assertEquals(emptyList<String>(), result.map { it.id })
+        assertEquals(emptyList<CipherView>(), result)
     }
 
     @Test
@@ -83,7 +85,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = null,
         )
 
-        assertEquals(listOf("mockId-2"), result.map { it.id })
+        assertEquals(listOf(B64_CIPHER_VIEW), result)
     }
 
     @Test
@@ -96,7 +98,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = byteArrayOf(1, 2, 3),
         )
 
-        assertEquals(listOf("mockId-1"), result.map { it.id })
+        assertEquals(listOf(UUID_CIPHER_VIEW), result)
     }
 
     @Test
@@ -107,7 +109,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = null,
         )
 
-        assertEquals(listOf("mockId-1", "mockId-2"), result.map { it.id })
+        assertEquals(listOf(UUID_CIPHER_VIEW, B64_CIPHER_VIEW), result)
     }
 
     @Test
@@ -118,7 +120,7 @@ class Fido2CredentialStoreImplTest {
             userHandle = null,
         )
 
-        assertEquals(listOf("mockId-1", "mockId-2"), result.map { it.id })
+        assertEquals(listOf(UUID_CIPHER_VIEW, B64_CIPHER_VIEW), result)
     }
 }
 
@@ -127,6 +129,8 @@ private const val UUID_CREDENTIAL_ID = "3c5d6a1e-8f2b-4c7d-9e0a-1b2c3d4e5f60"
 private val B64_CREDENTIAL_BYTES = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 private val B64_CREDENTIAL_ID =
     "b64." + Base64.getUrlEncoder().withoutPadding().encodeToString(B64_CREDENTIAL_BYTES)
+private val UUID_CIPHER_VIEW = createMockCipherView(number = 1)
+private val B64_CIPHER_VIEW = createMockCipherView(number = 2)
 
 private fun UUID.toRawBytes(): ByteArray = ByteBuffer
     .allocate(16)
