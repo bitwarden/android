@@ -45,6 +45,15 @@ data class CipherWithIdJsonRequest(
     @SerialName("sshKey")
     val sshKey: SyncResponseJson.Cipher.SshKey?,
 
+    @SerialName("bankAccount")
+    val bankAccount: SyncResponseJson.Cipher.BankAccount?,
+
+    @SerialName("driversLicense")
+    val driversLicense: SyncResponseJson.Cipher.DriversLicense?,
+
+    @SerialName("passport")
+    val passport: SyncResponseJson.Cipher.Passport?,
+
     @SerialName("folderId")
     val folderId: String?,
 
@@ -97,6 +106,9 @@ fun CipherJsonRequest.toCipherWithIdJsonRequest(id: String): CipherWithIdJsonReq
         folderId = folderId,
         organizationId = organizationId,
         identity = identity,
+        bankAccount = bankAccount,
+        driversLicense = driversLicense,
+        passport = passport,
         name = name,
         fields = fields,
         isFavorite = isFavorite,
