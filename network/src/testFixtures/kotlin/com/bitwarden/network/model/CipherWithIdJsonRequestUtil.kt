@@ -10,7 +10,7 @@ fun createMockCipherWithIdJsonRequest(
     number: Int,
     id: String = "mockId-$number",
     attachments: Map<String, AttachmentJsonRequest>? = mapOf(
-        "mockId-$number" to createMockAttachmentJsonRequest(number = 1),
+        "mockId-$number" to createMockAttachmentJsonRequest(number = number),
     ),
     organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockFolderId-$number",
@@ -22,6 +22,11 @@ fun createMockCipherWithIdJsonRequest(
     sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
     identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
     secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
+    passport: SyncResponseJson.Cipher.Passport? = createMockPassport(number = number),
+    driversLicense: SyncResponseJson.Cipher.DriversLicense? = createMockDriversLicense(
+        number = number,
+    ),
+    bankAccount: SyncResponseJson.Cipher.BankAccount? = createMockBankAccount(number = number),
     fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),
     isFavorite: Boolean = false,
     passwordHistory: List<SyncResponseJson.Cipher.PasswordHistory>? = listOf(
@@ -47,6 +52,9 @@ fun createMockCipherWithIdJsonRequest(
         sshKey = sshKey,
         identity = identity,
         secureNote = secureNote,
+        passport = passport,
+        driversLicense = driversLicense,
+        bankAccount = bankAccount,
         fields = fields,
         isFavorite = isFavorite,
         passwordHistory = passwordHistory,
