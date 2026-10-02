@@ -554,7 +554,7 @@ class VaultSdkCipherExtensionsTest {
     }
 
     @Test
-    fun `updateFromMiniResponse should update cipher with mini response data`() {
+    fun `toEncryptedNetworkCipher from mini response should use mini response data`() {
         val originalCipher = createMockCipher(
             number = 1,
             organizationId = null,
@@ -563,8 +563,8 @@ class VaultSdkCipherExtensionsTest {
 
         val miniResponse = createMockCipherMiniResponse(number = 2)
 
-        val result = originalCipher.updateFromMiniResponse(
-            miniResponse = miniResponse,
+        val result = miniResponse.toEncryptedNetworkCipher(
+            originalCipher = originalCipher,
             collectionIds = listOf("collection-1"),
         )
 
@@ -577,14 +577,32 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(miniResponse.deletedDate, result.deletedDate)
         assertEquals(miniResponse.reprompt, result.reprompt)
         assertEquals(miniResponse.shouldOrganizationUseTotp, result.shouldOrganizationUseTotp)
-        // Verify unchanged fields remain the same
-        assertEquals(originalCipher.name, result.name)
-        assertEquals(originalCipher.notes, result.notes)
-        assertEquals(originalCipher.id, result.id)
+        assertEquals(miniResponse.data, result.data)
+        assertEquals(miniResponse.creationDate, result.creationDate)
+        assertEquals(miniResponse.name, result.name)
+        assertEquals(miniResponse.notes, result.notes)
+        assertEquals(miniResponse.login, result.login)
+        assertEquals(miniResponse.card, result.card)
+        assertEquals(miniResponse.identity, result.identity)
+        assertEquals(miniResponse.secureNote, result.secureNote)
+        assertEquals(miniResponse.sshKey, result.sshKey)
+        assertEquals(miniResponse.bankAccount, result.bankAccount)
+        assertEquals(miniResponse.driversLicense, result.driversLicense)
+        assertEquals(miniResponse.passport, result.passport)
+        assertEquals(miniResponse.fields, result.fields)
+        assertEquals(miniResponse.passwordHistory, result.passwordHistory)
+        assertEquals(miniResponse.id, result.id)
+        // Verify fields absent from the mini response remain the same
+        assertEquals(originalCipher.folderId, result.folderId)
+        assertEquals(originalCipher.isFavorite, result.isFavorite)
+        assertEquals(originalCipher.shouldEdit, result.shouldEdit)
+        assertEquals(originalCipher.permissions, result.permissions)
+        assertEquals(originalCipher.shouldViewPassword, result.shouldViewPassword)
+        assertEquals(originalCipher.encryptedFor, result.encryptedFor)
     }
 
     @Test
-    fun `updateFromMiniResponse should preserve existing collectionIds when not provided`() {
+    fun `toEncryptedNetworkCipher from mini response should keep collectionIds when null`() {
         val originalCipher = createMockCipher(
             number = 1,
             collectionIds = listOf("original-collection-1", "original-collection-2"),
@@ -592,8 +610,8 @@ class VaultSdkCipherExtensionsTest {
 
         val miniResponse = createMockCipherMiniResponse(number = 2)
 
-        val result = originalCipher.updateFromMiniResponse(
-            miniResponse = miniResponse,
+        val result = miniResponse.toEncryptedNetworkCipher(
+            originalCipher = originalCipher,
             collectionIds = null,
         )
 

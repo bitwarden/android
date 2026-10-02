@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.MigratePersonalVaultResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
-import com.x8bit.bitwarden.data.vault.repository.util.updateFromMiniResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -298,8 +297,8 @@ class VaultMigrationManagerImpl(
                     encryptedCiphersMap[miniResponse.id]?.let {
                         vaultDiskSource.saveCipher(
                             userId = userId,
-                            cipher = it.updateFromMiniResponse(
-                                miniResponse = miniResponse,
+                            cipher = miniResponse.toEncryptedNetworkCipher(
+                                originalCipher = it,
                                 collectionIds = collectionIds,
                             ),
                         )
