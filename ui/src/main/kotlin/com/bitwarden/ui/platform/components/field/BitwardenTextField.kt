@@ -142,10 +142,10 @@ fun BitwardenTextField(
         helpData = helpData,
         placeholder = placeholder,
         leadingIconData = leadingIconData,
-        supportingContent = supportingText?.let {
+        supportingContent = supportingText?.let { text ->
             {
                 Text(
-                    text = it,
+                    text = text,
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier.fillMaxWidth(),
@@ -291,6 +291,7 @@ fun BitwardenTextField(
                         cardStyle = cardStyle,
                         paddingTop = 6.dp,
                         paddingBottom = 0.dp,
+                        interactionSource = interactionSource,
                     )
                     .fillMaxWidth(),
             ) {

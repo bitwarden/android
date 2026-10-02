@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -22,24 +23,29 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param text The text to display in the row.
  * @param onClick A callback to be invoked when the row is clicked.
  * @param modifier A [Modifier] for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  */
 @Composable
 fun BitwardenBasicDialogRow(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Text(
         text = text,
         style = BitwardenTheme.typography.bodyLarge,
         modifier = modifier
             .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+                interactionSource = interactionSource,
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 onClick = onClick,
                 role = Role.Button,
+            )
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.row,
             )
             .padding(
                 vertical = 16.dp,

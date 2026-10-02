@@ -2,6 +2,7 @@ package com.bitwarden.ui.platform.components.segment
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,11 +17,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SingleChoiceSegmentedButtonRowScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,11 +38,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.base.util.toMaxScale
 import com.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.ripple.NoFocusRippleConfig
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -111,34 +116,45 @@ fun BitwardenSegmentedButton(
 fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
     option: SegmentedButtonState,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    SegmentedButton(
-        enabled = option.isEnabled,
-        selected = option.isChecked,
-        onClick = option.onClick,
-        colors = bitwardenSegmentedButtonColors(),
-        shape = BitwardenTheme.shapes.segmentedControl,
-        border = BorderStroke(width = 0.dp, color = Color.Transparent),
-        label = {
-            Text(
-                text = option.text,
-                style = if (option.isChecked) {
-                    BitwardenTheme.typography.labelLarge
-                } else {
-                    BitwardenTheme.typography.labelLargeRegular
-                }
-                    .copy(lineBreak = LineBreak.Heading)
-                    .toMaxScale(maxScaleFactor = 2f),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center,
-            )
-        },
-        icon = {
-            // No icon required
-        },
-        modifier = modifier.nullableTestTag(tag = option.testTag),
-    )
+    val colors = bitwardenSegmentedButtonColors()
+    CompositionLocalProvider(LocalRippleConfiguration provides NoFocusRippleConfig) {
+        SegmentedButton(
+            enabled = option.isEnabled,
+            selected = option.isChecked,
+            onClick = option.onClick,
+            colors = colors,
+            shape = BitwardenTheme.shapes.segmentedControl,
+            border = BorderStroke(width = 0.dp, color = Color.Transparent),
+            interactionSource = interactionSource,
+            label = {
+                Text(
+                    text = option.text,
+                    style = if (option.isChecked) {
+                        BitwardenTheme.typography.labelLarge
+                    } else {
+                        BitwardenTheme.typography.labelLargeRegular
+                    }
+                        .copy(lineBreak = LineBreak.Heading)
+                        .toMaxScale(maxScaleFactor = 2f),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                )
+            },
+            icon = {
+                // No icon required
+            },
+            modifier = modifier
+                .interactiveBorder(
+                    interactionSource = interactionSource,
+                    shape = BitwardenTheme.shapes.segmentedControl,
+                    color = colors.activeContentColor,
+                )
+                .nullableTestTag(tag = option.testTag),
+        )
+    }
 }
 
 /**
