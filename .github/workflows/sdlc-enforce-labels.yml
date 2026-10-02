@@ -1,11 +1,20 @@
 name: SDLC / Enforce PR labels
-run-name: Enforce labels for PR ${{ github.event.pull_request.number }}
+run-name: Enforce labels for PR ${{ github.event.pull_request.number || inputs.pr-number }}
 
 on:
   pull_request:
-    types: [labeled, unlabeled, opened, reopened, edited, synchronize]
+    types: [labeled, unlabeled, edited]
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: "Pull Request Number"
+        required: true
+        type: number
 
 permissions: {}
+
+env:
+  _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
 
 jobs:
   enforce-label:
@@ -14,10 +23,20 @@ jobs:
     permissions:
       pull-requests: read
     steps:
+      - name: Fetch current PR labels
+        id: pr-labels
+        env:
+          _REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          _PR_LABELS=$(gh api "repos/$_REPO/pulls/$_PR_NUMBER" --jq '.labels')
+          echo "Labels fetched from PR: $_PR_LABELS"
+          echo "pr_labels=$_PR_LABELS" >> "$GITHUB_OUTPUT"
+
       - name: Enforce banned labels (e.g. hold, needs-qa)
         env:
-          _HOLD_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'hold') }}
-          _NEEDS_QA_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'needs-qa') }}
+          _HOLD_LABEL: ${{ contains(fromJSON(steps.pr-labels.outputs.pr_labels).*.name, 'hold') }}
+          _NEEDS_QA_LABEL: ${{ contains(fromJSON(steps.pr-labels.outputs.pr_labels).*.name, 'needs-qa') }}
         run: |
           if [ "$_HOLD_LABEL" = "true" ]; then
             echo "::error::PR has banned label: hold"
@@ -31,18 +50,8 @@ jobs:
 
       - name: Enforce exactly one Change Type (t:*) label
         env:
-          _PR_ACTION: ${{ github.event.action }}
-          _PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
-          _REPO: ${{ github.repository }}
-          _PR_NUMBER: ${{ github.event.pull_request.number }}
-          GH_TOKEN: ${{ github.token }}
+          _PR_LABELS: ${{ steps.pr-labels.outputs.pr_labels }}
         run: |
-          if [ "$_PR_ACTION" = "opened" ] || [ "$_PR_ACTION" = "reopened" ]; then
-            echo "⏳ Waiting 15s for labeler to run..."
-            sleep 15
-            _PR_LABELS=$(gh api "repos/$_REPO/pulls/$_PR_NUMBER" --jq '.labels')
-            echo "Labels fetched from PR: $_PR_LABELS"
-          fi
           _IGNORE_FOR_RELEASE_LABEL=$(echo "$_PR_LABELS" | jq 'any(.[]; .name == "ignore-for-release")')
           if [ "$_IGNORE_FOR_RELEASE_LABEL" = "true" ]; then
             echo "⏭️ Skipping type label check - 'ignore-for-release' label present"
@@ -54,11 +63,11 @@ jobs:
               echo "✅ PR has exactly one Change Type (t:*) label"
               ;;
             0)
-              echo "::error::PR is missing a Change Type (t:*) label. PRs must have exactly one Change Type (t:*) label"
+              echo "::error::PR #$_PR_NUMBER is missing a Change Type (t:*) label. PRs must have exactly one Change Type (t:*) label"
               exit 1
               ;;
             *)
-              echo "::error::PR has $_T_LABEL_COUNT Change Type (t:*) labels. PRs must have exactly one Change Type (t:*) label"
+              echo "::error::PR #$_PR_NUMBER has $_T_LABEL_COUNT Change Type (t:*) labels. PRs must have exactly one Change Type (t:*) label"
               exit 1
               ;;
           esac
