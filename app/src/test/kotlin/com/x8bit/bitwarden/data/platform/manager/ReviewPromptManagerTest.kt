@@ -111,7 +111,7 @@ class ReviewPromptManagerTest {
     @Test
     fun `shouldPromptForAppReview should return true if one auto fill service is enabled and one actions requirement is met`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+        fakeAccessibilityEnabledManager.isAccessibilityServiceConnected = true
         autofillEnabledManager.isAutofillEnabled = false
         fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 0)
         fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)
@@ -122,7 +122,7 @@ class ReviewPromptManagerTest {
     @Test
     fun `shouldPromptForAppReview should return false if no auto fill service is enabled`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
+        fakeAccessibilityEnabledManager.isAccessibilityServiceConnected = false
         autofillEnabledManager.isAutofillEnabled = false
         fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 0)
         fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)
@@ -133,7 +133,7 @@ class ReviewPromptManagerTest {
     @Test
     fun `shouldPromptForAppReview should return false if no action count is met`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+        fakeAccessibilityEnabledManager.isAccessibilityServiceConnected = true
         autofillEnabledManager.isAutofillEnabled = true
         fakeSettingsDiskSource.storeGeneratedResultActionCount(count = 1)
         fakeSettingsDiskSource.storeCreateSendActionCount(count = 0)

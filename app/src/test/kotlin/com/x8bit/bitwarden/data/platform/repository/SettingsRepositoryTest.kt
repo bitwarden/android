@@ -813,10 +813,10 @@ class SettingsRepositoryTest {
             settingsRepository.isAccessibilityEnabledStateFlow.test {
                 assertFalse(awaitItem())
 
-                fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+                fakeAccessibilityEnabledManager.isAccessibilityServiceConnected = true
                 assertTrue(awaitItem())
 
-                fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
+                fakeAccessibilityEnabledManager.isAccessibilityServiceConnected = false
                 assertFalse(awaitItem())
             }
         }
