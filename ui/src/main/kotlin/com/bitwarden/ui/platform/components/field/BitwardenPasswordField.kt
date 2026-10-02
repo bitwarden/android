@@ -28,6 +28,9 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.isSensitiveData
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -202,6 +205,19 @@ fun BitwardenPasswordField(
                 },
                 interactionSource = interactionSource,
                 modifier = Modifier
+                    .semantics {
+                        // Content description must be set to the field value in order for Talkback
+                        // to speak the password aloud when it is visible because we apply a custom
+                        // VisualTransformation to the text, which prevents Talkback from reading
+                        // the value as it normally would.
+                        // NOTE: This overrides the default behavior of Talkback's "Speak Passwords"
+                        // setting. When visible, the password will always be spoken aloud
+                        // regardless of the user's configuration.
+                        contentDescription = textFieldValue.text
+                            .takeIf { showPassword }
+                            .orEmpty()
+                        isSensitiveData = true
+                    }
                     .nullableTestTag(tag = passwordFieldTestTag)
                     .fillMaxWidth()
                     .focusRequester(focusRequester = focusRequester),
