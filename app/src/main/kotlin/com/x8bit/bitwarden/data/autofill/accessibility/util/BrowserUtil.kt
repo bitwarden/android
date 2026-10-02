@@ -127,6 +127,7 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
         possibleUrlSemanticIds = listOf("ADDRESSBAR_URL_BOX"),
         urlExtractor = mozillaUrlExtractor,
     ),
+    Browser(packageName = "io.github.jqssun.helium", urlFieldId = "url_bar"),
     Browser(packageName = "mark.via", urlFieldId = "am,an"),
     Browser(packageName = "mark.via.gp", urlFieldId = "as"),
     Browser(packageName = "net.dezor.browser", urlFieldId = "url_bar"),

@@ -197,6 +197,9 @@
         android:name="io.github.forkmaintainers.iceraven"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="io.github.jqssun.helium"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="mark.via"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
