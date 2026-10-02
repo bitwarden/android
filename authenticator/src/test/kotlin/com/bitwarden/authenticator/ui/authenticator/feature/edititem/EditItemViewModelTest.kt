@@ -26,11 +26,14 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class EditItemViewModelTest : BaseViewModelTest() {
     private val mutableItemStateFlow =
@@ -61,6 +64,109 @@ class EditItemViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [1, 30, 45, 60, 90, 120])
+    fun `saving metadata edits should preserve the loaded period`(period: Int) {
+        val entity = DEFAULT_AUTHENTICATOR_ENTITY.copy(
+            period = period,
+            algorithm = AuthenticatorItemAlgorithm.SHA256,
+            digits = 8,
+            favorite = true,
+        )
+        coEvery {
+            authenticatorRepository.createItem(item = any())
+        } returns CreateItemResult.Success
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        mutableItemStateFlow.tryEmit(DataState.Loaded(entity))
+
+        viewModel.trySendAction(EditItemAction.IssuerNameTextChange("New issuer"))
+        viewModel.trySendAction(EditItemAction.UsernameTextChange("New username"))
+        viewModel.trySendAction(EditItemAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            authenticatorRepository.createItem(
+                item = entity.copy(issuer = "New issuer", accountName = "New username"),
+            )
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [1, 30, 45, 60, 90, 120])
+    fun `saving without edits should preserve the loaded period`(period: Int) {
+        val entity = DEFAULT_AUTHENTICATOR_ENTITY.copy(period = period)
+        coEvery {
+            authenticatorRepository.createItem(item = any())
+        } returns CreateItemResult.Success
+        val viewModel = createViewModel()
+        mutableItemStateFlow.tryEmit(DataState.Loaded(entity))
+
+        viewModel.trySendAction(EditItemAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            authenticatorRepository.createItem(item = entity)
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [60, 45])
+    fun `selecting a period should retain the original option and save the selection`(period: Int) {
+        val entity = DEFAULT_AUTHENTICATOR_ENTITY.copy(period = 45)
+        coEvery {
+            authenticatorRepository.createItem(item = any())
+        } returns CreateItemResult.Success
+        val viewModel = createViewModel()
+        mutableItemStateFlow.tryEmit(DataState.Loaded(entity))
+
+        viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
+        viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(60))
+        viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(period))
+        viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
+        viewModel.trySendAction(EditItemAction.ExpandAdvancedOptionsClick)
+        viewModel.trySendAction(EditItemAction.IssuerNameTextChange("New issuer"))
+
+        assertEquals(
+            DEFAULT_CONTENT.copy(
+                isAdvancedOptionsExpanded = true,
+                itemData = DEFAULT_ITEM_DATA.copy(
+                    refreshPeriod = period,
+                    originalRefreshPeriod = 45,
+                    issuer = "New issuer",
+                ),
+            ),
+            viewModel.stateFlow.value.viewState,
+        )
+        viewModel.trySendAction(EditItemAction.SaveClick)
+        coVerify(exactly = 1) {
+            authenticatorRepository.createItem(
+                item = entity.copy(period = period, issuer = "New issuer"),
+            )
+        }
+    }
+
+    @Test
+    fun `saved custom period content should be accepted and saved`() {
+        every { authenticatorRepository.getItemStateFlow(DEFAULT_ITEM_ID) } returns emptyFlow()
+        coEvery {
+            authenticatorRepository.createItem(item = any())
+        } returns CreateItemResult.Success
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT.copy(
+                itemData = DEFAULT_ITEM_DATA.copy(refreshPeriod = 120, originalRefreshPeriod = 45),
+            ),
+        )
+        val viewModel = createViewModel(state = state)
+        assertEquals(state, viewModel.stateFlow.value)
+
+        viewModel.trySendAction(EditItemAction.SaveClick)
+
+        coVerify(exactly = 1) {
+            authenticatorRepository.createItem(
+                item = DEFAULT_AUTHENTICATOR_ENTITY.copy(period = 120),
+            )
+        }
     }
 
     @Test
@@ -175,7 +281,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
         mutableItemStateFlow.tryEmit(DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY))
         val state = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT)
         val viewModel = createViewModel(state = state)
-        val period = AuthenticatorRefreshPeriodOption.NINETY
+        val period = 90
         viewModel.trySendAction(EditItemAction.RefreshPeriodOptionClick(period))
         assertEquals(
             state.copy(
@@ -224,11 +330,15 @@ class EditItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `on SaveClick with blank issuer should display an error dialog`() {
         mutableItemStateFlow.tryEmit(
-            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(issuer = "")),
+            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(issuer = "", period = 45)),
         )
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT.copy(
-                itemData = DEFAULT_ITEM_DATA.copy(issuer = ""),
+                itemData = DEFAULT_ITEM_DATA.copy(
+                    issuer = "",
+                    refreshPeriod = 45,
+                    originalRefreshPeriod = 45,
+                ),
             ),
         )
         val viewModel = createViewModel(state = state)
@@ -243,16 +353,21 @@ class EditItemViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        coVerify(exactly = 0) { authenticatorRepository.createItem(item = any()) }
     }
 
     @Test
     fun `on SaveClick with blank totp code should display an error dialog`() {
         mutableItemStateFlow.tryEmit(
-            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(key = "")),
+            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(key = "", period = 45)),
         )
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT.copy(
-                itemData = DEFAULT_ITEM_DATA.copy(totpCode = ""),
+                itemData = DEFAULT_ITEM_DATA.copy(
+                    totpCode = "",
+                    refreshPeriod = 45,
+                    originalRefreshPeriod = 45,
+                ),
             ),
         )
         val viewModel = createViewModel(state = state)
@@ -267,16 +382,21 @@ class EditItemViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        coVerify(exactly = 0) { authenticatorRepository.createItem(item = any()) }
     }
 
     @Test
     fun `on SaveClick with non-base32 totp code should display an error dialog`() {
         mutableItemStateFlow.tryEmit(
-            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(key = "111%")),
+            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(key = "111%", period = 45)),
         )
         val state = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT.copy(
-                itemData = DEFAULT_ITEM_DATA.copy(totpCode = "111%"),
+                itemData = DEFAULT_ITEM_DATA.copy(
+                    totpCode = "111%",
+                    refreshPeriod = 45,
+                    originalRefreshPeriod = 45,
+                ),
             ),
         )
         val viewModel = createViewModel(state = state)
@@ -290,15 +410,23 @@ class EditItemViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        coVerify(exactly = 0) { authenticatorRepository.createItem(item = any()) }
     }
 
     @Test
     fun `on SaveClick with valid data and createItem error should display error dialog`() =
         runTest {
             mutableItemStateFlow.tryEmit(
-                DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY),
+                DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(period = 45)),
             )
-            val state = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT)
+            val state = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    itemData = DEFAULT_ITEM_DATA.copy(
+                        refreshPeriod = 45,
+                        originalRefreshPeriod = 45,
+                    ),
+                ),
+            )
             coEvery {
                 authenticatorRepository.createItem(item = any())
             } returns CreateItemResult.Error
@@ -324,7 +452,16 @@ class EditItemViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-            coVerify(exactly = 1) {
+            viewModel.trySendAction(EditItemAction.DismissDialog)
+            assertEquals(state, viewModel.stateFlow.value)
+            coEvery {
+                authenticatorRepository.createItem(item = any())
+            } returns CreateItemResult.Success
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(EditItemAction.SaveClick)
+                assertEquals(EditItemEvent.NavigateBack, awaitItem())
+            }
+            coVerify(exactly = 2) {
                 authenticatorRepository.createItem(
                     item = AuthenticatorItemEntity(
                         id = DEFAULT_ITEM_ID,
@@ -332,7 +469,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
                         accountName = "mockAccountName",
                         type = AuthenticatorItemType.TOTP,
                         algorithm = AuthenticatorItemAlgorithm.SHA1,
-                        period = 30,
+                        period = 45,
                         digits = 6,
                         issuer = "mockIssuer",
                         favorite = false,
@@ -344,9 +481,13 @@ class EditItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `on SaveClick with valid data and createItem success navigate back`() = runTest {
         mutableItemStateFlow.tryEmit(
-            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY),
+            DataState.Loaded(DEFAULT_AUTHENTICATOR_ENTITY.copy(period = 45)),
         )
-        val state = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT)
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT.copy(
+                itemData = DEFAULT_ITEM_DATA.copy(refreshPeriod = 45, originalRefreshPeriod = 45),
+            ),
+        )
         coEvery {
             authenticatorRepository.createItem(item = any())
         } returns CreateItemResult.Success
@@ -378,7 +519,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
                     accountName = "mockAccountName",
                     type = AuthenticatorItemType.TOTP,
                     algorithm = AuthenticatorItemAlgorithm.SHA1,
-                    period = 30,
+                    period = 45,
                     digits = 6,
                     issuer = "mockIssuer",
                     favorite = false,
@@ -480,7 +621,8 @@ private val DEFAULT_STATE: EditItemState =
 
 private val DEFAULT_ITEM_DATA: EditItemData =
     EditItemData(
-        refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
+        refreshPeriod = 30,
+        originalRefreshPeriod = 30,
         totpCode = "ABCD",
         type = AuthenticatorItemType.TOTP,
         username = "mockAccountName",
