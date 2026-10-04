@@ -12,6 +12,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.drop
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Instant
@@ -120,7 +122,12 @@ class OtherViewModel @Inject constructor(
                     ),
                 )
             }
-            vaultRepo.sync(forced = true)
+            viewModelScope.launch {
+                val result = vaultRepo.syncForResult(forced = true)
+                if (result is SyncVaultDataResult.Error) {
+                    sendAction(OtherAction.Internal.SyncVaultErrorReceive)
+                }
+            }
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -137,6 +144,21 @@ class OtherViewModel @Inject constructor(
         when (action) {
             is OtherAction.Internal.VaultLastSyncReceive -> handleVaultDataReceive(action)
             is OtherAction.Internal.ManualVaultSyncReceive -> handleManualVaultSyncReceive()
+            OtherAction.Internal.SyncVaultErrorReceive -> {
+                mutableStateFlow.update { currentState ->
+                    // Last sync can clear the loading dialog before this action is handled.
+                    if (currentState.dialogState !is OtherState.DialogState.Loading) {
+                        currentState
+                    } else {
+                        currentState.copy(
+                            dialogState = OtherState.DialogState.Error(
+                                title = BitwardenString.vault_sync_unsuccessful.asText(),
+                                message = BitwardenString.vault_sync_failed_description.asText(),
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -282,5 +304,10 @@ sealed class OtherAction {
          * Indicates a manual vault sync has been received.
          */
         data object ManualVaultSyncReceive : Internal()
+
+        /**
+         * Indicates a vault sync failed.
+         */
+        data object SyncVaultErrorReceive : Internal()
     }
 }

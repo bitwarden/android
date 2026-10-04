@@ -1755,6 +1755,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
+                expectNoEvents()
             }
         }
 
@@ -1810,6 +1811,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
+                expectNoEvents()
             }
         }
 
@@ -2219,6 +2221,42 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value,
             )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow NoNetwork with items while syncing should show SyncError and keep content`() =
+        runTest {
+            val vaultData = VaultData(
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(createMockCipherListView(number = 1)),
+                ),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(data = vaultData)
+            val viewModel = createViewModel()
+            advanceTimeBy(1500.milliseconds)
+            val contentState = viewModel.stateFlow.value
+
+            viewModel.trySendAction(VaultAction.SyncClick)
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.value = DataState.NoNetwork(data = vaultData)
+                advanceTimeBy(1500.milliseconds)
+                assertEquals(
+                    contentState.copy(
+                        dialog = VaultState.DialogState.SyncError(
+                            title = BitwardenString.vault_sync_unsuccessful.asText(),
+                            message = BitwardenString.vault_sync_failed_description.asText(),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                expectNoEvents()
+            }
         }
 
     @Test
@@ -2965,6 +3003,77 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
         verify(exactly = 0) {
             vaultRepository.sync(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RefreshPull with NoNetwork and items should show unsuccessful snackbar and stop refreshing`() =
+        runTest {
+            val vaultData = VaultData(
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(createMockCipherListView(number = 1)),
+                ),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(data = vaultData)
+            val viewModel = createViewModel()
+            advanceTimeBy(1500.milliseconds)
+            val contentState = viewModel.stateFlow.value
+
+            viewModel.trySendAction(VaultAction.RefreshPull)
+            advanceTimeBy(300.milliseconds)
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.value = DataState.NoNetwork(data = vaultData)
+                advanceTimeBy(1500.milliseconds)
+                assertEquals(
+                    contentState.copy(
+                        isRefreshing = false,
+                        dialog = null,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.vault_sync_unsuccessful.asText()),
+                    awaitItem(),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RefreshPull with loaded data should show syncing complete and stop refreshing`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.RefreshPull)
+        advanceTimeBy(300.milliseconds)
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            advanceTimeBy(1500.milliseconds)
+            assertEquals(
+                createMockVaultState(viewState = VaultState.ViewState.NoItems),
+                viewModel.stateFlow.value,
+            )
+            assertEquals(
+                VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
+                awaitItem(),
+            )
+            expectNoEvents()
         }
     }
 

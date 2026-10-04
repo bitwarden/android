@@ -1567,7 +1567,7 @@ class VaultViewModel @Inject constructor(
         vaultData: DataState.Loaded<VaultData>,
         validTotpIds: Set<String>,
     ) {
-        if (state.dialog == VaultState.DialogState.Syncing) {
+        if (state.dialog == VaultState.DialogState.Syncing || state.isRefreshing) {
             sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
         }
 
@@ -1668,9 +1668,26 @@ class VaultViewModel @Inject constructor(
             folderViewList = emptyList(),
             sendViewList = emptyList(),
         )
+        val isManualSync = state.dialog == VaultState.DialogState.Syncing
+        if (state.isRefreshing && !isManualSync) {
+            sendEvent(
+                VaultEvent.ShowSnackbar(
+                    message = BitwardenString.vault_sync_unsuccessful.asText(),
+                ),
+            )
+        }
+        val dialog = if (isManualSync) {
+            VaultState.DialogState.SyncError(
+                title = BitwardenString.vault_sync_unsuccessful.asText(),
+                message = BitwardenString.vault_sync_failed_description.asText(),
+            )
+        } else {
+            null
+        }
         updateVaultState(
             vaultData = data,
             validTotpIds = validTotpIds,
+            dialog = dialog,
         )
     }
 
