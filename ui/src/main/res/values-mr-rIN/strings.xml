@@ -574,8 +574,8 @@
     <string name="resend_code">कोड पुन्हा पाठवा</string>
     <string name="a_verification_code_was_sent_to_your_email">तुमच्या ईमेलवर एक सत्यापन कोड पाठवला गेला</string>
     <string name="submit_crash_logs">क्रॅश लॉग सबमिट करा</string>
-    <string name="options_expanded">पर्याय विस्तारित आहेत, संकुचित करण्यासाठी टॅप करा.</string>
-    <string name="options_collapsed">पर्याय संकुचित आहेत, विस्तारित करण्यासाठी टॅप करा.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">मोठे अक्षर (A ते Z)</string>
     <string name="lowercase_ato_z">छोटे अक्षर (A ते Z)</string>
     <string name="numbers_zero_to_nine">संख्या (0 ते 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">फाइलवर प्रक्रिया करता आली नाही</string>
     <string name="file_could_not_be_processed_message">फाइलवर प्रक्रिया करता आली नाही. ती वैध JSON आहे याची खात्री करा आणि पुन्हा प्रयत्न करा. मदत हवी आहे? bitwarden.com/help ला भेट द्या</string>
     <string name="get_help">मदत मिळवा</string>
-    <string name="expand_advanced_options">प्रगत पर्याय विस्तारित करा</string>
-    <string name="local_items_are_expanded_click_to_collapse">स्थानिक आयटम विस्तारित आहेत, संकुचित करण्यासाठी क्लिक करा.</string>
-    <string name="local_items_are_collapsed_click_to_expand">स्थानिक आयटम संकुचित आहेत, विस्तारित करण्यासाठी क्लिक करा.</string>
-    <string name="items_expanded_click_to_collapse">आयटम विस्तारित आहेत, संकुचित करण्यासाठी क्लिक करा.</string>
-    <string name="items_are_collapsed_click_to_expand">आयटम संकुचित आहेत, विस्तारित करण्यासाठी क्लिक करा.</string>
     <string name="error_cannot_decrypt">[त्रुटी: डिक्रिप्ट करू शकत नाही]</string>
     <string name="copy_error_report">त्रुटी अहवाल कॉपी करा</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden हा तिजोरी आयटम डिक्रिप्ट करू शकला नाही. अतिरिक्त डेटा नुकसान टाळण्यासाठी हा त्रुटी अहवाल कॉपी करा आणि ग्राहक सफलता टीमशी सामायिक करा.</string>

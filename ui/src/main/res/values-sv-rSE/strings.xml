@@ -574,8 +574,8 @@ Skanningen sker automatiskt.</string>
     <string name="resend_code">Skicka koden igen</string>
     <string name="a_verification_code_was_sent_to_your_email">En verifieringskod skickades till din e-postadress</string>
     <string name="submit_crash_logs">Skicka kraschloggar</string>
-    <string name="options_expanded">Alternativen är utvidgade, tryck för att dölja.</string>
-    <string name="options_collapsed">Alternativen är dolda, tryck för att utvidga.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Versaler (A till Z)</string>
     <string name="lowercase_ato_z">Gemener (A till Z)</string>
     <string name="numbers_zero_to_nine">Siffror (0 till 9)</string>
@@ -1148,11 +1148,6 @@ Vill du byta till detta konto?</string>
     <string name="file_could_not_be_processed">Filen kunde inte behandlas</string>
     <string name="file_could_not_be_processed_message">Filen kunde inte behandlas. Kontrollera att det är giltig JSON och försök igen. Behöver du hjälp? Besök bitwarden.com/help</string>
     <string name="get_help">Få hjälp</string>
-    <string name="expand_advanced_options">Expandera avancerade alternativ</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokala objekt är expanderade, klicka för att fälla in.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
-    <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
-    <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
     <string name="error_cannot_decrypt">[fel: kan inte dekryptera]</string>
     <string name="copy_error_report">Kopiera felrapport</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kunde inte avkryptera detta valvobjekt. Kopiera och dela denna felrapport med kundtjänst för att undvika ytterligare dataförlust.</string>

@@ -574,8 +574,8 @@
     <string name="resend_code">Кодду кайра жөнөтүү</string>
     <string name="a_verification_code_was_sent_to_your_email">Текшерүү коду электрондук почтаңызга жөнөтүлдү</string>
     <string name="submit_crash_logs">Күтүүсүз токтотуу журналдарын жөнөтүү</string>
-    <string name="options_expanded">Параметрлер кеңейтилген, жыйнап салуу үчүн басыңыз.</string>
-    <string name="options_collapsed">Параметрлер жыйналган, кеңейтүү үчүн басыңыз.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Баш тамгалар (A дан Z ге чейин)</string>
     <string name="lowercase_ato_z">Кичине тамгалар (A дан Z ге чейин)</string>
     <string name="numbers_zero_to_nine">Сандар (0 ден 9 га чейин)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">Файлды иштетүү мүмкүн болбой калды</string>
     <string name="file_could_not_be_processed_message">Файлды иштетүү мүмкүн болбой калды. Ал туура JSON экенине ынанып, кайра аракет кылыңыз. Жардам керекпи? bitwarden.com/help сайтына кириңиз</string>
     <string name="get_help">Жардам алуу</string>
-    <string name="expand_advanced_options">Кеңейтилген параметрлерди ачуу</string>
-    <string name="local_items_are_expanded_click_to_collapse">Жергиликтүү буюмдар ачылды, жыйруу үчүн басыңыз.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Жергиликтүү буюмдар жыйрылды, ачуу үчүн басыңыз.</string>
-    <string name="items_expanded_click_to_collapse">Буюмдар ачылды, жыйруу үчүн басыңыз.</string>
-    <string name="items_are_collapsed_click_to_expand">Буюмдар жыйрылды, ачуу үчүн басыңыз.</string>
     <string name="error_cannot_decrypt">[ката: чечүү мүмкүн эмес]</string>
     <string name="copy_error_report">Ката отчетун көчүрүү</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden бул купчул элементин чече албай калды. Кошумча маалымат жоготууну болтурбоо үчүн бул ката отчетун көчүрүп, кардарларды тейлөө бөлүмү менен бөлүшүңүз.</string>

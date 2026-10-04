@@ -574,8 +574,8 @@
     <string name="resend_code">ಕೋಡ್ ಅನ್ನು ಮರುಕಳುಹಿಸಿ</string>
     <string name="a_verification_code_was_sent_to_your_email">ನಿಮ್ಮ ಇಮೇಲ್ಗೆ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
     <string name="submit_crash_logs">ಕ್ರ್ಯಾಶ್ ಲಾಗ್ಗಳನ್ನು ಸಲ್ಲಿಸಿ</string>
-    <string name="options_expanded">ಆಯ್ಕೆಗಳನ್ನು ವಿಸ್ತರಿಸಲಾಗಿದೆ, ಮುಚ್ಚಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
-    <string name="options_collapsed">ಆಯ್ಕೆಗಳನ್ನು ಮುಚ್ಚಲಾಗಿದೆ, ವಿಸ್ತರಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">ದೊಡ್ಡಕ್ಷರ (A ನಿಂದ Z)</string>
     <string name="lowercase_ato_z">ಸಣ್ಣಕ್ಷರ (A ನಿಂದ Z)</string>
     <string name="numbers_zero_to_nine">ಸಂಖ್ಯೆಗಳು (0 ರಿಂದ 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ಫೈಲ್ ಅನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
     <string name="file_could_not_be_processed_message">ಫೈಲ್ ಅನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಇದು ಮಾನ್ಯ JSON ಆಗಿದೆಯೆಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ. ಸಹಾಯ ಬೇಕೇ? bitwarden.com/help ಗೆ ಭೇಟಿ ನೀಡಿ</string>
     <string name="get_help">ಸಹಾಯ ಪಡೆ</string>
-    <string name="expand_advanced_options">ಮುಂದುವರಿದ ಆಯ್ಕೆಗಳನ್ನು ವಿಸ್ತರಿಸಿ</string>
-    <string name="local_items_are_expanded_click_to_collapse">ಸ್ಥಳೀಯ ಐಟಂಗಳನ್ನು ವಿಸ್ತರಿಸಲಾಗಿದೆ, ಮುಚ್ಚಲು ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
-    <string name="local_items_are_collapsed_click_to_expand">ಸ್ಥಳೀಯ ಐಟಂಗಳನ್ನು ಮುಚ್ಚಲಾಗಿದೆ, ವಿಸ್ತರಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
-    <string name="items_expanded_click_to_collapse">ಐಟಂಗಳನ್ನು ವಿಸ್ತರಿಸಲಾಗಿದೆ, ಮುಚ್ಚಲು ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
-    <string name="items_are_collapsed_click_to_expand">ಐಟಂಗಳನ್ನು ಮುಚ್ಚಲಾಗಿದೆ, ವಿಸ್ತರಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
     <string name="error_cannot_decrypt">[ದೋಷ: ಡೀಕ್ರಿಪ್ಟ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ]</string>
     <string name="copy_error_report">ದೋಷ ವರದಿಯನ್ನು ನಕಲಿಸಿ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ಈ ವಾಲ್ಟ್ ಐಟಂ ಅನ್ನು ಡೀಕ್ರಿಪ್ಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಹೆಚ್ಚುವರಿ ಡೇಟಾ ನಷ್ಟವನ್ನು ತಪ್ಪಿಸಲು ಈ ದೋಷ ವರದಿಯನ್ನು ನಕಲಿಸಿ ಮತ್ತು ಗ್ರಾಹಕ ಯಶಸ್ಸಿನೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಿ.</string>

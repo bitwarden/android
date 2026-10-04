@@ -570,8 +570,8 @@
     <string name="resend_code">重新发送代码</string>
     <string name="a_verification_code_was_sent_to_your_email">验证码已发送到您的电子邮箱</string>
     <string name="submit_crash_logs">提交崩溃日志</string>
-    <string name="options_expanded">选项已展开，点击折叠。</string>
-    <string name="options_collapsed">选项已折叠，点击展开。</string>
+    <string name="expand">展开</string>
+    <string name="collapse">折叠</string>
     <string name="uppercase_ato_z">大写 (A-Z)</string>
     <string name="lowercase_ato_z">小写 (a-z)</string>
     <string name="numbers_zero_to_nine">数字 (0-9)</string>
@@ -1142,11 +1142,6 @@
     <string name="file_could_not_be_processed">文件无法处理</string>
     <string name="file_could_not_be_processed_message">文件无法处理。请确保它是有效的 JSON 文件然后重试。需要帮助吗？请访问 bitwarden.com/help</string>
     <string name="get_help">获取帮助</string>
-    <string name="expand_advanced_options">展开高级选项</string>
-    <string name="local_items_are_expanded_click_to_collapse">本地项目已展开，点击折叠。</string>
-    <string name="local_items_are_collapsed_click_to_expand">本地项目已折叠，点击展开。</string>
-    <string name="items_expanded_click_to_collapse">项目已展开，点击折叠。</string>
-    <string name="items_are_collapsed_click_to_expand">项目已折叠，点击展开。</string>
     <string name="error_cannot_decrypt">[错误：无法解密]</string>
     <string name="copy_error_report">复制错误报告</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</string>

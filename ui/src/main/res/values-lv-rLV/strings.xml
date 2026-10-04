@@ -578,8 +578,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="resend_code">Atkārtoti nosūtīt kodu</string>
     <string name="a_verification_code_was_sent_to_your_email">Apliecinājuma kods tika nosūtīts e-pastā</string>
     <string name="submit_crash_logs">Iesniegt avāriju ierakstus</string>
-    <string name="options_expanded">Iespējas ir izvērstas, piesist, lai sakļautu.</string>
-    <string name="options_collapsed">Iespējas ir sakļautas, piesist, lai izvērstu.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Lielie burti (A līdz Z)</string>
     <string name="lowercase_ato_z">Mazie burti (A līdz Z)</string>
     <string name="numbers_zero_to_nine">Cipari (0 līdz 9)</string>
@@ -1155,11 +1155,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="file_could_not_be_processed">Datni nevarēja apstrādāt</string>
     <string name="file_could_not_be_processed_message">Datni nevarēja apstrādāt. Jāpārliecinās, ka tas ir derīgs JSON, un jāmēģina vēlreiz. Vai nepieciešama palīdzība? Dodies uz bitwarden.com/help</string>
     <string name="get_help">Saņemt palīdzību</string>
-    <string name="expand_advanced_options">Izvērst paplašinātās iespējas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Vietējie vienumi ir izvērsti, klikšķināt, lai sakļautu.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Vietējie vienumi ir sakļauti, klikšķināt, lai izvērstu.</string>
-    <string name="items_expanded_click_to_collapse">Vienumi ir izvērsti; klikšķināt, lai sakļautu.</string>
-    <string name="items_are_collapsed_click_to_expand">Vienumi ir sakļauti; klikšķināt, lai izvērstu.</string>
     <string name="error_cannot_decrypt">[kļūda: nevar atšifrēt]</string>
     <string name="copy_error_report">Ievietot kļūdas ziņojumu starpliktuvē</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nevarēja atšifrēt šo glabātavas vienumu. Šī kļūda jāievieto starpliktuvē un jākopīgo ar klientu atbalstu, lai izvairītos no papildu datu zudumiem.</string>

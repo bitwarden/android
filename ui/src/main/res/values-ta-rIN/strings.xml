@@ -574,8 +574,8 @@
     <string name="resend_code">குறியீட்டை மீண்டுமனுப்பு</string>
     <string name="a_verification_code_was_sent_to_your_email">சரிபார்ப்புக் குறியீடு உம் மின்னஞ்சலுக்கு அனுப்பப்பட்டது</string>
     <string name="submit_crash_logs">சிதைவுக்குறிப்புகளைச் சமர்ப்பி</string>
-    <string name="options_expanded">தெரிவுகள் விரிவாகின, சுருக்கத் தட்டு.</string>
-    <string name="options_collapsed">தெரிவுகள் சுருங்கின, விரிவாக்கத் தட்டு.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">பேரெழுத்து (A - Z)</string>
     <string name="lowercase_ato_z">சிற்றெழுத்து (a - z)</string>
     <string name="numbers_zero_to_nine">எண்கள் (0 - 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">கோப்பைச் செயல்படுத்த முடியவில்லை</string>
     <string name="file_could_not_be_processed_message">கோப்பைச் செயல்படுத்த முடியவில்லை. இது செல்லுபடியாகும் JSON என்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும். உதவி தேவையா? bitwarden.com/help-ஐப் பார்வையிடவும்</string>
     <string name="get_help">உதவி பெறு</string>
-    <string name="expand_advanced_options">மேம்பட்ட விருப்பங்களை விரி</string>
-    <string name="local_items_are_expanded_click_to_collapse">உள்ளூர் உருப்படிகள் விரிவாக்கப்பட்டுள்ளன, சுருக்குவதற்கு கிளிக் செய்யவும்.</string>
-    <string name="local_items_are_collapsed_click_to_expand">உள்ளூர் உருப்படிகள் சுருக்கப்பட்டுள்ளன, விரிவாக்க கிளிக் செய்யவும்.</string>
-    <string name="items_expanded_click_to_collapse">உருப்படிகள் விரிவாக்கப்பட்டுள்ளன, சுருக்குவதற்கு கிளிக் செய்யவும்.</string>
-    <string name="items_are_collapsed_click_to_expand">உருப்படிகள் சுருக்கப்பட்டுள்ளன, விரிவாக்க கிளிக் செய்யவும்.</string>
     <string name="error_cannot_decrypt">[பிழை: மறைகுறியாக்க முடியவில்லை]</string>
     <string name="copy_error_report">பிழை அறிக்கையை நகலெடு</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden இந்த பெட்டக உருப்படியை மறைகுறியாக்க முடியவில்லை. கூடுதல் தரவு இழப்பைத் தவிர்க்க, இந்த பிழை அறிக்கையை நகலெடுத்து வாடிக்கையாளர் வெற்றியுடன் பகிரவும்.</string>

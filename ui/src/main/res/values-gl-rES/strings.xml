@@ -574,8 +574,8 @@ Escanearase automaticamente.</string>
     <string name="resend_code">Volver enviar o código</string>
     <string name="a_verification_code_was_sent_to_your_email">Insire o código de verificación enviado ó teu correo</string>
     <string name="submit_crash_logs">Enviar rexistro de fallo</string>
-    <string name="options_expanded">As opcións están despregadas, pulsa para recollelas.</string>
-    <string name="options_collapsed">As opcións están recollidas, pulsa para despregalas.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Maiúsculas (A - Z)</string>
     <string name="lowercase_ato_z">Minúsculas (A - Z)</string>
     <string name="numbers_zero_to_nine">Números (0 - 9)</string>
@@ -1148,11 +1148,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="file_could_not_be_processed">Non se puido procesar o ficheiro</string>
     <string name="file_could_not_be_processed_message">Non se puido procesar o ficheiro. Asegúrate de que sexa JSON válido e inténtao de novo. Necesitas axuda? Visita bitwarden.com/help</string>
     <string name="get_help">Obter axuda</string>
-    <string name="expand_advanced_options">Expandir opcións avanzadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Os elementos locais están expandidos, fai clic para contraer.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Os elementos locais están contraídos, fai clic para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Os elementos están expandidos, fai clic para contraer.</string>
-    <string name="items_are_collapsed_click_to_expand">Os elementos están contraídos, fai clic para expandir.</string>
     <string name="error_cannot_decrypt">[erro: non se pode descifrar]</string>
     <string name="copy_error_report">Copiar informe de erro</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden non puido descifrar este elemento do cofre. Copia e comparte este informe de erro co equipo de atención ao cliente para evitar perda adicional de datos.</string>

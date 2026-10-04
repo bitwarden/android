@@ -574,8 +574,8 @@ Skaneerimine toimub automaatselt.</string>
     <string name="resend_code">Saada kood uuesti</string>
     <string name="a_verification_code_was_sent_to_your_email">Kinnituskood on saadetud e-posti aadressile.</string>
     <string name="submit_crash_logs">Saada krahhiaruandeid</string>
-    <string name="options_expanded">Valikud on avatud. Vajuta, et need peita.</string>
-    <string name="options_collapsed">Valikud on peidetud. Vajuta, et need kuvada.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Suurtähed (A-Z)</string>
     <string name="lowercase_ato_z">Väiketähed (A-Z)</string>
     <string name="numbers_zero_to_nine">Numbrid (0-9)</string>
@@ -1148,11 +1148,6 @@ Soovid selle konto peale lülituda?</string>
     <string name="file_could_not_be_processed">Faili ei õnnestunud töödelda</string>
     <string name="file_could_not_be_processed_message">Faili ei õnnestunud töödelda. Kontrolli, et see oleks korrektne JSON ja proovi uuesti. Vajad abi? Külasta bitwarden.com/help</string>
     <string name="get_help">Klienditugi</string>
-    <string name="expand_advanced_options">Laienda täpsemate seadete jaoks</string>
-    <string name="local_items_are_expanded_click_to_collapse">Kohalikud kirjed on laiendatud, peitmiseks vajuta.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Kohalikud kirjed on peidetud, laiendamiseks vajuta.</string>
-    <string name="items_expanded_click_to_collapse">Kirjed laiendatud, peitmiseks vajuta.</string>
-    <string name="items_are_collapsed_click_to_expand">Kirjed peidetud, laiendamiseks vajuta.</string>
     <string name="error_cannot_decrypt">[error: dekrüpteerimine ebaõnnestus]</string>
     <string name="copy_error_report">Kopeeri veateade</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ei suutnud dekrüpteerida seda hoidla kirjet. Edasise andmekaotuse vältimiseks kopeeri ja jaga seda veateadet klienditeenindusega.</string>

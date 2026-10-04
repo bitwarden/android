@@ -574,8 +574,8 @@ La numérisation se fera automatiquement.</string>
     <string name="resend_code">Renvoyer le code</string>
     <string name="a_verification_code_was_sent_to_your_email">Un code de vérification a été envoyé à votre courriel</string>
     <string name="submit_crash_logs">Envoyer les journaux de plantage</string>
-    <string name="options_expanded">Les options sont dépliées, appuyez pour grouper.</string>
-    <string name="options_collapsed">Les options sont groupées, appuyez pour déplier.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Majuscules (A à Z)</string>
     <string name="lowercase_ato_z">Minuscules (A à Z)</string>
     <string name="numbers_zero_to_nine">Nombres (0 à 9)</string>
@@ -1148,11 +1148,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="file_could_not_be_processed">Le fichier n\'a pas pu être traité</string>
     <string name="file_could_not_be_processed_message">Le fichier n\'a pas pu être traité. Assurez-vous qu\'il s\'agit d\'un JSON valide et réessayez. Besoin d\'aide ? Visitez bitwarden.com/help</string>
     <string name="get_help">Obtenir de l\'aide</string>
-    <string name="expand_advanced_options">Élargir les options avancées</string>
-    <string name="local_items_are_expanded_click_to_collapse">Les éléments locaux sont développés, cliquez pour réduire.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Les éléments locaux sont réduits, cliquez pour développer.</string>
-    <string name="items_expanded_click_to_collapse">Les éléments sont développés, cliquez pour réduire.</string>
-    <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
     <string name="error_cannot_decrypt">[erreur : impossible de déchiffrer]</string>
     <string name="copy_error_report">Copier le rapport d’erreur</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden n’a pas pu déchiffrer cet élément du coffre-fort. Copiez et partagez ce rapport d’erreur avec succès client afin d’éviter toute perte de données supplémentaire.</string>

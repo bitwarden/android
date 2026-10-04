@@ -574,8 +574,8 @@ El escaneo se realizará automáticamente.</string>
     <string name="resend_code">Reenviar código</string>
     <string name="a_verification_code_was_sent_to_your_email">Se ha enviado un código de verificación a tu correo electrónico</string>
     <string name="submit_crash_logs">Enviar registros de fallos</string>
-    <string name="options_expanded">Las opciones están expandidas, toque para colapsar.</string>
-    <string name="options_collapsed">Las opciones están colapsadas, toque para expandir.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Mayúsculas (A a la Z)</string>
     <string name="lowercase_ato_z">Minúsculas (A a la Z)</string>
     <string name="numbers_zero_to_nine">Números (0 al 9)</string>
@@ -1151,11 +1151,6 @@ cualquier problema.</string>
     <string name="file_could_not_be_processed">No se pudo procesar el archivo</string>
     <string name="file_could_not_be_processed_message">No se pudo procesar el archivo. Asegúrate de que sea un JSON válido e inténtalo de nuevo. ¿Necesitas ayuda? Visita bitwarden.com/help</string>
     <string name="get_help">Obtener ayuda</string>
-    <string name="expand_advanced_options">Expandir opciones avanzadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Los elementos locales están expandidos, clic para colapsar.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Los elementos locales están colapsados, clic para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Los elementos están expandidos, clic para colapsar.</string>
-    <string name="items_are_collapsed_click_to_expand">Los elementos están colapsados, clic para expandir.</string>
     <string name="error_cannot_decrypt">[error: no se puede descifrar]</string>
     <string name="copy_error_report">Copiar informe de error</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden no pudo descifrar este elemento de la caja fuerte. Copia y comparte este informe de error con el servicio de atención al cliente para evitar la pérdida de datos adicionales.</string>

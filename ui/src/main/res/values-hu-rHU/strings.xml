@@ -573,8 +573,8 @@
     <string name="resend_code">Újraküldési kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Egy ellenőrző kód lett elküldve a saját email címre.</string>
     <string name="submit_crash_logs">Összeomlási naplózások beküldése</string>
-    <string name="options_expanded">Az opciók nyitottak, koppintásra bezárulnak.</string>
-    <string name="options_collapsed">Az opciók bezártak, koppintásra kinyílnak.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Nagybetűs (A-Z)</string>
     <string name="lowercase_ato_z">Kisbetűs (a-z)</string>
     <string name="numbers_zero_to_nine">Számok (0-9)</string>
@@ -1147,11 +1147,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="file_could_not_be_processed">A fájl nem dolgozható fel.</string>
     <string name="file_could_not_be_processed_message">A fájlt nem sikerült feldolgozni. Győződjünk meg arról, hogy érvényes a JSON és próbáljuk újra. Segítségre szorulunk? Látogassunk el a bitwarden.com/help oldalra.</string>
     <string name="get_help">Segítségkérés</string>
-    <string name="expand_advanced_options">Bővített opciók kinyitása</string>
-    <string name="local_items_are_expanded_click_to_collapse">A helyi elemek kinyitásra kerülnek, kattintás az összezáráshoz.</string>
-    <string name="local_items_are_collapsed_click_to_expand">A helyi elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
-    <string name="items_expanded_click_to_collapse">Az elemek kinyitásra kerülnek, kattintás az összezáráshoz.</string>
-    <string name="items_are_collapsed_click_to_expand">Az elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
     <string name="error_cannot_decrypt">[hiba: nem fejlthető vissza]</string>
     <string name="copy_error_report">Hibajelentés másolása</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nem tudta visszafejteni ezt a széf elemet. Másoljuk és osszuk meg ezt a hibajelentést az ügyfél sikerrel, hogy elkerüljük a további adatvesztést.</string>

@@ -574,8 +574,8 @@
     <string name="resend_code">कोड पुन: पठाउनुहोस्</string>
     <string name="a_verification_code_was_sent_to_your_email">एउटा प्रमाणीकरण कोड तपाईंको इमेलमा पठाइयो</string>
     <string name="submit_crash_logs">क्र्यास लगहरू पेश गर्नुहोस्</string>
-    <string name="options_expanded">विकल्पहरू विस्तारित छन्, संक्षिप्त गर्न ट्याप गर्नुहोस्।</string>
-    <string name="options_collapsed">विकल्पहरू संक्षिप्त छन्, विस्तार गर्न ट्याप गर्नुहोस्।</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">ठूलो अक्षर (A देखि Z)</string>
     <string name="lowercase_ato_z">सानो अक्षर (A देखि Z)</string>
     <string name="numbers_zero_to_nine">संख्याहरू (0 देखि 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">फाइल प्रशोधन गर्न सकिएन</string>
     <string name="file_could_not_be_processed_message">फाइल प्रशोधन गर्न सकिएन। यो मान्य JSON छ भनी सुनिश्चित गर्नुहोस् र फेरि प्रयास गर्नुहोस्। मद्दत चाहिन्छ? bitwarden.com/help मा जानुहोस्</string>
     <string name="get_help">सहायता प्राप्त गर्नुहोस्</string>
-    <string name="expand_advanced_options">उन्नत विकल्पहरू विस्तार गर्नुहोस्</string>
-    <string name="local_items_are_expanded_click_to_collapse">स्थानीय वस्तुहरू विस्तारित छन्, संक्षिप्त गर्न क्लिक गर्नुहोस्।</string>
-    <string name="local_items_are_collapsed_click_to_expand">स्थानीय वस्तुहरू संक्षिप्त छन्, विस्तार गर्न क्लिक गर्नुहोस्।</string>
-    <string name="items_expanded_click_to_collapse">वस्तुहरू विस्तारित छन्, संक्षिप्त गर्न क्लिक गर्नुहोस्।</string>
-    <string name="items_are_collapsed_click_to_expand">वस्तुहरू संक्षिप्त छन्, विस्तार गर्न क्लिक गर्नुहोस्।</string>
     <string name="error_cannot_decrypt">[त्रुटि: डिक्रिप्ट गर्न सकिँदैन]</string>
     <string name="copy_error_report">त्रुटि रिपोर्ट प्रतिलिपि गर्नुहोस्</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ले यो भल्ट वस्तु डिक्रिप्ट गर्न सकेन। थप डाटा हानिबाट बच्न यो त्रुटि रिपोर्ट प्रतिलिपि गरेर ग्राहक सफलतासँग साझेदारी गर्नुहोस्।</string>

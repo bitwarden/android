@@ -574,8 +574,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="resend_code">Reenviar código</string>
     <string name="a_verification_code_was_sent_to_your_email">Foi enviado um código de verificação para o seu e-mail</string>
     <string name="submit_crash_logs">Submeter registo de falhas</string>
-    <string name="options_expanded">As opções estão expandidas, clique para as fechar.</string>
-    <string name="options_collapsed">As opções estão fechadas, clique para as expandir.</string>
+    <string name="expand">expandir</string>
+    <string name="collapse">recolher</string>
     <string name="uppercase_ato_z">Maiúsculas (A-Z)</string>
     <string name="lowercase_ato_z">Minúsculas (a-z)</string>
     <string name="numbers_zero_to_nine">Números (0-9)</string>
@@ -1148,11 +1148,6 @@ Pretende mudar para esta conta?</string>
     <string name="file_could_not_be_processed">O ficheiro não pôde ser processado</string>
     <string name="file_could_not_be_processed_message">O ficheiro não pôde ser processado. Certifique-se de que se trata de um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help</string>
     <string name="get_help">Obter ajuda</string>
-    <string name="expand_advanced_options">Expandir opções avançadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Os itens locais estão expandidos, clique para recolher.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
-    <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
     <string name="error_cannot_decrypt">[erro: não é possível desencriptar]</string>
     <string name="copy_error_report">Copiar relatório de erros</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">O Bitwarden não conseguiu desencriptar este item do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</string>

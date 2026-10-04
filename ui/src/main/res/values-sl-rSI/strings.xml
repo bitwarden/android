@@ -151,14 +151,14 @@
     <string name="select">Izberi</string>
     <string name="item_details">Podrobnosti predmeta</string>
     <string name="item_updated">Element shranjen.</string>
-    <string name="bank_account_saved">Bank account saved</string>
-    <string name="card_saved">Card saved</string>
-    <string name="identity_saved">Identity saved</string>
-    <string name="license_saved">License saved</string>
-    <string name="login_saved">Login saved</string>
-    <string name="passport_saved">Passport saved</string>
-    <string name="secure_note_saved">Secure note saved</string>
-    <string name="ssh_key_saved">SSH key saved</string>
+    <string name="bank_account_saved">Bančni račun shranjen</string>
+    <string name="card_saved">Kartica je shranjena</string>
+    <string name="identity_saved">Identiteta je shranjena</string>
+    <string name="license_saved">Licenca je shranjena</string>
+    <string name="login_saved">Prijava je shranjena</string>
+    <string name="passport_saved">Potni list je shranjen</string>
+    <string name="secure_note_saved">Zavarovani zapisek je shranjen</string>
+    <string name="ssh_key_saved">SSH ključ je shranjen</string>
     <string name="submitting">Pošiljanje…</string>
     <string name="syncing">Sinhronizacija…</string>
     <string name="syncing_complete">Sinhronizacija končana.</string>
@@ -175,7 +175,7 @@
     <string name="items">Elementi</string>
     <string name="items_for_uri">Elementi za %1$s</string>
     <string name="no_items_for_uri">V vašem trezorju ni elementov za %1$s.</string>
-    <string name="no_items_for_vault">V vašem trezorju ni elementov, ki bi ustrezali \"%1$s\"</string>
+    <string name="no_items_for_vault">V tvojem trezorju ni predmetov, ki bi ustrezali »%1$s«</string>
     <string name="search_for_a_login_or_add_a_new_login">Poiščite prijavo ali dodajte novo prijavo</string>
     <string name="disabled">Onemogočeno</string>
     <string name="bitwarden_autofill_service_alert2">Najlažji način za dodajanje novih prijav v vaš trezor je prek storitve Bitwarden za samodejno izpolnjevanje. Več o uporabi storitve Bitwarden za samodejno izpolnjevanje izveste tako, da odprete zaslon »Nastavitve«.</string>
@@ -294,10 +294,10 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="vault_is_locked">Trezor je zaklenjen.</string>
     <string name="go_to_my_vault">Pojdi v moj trezor.</string>
     <string name="collections">Zbirke</string>
-    <string name="shared_folders">Shared folders</string>
+    <string name="shared_folders">Deljene mape</string>
     <string name="no_items_collection">V tej zbirki ni predmetov.</string>
-    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
-    <string name="no_items_folder">V tej mapi ni elementov.</string>
+    <string name="there_are_no_items_in_this_shared_folder">V tej deljeni mapi ni predmetov.</string>
+    <string name="no_items_folder">V tej mapi ni predmetov.</string>
     <string name="no_items_trash">Koš je prazen.</string>
     <string name="autofill_accessibility_summary">Pomaga pri izpolnjevanju polj z uporabniškim imenom in geslom v drugih aplikacijah in na spletu.</string>
     <string name="autofill_service_description">Storitev Bitwarden za samodejno izpolnjevanje uporablja Android Autofill Framework za pomoč pri izpolnjevanju prijavnih podatkov v drugih aplikacijah v vaši napravi.</string>
@@ -353,21 +353,21 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="move_up">Premakni navzgor</string>
     <string name="owner">Lastnik</string>
     <string name="no_collections_to_list">Ni zbirk za prikazat.</string>
-    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
+    <string name="there_are_no_shared_folders_to_list">Ni deljenih map za prikaz.</string>
     <string name="moved_item_to_org">%1$s premaknjeno v %2$s.</string>
     <string name="select_one_collection">Izbrati moraš vsaj eno zbirko.</string>
-    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Izbrati moraš vsaj eno deljeno mapo.</string>
     <string name="share">Deli</string>
     <string name="move_to_organization">Premakni v organizacijo</string>
     <string name="no_orgs_to_list">Ni organizacij za prikazat.</string>
     <string name="move_to_org_desc">Izberite organizacijo, v katero želite premakniti ta predmet. S premikom v organizacijo se lastništvo predmeta prenese na to organizacijo. Ko bo predmet premaknjen, ne boste več neposredni lastnik tega predmeta.</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="no_vaults_to_list">Ni trezorjev za prikaz.</string>
+    <string name="move_to_vault_desc">Izberi trezor, v katerega želiš premakniti ta element. Premik v trezor prenese lastništvo elementa na to organizacijo. Ko je element premaknjen, ne boš več njegov neposredni lastnik.</string>
     <string name="number_of_words">Število besed</string>
     <string name="passphrase">Večbesedno geslo</string>
     <string name="word_separator">Ločilo besed</string>
     <string name="clear">Počisti</string>
-    <string name="open_calendar">open calendar</string>
+    <string name="open_calendar">odpri koledar</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Ni map za prikazat.</string>
     <string name="fingerprint_phrase">Identifikacijsko geslo</string>
@@ -477,7 +477,7 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="deletion_date">Datum izbrisa</string>
     <string name="deletion_time">Čas izbrisa</string>
     <string name="deletion_date_info">Send bo trajno izbrisan na določen datum in ob določeni uri.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Ta datum določa tvoja organizacija</string>
     <string name="who_can_view">Kdo si lahko ogleda</string>
     <string name="anyone_with_the_link">Kdorkoli s povezavo</string>
     <string name="anyone_with_link_can_view_send">Kdorkoli s to povezavo si lahko ogleda ta Send</string>
@@ -515,7 +515,7 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="two_days">2 dneva</string>
     <string name="three_days">3 dni</string>
     <string name="seven_days">7 dni</string>
-    <string name="fourteen_days">14 days</string>
+    <string name="fourteen_days">14 dni</string>
     <string name="thirty_days">30 dni</string>
     <string name="custom">Po meri</string>
     <string name="custom_timeout">Časovna omejitev po meri</string>
@@ -524,11 +524,11 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="about_send">O pošiljkah</string>
     <string name="hide_email">Skrij moj e-poštni naslov od prejemnikov.</string>
     <string name="send_options_policy_in_effect">Ena ali več pravilnikov organizacije vpliva na vaše možnosti pošiljanja.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="organization_policy_restriction">Omejitev v skladu s politiko organizacije</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Ta Pošiljka ni v skladu s politiko pošiljanja tvoje organizacije in bo samodejno prenehala veljati na predviden datum izbrisa.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Ta Pošiljka ni dovoljena za tvojo organizacijo in bo samodejno prenehala veljati na predviden datum izbrisa.</string>
+    <string name="to_edit_this_send_make_a_copy">Za urejanje teg Pošiljke naredi kopijo. Če lahko ta Pošiljka poteče na nastavljeni datum izbrisa, ni potrebno nobeno dejanje.</string>
+    <string name="make_a_copy">Naredi kopijo</string>
     <string name="send_file_premium_required">Brezplačni računi so omejeni samo na besedilne pošiljke. Za uporabo datotečnih pošiljk je potrebno članstvo Premium.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Skupna raba z določenimi osebami je funkcija Premium. Vaš trenutni paket ne vključuje dostopa do te funkcije.</string>
     <string name="password_prompt">Ponovno zahtevaj glavno geslo</string>
@@ -582,8 +582,8 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="resend_code">Ponovno pošlji kodo</string>
     <string name="a_verification_code_was_sent_to_your_email">Verifikacijska koda je bila poslana na vaš e-poštni naslov</string>
     <string name="submit_crash_logs">Pošlji zapisnike ob sesutju</string>
-    <string name="options_expanded">Možnosti so razširjene, tapnite za strnitev.</string>
-    <string name="options_collapsed">Možnosti so strnjene, tapnite za razširitev.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Velike črke (A-Z)</string>
     <string name="lowercase_ato_z">Male črke (a-z)</string>
     <string name="numbers_zero_to_nine">Števke (0-9)</string>
@@ -718,7 +718,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="logging_in_on">Prijava na</string>
     <string name="logging_in_on_with_colon">Prijava na:</string>
     <string name="vault">Trezor</string>
-    <string name="select_vault">Select vault</string>
+    <string name="select_vault">Izberi trezor</string>
     <string name="appearance">Videz</string>
     <string name="account_security">Varnost računa</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>
@@ -1162,11 +1162,6 @@ Ali želite preklopiti na ta račun?</string>
     <string name="file_could_not_be_processed">Datoteke ni bilo mogoče obdelati</string>
     <string name="file_could_not_be_processed_message">Datoteke ni bilo mogoče obdelati. Prepričajte se, da je veljaven JSON, in poskusite znova. Potrebujete pomoč? Obiščite bitwarden.com/help</string>
     <string name="get_help">Pomoč</string>
-    <string name="expand_advanced_options">Razširi napredne možnosti</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokalni predmeti so razširjeni, kliknite za strnitev.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokalni predmeti so strnjeni, kliknite za razširitev.</string>
-    <string name="items_expanded_click_to_collapse">Predmeti so razširjeni, kliknite za strnitev.</string>
-    <string name="items_are_collapsed_click_to_expand">Predmeti so strnjeni, kliknite za razširitev.</string>
     <string name="error_cannot_decrypt">[napaka: ni mogoče dešifrirati]</string>
     <string name="copy_error_report">Kopiraj poročilo o napaki</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ni mogel dešifrirati tega predmeta v trezorju. Kopirajte in delite to poročilo o napaki s podporo za stranke, da preprečite dodatno izgubo podatkov.</string>
@@ -1177,7 +1172,7 @@ Ali želite preklopiti na ta račun?</string>
         <item quantity="other">Bitwarden ni mogel dešifrirati %1$d predmetov v trezorju. Kopirajte in delite to poročilo o napaki s podporo za stranke, da preprečite dodatno izgubo podatkov.</item>
     </plurals>
     <string name="select_a_card_for_x">Izberite kartico za %s</string>
-    <string name="choose_an_identity">Choose an identity</string>
+    <string name="choose_an_identity">Izberi identiteto</string>
     <string name="advanced_options">Napredne možnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Več o zaznavanju ujemanja</annotation></string>
     <string name="keep_your_credential_secure">Ohranite svoje poverilnice varne</string>
@@ -1282,7 +1277,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="invalid_email_addresses">Neveljavni e-poštni naslovi</string>
     <string name="one_or_more_email_addresses_are_incorrect">Eden ali več e-poštnih naslovov je napačnih. Preglejte in poskusite znova.</string>
     <string name="no_email_addresses_entered">Ni vnesenih e-poštnih naslovov</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Vključi samo naslednje domene: %1$s. Preglej in poskusi znova.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Za skupno rabo tega Senda vnesite vsaj en veljaven e-poštni naslov.</string>
     <string name="sync_with_browser">Sinhroniziraj z brskalnikom</string>
     <string name="sync_with_browser_description">Za povezavo z %1$s sinhronizirajte svoj privzeti brskalnik z mobilno aplikacijo Bitwarden. Ko se brskalnik odpre, dokončajte prijavo, če ste pozvani.\nKo je sinhronizacija končana, se boste vrnili v to aplikacijo.</string>
@@ -1462,14 +1457,14 @@ Ali želite preklopiti na ta račun?</string>
     <string name="receive_24_7_priority_support">Prejemajte prednostno podporo 24/7</string>
     <string name="account_creation_restricted">Ustvarjanje računa omejeno</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s dovoljuje ustvarjanje računov samo povabljenim uporabnikom.</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Zmanjšaj %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Povečaj %1$s</string>
     <string name="use_this_passphrase">Uporabi to geselsko frazo</string>
     <string name="use_this_password">Uporabi to geslo</string>
     <string name="use_this_username">Uporabi to uporabniško ime</string>
-    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
-    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
-    <string name="turn_off">Turn off</string>
-    <string name="turn_off_biometric_question">Turn off biometrics?</string>
-    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="keep_unlocking_with_biometrics">Ohrani odklepanje z biometričnimi podatki</string>
+    <string name="weve_made_a_security_update">Izvedli smo varnostno posodobitev. Ponovno potrdi svoje biometrične podatke, da jih boš lahko še naprej uporabljal/a za odklepanje Bitwardena.</string>
+    <string name="turn_off">Izklopi</string>
+    <string name="turn_off_biometric_question">Izklopiti biometrične podatke?</string>
+    <string name="unlocking_will_require_your_master_password">Za odklepanje boš potreboval/a glavno geslo. Biometrične podatke lahko ponovno vklopiš v nastavitvah.</string>
 </resources>

@@ -582,8 +582,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="resend_code">Wyślij ponownie kod</string>
     <string name="a_verification_code_was_sent_to_your_email">Kod weryfikacyjny został wysłany na adres e-mail</string>
     <string name="submit_crash_logs">Wyślij logi awarii</string>
-    <string name="options_expanded">Opcje są rozwinięte. Kliknij, aby zwinąć.</string>
-    <string name="options_collapsed">Opcje są zwinięte. Kliknij, aby rozwinąć.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Wielkie litery (A-Z)</string>
     <string name="lowercase_ato_z">Małe litery (a-z)</string>
     <string name="numbers_zero_to_nine">Cyfry (0-9)</string>
@@ -1161,11 +1161,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="file_could_not_be_processed">Plik nie może zostać przetworzony</string>
     <string name="file_could_not_be_processed_message">Plik nie może być przetworzony. Upewnij się, że plik JSON jest prawidłowy i spróbuj ponownie. Potrzebujesz pomocy? Odwiedź bitwarden.com/help</string>
     <string name="get_help">Uzyskaj pomoc</string>
-    <string name="expand_advanced_options">Rozwiń opcje zaawansowane</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokalne elementy są rozwinięte. Kliknij, aby zwinąć.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokalne elementy są zwinięte. Kliknij, aby rozwinąć.</string>
-    <string name="items_expanded_click_to_collapse">Elementy są rozwinięte. Kliknij, aby zwinąć.</string>
-    <string name="items_are_collapsed_click_to_expand">Elementy są zwinięte. Kliknij, aby rozwinąć.</string>
     <string name="error_cannot_decrypt">[błąd: nie można odszyfrować]</string>
     <string name="copy_error_report">Kopiuj raport błędu</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nie mógł odszyfrować elementu sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</string>

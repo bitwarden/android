@@ -574,8 +574,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="resend_code">Kodu təkrar göndər</string>
     <string name="a_verification_code_was_sent_to_your_email">Doğrulama kodu e-poçtunuza göndərildi</string>
     <string name="submit_crash_logs">Çökmə jurnallarını göndər</string>
-    <string name="options_expanded">Seçənəklər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
-    <string name="options_collapsed">Seçənəklər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Böyük hərf (A-Z)</string>
     <string name="lowercase_ato_z">Kiçik hərf (Z-A)</string>
     <string name="numbers_zero_to_nine">Rəqəmlər (0-9)</string>
@@ -1149,11 +1149,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="file_could_not_be_processed">Fayl emal oluna bilmədi</string>
     <string name="file_could_not_be_processed_message">Fayl emal edilə bilmədi. Bunun yararlı JSON faylı olduğuna əmin olub yenidən sınayın. Kömək lazımdır? bitwarden.com/help ünvanını ziyarət edin</string>
     <string name="get_help">Kömək al</string>
-    <string name="expand_advanced_options">Qabaqcıl seçənəkləri genişləndir</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokal elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokal elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
-    <string name="items_expanded_click_to_collapse">Elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
-    <string name="items_are_collapsed_click_to_expand">Elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="error_cannot_decrypt">[xəta: şifrə açıla bilmir]</string>
     <string name="copy_error_report">Xəta hesabatını kopyala</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</string>

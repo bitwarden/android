@@ -574,8 +574,8 @@
     <string name="resend_code">Повторно изпращане на кода</string>
     <string name="a_verification_code_was_sent_to_your_email">На Вашата е-поща беше изпратен код за потвърждаване</string>
     <string name="submit_crash_logs">Изпращане на доклади за сривовете</string>
-    <string name="options_expanded">Възможностите са разгънати. Докоснете за свиване.</string>
-    <string name="options_collapsed">Възможностите са свити. Докоснете за разгъване.</string>
+    <string name="expand">разгъване</string>
+    <string name="collapse">свиване</string>
     <string name="uppercase_ato_z">Главни букви (A-Z)</string>
     <string name="lowercase_ato_z">Малки букви (a-z)</string>
     <string name="numbers_zero_to_nine">Числа (0-9)</string>
@@ -1150,11 +1150,6 @@
     <string name="file_could_not_be_processed">Файлът не може да бъде обработен</string>
     <string name="file_could_not_be_processed_message">Файлът не може да бъде обработен. Уверете се, че той е правилно структуриран файл JSON и опитайте отново. Ако имате нужда от помощ, прегледайте bitwarden.com/help</string>
     <string name="get_help">Потърсете помощ</string>
-    <string name="expand_advanced_options">Разгъване на разширените настройки</string>
-    <string name="local_items_are_expanded_click_to_collapse">Наличните на това устройство елементи са разгънати. Щракнете за свиване.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Наличните на това устройство елементи са свити. Щракнете за разгъване.</string>
-    <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
-    <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
     <string name="error_cannot_decrypt">[грешка: не може да се дешифрира]</string>
     <string name="copy_error_report">Копиране на доклада за грешката</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Битуорден не може да дешифрира този елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</string>
