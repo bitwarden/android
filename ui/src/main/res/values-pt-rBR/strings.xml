@@ -573,8 +573,8 @@
     <string name="resend_code">Reenviar código</string>
     <string name="a_verification_code_was_sent_to_your_email">Um código de verificação foi enviado para o seu e-mail</string>
     <string name="submit_crash_logs">Enviar registros de travamentos</string>
-    <string name="options_expanded">Opções expandidas, toque para recolher.</string>
-    <string name="options_collapsed">Opções recolhidas, toque para expandir.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Maiúsculas (A ao Z)</string>
     <string name="lowercase_ato_z">Minúsculas (A ao Z)</string>
     <string name="numbers_zero_to_nine">Números (0 ao 9)</string>
@@ -1147,11 +1147,6 @@ Deseja trocar para esta conta?</string>
     <string name="file_could_not_be_processed">O arquivo não pôde ser processado</string>
     <string name="file_could_not_be_processed_message">O arquivo não pôde ser processado. Certifique-se de que é um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help</string>
     <string name="get_help">Obter ajuda</string>
-    <string name="expand_advanced_options">Expandir opções avançadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Itens locais expandidos, clique para recolher.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Itens locais recolhidos, clique para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Itens expandidos, clique para recolher.</string>
-    <string name="items_are_collapsed_click_to_expand">Itens recolhidos, clique para expandir.</string>
     <string name="error_cannot_decrypt">[erro: não é possível descriptografar]</string>
     <string name="copy_error_report">Copiar relatório de erros</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">O Bitwarden não pôde descriptografar este item do cofre. Copie e compartilhe este relatório de erro com o suporte ao cliente para evitar a perda de dados adicionais.</string>

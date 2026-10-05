@@ -574,8 +574,8 @@
     <string name="resend_code">କୋଡ୍ ପୁନଃପଠାନ୍ତୁ</string>
     <string name="a_verification_code_was_sent_to_your_email">ଆପଣଙ୍କ ଇମେଲକୁ ଏକ ଯାଞ୍ଚ କୋଡ୍ ପଠାଗଲା</string>
     <string name="submit_crash_logs">କ୍ରାସ୍ ଲଗ୍ ଦାଖଲ</string>
-    <string name="options_expanded">ବିକଳ୍ପଗୁଡ଼ିକ ବିସ୍ତୃତ, ସଙ୍କୁଚିତ କରିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ।</string>
-    <string name="options_collapsed">ବିକଳ୍ପଗୁଡ଼ିକ ସଙ୍କୁଚିତ, ବିସ୍ତୃତ କରିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ।</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">ବଡ଼ ଅକ୍ଷର (A ଠାରୁ Z)</string>
     <string name="lowercase_ato_z">ସାନ ଅକ୍ଷର (a ଠାରୁ z)</string>
     <string name="numbers_zero_to_nine">ସଂଖ୍ୟା (0 ଠାରୁ 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ଫାଇଲ୍ ପ୍ରକ୍ରିୟାକରଣ ହୋଇପାରିଲା ନାହିଁ</string>
     <string name="file_could_not_be_processed_message">ଫାଇଲ୍ ପ୍ରକ୍ରିୟାକରଣ ହୋଇପାରିଲା ନାହିଁ। ଏହା ବୈଧ JSON ବୋଲି ନିଶ୍ଚିତ କରନ୍ତୁ ଏବଂ ପୁନଃ ଚେଷ୍ଟା। ସାହାଯ୍ୟ ଆବଶ୍ୟକ? bitwarden.com/help ଦେଖନ୍ତୁ</string>
     <string name="get_help">ସାହାଯ୍ୟ ପାଆନ୍ତୁ</string>
-    <string name="expand_advanced_options">ଉନ୍ନତ ବିକଳ୍ପ ବିସ୍ତୃତ</string>
-    <string name="local_items_are_expanded_click_to_collapse">ସ୍ଥାନୀୟ ଆଇଟମ୍‌ଗୁଡ଼ିକ ବିସ୍ତୃତ, ସଙ୍କୁଚିତ କରିବାକୁ କ୍ଲିକ୍।</string>
-    <string name="local_items_are_collapsed_click_to_expand">ସ୍ଥାନୀୟ ଆଇଟମ୍‌ଗୁଡ଼ିକ ସଙ୍କୁଚିତ, ବିସ୍ତୃତ କରିବାକୁ କ୍ଲିକ୍।</string>
-    <string name="items_expanded_click_to_collapse">ଆଇଟମ୍‌ଗୁଡ଼ିକ ବିସ୍ତୃତ, ସଙ୍କୁଚିତ କରିବାକୁ କ୍ଲିକ୍।</string>
-    <string name="items_are_collapsed_click_to_expand">ଆଇଟମ୍‌ଗୁଡ଼ିକ ସଙ୍କୁଚିତ, ବିସ୍ତୃତ କରିବାକୁ କ୍ଲିକ୍।</string>
     <string name="error_cannot_decrypt">[ତ୍ରୁଟି: ଡିକ୍ରିପ୍ଟ୍ ହୋଇପାରିଲା ନାହିଁ]</string>
     <string name="copy_error_report">ତ୍ରୁଟି ରିପୋର୍ଟ କପି</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ଏହି ତିଜୋରି ଆଇଟମ୍‌କୁ ଡିକ୍ରିପ୍ଟ୍ କରିପାରିଲା ନାହିଁ। ଅତିରିକ୍ତ ଡାଟା କ୍ଷତି ଏଡ଼ାଇବାକୁ ଏହି ତ୍ରୁଟି ରିପୋର୍ଟ କପି ଏବଂ ଗ୍ରାହକ ସଫଳତା ଟିମ୍‌ ସହ ବାଣ୍ଟନ୍ତୁ।</string>

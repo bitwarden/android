@@ -191,7 +191,7 @@
     <string name="send_verification_code_again">確認コードをメールで再送</string>
     <string name="verification_email_not_sent">確認メールを送信できませんでした。やり直してください。</string>
     <string name="verification_email_sent">確認メールを送信しました。</string>
-    <string name="yubi_key_instruction">続行するには、Yubicoセキュリティキーをデバイスの背面にかざすか、デバイスのUSBポートに挿入し、ボタンをタッチしてください。</string>
+    <string name="yubi_key_instruction">続行するには、Yubico セキュリティ キーをデバイスの背面にかざすか、デバイスの USB ポートに挿入し手から、ボタンをタップしてください。</string>
     <string name="yubi_key_title">Yubico セキュリティキー</string>
     <string name="add_new_attachment">添付ファイルを追加</string>
     <string name="attachments">添付ファイル</string>
@@ -385,7 +385,7 @@
     <string name="clear_clipboard">クリップボードの消去</string>
     <string name="clear_clipboard_description">コピー内容をクリップボードから自動的に消去します。</string>
     <string name="default_uri_match_detection">デフォルトの URI 一致検出方法</string>
-    <string name="default_uri_match_detection_description">URI一致検出は、Bitwardenがオートフィルの候補をどのように識別するかを制御します。</string>
+    <string name="default_uri_match_detection_description">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。</string>
     <string name="theme">テーマ</string>
     <string name="theme_description">アプリケーションのカラーテーマを変更</string>
     <string name="copy_notes">メモをコピー</string>
@@ -422,7 +422,7 @@
     <string name="unable_to_save_attachment">添付ファイルの保存時に問題が発生しました。問題が続くようであれば、ウェブ保管庫から保存してください。</string>
     <string name="save_attachment_success">添付ファイルを保存しました</string>
     <string name="autofill_tile_accessibility_required">自動入力タイルを使用するには、Bitwarden の設定で「自動入力のユーザー補助」を有効にしてください。</string>
-    <string name="autofill_tile_uri_not_found">パスワードフィールドが見つかりませんでした</string>
+    <string name="autofill_tile_uri_not_found">パスワード フィールドが見つかりませんでした</string>
     <string name="soft_deleting">ごみ箱に入れています…</string>
     <string name="item_soft_deleted">アイテムをごみ箱に入れました。</string>
     <string name="restore">リストア</string>
@@ -570,8 +570,8 @@
     <string name="resend_code">コードを再送信</string>
     <string name="a_verification_code_was_sent_to_your_email">確認コードをあなたのメールアドレスに送信しました</string>
     <string name="submit_crash_logs">クラッシュログを送信</string>
-    <string name="options_expanded">オプションを展開しました。タップして折りたたみます。</string>
-    <string name="options_collapsed">オプションが折りたたまれています。タップすると展開します。</string>
+    <string name="expand">展開</string>
+    <string name="collapse">折りたたむ</string>
     <string name="uppercase_ato_z">大文字（A～Z）</string>
     <string name="lowercase_ato_z">小文字（a～z）</string>
     <string name="numbers_zero_to_nine">数値 (0～9)</string>
@@ -866,7 +866,7 @@
     <string name="import_logins_to_bitwarden">Bitwarden にログイン情報をインポート</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Bitwardenのナビゲーションで、<annotation emphasis="bold">「ツール」オプションを見つけ</annotation>、<annotation emphasis="bold">「データをインポート」を選択します。</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">フォームに入力し、<annotation emphasis="bold">保存したパスワードファイルをインポートします。</annotation></string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">セキュリティのため、必ず<annotation emphasis="bold">保存したパスワードファイルを削除してください。</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">セキュリティのため、必ず<annotation emphasis="bold">保存したパスワード ファイル</annotation>を削除してください。</string>
     <string name="need_help_check_out_import_help">ヘルプが必要ですか？ <annotation link="importHelp">インポートのヘルプ</annotation>をご覧ください。</string>
     <string name="import_help">インポートのヘルプ</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">エクスポートしたファイルを</annotation>コンピューター上の見つけやすい場所に保存します。</string>
@@ -962,7 +962,7 @@
     <string name="invalid_certificate_chain">無効な証明書チェーンです</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">システム証明書を使用することは、Bitwardenに証明書を保存するよりも安全性が低くなります。続行すると、インストールされている場合は利用可能なシステム証明書のリストが表示されます。</string>
     <string name="link">リンク</string>
-    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">リクエストにホストURLが含まれていないため、パスキー操作に失敗しました。</string>
+    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">リクエストにホスト URL が含まれていないため、パスキー操作に失敗しました。</string>
     <string name="passkey_operation_failed_because_app_signature_is_invalid">アプリの署名が無効なため、パスキー操作に失敗しました。</string>
     <string name="passkey_registration_failed_due_to_an_internal_error">内部エラーのため、パスキー登録に失敗しました。</string>
     <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">証明書利用者を識別できないため、パスキー操作に失敗しました。</string>
@@ -1141,11 +1141,6 @@
     <string name="file_could_not_be_processed">ファイルを処理できませんでした</string>
     <string name="file_could_not_be_processed_message">ファイルを処理できませんでした。有効な JSON であることを確認し、再度お試しください。ヘルプが必要な場合は bitwarden.com/help をご覧ください</string>
     <string name="get_help">ヘルプを参照する</string>
-    <string name="expand_advanced_options">高度なオプションを展開</string>
-    <string name="local_items_are_expanded_click_to_collapse">ローカルアイテムが展開されています。クリックして折りたたみます。</string>
-    <string name="local_items_are_collapsed_click_to_expand">ローカルアイテムが折りたたまれています。クリックして展開します。</string>
-    <string name="items_expanded_click_to_collapse">アイテムが展開されています。クリックして折りたたみます。</string>
-    <string name="items_are_collapsed_click_to_expand">アイテムが折りたたまれています。クリックして展開します。</string>
     <string name="error_cannot_decrypt">[エラー: 復号できません]</string>
     <string name="copy_error_report">エラーレポートをコピー</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwardenはこのボールトアイテムを復号化できませんでした。このエラーレポートをコピーしてカスタマーサクセスと共有し、さらなるデータ損失を防いでください。</string>
@@ -1159,14 +1154,14 @@
     <string name="keep_your_credential_secure">資格情報を安全に保つ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” を使用する際に認証情報を安全に保つ方法の詳細はこちら</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” を使用してもよろしいですか？</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI一致検出は、Bitwardenがオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「正規表現」は上級者向けオプションであり、誤って使用すると認証情報を露出させるリスクが高まります。</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI一致検出は、Bitwardenがオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「前方一致」は上級者向けオプションであり、認証情報を露出させるリスクが高まります。</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「正規表現」は上級者向けオプションであり、誤って使用すると認証情報が漏洩するリスクが高まります。</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「前方一致」は上級者向けオプションであり、認証情報が漏洩するリスクが高まります。</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">「前方一致」は上級者向けオプションであり、認証情報を露出させるリスクが高まります。</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">「正規表現」は上級者向けオプションであり、誤って使用すると認証情報を露出させるリスクが高まります。</string>
     <string name="later">後で</string>
     <string name="encryption_settings_updated">暗号化設定が更新されました</string>
     <string name="update_your_encryption_settings">暗号化設定を更新</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">新しい推奨暗号化設定により、アカウントのセキュリティが向上します。今すぐ更新するには、マスターパスワードを入力してください。</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">新しい推奨暗号化設定により、アカウントのセキュリティが向上します。今すぐ更新するには、マスター パスワードを入力してください。</string>
     <string name="import_was_cancelled_in_the_selected_app">選択したアプリで認証情報のインポートがキャンセルされました。アイテムはインポートされていません。</string>
     <string name="import_cancelled">インポートがキャンセルされました</string>
     <string name="no_items_imported">インポートされたアイテムはありません</string>
@@ -1189,7 +1184,7 @@
     <string name="import_from_bitwarden">Bitwarden からインポート</string>
     <string name="select_account">アカウントを選択</string>
     <string name="no_accounts_available">利用可能なアカウントがありません</string>
-    <string name="you_dont_have_any_accounts_you_can_import_from">インポート元となるアカウントがありません。組織のセキュリティポリシーにより、Bitwardenから別のアプリへのアイテムのインポートが制限されている可能性があります。</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">インポート元となるアカウントがありません。組織のセキュリティ ポリシーにより、Bitwarden から他のアプリへのアイテムのインポートが制限されている可能性があります。</string>
     <string name="import_restricted_unable_to_import_credit_cards">インポートが制限されています。このアカウントからカードをインポートできません。</string>
     <string name="verify_your_master_password">マスターパスワードの確認</string>
     <string name="having_trouble_with_autofill">自動入力に問題がありますか?</string>

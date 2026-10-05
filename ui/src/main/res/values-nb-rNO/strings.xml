@@ -574,8 +574,8 @@ Skanning skjer automatisk.</string>
     <string name="resend_code">Send på nytt</string>
     <string name="a_verification_code_was_sent_to_your_email">En verifiseringskode er sendt til din e-post</string>
     <string name="submit_crash_logs">Send krasjlogger</string>
-    <string name="options_expanded">Alternativer er utvidet, trykk for å skjule.</string>
-    <string name="options_collapsed">Instillinger er kollapset, trykk for å vise.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Store bokstaver (A til Z)</string>
     <string name="lowercase_ato_z">Små bokstaver (A til Z)</string>
     <string name="numbers_zero_to_nine">Siffer (0 til 9)</string>
@@ -1148,11 +1148,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="file_could_not_be_processed">Filen kunne ikke behandles</string>
     <string name="file_could_not_be_processed_message">Filen kunne ikke behandles. Kontroller at det er gyldig JSON og prøv på nytt. Trenger du hjelp? Besøk bitwarden.com/help</string>
     <string name="get_help">Få hjelp</string>
-    <string name="expand_advanced_options">Vis avanserte alternativer</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokale elementer er utvidet, klikk for å skjule.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokale elementer er skjult, klikk for å utvide.</string>
-    <string name="items_expanded_click_to_collapse">Elementer er utvidet, klikk for å skjule.</string>
-    <string name="items_are_collapsed_click_to_expand">Elementer er skjult, klikk for å utvide.</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
     <string name="copy_error_report">Copy error report</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>

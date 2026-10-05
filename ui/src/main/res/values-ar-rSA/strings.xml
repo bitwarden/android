@@ -590,8 +590,8 @@
     <string name="resend_code">إعادة إرسال الرمز</string>
     <string name="a_verification_code_was_sent_to_your_email">تم إرسال رمز التحقق إلى بريدك الإلكتروني</string>
     <string name="submit_crash_logs">إرسال سجلات الأعطال</string>
-    <string name="options_expanded">يتم توسيع الخيارات، انقر للتصغير.</string>
-    <string name="options_collapsed">الخيارات مخفية، انقر لتوسيعها.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">أحرف كبيرة (من A إلى Z)</string>
     <string name="lowercase_ato_z">أحرف صغيرة (من A إلى Z)</string>
     <string name="numbers_zero_to_nine">الأعداد (من 0 حتى 9)</string>
@@ -1177,11 +1177,6 @@
     <string name="file_could_not_be_processed">تعذر معالجة الملف</string>
     <string name="file_could_not_be_processed_message">تعذر معالجة الملف. تأكد من صلاحيتها JSON وحاول مرة أخرى. بحاجة إلى مساعدة؟ قم بزيارة bitwarden.com/help</string>
     <string name="get_help">الحصول على المساعدة</string>
-    <string name="expand_advanced_options">توسيع الخيارات المتقدمة</string>
-    <string name="local_items_are_expanded_click_to_collapse">يتم توسيع العناصر المحلية، انقر للإنهيار.</string>
-    <string name="local_items_are_collapsed_click_to_expand">تم انهيار العناصر المحلية، انقر للتوسع.</string>
-    <string name="items_expanded_click_to_collapse">العناصر متوسيعة ، انقر للانهيار.</string>
-    <string name="items_are_collapsed_click_to_expand">العناصر مخفية، انقر للتوسيع.</string>
     <string name="error_cannot_decrypt">[خطأ: لا يمكن فك التشفير]</string>
     <string name="copy_error_report">نسخ تقرير الخطأ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">تعذر على Bitwarden فك تشفير عنصر الخزنة هذا. انسخ تقرير الخطأ هذا وشاركه مع دعم العملاء لتجنب خسارة إضافية للبيانات.</string>

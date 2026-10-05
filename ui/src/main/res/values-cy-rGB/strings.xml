@@ -590,8 +590,8 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="resend_code">Ailanfon cod</string>
     <string name="a_verification_code_was_sent_to_your_email">Anfonwyd cod dilysu i\'ch e-bost</string>
     <string name="submit_crash_logs">Cyflwyno logiau damwain</string>
-    <string name="options_expanded">Mae opsiynau wedi\'u hehangu, tapiwch i\'w cwympo.</string>
-    <string name="options_collapsed">Mae opsiynau wedi\'u cwympo, tapiwch i\'w hehangu.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Priflythrennau (A i Z)</string>
     <string name="lowercase_ato_z">Lythrennau bach (A i Z)</string>
     <string name="numbers_zero_to_nine">Rhifau (0 i 9)</string>
@@ -1176,11 +1176,6 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="file_could_not_be_processed">Ni ellid Prosesu\'r Ffeil</string>
     <string name="file_could_not_be_processed_message">Ni ellid prosesu\'r ffeil. Sicrhewch ei bod yn JSON dilys a cheisiwch eto. Angen cymorth? Ewch i bitwarden.com/help</string>
     <string name="get_help">Cael Cymorth</string>
-    <string name="expand_advanced_options">Ehangu opsiynau uwch</string>
-    <string name="local_items_are_expanded_click_to_collapse">Mae eitemau lleol wedi\'u hehangu, cliciwch i\'w cwympo.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Mae eitemau lleol wedi\'u cwympo, cliciwch i\'w hehangu.</string>
-    <string name="items_expanded_click_to_collapse">Mae eitemau wedi\'u hehangu, cliciwch i\'w cwympo.</string>
-    <string name="items_are_collapsed_click_to_expand">Mae eitemau wedi\'u cwympo, cliciwch i\'w hehangu.</string>
     <string name="error_cannot_decrypt">[gwall: ni ellir dadgryptio]</string>
     <string name="copy_error_report">Copïo adroddiad gwall</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Ni allai Bitwarden ddadgryptio\'r eitem cwpwrdd hon. Copïwch a rhannwch yr adroddiad gwall hwn gyda llwyddiant cwsmeriaid i osgoi colli data ychwanegol.</string>

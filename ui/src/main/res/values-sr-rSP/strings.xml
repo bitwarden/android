@@ -578,8 +578,8 @@
     <string name="resend_code">Понови слање кôда</string>
     <string name="a_verification_code_was_sent_to_your_email">Верификациони кôд је послат на вашу е-пошту</string>
     <string name="submit_crash_logs">Пошаљите евиденцију о паду</string>
-    <string name="options_expanded">Опције су проширене, додирните да бисте скупили.</string>
-    <string name="options_collapsed">Опције су скупљене, додирните да бисте проширили.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Велика слова (A-Z)</string>
     <string name="lowercase_ato_z">Мала слова (A-Z)</string>
     <string name="numbers_zero_to_nine">Цифре (0-9)</string>
@@ -1157,11 +1157,6 @@
     <string name="file_could_not_be_processed">Није могуће обрадити датотеку</string>
     <string name="file_could_not_be_processed_message">Датотека се не може обрадити. Осигурајте да је валидан JSON и покушајте поново. Требате помоћ? Посетите bitwarden.com/help</string>
     <string name="get_help">Потражи помоћ</string>
-    <string name="expand_advanced_options">Проширите напредне опције</string>
-    <string name="local_items_are_expanded_click_to_collapse">Локални предмети су проширени, кликните да се умањи.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Локални предмети су умањени, кликните да се проширу.</string>
-    <string name="items_expanded_click_to_collapse">Предмети су проширени, кликните да се умањи.</string>
-    <string name="items_are_collapsed_click_to_expand">Предмети су умањени, кликните да се проширу.</string>
     <string name="error_cannot_decrypt">[грешка: неуспешна декрипција]</string>
     <string name="copy_error_report">Копирај извештај о грешци</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden није могао да дешифрира овај сеф. Копирајте и делите овај извештај о грешци са успехом купца да бисте избегли додатни губитак података.</string>

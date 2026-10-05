@@ -574,8 +574,8 @@
     <string name="resend_code">కోడ్ మళ్లీ పంపు</string>
     <string name="a_verification_code_was_sent_to_your_email">మీ ఇమెయిల్‌కు ధృవీకరణ కోడ్ పంపబడింది</string>
     <string name="submit_crash_logs">క్రాష్ లాగ్‌లను సమర్పించు</string>
-    <string name="options_expanded">ఎంపికలు విస్తరించబడ్డాయి, కుదించడానికి నొక్కండి.</string>
-    <string name="options_collapsed">ఎంపికలు కుదించబడ్డాయి, విస్తరించడానికి నొక్కండి.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">పెద్ద అక్షరాలు (A నుండి Z)</string>
     <string name="lowercase_ato_z">చిన్న అక్షరాలు (A నుండి Z)</string>
     <string name="numbers_zero_to_nine">సంఖ్యలు (0 నుండి 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ఫైల్ ప్రాసెస్ చేయలేకపోయింది</string>
     <string name="file_could_not_be_processed_message">ఫైల్ ప్రాసెస్ చేయలేకపోయింది. ఇది చెల్లుబాటు అయ్యే JSON అని నిర్ధారించుకుని మళ్లీ ప్రయత్నించండి. సహాయం కావాలా? bitwarden.com/help సందర్శించండి</string>
     <string name="get_help">సహాయం పొందండి</string>
-    <string name="expand_advanced_options">అధునాతన ఎంపికలను విస్తరించు</string>
-    <string name="local_items_are_expanded_click_to_collapse">స్థానిక అంశాలు విస్తరించబడ్డాయి, కుదించడానికి క్లిక్ చేయండి.</string>
-    <string name="local_items_are_collapsed_click_to_expand">స్థానిక అంశాలు కుదించబడ్డాయి, విస్తరించడానికి క్లిక్ చేయండి.</string>
-    <string name="items_expanded_click_to_collapse">అంశాలు విస్తరించబడ్డాయి, కుదించడానికి క్లిక్ చేయండి.</string>
-    <string name="items_are_collapsed_click_to_expand">అంశాలు కుదించబడ్డాయి, విస్తరించడానికి క్లిక్ చేయండి.</string>
     <string name="error_cannot_decrypt">[లోపం: డీక్రిప్ట్ చేయలేము]</string>
     <string name="copy_error_report">లోపం నివేదికను కాపీ చేయి</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ఈ ఖజానా అంశాన్ని డీక్రిప్ట్ చేయలేకపోయింది. అదనపు డేటా నష్టాన్ని నివారించడానికి ఈ లోపం నివేదికను కాపీ చేసి, కస్టమర్ సక్సెస్‌తో భాగస్వామ్యం చేయండి.</string>

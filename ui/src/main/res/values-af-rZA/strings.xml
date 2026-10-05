@@ -574,8 +574,8 @@ Skandering gebeur outomaties.</string>
     <string name="resend_code">Stuur kode weer</string>
     <string name="a_verification_code_was_sent_to_your_email">’n Bevestigingskode is na u e-pos gestuur</string>
     <string name="submit_crash_logs">Dien uitbomverslae in</string>
-    <string name="options_expanded">Opsies is uitgevou, tik om in te vou.</string>
-    <string name="options_collapsed">Opsies is ingevou, tik om uit te vou.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Hoofletters (A tot Z)</string>
     <string name="lowercase_ato_z">Kleinletters (A tot Z)</string>
     <string name="numbers_zero_to_nine">Syfers (0 tot 9)</string>
@@ -1151,11 +1151,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="file_could_not_be_processed">Lêer kon nie verwerk word nie</string>
     <string name="file_could_not_be_processed_message">Lêer kon nie verwerk word nie. Maak seker dat dit geldige JSON is en probeer weer. Het u hulp nodig? Besoek bitwarden.com/help</string>
     <string name="get_help">Kry hulp</string>
-    <string name="expand_advanced_options">Vou gevorderde opsies uit</string>
-    <string name="local_items_are_expanded_click_to_collapse">Plaaslike items is uitgevou, klik om in te vou.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Plaaslike items is ingevou, klik om uit te vou.</string>
-    <string name="items_expanded_click_to_collapse">Items is uitgevou, klik om in te vou.</string>
-    <string name="items_are_collapsed_click_to_expand">Items is ingevou, klik om uit te vou.</string>
     <string name="error_cannot_decrypt">[fout: kan nie dekripteer nie]</string>
     <string name="copy_error_report">Kopieer foutverslag</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kon nie hierdie kluisitem dekripteer nie. Kopieer en deel hierdie foutverslag met kliëntesukses om addisionele dataverlies te vermy.</string>

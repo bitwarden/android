@@ -582,8 +582,8 @@ Načtení proběhne automaticky.</string>
     <string name="resend_code">Znovu odeslat kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Ověřovací kód byl odeslán na Váš e-mail</string>
     <string name="submit_crash_logs">Odesílat záznamy o pádech</string>
-    <string name="options_expanded">Volby jsou rozbaleny, klepněte pro sbalení.</string>
-    <string name="options_collapsed">Volby jsou sbaleny, klepněte pro rozbalení.</string>
+    <string name="expand">rozbalit</string>
+    <string name="collapse">sbalit</string>
     <string name="uppercase_ato_z">Velká písmena (A-Z)</string>
     <string name="lowercase_ato_z">Malá písmena (A-Z)</string>
     <string name="numbers_zero_to_nine">Číslice (0-9)</string>
@@ -1163,11 +1163,6 @@ při opakování problémů.</string>
     <string name="file_could_not_be_processed">Soubor nelze zpracovat</string>
     <string name="file_could_not_be_processed_message">Soubor nelze zpracovat. Ujistěte se, že je to platný JSON a zkuste to znovu. Potřebujete pomoc? Navštivte bitwarden.com/help</string>
     <string name="get_help">Získat pomoc</string>
-    <string name="expand_advanced_options">Rozbalit rozšířené volby</string>
-    <string name="local_items_are_expanded_click_to_collapse">Místní položky jsou rozbaleny; klepnutím sbalíte.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
-    <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
-    <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
     <string name="copy_error_report">Zpráva o chybě kopírování</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nemohl dešifrovat tuto položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</string>

@@ -570,8 +570,8 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="resend_code">Kirim ulang kode</string>
     <string name="a_verification_code_was_sent_to_your_email">Kode verifikasi telah dikirim ke email Anda.</string>
     <string name="submit_crash_logs">Kirim catatan kerusakan</string>
-    <string name="options_expanded">Opsi diperluas, ketuk untuk menciutkan.</string>
-    <string name="options_collapsed">Opsi diciutkan, ketuk untuk memperluas.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Huruf besar (A ke Z)</string>
     <string name="lowercase_ato_z">Huruf kecil (Z ke A)</string>
     <string name="numbers_zero_to_nine">Angka (0 ke 9)</string>
@@ -1141,11 +1141,6 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="file_could_not_be_processed">File Tidak Dapat Diproses</string>
     <string name="file_could_not_be_processed_message">File tidak dapat diproses. Pastikan file berformat JSON yang valid lalu coba lagi. Perlu bantuan? Kunjungi bitwarden.com/help</string>
     <string name="get_help">Dapatkan Bantuan</string>
-    <string name="expand_advanced_options">Buka opsi lanjutan</string>
-    <string name="local_items_are_expanded_click_to_collapse">Item lokal ditampilkan, klik untuk menutup.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Item lokal tertutup, klik untuk menampilkan.</string>
-    <string name="items_expanded_click_to_collapse">Item ditampilkan, klik untuk menutup.</string>
-    <string name="items_are_collapsed_click_to_expand">Item tertutup, klik untuk menampilkan.</string>
     <string name="error_cannot_decrypt">[kesalahan: tidak bisa mendecrypt]</string>
     <string name="copy_error_report">Salin laporan kesalahan</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden tidak dapat mendekripsi item brankas ini. Salin dan bagikan laporan kesalahan ini ke tim layanan pelanggan untuk mencegah kehilangan data lebih lanjut.</string>

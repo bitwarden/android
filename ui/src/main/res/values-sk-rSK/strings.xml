@@ -582,8 +582,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="resend_code">Znova odoslať kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Na váš e-mail bol odoslaný overovací kód</string>
     <string name="submit_crash_logs">Odoslať logy o zlyhaní</string>
-    <string name="options_expanded">Možnosti sú rozbalené, ťuknutím na položku ich zbalíte.</string>
-    <string name="options_collapsed">Možnosti sú zbalené, ťuknutím na položku ich rozbalíte.</string>
+    <string name="expand">rozbaliť</string>
+    <string name="collapse">zbaliť</string>
     <string name="uppercase_ato_z">Veľké písmená (A až Z)</string>
     <string name="lowercase_ato_z">Malé písmená (a až z)</string>
     <string name="numbers_zero_to_nine">Čísla (0 až 9)</string>
@@ -1162,11 +1162,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="file_could_not_be_processed">Súbor sa nepodarilo spracovať</string>
     <string name="file_could_not_be_processed_message">Súbor sa nedal spracovať. Uistite sa, že ide o platný JSON, a skúste to znova. Potrebujete pomoc? Navštívte stránku bitwarden.com/help</string>
     <string name="get_help">Získať pomoc</string>
-    <string name="expand_advanced_options">Rozbaliť rozšírené možnosti</string>
-    <string name="local_items_are_expanded_click_to_collapse">Miestne položky sú rozbalené, kliknutím ich zbalíte.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Miestne položky sú zbalené, kliknutím ich rozbalíte.</string>
-    <string name="items_expanded_click_to_collapse">Položky sú rozbalené, kliknutím ich zbalíte.</string>
-    <string name="items_are_collapsed_click_to_expand">Položky sú zbalené, kliknutím ich rozbalíte.</string>
     <string name="error_cannot_decrypt">[chyba: nedá sa dešifrovať]</string>
     <string name="copy_error_report">Kopírovať hlásenie o chybe</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nedokázal dešifrovať túto položku trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</string>

@@ -574,8 +574,8 @@ L\'escaneig es farà automàticament.</string>
     <string name="resend_code">Reenvia el codi</string>
     <string name="a_verification_code_was_sent_to_your_email">S\'ha enviat el codi de verificació al vostre correu electrònic.</string>
     <string name="submit_crash_logs">Envieu registres d\'error</string>
-    <string name="options_expanded">Les opcions estan ampliades, toqueu per contraure.</string>
-    <string name="options_collapsed">Les opcions estan reduïdes, toqueu per ampliar.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Majúscules (A a la Z)</string>
     <string name="lowercase_ato_z">Minúscules (A a la Z)</string>
     <string name="numbers_zero_to_nine">Números (0 al 9)</string>
@@ -1148,11 +1148,6 @@ Voleu canviar a aquest compte?</string>
     <string name="file_could_not_be_processed">No s\'ha pogut processar el fitxer</string>
     <string name="file_could_not_be_processed_message">No s\'ha pogut processar el fitxer. Assegura\'t que és un JSON vàlid i torna a provar. Necessites ajuda? Visita bitwarden.com/help</string>
     <string name="get_help">Obteniu ajuda</string>
-    <string name="expand_advanced_options">Expandeix les opcions avançades</string>
-    <string name="local_items_are_expanded_click_to_collapse">Els elements locals estan expandits, fes clic per col·lapsar.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Els elements locals estan col·lapsats, fes clic per expandir.</string>
-    <string name="items_expanded_click_to_collapse">Els elements estan expandits, fes clic per col·lapsar.</string>
-    <string name="items_are_collapsed_click_to_expand">Els elements estan col·lapsats, fes clic per expandir.</string>
     <string name="error_cannot_decrypt">[error: no es pot desxifrar]</string>
     <string name="copy_error_report">Copia l\'informe d\'error</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden no ha pogut desxifrar aquest element del cofre. Copia i comparteix aquest informe d\'error amb l\'èxit del client per evitar pèrdues de dades addicionals.</string>

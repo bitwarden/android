@@ -573,8 +573,8 @@
     <string name="resend_code">कोड वापस भेजें</string>
     <string name="a_verification_code_was_sent_to_your_email">आपके ईमेल पर एक सत्यापन कोड भेजा गया था</string>
     <string name="submit_crash_logs">क्रैश लॉग भेजें</string>
-    <string name="options_expanded">विकल्प विस्तारित हैं, संक्षिप्त करने के लिए टैप करें।</string>
-    <string name="options_collapsed">विकल्प संक्षिप्त हैं, विस्तारित करने के लिए टैप करें।</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">बड़े अक्षर (A से Z)</string>
     <string name="lowercase_ato_z">छोटे अक्षर (A से Z)</string>
     <string name="numbers_zero_to_nine">नंबर (0 से 9)</string>
@@ -1147,11 +1147,6 @@
     <string name="file_could_not_be_processed">फ़ाइल संसाधित नहीं की जा सकी</string>
     <string name="file_could_not_be_processed_message">फ़ाइल संसाधित नहीं की जा सकी। सुनिश्चित करें कि यह मान्य JSON है और पुनः प्रयास करें। सहायता चाहिए? bitwarden.com/help पर जाएं</string>
     <string name="get_help">सहायता प्राप्त करें</string>
-    <string name="expand_advanced_options">उन्नत विकल्प विस्तारित करें</string>
-    <string name="local_items_are_expanded_click_to_collapse">स्थानीय आइटम विस्तारित हैं, संक्षिप्त करने के लिए क्लिक करें।</string>
-    <string name="local_items_are_collapsed_click_to_expand">स्थानीय आइटम संक्षिप्त हैं, विस्तारित करने के लिए क्लिक करें।</string>
-    <string name="items_expanded_click_to_collapse">आइटम विस्तारित हैं, संक्षिप्त करने के लिए क्लिक करें।</string>
-    <string name="items_are_collapsed_click_to_expand">आइटम संक्षिप्त हैं, विस्तारित करने के लिए क्लिक करें।</string>
     <string name="error_cannot_decrypt">[त्रुटि: डिक्रिप्ट नहीं कर सकता]</string>
     <string name="copy_error_report">त्रुटि रिपोर्ट कॉपी करें</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden इस वॉल्ट आइटम को डिक्रिप्ट नहीं कर सका। अतिरिक्त डेटा हानि से बचने के लिए इस त्रुटि रिपोर्ट को कॉपी करें और ग्राहक सफलता टीम के साथ साझा करें।</string>

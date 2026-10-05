@@ -581,8 +581,8 @@
     <string name="resend_code">Адправіць код яшчэ раз</string>
     <string name="a_verification_code_was_sent_to_your_email">Праверачны код адпраўлены на ваш адрас электроннай пошты</string>
     <string name="submit_crash_logs">Адпраўляць справаздачы пра збоі</string>
-    <string name="options_expanded">Параметры разгорнутыя. Дакраніцеся, каб згарнуць.</string>
-    <string name="options_collapsed">Параметры згорнутыя. Дакраніцеся, каб разгарнуць.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Вялікія літары (A-Z)</string>
     <string name="lowercase_ato_z">Маленькія літары (a-z)</string>
     <string name="numbers_zero_to_nine">Лічбы (0-9)</string>
@@ -1158,11 +1158,6 @@
     <string name="file_could_not_be_processed">Не ўдалося апрацаваць файл</string>
     <string name="file_could_not_be_processed_message">Не ўдалося апрацаваць файл. Пераканайцеся, што гэта сапраўдны JSON, і паспрабуйце яшчэ раз. Патрэбна дапамога? Наведайце bitwarden.com/help</string>
     <string name="get_help">Атрымаць даведку</string>
-    <string name="expand_advanced_options">Разгарнуць дадатковыя параметры</string>
-    <string name="local_items_are_expanded_click_to_collapse">Лакальныя элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Лакальныя элементы згорнутыя, націсніце, каб разгарнуць.</string>
-    <string name="items_expanded_click_to_collapse">Элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="items_are_collapsed_click_to_expand">Элементы згорнутыя, націсніце, каб разгарнуць.</string>
     <string name="error_cannot_decrypt">[памылка: нельга расшыфраваць]</string>
     <string name="copy_error_report">Скапіраваць справаздачу аб памылцы</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не змог расшыфраваць гэты элемент сховішча. Каб пазбегнуць дадатковай страты даных, скапіруйце і абагуліце гэтую справаздачу аб памылцы са службай падтрымкі.</string>
