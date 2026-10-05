@@ -179,7 +179,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 leadingIcon = painterResource(id = BitwardenDrawable.ic_plus_small),
                 style = BitwardenTheme.typography.labelMedium,
                 innerPadding = PaddingValues(all = 16.dp),
-                cornerSize = 0.dp,
+                shape = BitwardenTheme.shapes.contentBottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag(tag = "LoginAddNewUriButton")
@@ -288,7 +288,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
                     style = BitwardenTheme.typography.labelMedium,
                     onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                     innerPadding = PaddingValues(all = 16.dp),
-                    cornerSize = 0.dp,
+                    shape = BitwardenTheme.shapes.contentBottom,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(tag = "CheckPasswordButton"),
@@ -400,7 +400,7 @@ private fun TotpRow(
                 style = BitwardenTheme.typography.labelMedium,
                 innerPadding = PaddingValues(all = 16.dp),
                 isEnabled = canViewTotp,
-                cornerSize = 0.dp,
+                shape = BitwardenTheme.shapes.contentBottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SetupTotpButton"),
