@@ -59,13 +59,14 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Scheduled runs are live: they comment on and close issues. Set this to 'dry-run' to have
-  # actions/stale log every comment and closure it would make without touching an issue.
+  # Scheduled runs are live: they comment on and close issues. Dry runs are for testing:
+  # actions/stale logs every comment and closure it would make without touching an issue,
+  # and the summary posts to the automations test channel.
   #
   # Note that a dry run projects closures only for issues already carrying a real "stale"
   # label from an earlier live run. Issues it stales during the same run are skipped for
   # closure, so the first dry run against an unlabelled repo projects warnings only.
-  SCHEDULED_RUN_MODE: live
+  RUN_MODE: ${{ inputs.run-mode || 'live' }}
 
 jobs:
   stale-issue-cleanup:
@@ -82,20 +83,11 @@ jobs:
       issues: write
 
     steps:
-      # Single source of truth for the run mode, so the stale step's debug-only and the
-      # Slack webhook choice can never disagree.
-      - name: Resolve run mode
-        id: mode
-        env:
-          _RUN_MODE: ${{ inputs.run-mode || env.SCHEDULED_RUN_MODE }}
+      - name: Log run mode
         run: |
-          if [ "$_RUN_MODE" = "live" ]; then
-            echo "mode=live" >> "$GITHUB_OUTPUT"
-            echo "debug_only=false" >> "$GITHUB_OUTPUT"
+          if [ "${RUN_MODE}" = "live" ]; then
             echo "🔴 Running live: issues will be commented on and closed."
           else
-            echo "mode=dry-run" >> "$GITHUB_OUTPUT"
-            echo "debug_only=true" >> "$GITHUB_OUTPUT"
             echo "👀 Dry run: no issue will be modified; Slack goes to the test channel."
           fi
 
@@ -151,8 +143,8 @@ jobs:
           # and no dedicated bot account required.
           repo-token: ${{ github.token }}
 
-          # Resolved once by the 'Resolve run mode' step above.
-          debug-only: ${{ steps.mode.outputs.debug_only }}
+          # Dry run unless RUN_MODE is live.
+          debug-only: ${{ env.RUN_MODE != 'live' }}
 
           # Warn after 240 days (8 months) of inactivity, then close 14 days later.
           days-before-issue-stale: 240
@@ -228,7 +220,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
-          _MODE: ${{ steps.mode.outputs.mode }}
+          _MODE: ${{ env.RUN_MODE }}
           # "true" or "false" on manual runs; empty on scheduled ones, which have no inputs.
           _SINGLE_CHANGE: ${{ inputs.single-change }}
           _SERVER_URL: ${{ github.server_url }}
@@ -447,6 +439,6 @@ jobs:
         if: steps.stats.outputs.notify == 'true'
         uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
-          webhook: ${{ steps.mode.outputs.mode == 'live' && steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS || steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL }}
+          webhook: ${{ env.RUN_MODE == 'live' && steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-TEAM-ENG-MOBILE-NOTIFICATIONS || steps.retrieve-slack-secrets.outputs.SLACK-WEBHOOK-AUTOMATIONS-TEST-CHANNEL }}
           webhook-type: incoming-webhook
           payload-file-path: slack-payload.json
