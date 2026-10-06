@@ -712,15 +712,9 @@ data class SyncResponseJson(
         @SerialName("type")
         val type: CipherTypeJson,
 
-        @SerialName("login")
-        val login: Login?,
-
         @SerialName("creationDate")
         @Contextual
         val creationDate: Instant,
-
-        @SerialName("secureNote")
-        val secureNote: SecureNote?,
 
         @SerialName("folderId")
         val folderId: String?,
@@ -731,21 +725,6 @@ data class SyncResponseJson(
         @SerialName("deletedDate")
         @Contextual
         val deletedDate: Instant?,
-
-        @SerialName("identity")
-        val identity: Identity?,
-
-        @SerialName("sshKey")
-        val sshKey: SshKey?,
-
-        @SerialName("bankAccount")
-        val bankAccount: BankAccount?,
-
-        @SerialName("driversLicense")
-        val driversLicense: DriversLicense?,
-
-        @SerialName("passport")
-        val passport: Passport?,
 
         @SerialName("collectionIds")
         val collectionIds: List<String>?,
@@ -765,9 +744,6 @@ data class SyncResponseJson(
         @SerialName("favorite")
         val isFavorite: Boolean,
 
-        @SerialName("card")
-        val card: Card?,
-
         @SerialName("key")
         val key: String?,
 
@@ -780,6 +756,38 @@ data class SyncResponseJson(
 
         @SerialName("data")
         val data: String?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("login")
+        val login: Login?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("card")
+        val card: Card?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("bankAccount")
+        val bankAccount: BankAccount?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("identity")
+        val identity: Identity?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("driversLicense")
+        val driversLicense: DriversLicense?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("passport")
+        val passport: Passport?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("secureNote")
+        val secureNote: SecureNote?,
+
+        @Deprecated("V2 encryption uses `data` and this will always be null")
+        @SerialName("sshKey")
+        val sshKey: SshKey?,
     ) {
         /**
          * Represents an attachment in the vault response.
