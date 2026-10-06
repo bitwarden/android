@@ -227,6 +227,7 @@ jobs:
           CLOSED="$(len "$_CLOSED_NUMBERS")"
 
           UNSTALED_JSON='[]'
+          UNSTALED_OK=true
           if [ "$_MODE" = "live" ]; then
             if [ -n "${_STALE_BEFORE:-}" ] && UNLABELLED="$(
               gh api --paginate \
@@ -238,6 +239,7 @@ jobs:
                   '. as $now | [$before[] | select(.number as $n | $now | any(. == $n))]'
               )"
             else
+              UNSTALED_OK=false
               echo "::warning::Could not work out which stale labels this run removed."
             fi
           fi
@@ -251,13 +253,16 @@ jobs:
             MODE_TEXT="DRY RUN - no issue was modified"
           fi
 
-          # $1 = full|slack. Empty for Slack on a live run without single-change.
+          # $1 = full|slack. Empty for Slack on a live run with nothing to flag.
           body() {
             if [ "$1" = "full" ] || [ "$_MODE" != "live" ]; then
               printf 'Mode: %s\n' "$MODE_TEXT"
             fi
             if [ "$_SINGLE_CHANGE" = "true" ]; then
               printf 'Single change: on - stopped after the first issue acted on\n'
+            fi
+            if [ "$UNSTALED_OK" = "false" ]; then
+              printf 'Stale labels removed: unavailable (listing failed)\n'
             fi
           }
 
@@ -291,9 +296,12 @@ jobs:
             echo '```'
             if [ -n "$SECTIONS_MD" ]; then
               echo "$SECTIONS_MD"
-            else
+            elif [ "$UNSTALED_OK" = "true" ]; then
               echo
               echo "No issue was warned, closed, or un-staled."
+            else
+              echo
+              echo "No issue was warned or closed."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -310,7 +318,11 @@ jobs:
             echo "notify=true" >> "$GITHUB_OUTPUT"
           else
             echo "notify=false" >> "$GITHUB_OUTPUT"
-            echo "No issue was warned, closed, or un-staled, so Slack will be skipped."
+            if [ "$UNSTALED_OK" = "true" ]; then
+              echo "No issue was warned, closed, or un-staled, so Slack will be skipped."
+            else
+              echo "No issue was warned or closed, so Slack will be skipped."
+            fi
           fi
 
       - name: Log in to Azure
