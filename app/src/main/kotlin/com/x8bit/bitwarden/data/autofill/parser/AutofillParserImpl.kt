@@ -11,6 +11,9 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.parser.util.logViewNode
+import com.x8bit.bitwarden.data.autofill.parser.util.logWindowNodeEnd
+import com.x8bit.bitwarden.data.autofill.parser.util.logWindowNodeStart
 import com.x8bit.bitwarden.data.autofill.util.buildFillAssistViews
 import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
@@ -86,7 +89,7 @@ private val IDENTITY_FILL_ASSIST_CATEGORIES: List<String> = listOf(
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
-class AutofillParserImpl(
+internal class AutofillParserImpl(
     private val settingsRepository: SettingsRepository,
     private val fillAssistManager: FillAssistManager,
     private val featureFlagManager: FeatureFlagManager,
@@ -316,14 +319,17 @@ private fun AssistStructure.traverse(
     (0 until windowNodeCount)
         .map { getWindowNodeAt(it) }
         .mapNotNull { windowNode ->
+            windowNode.logWindowNodeStart()
             windowNode
                 .rootViewNode
                 ?.traverse(
                     parentWebsite = null,
                     isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                    depth = 1,
                 )
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
+                .also { windowNode.logWindowNodeEnd() }
         }
 
 /**
@@ -436,6 +442,7 @@ private fun ViewNodeTraversalData.copyAndMapAutofillViews(
 private fun AssistStructure.ViewNode.traverse(
     parentWebsite: String?,
     isIdentityAutofillEnabled: Boolean,
+    depth: Int,
 ): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
@@ -455,10 +462,11 @@ private fun AssistStructure.ViewNode.traverse(
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
-    toAutofillView(
-        parentWebsite = parentWebsite,
-        isIdentityAutofillEnabled = isIdentityAutofillEnabled,
-    )
+    this
+        .toAutofillView(
+            parentWebsite = parentWebsite,
+            isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+        )
         ?.also { view ->
             if (view !is AutofillView.Unused) {
                 claimedAutofillIds.add(view.data.autofillId)
@@ -482,7 +490,7 @@ private fun AssistStructure.ViewNode.traverse(
             }
         }
         ?: autofillId?.run(mutableIgnoreAutofillIdList::add)
-
+    this.logViewNode(depth = depth)
     // Recursively traverse all of this view node's children.
     for (i in 0 until childCount) {
         // Extract the traversal data from each child view node and add it to the lists.
@@ -490,6 +498,7 @@ private fun AssistStructure.ViewNode.traverse(
             .traverse(
                 parentWebsite = website,
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                depth = depth + 1,
             )
             .let { viewNodeTraversalData ->
                 // Ids already claimed by an ancestor's own view (e.g. a container-redirect
