@@ -48,6 +48,7 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR = 2
 
 /**
  * Manages application state for the initial vault unlock screen.
@@ -112,6 +113,8 @@ class VaultUnlockViewModel @Inject constructor(
         )
     },
 ) {
+    private var keystoreAuthorizationFailureCount = 0
+
     init {
         authRepository
             .userStateFlow
@@ -365,6 +368,10 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
+            is VaultUnlockResult.BiometricKeystoreAuthorizationError -> {
+                handleBiometricKeystoreAuthorizationError(result)
+            }
+
             is VaultUnlockResult.GenericError,
             is VaultUnlockResult.InvalidStateError,
                 -> {
@@ -380,15 +387,48 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
-            VaultUnlockResult.Success -> {
-                if (specialCircumstanceManager.specialCircumstance == null) {
-                    specialCircumstanceManager.specialCircumstance =
-                        appResumeManager.getResumeSpecialCircumstance()
-                }
+            VaultUnlockResult.Success -> handleVaultUnlockSuccess()
+        }
+    }
 
-                mutableStateFlow.update { it.copy(dialog = null) }
-                // Don't do anything, we'll navigate to the right place.
+    private fun handleVaultUnlockSuccess() {
+        keystoreAuthorizationFailureCount = 0
+        if (specialCircumstanceManager.specialCircumstance == null) {
+            specialCircumstanceManager.specialCircumstance =
+                appResumeManager.getResumeSpecialCircumstance()
+        }
+
+        mutableStateFlow.update { it.copy(dialog = null) }
+        // Don't do anything, we'll navigate to the right place.
+    }
+
+    private fun handleBiometricKeystoreAuthorizationError(
+        result: VaultUnlockResult.BiometricKeystoreAuthorizationError,
+    ) {
+        keystoreAuthorizationFailureCount += 1
+        if (keystoreAuthorizationFailureCount >= KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR) {
+            authRepository.clearBiometrics(userId = state.userId)
+            mutableStateFlow.update {
+                it.copy(
+                    isBiometricsValid = false,
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        title = BitwardenString.biometrics_failed.asText(),
+                        message = BitwardenString.biometrics_decoding_failure.asText(),
+                        throwable = result.error,
+                    ),
+                )
             }
+            return
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
+                    throwable = result.error,
+                ),
+            )
         }
     }
 
@@ -413,6 +453,10 @@ class VaultUnlockViewModel @Inject constructor(
         if (userState.activeAccount.isVaultUnlocked) return
         // If the user state has changed to add a new account, do nothing.
         if (userState.hasPendingAccountAddition) return
+
+        if (state.userId != userState.activeUserId) {
+            keystoreAuthorizationFailureCount = 0
+        }
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()

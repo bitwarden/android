@@ -13,6 +13,7 @@ fun VaultUnlockError.toLoginErrorResult(): LoginResult.Error = when (this) {
     }
 
     is VaultUnlockResult.BiometricDecodingError,
+    is VaultUnlockResult.BiometricKeystoreAuthorizationError,
     is VaultUnlockResult.GenericError,
     is VaultUnlockResult.InvalidStateError,
         -> LoginResult.Error(error = this.error)

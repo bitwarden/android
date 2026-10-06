@@ -66,6 +66,7 @@ class AuthenticatorBridgeRepositoryImpl(
                 when (vaultUnlockResult) {
                     is VaultUnlockResult.AuthenticationError,
                     is VaultUnlockResult.BiometricDecodingError,
+                    is VaultUnlockResult.BiometricKeystoreAuthorizationError,
                     is VaultUnlockResult.GenericError,
                     is VaultUnlockResult.InvalidStateError,
                         -> {

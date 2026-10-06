@@ -298,6 +298,7 @@ class VerifyPasswordViewModel @Inject constructor(
 
             is VaultUnlockResult.InvalidStateError,
             is VaultUnlockResult.BiometricDecodingError,
+            is VaultUnlockResult.BiometricKeystoreAuthorizationError,
             is VaultUnlockResult.GenericError,
                 -> {
                 showGenericErrorDialog(throwable = action.vaultUnlockResult.error)

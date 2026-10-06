@@ -273,50 +273,62 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithBiometrics with stored IV and Keystore user-authentication-required error on API 33 should return AuthenticationError without unlocking or mutating biometrics`() =
+    fun `unlockVaultWithBiometrics with stored IV and Keystore user-authentication-required error on API 33 should return BiometricKeystoreAuthorizationError without unlocking or mutating biometrics`() =
         runTest {
             mockBuildVersion(sdkInt = Build.VERSION_CODES.TIRAMISU)
             val (error, _) = createUserAuthenticationRequiredDoFinalError()
 
             val result = unlockVaultWithBiometricsDoFinalError(error = error)
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
-            assertEquals(error, (result as VaultUnlockResult.AuthenticationError).error)
+            assertEquals(
+                VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error),
+                result,
+            )
+            assertEquals(
+                error,
+                (result as VaultUnlockResult.BiometricKeystoreAuthorizationError).error,
+            )
             assertStoredBiometricsUnchanged()
             verifyUnlockAndPinDerivationNeverCalled()
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithBiometrics with stored IV and Keystore user-authentication-required error on API 36 should return AuthenticationError without unlocking or mutating biometrics`() =
+    fun `unlockVaultWithBiometrics with stored IV and Keystore user-authentication-required error on API 36 should return BiometricKeystoreAuthorizationError without unlocking or mutating biometrics`() =
         runTest {
             mockBuildVersion(sdkInt = Build.VERSION_CODES.BAKLAVA)
             val (error, _) = createUserAuthenticationRequiredDoFinalError()
 
             val result = unlockVaultWithBiometricsDoFinalError(error = error)
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
+            assertEquals(
+                VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error),
+                result,
+            )
             assertStoredBiometricsUnchanged()
             verifyUnlockAndPinDerivationNeverCalled()
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithBiometrics with stored IV and nested Keystore user-authentication-required error should return AuthenticationError`() =
+    fun `unlockVaultWithBiometrics with stored IV and nested Keystore user-authentication-required error should return BiometricKeystoreAuthorizationError`() =
         runTest {
             mockBuildVersion(sdkInt = Build.VERSION_CODES.TIRAMISU)
             val (error, _) = createUserAuthenticationRequiredDoFinalError(additionalWrapperCount = 2)
 
             val result = unlockVaultWithBiometricsDoFinalError(error = error)
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
+            assertEquals(
+                VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error),
+                result,
+            )
             assertStoredBiometricsUnchanged()
             verifyUnlockAndPinDerivationNeverCalled()
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithBiometrics without IV and Keystore user-authentication-required error should return AuthenticationError without migrating biometrics`() =
+    fun `unlockVaultWithBiometrics without IV and Keystore user-authentication-required error should return BiometricKeystoreAuthorizationError without migrating biometrics`() =
         runTest {
             mockBuildVersion(sdkInt = Build.VERSION_CODES.TIRAMISU)
             val (error, _) = createUserAuthenticationRequiredDoFinalError()
@@ -326,7 +338,10 @@ class VaultRepositoryTest {
                 initVector = null,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
+            assertEquals(
+                VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error),
+                result,
+            )
             assertStoredBiometricsUnchanged(initVector = null)
             verifyUnlockAndPinDerivationNeverCalled()
         }
