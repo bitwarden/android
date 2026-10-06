@@ -32,8 +32,6 @@ run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 
 on:
   schedule:
-    # Run daily at 07:15 UTC. Off the hour: GitHub delays scheduled runs during the
-    # congestion at :00, and the close countdown is only as precise as the cadence.
     - cron: '15 7 * * *'
   workflow_dispatch:
     inputs:
@@ -51,21 +49,14 @@ on:
 
 permissions: {}
 
-# One run at a time. Overlapping runs could both warn the same issue, posting the comment
-# twice, and would race on actions/stale's saved progress. A second run queues rather than
-# cancelling the first, since a cancelled live run stops partway through.
+# Overlapping runs could both warn the same issue, posting the comment twice, and would
+# race on actions/stale's saved progress. A second run queues rather than cancelling the
+# first.
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 
 env:
-  # Scheduled runs are live: they comment on and close issues. Dry runs are for testing:
-  # actions/stale logs every comment and closure it would make without touching an issue,
-  # and the summary posts to the automations test channel.
-  #
-  # Note that a dry run projects closures only for issues already carrying a real "stale"
-  # label from an earlier live run. Issues it stales during the same run are skipped for
-  # closure, so the first dry run against an unlabelled repo projects warnings only.
   RUN_MODE: ${{ inputs.run-mode || 'live' }}
 
 jobs:
@@ -78,7 +69,6 @@ jobs:
       # needs this; without it the saved progress is either never read or never replaced.
       actions: write
       contents: read
-      # Required by azure-login below to fetch the Slack webhook via OIDC.
       id-token: write
       issues: write
 
@@ -91,36 +81,24 @@ jobs:
             echo "👀 Dry run: no issue will be modified; Slack goes to the test channel."
           fi
 
-      # Taken before the stale step runs, so the counts are never affected by this run's
+      # Taken before the stale step runs so the counts are never affected by this run's
       # own mutations or by search-index lag behind them.
       - name: Snapshot issue counts
         id: snapshot
         env:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
-        # Nothing here may fail the step: it runs before the sweep, so a failed report query
-        # would otherwise skip the whole cleanup. Failures surface in the summary as ? instead.
-        # The default shell is bash -e without pipefail, and set -e ignores substitutions
-        # used as arguments, so each failure is caught explicitly rather than by the shell.
         run: |
           count() {
             gh api -X GET search/issues -f q="repo:$_REPO $1" --jq '.total_count' || echo '?'
           }
 
-          # Taken before the stale listing below, so a label removed between the two can't be
-          # mistaken for one this run removed. A minute early, so runner clock skew can't hide
-          # an update from the stats step's since filter.
           STARTED_AT="$(date -u -d '-1 minute' +%Y-%m-%dT%H:%M:%SZ)"
 
-          # For the stats step to work out which stale labels this run removed. REST rather
-          # than search, so there's no index lag. The gh call is tested on its own, outside a
-          # pipe, so its exit status isn't lost; an empty value is what makes the stats step
-          # show ? instead of 0.
           if STALE_BEFORE="$(
             gh api --paginate "repos/$_REPO/issues?state=open&labels=stale&per_page=100" \
               --jq '.[] | select(.pull_request | not) | {number, title}'
           )"; then
-            # jq -c keeps it on one line for GITHUB_OUTPUT.
             STALE_BEFORE="$(printf '%s\n' "$STALE_BEFORE" | jq -sc '.')"
           else
             echo "::warning::Could not list stale issues; the un-stale count will show ?."
@@ -139,11 +117,8 @@ jobs:
         id: stale
         uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
         with:
-          # Default GITHUB_TOKEN, scoped by the issues: write permission above. No PAT
-          # and no dedicated bot account required.
           repo-token: ${{ github.token }}
 
-          # Dry run unless RUN_MODE is live.
           debug-only: ${{ env.RUN_MODE != 'live' }}
 
           # Warn after 240 days (8 months) of inactivity, then close 14 days later.
@@ -161,27 +136,14 @@ jobs:
           days-before-pr-close: -1
 
           # Oldest issues first, so a capped run still makes forward progress on the
-          # backlog; a daily cadence drains it at up to 300 operations per day, shared
-          # between warnings and closures. Runs that hit this cap log the remaining
-          # operations.
-          #
-          # single-change drops the budget to 2. actions/stale checks the budget only between
-          # issues, never partway through one, and the first page fetch spends 1, so the
-          # first issue that costs any operation runs to completion and nothing after it is
-          # touched. Fetching a second page would spend the last operation, so that issue
-          # has to be on the first page of 100.
-          #
-          # It also sorts by least recently updated, which puts every issue due a warning
-          # (240+ days idle) or a closure (14+ days since warning) ahead of any issue still
-          # counting down, the one kind that costs operations without changing anything.
-          # Issues costing nothing (exempt, pull requests, not yet idle long enough) are
-          # skipped for free, so the first page holds the target unless 100 or more of those
-          # sort ahead of it.
+          # backlog. Sorting by least recently updated puts every issue due a warning
+          # or a closure ahead of any issue still counting down to save operations.
+          # single-change drops the budget to 2 since the fetch costs 1 operation,
+          # leaving room for exactly one warning or closure.
           ascending: true
           sort-by: ${{ inputs.single-change && 'updated' || 'created' }}
           operations-per-run: ${{ inputs.single-change && 2 || 300 }}
 
-          # Logs the per-run summary of issues staled, closed, and skipped.
           enable-statistics: true
 
           stale-issue-message: |
@@ -208,20 +170,12 @@ jobs:
 
             Thank you for your contribution to this project. Your feedback helps us improve! 🙏
 
-      # actions/stale's enable-statistics output is log-only, so the run's counts come from
-      # its step outputs instead. Those arrays populate even in a dry run, which is what
-      # makes a dry run's projection useful.
-      #
-      # The aligned counts stay inside a code fence; the issue links have to sit outside one,
-      # since neither GitHub markdown nor Slack mrkdwn linkifies fenced text. Markdown and
-      # mrkdwn also spell links differently, so each section is rendered twice.
       - name: Build stats summary
         id: stats
         env:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
           _MODE: ${{ env.RUN_MODE }}
-          # "true" or "false" on manual runs; empty on scheduled ones, which have no inputs.
           _SINGLE_CHANGE: ${{ inputs.single-change }}
           _SERVER_URL: ${{ github.server_url }}
           _RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -230,10 +184,6 @@ jobs:
           _EXEMPT: ${{ steps.snapshot.outputs.exempt }}
           _STARTED_AT: ${{ steps.snapshot.outputs.started_at }}
           _STALE_BEFORE: ${{ steps.snapshot.outputs.stale_before }}
-          # The stale outputs carry full issue objects, several KB each, and Linux caps a
-          # single environment variable at 128 KiB, so passing them whole fails the step
-          # with "Argument list too long" once a run touches a few dozen issues. Only the
-          # number and title of each issue cross the env boundary, as parallel arrays.
           _NEW_WARNING_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.number) }}
           _NEW_WARNING_TITLES: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.title) }}
           _CLOSED_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.closed-issues-prs || '[]').*.number) }}
@@ -249,7 +199,6 @@ jobs:
           row() { printf '  %-36s %5s\n' "$1" "$2"; }
 
           # $1 = numbers JSON, $2 = titles JSON (same order), $3 = md|slack
-          #
           # Lists every issue, uncapped. Safe because operations-per-run already bounds how
           # many issues one run can touch (~75 at roughly four operations per warning; 56
           # warnings took 227), keeping even a full sweep near 10,000 characters, well inside
@@ -261,10 +210,6 @@ jobs:
               --argjson titles "$2" \
               --arg base "$_SERVER_URL/$_REPO" \
               --arg fmt "$3" '
-                # Truncate first, then escape, so a cut never lands inside an entity.
-                # Both targets need the HTML escaping: Slack requires it for mrkdwn, and
-                # GitHub strips raw tags it does not allow, which would otherwise eat part
-                # of a title like <input type="password"> outright.
                 def title:
                   ((.title // "") | if (length > 70) then (.[0:70] + "…") else . end)
                   | gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
@@ -277,7 +222,6 @@ jobs:
               '
           }
 
-          # $1 = heading, $2 = count, $3 = numbers JSON, $4 = titles JSON, $5 = md|slack
           section() {
             if [ "$2" -eq 0 ]; then
               return 0
@@ -293,16 +237,6 @@ jobs:
           NEW_WARNINGS="$(len "$_NEW_WARNING_NUMBERS")"
           CLOSED="$(len "$_CLOSED_NUMBERS")"
 
-          # actions/stale outputs its warnings and closures but not the stale labels it
-          # removes when an issue sees new activity, so those are worked out here: issues
-          # that carried the label before the run, were updated since it started, and no
-          # longer carry it. Closing keeps the label, so this run's closures (and anything a
-          # person closed meanwhile) drop out on their own. A dry run removes nothing, so it
-          # has nothing to find and shows n/a rather than a misleading 0.
-          #
-          # A person removing the label by hand mid-run would be counted too; runs take
-          # seconds, so that's accepted. If either listing failed, the count shows ? rather
-          # than a 0 that would read as "none".
           UNSTALED_JSON='[]'
           UNSTALED_TEXT='n/a'
           if [ "$_MODE" = "live" ]; then
@@ -332,13 +266,6 @@ jobs:
             MODE_TEXT="DRY RUN - no issue was modified"
           fi
 
-          # $1 = full|slack. The exempt count is reference detail for the job summary and
-          # log only; the Slack post sticks to the issues that are moving. Slack also drops
-          # the Mode line on live runs, where it's the expected case, but keeps it on dry
-          # runs as the reminder that nothing was modified.
-          #
-          # The single-change line appears in both, and only on runs that set it, so a capped
-          # run is never mistaken for a full sweep that happened to find one issue.
           body() {
             local header=false
             if [ "$1" = "full" ] || [ "$_MODE" != "live" ]; then
@@ -367,7 +294,6 @@ jobs:
           BODY="$(body full)"
           BODY_SLACK="$(body slack)"
 
-          # Most consequential first: closures, then new warnings, then removed labels.
           SECTIONS_MD="$(
             section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" md
             section 'New 2-week warnings posted' "$NEW_WARNINGS" \
@@ -398,7 +324,6 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # payload-templated is off by default, so nothing in BODY_SLACK is re-evaluated.
           jq -n \
             --arg body "$BODY_SLACK" \
             --arg sections "$SECTIONS_SLACK" \
@@ -407,7 +332,6 @@ jobs:
             '{text: (":broom: *Stale Issue Cleanup:* \($repo) - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
             > slack-payload.json
 
-          # A run that changed nothing posts nothing; the job summary still has it.
           if [ $(( NEW_WARNINGS + CLOSED + UNSTALED )) -gt 0 ]; then
             echo "notify=true" >> "$GITHUB_OUTPUT"
           else
