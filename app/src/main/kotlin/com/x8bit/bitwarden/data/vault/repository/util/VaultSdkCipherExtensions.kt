@@ -485,6 +485,7 @@ fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
  * Converts a [SyncResponseJson.Cipher] object to a corresponding
  * Bitwarden SDK [Cipher] object.
  */
+@Suppress("DEPRECATION")
 fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
     Cipher(
         id = id,
