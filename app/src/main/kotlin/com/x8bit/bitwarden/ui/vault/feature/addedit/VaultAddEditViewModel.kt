@@ -2069,7 +2069,9 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is UpdateCipherResult.Success -> {
-                specialCircumstanceManager.specialCircumstance = null
+                if (state.shouldClearSpecialCircumstance) {
+                    specialCircumstanceManager.specialCircumstance = null
+                }
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
