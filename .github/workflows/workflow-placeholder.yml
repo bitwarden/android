@@ -81,18 +81,14 @@ jobs:
             echo "👀 Dry run: no issue will be modified; Slack goes to the test channel."
           fi
 
-      # Taken before the stale step runs so the counts are never affected by this run's
-      # own mutations or by search-index lag behind them.
-      - name: Snapshot issue counts
+      # Taken before the stale step runs, so the stats step can tell which stale labels this
+      # run removed.
+      - name: Snapshot stale issues
         id: snapshot
         env:
           GH_TOKEN: ${{ github.token }}
           _REPO: ${{ github.repository }}
         run: |
-          count() {
-            gh api -X GET search/issues -f q="repo:$_REPO $1" --jq '.total_count' || echo '?'
-          }
-
           STARTED_AT="$(date -u -d '-1 minute' +%Y-%m-%dT%H:%M:%SZ)"
 
           if STALE_BEFORE="$(
@@ -101,14 +97,11 @@ jobs:
           )"; then
             STALE_BEFORE="$(printf '%s\n' "$STALE_BEFORE" | jq -sc '.')"
           else
-            echo "::warning::Could not list stale issues; the un-stale count will show ?."
+            echo "::warning::Could not list stale issues; removed stale labels won't be reported."
             STALE_BEFORE=''
           fi
 
           {
-            echo "open_issues=$(count 'is:issue is:open')"
-            echo "in_warning=$(count 'is:issue is:open label:stale')"
-            echo "exempt=$(count 'is:issue is:open label:never-stale')"
             echo "started_at=$STARTED_AT"
             echo "stale_before=$STALE_BEFORE"
           } >> "$GITHUB_OUTPUT"
@@ -179,9 +172,6 @@ jobs:
           _SINGLE_CHANGE: ${{ inputs.single-change }}
           _SERVER_URL: ${{ github.server_url }}
           _RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          _OPEN_ISSUES: ${{ steps.snapshot.outputs.open_issues }}
-          _IN_WARNING: ${{ steps.snapshot.outputs.in_warning }}
-          _EXEMPT: ${{ steps.snapshot.outputs.exempt }}
           _STARTED_AT: ${{ steps.snapshot.outputs.started_at }}
           _STALE_BEFORE: ${{ steps.snapshot.outputs.stale_before }}
           _NEW_WARNING_NUMBERS: ${{ toJSON(fromJSON(steps.stale.outputs.staled-issues-prs || '[]').*.number) }}
@@ -196,7 +186,6 @@ jobs:
               printf '%s' "$1" | jq 'length'
             fi
           }
-          row() { printf '  %-36s %5s\n' "$1" "$2"; }
 
           # $1 = numbers JSON, $2 = titles JSON (same order), $3 = md|slack
           # Lists every issue, uncapped. Safe because operations-per-run already bounds how
@@ -238,7 +227,6 @@ jobs:
           CLOSED="$(len "$_CLOSED_NUMBERS")"
 
           UNSTALED_JSON='[]'
-          UNSTALED_TEXT='n/a'
           if [ "$_MODE" = "live" ]; then
             if [ -n "${_STALE_BEFORE:-}" ] && UNLABELLED="$(
               gh api --paginate \
@@ -249,16 +237,13 @@ jobs:
                 printf '%s\n' "$UNLABELLED" | jq -sc --argjson before "$_STALE_BEFORE" \
                   '. as $now | [$before[] | select(.number as $n | $now | any(. == $n))]'
               )"
-              UNSTALED_TEXT=''
             else
               echo "::warning::Could not work out which stale labels this run removed."
-              UNSTALED_TEXT='?'
             fi
           fi
           UNSTALED_NUMBERS="$(printf '%s' "$UNSTALED_JSON" | jq -c '[.[].number]')"
           UNSTALED_TITLES="$(printf '%s' "$UNSTALED_JSON" | jq -c '[.[].title]')"
           UNSTALED="$(len "$UNSTALED_NUMBERS")"
-          UNSTALED_TEXT="${UNSTALED_TEXT:-$UNSTALED}"
 
           if [ "$_MODE" = "live" ]; then
             MODE_TEXT="live"
@@ -266,29 +251,14 @@ jobs:
             MODE_TEXT="DRY RUN - no issue was modified"
           fi
 
+          # $1 = full|slack. Empty for Slack on a live run without single-change.
           body() {
-            local header=false
             if [ "$1" = "full" ] || [ "$_MODE" != "live" ]; then
               printf 'Mode: %s\n' "$MODE_TEXT"
-              header=true
             fi
             if [ "$_SINGLE_CHANGE" = "true" ]; then
               printf 'Single change: on - stopped after the first issue acted on\n'
-              header=true
             fi
-            if [ "$header" = "true" ]; then
-              printf '\n'
-            fi
-            printf 'Pipeline at start of run\n'
-            row 'Open issues:' "$_OPEN_ISSUES"
-            row 'Awaiting closure (2-week warning):' "$_IN_WARNING"
-            if [ "$1" = "full" ]; then
-              row 'Exempt (never-stale):' "$_EXEMPT"
-            fi
-            printf '\nActions this run\n'
-            row 'New 2-week warnings posted:' "$NEW_WARNINGS"
-            row 'Issues closed:' "$CLOSED"
-            row 'Stale labels removed (activity):' "$UNSTALED_TEXT"
           }
 
           BODY="$(body full)"
@@ -296,14 +266,14 @@ jobs:
 
           SECTIONS_MD="$(
             section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" md
-            section 'New 2-week warnings posted' "$NEW_WARNINGS" \
+            section 'New stale warnings posted' "$NEW_WARNINGS" \
               "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" md
             section 'Stale labels removed on new activity' "$UNSTALED" \
               "$UNSTALED_NUMBERS" "$UNSTALED_TITLES" md
           )"
           SECTIONS_SLACK="$(
             section 'Issues closed' "$CLOSED" "$_CLOSED_NUMBERS" "$_CLOSED_TITLES" slack
-            section 'New 2-week warnings posted' "$NEW_WARNINGS" \
+            section 'New stale warnings posted' "$NEW_WARNINGS" \
               "$_NEW_WARNING_NUMBERS" "$_NEW_WARNING_TITLES" slack
             section 'Stale labels removed on new activity' "$UNSTALED" \
               "$UNSTALED_NUMBERS" "$UNSTALED_TITLES" slack
@@ -321,6 +291,9 @@ jobs:
             echo '```'
             if [ -n "$SECTIONS_MD" ]; then
               echo "$SECTIONS_MD"
+            else
+              echo
+              echo "No issue was warned, closed, or un-staled."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -329,7 +302,8 @@ jobs:
             --arg sections "$SECTIONS_SLACK" \
             --arg url "$_RUN_URL" \
             --arg repo "$_REPO" \
-            '{text: (":broom: *Stale Issue Cleanup:* \($repo) - <\($url)|run details>\n```\n\($body)\n```\n" + $sections)}' \
+            '{text: (":broom: *Stale Issue Cleanup:* \($repo) - <\($url)|run details>\n"
+              + (if $body == "" then "" else "```\n\($body)\n```\n" end) + $sections)}' \
             > slack-payload.json
 
           if [ $(( NEW_WARNINGS + CLOSED + UNSTALED )) -gt 0 ]; then
