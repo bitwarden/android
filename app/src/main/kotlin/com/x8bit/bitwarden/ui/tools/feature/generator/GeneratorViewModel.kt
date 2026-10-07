@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.util.GeneratorRequestResul
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -157,6 +158,7 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.SaveClick -> handleSaveClick()
             is GeneratorAction.RegenerateClick -> handleRegenerateClick()
             is GeneratorAction.CopyClick -> handleCopyClick()
+            is GeneratorAction.CreateLoginClick -> handleCreateLoginClick()
             is GeneratorAction.MainTypeOptionSelect -> handleMainTypeOptionSelect(action)
             is GeneratorAction.MainType -> handleMainTypeAction(action)
             is GeneratorAction.Internal -> handleInternalAction(action)
@@ -723,6 +725,24 @@ class GeneratorViewModel @Inject constructor(
     private fun handleCopyClick() {
         reviewPromptManager.registerGeneratedResultAction()
         clipboardManager.setText(text = state.generatedText)
+    }
+
+    private fun handleCreateLoginClick() {
+        sendEvent(
+            GeneratorEvent.NavigateToAddLogin(
+                initialData = when (state.selectedType.mainTypeOption) {
+                    GeneratorState.MainTypeOption.USERNAME -> {
+                        VaultAddEditType.AddItem.InitialData.Username(value = state.generatedText)
+                    }
+
+                    GeneratorState.MainTypeOption.PASSWORD,
+                    GeneratorState.MainTypeOption.PASSPHRASE,
+                        -> {
+                        VaultAddEditType.AddItem.InitialData.Password(value = state.generatedText)
+                    }
+                },
+            ),
+        )
     }
 
     private fun handleTooltipClick() {
@@ -2368,9 +2388,14 @@ sealed class GeneratorAction {
     data object PasswordHistoryClick : GeneratorAction()
 
     /**
-     * Indicates the user has selected a generated string from the modal generator
+     * Indicates the user has selected a generated string from the modal generator.
      */
     data object SaveClick : GeneratorAction()
+
+    /**
+     * Indicates the user has selected to create a login from the generated value.
+     */
+    data object CreateLoginClick : GeneratorAction()
 
     /**
      * Indicates the user has clicked the close button.
@@ -2836,6 +2861,13 @@ sealed class GeneratorEvent {
      * Navigate back to previous screen.
      */
     data object NavigateBack : GeneratorEvent()
+
+    /**
+     * Navigate to create a Login with the generated data.
+     */
+    data class NavigateToAddLogin(
+        val initialData: VaultAddEditType.AddItem.InitialData,
+    ) : GeneratorEvent()
 
     /**
      * Navigate back to learn more screen.

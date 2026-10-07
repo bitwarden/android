@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -583,6 +584,60 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             reviewPromptManager.registerGeneratedResultAction()
         }
     }
+
+    @Test
+    fun `CreateLoginClick for password state should emit NavigateToAddLogin with Password`() =
+        runTest {
+            val viewModel = createViewModel(state = initialPasscodeState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Password(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CreateLoginClick for passphrase state should emit NavigateToAddLogin with Password`() =
+        runTest {
+            val viewModel = createViewModel(state = initialPassphraseState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Password(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CreateLoginClick for username state should emit NavigateToAddLogin with Username`() =
+        runTest {
+            val viewModel = createViewModel(state = initialUsernameState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Username(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `Policy should overwrite password options if stricter`() {
