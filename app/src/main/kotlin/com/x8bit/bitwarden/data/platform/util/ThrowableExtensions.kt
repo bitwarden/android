@@ -36,7 +36,7 @@ fun Throwable.isKeystoreUserAuthenticationRequired(): Boolean {
  * [KeyStoreException.ERROR_USER_AUTHENTICATION_REQUIRED].
  */
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun Throwable.hasUserAuthenticationRequiredKeystoreCause(): Boolean {
+private fun Throwable.hasUserAuthenticationRequiredKeystoreCause(): Boolean {
     val seen = mutableSetOf<Throwable>()
     var current: Throwable? = this
     while (current != null && seen.add(current)) {

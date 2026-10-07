@@ -29,7 +29,7 @@ sealed class VaultUnlockResult {
      * Biometric cipher is missing its Keystore authorization.
      */
     data class BiometricKeystoreAuthorizationError(
-        override val error: Throwable?,
+        override val error: Throwable,
     ) : VaultUnlockResult(), VaultUnlockError
 
     /**

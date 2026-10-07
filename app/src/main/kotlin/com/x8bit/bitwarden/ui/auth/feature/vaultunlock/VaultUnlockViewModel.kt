@@ -113,8 +113,6 @@ class VaultUnlockViewModel @Inject constructor(
         )
     },
 ) {
-    private var keystoreAuthorizationFailureCount = 0
-
     init {
         authRepository
             .userStateFlow
@@ -392,25 +390,30 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleVaultUnlockSuccess() {
-        keystoreAuthorizationFailureCount = 0
         if (specialCircumstanceManager.specialCircumstance == null) {
             specialCircumstanceManager.specialCircumstance =
                 appResumeManager.getResumeSpecialCircumstance()
         }
 
-        mutableStateFlow.update { it.copy(dialog = null) }
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+                keystoreAuthorizationFailureCount = 0,
+            )
+        }
         // Don't do anything, we'll navigate to the right place.
     }
 
     private fun handleBiometricKeystoreAuthorizationError(
         result: VaultUnlockResult.BiometricKeystoreAuthorizationError,
     ) {
-        keystoreAuthorizationFailureCount += 1
-        if (keystoreAuthorizationFailureCount >= KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR) {
+        val failureCount = state.keystoreAuthorizationFailureCount + 1
+        if (failureCount >= KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR) {
             authRepository.clearBiometrics(userId = state.userId)
             mutableStateFlow.update {
                 it.copy(
                     isBiometricsValid = false,
+                    keystoreAuthorizationFailureCount = failureCount,
                     dialog = VaultUnlockState.VaultUnlockDialog.Error(
                         title = BitwardenString.biometrics_failed.asText(),
                         message = BitwardenString.biometrics_decoding_failure.asText(),
@@ -423,6 +426,7 @@ class VaultUnlockViewModel @Inject constructor(
 
         mutableStateFlow.update {
             it.copy(
+                keystoreAuthorizationFailureCount = failureCount,
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenString.generic_error_message.asText(),
@@ -454,10 +458,6 @@ class VaultUnlockViewModel @Inject constructor(
         // If the user state has changed to add a new account, do nothing.
         if (userState.hasPendingAccountAddition) return
 
-        if (state.userId != userState.activeUserId) {
-            keystoreAuthorizationFailureCount = 0
-        }
-
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
@@ -471,6 +471,11 @@ class VaultUnlockViewModel @Inject constructor(
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
                 input = "",
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
+                keystoreAuthorizationFailureCount = if (it.userId != userState.activeUserId) {
+                    0
+                } else {
+                    it.keystoreAuthorizationFailureCount
+                },
             )
         }
 
@@ -511,6 +516,7 @@ data class VaultUnlockState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     private val hasMasterPassword: Boolean,
     val isFromLockFlow: Boolean,
+    val keystoreAuthorizationFailureCount: Int = 0,
 ) : Parcelable {
 
     /**

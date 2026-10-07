@@ -125,15 +125,8 @@ class ThrowableExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `hasUserAuthenticationRequiredKeystoreCause should return true for a nested user authentication required cause`() {
-        val (error, _) = createUserAuthenticationRequiredError(additionalWrapperCount = 2)
-
-        assertTrue(error.hasUserAuthenticationRequiredKeystoreCause())
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `hasUserAuthenticationRequiredKeystoreCause should return false and stop when the cause chain cycles`() {
+    fun `isKeystoreUserAuthenticationRequired should return false and stop when the cause chain cycles`() {
+        mockBuildVersion(sdkInt = Build.VERSION_CODES.TIRAMISU)
         val keyStoreException = mockKeyStoreException(
             numericErrorCode = KeyStoreException.ERROR_KEY_CORRUPTED,
         )
@@ -141,7 +134,7 @@ class ThrowableExtensionsTest {
         every { keyStoreException.cause } returns wrapper
         wrapper.initCause(keyStoreException)
 
-        assertFalse(wrapper.hasUserAuthenticationRequiredKeystoreCause())
+        assertFalse(wrapper.isKeystoreUserAuthenticationRequired())
     }
 
     private fun mockBuildVersion(sdkInt: Int) {
