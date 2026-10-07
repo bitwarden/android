@@ -5,6 +5,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityNodeInfoManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.FillableFields
+import com.x8bit.bitwarden.data.autofill.accessibility.parser.util.logAccessibilityNodeInfo
 import com.x8bit.bitwarden.data.autofill.accessibility.util.getSupportedBrowserOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isEditText
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
@@ -13,7 +14,7 @@ import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 /**
  * The default implementation for the [AccessibilityParser].
  */
-class AccessibilityParserImpl(
+internal class AccessibilityParserImpl(
     private val accessibilityNodeInfoManager: AccessibilityNodeInfoManager,
 ) : AccessibilityParser {
     override fun parseForFillableFields(
@@ -36,6 +37,7 @@ class AccessibilityParserImpl(
     }
 
     override fun parseForUriOrPackageName(rootNode: AccessibilityNodeInfo): Uri? {
+        rootNode.logAccessibilityNodeInfo(depth = 0)
         val packageName = rootNode.packageName.toString()
         val browser = packageName
             .getSupportedBrowserOrNull()
