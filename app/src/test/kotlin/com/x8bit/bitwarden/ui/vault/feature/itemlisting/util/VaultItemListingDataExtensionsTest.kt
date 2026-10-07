@@ -1568,9 +1568,8 @@ class VaultItemListingDataExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should count ciphers in nested collections that are not in the parent collection`() {
+    fun `toViewState should count nested collection ciphers not in the parent collection`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
@@ -1616,9 +1615,8 @@ class VaultItemListingDataExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should exclude archived and deleted ciphers from nested collection counts`() {
+    fun `toViewState should exclude archived and deleted ciphers from nested counts`() {
         val vaultData = createNestedCollectionVaultData(
             successes = listOf(
                 createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
@@ -1640,9 +1638,8 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(createNestedCollectionContent(count = 1), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should exclude ciphers outside the vault filter from nested collection counts`() {
+    fun `toViewState should exclude ciphers outside the vault filter from nested counts`() {
         val vaultData = createNestedCollectionVaultData(
             successes = listOf(
                 createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
@@ -1660,9 +1657,8 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(createNestedCollectionContent(count = 1), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should exclude restricted item types from nested collection counts`() {
+    fun `toViewState should exclude restricted item types from nested counts`() {
         val vaultData = createNestedCollectionVaultData(
             successes = listOf(
                 createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
@@ -1681,9 +1677,8 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(createNestedCollectionContent(count = 1), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should include ciphers that failed to decrypt in nested collection counts`() {
+    fun `toViewState should include ciphers that failed to decrypt in nested counts`() {
         val vaultData = createNestedCollectionVaultData(
             successes = listOf(
                 createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
@@ -1702,9 +1697,8 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(createNestedCollectionContent(count = 2), actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should exclude ciphers in deeper nested collections from nested collection counts`() {
+    fun `toViewState should exclude deeper nested collection ciphers from nested counts`() {
         val vaultData = createNestedCollectionVaultData(
             successes = listOf(
                 createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
