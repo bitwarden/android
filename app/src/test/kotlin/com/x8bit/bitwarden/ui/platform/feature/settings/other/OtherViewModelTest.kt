@@ -232,34 +232,25 @@ class OtherViewModelTest : BaseViewModelTest() {
         coVerify { vaultRepository.syncForResult(forced = true) }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `SyncNowButtonClick error should not overwrite dialog cleared by last sync`() = runTest {
+    fun `SyncNowButtonClick error should show error dialog even if last sync updates`() = runTest {
         val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
         coEvery { vaultRepository.syncForResult(forced = true) } coAnswers {
             mutableVaultLastSyncStateFlow.value = newSyncTime
             SyncVaultDataResult.Error(throwable = IllegalStateException())
         }
         val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(OtherAction.SyncNowButtonClick)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = OtherState.DialogState.Loading(
-                        message = BitwardenString.syncing.asText(),
-                    ),
+        viewModel.trySendAction(OtherAction.SyncNowButtonClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                lastSyncTime = "Oct 27, 2023, 12:00\u202FPM",
+                dialogState = OtherState.DialogState.Error(
+                    title = BitwardenString.vault_sync_unsuccessful.asText(),
+                    message = BitwardenString.vault_sync_failed_description.asText(),
                 ),
-                awaitItem(),
-            )
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    lastSyncTime = "Oct 27, 2023, 12:00\u202FPM",
-                    dialogState = null,
-                ),
-                awaitItem(),
-            )
-        }
+            ),
+            viewModel.stateFlow.value,
+        )
         coVerify { vaultRepository.syncForResult(forced = true) }
     }
 

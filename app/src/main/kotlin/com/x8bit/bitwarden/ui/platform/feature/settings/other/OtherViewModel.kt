@@ -150,18 +150,13 @@ class OtherViewModel @Inject constructor(
             }
 
             is SyncVaultDataResult.Error -> {
-                mutableStateFlow.update { currentState ->
-                    // Last sync can clear the loading dialog before this action is handled.
-                    if (currentState.dialogState !is OtherState.DialogState.Loading) {
-                        currentState
-                    } else {
-                        currentState.copy(
-                            dialogState = OtherState.DialogState.Error(
-                                title = BitwardenString.vault_sync_unsuccessful.asText(),
-                                message = BitwardenString.vault_sync_failed_description.asText(),
-                            ),
-                        )
-                    }
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = OtherState.DialogState.Error(
+                            title = BitwardenString.vault_sync_unsuccessful.asText(),
+                            message = BitwardenString.vault_sync_failed_description.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -178,7 +173,6 @@ class OtherViewModel @Inject constructor(
                         clock = clock,
                     )
                     .orEmpty(),
-                dialogState = null,
             )
         }
     }
