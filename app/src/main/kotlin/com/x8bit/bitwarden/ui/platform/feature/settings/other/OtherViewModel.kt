@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -61,13 +60,6 @@ class OtherViewModel @Inject constructor(
         settingsRepo
             .vaultLastSyncStateFlow
             .map { OtherAction.Internal.VaultLastSyncReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        settingsRepo
-            .vaultLastSyncStateFlow
-            .drop(1)
-            .map { OtherAction.Internal.ManualVaultSyncReceive }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -123,10 +115,11 @@ class OtherViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.syncForResult(forced = true)
-                if (result is SyncVaultDataResult.Error) {
-                    sendAction(OtherAction.Internal.SyncVaultErrorReceive)
-                }
+                sendAction(
+                    OtherAction.Internal.SyncVaultResultReceive(
+                        result = vaultRepo.syncForResult(forced = true),
+                    ),
+                )
             }
         } else {
             mutableStateFlow.update {
@@ -143,8 +136,20 @@ class OtherViewModel @Inject constructor(
     private fun handleInternalAction(action: OtherAction.Internal) {
         when (action) {
             is OtherAction.Internal.VaultLastSyncReceive -> handleVaultDataReceive(action)
-            is OtherAction.Internal.ManualVaultSyncReceive -> handleManualVaultSyncReceive()
-            OtherAction.Internal.SyncVaultErrorReceive -> {
+            is OtherAction.Internal.SyncVaultResultReceive -> handleSyncVaultResultReceive(action)
+        }
+    }
+
+    private fun handleSyncVaultResultReceive(
+        action: OtherAction.Internal.SyncVaultResultReceive,
+    ) {
+        when (val result = action.result) {
+            is SyncVaultDataResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
+            }
+
+            is SyncVaultDataResult.Error -> {
                 mutableStateFlow.update { currentState ->
                     // Last sync can clear the loading dialog before this action is handled.
                     if (currentState.dialogState !is OtherState.DialogState.Loading) {
@@ -176,10 +181,6 @@ class OtherViewModel @Inject constructor(
                 dialogState = null,
             )
         }
-    }
-
-    private fun handleManualVaultSyncReceive() {
-        sendEvent(OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
     }
 }
 
@@ -301,13 +302,10 @@ sealed class OtherAction {
         ) : Internal()
 
         /**
-         * Indicates a manual vault sync has been received.
+         * Indicates a vault sync result has been received.
          */
-        data object ManualVaultSyncReceive : Internal()
-
-        /**
-         * Indicates a vault sync failed.
-         */
-        data object SyncVaultErrorReceive : Internal()
+        data class SyncVaultResultReceive(
+            val result: SyncVaultDataResult,
+        ) : Internal()
     }
 }
