@@ -1,34 +1,8 @@
 name: Cron / Stale Issue Cleanup
 run-name: Stale Issue Cleanup - ${{ inputs.run-mode || 'scheduled' }}
 
-# A single actions/stale step carries the whole lifecycle:
-#
-#   day 0   "stale" label + 2-week warning   (240 days of inactivity)
-#   day 14  closed as not_planned            (14 days after that warning)
-#
-# The 14 is the window the warning message promises. actions/stale measures the close from
-# updated_at, and applying the label bumps updated_at, so the countdown starts at the warning.
-# Both boundaries are approximate: daily polling plus GitHub's schedule delays push each step
-# 0-1 days later, never earlier, so issues only ever get more time than the message promises.
-#
-# Staleness is a rolling inactivity window (actions/stale reads updated_at). Any activity
-# before the close clears the label and restarts the 240-day clock: a human comment, or any
-# other update to the issue (an edit, a label change, another automation touching it) beyond
-# the stale label itself being added. Comments count only when their author type is User, so
-# the action's own comments from github-actions[bot] are ignored. One warning, one closure.
-#
 # Labels required: stale, never-stale. Apply "never-stale" to the Renovate dependency
 # dashboard issue (#3306) and anything else that should never be swept.
-#
-# Comments come from github-actions[bot] via GITHUB_TOKEN.
-#
-# Each run reports a summary. actions/stale's own enable-statistics output is log-only, so the
-# counts are assembled from its two step outputs (staled-issues-prs, closed-issues-prs) plus
-# a pre-run snapshot of the label state. Stale labels removed on activity have no output, so
-# live runs find them by diffing that snapshot against the issues afterwards. The summary
-# always lands in the job summary and the run log. A run that warned, closed, or un-staled at
-# least one issue also posts it to Slack: live runs to #team-eng-mobile-notifications, dry
-# runs to the automations test channel.
 
 on:
   schedule:
@@ -49,9 +23,7 @@ on:
 
 permissions: {}
 
-# Overlapping runs could both warn the same issue, posting the comment twice, and would
-# race on actions/stale's saved progress. A second run queues rather than cancelling the
-# first.
+# One run at a time to avoid duplicate warnings and cache races
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -64,10 +36,7 @@ jobs:
     name: Stale Issue Cleanup
     runs-on: ubuntu-24.04
     permissions:
-      # actions/stale saves how far a run got in an Actions cache (key "_state") so a run
-      # cut short by operations-per-run resumes there. Listing and replacing that cache
-      # needs this; without it the saved progress is either never read or never replaced.
-      actions: write
+      actions: write # required for actions/stale cache
       contents: read
       id-token: write
       issues: write
@@ -81,8 +50,7 @@ jobs:
             echo "👀 Dry run: no issue will be modified; Slack goes to the test channel."
           fi
 
-      # Taken before the stale step runs, so the stats step can tell which stale labels this
-      # run removed.
+      # Snapshot required for later comparison after actions taken
       - name: Snapshot stale issues
         id: snapshot
         env:
@@ -111,32 +79,18 @@ jobs:
         uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
         with:
           repo-token: ${{ github.token }}
-
           debug-only: ${{ env.RUN_MODE != 'live' }}
-
-          # Warn after 240 days (8 months) of inactivity, then close 14 days later.
-          days-before-issue-stale: 240
+          days-before-issue-stale: 240 # 8 months
           days-before-issue-close: 14
           stale-issue-label: stale
           close-issue-reason: not_planned
           exempt-issue-labels: never-stale
-
-          # A human reply clears the stale label and restarts the 240-day clock.
           remove-issue-stale-when-updated: true
-
-          # Skip pull requests entirely.
-          days-before-pr-stale: -1
+          days-before-pr-stale: -1 # skip PRs
           days-before-pr-close: -1
-
-          # Oldest issues first, so a capped run still makes forward progress on the
-          # backlog. Sorting by least recently updated puts every issue due a warning
-          # or a closure ahead of any issue still counting down to save operations.
-          # single-change drops the budget to 2 since the fetch costs 1 operation,
-          # leaving room for exactly one warning or closure.
-          ascending: true
+          ascending: true # oldest issues first
           sort-by: ${{ inputs.single-change && 'updated' || 'created' }}
-          operations-per-run: ${{ inputs.single-change && 2 || 300 }}
-
+          operations-per-run: ${{ inputs.single-change && 2 || 300 }} # single-change: 1 op for the fetch, 1 issue max
           enable-statistics: true
 
           stale-issue-message: |
