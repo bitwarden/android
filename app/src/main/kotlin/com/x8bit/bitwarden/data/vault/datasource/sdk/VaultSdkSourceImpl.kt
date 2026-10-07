@@ -227,6 +227,7 @@ class VaultSdkSourceImpl(
                     is EncryptionSettingsException.LocalUserDataKeyLoadFailed,
                     is EncryptionSettingsException.LocalUserDataMigrationFailed,
                     is EncryptionSettingsException.MissingPrivateKey,
+                    is EncryptionSettingsException.PinUnlockNotAvailable,
                     is EncryptionSettingsException.UserIdAlreadySet,
                     is EncryptionSettingsException.UserKeyStateRetrievalFailed,
                     is EncryptionSettingsException.UserKeyStateUpdateFailed,
