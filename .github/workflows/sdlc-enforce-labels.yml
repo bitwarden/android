@@ -3,14 +3,8 @@ run-name: Enforce labels for PR ${{ github.event.pull_request.number || inputs.p
 
 on:
   pull_request:
-    types: [labeled, unlabeled, edited]
+    types: [opened, reopened, synchronize, labeled, unlabeled, edited]
   workflow_dispatch:
-    inputs:
-      pr-number:
-        description: "Pull Request Number"
-        required: true
-        type: number
-  workflow_call: # invoked by sdlc-label-pr.yml after labels are applied
     inputs:
       pr-number:
         description: "Pull Request Number"
@@ -25,6 +19,9 @@ env:
 jobs:
   enforce-label:
     name: Enforce Label
+    # Same-repo PRs are enforced by a workflow_dispatch from sdlc-label-pr.yml, after labeling.
+    # Fork PRs can't be labeled or dispatched (read-only token), so enforce them natively.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork || contains(fromJSON('["labeled","unlabeled","edited"]'), github.event.action) }}
     runs-on: ubuntu-24.04
     permissions:
       pull-requests: read
