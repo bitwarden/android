@@ -212,7 +212,9 @@ class VaultAddEditViewModel @Inject constructor(
                                     selectedCollectionId = selectedCollectionId,
                                 ),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
-                                type = vaultCipherType.toItemType(),
+                                type = vaultCipherType.toItemType(
+                                    initialData = vaultAddEditType.initialData,
+                                ),
                             )
                     }
 
