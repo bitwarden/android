@@ -10,6 +10,12 @@ on:
         description: "Pull Request Number"
         required: true
         type: number
+  workflow_call: # invoked by sdlc-label-pr.yml after labels are applied
+    inputs:
+      pr-number:
+        description: "Pull Request Number"
+        required: true
+        type: number
 
 permissions: {}
 

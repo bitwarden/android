@@ -20,14 +20,9 @@ on:
         description: "Dry Run - Don't apply labels"
         type: boolean
         default: false
-      enforce-labels-ref:
-        description: "Branch of sdlc-enforce-labels.yml to trigger"
-        type: string
-        default: main
 
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
-  _ENFORCE_LABELS_REF: ${{ inputs.enforce-labels-ref || 'main' }}
 
 jobs:
   label-pr:
@@ -36,7 +31,6 @@ jobs:
     permissions:
       pull-requests: write # required to update labels
       contents: read
-      actions: write # required to trigger sdlc-enforce-labels.yml
 
     steps:
       - name: Check out repository
@@ -94,9 +88,12 @@ jobs:
           echo ""
           python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_PR_LABELS" "$_LABEL_MODE" "$_DRY_RUN"
 
-      - name: Trigger label enforcement
-        if: ${{ !inputs.dry-run }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run sdlc-enforce-labels.yml --ref "$_ENFORCE_LABELS_REF" -f pr-number="$_PR_NUMBER"
+  enforce-labels:
+    name: Enforce labels
+    needs: label-pr
+    if: ${{ !inputs.dry-run }}
+    permissions:
+      pull-requests: read
+    uses: ./.github/workflows/sdlc-enforce-labels.yml
+    with:
+      pr-number: ${{ fromJSON(github.event.pull_request.number || inputs.pr-number) }}
