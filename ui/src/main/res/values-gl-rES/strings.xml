@@ -574,8 +574,8 @@ Escanearase automaticamente.</string>
     <string name="resend_code">Volver enviar o código</string>
     <string name="a_verification_code_was_sent_to_your_email">Insire o código de verificación enviado ó teu correo</string>
     <string name="submit_crash_logs">Enviar rexistro de fallo</string>
-    <string name="options_expanded">As opcións están despregadas, pulsa para recollelas.</string>
-    <string name="options_collapsed">As opcións están recollidas, pulsa para despregalas.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Maiúsculas (A - Z)</string>
     <string name="lowercase_ato_z">Minúsculas (A - Z)</string>
     <string name="numbers_zero_to_nine">Números (0 - 9)</string>
@@ -1148,11 +1148,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="file_could_not_be_processed">Non se puido procesar o ficheiro</string>
     <string name="file_could_not_be_processed_message">Non se puido procesar o ficheiro. Asegúrate de que sexa JSON válido e inténtao de novo. Necesitas axuda? Visita bitwarden.com/help</string>
     <string name="get_help">Obter axuda</string>
-    <string name="expand_advanced_options">Expandir opcións avanzadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Os elementos locais están expandidos, fai clic para contraer.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Os elementos locais están contraídos, fai clic para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Os elementos están expandidos, fai clic para contraer.</string>
-    <string name="items_are_collapsed_click_to_expand">Os elementos están contraídos, fai clic para expandir.</string>
     <string name="error_cannot_decrypt">[erro: non se pode descifrar]</string>
     <string name="copy_error_report">Copiar informe de erro</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden non puido descifrar este elemento do cofre. Copia e comparte este informe de erro co equipo de atención ao cliente para evitar perda adicional de datos.</string>
@@ -1161,6 +1156,7 @@ Queres comprobalo dende esa conta?</string>
         <item quantity="other">Bitwarden non puido descifrar %1$d elementos do cofre. Copia e comparte este informe de erro co equipo de atención ao cliente para evitar perda adicional de datos.</item>
     </plurals>
     <string name="select_a_card_for_x">Selecciona unha tarxeta para %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opcións avanzadas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Máis sobre a detección de coincidencias</annotation></string>
     <string name="keep_your_credential_secure">Mantén as túas credenciais seguras</string>
@@ -1446,4 +1442,9 @@ Queres comprobalo dende esa conta?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

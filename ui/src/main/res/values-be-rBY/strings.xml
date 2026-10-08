@@ -581,8 +581,8 @@
     <string name="resend_code">Адправіць код яшчэ раз</string>
     <string name="a_verification_code_was_sent_to_your_email">Праверачны код адпраўлены на ваш адрас электроннай пошты</string>
     <string name="submit_crash_logs">Адпраўляць справаздачы пра збоі</string>
-    <string name="options_expanded">Параметры разгорнутыя. Дакраніцеся, каб згарнуць.</string>
-    <string name="options_collapsed">Параметры згорнутыя. Дакраніцеся, каб разгарнуць.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Вялікія літары (A-Z)</string>
     <string name="lowercase_ato_z">Маленькія літары (a-z)</string>
     <string name="numbers_zero_to_nine">Лічбы (0-9)</string>
@@ -1158,11 +1158,6 @@
     <string name="file_could_not_be_processed">Не ўдалося апрацаваць файл</string>
     <string name="file_could_not_be_processed_message">Не ўдалося апрацаваць файл. Пераканайцеся, што гэта сапраўдны JSON, і паспрабуйце яшчэ раз. Патрэбна дапамога? Наведайце bitwarden.com/help</string>
     <string name="get_help">Атрымаць даведку</string>
-    <string name="expand_advanced_options">Разгарнуць дадатковыя параметры</string>
-    <string name="local_items_are_expanded_click_to_collapse">Лакальныя элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Лакальныя элементы згорнутыя, націсніце, каб разгарнуць.</string>
-    <string name="items_expanded_click_to_collapse">Элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="items_are_collapsed_click_to_expand">Элементы згорнутыя, націсніце, каб разгарнуць.</string>
     <string name="error_cannot_decrypt">[памылка: нельга расшыфраваць]</string>
     <string name="copy_error_report">Скапіраваць справаздачу аб памылцы</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не змог расшыфраваць гэты элемент сховішча. Каб пазбегнуць дадатковай страты даных, скапіруйце і абагуліце гэтую справаздачу аб памылцы са службай падтрымкі.</string>
@@ -1173,6 +1168,7 @@
         <item quantity="other">Bitwarden не змог расшыфраваць %1$d элементаў сховішча. Скапіюйце і абагуліце гэтую справаздачу пра памылку са службай падтрымкі, каб пазбегнуць дадатковай страты даных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберыце картку для %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Дадатковыя параметры</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Больш пра выяўленне супадзенняў</annotation></string>
     <string name="keep_your_credential_secure">Захоўвайце свае ўліковыя даныя ў бяспецы</string>
@@ -1464,4 +1460,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

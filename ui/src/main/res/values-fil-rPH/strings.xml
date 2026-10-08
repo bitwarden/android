@@ -574,8 +574,8 @@ Awtomatikong itong magsa-scan.</string>
     <string name="resend_code">Ipadala ulit ang code</string>
     <string name="a_verification_code_was_sent_to_your_email">Naipadala ang code pamberipika sa email mo</string>
     <string name="submit_crash_logs">Ipadala ang mga log sa pag-crash</string>
-    <string name="options_expanded">Napalaki ang mga opsyon, pindutin para paliitin.</string>
-    <string name="options_collapsed">Napaliit ang mga opsyon, pindutin para palakihin.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Malaking letra (A hanggang Z)</string>
     <string name="lowercase_ato_z">Maliit na letra (A hanggang Z)</string>
     <string name="numbers_zero_to_nine">Mga numero (0 hanggang 9)</string>
@@ -1148,11 +1148,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="file_could_not_be_processed">Hindi Maproseso ang File</string>
     <string name="file_could_not_be_processed_message">Hindi maproseso ang file. Tiyaking ito ay wastong JSON at subukan muli. Kailangan ng tulong? Bisitahin ang bitwarden.com/help</string>
     <string name="get_help">Kumuha ng Tulong</string>
-    <string name="expand_advanced_options">Palawakin ang mga advanced na opsyon</string>
-    <string name="local_items_are_expanded_click_to_collapse">Naka-expand ang mga lokal na item, i-click upang i-collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Naka-collapse ang mga lokal na item, i-click upang i-expand.</string>
-    <string name="items_expanded_click_to_collapse">Naka-expand ang mga item, i-click upang i-collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Naka-collapse ang mga item, i-click upang i-expand.</string>
     <string name="error_cannot_decrypt">[error: hindi ma-decrypt]</string>
     <string name="copy_error_report">Kopyahin ang ulat ng error</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Hindi ma-decrypt ng Bitwarden ang item ng baul na ito. Kopyahin at ibahagi ang ulat ng error na ito sa customer success upang maiwasan ang karagdagang pagkawala ng data.</string>
@@ -1161,6 +1156,7 @@ Gusto mo bang pumunta sa account na ito?</string>
         <item quantity="other">Hindi ma-decrypt ng Bitwarden ang %1$d na mga item ng baul. Kopyahin at ibahagi ang ulat ng error na ito sa customer success upang maiwasan ang karagdagang pagkawala ng data.</item>
     </plurals>
     <string name="select_a_card_for_x">Pumili ng card para sa %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Mga advanced na opsyon</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Higit pa tungkol sa match detection</annotation></string>
     <string name="keep_your_credential_secure">Panatilihing secure ang iyong mga kredensyal</string>
@@ -1446,4 +1442,9 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

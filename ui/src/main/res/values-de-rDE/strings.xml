@@ -574,8 +574,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="resend_code">Code erneut senden</string>
     <string name="a_verification_code_was_sent_to_your_email">Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet</string>
     <string name="submit_crash_logs">Absturzprotokolle senden</string>
-    <string name="options_expanded">Optionen sind ausgeklappt, tippen zum Einklappen.</string>
-    <string name="options_collapsed">Optionen sind eingeklappt, tippe zum Ausklappen.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Großbuchstaben (A bis Z)</string>
     <string name="lowercase_ato_z">Kleinbuchstaben (A bis Z)</string>
     <string name="numbers_zero_to_nine">Zahlen (0 bis 9)</string>
@@ -1147,11 +1147,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="file_could_not_be_processed">Datei konnte nicht verarbeitet werden</string>
     <string name="file_could_not_be_processed_message">Datei konnte nicht verarbeitet werden. Stelle sicher, dass es sich um ein gültiges JSON handelt und versuche es erneut. Benötigst du Hilfe? Besuche bitwarden.com/help</string>
     <string name="get_help">Hilfe erhalten</string>
-    <string name="expand_advanced_options">Erweiterte Optionen ausklappen</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokale Einträge sind ausgeklappt, klicke zum Einklappen.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
-    <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
-    <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
     <string name="error_cannot_decrypt">[Fehler: Entschlüsselung nicht möglich]</string>
     <string name="copy_error_report">Fehlerbericht kopieren</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden konnte diesen Tresor-Eintrag nicht entschlüsseln. Kopiere und teile diesen Fehlerbericht mit dem Kundensupport, um zusätzlichen Datenverlust zu vermeiden.</string>
@@ -1160,6 +1155,7 @@ Möchtest du zu diesem Konto wechseln?</string>
         <item quantity="other">Bitwarden konnte %1$d Tresor-Einträge nicht entschlüsseln. Kopiere und teile diesen Fehlerbericht mit dem Kundensupport, um zusätzlichen Datenverlust zu vermeiden.</item>
     </plurals>
     <string name="select_a_card_for_x">Wähle eine Karte für %s aus</string>
+    <string name="choose_an_identity">Wähle eine Identität</string>
     <string name="advanced_options">Erweiterte Optionen</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mehr über die Übereinstimmungserkennung</annotation></string>
     <string name="keep_your_credential_secure">Schütze deine Zugangsdaten</string>
@@ -1445,4 +1441,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="use_this_passphrase">Diese Passphrase verwenden</string>
     <string name="use_this_password">Dieses Passwort verwenden</string>
     <string name="use_this_username">Diesen Benutzernamen verwenden</string>
+    <string name="keep_unlocking_with_biometrics">Weiterhin mit Biometrie entsperren</string>
+    <string name="weve_made_a_security_update">Wir haben eine Sicherheitsaktualisierung durchgeführt. Bitte bestätige deine biometrischen Daten erneut, um sie weiterhin zum Entsperren von Bitwarden nutzen zu können.</string>
+    <string name="turn_off">Deaktivieren</string>
+    <string name="turn_off_biometric_question">Biometrie deaktivieren?</string>
+    <string name="unlocking_will_require_your_master_password">Zum Entsperren ist dein Master-Passwort erforderlich. Du kannst Biometrie in den Einstellungen wieder aktivieren.</string>
 </resources>

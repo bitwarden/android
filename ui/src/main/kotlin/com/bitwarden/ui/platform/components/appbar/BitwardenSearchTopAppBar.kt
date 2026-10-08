@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
@@ -27,6 +28,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import com.bitwarden.ui.platform.base.util.bottomDivider
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.tabNavigation
 import com.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
@@ -77,6 +79,7 @@ fun BitwardenSearchTopAppBar(
             }
         },
         title = {
+            val interactionSource = remember { MutableInteractionSource() }
             TextField(
                 colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.bodyLarge,
@@ -98,8 +101,13 @@ fun BitwardenSearchTopAppBar(
                     }
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                interactionSource = interactionSource,
                 modifier = Modifier
                     .tabNavigation()
+                    .interactiveBorder(
+                        interactionSource = interactionSource,
+                        shape = BitwardenTheme.shapes.content,
+                    )
                     .testTag("SearchFieldEntry")
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),

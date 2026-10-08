@@ -570,8 +570,8 @@
     <string name="resend_code">ကုဒ် ပြန်ပို့ပါ</string>
     <string name="a_verification_code_was_sent_to_your_email">အတည်ပြုကုဒ်ကို သင့်အီးမေးလ်သို့ ပေးပို့ထားပါသည်</string>
     <string name="submit_crash_logs">ချို့ယွင်းမှုမှတ်တမ်းများ တင်သွင်းပါ</string>
-    <string name="options_expanded">ရွေးချယ်မှုများ ချဲ့ထားသည်၊ ခေါက်ရန် နှိပ်ပါ။</string>
-    <string name="options_collapsed">ရွေးချယ်မှုများ ခေါက်ထားသည်၊ ချဲ့ရန် နှိပ်ပါ။</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">စာလုံးကြီး (A မှ Z)</string>
     <string name="lowercase_ato_z">စာလုံးသေး (A မှ Z)</string>
     <string name="numbers_zero_to_nine">ဂဏန်းများ (0 မှ 9)</string>
@@ -1141,11 +1141,6 @@
     <string name="file_could_not_be_processed">ဖိုင်ကို ဆောင်ရွက်၍ မရပါ</string>
     <string name="file_could_not_be_processed_message">ဖိုင်ကို ဆောင်ရွက်၍ မရပါ။ ၎င်းသည် မှန်ကန်သော JSON ဖြစ်ကြောင်း သေချာပြီး ထပ်စမ်းကြည့်ပါ။ အကူအညီ လိုပါသလား? bitwarden.com/help သို့ သွားရောက်ပါ။</string>
     <string name="get_help">အကူအညီ ရယူပါ</string>
-    <string name="expand_advanced_options">အဆင့်မြင့် ရွေးချယ်မှုများကို ချဲ့ပါ</string>
-    <string name="local_items_are_expanded_click_to_collapse">ဒေသဆိုင်ရာ ပစ္စည်းများ ချဲ့ထားသည်၊ ခေါက်ရန် နှိပ်ပါ။</string>
-    <string name="local_items_are_collapsed_click_to_expand">ဒေသဆိုင်ရာ ပစ္စည်းများ ခေါက်ထားသည်၊ ချဲ့ရန် နှိပ်ပါ။</string>
-    <string name="items_expanded_click_to_collapse">ပစ္စည်းများ ချဲ့ထားသည်၊ ခေါက်ရန် နှိပ်ပါ။</string>
-    <string name="items_are_collapsed_click_to_expand">ပစ္စည်းများ ခေါက်ထားသည်၊ ချဲ့ရန် နှိပ်ပါ။</string>
     <string name="error_cannot_decrypt">[အမှား- ကုဒ်ဖြင့်ဖွင့်၍မရ]</string>
     <string name="copy_error_report">အမှားအစီရင်ခံစာ ကူးယူပါ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden သည် ဤဗော်လ်တ်ပစ္စည်းကို ကုဒ်ဖြင့်ဖွင့်၍ မရပါ။ နောက်ထပ် ဒေတာဆုံးရှုံးမှုကို ရှောင်ရှားရန် ဤအမှားအစီရင်ခံစာကို ကူးယူပြီး ဖောက်သည်အောင်မြင်ရေးအဖွဲ့ထံ မျှဝေပါ။</string>
@@ -1153,6 +1148,7 @@
         <item quantity="other">Bitwarden သည် ဗော်လ်တ်ပစ္စည်း %1$d ခုကို ကုဒ်ဖြင့်ဖွင့်၍ မရပါ။ နောက်ထပ် ဒေတာဆုံးရှုံးမှုကို ရှောင်ရှားရန် ဤအမှားအစီရင်ခံစာကို ကူးယူပြီး ဖောက်သည်အောင်မြင်ရေးအဖွဲ့ထံ မျှဝေပါ။</item>
     </plurals>
     <string name="select_a_card_for_x">%s အတွက် ကဒ်တစ်ခု ရွေးပါ</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">အဆင့်မြင့် ရွေးချယ်မှုများ</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ကိုက်ညီမှု ရှာဖွေခြင်းအကြောင်း ပိုမိုလေ့လာပါ</annotation></string>
     <string name="keep_your_credential_secure">သင့်အထောက်အထားများကို လုံခြုံအောင်ထားပါ</string>
@@ -1436,4 +1432,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

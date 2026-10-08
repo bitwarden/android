@@ -24,7 +24,7 @@
     <string name="folder_created">Ny mapp skapad</string>
     <string name="folder_deleted">Mapp borttagen.</string>
     <string name="folder_none">Ingen mapp</string>
-    <string name="folder_updated">Mappen uppdaterades</string>
+    <string name="folder_updated">Mappen sparades</string>
     <string name="folders">Mappar</string>
     <string name="hide">Dölj</string>
     <string name="internet_connection_required_message">Anslut till internet innan du fortsätter.</string>
@@ -189,7 +189,7 @@
     <string name="recovery_code_title">Återställningskod</string>
     <string name="remember">Kom ihåg</string>
     <string name="remember_email">Kom ihåg e-post</string>
-    <string name="send_verification_code_again">Skicka verifieringskod-mejlet igen</string>
+    <string name="send_verification_code_again">Skicka verifieringskoden igen</string>
     <string name="verification_email_not_sent">Kunde inte skicka verifierings-mejl. Försök igen.</string>
     <string name="verification_email_sent">Verifieringsmeddelande har skickats</string>
     <string name="yubi_key_instruction">För att fortsätta, håll din YubiKey NEO mot baksidan av enheten eller sätt in din YubiKey i enhetens USB-port, tryck sedan på dess knapp.</string>
@@ -423,7 +423,7 @@ Skanningen sker automatiskt.</string>
     <string name="password_generator_policy_in_effect">En eller flera organisationspolicyer påverkar dina generatorinställningar</string>
     <string name="unable_to_save_attachment">Det gick inte att spara bilagan. Om problemet kvarstår kan du spara den från webbvalvet.</string>
     <string name="save_attachment_success">Bilagan sparades</string>
-    <string name="autofill_tile_accessibility_required">Slå på \"Autofill Accessibility Service\" från Bitwarden Settings för att använda Autofill-kaklet.</string>
+    <string name="autofill_tile_accessibility_required">Slå på ”Autofyllningens tillgänglighetstjänst” i Bitwarden-inställningarna för att använda autofyllningsrutan.</string>
     <string name="autofill_tile_uri_not_found">Inga lösenordsfält hittades</string>
     <string name="soft_deleting">Skickar till papperskorg…</string>
     <string name="item_soft_deleted">Objektet har skickats till papperskorgen.</string>
@@ -574,8 +574,8 @@ Skanningen sker automatiskt.</string>
     <string name="resend_code">Skicka koden igen</string>
     <string name="a_verification_code_was_sent_to_your_email">En verifieringskod skickades till din e-postadress</string>
     <string name="submit_crash_logs">Skicka kraschloggar</string>
-    <string name="options_expanded">Alternativen är utvidgade, tryck för att dölja.</string>
-    <string name="options_collapsed">Alternativen är dolda, tryck för att utvidga.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Versaler (A till Z)</string>
     <string name="lowercase_ato_z">Gemener (A till Z)</string>
     <string name="numbers_zero_to_nine">Siffror (0 till 9)</string>
@@ -635,7 +635,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
     <string name="plus_addressed_email_description">Använd din e-postleverantörs funktioner för underadress</string>
     <string name="catch_all_email_description">Använd domänens konfigurerade catch-all inkorg.</string>
     <string name="forwarded_email_description">Skapa ett e-postalias med en extern vidarebefordranstjänst.</string>
-    <string name="accessibility_service_disclosure">Delgivning av tillgänglighetstjänst</string>
+    <string name="accessibility_service_disclosure">Information om tillgänglighetstjänsten</string>
     <string name="accessibility_disclosure_text">Bitwarden använder tillgänglighetstjänsten för att söka efter inloggningsfält i appar och på webbplatser. Därefter fastställs lämpliga fältidentifierare för att mata in användarnamn och lösenord när en träff för appen eller webbplatsen hittas. Vi lagrar inte några av de uppgifter som hittas av tjänsten, vi gör inte heller några försök att kontrollera några element på skärmen bortom textinmatning av identitetshandlingarna.</string>
     <string name="accessibility_disclosure_start_up_text_1">Detta meddelande krävs innan Bitwarden kan erbjuda tillgänglighetsbaserad autofyllnad.</string>
     <string name="accessibility_disclosure_start_up_text_2">Bitwarden erbjuder en valfri autofyllnadsmetod som använder Androids tillgänglighetstjänst för att upptäcka inloggningsfält. Om du aktiverar den kommer Bitwarden att identifiera lämpliga fält och fylla i dina inloggningsuppgifter när en matchning hittas.</string>
@@ -803,7 +803,7 @@ Vill du byta till detta konto?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Skriv ner detta lösenord och håll det säkert någonstans.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Läs mer om andra sätt att förhindra att kontot spärras</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Läs om hur du kan förhindra att ditt konto spärras</annotation></string>
-    <string name="help_with_server_geolocations">Hjälp med servergeolokalisering.</string>
+    <string name="help_with_server_geolocations">Hjälp med servergeolokalisering</string>
     <string name="email_address_required">E-postadress (obligatoriskt)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Välj länken i e-postmeddelandet för att verifiera din e-postadress och fortsätta skapa ditt konto.</string>
     <string name="change_email_address">Ändra e-postadress</string>
@@ -847,7 +847,7 @@ Vill du byta till detta konto?</string>
     <string name="send_sensitive_information_safely">Skicka känslig information, säkert</string>
     <string name="import_saved_logins">Importera sparade inloggningar</string>
     <string name="use_a_computer_to_import_logins">Använd en dator för att importera inloggningar från en befintlig lösenordshanterare</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_settings">Du kan återgå till att slutföra detta steg när som helst i Vault Settings.</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_settings">Du kan när som helst återgå och slutföra det här steget i valvinställningarna.</string>
     <string name="import_logins_later">Importera inloggningar senare</string>
     <string name="import_logins_later_dialog_title">Importera inloggningar senare?</string>
     <string name="do_you_have_a_computer_available">Har du tillgång till en dator?</string>
@@ -1021,7 +1021,7 @@ Vill du byta till detta konto?</string>
     <string name="delete_logs">Radera loggar</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Vill du verkligen radera alla inspelade loggar?</string>
     <string name="confirm_key_connector_domain">Bekräfta Key Connector-domän</string>
-    <string name="key_connector_domain">Key Connector-domän:</string>
+    <string name="key_connector_domain">Key Connector-domän</string>
     <string name="your_organization_no_longer_requires_a_master_password">Din organisation kräver inte längre ett huvudlösenord för sina medlemmar. Verifiera domänen nedan med din administratör och ange ditt huvudlösenord för att fortsätta.</string>
     <string name="please_confirm_domain_with_admin">Vänligen bekräfta domänen nedan med din organisationsadministratör.\n\nKey Connector-domän:\n%1$s</string>
     <string name="flight_recorder_banner_title">Färdskrivare på</string>
@@ -1148,11 +1148,6 @@ Vill du byta till detta konto?</string>
     <string name="file_could_not_be_processed">Filen kunde inte behandlas</string>
     <string name="file_could_not_be_processed_message">Filen kunde inte behandlas. Kontrollera att det är giltig JSON och försök igen. Behöver du hjälp? Besök bitwarden.com/help</string>
     <string name="get_help">Få hjälp</string>
-    <string name="expand_advanced_options">Expandera avancerade alternativ</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokala objekt är expanderade, klicka för att fälla in.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
-    <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
-    <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
     <string name="error_cannot_decrypt">[fel: kan inte dekryptera]</string>
     <string name="copy_error_report">Kopiera felrapport</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kunde inte avkryptera detta valvobjekt. Kopiera och dela denna felrapport med kundtjänst för att undvika ytterligare dataförlust.</string>
@@ -1161,6 +1156,7 @@ Vill du byta till detta konto?</string>
         <item quantity="other">Bitwarden kunde inte dekryptera %1$d objekt i valvet. Kopiera och dela den här felrapporten med kundsupport för att undvika ytterligare dataförlust.</item>
     </plurals>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
+    <string name="choose_an_identity">Välj en identitet</string>
     <string name="advanced_options">Avancerade inställningar</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mer om matchningsdetektering</annotation></string>
     <string name="keep_your_credential_secure">Håll dina uppgifter säkra</string>
@@ -1446,4 +1442,9 @@ Vill du byta till detta konto?</string>
     <string name="use_this_passphrase">Använd den här lösenordsfrasen</string>
     <string name="use_this_password">Använd det här lösenordet</string>
     <string name="use_this_username">Använd det här användarnamnet</string>
+    <string name="keep_unlocking_with_biometrics">Behåll upplåsning med biometri</string>
+    <string name="weve_made_a_security_update">Vi har gjort en säkerhetsuppdatering. Bekräfta din biometri igen för att fortsätta använda den för att låsa upp Bitwarden.</string>
+    <string name="turn_off">Stäng av</string>
+    <string name="turn_off_biometric_question">Stänga av biometri?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

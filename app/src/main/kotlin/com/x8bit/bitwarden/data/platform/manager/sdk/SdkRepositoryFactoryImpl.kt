@@ -43,6 +43,7 @@ class SdkRepositoryFactoryImpl(
                 authDiskSource = authDiskSource,
             ),
             organizationSharedKey = null,
+            policy = null,
             send = null,
         )
 

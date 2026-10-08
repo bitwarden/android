@@ -574,8 +574,8 @@ Skanning skjer automatisk.</string>
     <string name="resend_code">Send kode om att</string>
     <string name="a_verification_code_was_sent_to_your_email">Ein stadfestingskode vart sendt til e-postadressa di.</string>
     <string name="submit_crash_logs">Send krasjloggar</string>
-    <string name="options_expanded">Val er utvida, trykk for å gøyma.</string>
-    <string name="options_collapsed">Val er gøymde, trykk for å vida ut.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Store bokstavar (A til Z)</string>
     <string name="lowercase_ato_z">Små bokstavar (A til Z)</string>
     <string name="numbers_zero_to_nine">Tal (0 til 9)</string>
@@ -1148,11 +1148,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="file_could_not_be_processed">Fila kunne ikkje behandlast</string>
     <string name="file_could_not_be_processed_message">Fila kunne ikkje behandlast. Sørg for at det er gyldig JSON og prøv igjen. Treng du hjelp? Besøk bitwarden.com/help</string>
     <string name="get_help">Få hjelp</string>
-    <string name="expand_advanced_options">Vis avanserte alternativ</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokale element er utvida, trykk for å skjule.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokale element er skjult, trykk for å utvide.</string>
-    <string name="items_expanded_click_to_collapse">Element er utvida, trykk for å skjule.</string>
-    <string name="items_are_collapsed_click_to_expand">Element er skjult, trykk for å utvide.</string>
     <string name="error_cannot_decrypt">[feil: kan ikkje dekryptere]</string>
     <string name="copy_error_report">Kopier feilmelding</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kunne ikkje dekryptere dette kvelelementet. Kopier og del denne feilmeldinga med kundestøtte for å unngå ytterlegare datatap.</string>
@@ -1161,6 +1156,7 @@ Vil du bytte til denne kontoen?</string>
         <item quantity="other">Bitwarden kunne ikkje dekryptere %1$d kvelelement. Kopier og del denne feilmeldinga med kundestøtte for å unngå ytterlegare datatap.</item>
     </plurals>
     <string name="select_a_card_for_x">Vel eit kort for %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Avanserte alternativ</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Meir om samsvarsregistrering</annotation></string>
     <string name="keep_your_credential_secure">Hald legitimasjonen din trygg</string>
@@ -1446,4 +1442,9 @@ Vil du bytte til denne kontoen?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

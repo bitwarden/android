@@ -590,8 +590,8 @@
     <string name="resend_code">إعادة إرسال الرمز</string>
     <string name="a_verification_code_was_sent_to_your_email">تم إرسال رمز التحقق إلى بريدك الإلكتروني</string>
     <string name="submit_crash_logs">إرسال سجلات الأعطال</string>
-    <string name="options_expanded">يتم توسيع الخيارات، انقر للتصغير.</string>
-    <string name="options_collapsed">الخيارات مخفية، انقر لتوسيعها.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">أحرف كبيرة (من A إلى Z)</string>
     <string name="lowercase_ato_z">أحرف صغيرة (من A إلى Z)</string>
     <string name="numbers_zero_to_nine">الأعداد (من 0 حتى 9)</string>
@@ -1177,11 +1177,6 @@
     <string name="file_could_not_be_processed">تعذر معالجة الملف</string>
     <string name="file_could_not_be_processed_message">تعذر معالجة الملف. تأكد من صلاحيتها JSON وحاول مرة أخرى. بحاجة إلى مساعدة؟ قم بزيارة bitwarden.com/help</string>
     <string name="get_help">الحصول على المساعدة</string>
-    <string name="expand_advanced_options">توسيع الخيارات المتقدمة</string>
-    <string name="local_items_are_expanded_click_to_collapse">يتم توسيع العناصر المحلية، انقر للإنهيار.</string>
-    <string name="local_items_are_collapsed_click_to_expand">تم انهيار العناصر المحلية، انقر للتوسع.</string>
-    <string name="items_expanded_click_to_collapse">العناصر متوسيعة ، انقر للانهيار.</string>
-    <string name="items_are_collapsed_click_to_expand">العناصر مخفية، انقر للتوسيع.</string>
     <string name="error_cannot_decrypt">[خطأ: لا يمكن فك التشفير]</string>
     <string name="copy_error_report">نسخ تقرير الخطأ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">تعذر على Bitwarden فك تشفير عنصر الخزنة هذا. انسخ تقرير الخطأ هذا وشاركه مع دعم العملاء لتجنب خسارة إضافية للبيانات.</string>
@@ -1194,6 +1189,7 @@
         <item quantity="other">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
     </plurals>
     <string name="select_a_card_for_x">اختر بطاقة لـ %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">الخيارات المتقدمة</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">المزيد عن اكتشاف المطابقة</annotation></string>
     <string name="keep_your_credential_secure">حافظ على بيانات الحساب آمنة</string>
@@ -1487,4 +1483,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

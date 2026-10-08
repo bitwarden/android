@@ -15,6 +15,12 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import timber.log.Timber
+import java.nio.ByteBuffer
+import java.util.Base64
+import java.util.UUID
+
+private const val B64_PREFIX: String = "b64."
+private const val UUID_BYTE_COUNT: Int = 16
 
 /**
  * Primary implementation of [Fido2CredentialStore].
@@ -138,15 +144,36 @@ class Fido2CredentialStoreImpl(
             val fido2CredentialIds = cipherListView.login
                 ?.fido2Credentials
                 .orEmpty()
-                .map { it.credentialId.toByteArray() }
+                .mapNotNull { it.credentialId.toGuidBytesOrNull() }
 
             val hasIntersectingCredentials = credentialIds
-                ?.intersect(fido2CredentialIds)
                 .orEmpty()
-                .isNotEmpty()
+                .any { id -> fido2CredentialIds.any { it.contentEquals(id) } }
 
             hasMatchingRpId &&
                 (skipCredentialIdFiltering || hasIntersectingCredentials)
+        }
+    }
+
+    /**
+     * Convert a stored credential ID to its raw bytes, mirroring the SDK's
+     * `string_to_guid_bytes`. Ids prefixed with "b64." are Base64 URL-safe encoded; all others
+     * are UUIDs (16 big-endian bytes). Returns null when the id is invalid.
+     */
+    private fun String.toGuidBytesOrNull(): ByteArray? {
+        return if (startsWith(B64_PREFIX)) {
+            runCatching { Base64.getUrlDecoder().decode(removePrefix(B64_PREFIX)) }
+                .getOrNull()
+        } else {
+            runCatching { UUID.fromString(this) }
+                .map {
+                    ByteBuffer
+                        .allocate(UUID_BYTE_COUNT)
+                        .putLong(it.mostSignificantBits)
+                        .putLong(it.leastSignificantBits)
+                        .array()
+                }
+                .getOrNull()
         }
     }
 

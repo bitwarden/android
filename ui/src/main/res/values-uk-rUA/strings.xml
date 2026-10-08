@@ -582,8 +582,8 @@
     <string name="resend_code">Надіслати новий код</string>
     <string name="a_verification_code_was_sent_to_your_email">Код підтвердження надіслано на вашу електронну пошту</string>
     <string name="submit_crash_logs">Надсилати звіти про збої</string>
-    <string name="options_expanded">Налаштування розгорнуто. Торкніться, щоб згорнути.</string>
-    <string name="options_collapsed">Налаштування згорнуто. Торкніться, щоб розгорнути.</string>
+    <string name="expand">розгорнути</string>
+    <string name="collapse">згорнути</string>
     <string name="uppercase_ato_z">Верхній регістр (A - Z)</string>
     <string name="lowercase_ato_z">Нижній регістр (a - z)</string>
     <string name="numbers_zero_to_nine">Числа (0 - 9)</string>
@@ -1164,11 +1164,6 @@
     <string name="file_could_not_be_processed">Неможливо обробити файл</string>
     <string name="file_could_not_be_processed_message">Не вдалося обробити файл. Перевірте правильність JSON і повторіть спробу. Потрібна допомога? Відвідайте bitwarden.com/help</string>
     <string name="get_help">Отримати допомогу</string>
-    <string name="expand_advanced_options">Розгорнути додаткові налаштування</string>
-    <string name="local_items_are_expanded_click_to_collapse">Локальні записи розгорнуто. Натисніть, щоб згорнути.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Локальні записи згорнуто. Натисніть, щоб розгорнути.</string>
-    <string name="items_expanded_click_to_collapse">Записи розгорнуто. Натисніть, щоб згорнути.</string>
-    <string name="items_are_collapsed_click_to_expand">Записи згорнуто. Натисніть, щоб розгорнути.</string>
     <string name="error_cannot_decrypt">[помилка: неможливо розшифрувати]</string>
     <string name="copy_error_report">Копіювати звіт про помилку</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не вдалося розшифрувати цей елемент сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</string>
@@ -1179,6 +1174,7 @@
         <item quantity="other">Bitwarden не може розшифрувати %1$d елементів сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</item>
     </plurals>
     <string name="select_a_card_for_x">Вибрати картку для %s</string>
+    <string name="choose_an_identity">Виберіть посвідчення</string>
     <string name="advanced_options">Додаткові налаштування</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Докладніше про виявлення збігів</annotation></string>
     <string name="keep_your_credential_secure">Захистіть свої облікові дані</string>
@@ -1465,7 +1461,12 @@
     <string name="only_allows_invited_users_to_create_accounts">%1$s дозволяє створювати облікові записи тільки запрошеним користувачам.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Зменшити %1$s</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Збільшити %1$s</string>
-    <string name="use_this_passphrase">Use this passphrase</string>
-    <string name="use_this_password">Use this password</string>
-    <string name="use_this_username">Use this username</string>
+    <string name="use_this_passphrase">Використати цю парольну фразу</string>
+    <string name="use_this_password">Використати цей пароль</string>
+    <string name="use_this_username">Використати це ім\'я користувача</string>
+    <string name="keep_unlocking_with_biometrics">Продовжуйте розблоковувати за допомогою біометрії</string>
+    <string name="weve_made_a_security_update">Ми внесли оновлення безпеки. Підтвердьте свої біометричні дані ще раз, щоб і надалі використовувати їх для розблокування Bitwarden.</string>
+    <string name="turn_off">Вимкнути</string>
+    <string name="turn_off_biometric_question">Вимкнути біометрику?</string>
+    <string name="unlocking_will_require_your_master_password">Для розблокування знадобиться ваш головний пароль. Ви можете знову увімкнути біометричну аутентифікацію в розділі «Налаштування».</string>
 </resources>

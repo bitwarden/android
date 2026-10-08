@@ -582,8 +582,8 @@ Načtení proběhne automaticky.</string>
     <string name="resend_code">Znovu odeslat kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Ověřovací kód byl odeslán na Váš e-mail</string>
     <string name="submit_crash_logs">Odesílat záznamy o pádech</string>
-    <string name="options_expanded">Volby jsou rozbaleny, klepněte pro sbalení.</string>
-    <string name="options_collapsed">Volby jsou sbaleny, klepněte pro rozbalení.</string>
+    <string name="expand">rozbalit</string>
+    <string name="collapse">sbalit</string>
     <string name="uppercase_ato_z">Velká písmena (A-Z)</string>
     <string name="lowercase_ato_z">Malá písmena (A-Z)</string>
     <string name="numbers_zero_to_nine">Číslice (0-9)</string>
@@ -1163,11 +1163,6 @@ při opakování problémů.</string>
     <string name="file_could_not_be_processed">Soubor nelze zpracovat</string>
     <string name="file_could_not_be_processed_message">Soubor nelze zpracovat. Ujistěte se, že je to platný JSON a zkuste to znovu. Potřebujete pomoc? Navštivte bitwarden.com/help</string>
     <string name="get_help">Získat pomoc</string>
-    <string name="expand_advanced_options">Rozbalit rozšířené volby</string>
-    <string name="local_items_are_expanded_click_to_collapse">Místní položky jsou rozbaleny; klepnutím sbalíte.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
-    <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
-    <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
     <string name="copy_error_report">Zpráva o chybě kopírování</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nemohl dešifrovat tuto položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</string>
@@ -1178,6 +1173,7 @@ při opakování problémů.</string>
         <item quantity="other">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
     </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
+    <string name="choose_an_identity">Zvolte identitu</string>
     <string name="advanced_options">Rozšířené volby</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>
     <string name="keep_your_credential_secure">Uchovávejte Vaše přihlašovací údaje v bezpečí</string>
@@ -1467,4 +1463,9 @@ při opakování problémů.</string>
     <string name="use_this_passphrase">Použít tuto heslovou frázi</string>
     <string name="use_this_password">Použít toto heslo</string>
     <string name="use_this_username">Použít toto uživatelské jméno</string>
+    <string name="keep_unlocking_with_biometrics">Pokračovat v odemykání pomocí biometrie</string>
+    <string name="weve_made_a_security_update">Provedli jsme bezpečnostní aktualizaci. Potvrďte znovu Vaše biometrické údaje pro jejich další používání k odemknutí Bitwardenu.</string>
+    <string name="turn_off">Vypnout</string>
+    <string name="turn_off_biometric_question">Vypnout biometriku?</string>
+    <string name="unlocking_will_require_your_master_password">Odemknutí bude vyžadovat hlavní heslo. V nastavení můžete znovu zapnout biometriku.</string>
 </resources>

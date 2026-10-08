@@ -574,8 +574,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="resend_code">Kodu yeniden gönder</string>
     <string name="a_verification_code_was_sent_to_your_email">E-posta adresinize doğrulama kodu gönderildi</string>
     <string name="submit_crash_logs">Çökme günlüklerini gönder</string>
-    <string name="options_expanded">Seçenekler genişletildi, daraltmak için dokunun.</string>
-    <string name="options_collapsed">Seçenekler daraltıldı, genişletmek için dokunun.</string>
+    <string name="expand">genişlet</string>
+    <string name="collapse">daralt</string>
     <string name="uppercase_ato_z">Büyük harf (A-Z)</string>
     <string name="lowercase_ato_z">Küçük harf (A-Z)</string>
     <string name="numbers_zero_to_nine">Rakamlar (0-9)</string>
@@ -1147,11 +1147,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="file_could_not_be_processed">Dosya işlenemedi</string>
     <string name="file_could_not_be_processed_message">Dosya işlenemedi. Geçerli bir JSON olduğunu kontrol edip yeniden deneyin. Yardıma ihtiyacınız varsa bitwarden.com/help adresini ziyaret edebilirsiniz</string>
     <string name="get_help">Yardım al</string>
-    <string name="expand_advanced_options">Gelişmiş seçenekleri genişlet</string>
-    <string name="local_items_are_expanded_click_to_collapse">Yerel öğeler genişletildi, daraltmak için tıklayın.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Yerel öğeler daraltıldı, genişletmek için tıklayın.</string>
-    <string name="items_expanded_click_to_collapse">Öğeler genişletildi, daraltmak için tıklayın.</string>
-    <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
     <string name="error_cannot_decrypt">[hata: deşifre edilemiyor]</string>
     <string name="copy_error_report">Hata raporunu kopyala</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu kasa öğesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</string>
@@ -1160,6 +1155,7 @@ Bu hesaba geçmek ister misiniz?</string>
         <item quantity="other">Bitwarden, %1$d kasa ögesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s için kart seçin</string>
+    <string name="choose_an_identity">Bir kimlik seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
     <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
@@ -1445,4 +1441,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
     <string name="use_this_password">Bu parolayı kullan</string>
     <string name="use_this_username">Bu kullanıcı adını kullan</string>
+    <string name="keep_unlocking_with_biometrics">Kilidi biyometri ile açmaya devam edin</string>
+    <string name="weve_made_a_security_update">Bir güvenlik güncellemesi yaptık. Bitwarden kilidini açmak için biyometri kullanmaya devam etmek isterseniz biyometrinizi doğrulayın.</string>
+    <string name="turn_off">Devre dışı bırak</string>
+    <string name="turn_off_biometric_question">Biyometri devre dışı bırakılsın mı?</string>
+    <string name="unlocking_will_require_your_master_password">Kilidi açmak için ana parolanızı kullanmanız gerekecek. İstediğiniz zaman Ayarlar menüsünden biyometriyi yeniden etkinleştirebilirsiniz.</string>
 </resources>

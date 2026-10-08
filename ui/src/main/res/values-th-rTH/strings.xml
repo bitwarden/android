@@ -570,8 +570,8 @@
     <string name="resend_code">ส่งโค้ดอีกครั้ง</string>
     <string name="a_verification_code_was_sent_to_your_email">ส่งโค้ดยืนยันไปยังอีเมลของคุณแล้ว</string>
     <string name="submit_crash_logs">ส่งบันทึกข้อผิดพลาด</string>
-    <string name="options_expanded">ตัวเลือกขยายอยู่ แตะเพื่อย่อ</string>
-    <string name="options_collapsed">ตัวเลือกย่ออยู่ แตะเพื่อขยาย</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">ตัวพิมพ์ใหญ่ (A ถึง Z)</string>
     <string name="lowercase_ato_z">ตัวพิมพ์เล็ก (a ถึง z)</string>
     <string name="numbers_zero_to_nine">ตัวเลข (0 ถึง 9)</string>
@@ -1141,11 +1141,6 @@
     <string name="file_could_not_be_processed">ไม่สามารถประมวลผลไฟล์ได้</string>
     <string name="file_could_not_be_processed_message">ไม่สามารถประมวลผลไฟล์ได้ ตรวจสอบว่าเป็น JSON ที่ถูกต้องแล้วลองอีกครั้ง ต้องการความช่วยเหลือไหม เยี่ยมชม bitwarden.com/help</string>
     <string name="get_help">ขอความช่วยเหลือ</string>
-    <string name="expand_advanced_options">ขยายตัวเลือกขั้นสูง</string>
-    <string name="local_items_are_expanded_click_to_collapse">ขยายรายการในเครื่องแล้ว คลิกเพื่อย่อ</string>
-    <string name="local_items_are_collapsed_click_to_expand">ย่อรายการในเครื่องอยู่ คลิกเพื่อขยาย</string>
-    <string name="items_expanded_click_to_collapse">ขยายรายการแล้ว คลิกเพื่อย่อ</string>
-    <string name="items_are_collapsed_click_to_expand">ย่อรายการอยู่ คลิกเพื่อขยาย</string>
     <string name="error_cannot_decrypt">[ข้อผิดพลาด: ไม่สามารถถอดรหัสได้]</string>
     <string name="copy_error_report">คัดลอกรายงานข้อผิดพลาด</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ไม่สามารถถอดรหัสรายการในตู้นิรภัยนี้ได้ คัดลอกและแชร์รายงานข้อผิดพลาดนี้กับฝ่ายดูแลลูกค้าเพื่อหลีกเลี่ยงการสูญเสียข้อมูลเพิ่มเติม</string>
@@ -1153,6 +1148,7 @@
         <item quantity="other">Bitwarden ไม่สามารถถอดรหัสรายการตู้นิรภัย %1$d รายการ คัดลอกและแชร์รายงานข้อผิดพลาดนี้กับทีมบริการลูกค้าเพื่อหลีกเลี่ยงการสูญเสียข้อมูลเพิ่มเติม</item>
     </plurals>
     <string name="select_a_card_for_x">เลือกบัตรสำหรับ %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">ตัวเลือกขั้นสูง</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">เพิ่มเติมเกี่ยวกับการตรวจสอบการจับคู่</annotation></string>
     <string name="keep_your_credential_secure">รักษาความปลอดภัยข้อมูลประจำตัวของคุณ</string>
@@ -1436,4 +1432,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

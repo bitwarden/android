@@ -148,14 +148,14 @@
     <string name="select">選擇</string>
     <string name="item_details">項目詳細資訊</string>
     <string name="item_updated">項目已儲存</string>
-    <string name="bank_account_saved">Bank account saved</string>
-    <string name="card_saved">Card saved</string>
-    <string name="identity_saved">Identity saved</string>
-    <string name="license_saved">License saved</string>
+    <string name="bank_account_saved">銀行帳戶已儲存</string>
+    <string name="card_saved">卡片已儲存</string>
+    <string name="identity_saved">身分資料已儲存</string>
+    <string name="license_saved">駕照已儲存</string>
     <string name="login_saved">登入項目已儲存</string>
-    <string name="passport_saved">Passport saved</string>
-    <string name="secure_note_saved">Secure note saved</string>
-    <string name="ssh_key_saved">SSH key saved</string>
+    <string name="passport_saved">護照已儲存</string>
+    <string name="secure_note_saved">安全筆記已儲存</string>
+    <string name="ssh_key_saved">SSH 金鑰已儲存</string>
     <string name="submitting">提交中…</string>
     <string name="syncing">正在同步…</string>
     <string name="syncing_complete">同步完成</string>
@@ -361,7 +361,7 @@
     <string name="passphrase">密碼短語</string>
     <string name="word_separator">單字分隔字元</string>
     <string name="clear">清除</string>
-    <string name="open_calendar">open calendar</string>
+    <string name="open_calendar">開啟行事曆</string>
     <string name="generator">產生器</string>
     <string name="no_folders_to_list">沒有可列出的資料夾。</string>
     <string name="fingerprint_phrase">指紋短語</string>
@@ -471,7 +471,7 @@
     <string name="deletion_date">刪除日期</string>
     <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">此日期由您的組織強制設定</string>
     <string name="who_can_view">誰可以檢視</string>
     <string name="anyone_with_the_link">任何持有連結的人</string>
     <string name="anyone_with_link_can_view_send">任何持有此連結的人都可以檢視此 Send</string>
@@ -518,11 +518,11 @@
     <string name="about_send">關於 Send</string>
     <string name="hide_email">對收件人隱藏我的電子郵件地址</string>
     <string name="send_options_policy_in_effect">一個或多個組織原則正影響您的 Send 選項。</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
-    <string name="make_a_copy">Make a copy</string>
+    <string name="organization_policy_restriction">組織政策限制</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">此 Send 不符合您組織的 Send 政策，並會在設定的刪除日期自動到期。</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">您的組織不允許使用文字 Send，此 Send 將在設定的刪除日期自動到期。</string>
+    <string name="to_edit_this_send_make_a_copy">若要編輯此 Send，請建立副本。如果此 Send 可在設定的刪除日期到期，則無需採取任何動作。</string>
+    <string name="make_a_copy">建立副本</string>
     <string name="send_file_premium_required">免費帳戶僅限於共用文字。若想使用檔案 Send，需要進階會員資格。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">與特定人員分享為 Premium 功能。您目前的方案不包含此功能的使用權限。</string>
     <string name="password_prompt">重新詢問主密碼</string>
@@ -570,8 +570,8 @@
     <string name="resend_code">重新傳送驗證碼</string>
     <string name="a_verification_code_was_sent_to_your_email">已傳送驗證碼至您的電子郵件信箱</string>
     <string name="submit_crash_logs">提交當機記錄</string>
-    <string name="options_expanded">選項已展開，點選收合。</string>
-    <string name="options_collapsed">選項已收合，點選展開。</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">大寫 (A–Z)</string>
     <string name="lowercase_ato_z">小寫 (a-z)</string>
     <string name="numbers_zero_to_nine">數字 (0–9)</string>
@@ -1142,11 +1142,6 @@
     <string name="file_could_not_be_processed">無法處理檔案</string>
     <string name="file_could_not_be_processed_message">無法處理檔案。請確認其為有效的 JSON 後再試一次。需要協助？請造訪 bitwarden.com/help</string>
     <string name="get_help">尋求協助</string>
-    <string name="expand_advanced_options">展開進階選項</string>
-    <string name="local_items_are_expanded_click_to_collapse">本機項目已展開，點擊以收合。</string>
-    <string name="local_items_are_collapsed_click_to_expand">本機項目已收合，點擊以展開。</string>
-    <string name="items_expanded_click_to_collapse">項目已展開，點擊以收合。</string>
-    <string name="items_are_collapsed_click_to_expand">項目已收合，點擊以展開。</string>
     <string name="error_cannot_decrypt">[錯誤：無法解密]</string>
     <string name="copy_error_report">複製錯誤報告</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 無法解密此保險庫項目。請複製並將此錯誤報告提供給客服團隊，以避免進一步的資料遺失。</string>
@@ -1154,6 +1149,7 @@
         <item quantity="other">Bitwarden 無法解密 %1$d 個保險庫項目。請複製並將此錯誤報告提供給客服團隊，以避免進一步的資料遺失。</item>
     </plurals>
     <string name="select_a_card_for_x">選擇 %s 的付款卡</string>
+    <string name="choose_an_identity">選擇身分資料</string>
     <string name="advanced_options">進階選項</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">深入了解匹配偵測</annotation></string>
     <string name="keep_your_credential_secure">保護您的憑證安全</string>
@@ -1256,7 +1252,7 @@
     <string name="invalid_email_addresses">電郵無效</string>
     <string name="one_or_more_email_addresses_are_incorrect">一個或多個電子郵件地址不正確。請檢查後再試一次。</string>
     <string name="no_email_addresses_entered">尚未輸入任何電子郵件地址</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">僅包含下列網域：%1$s。請檢查後再試一次。</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">請至少輸入一個有效的電子郵件地址以分享此 Send。</string>
     <string name="sync_with_browser">與瀏覽器同步</string>
     <string name="sync_with_browser_description">若要連線至 %1$s，請將您的預設瀏覽器與 Bitwarden 行動應用程式同步。瀏覽器開啟後，如有提示請完成登入。\n同步完成後，您將返回此應用程式。</string>
@@ -1433,9 +1429,14 @@
     <string name="receive_24_7_priority_support">享有全年無休的優先支援</string>
     <string name="account_creation_restricted">帳戶建立受到限制</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s 僅允許受邀使用者建立帳戶。</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
-    <string name="use_this_passphrase">Use this passphrase</string>
-    <string name="use_this_password">Use this password</string>
-    <string name="use_this_username">Use this username</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">減少 %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">增加 %1$s</string>
+    <string name="use_this_passphrase">使用此密碼片語</string>
+    <string name="use_this_password">使用此密碼</string>
+    <string name="use_this_username">使用此使用者名稱</string>
+    <string name="keep_unlocking_with_biometrics">繼續使用生物辨識解鎖</string>
+    <string name="weve_made_a_security_update">我們已進行安全性更新。請再次確認您的生物辨識，以繼續用它解鎖 Bitwarden。</string>
+    <string name="turn_off">關閉</string>
+    <string name="turn_off_biometric_question">關閉生物辨識？</string>
+    <string name="unlocking_will_require_your_master_password">解鎖時將需要您的主密碼。您可以在「設定」中重新開啟生物辨識。</string>
 </resources>

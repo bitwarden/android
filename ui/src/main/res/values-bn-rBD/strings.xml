@@ -574,8 +574,8 @@
     <string name="resend_code">কোড আবার পাঠান</string>
     <string name="a_verification_code_was_sent_to_your_email">আপনার ইমেলে একটি যাচাইকরণ কোড পাঠানো হয়েছে</string>
     <string name="submit_crash_logs">ক্র্যাশ লগ জমা দিন</string>
-    <string name="options_expanded">বিকল্পগুলি প্রসারিত, সংকুচিত করতে আলতো চাপুন।</string>
-    <string name="options_collapsed">বিকল্পগুলি সংকুচিত, প্রসারিত করতে আলতো চাপুন।</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">বড় হাতের অক্ষর (A-Z)</string>
     <string name="lowercase_ato_z">ছোট হাতের অক্ষর (A থেকে Z)</string>
     <string name="numbers_zero_to_nine">সংখ্যা (0-9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ফাইল প্রক্রিয়া করা যায়নি</string>
     <string name="file_could_not_be_processed_message">ফাইল প্রক্রিয়া করা যায়নি। এটি বৈধ JSON তা নিশ্চিত করে আবার চেষ্টা করুন। সাহায্য প্রয়োজন? bitwarden.com/help দেখুন</string>
     <string name="get_help">সাহায্য পান</string>
-    <string name="expand_advanced_options">উন্নত বিকল্পগুলি প্রসারিত করুন</string>
-    <string name="local_items_are_expanded_click_to_collapse">স্থানীয় আইটেমগুলি প্রসারিত, সংকুচিত করতে ক্লিক করুন।</string>
-    <string name="local_items_are_collapsed_click_to_expand">স্থানীয় আইটেমগুলি সংকুচিত, প্রসারিত করতে ক্লিক করুন।</string>
-    <string name="items_expanded_click_to_collapse">আইটেমগুলি প্রসারিত, সংকুচিত করতে ক্লিক করুন।</string>
-    <string name="items_are_collapsed_click_to_expand">আইটেমগুলি সংকুচিত, প্রসারিত করতে ক্লিক করুন।</string>
     <string name="error_cannot_decrypt">[ত্রুটি: ডিক্রিপ্ট করা যায় না]</string>
     <string name="copy_error_report">ত্রুটি প্রতিবেদন কপি করুন</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden এই ভল্ট আইটেমটি ডিক্রিপ্ট করতে পারেনি। অতিরিক্ত ডেটা ক্ষতি এড়াতে এই ত্রুটি প্রতিবেদনটি কপি করে কাস্টমার সাকসেসের সাথে শেয়ার করুন।</string>
@@ -1161,6 +1156,7 @@
         <item quantity="other">Bitwarden %1$d ভল্ট আইটেম ডিক্রিপ্ট করতে পারেনি। অতিরিক্ত ডেটা ক্ষতি এড়াতে এই ত্রুটি প্রতিবেদনটি কপি করে কাস্টমার সাকসেসের সাথে শেয়ার করুন।</item>
     </plurals>
     <string name="select_a_card_for_x">%s এর জন্য একটি কার্ড নির্বাচন করুন</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">উন্নত বিকল্প</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ম্যাচ সনাক্তকরণ সম্পর্কে আরও</annotation></string>
     <string name="keep_your_credential_secure">আপনার শংসাপত্রগুলি সুরক্ষিত রাখুন</string>
@@ -1446,4 +1442,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

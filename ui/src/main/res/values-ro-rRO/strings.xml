@@ -578,8 +578,8 @@ Scanarea se va face automat.</string>
     <string name="resend_code">Retrimitere cod</string>
     <string name="a_verification_code_was_sent_to_your_email">Un cod de verificare a fost trimis la adresa dvs. de e-mail</string>
     <string name="submit_crash_logs">Trimiteți jurnalele de erori</string>
-    <string name="options_expanded">Opțiunile sunt extinse, atingeți pentru a le restrânge.</string>
-    <string name="options_collapsed">Opțiunile sunt restrânse, atingeți pentru a le extinde.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Litere mari (A la Z)</string>
     <string name="lowercase_ato_z">Litere mici (a la z)</string>
     <string name="numbers_zero_to_nine">Numere (0 la 9)</string>
@@ -1155,11 +1155,6 @@ Doriți să comutați la acest cont?</string>
     <string name="file_could_not_be_processed">Fișierul nu a putut fi procesat</string>
     <string name="file_could_not_be_processed_message">Fișierul nu a putut fi procesat. Asigură-te că este JSON valid și încearcă din nou. Ai nevoie de ajutor? Vizitează bitwarden.com/help</string>
     <string name="get_help">Obținere ajutor</string>
-    <string name="expand_advanced_options">Extinde opțiunile avansate</string>
-    <string name="local_items_are_expanded_click_to_collapse">Elementele locale sunt extinse, faceți clic pentru a le restrânge.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Elementele locale sunt restrânse, faceți clic pentru a le extinde.</string>
-    <string name="items_expanded_click_to_collapse">Elementele sunt extinse, faceți clic pentru a le restrânge.</string>
-    <string name="items_are_collapsed_click_to_expand">Elementele sunt restrânse, faceți clic pentru a le extinde.</string>
     <string name="error_cannot_decrypt">[eroare: nu se poate decripta]</string>
     <string name="copy_error_report">Copiază raportul de eroare</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nu a putut decripta acest element al seifului. Copiază și distribuie acest raport de eroare către departamentul de succes al clienților pentru a evita pierderea suplimentară de date.</string>
@@ -1169,6 +1164,7 @@ Doriți să comutați la acest cont?</string>
         <item quantity="other">Bitwarden nu a putut decripta %1$d elemente ale seifului. Copiază și distribuie acest raport de eroare către departamentul de succes al clienților pentru a evita pierderea suplimentară de date.</item>
     </plurals>
     <string name="select_a_card_for_x">Selectează un card pentru %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opțiuni avansate</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mai multe despre detectarea potrivirilor</annotation></string>
     <string name="keep_your_credential_secure">Menține-ți acreditările în siguranță</string>
@@ -1456,4 +1452,9 @@ Doriți să comutați la acest cont?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

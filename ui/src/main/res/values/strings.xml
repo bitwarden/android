@@ -574,8 +574,8 @@ Scanning will happen automatically.</string>
     <string name="resend_code">Resend code</string>
     <string name="a_verification_code_was_sent_to_your_email">A verification code was sent to your email</string>
     <string name="submit_crash_logs">Submit crash logs</string>
-    <string name="options_expanded">Options are expanded, tap to collapse.</string>
-    <string name="options_collapsed">Options are collapsed, tap to expand.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Uppercase (A to Z)</string>
     <string name="lowercase_ato_z">Lowercase (A to Z)</string>
     <string name="numbers_zero_to_nine">Numbers (0 to 9)</string>
@@ -1148,11 +1148,6 @@ Do you want to switch to this account?</string>
     <string name="file_could_not_be_processed">File Could Not Be Processed</string>
     <string name="file_could_not_be_processed_message">File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help</string>
     <string name="get_help">Get Help</string>
-    <string name="expand_advanced_options">Expand advanced options</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
     <string name="copy_error_report">Copy error report</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>

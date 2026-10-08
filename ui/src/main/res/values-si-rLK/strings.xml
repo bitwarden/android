@@ -574,8 +574,8 @@
     <string name="resend_code">කේතය නැවත යවන්න</string>
     <string name="a_verification_code_was_sent_to_your_email">සත්‍යාපන කේතයක් ඔබගේ විද්‍යුත් තැපෑලට යවන ලදී</string>
     <string name="submit_crash_logs">බිඳවැටීම් ලොග ඉදිරිපත් කරන්න</string>
-    <string name="options_expanded">විකල්ප පුළුල් කර ඇත, හකුළා ගැනීමට තට්ටු කරන්න.</string>
-    <string name="options_collapsed">විකල්ප හකුළා ඇත, පුළුල් කිරීමට තට්ටු කරන්න.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">ලොකු අකුරු (A සිට Z)</string>
     <string name="lowercase_ato_z">කුඩා අකුරු (A සිට Z)</string>
     <string name="numbers_zero_to_nine">සංඛ්‍යා (0 සිට 9)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ගොනුව සැකසිය නොහැකි විය</string>
     <string name="file_could_not_be_processed_message">ගොනුව සැකසිය නොහැකි විය. එය වලංගු JSON බවට සහතික වී නැවත උත්සාහ කරන්න. උදව් අවශ්‍යද? bitwarden.com/help වෙත පිවිසෙන්න</string>
     <string name="get_help">උදව් ලබා ගන්න</string>
-    <string name="expand_advanced_options">උසස් විකල්ප පුළුල් කරන්න</string>
-    <string name="local_items_are_expanded_click_to_collapse">දේශීය අයිතම පුළුල් කර ඇත, හකුළා ගැනීමට ක්ලික් කරන්න.</string>
-    <string name="local_items_are_collapsed_click_to_expand">දේශීය අයිතම හකුළා ඇත, පුළුල් කිරීමට ක්ලික් කරන්න.</string>
-    <string name="items_expanded_click_to_collapse">අයිතම පුළුල් කර ඇත, හකුළා ගැනීමට ක්ලික් කරන්න.</string>
-    <string name="items_are_collapsed_click_to_expand">අයිතම හකුළා ඇත, පුළුල් කිරීමට ක්ලික් කරන්න.</string>
     <string name="error_cannot_decrypt">[දෝෂය: විකේතනය කළ නොහැක]</string>
     <string name="copy_error_report">දෝෂ වාර්තාව පිටපත් කරන්න</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ට මෙම සුරක්ෂිතාගාර අයිතමය විකේතනය කළ නොහැකි විය. අමතර දත්ත පාඩුව වළක්වා ගැනීමට මෙම දෝෂ වාර්තාව පිටපත් කර පාරිභෝගික සාර්ථකත්වය සමඟ බෙදාගන්න.</string>
@@ -1161,6 +1156,7 @@
         <item quantity="other">Bitwarden ට %1$d සුරක්ෂිතාගාර අයිතම විකේතනය කළ නොහැකි විය. අමතර දත්ත පාඩුව වළක්වා ගැනීමට මෙම දෝෂ වාර්තාව පිටපත් කර පාරිභෝගික සාර්ථකත්වය සමඟ බෙදාගන්න.</item>
     </plurals>
     <string name="select_a_card_for_x">%s සඳහා කාඩ්පතක් තෝරන්න</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">උසස් විකල්ප</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ගැළපුම් හඳුනාගැනීම ගැන තවත්</annotation></string>
     <string name="keep_your_credential_secure">ඔබගේ අක්තපත්‍ර ආරක්ෂිතව තබා ගන්න</string>
@@ -1446,4 +1442,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

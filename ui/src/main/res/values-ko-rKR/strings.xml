@@ -570,8 +570,8 @@
     <string name="resend_code">코드 재전송</string>
     <string name="a_verification_code_was_sent_to_your_email">인증 코드를 이메일로 보냈습니다</string>
     <string name="submit_crash_logs">충돌 로그 보고하기</string>
-    <string name="options_expanded">설정이 펼쳐졌습니다. 탭해서 접을 수 있습니다.</string>
-    <string name="options_collapsed">설정이 접혀있습니다. 탭해서 펼칠 수 있습니다.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">대문자 (A-Z)</string>
     <string name="lowercase_ato_z">소문자 (a-z)</string>
     <string name="numbers_zero_to_nine">숫자 (0-9)</string>
@@ -1141,11 +1141,6 @@
     <string name="file_could_not_be_processed">파일을 처리할 수 없음</string>
     <string name="file_could_not_be_processed_message">파일을 처리할 수 없습니다. 유효한 JSON인지 확인하고 다시 시도하세요. 도움이 필요하신가요? bitwarden.com/help를 방문하세요.</string>
     <string name="get_help">도움말</string>
-    <string name="expand_advanced_options">고급 옵션 확장</string>
-    <string name="local_items_are_expanded_click_to_collapse">로컬 항목이 확장되었습니다. 축소하려면 클릭하세요.</string>
-    <string name="local_items_are_collapsed_click_to_expand">로컬 항목이 축소되었습니다. 확장하려면 클릭하세요.</string>
-    <string name="items_expanded_click_to_collapse">항목이 확장되었습니다. 축소하려면 클릭하세요.</string>
-    <string name="items_are_collapsed_click_to_expand">항목이 축소되었습니다. 확장하려면 클릭하세요.</string>
     <string name="error_cannot_decrypt">[오류: 복호화할 수 없음]</string>
     <string name="copy_error_report">오류 보고서 복사</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden이 이 보관함 항목을 복호화할 수 없습니다. 추가 데이터 손실을 막으려면 이 오류 보고서를 복사해 고객 지원 팀과 공유하세요.</string>
@@ -1153,6 +1148,7 @@
         <item quantity="other">Bitwarden이 보관함 항목 %1$d개를 복호화할 수 없습니다. 추가 데이터 손실을 막으려면 이 오류 보고서를 복사해 고객 지원 팀과 공유하세요.</item>
     </plurals>
     <string name="select_a_card_for_x">%s에 대한 카드 선택</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">고급 옵션</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">일치 감지에 대한 자세한 내용</annotation></string>
     <string name="keep_your_credential_secure">자격 증명을 안전하게 유지</string>
@@ -1436,4 +1432,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

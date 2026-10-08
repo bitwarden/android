@@ -571,8 +571,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="resend_code">Gửi lại mã</string>
     <string name="a_verification_code_was_sent_to_your_email">Mã xác minh đã được gửi đến email của bạn</string>
     <string name="submit_crash_logs">Gửi nhật ký lỗi</string>
-    <string name="options_expanded">Đã mở rộng các tuỳ chọn, nhấn để thu gọn.</string>
-    <string name="options_collapsed">Đã thu gọn các tuỳ chọn, nhấn để mở rộng.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Chữ hoa (A-Z)</string>
     <string name="lowercase_ato_z">Chữ thường (a-z)</string>
     <string name="numbers_zero_to_nine">Số (0-9)</string>
@@ -1144,11 +1144,6 @@ các vấn đề.</string>
     <string name="file_could_not_be_processed">Tệp không thể được xử lý</string>
     <string name="file_could_not_be_processed_message">Tệp không thể được xử lý. Hãy đảm bảo tệp JSON hợp lệ và thử lại. Cần trợ giúp? Truy cập bitwarden.com/help</string>
     <string name="get_help">Nhận trợ giúp</string>
-    <string name="expand_advanced_options">Mở rộng các tùy chọn nâng cao</string>
-    <string name="local_items_are_expanded_click_to_collapse">Các mục địa phương được mở rộng, nhấp để thu gọn.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
-    <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
-    <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
     <string name="error_cannot_decrypt">[lỗi: không thể giải mã]</string>
     <string name="copy_error_report">Sao chép báo lỗi</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden không thể giải mã mục này trong kho. Vui lòng sao chép và chia sẻ báo cáo lỗi này với bộ phận Hỗ trợ Khách hàng để tránh mất dữ liệu thêm.</string>
@@ -1156,6 +1151,7 @@ các vấn đề.</string>
         <item quantity="other">Bitwarden không thể giải mã %1$d mục trong kho. Hãy sao chép và chia sẻ báo cáo lỗi này với bộ phận hỗ trợ khách hàng để tránh mất thêm dữ liệu.</item>
     </plurals>
     <string name="select_a_card_for_x">Chọn một thẻ cho %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Tùy chọn nâng cao</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Tìm hiểu thêm về phát hiện khớp</annotation></string>
     <string name="keep_your_credential_secure">Giữ thông tin xác thực của bạn an toàn</string>
@@ -1441,4 +1437,9 @@ các vấn đề.</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

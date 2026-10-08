@@ -2119,6 +2119,53 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `in edit mode during autofill selection, SaveClick should navigate back without clearing special circumstances`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = AutofillSelectionData(
+                        type = AutofillSelectionData.Type.LOGIN,
+                        framework = AutofillSelectionData.Framework.AUTOFILL,
+                        uri = "mockUri",
+                    ),
+                    shouldFinishWhenComplete = true,
+                )
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+            coEvery {
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
+            } returns UpdateCipherResult.Success
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+
+            assertNotNull(specialCircumstanceManager.specialCircumstance)
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
+                    relay = SnackbarRelay.CIPHER_UPDATED,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in edit mode, SaveClick updateCipher error with a null message should show an error dialog with a generic message`() =
         runTest {
             val cipherListView = createMockCipherListView(1)

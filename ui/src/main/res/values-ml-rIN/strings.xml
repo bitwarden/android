@@ -574,8 +574,8 @@
     <string name="resend_code">കോഡ് വീണ്ടും അയയ്ക്കുക</string>
     <string name="a_verification_code_was_sent_to_your_email">നിങ്ങളുടെ ഇമെയിലിലേക്ക് ഒരു പരിശോധന കോഡ് അയച്ചു</string>
     <string name="submit_crash_logs">ക്രാഷ് ലോഗുകൾ സമർപ്പിക്കുക</string>
-    <string name="options_expanded">ഓപ്ഷനുകൾ വികസിപ്പിച്ചിരിക്കുന്നു, ചുരുക്കാൻ ടാപ്പ് ചെയ്യുക.</string>
-    <string name="options_collapsed">ഓപ്ഷനുകൾ ചുരുക്കിയിരിക്കുന്നു, വികസിപ്പിക്കാൻ ടാപ്പ് ചെയ്യുക.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">വലിയക്ഷരങ്ങൾ (A മുതൽ Z വരെ)</string>
     <string name="lowercase_ato_z">ചെറിയക്ഷരങ്ങൾ (A മുതൽ Z വരെ)</string>
     <string name="numbers_zero_to_nine">അക്കങ്ങൾ (0 മുതൽ 9 വരെ)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ഫയൽ പ്രോസസ്സ് ചെയ്യാനായില്ല</string>
     <string name="file_could_not_be_processed_message">ഫയൽ പ്രോസസ്സ് ചെയ്യാനായില്ല. ഇത് സാധുവായ JSON ആണെന്ന് ഉറപ്പാക്കി വീണ്ടും ശ്രമിക്കുക. സഹായം വേണോ? bitwarden.com/help സന്ദർശിക്കുക</string>
     <string name="get_help">Get Help</string>
-    <string name="expand_advanced_options">വിപുല ഓപ്ഷനുകൾ വികസിപ്പിക്കുക</string>
-    <string name="local_items_are_expanded_click_to_collapse">പ്രാദേശിക ഇനങ്ങൾ വികസിപ്പിച്ചിരിക്കുന്നു, ചുരുക്കാൻ ക്ലിക്ക് ചെയ്യുക.</string>
-    <string name="local_items_are_collapsed_click_to_expand">പ്രാദേശിക ഇനങ്ങൾ ചുരുക്കിയിരിക്കുന്നു, വികസിപ്പിക്കാൻ ക്ലിക്ക് ചെയ്യുക.</string>
-    <string name="items_expanded_click_to_collapse">ഇനങ്ങൾ വികസിപ്പിച്ചിരിക്കുന്നു, ചുരുക്കാൻ ക്ലിക്ക് ചെയ്യുക.</string>
-    <string name="items_are_collapsed_click_to_expand">ഇനങ്ങൾ ചുരുക്കിയിരിക്കുന്നു, വികസിപ്പിക്കാൻ ക്ലിക്ക് ചെയ്യുക.</string>
     <string name="error_cannot_decrypt">[പിശക്: ഡീക്രിപ്റ്റ് ചെയ്യാനാകില്ല]</string>
     <string name="copy_error_report">പിശക് റിപ്പോർട്ട് പകർത്തുക</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden-ന് ഈ വോൾട്ട് ഇനം ഡീക്രിപ്റ്റ് ചെയ്യാൻ കഴിഞ്ഞില്ല. അധിക ഡാറ്റ നഷ്ടം ഒഴിവാക്കാൻ ഈ പിശക് റിപ്പോർട്ട് പകർത്തി ഉപഭോക്തൃ വിജയവുമായി പങ്കിടുക.</string>
@@ -1161,6 +1156,7 @@
         <item quantity="other">%1$d വോൾട്ട് ഇനങ്ങൾ ഡീക്രിപ്റ്റ് ചെയ്യാൻ Bitwarden-ന് കഴിഞ്ഞില്ല. അധിക ഡാറ്റ നഷ്ടം ഒഴിവാക്കാൻ ഈ പിശക് റിപ്പോർട്ട് പകർത്തി ഉപഭോക്തൃ വിജയവുമായി പങ്കിടുക.</item>
     </plurals>
     <string name="select_a_card_for_x">%s-നായി ഒരു കാർഡ് തിരഞ്ഞെടുക്കുക</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">വിപുല ഓപ്ഷനുകൾ</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">മാച്ച് ഡിറ്റക്ഷനെക്കുറിച്ച് കൂടുതൽ</annotation></string>
     <string name="keep_your_credential_secure">നിങ്ങളുടെ യോഗ്യതാവിവരങ്ങൾ സുരക്ഷിതമായി സൂക്ഷിക്കുക</string>
@@ -1446,4 +1442,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

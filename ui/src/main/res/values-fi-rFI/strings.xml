@@ -574,8 +574,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="resend_code">Lähetä koodi uudelleen</string>
     <string name="a_verification_code_was_sent_to_your_email">Todennuskoodi lähetettiin sähköpostiisi.</string>
     <string name="submit_crash_logs">Lähetä kaatumislokit</string>
-    <string name="options_expanded">Valinnat on laajennettu, tiivistä napauttamalla.</string>
-    <string name="options_collapsed">Valinnat on tiivistetty, laajenna napauttamalla.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Isot kirjaimet (A-Z)</string>
     <string name="lowercase_ato_z">Pienet kirjaimet (A-Z)</string>
     <string name="numbers_zero_to_nine">Numerot (0-9)</string>
@@ -1148,11 +1148,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="file_could_not_be_processed">Tiedostoa ei voitu käsitellä</string>
     <string name="file_could_not_be_processed_message">Tiedostoa ei voitu käsitellä. Varmista, että se on JSON-muodossa ja yritä uudelleen. Tarvitsetko apua? Katso bitwarden.com/help</string>
     <string name="get_help">Hanki ohjeita</string>
-    <string name="expand_advanced_options">Laajenna lisäasetukset</string>
-    <string name="local_items_are_expanded_click_to_collapse">Paikalliset kohteet on laajennettu. Napsauta pienentääksesi.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Paikalliset kohteet on pienennetty. Paina laajentaaksesi.</string>
-    <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
-    <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
     <string name="error_cannot_decrypt">[virhe: salausta ei voi purkaa]</string>
     <string name="copy_error_report">Kopioi virheilmoitus</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden ei pystynyt purkamaan tämän holvin kohteen salausta. Kopioi ja jaa tämä virheilmoitus asiakastuelle välttääksesi lisätietojen menetyksen.</string>
@@ -1161,6 +1156,7 @@ Haluatko vaihtaa tähän tiliin?</string>
         <item quantity="other">Bitwarden ei pystynyt purkamaan %1$d holvin kohteen salausta. Kopioi ja jaa tämä virheilmoitus asiakastuelle välttääksesi lisätietojen menetyksen.</item>
     </plurals>
     <string name="select_a_card_for_x">Valitse kortti kohteelle %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Lisäasetukset</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lisää vastaavuuden tunnistuksesta</annotation></string>
     <string name="keep_your_credential_secure">Pidä tunnistetietosi turvassa</string>
@@ -1446,4 +1442,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

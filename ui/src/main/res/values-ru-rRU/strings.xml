@@ -582,8 +582,8 @@
     <string name="resend_code">Отправить код повторно</string>
     <string name="a_verification_code_was_sent_to_your_email">Код подтверждения отправлен на вашу электронную почту.</string>
     <string name="submit_crash_logs">Отправлять отчеты о сбоях</string>
-    <string name="options_expanded">Настройки развернуты, коснитесь, чтобы свернуть.</string>
-    <string name="options_collapsed">Настройки свернуты, нажмите, чтобы развернуть.</string>
+    <string name="expand">развернуть</string>
+    <string name="collapse">свернуть</string>
     <string name="uppercase_ato_z">Прописные буквы (A-Z)</string>
     <string name="lowercase_ato_z">Строчные буквы (A-Z)</string>
     <string name="numbers_zero_to_nine">Цифры (0-9)</string>
@@ -1162,11 +1162,6 @@
     <string name="file_could_not_be_processed">Файл не может быть обработан</string>
     <string name="file_could_not_be_processed_message">Файл не удалось обработать. Убедитесь, что он имеет формат JSON, и повторите попытку. Нужна помощь? Посетите bitwarden.com/help</string>
     <string name="get_help">Получить помощь</string>
-    <string name="expand_advanced_options">Развернуть дополнительные параметры</string>
-    <string name="local_items_are_expanded_click_to_collapse">Локальные элементы развернуты, нажмите, чтобы свернуть.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Локальные элементы свернуты, нажмите, чтобы развернуть.</string>
-    <string name="items_expanded_click_to_collapse">Элементы развернуты, нажмите, чтобы свернуть.</string>
-    <string name="items_are_collapsed_click_to_expand">Элементы свернуты, нажмите, чтобы развернуть.</string>
     <string name="error_cannot_decrypt">[ошибка: невозможно расшифровать]</string>
     <string name="copy_error_report">Скопировать отчет об ошибке</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не удалось расшифровать этот элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</string>
@@ -1177,6 +1172,7 @@
         <item quantity="other">Bitwarden не смог расшифровать %1$d элемента хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберите карту для %s</string>
+    <string name="choose_an_identity"></string>
     <string name="advanced_options">Расширенные настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Подробнее об обнаружении совпадений</annotation></string>
     <string name="keep_your_credential_secure">Храните свои учетные данные в безопасности</string>
@@ -1461,9 +1457,14 @@
     <string name="receive_24_7_priority_support">Получите приоритетную поддержку 24/7</string>
     <string name="account_creation_restricted">Создание аккаунта запрещено</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s позволяет создавать аккаунты только приглашенным пользователям.</string>
-    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
-    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Уменьшить %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Увеличить %1$s</string>
     <string name="use_this_passphrase">Использовать эту парольную фразу</string>
     <string name="use_this_password">Использовать этот пароль</string>
     <string name="use_this_username">Использовать это имя пользователя</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

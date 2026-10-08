@@ -574,8 +574,8 @@
     <string name="resend_code">კოდის ხელახლა გაგზავნა</string>
     <string name="a_verification_code_was_sent_to_your_email">დადასტურების კოდი გაიგზავნა თქვენს ელ. ფოსტაზე</string>
     <string name="submit_crash_logs">ჩავარდნის ჟურნალების გაგზავნა</string>
-    <string name="options_expanded">ვარიანტები გაშლილია, დასაკეცად შეეხეთ.</string>
-    <string name="options_collapsed">ვარიანტები დაკეცილია, გასაშლელად შეეხეთ.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">დიდი ასოები (A-დან Z-მდე)</string>
     <string name="lowercase_ato_z">პატარა ასოები (A-დან Z-მდე)</string>
     <string name="numbers_zero_to_nine">ციფრები (0-დან 9-მდე)</string>
@@ -1148,11 +1148,6 @@
     <string name="file_could_not_be_processed">ფაილის დამუშავება ვერ მოხერხდა</string>
     <string name="file_could_not_be_processed_message">ფაილის დამუშავება ვერ მოხერხდა. დარწმუნდით, რომ ის მოქმედი JSON-ია და სცადეთ ხელახლა. გჭირდებათ დახმარება? ეწვიეთ bitwarden.com/help</string>
     <string name="get_help">დახმარების მიღება</string>
-    <string name="expand_advanced_options">გაფართოებული ვარიანტების გაშლა</string>
-    <string name="local_items_are_expanded_click_to_collapse">ლოკალური ჩანაწერები გაშლილია, დასაკეცად დააწკაპუნეთ.</string>
-    <string name="local_items_are_collapsed_click_to_expand">ლოკალური ჩანაწერები დაკეცილია, გასაშლელად დააწკაპუნეთ.</string>
-    <string name="items_expanded_click_to_collapse">ჩანაწერები გაშლილია, დასაკეცად დააწკაპუნეთ.</string>
-    <string name="items_are_collapsed_click_to_expand">ჩანაწერები დაკეცილია, გასაშლელად დააწკაპუნეთ.</string>
     <string name="error_cannot_decrypt">[შეცდომა: გაშიფვრა შეუძლებელია]</string>
     <string name="copy_error_report">შეცდომის ანგარიშის კოპირება</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden-მა ვერ შეძლო ამ სეიფის ჩანაწერის გაშიფვრა. მონაცემთა დამატებითი დაკარგვის თავიდან ასაცილებლად, დააკოპირეთ და გააზიარეთ ეს შეცდომის ანგარიში მომხმარებლის მხარდაჭერასთან.</string>
@@ -1161,6 +1156,7 @@
         <item quantity="other">Bitwarden-მა ვერ შეძლო %1$d სეიფის ჩანაწერის გაშიფვრა. მონაცემთა დამატებითი დაკარგვის თავიდან ასაცილებლად, დააკოპირეთ და გააზიარეთ ეს შეცდომის ანგარიში მომხმარებლის მხარდაჭერასთან.</item>
     </plurals>
     <string name="select_a_card_for_x">აირჩიეთ ბარათი %s-ისთვის</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">გაფართოებული ვარიანტები</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">მეტი შესაბამისობის გამოვლენის შესახებ</annotation></string>
     <string name="keep_your_credential_secure">შეინახეთ თქვენი მონაცემები უსაფრთხოდ</string>
@@ -1446,4 +1442,9 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

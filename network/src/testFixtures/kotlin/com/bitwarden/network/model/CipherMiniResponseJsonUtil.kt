@@ -20,6 +20,18 @@ fun createMockCipherMiniResponse(
     reprompt = CipherRepromptTypeJson.NONE,
     key = "mockKey-$number",
     archivedDate = null,
+    name = "mockName-$number",
+    notes = "mockNotes-$number",
+    login = createMockLogin(number = number),
+    card = createMockCard(number = number),
+    identity = createMockIdentity(number = number),
+    secureNote = createMockSecureNote(),
+    sshKey = createMockSshKey(number = number),
+    bankAccount = createMockBankAccount(number = number),
+    driversLicense = createMockDriversLicense(number = number),
+    passport = createMockPassport(number = number),
+    fields = listOf(createMockField(number = number)),
+    passwordHistory = listOf(createMockPasswordHistory(number = number)),
 )
 
 /**

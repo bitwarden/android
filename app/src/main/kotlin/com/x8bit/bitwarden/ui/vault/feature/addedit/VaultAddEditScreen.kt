@@ -769,6 +769,11 @@ private fun FolderSelectionBottomSheetContent(
                 mutableStateOf("")
             }
             val cardStyle = if (options.isEmpty()) CardStyle.Full else CardStyle.Bottom
+            val shape = if (options.isEmpty()) {
+                BitwardenTheme.shapes.content
+            } else {
+                BitwardenTheme.shapes.contentBottom
+            }
             if (inEditMode) {
                 BitwardenTextField(
                     label = stringResource(BitwardenString.add_folder),
@@ -800,7 +805,7 @@ private fun FolderSelectionBottomSheetContent(
                     leadingIcon = painterResource(id = BitwardenDrawable.ic_plus_small),
                     style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(all = 16.dp),
-                    cornerSize = 0.dp,
+                    shape = shape,
                     modifier = Modifier
                         .fillMaxWidth()
                         .cardStyle(cardStyle = cardStyle, paddingVertical = 0.dp),

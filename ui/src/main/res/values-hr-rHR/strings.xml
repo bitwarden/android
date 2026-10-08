@@ -577,8 +577,8 @@
     <string name="resend_code">Ponovno pošalji kod</string>
     <string name="a_verification_code_was_sent_to_your_email">Kôd za potvrdu je poslan na vašu adresu e-pošte</string>
     <string name="submit_crash_logs">Slanje zapisnika rušenja</string>
-    <string name="options_expanded">Opcije su proširene, dodirni za sažimanje.</string>
-    <string name="options_collapsed">Opcije su sažete, dodirni za proširenje.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Velika slova (A - Z)</string>
     <string name="lowercase_ato_z">Mala slova (a - z)</string>
     <string name="numbers_zero_to_nine">Brojevi (0 - 9)</string>
@@ -1155,11 +1155,6 @@ bilo kakav problem.</string>
     <string name="file_could_not_be_processed">Datoteka se ne može obraditi</string>
     <string name="file_could_not_be_processed_message">Datoteka se ne može obraditi. Provjeri je li JSON ispravan i pokušaj ponovno. Za pomoć posjeti bitwarden.com/help</string>
     <string name="get_help">Potraži pomoć</string>
-    <string name="expand_advanced_options">Proširi napredne mogućnosti</string>
-    <string name="local_items_are_expanded_click_to_collapse">Lokalne stavke su proširene. Klikni za sažimanje.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
-    <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
-    <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
     <string name="error_cannot_decrypt">[greška: dešifriranje nije moguće]</string>
     <string name="copy_error_report">Kopiraj izvješće o pogrešci</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nije mogao dešifrirati ovu stavku trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</string>
@@ -1169,6 +1164,7 @@ bilo kakav problem.</string>
         <item quantity="other">Bitwarden nije mogao dešifrirati %1$d stavki trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</item>
     </plurals>
     <string name="select_a_card_for_x">Odaberi karticu za %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Napredne mogućnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Više o otkrivanju podudaranja</annotation></string>
     <string name="keep_your_credential_secure">Čuvaj svoje vjerodajnice sigurnima</string>
@@ -1456,4 +1452,9 @@ bilo kakav problem.</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>
