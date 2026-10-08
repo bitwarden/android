@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.components.text
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -71,6 +72,7 @@ fun BitwardenClickableText(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .clip(shape = shape)
+            .focusable(enabled = isEnabled)
             .clickable(
                 indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 interactionSource = interactionSource,
@@ -88,15 +90,16 @@ fun BitwardenClickableText(
                 contentDescription = formattedAccessibilityString
             },
     ) {
+        val foregroundColor = if (isEnabled) {
+            color
+        } else {
+            BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+        }
         leadingIcon?.let {
             Icon(
                 painter = leadingIcon,
                 contentDescription = null,
-                tint = if (isEnabled) {
-                    color
-                } else {
-                    BitwardenTheme.colorScheme.filledButton.foregroundDisabled
-                },
+                tint = foregroundColor,
                 modifier = Modifier.size(size = 16.dp),
             )
             Spacer(modifier = Modifier.width(width = 8.dp))
@@ -104,7 +107,7 @@ fun BitwardenClickableText(
         Text(
             text = label,
             textAlign = TextAlign.Start,
-            color = color,
+            color = foregroundColor,
             style = style,
             modifier = Modifier.semantics { hideFromAccessibility() },
         )

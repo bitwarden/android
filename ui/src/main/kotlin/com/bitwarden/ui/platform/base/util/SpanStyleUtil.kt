@@ -5,6 +5,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -66,4 +67,18 @@ val bitwardenClickableTextSpanStyle: SpanStyle
     get() = spanStyleOf(
         color = BitwardenTheme.colorScheme.text.interaction,
         textStyle = BitwardenTheme.typography.labelMedium,
+    )
+
+/**
+ * A [SpanStyle] representing "clickable" text in the focused state using the background alert
+ * color and the underlined label medium font.
+ */
+val bitwardenClickableTextFocusSpanStyle: SpanStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = spanStyleOf(
+        color = BitwardenTheme.colorScheme.background.alert,
+        textStyle = BitwardenTheme.typography.labelMedium.copy(
+            textDecoration = TextDecoration.Underline,
+        ),
     )

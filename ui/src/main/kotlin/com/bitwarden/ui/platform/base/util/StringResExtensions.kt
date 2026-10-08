@@ -26,6 +26,8 @@ import androidx.core.text.getSpans
  * with the "emphasis" annotation.
  * @param linkHighlightStyle Style to apply to part of the resource that has been annotated with
  * the "link" annotation.
+ * @param linkHighlightFocusStyle Style to apply to part of the resource that has been annotated
+ * with the "link" annotation and is currently focused.
  * @param resources The resources used to access the strings.
  * @param onAnnotationClick Callback to invoke when a link annotation is clicked. Will pass back
  * the value of the annotation as a string to allow for delineation if there are multiple callbacks
@@ -52,6 +54,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
     style: SpanStyle = bitwardenDefaultSpanStyle,
     emphasisHighlightStyle: SpanStyle = bitwardenBoldSpanStyle,
     linkHighlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    linkHighlightFocusStyle: SpanStyle = bitwardenClickableTextFocusSpanStyle,
     resources: Resources = LocalResources.current,
     onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
 ): AnnotatedString = remember(
@@ -60,6 +63,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
     style,
     emphasisHighlightStyle,
     linkHighlightStyle,
+    linkHighlightFocusStyle,
     onAnnotationClick,
 ) {
     val spannedString = try {
@@ -73,6 +77,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
         style = style,
         emphasisHighlightStyle = emphasisHighlightStyle,
         linkHighlightStyle = linkHighlightStyle,
+        linkHighlightFocusStyle = linkHighlightFocusStyle,
         onAnnotationClick = onAnnotationClick,
     )
 }
@@ -90,6 +95,8 @@ fun @receiver:StringRes Int.toAnnotatedString(
  * with the "emphasis" annotation.
  * @param linkHighlightStyle Style to apply to part of the resource that has been annotated with
  * the "link" annotation.
+ * @param linkHighlightFocusStyle Style to apply to part of the resource that has been annotated
+ * with the "link" annotation and is currently focused.
  * @param resources The resources used to access the strings.
  * @param onAnnotationClick Callback to invoke when a link annotation is clicked. Will pass back
  * the value of the annotation as a string to allow for delineation if there are multiple callbacks
@@ -105,6 +112,7 @@ fun @receiver:PluralsRes Int.toAnnotatedPluralsString(
     style: SpanStyle = bitwardenDefaultSpanStyle,
     emphasisHighlightStyle: SpanStyle = bitwardenBoldSpanStyle,
     linkHighlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    linkHighlightFocusStyle: SpanStyle = bitwardenClickableTextFocusSpanStyle,
     resources: Resources = LocalResources.current,
     onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
 ): AnnotatedString = remember(
@@ -114,6 +122,7 @@ fun @receiver:PluralsRes Int.toAnnotatedPluralsString(
     style,
     emphasisHighlightStyle,
     linkHighlightStyle,
+    linkHighlightFocusStyle,
     onAnnotationClick,
 ) {
     val spannedString = try {
@@ -129,6 +138,7 @@ fun @receiver:PluralsRes Int.toAnnotatedPluralsString(
         style = style,
         emphasisHighlightStyle = emphasisHighlightStyle,
         linkHighlightStyle = linkHighlightStyle,
+        linkHighlightFocusStyle = linkHighlightFocusStyle,
         onAnnotationClick = onAnnotationClick,
     )
 }
@@ -138,11 +148,13 @@ fun @receiver:PluralsRes Int.toAnnotatedPluralsString(
  * `arg` annotations with the corresponding [args] entry then applies emphasis and link styles
  * to the resulting [AnnotatedString].
  */
+@Suppress("LongParameterList")
 private fun SpannedString.buildAnnotatedString(
     args: Array<out CharSequence>,
     style: SpanStyle,
     emphasisHighlightStyle: SpanStyle,
     linkHighlightStyle: SpanStyle,
+    linkHighlightFocusStyle: SpanStyle,
     onAnnotationClick: ((annotationKey: String) -> Unit)?,
 ): AnnotatedString {
     // The spannableBuilder is used to help parse through the annotations in the string resource.
@@ -181,6 +193,8 @@ private fun SpannedString.buildAnnotatedString(
                     tag = annotation.value.orEmpty(),
                     styles = TextLinkStyles(
                         style = linkHighlightStyle,
+                        focusedStyle = linkHighlightFocusStyle,
+                        hoveredStyle = linkHighlightFocusStyle,
                     ),
                 ) {
                     onAnnotationClick?.invoke(annotation.value.orEmpty())
