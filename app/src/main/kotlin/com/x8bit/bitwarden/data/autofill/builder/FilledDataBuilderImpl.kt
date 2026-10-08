@@ -84,8 +84,12 @@ class FilledDataBuilderImpl(
     /**
      * Build the [FilledPartition]s for the [autofillRequest]'s partition by fetching the matching
      * ciphers and fulfilling the partition's views with each cipher's data.
+     *
+     * Note: This must remain `inline`. A non-inlined lambda returning [InlinePresentationSpec]
+     * forces a `checkcast` against that class, which does not exist below API 30 and crashes
+     * with a `NoClassDefFoundError` on Android 10.
      */
-    private suspend fun buildFilledPartitions(
+    private suspend inline fun buildFilledPartitions(
         autofillRequest: AutofillRequest.Fillable,
         getCipherInlinePresentationOrNull: () -> InlinePresentationSpec?,
     ): List<FilledPartition> = when (autofillRequest.partition) {
