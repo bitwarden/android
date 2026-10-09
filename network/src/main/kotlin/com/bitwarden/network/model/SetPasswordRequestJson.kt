@@ -8,12 +8,8 @@ import kotlinx.serialization.Serializable
  *
  * @property organizationIdentifier The SSO organization identifier.
  * @property passwordHint The hint for the master password (nullable).
- * @property kdfType The KDF type.
- * @property kdfIterations The number of iterations when calculating a user's password.
- * @property kdfMemory The amount of memory to use when calculating a password hash (MB).
- * @property kdfParallelism The number of threads to use when calculating a password hash.
- * @property key The user key for the request (encrypted).
- * @property passwordHash The hash of the user's new password.
+ * @property authenticationData The data to authenticate with a master password.
+ * @property unlockData The data to unlock with a master password.
  * @property keys A [KeysJson] object containing public and private keys.
  */
 @Serializable
@@ -24,23 +20,11 @@ data class SetPasswordRequestJson(
     @SerialName("masterPasswordHint")
     val passwordHint: String?,
 
-    @SerialName("kdf")
-    val kdfType: KdfTypeJson? = null,
+    @SerialName("masterPasswordAuthentication")
+    val authenticationData: MasterPasswordAuthenticationDataJson,
 
-    @SerialName("kdfIterations")
-    val kdfIterations: Int? = null,
-
-    @SerialName("kdfMemory")
-    val kdfMemory: Int? = null,
-
-    @SerialName("kdfParallelism")
-    val kdfParallelism: Int? = null,
-
-    @SerialName("key")
-    val key: String,
-
-    @SerialName("masterPasswordHash")
-    val passwordHash: String?,
+    @SerialName("masterPasswordUnlock")
+    val unlockData: MasterPasswordUnlockDataJson,
 
     @SerialName("keys")
     val keys: KeysJson?,
@@ -56,12 +40,17 @@ data class SetPasswordRequestJson(
     ) : this(
         organizationIdentifier = organizationIdentifier,
         passwordHint = passwordHint,
-        kdfType = kdf.kdfType,
-        kdfIterations = kdf.iterations,
-        kdfMemory = kdf.memory,
-        kdfParallelism = kdf.parallelism,
-        key = masterKeyWrappedUserKey,
-        passwordHash = masterPasswordAuthenticationHash,
+        authenticationData = MasterPasswordAuthenticationDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterPasswordAuthenticationHash = masterPasswordAuthenticationHash,
+        ),
+        unlockData = MasterPasswordUnlockDataJson(
+            kdf = kdf,
+            salt = salt,
+            masterKeyWrappedUserKey = masterKeyWrappedUserKey,
+            containedKeyId = null,
+        ),
         keys = keys,
     )
 }
