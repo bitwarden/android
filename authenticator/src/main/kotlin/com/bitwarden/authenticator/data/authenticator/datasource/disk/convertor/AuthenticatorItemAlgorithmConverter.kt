@@ -1,25 +1,25 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.convertor
 
-import androidx.room.ProvidedTypeConverter
-import androidx.room.TypeConverter
+import androidx.room3.ColumnTypeConverter
+import androidx.room3.ProvidedColumnTypeConverter
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 
 /**
- * A [TypeConverter] to convert [AuthenticatorItemAlgorithm] to and from a [String].
+ * A [ColumnTypeConverter] to convert [AuthenticatorItemAlgorithm] to and from a [String].
  */
-@ProvidedTypeConverter
+@ProvidedColumnTypeConverter
 class AuthenticatorItemAlgorithmConverter {
 
     /**
-     * A [TypeConverter] to convert an [AuthenticatorItemAlgorithm] to a [String].
+     * A [ColumnTypeConverter] to convert an [AuthenticatorItemAlgorithm] to a [String].
      */
-    @TypeConverter
+    @ColumnTypeConverter
     fun toString(item: AuthenticatorItemAlgorithm): String = item.name
 
     /**
-     * A [TypeConverter] to convert a [String] to an [AuthenticatorItemAlgorithm].
+     * A [ColumnTypeConverter] to convert a [String] to an [AuthenticatorItemAlgorithm].
      */
-    @TypeConverter
+    @ColumnTypeConverter
     fun fromString(itemName: String) = AuthenticatorItemAlgorithm
         .entries
         .find { it.name == itemName }

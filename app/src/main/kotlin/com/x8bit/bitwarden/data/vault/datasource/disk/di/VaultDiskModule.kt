@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.di
 
 import android.app.Application
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -35,14 +36,11 @@ class VaultDiskModule {
         databaseSchemeManager: DatabaseSchemeManager,
     ): VaultDatabase =
         Room
-            .databaseBuilder(
-                context = app,
-                klass = VaultDatabase::class.java,
-                name = "vault_database",
-            )
+            .databaseBuilder<VaultDatabase>(context = app, name = "vault_database")
             .fallbackToDestructiveMigration(dropAllTables = false)
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
-            .addTypeConverter(InstantTypeConverter())
+            .addColumnTypeConverter(typeConverter = InstantTypeConverter())
+            .setDriver(driver = AndroidSQLiteDriver())
             .build()
 
     @Provides

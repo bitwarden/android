@@ -1,26 +1,26 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.convertor
 
-import androidx.room.ProvidedTypeConverter
-import androidx.room.TypeConverter
+import androidx.room3.ColumnTypeConverter
+import androidx.room3.ProvidedColumnTypeConverter
 import java.time.Instant
 
 /**
- * A [TypeConverter] to convert an [Instant] to and from a [Long].
+ * A [ColumnTypeConverter] to convert an [Instant] to and from a [Long].
  */
-@ProvidedTypeConverter
+@ProvidedColumnTypeConverter
 class InstantTypeConverter {
     /**
-     * A [TypeConverter] to convert a [Long] to an [Instant].
+     * A [ColumnTypeConverter] to convert a [Long] to an [Instant].
      */
-    @TypeConverter
+    @ColumnTypeConverter
     fun fromTimestamp(
         value: Long?,
     ): Instant? = value?.let { Instant.ofEpochSecond(it) }
 
     /**
-     * A [TypeConverter] to convert an [Instant] to a [Long].
+     * A [ColumnTypeConverter] to convert an [Instant] to a [Long].
      */
-    @TypeConverter
+    @ColumnTypeConverter
     fun toTimestamp(
         instant: Instant?,
     ): Long? = instant?.epochSecond

@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.database
 
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.DeleteColumn
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import androidx.room.migration.AutoMigrationSpec
+import androidx.room3.AutoMigration
+import androidx.room3.ColumnTypeConverters
+import androidx.room3.Database
+import androidx.room3.DeleteColumn
+import androidx.room3.RoomDatabase
+import androidx.room3.migration.AutoMigrationSpec
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.InstantTypeConverter
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
@@ -38,7 +38,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
         AutoMigration(from = 9, to = 10, RemoveTotpAutoMigration::class),
     ],
 )
-@TypeConverters(InstantTypeConverter::class)
+@ColumnTypeConverters(InstantTypeConverter::class)
 abstract class VaultDatabase : RoomDatabase() {
 
     /**
