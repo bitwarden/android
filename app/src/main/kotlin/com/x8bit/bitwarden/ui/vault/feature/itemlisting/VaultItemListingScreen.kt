@@ -118,7 +118,7 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen(
                     VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = event.vaultItemCipherType,
                         selectedFolderId = event.selectedFolderId,
                         selectedCollectionId = event.selectedCollectionId,

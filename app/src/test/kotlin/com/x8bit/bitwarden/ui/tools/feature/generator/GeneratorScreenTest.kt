@@ -37,6 +37,7 @@ import com.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -50,6 +51,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 @Suppress("LargeClass")
 class GeneratorScreenTest : BitwardenComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
+    private var onNavigateToVaultAddItemCalled = false
+    private var onNavigateBackCalled = false
     private var onDimNavBarRequest: Boolean? = null
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -72,8 +75,9 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         ) {
             GeneratorScreen(
                 viewModel = viewModel,
+                navigateToVaultAddItem = { onNavigateToVaultAddItemCalled = true },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
-                onNavigateBack = {},
+                onNavigateBack = { onNavigateBackCalled = true },
                 onDimNavBarRequest = { onDimNavBarRequest = it },
             )
         }
@@ -274,6 +278,21 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `NavigateToAddLogin event should call onNavigateToVaultAddItem`() {
+        val event = GeneratorEvent.NavigateToAddLogin(
+            initialData = VaultAddEditType.AddItem.InitialData.Username(value = "bitwarden_user"),
+        )
+        mutableEventFlow.tryEmit(event)
+        assertTrue(onNavigateToVaultAddItemCalled)
+    }
+
+    @Test
+    fun `NavigateBack event should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
     fun `Snackbar should be displayed with correct message on ShowSnackbar event`() {
         mutableEventFlow.tryEmit(GeneratorEvent.ShowSnackbar("Test Snackbar Message".asText()))
 
@@ -296,11 +315,22 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking the Copy button should send CopyClick action`() {
         composeTestRule
-            .onNodeWithText(text = "Copy")
+            .onNodeWithContentDescription(label = "Copy")
             .performClick()
 
         verify {
             viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
+    }
+
+    @Test
+    fun `clicking the Create login button should send CreateLoginClick action`() {
+        composeTestRule
+            .onNodeWithText(text = "Create login")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CreateLoginClick)
         }
     }
 

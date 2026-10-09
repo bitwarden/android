@@ -19,6 +19,8 @@ data class VaultAddEditRoute(
     val vaultAddEditMode: VaultAddEditMode,
     val vaultItemId: String?,
     val vaultItemCipherType: VaultItemCipherType,
+    val initialValueType: InitialValueType?,
+    val initialValue: String?,
     val selectedFolderId: String? = null,
     val selectedCollectionId: String? = null,
 )
@@ -31,6 +33,15 @@ enum class VaultAddEditMode {
     ADD,
     EDIT,
     CLONE,
+}
+
+/**
+ * The type of initial data that is being provided.
+ */
+@Serializable
+enum class InitialValueType {
+    PASSWORD,
+    USERNAME,
 }
 
 /**
@@ -50,7 +61,22 @@ fun SavedStateHandle.toVaultAddEditArgs(): VaultAddEditArgs {
     val route = this.toRoute<VaultAddEditRoute>()
     return VaultAddEditArgs(
         vaultAddEditType = when (route.vaultAddEditMode) {
-            VaultAddEditMode.ADD -> VaultAddEditType.AddItem
+            VaultAddEditMode.ADD -> {
+                VaultAddEditType.AddItem(
+                    initialData = when (route.initialValueType) {
+                        InitialValueType.PASSWORD -> VaultAddEditType.AddItem.InitialData.Password(
+                            value = requireNotNull(route.initialValue),
+                        )
+
+                        InitialValueType.USERNAME -> VaultAddEditType.AddItem.InitialData.Username(
+                            value = requireNotNull(route.initialValue),
+                        )
+
+                        null -> null
+                    },
+                )
+            }
+
             VaultAddEditMode.EDIT -> {
                 VaultAddEditType.EditItem(vaultItemId = requireNotNull(route.vaultItemId))
             }
@@ -102,13 +128,20 @@ fun NavController.navigateToVaultAddEdit(
     args: VaultAddEditArgs,
     navOptions: NavOptions? = null,
 ) {
+    val initialData = (args.vaultAddEditType as? VaultAddEditType.AddItem)?.initialData
     navigate(
         route = VaultAddEditRoute(
             vaultAddEditMode = when (args.vaultAddEditType) {
-                VaultAddEditType.AddItem -> VaultAddEditMode.ADD
+                is VaultAddEditType.AddItem -> VaultAddEditMode.ADD
                 is VaultAddEditType.CloneItem -> VaultAddEditMode.CLONE
                 is VaultAddEditType.EditItem -> VaultAddEditMode.EDIT
             },
+            initialValueType = when (initialData) {
+                is VaultAddEditType.AddItem.InitialData.Password -> InitialValueType.PASSWORD
+                is VaultAddEditType.AddItem.InitialData.Username -> InitialValueType.USERNAME
+                null -> null
+            },
+            initialValue = initialData?.value,
             vaultItemId = args.vaultAddEditType.vaultItemId,
             vaultItemCipherType = args.vaultItemCipherType,
             selectedFolderId = args.selectedFolderId,

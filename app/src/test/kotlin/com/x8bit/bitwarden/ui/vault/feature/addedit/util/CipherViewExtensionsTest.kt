@@ -560,7 +560,7 @@ class CipherViewExtensionsTest {
         val result = createMockCipherView(number = 1)
             .validateCipherOrReturnErrorState(
                 currentAccount = createAccount(),
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
             ) { _, _ -> providedState }
 
         assertEquals(providedState, result)
@@ -589,7 +589,7 @@ class CipherViewExtensionsTest {
         val result = createMockCipherView(number = 1)
             .validateCipherOrReturnErrorState(
                 currentAccount = null,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
             ) { _, _ -> providedState }
 
         assertEquals(

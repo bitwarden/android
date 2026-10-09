@@ -34,7 +34,7 @@ class VaultAddEditExtensionsTest {
             VaultItemCipherType.SSH_KEY,
         )
 
-        val result = vaultItemCipherTypeList.map { it.toItemType() }
+        val result = vaultItemCipherTypeList.map { it.toItemType(initialData = null) }
 
         assertEquals(
             listOf(

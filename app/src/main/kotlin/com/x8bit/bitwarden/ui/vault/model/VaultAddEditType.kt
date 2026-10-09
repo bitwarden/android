@@ -17,8 +17,33 @@ sealed class VaultAddEditType : Parcelable {
      * Indicates that we want to create a completely new vault item.
      */
     @Parcelize
-    data object AddItem : VaultAddEditType() {
+    data class AddItem(
+        val initialData: InitialData? = null,
+    ) : VaultAddEditType() {
         override val vaultItemId: String? get() = null
+
+        /**
+         * When present, indicates that an initial value should be displayed for the new item.
+         */
+        @Parcelize
+        sealed class InitialData : Parcelable {
+            /**
+             * The initial value.
+             */
+            abstract val value: String
+
+            /**
+             * The initial value for a new password.
+             */
+            @Parcelize
+            data class Password(override val value: String) : InitialData()
+
+            /**
+             * The initial value for a new username.
+             */
+            @Parcelize
+            data class Username(override val value: String) : InitialData()
+        }
     }
 
     /**

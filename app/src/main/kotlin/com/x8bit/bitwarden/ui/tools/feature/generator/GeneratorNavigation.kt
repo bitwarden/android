@@ -10,6 +10,7 @@ import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -89,11 +90,13 @@ fun SavedStateHandle.toGeneratorArgs(): GeneratorArgs {
  * Add generator destination to the root nav graph.
  */
 fun NavGraphBuilder.generatorDestination(
+    navigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
 ) {
     composableWithRootPushTransitions<GeneratorRoute.Standard> {
         GeneratorScreen(
+            navigateToVaultAddItem = navigateToVaultAddItem,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateBack = {},
             onDimNavBarRequest = onDimNavBarRequest,
@@ -109,6 +112,7 @@ fun NavGraphBuilder.generatorModalDestination(
 ) {
     composableWithSlideTransitions<GeneratorRoute.Modal> {
         GeneratorScreen(
+            navigateToVaultAddItem = {},
             onNavigateToPasswordHistory = {},
             onNavigateBack = onNavigateBack,
             onDimNavBarRequest = {},

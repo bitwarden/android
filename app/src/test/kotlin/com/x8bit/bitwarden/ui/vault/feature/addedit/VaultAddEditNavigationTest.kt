@@ -13,7 +13,7 @@ class VaultAddEditNavigationTest {
     fun `navigateToVaultAddEdit should pass along the selected collection ID`() {
         navController.navigateToVaultAddEdit(
             args = VaultAddEditArgs(
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
                 selectedCollectionId = "mockCollectionId",
             ),
@@ -23,6 +23,8 @@ class VaultAddEditNavigationTest {
             navController.navigate(
                 route = VaultAddEditRoute(
                     vaultAddEditMode = VaultAddEditMode.ADD,
+                    initialValueType = null,
+                    initialValue = null,
                     vaultItemId = null,
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                     selectedFolderId = null,
@@ -37,7 +39,7 @@ class VaultAddEditNavigationTest {
     fun `navigateToVaultAddEdit should pass along the selected folder ID`() {
         navController.navigateToVaultAddEdit(
             args = VaultAddEditArgs(
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
                 selectedFolderId = "mockFolderId",
             ),
@@ -47,6 +49,8 @@ class VaultAddEditNavigationTest {
             navController.navigate(
                 route = VaultAddEditRoute(
                     vaultAddEditMode = VaultAddEditMode.ADD,
+                    initialValueType = null,
+                    initialValue = null,
                     vaultItemId = null,
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                     selectedFolderId = "mockFolderId",

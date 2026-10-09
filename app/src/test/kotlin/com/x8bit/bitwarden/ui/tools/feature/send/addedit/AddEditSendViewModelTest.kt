@@ -131,6 +131,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             SendView::toViewState,
             UUID::randomUUID,
         )
+        every { UUID.randomUUID().toString() } returns "uuid"
     }
 
     @AfterEach
