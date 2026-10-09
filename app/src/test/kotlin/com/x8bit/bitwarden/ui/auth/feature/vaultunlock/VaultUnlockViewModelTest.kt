@@ -1318,7 +1318,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             verify(exactly = 0) { authRepository.clearBiometrics(userId = any()) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `keystore authorization failure count should reset when the active user changes`() {
         val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
