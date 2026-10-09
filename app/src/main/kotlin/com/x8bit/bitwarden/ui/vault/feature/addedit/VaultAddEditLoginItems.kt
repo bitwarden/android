@@ -373,7 +373,7 @@ private fun TotpRow(
         readOnly = true,
         singleLine = true,
         actions = {
-            totpKey?.let {
+            totpKey?.takeIf { canViewTotp }?.let {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_clear,
                     contentDescription = stringResource(id = BitwardenString.delete),
