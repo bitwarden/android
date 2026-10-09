@@ -141,11 +141,13 @@ fun VaultData.toViewState(
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
         )
 
-    val filteredFailuresCipherViewList = decryptCipherListResult
+    val failuresCipherViewList = decryptCipherListResult
         .failures
         .map { cipher ->
             cipher.toFailureCipherListView()
         }
+
+    val filteredFailuresCipherViewList = failuresCipherViewList
         .applyFilters(
             itemListingType = itemListingType,
             vaultFilterType = vaultFilterType,
@@ -165,6 +167,19 @@ fun VaultData.toViewState(
         (itemListingType as? VaultItemListingState.ItemListingType.Vault.Collection)
             ?.let { collectionViewList.getCollections(it.collectionId) }
             .orEmpty()
+
+    // Nested collection counts cannot use the parent-scoped list, since ciphers in a nested
+    // collection are not necessarily in the parent collection.
+    val nestedCollectionCipherViewList = if (collectionList.isEmpty()) {
+        emptyList()
+    } else {
+        decryptCipherListResult
+            .successes
+            .plus(failuresCipherViewList)
+            .filter { it.isActive }
+            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
+            .toFilteredList(vaultFilterType)
+    }
 
     return if (folderList.isNotEmpty() || allFilteredCipherViewList.isNotEmpty() ||
         collectionList.isNotEmpty()
@@ -200,12 +215,8 @@ fun VaultData.toViewState(
                 VaultItemListingState.CollectionDisplayItem(
                     id = requireNotNull(collectionView.id),
                     name = collectionView.name,
-                    count = allFilteredCipherViewList
-                        .count {
-                            !it.id.isNullOrBlank() &&
-                                it.deletedDate == null &&
-                                collectionView.id in it.collectionIds
-                        },
+                    count = nestedCollectionCipherViewList
+                        .count { collectionView.id in it.collectionIds },
                 )
             },
         )
