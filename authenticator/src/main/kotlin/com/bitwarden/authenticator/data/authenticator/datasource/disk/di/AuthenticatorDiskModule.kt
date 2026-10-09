@@ -1,7 +1,8 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.di
 
 import android.app.Application
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSourceImpl
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.convertor.AuthenticatorItemAlgorithmConverter
@@ -25,14 +26,11 @@ object AuthenticatorDiskModule {
     @Singleton
     fun provideAuthenticatorDatabase(app: Application): AuthenticatorDatabase =
         Room
-            .databaseBuilder(
-                context = app,
-                klass = AuthenticatorDatabase::class.java,
-                name = "authenticator_database",
-            )
+            .databaseBuilder<AuthenticatorDatabase>(context = app, name = "authenticator_database")
             .fallbackToDestructiveMigration(dropAllTables = true)
-            .addTypeConverter(AuthenticatorItemTypeConverter())
-            .addTypeConverter(AuthenticatorItemAlgorithmConverter())
+            .addColumnTypeConverter(typeConverter = AuthenticatorItemTypeConverter())
+            .addColumnTypeConverter(typeConverter = AuthenticatorItemAlgorithmConverter())
+            .setDriver(driver = AndroidSQLiteDriver())
             .build()
 
     @Provides

@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.data.credentials.datasource.disk.di
 
 import android.app.Application
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSourceImpl
 import com.x8bit.bitwarden.data.credentials.datasource.disk.dao.PrivilegedAppDao
@@ -25,12 +26,12 @@ object CredentialsDiskModule {
         app: Application,
     ): PrivilegedAppDatabase =
         Room
-            .databaseBuilder(
+            .databaseBuilder<PrivilegedAppDatabase>(
                 context = app,
-                klass = PrivilegedAppDatabase::class.java,
                 name = "privileged_apps_database",
             )
             .fallbackToDestructiveMigration(dropAllTables = true)
+            .setDriver(driver = AndroidSQLiteDriver())
             .build()
 
     @Provides

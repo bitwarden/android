@@ -3,7 +3,8 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
@@ -69,14 +70,11 @@ object PlatformDiskModule {
         databaseSchemeManager: DatabaseSchemeManager,
     ): PlatformDatabase =
         Room
-            .databaseBuilder(
-                context = app,
-                klass = PlatformDatabase::class.java,
-                name = "platform_database",
-            )
+            .databaseBuilder<PlatformDatabase>(context = app, name = "platform_database")
             .fallbackToDestructiveMigration(dropAllTables = false)
-            .addTypeConverter(InstantTypeConverter())
+            .addColumnTypeConverter(typeConverter = InstantTypeConverter())
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
+            .setDriver(driver = AndroidSQLiteDriver())
             .build()
 
     @Provides

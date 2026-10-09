@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.database
 
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room3.AutoMigration
+import androidx.room3.ColumnTypeConverters
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.convertor.AuthenticatorItemAlgorithmConverter
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.convertor.AuthenticatorItemTypeConverter
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.dao.ItemDao
@@ -22,7 +22,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
     version = 2,
     exportSchema = true,
 )
-@TypeConverters(
+@ColumnTypeConverters(
     AuthenticatorItemTypeConverter::class,
     AuthenticatorItemAlgorithmConverter::class,
 )

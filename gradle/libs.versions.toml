@@ -25,7 +25,7 @@ androidxCredentialsProviderEvents = "1.0.0-alpha06"
 androidxHiltNavigationCompose = "1.4.0"
 androidxLifecycle = "2.11.0"
 androidxNavigation = "2.9.8"
-androidxRoom = "2.8.5"
+androidxRoom3 = "3.0.3"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.12.0"
@@ -92,9 +92,8 @@ androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", 
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidxRoom" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
+androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "androidxRoom3" }
+androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "androidxRoom3" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
@@ -144,7 +143,7 @@ testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-androidx-room = { id = "androidx.room", version.ref = "androidxRoom" }
+androidx-room3 = { id = "androidx.room3", version.ref = "androidxRoom3" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }

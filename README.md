@@ -153,8 +153,8 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Provides a consistent API for navigating between Android components.
     - License: Apache 2.0
 
-- **AndroidX Room**
-    - https://developer.android.com/jetpack/androidx/releases/room
+- **AndroidX Room3**
+    - https://developer.android.com/jetpack/androidx/releases/room3
     - Purpose: A convenient SQLite-based persistence layer for Android.
     - License: Apache 2.0
 
