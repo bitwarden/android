@@ -28,6 +28,9 @@ class BitwardenAutofillTileService : TileService() {
     @Inject
     lateinit var accessibilityAutofillManager: AccessibilityAutofillManager
 
+    /**
+     * Tracks the accessibility enabled state reported by the platform and service callbacks.
+     */
     @Inject
     lateinit var accessibilityEnabledManager: AccessibilityEnabledManager
 

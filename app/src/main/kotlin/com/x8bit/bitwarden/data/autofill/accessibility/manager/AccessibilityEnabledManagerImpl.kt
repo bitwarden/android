@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 class AccessibilityEnabledManagerImpl(
     context: Context,
 ) : AccessibilityEnabledManager {
-    // Seeded from the platform so the state is correct before the service connects; on platforms
-    // that no longer report our own service this is false until the service reports itself.
+    // Seeded from the platform until the service reports its connection state. If the platform
+    // does not report our service, this stays false until the service connects.
     private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(
         value = context.isAccessibilityServiceEnabled,
     )
@@ -21,9 +21,7 @@ class AccessibilityEnabledManagerImpl(
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
         get() = mutableIsAccessibilityEnabledStateFlow.asStateFlow()
 
-    override var isAccessibilityServiceConnected: Boolean
-        get() = mutableIsAccessibilityEnabledStateFlow.value
-        set(value) {
-            mutableIsAccessibilityEnabledStateFlow.value = value
-        }
+    override fun setAccessibilityServiceConnected(isConnected: Boolean) {
+        mutableIsAccessibilityEnabledStateFlow.value = isConnected
+    }
 }
