@@ -227,7 +227,6 @@ dependencies {
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
-    implementation(libs.bumptech.glide)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.cloud.messaging)
     implementation(libs.google.firebase.crashlytics)

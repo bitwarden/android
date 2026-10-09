@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.glide
+package com.x8bit.bitwarden.ui.platform.image
 
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.interceptor.FakeInterceptorChain
@@ -15,11 +15,11 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class GlideCookieInterceptorTest {
+class ImageCookieInterceptorTest {
 
     private val mockCookieProvider: CookieProvider = mockk()
 
-    private val interceptor = GlideCookieInterceptor(
+    private val interceptor = ImageCookieInterceptor(
         cookieProvider = mockCookieProvider,
     )
 
