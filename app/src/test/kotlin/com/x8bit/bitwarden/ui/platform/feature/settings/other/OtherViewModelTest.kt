@@ -201,7 +201,6 @@ class OtherViewModelTest : BaseViewModelTest() {
             coVerify { vaultRepository.syncForResult(forced = true) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `SyncNowButtonClick should show error dialog when sync fails`() = runTest {
         coEvery {
