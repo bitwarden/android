@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
+import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CoroutineScope
@@ -302,7 +303,7 @@ internal class VaultRepositoryImpl(
                         .decodeToString()
                 } catch (e: GeneralSecurityException) {
                     Timber.w(e, "unlockVaultWithBiometrics failed when decrypting biometrics key")
-                    return VaultUnlockResult.BiometricDecodingError(error = e)
+                    return e.toVaultUnlockResult()
                 }
             }
             ?: biometricsKey
@@ -316,7 +317,7 @@ internal class VaultRepositoryImpl(
                     .toString(Charsets.ISO_8859_1)
             } catch (e: GeneralSecurityException) {
                 Timber.w(e, "unlockVaultWithBiometrics failed to migrate the user to IV encryption")
-                return VaultUnlockResult.BiometricDecodingError(error = e)
+                return e.toVaultUnlockResult()
             }
         } else {
             null
