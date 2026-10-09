@@ -12,13 +12,14 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Instant
@@ -59,13 +60,6 @@ class OtherViewModel @Inject constructor(
         settingsRepo
             .vaultLastSyncStateFlow
             .map { OtherAction.Internal.VaultLastSyncReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        settingsRepo
-            .vaultLastSyncStateFlow
-            .drop(1)
-            .map { OtherAction.Internal.ManualVaultSyncReceive }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -120,7 +114,13 @@ class OtherViewModel @Inject constructor(
                     ),
                 )
             }
-            vaultRepo.sync(forced = true)
+            viewModelScope.launch {
+                sendAction(
+                    OtherAction.Internal.SyncVaultResultReceive(
+                        result = vaultRepo.syncForResult(forced = true),
+                    ),
+                )
+            }
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -136,7 +136,29 @@ class OtherViewModel @Inject constructor(
     private fun handleInternalAction(action: OtherAction.Internal) {
         when (action) {
             is OtherAction.Internal.VaultLastSyncReceive -> handleVaultDataReceive(action)
-            is OtherAction.Internal.ManualVaultSyncReceive -> handleManualVaultSyncReceive()
+            is OtherAction.Internal.SyncVaultResultReceive -> handleSyncVaultResultReceive(action)
+        }
+    }
+
+    private fun handleSyncVaultResultReceive(
+        action: OtherAction.Internal.SyncVaultResultReceive,
+    ) {
+        when (val result = action.result) {
+            is SyncVaultDataResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
+            }
+
+            is SyncVaultDataResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = OtherState.DialogState.Error(
+                            title = BitwardenString.vault_sync_unsuccessful.asText(),
+                            message = BitwardenString.vault_sync_failed_description.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -151,13 +173,8 @@ class OtherViewModel @Inject constructor(
                         clock = clock,
                     )
                     .orEmpty(),
-                dialogState = null,
             )
         }
-    }
-
-    private fun handleManualVaultSyncReceive() {
-        sendEvent(OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
     }
 }
 
@@ -279,8 +296,10 @@ sealed class OtherAction {
         ) : Internal()
 
         /**
-         * Indicates a manual vault sync has been received.
+         * Indicates a vault sync result has been received.
          */
-        data object ManualVaultSyncReceive : Internal()
+        data class SyncVaultResultReceive(
+            val result: SyncVaultDataResult,
+        ) : Internal()
     }
 }

@@ -8,7 +8,10 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -166,8 +169,43 @@ class OtherViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SyncNowButtonClick should sync repo`() = runTest {
-        every { vaultRepository.sync(forced = true) } just runs
+    fun `on SyncNowButtonClick should clear loading dialog and show snackbar when sync succeeds`() =
+        runTest {
+            coEvery {
+                vaultRepository.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Success(itemsAvailable = true)
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(OtherAction.SyncNowButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = OtherState.DialogState.Loading(
+                            message = BitwardenString.syncing.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialogState = null),
+                    awaitItem(),
+                )
+            }
+            viewModel.eventFlow.test {
+                assertEquals(
+                    OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
+                    awaitItem(),
+                )
+                expectNoEvents()
+            }
+            coVerify { vaultRepository.syncForResult(forced = true) }
+        }
+
+    @Test
+    fun `SyncNowButtonClick should show error dialog when sync fails`() = runTest {
+        coEvery {
+            vaultRepository.syncForResult(forced = true)
+        } returns SyncVaultDataResult.Error(throwable = IllegalStateException())
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
@@ -180,21 +218,39 @@ class OtherViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
-        }
-        verify { vaultRepository.sync(forced = true) }
-    }
-
-    @Test
-    fun `ManualVaultSyncReceive should emit ShowSnackbar`() = runTest {
-        val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
             assertEquals(
-                OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
+                DEFAULT_STATE.copy(
+                    dialogState = OtherState.DialogState.Error(
+                        title = BitwardenString.vault_sync_unsuccessful.asText(),
+                        message = BitwardenString.vault_sync_failed_description.asText(),
+                    ),
+                ),
                 awaitItem(),
             )
         }
+        coVerify { vaultRepository.syncForResult(forced = true) }
+    }
+
+    @Test
+    fun `SyncNowButtonClick error should show error dialog even if last sync updates`() = runTest {
+        val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
+        coEvery { vaultRepository.syncForResult(forced = true) } coAnswers {
+            mutableVaultLastSyncStateFlow.value = newSyncTime
+            SyncVaultDataResult.Error(throwable = IllegalStateException())
+        }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(OtherAction.SyncNowButtonClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                lastSyncTime = "Oct 27, 2023, 12:00\u202FPM",
+                dialogState = OtherState.DialogState.Error(
+                    title = BitwardenString.vault_sync_unsuccessful.asText(),
+                    message = BitwardenString.vault_sync_failed_description.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify { vaultRepository.syncForResult(forced = true) }
     }
 
     @Test
@@ -214,7 +270,7 @@ class OtherViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
-        verify(exactly = 0) { vaultRepository.sync(forced = true) }
+        coVerify(exactly = 0) { vaultRepository.syncForResult(forced = true) }
     }
 
     private fun createViewModel(

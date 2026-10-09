@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -679,7 +680,7 @@ class VaultViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(dialog = VaultState.DialogState.Syncing)
             }
-            vaultRepository.sync(forced = true)
+            syncForResult(forced = true, isManualSync = true)
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -772,7 +773,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = VaultState.DialogState.Syncing)
         }
-        vaultRepository.sync(forced = true)
+        syncForResult(forced = true, isManualSync = true)
     }
 
     private fun handleDialogDismiss() {
@@ -787,10 +788,26 @@ class VaultViewModel @Inject constructor(
         viewModelScope.launch {
             delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
-                vaultRepository.sync(forced = false)
+                sendAction(
+                    VaultAction.Internal.SyncResultReceive(
+                        result = vaultRepository.syncForResult(forced = false),
+                        isManualSync = false,
+                    ),
+                )
             } else {
                 sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
             }
+        }
+    }
+
+    private fun syncForResult(forced: Boolean, isManualSync: Boolean) {
+        viewModelScope.launch {
+            sendAction(
+                VaultAction.Internal.SyncResultReceive(
+                    result = vaultRepository.syncForResult(forced = forced),
+                    isManualSync = isManualSync,
+                ),
+            )
         }
     }
 
@@ -1168,6 +1185,8 @@ class VaultViewModel @Inject constructor(
                 handleKdfSyncCompletedReceive()
             }
 
+            is VaultAction.Internal.SyncResultReceive -> handleSyncResultReceive(action)
+
             is VaultAction.Internal.NewItemTypesFlagUpdateReceive -> {
                 handleNewItemTypesFlagUpdateReceive(action)
             }
@@ -1192,6 +1211,41 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.UserNotificationPolicyReceive -> {
                 handleUserNotificationPolicyReceive(action)
+            }
+        }
+    }
+
+    private fun handleSyncResultReceive(action: VaultAction.Internal.SyncResultReceive) {
+        when (action.result) {
+            is SyncVaultDataResult.Success -> {
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = it.dialog.takeUnless { dialog ->
+                            dialog == VaultState.DialogState.Syncing
+                        },
+                        isRefreshing = false,
+                    )
+                }
+            }
+
+            is SyncVaultDataResult.Error -> {
+                if (action.isManualSync) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = VaultState.DialogState.SyncError(
+                                title = BitwardenString.vault_sync_unsuccessful.asText(),
+                                message = BitwardenString.vault_sync_failed_description.asText(),
+                            ),
+                            isRefreshing = false,
+                        )
+                    }
+                } else {
+                    sendEvent(
+                        VaultEvent.ShowSnackbar(BitwardenString.vault_sync_unsuccessful.asText()),
+                    )
+                    mutableStateFlow.update { it.copy(isRefreshing = false) }
+                }
             }
         }
     }
@@ -1567,10 +1621,6 @@ class VaultViewModel @Inject constructor(
         vaultData: DataState.Loaded<VaultData>,
         validTotpIds: Set<String>,
     ) {
-        if (state.dialog == VaultState.DialogState.Syncing) {
-            sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
-        }
-
         val shouldShowDecryptionAlert = !state.hasShownDecryptionFailureAlert &&
             vaultData.data.decryptCipherListResult.failures.isNotEmpty() &&
             state.dialog == null
@@ -1671,6 +1721,8 @@ class VaultViewModel @Inject constructor(
         updateVaultState(
             vaultData = data,
             validTotpIds = validTotpIds,
+            // Keep a sync error the sync result already surfaced.
+            dialog = state.dialog as? VaultState.DialogState.SyncError,
         )
     }
 
@@ -2894,6 +2946,17 @@ sealed class VaultAction {
          * Indicates the forced sync triggered for a KDF update check has completed.
          */
         data object KdfSyncCompletedReceive : Internal()
+
+        /**
+         * Indicates a vault sync started from the vault screen has completed.
+         *
+         * @property isManualSync whether the sync was started from the sync button or "try again"
+         * rather than pull to refresh.
+         */
+        data class SyncResultReceive(
+            val result: SyncVaultDataResult,
+            val isManualSync: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that the New Item Types feature flag has been updated.
