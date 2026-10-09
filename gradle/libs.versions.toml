@@ -30,11 +30,10 @@ androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.11.2"
 bitwardenSdk = "4.0.0-9318-3b2c8fc3"
+coil = "3.6.3"
 crashlytics = "3.0.8"
 detekt = "1.23.8"
 firebaseBom = "35.0.0"
-glide = "5.0.9"
-glideCompose = "1.0.0-beta01"
 googleBilling = "9.1.0"
 googleMlkitTextRecognition = "16.0.1"
 googleGuava = "33.7.1-jre"
@@ -99,9 +98,10 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
-bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
-bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
-bumptech-glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
+coil-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-billing = { module = "com.android.billingclient:billing", version.ref = "googleBilling" }

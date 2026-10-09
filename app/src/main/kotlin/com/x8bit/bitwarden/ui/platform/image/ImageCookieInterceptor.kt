@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.glide
+package com.x8bit.bitwarden.ui.platform.image
 
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.provider.CookieProvider
@@ -9,16 +9,16 @@ private const val HEADER_COOKIE = "Cookie"
 private const val HTTP_302 = 302
 
 /**
- * Interceptor that attaches cookies to Glide image requests for enterprise environments
- * requiring cookie-based authentication.
+ * Interceptor that attaches cookies to image requests for enterprise environments requiring
+ * cookie-based authentication.
  *
  * Unlike [com.bitwarden.network.interceptor.CookieInterceptor], this interceptor does not
  * trigger cookie acquisition. It throws [CookieRedirectException] on HTTP 302 responses
- * to prevent Glide from following redirects and caching invalid content.
+ * to prevent following redirects and caching invalid content.
  *
  * @property cookieProvider Provider for retrieving cookies by hostname.
  */
-class GlideCookieInterceptor(
+class ImageCookieInterceptor(
     private val cookieProvider: CookieProvider,
 ) : Interceptor {
 
