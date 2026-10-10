@@ -3,6 +3,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "app.nixgramx.android",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "52:54:81:59:97:91:41:62:6E:E5:B4:07:B8:4E:E7:0A:33:44:ED:91:29:7F:5F:BE:8E:91:DF:8F:0C:29:A3:1C"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.iode.firefox",
         "signatures": [
           {
