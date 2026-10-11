@@ -1442,6 +1442,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="use_this_passphrase">Deze wachtwoordzin gebruiken</string>
     <string name="use_this_password">Dit wachtwoord gebruiken</string>
     <string name="use_this_username">Deze gebruikersnaam gebruiken</string>
+    <string name="create_login">Login aanmaken</string>
     <string name="keep_unlocking_with_biometrics">Blijf ontgrendelen met biometrische gegevens</string>
     <string name="weve_made_a_security_update">We hebben een beveiligingsupdate gemaakt. Bevestig je biometrische gegevens opnieuw om deze te blijven gebruiken om Bitwarden te ontgrendelen.</string>
     <string name="turn_off">Uitschakelen</string>

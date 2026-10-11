@@ -1433,6 +1433,7 @@
     <string name="use_this_passphrase">使用此密码短语</string>
     <string name="use_this_password">使用此密码</string>
     <string name="use_this_username">使用此用户名</string>
+    <string name="create_login">创建登录</string>
     <string name="keep_unlocking_with_biometrics">继续使用生物识别解锁</string>
     <string name="weve_made_a_security_update">我们已进行了一次安全更新。请再次确认您的生物识别，以便继续使用其来解锁 Bitwarden。</string>
     <string name="turn_off">停用</string>

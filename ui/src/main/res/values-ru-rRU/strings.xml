@@ -1462,6 +1462,7 @@
     <string name="use_this_passphrase">Использовать эту парольную фразу</string>
     <string name="use_this_password">Использовать этот пароль</string>
     <string name="use_this_username">Использовать это имя пользователя</string>
+    <string name="create_login">Создать логин</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>
