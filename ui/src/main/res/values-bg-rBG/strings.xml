@@ -1444,6 +1444,7 @@
     <string name="use_this_passphrase">Използване на тази парола-фраза</string>
     <string name="use_this_password">Използване на тази парола</string>
     <string name="use_this_username">Използване на това потребителско име</string>
+    <string name="create_login">Създаване на запис за вписване</string>
     <string name="keep_unlocking_with_biometrics">Продължаване на отключването с биометрични данни</string>
     <string name="weve_made_a_security_update">Обновихме сигурността. Потвърдете биометричните си данни, за да продължите да ги използвате за отключване на Битуорден.</string>
     <string name="turn_off">Изключване</string>

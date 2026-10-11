@@ -1463,6 +1463,7 @@ při opakování problémů.</string>
     <string name="use_this_passphrase">Použít tuto heslovou frázi</string>
     <string name="use_this_password">Použít toto heslo</string>
     <string name="use_this_username">Použít toto uživatelské jméno</string>
+    <string name="create_login">Vytvořit přihlášení</string>
     <string name="keep_unlocking_with_biometrics">Pokračovat v odemykání pomocí biometrie</string>
     <string name="weve_made_a_security_update">Provedli jsme bezpečnostní aktualizaci. Potvrďte znovu Vaše biometrické údaje pro jejich další používání k odemknutí Bitwardenu.</string>
     <string name="turn_off">Vypnout</string>

@@ -1441,6 +1441,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
     <string name="use_this_password">Bu parolayı kullan</string>
     <string name="use_this_username">Bu kullanıcı adını kullan</string>
+    <string name="create_login">Hesap oluştur</string>
     <string name="keep_unlocking_with_biometrics">Kilidi biyometri ile açmaya devam edin</string>
     <string name="weve_made_a_security_update">Bir güvenlik güncellemesi yaptık. Bitwarden kilidini açmak için biyometri kullanmaya devam etmek isterseniz biyometrinizi doğrulayın.</string>
     <string name="turn_off">Devre dışı bırak</string>

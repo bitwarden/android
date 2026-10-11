@@ -582,8 +582,8 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="resend_code">Ponovno pošlji kodo</string>
     <string name="a_verification_code_was_sent_to_your_email">Verifikacijska koda je bila poslana na vaš e-poštni naslov</string>
     <string name="submit_crash_logs">Pošlji zapisnike ob sesutju</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">razširi</string>
+    <string name="collapse">zloži</string>
     <string name="uppercase_ato_z">Velike črke (A-Z)</string>
     <string name="lowercase_ato_z">Male črke (a-z)</string>
     <string name="numbers_zero_to_nine">Števke (0-9)</string>
@@ -1462,6 +1462,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="use_this_passphrase">Uporabi to geselsko frazo</string>
     <string name="use_this_password">Uporabi to geslo</string>
     <string name="use_this_username">Uporabi to uporabniško ime</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Ohrani odklepanje z biometričnimi podatki</string>
     <string name="weve_made_a_security_update">Izvedli smo varnostno posodobitev. Ponovno potrdi svoje biometrične podatke, da jih boš lahko še naprej uporabljal/a za odklepanje Bitwardena.</string>
     <string name="turn_off">Izklopi</string>

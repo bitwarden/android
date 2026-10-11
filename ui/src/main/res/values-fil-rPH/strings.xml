@@ -1442,6 +1442,7 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>
