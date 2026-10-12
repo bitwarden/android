@@ -395,8 +395,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="pin_require_master_password_restart">Möchtest du mit deinem Master-Passwort entsperren, wenn die Anwendung neu gestartet wird?</string>
     <string name="ask_to_add_item">Nach dem Hinzufügen von Einträgen fragen</string>
     <string name="ask_to_add_item_description">Nach dem Hinzufügen eines Eintrags fragen, wenn dieser nicht in deinem Tresor gefunden wurde.</string>
-    <string name="turn_on_fill_assist">Ausfüllhilfe einschalten</string>
-    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Die Ausfüllhilfe verbessert die Genauigkeit von Auto-Ausfüllen auf unterstützten Websites durch die Verwendung von Website-spezifischen Regeln.</string>
+    <string name="turn_on_fill_assist">Fill Assist aktivieren</string>
+    <string name="fill_assist_improves_autofill_accuracy_on_supported_sites">Fill Assist verbessert die Genauigkeit von Auto-Ausfüllen auf unterstützten Websites durch die Verwendung von Website-spezifischen Regeln.</string>
     <string name="on_restart">Beim Neustart der App</string>
     <string name="capitalize">Wortanfänge großschreiben</string>
     <string name="include_number">Ziffern einschließen</string>
@@ -574,8 +574,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="resend_code">Code erneut senden</string>
     <string name="a_verification_code_was_sent_to_your_email">Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet</string>
     <string name="submit_crash_logs">Absturzprotokolle senden</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">Ausklappen</string>
+    <string name="collapse">Einklappen</string>
     <string name="uppercase_ato_z">Großbuchstaben (A bis Z)</string>
     <string name="lowercase_ato_z">Kleinbuchstaben (A bis Z)</string>
     <string name="numbers_zero_to_nine">Zahlen (0 bis 9)</string>
@@ -1441,6 +1441,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="use_this_passphrase">Diese Passphrase verwenden</string>
     <string name="use_this_password">Dieses Passwort verwenden</string>
     <string name="use_this_username">Diesen Benutzernamen verwenden</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Weiterhin mit Biometrie entsperren</string>
     <string name="weve_made_a_security_update">Wir haben eine Sicherheitsaktualisierung durchgeführt. Bitte bestätige deine biometrischen Daten erneut, um sie weiterhin zum Entsperren von Bitwarden nutzen zu können.</string>
     <string name="turn_off">Deaktivieren</string>

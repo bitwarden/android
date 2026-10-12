@@ -191,7 +191,7 @@
     <string name="send_verification_code_again">確認コードをメールで再送</string>
     <string name="verification_email_not_sent">確認メールを送信できませんでした。やり直してください。</string>
     <string name="verification_email_sent">確認メールを送信しました。</string>
-    <string name="yubi_key_instruction">続行するには、Yubico セキュリティ キーをデバイスの背面にかざすか、デバイスの USB ポートに挿入し手から、ボタンをタップしてください。</string>
+    <string name="yubi_key_instruction">続行するには、Yubico セキュリティ キーをデバイスの背面にかざすか、デバイスの USB ポートに挿入してから、ボタンをタップしてください。</string>
     <string name="yubi_key_title">Yubico セキュリティキー</string>
     <string name="add_new_attachment">添付ファイルを追加</string>
     <string name="attachments">添付ファイル</string>
@@ -1432,6 +1432,7 @@
     <string name="use_this_passphrase">このパスフレーズを使用する</string>
     <string name="use_this_password">このパスワードを使用する</string>
     <string name="use_this_username">このユーザー名を使用する</string>
+    <string name="create_login">ログイン情報の作成</string>
     <string name="keep_unlocking_with_biometrics">生体認証でロック解除を続ける</string>
     <string name="weve_made_a_security_update">セキュリティを更新しました。生体認証を再度確認して、Bitwarden のロックを解除してください。</string>
     <string name="turn_off">オフにする</string>

@@ -574,8 +574,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="resend_code">Kodu təkrar göndər</string>
     <string name="a_verification_code_was_sent_to_your_email">Doğrulama kodu e-poçtunuza göndərildi</string>
     <string name="submit_crash_logs">Çökmə jurnallarını göndər</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">genişləndir</string>
+    <string name="collapse">yığcamlaşdır</string>
     <string name="uppercase_ato_z">Böyük hərf (A-Z)</string>
     <string name="lowercase_ato_z">Kiçik hərf (Z-A)</string>
     <string name="numbers_zero_to_nine">Rəqəmlər (0-9)</string>
@@ -1443,6 +1443,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="use_this_passphrase">Bu keçid ifadəsini istifadə et</string>
     <string name="use_this_password">Bu parolu istifadə et</string>
     <string name="use_this_username">Bu istifadəçi adını istifadə et</string>
+    <string name="create_login">Giriş yarat</string>
     <string name="keep_unlocking_with_biometrics">Kilidi biometriklə açmağa davam et</string>
     <string name="weve_made_a_security_update">Biz bir təhlükəsizlik güncəlləməsi həyata keçirdik. Bitwarden kilidini biometriklə açmaq istəyirsinizsə, biometrik məlumatlarınızı yenidən təsdiqləməlisiniz.</string>
     <string name="turn_off">Söndür</string>

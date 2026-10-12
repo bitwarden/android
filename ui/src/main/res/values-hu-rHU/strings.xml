@@ -573,8 +573,8 @@
     <string name="resend_code">Újraküldési kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Egy ellenőrző kód lett elküldve a saját email címre.</string>
     <string name="submit_crash_logs">Összeomlási naplózások beküldése</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">kinyitás</string>
+    <string name="collapse">összezárás</string>
     <string name="uppercase_ato_z">Nagybetűs (A-Z)</string>
     <string name="lowercase_ato_z">Kisbetűs (a-z)</string>
     <string name="numbers_zero_to_nine">Számok (0-9)</string>
@@ -1441,6 +1441,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_this_passphrase">Jelmondat használata</string>
     <string name="use_this_password">Jelszó használata</string>
     <string name="use_this_username">Felhasználónév használata</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Feloldás folytatása biometrikus adatokkal</string>
     <string name="weve_made_a_security_update">Biztonsági frissítés történt. Erősítsük meg újra a biometrikus adatokat, hogy továbbra is használjuk azokat a Bitwarden feloldásához.</string>
     <string name="turn_off">Kikapcsolás</string>
