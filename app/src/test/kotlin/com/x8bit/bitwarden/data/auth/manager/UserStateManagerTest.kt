@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
@@ -259,7 +259,7 @@ class UserStateManagerTest {
     @Test
     fun `userStateFlow should update isExportable when getUserPolicies returns policies`() =
         runTest {
-            val policy = createMockPolicyView(
+            val policy = createMockSdkPolicy(
                 id = "policyId",
                 organizationId = "mockId-1",
                 type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,

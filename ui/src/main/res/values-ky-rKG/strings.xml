@@ -24,8 +24,8 @@
     <string name="folder_created">Жаңы папка түзүлдү.</string>
     <string name="folder_deleted">Папка өчүрүлдү.</string>
     <string name="folder_none">Папка жок</string>
-    <string name="folders">Папкалар</string>
     <string name="folder_updated">Папка сакталды</string>
+    <string name="folders">Папкалар</string>
     <string name="hide">Жашыруу</string>
     <string name="internet_connection_required_message">Улантуудан мурун интернетке туташыңыз.</string>
     <string name="internet_connection_required_title">Интернет байланышы талап кылынат</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Башкы сырсөз (талап кылынат)</string>
     <string name="new_master_password_required">Жаңы башкы сырсөз (талап кылынат)</string>
     <string name="more_options">Көбүрөөк параметрлер</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Менин купчулдарым</string>
     <string name="name">Аты</string>
     <string name="item_name_required">Элементтин аты (талап кылынат)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">Сандардын минимуму</string>
     <string name="min_special">Атайын белгилердин минимуму</string>
     <string name="never">Эч качан</string>
-    <string name="new_item_created">Элемент кошулду</string>
     <string name="no_cards">Сиздин купчулда карталар жок.</string>
     <string name="add_card">Карта кошуу</string>
     <string name="no_logins">Сиздин купчулда кирүүлөр жок.</string>
@@ -148,6 +149,14 @@
     <string name="select">Тандоо</string>
     <string name="item_details">Элементтин маалыматтары</string>
     <string name="item_updated">Элемент сакталды</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Жөнөтүлүүдө…</string>
     <string name="syncing">Синхрондоштуруу…</string>
     <string name="syncing_complete">Синхрондоштуруу аяктады</string>
@@ -283,7 +292,9 @@
     <string name="vault_is_locked">Купчул кулпуланган</string>
     <string name="go_to_my_vault">Менин купчулума өтүү</string>
     <string name="collections">Жыйындылар</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">Бул жыйындыда эч кандай элементтер жок.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Бул папкада эч кандай элементтер жок.</string>
     <string name="no_items_trash">Себетте эч кандай элементтер жок.</string>
     <string name="autofill_accessibility_summary">Башка колдонмолордо жана вебде колдонуучу аты жана сырсөз талааларын толтурууга жардам берүү.</string>
@@ -338,16 +349,21 @@
     <string name="move_up">Өйдө жылдыруу</string>
     <string name="owner">Ээси</string>
     <string name="no_collections_to_list">Тизмеге алынуучу жыйындылар жок.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s өткөрүлдү.</string>
     <string name="select_one_collection">Кеминде бир жыйындыны тандооңуз керек.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Бөлүшүү</string>
-    <string name="move_to_vault">Купчулга жылдыруу</string>
-    <string name="no_vaults_to_list">Тизмеге алынуучу купчулдар жок.</string>
-    <string name="move_to_vault_desc">Бул элементти жылдыргыңыз келген купчулду тандаңыз. Башка купчулга жылдыруу элементтин ээлик укугун ошол уюмга берет. Элемент жылдырылгандан кийин сиз анын түз ээси болбой каласыз.</string>
+    <string name="move_to_organization">Уюмга өткөрүү</string>
+    <string name="no_orgs_to_list">Тизмеге алынуучу уюмдар жок.</string>
+    <string name="move_to_org_desc">Бул элементти өткөргүңүз келген уюмду тандаңыз. Уюмга өткөрүү элементтин ээлик укугун ошол уюмга берет. Элемент өткөрүлгөндөн кийин сиз анын түз ээси болбой каласыз.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Сөздөрдүн саны</string>
     <string name="passphrase">Шифрфраза</string>
     <string name="word_separator">Сөз бөлгүч</string>
     <string name="clear">Тазалоо</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Тизмеге алынуучу папкалар жок.</string>
     <string name="fingerprint_phrase">Манжа изи фразасы</string>
@@ -457,6 +473,7 @@
     <string name="deletion_date">Өчүрүү датасы</string>
     <string name="deletion_time">Өчүрүү убактысы</string>
     <string name="deletion_date_info">Send көрсөтүлгөн күнү жана убактысында түбөлүккө өчүрүлөт.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Ким көрө алат</string>
     <string name="anyone_with_the_link">Шилтемеси бар ар бир адам</string>
     <string name="anyone_with_link_can_view_send">Бул шилтемеси бар ар бир адам бул Sendди көрө алат</string>
@@ -494,6 +511,7 @@
     <string name="two_days">2 күн</string>
     <string name="three_days">3 күн</string>
     <string name="seven_days">7 күн</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 күн</string>
     <string name="custom">Ыңгайлаштырылган</string>
     <string name="custom_timeout">Ыңгайлаштырылган убакыт</string>
@@ -502,6 +520,11 @@
     <string name="about_send">Send жөнүндө</string>
     <string name="hide_email">Менин электрондук почта дарегимди кабыл алуучулардан жашыруу</string>
     <string name="send_options_policy_in_effect">Бир же бир нече уюм саясаты сиздин Send параметрлериңизге таасир этүүдө.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Акысыз аккаунттар текст менен гана бөлүшүүгө чектелген. Send менен файлдарды колдонуу үчүн Premium мүчөлүгү талап кылынат.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Белгилүү адамдар менен бөлүшүү - Premium функциясы. Учурдагы планыңыз бул функцияга кирүү мүмкүнчүлүгүн камтыбайт.</string>
     <string name="password_prompt">Башкы сырсөздү кайра суроо</string>
@@ -551,8 +574,8 @@
     <string name="resend_code">Кодду кайра жөнөтүү</string>
     <string name="a_verification_code_was_sent_to_your_email">Текшерүү коду электрондук почтаңызга жөнөтүлдү</string>
     <string name="submit_crash_logs">Күтүүсүз токтотуу журналдарын жөнөтүү</string>
-    <string name="options_expanded">Параметрлер кеңейтилген, жыйнап салуу үчүн басыңыз.</string>
-    <string name="options_collapsed">Параметрлер жыйналган, кеңейтүү үчүн басыңыз.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Баш тамгалар (A дан Z ге чейин)</string>
     <string name="lowercase_ato_z">Кичине тамгалар (A дан Z ге чейин)</string>
     <string name="numbers_zero_to_nine">Сандар (0 ден 9 га чейин)</string>
@@ -687,6 +710,7 @@
     <string name="logging_in_on">Кирүүдө</string>
     <string name="logging_in_on_with_colon">Кирүүдө:</string>
     <string name="vault">Купчул</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Көрүнүшү</string>
     <string name="account_security">Аккаунт коопсуздугу</string>
     <string name="bitwarden_help_center">Bitwarden жардам борбору</string>
@@ -1124,11 +1148,6 @@
     <string name="file_could_not_be_processed">Файлды иштетүү мүмкүн болбой калды</string>
     <string name="file_could_not_be_processed_message">Файлды иштетүү мүмкүн болбой калды. Ал туура JSON экенине ынанып, кайра аракет кылыңыз. Жардам керекпи? bitwarden.com/help сайтына кириңиз</string>
     <string name="get_help">Жардам алуу</string>
-    <string name="expand_advanced_options">Кеңейтилген параметрлерди ачуу</string>
-    <string name="local_items_are_expanded_click_to_collapse">Жергиликтүү буюмдар ачылды, жыйруу үчүн басыңыз.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Жергиликтүү буюмдар жыйрылды, ачуу үчүн басыңыз.</string>
-    <string name="items_expanded_click_to_collapse">Буюмдар ачылды, жыйруу үчүн басыңыз.</string>
-    <string name="items_are_collapsed_click_to_expand">Буюмдар жыйрылды, ачуу үчүн басыңыз.</string>
     <string name="error_cannot_decrypt">[ката: чечүү мүмкүн эмес]</string>
     <string name="copy_error_report">Ката отчетун көчүрүү</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden бул купчул элементин чече албай калды. Кошумча маалымат жоготууну болтурбоо үчүн бул ката отчетун көчүрүп, кардарларды тейлөө бөлүмү менен бөлүшүңүз.</string>
@@ -1137,6 +1156,7 @@
         <item quantity="other">Bitwarden %1$d сейф буюмун чечүү мүмкүн болбой калды. Кошумча маалымат жоготууга жол бербөө үчүн бул ката билдирүүсүн көчүрүп, кардарларды колдоо кызматына бөлүшүңүз.</item>
     </plurals>
     <string name="select_a_card_for_x">%s үчүн картаны тандаңыз</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Кеңейтилген параметрлер</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Дал келүүнү аныктоо жөнүндө көбүрөөк</annotation></string>
     <string name="keep_your_credential_secure">Кыйгам укук маалыматтарыңызды коопсуз сактаңыз</string>
@@ -1239,6 +1259,7 @@
     <string name="invalid_email_addresses">Жараксыз электрондук почта даректер</string>
     <string name="one_or_more_email_addresses_are_incorrect">Бир же бир нече электрондук почта даректери туура эмес. Кайра карап чыгып, аракет кылыңыз.</string>
     <string name="no_email_addresses_entered">Электрондук почта даректери киргизилген жок</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Бул Sendди бөлүшүү үчүн жок дегенде бир туура электрондук почта даректи киргизиңиз.</string>
     <string name="sync_with_browser">Браузер менен синхрондоштуруу</string>
     <string name="sync_with_browser_description">%1$s туташуу үчүн, дөөлөттүү браузериңизди Bitwarden мобилдик колдонмосу менен синхрондоштуруңуз. Браузериңиз ачылганда, суралса кирүүнү аяктаңыз.\nСинхрондоштуруу аяктагандан кийин, сиз ушул колдонмого кайтарыласыз.</string>
@@ -1416,4 +1437,15 @@
     <string name="receive_24_7_priority_support">24/7 артыкчылыктуу колдоо алуу</string>
     <string name="account_creation_restricted">Каттоо эсебин түзүү чектелди</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s чакырылган колдонуучуларга гана каттоо эсебин түзүүгө уруксат берет.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

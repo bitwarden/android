@@ -6,8 +6,11 @@ import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
+import com.bitwarden.sdk.ManagedSettingsBindingClient
+import com.bitwarden.sdk.initLogger
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -16,11 +19,13 @@ import kotlinx.coroutines.runBlocking
 /**
  * Primary implementation of [SdkClientManager].
  */
+@Suppress("LongParameterList")
 internal class SdkClientManagerImpl(
     nativeLibraryManager: NativeLibraryManager,
     dispatcherManager: DispatcherManager,
     sdkRepoFactory: SdkRepositoryFactory,
     sdkPlatformApiFactory: SdkPlatformApiFactory,
+    sdkLoggerFactory: SdkLoggerFactory,
     private val featureFlagManager: FeatureFlagManager,
     private val clientProvider: suspend (
         userId: String?,
@@ -32,6 +37,9 @@ internal class SdkClientManagerImpl(
                 accessToken = accessToken,
             ),
             settings = sdkRepoFactory.getClientSettings(),
+            // There is no unified endpoint management source on Android, so a fresh handle is
+            // passed here and no setting reads as administrator-forced.
+            managedSettings = ManagedSettingsBindingClient(),
         )
             .apply {
                 platform().loadFlags(featureFlagManager.sdkFeatureFlags)
@@ -59,6 +67,11 @@ internal class SdkClientManagerImpl(
         if (!isBuildVersionAtLeast(Build.VERSION_CODES.S)) {
             nativeLibraryManager.loadLibrary("bitwarden_uniffi")
         }
+        initLogger(
+            callback = sdkLoggerFactory.getLogCallback(),
+            level = sdkLoggerFactory.logLevel,
+            platformLogger = false,
+        )
         // Initialize this now, so that we can access it synchronously later on.
         globalClientDeferred = ioScope.async { clientProvider(null, null) }
     }

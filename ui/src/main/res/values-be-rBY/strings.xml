@@ -24,8 +24,8 @@
     <string name="folder_created">Створана новая папка.</string>
     <string name="folder_deleted">Папка выдалена.</string>
     <string name="folder_none">Без папкі</string>
-    <string name="folders">Папкі</string>
     <string name="folder_updated">Папка абноўлена.</string>
+    <string name="folders">Папкі</string>
     <string name="hide">Схаваць</string>
     <string name="internet_connection_required_message">Калі ласка, спачатку падлучыце інтэрнэт.</string>
     <string name="internet_connection_required_title">Патрабуецца доступ да інтэрнэту</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Галоўны пароль (абавязкова)</string>
     <string name="new_master_password_required">Новы галоўны пароль (абавязкова)</string>
     <string name="more_options">Дадатковыя параметры</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Маё сховішча</string>
     <string name="name">Назва</string>
     <string name="item_name_required">Назва элемента (абавязкова)</string>
@@ -120,7 +122,6 @@
     <string name="min_numbers">Мінімум лічбаў</string>
     <string name="min_special">Мінімум спецыяльных сімвалаў</string>
     <string name="never">Ніколі</string>
-    <string name="new_item_created">Створаны новы элемент.</string>
     <string name="no_cards">У вашым сховішчы няма картак.</string>
     <string name="add_card">Дадаць картку</string>
     <string name="no_logins">У вашым сховішчы няма лагінаў.</string>
@@ -150,6 +151,14 @@
     <string name="select">Выбраць</string>
     <string name="item_details">Падрабязнасці элемента</string>
     <string name="item_updated">Элемент абноўлены.</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Адпраўка…</string>
     <string name="syncing">Сінхранізацыя…</string>
     <string name="syncing_complete">Сінхранізацыя завершана.</string>
@@ -284,7 +293,9 @@
     <string name="vault_is_locked">Сховішча заблакіравана</string>
     <string name="go_to_my_vault">Перайсці ў сховішча</string>
     <string name="collections">Калекцыі</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">У гэтай калекцыі няма элементаў.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">У гэтай папцы адсутнічаюць элементы.</string>
     <string name="no_items_trash">У сметніцы адсутнічаюць элементы.</string>
     <string name="autofill_accessibility_summary">Дапамагае запаўняць палі імя карыстальніка і пароля ў іншых праграмах і ў інтэрнэце.</string>
@@ -341,16 +352,21 @@
     <string name="move_up">Перамясціць уверх</string>
     <string name="owner">Уладальнік</string>
     <string name="no_collections_to_list">У спісе адсутнічаюць калекцыі.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s перамешчана ў %2$s.</string>
     <string name="select_one_collection">Вы павінны выбраць прынамсі адну калекцыю.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Абагуліць</string>
-    <string name="move_to_vault">Перамясціць у сховішча</string>
-    <string name="no_vaults_to_list">Няма сховішчаў для спісу.</string>
-    <string name="move_to_vault_desc">Выберыце сховішча, у якое хочаце перамясціць гэты элемент. Перамяшчэнне ў іншае сховішча перадае правы ўласнасці на элемент гэтай арганізацыі. Пасля перамяшчэння вы больш не будзеце прамым уладальнікам гэтага элемента.</string>
+    <string name="move_to_organization">Перамясціць у арганізацыю</string>
+    <string name="no_orgs_to_list">Няма арганізацый для паказу.</string>
+    <string name="move_to_org_desc">Выберыце арганізацыю, у якую вы хочаце перамясціць гэты элемент. Пры перамяшчэнні ў арганізацыю ўсе правы ўласнасці на дадзены элемент пяройдуць да гэтай арганізацыі. Вы больш не будзеце адзіным уласнікам гэтага элемента пасля яго перамяшчэння.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Колькасць слоў</string>
     <string name="passphrase">Парольная фраза</string>
     <string name="word_separator">Раздзяляльнік слоў</string>
     <string name="clear">Ачысціць</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Генератар</string>
     <string name="no_folders_to_list">У спісе адсутнічаюць папкі.</string>
     <string name="fingerprint_phrase">Фраза адбітка пальца</string>
@@ -460,6 +476,7 @@
     <string name="deletion_date">Дата выдалення</string>
     <string name="deletion_time">Час выдалення</string>
     <string name="deletion_date_info">Send будзе незваротна выдалены ў азначаныя дату і час.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Хто можа праглядаць</string>
     <string name="anyone_with_the_link">Хто заўгодна са спасылкай</string>
     <string name="anyone_with_link_can_view_send">Усе, у каго ёсць гэтая спасылка, могуць праглядаць гэты Send</string>
@@ -497,6 +514,7 @@
     <string name="two_days">2 дні</string>
     <string name="three_days">3 дні</string>
     <string name="seven_days">7 дзён</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 дзён</string>
     <string name="custom">Карыстальніцкі</string>
     <string name="custom_timeout">Карыстальніцкі тайм-аўт</string>
@@ -505,6 +523,11 @@
     <string name="about_send">Пра Send</string>
     <string name="hide_email">Схаваць мой адрас электроннай пошты ад атрымальнікаў</string>
     <string name="send_options_policy_in_effect">Адна або больш палітык арганізацыі ўплываюць на параметры Send.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">У бясплатных уліковых запісах можна адпраўляць толькі тэкст. Для адпраўкі файлаў праз Send, патрабуецца прэміяльны статус.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Абмен з пэўнымі людзьмі — гэта функцыя Premium. Ваш бягучы тарыф не ўключае доступ да гэтай функцыі.</string>
     <string name="password_prompt">Паўторны запыт асноўнага пароля</string>
@@ -558,8 +581,8 @@
     <string name="resend_code">Адправіць код яшчэ раз</string>
     <string name="a_verification_code_was_sent_to_your_email">Праверачны код адпраўлены на ваш адрас электроннай пошты</string>
     <string name="submit_crash_logs">Адпраўляць справаздачы пра збоі</string>
-    <string name="options_expanded">Параметры разгорнутыя. Дакраніцеся, каб згарнуць.</string>
-    <string name="options_collapsed">Параметры згорнутыя. Дакраніцеся, каб разгарнуць.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Вялікія літары (A-Z)</string>
     <string name="lowercase_ato_z">Маленькія літары (a-z)</string>
     <string name="numbers_zero_to_nine">Лічбы (0-9)</string>
@@ -691,6 +714,7 @@
     <string name="logging_in_on">Увайсці на</string>
     <string name="logging_in_on_with_colon">Уваход на:</string>
     <string name="vault">Сховішча</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Знешні выгляд</string>
     <string name="account_security">Бяспеке акаўнта</string>
     <string name="bitwarden_help_center">Даведачны цэнтр Bitwarden</string>
@@ -1134,11 +1158,6 @@
     <string name="file_could_not_be_processed">Не ўдалося апрацаваць файл</string>
     <string name="file_could_not_be_processed_message">Не ўдалося апрацаваць файл. Пераканайцеся, што гэта сапраўдны JSON, і паспрабуйце яшчэ раз. Патрэбна дапамога? Наведайце bitwarden.com/help</string>
     <string name="get_help">Атрымаць даведку</string>
-    <string name="expand_advanced_options">Разгарнуць дадатковыя параметры</string>
-    <string name="local_items_are_expanded_click_to_collapse">Лакальныя элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Лакальныя элементы згорнутыя, націсніце, каб разгарнуць.</string>
-    <string name="items_expanded_click_to_collapse">Элементы разгорнутыя, націсніце, каб згарнуць.</string>
-    <string name="items_are_collapsed_click_to_expand">Элементы згорнутыя, націсніце, каб разгарнуць.</string>
     <string name="error_cannot_decrypt">[памылка: нельга расшыфраваць]</string>
     <string name="copy_error_report">Скапіраваць справаздачу аб памылцы</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не змог расшыфраваць гэты элемент сховішча. Каб пазбегнуць дадатковай страты даных, скапіруйце і абагуліце гэтую справаздачу аб памылцы са службай падтрымкі.</string>
@@ -1149,6 +1168,7 @@
         <item quantity="other">Bitwarden не змог расшыфраваць %1$d элементаў сховішча. Скапіюйце і абагуліце гэтую справаздачу пра памылку са службай падтрымкі, каб пазбегнуць дадатковай страты даных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберыце картку для %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Дадатковыя параметры</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Больш пра выяўленне супадзенняў</annotation></string>
     <string name="keep_your_credential_secure">Захоўвайце свае ўліковыя даныя ў бяспецы</string>
@@ -1255,6 +1275,7 @@
     <string name="invalid_email_addresses">Няправільныя адрасы электроннай пошты</string>
     <string name="one_or_more_email_addresses_are_incorrect">Адзін або некалькі адрасоў электроннай пошты няправільныя. Калі ласка, праверце і паспрабуйце яшчэ раз.</string>
     <string name="no_email_addresses_entered">Адрасы электроннай пошты не ўведзеныя</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Увядзіце прынамсі адзін сапраўдны адрас электроннай пошты, каб абагуліць гэты Send.</string>
     <string name="sync_with_browser">Сінхранізаваць з браўзерам</string>
     <string name="sync_with_browser_description">Каб падключыцца да %1$s, сінхранізуйце свой прадвызначаны браўзер з мабільнай праграмай Bitwarden. Калі браўзер адкрыецца, завершыце ўваход, калі будзе запытана. Пасля завяршэння сінхранізацыі вы вернецеся ў гэту праграму.</string>
@@ -1434,4 +1455,15 @@
     <string name="receive_24_7_priority_support">Атрымлівайце прыярытэтную падтрымку 24/7</string>
     <string name="account_creation_restricted">Стварэнне ўліковых запісаў абмежаванае</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s дазваляе ствараць уліковыя запісы толькі запрошаным карыстальнікам.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

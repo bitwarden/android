@@ -71,4 +71,43 @@ sealed class AutofillCipher {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_globe
     }
+
+    /**
+     * The identity [AutofillCipher] model. This contains all the data for building
+     * an identity partition.
+     *
+     * @param fullName The identity's name parts joined for filling a combined full-name field.
+     * @param fullAddress The identity's address parts joined for filling a combined full-address
+     * field.
+     */
+    data class Identity(
+        override val cipherId: String?,
+        override val name: String,
+        override val subtitle: String,
+        val fullName: String,
+        val fullAddress: String,
+        val title: String,
+        val firstName: String,
+        val middleName: String,
+        val lastName: String,
+        val address1: String,
+        val address2: String,
+        val address3: String,
+        val city: String,
+        val state: String,
+        val postalCode: String,
+        val country: String,
+        val company: String,
+        val email: String,
+        val phone: String,
+        val ssn: String,
+        val passportNumber: String,
+        val licenseNumber: String,
+    ) : AutofillCipher() {
+        override val iconRes: Int
+            @DrawableRes get() = BitwardenDrawable.ic_id_card
+
+        override val isTotpEnabled: Boolean
+            get() = false
+    }
 }

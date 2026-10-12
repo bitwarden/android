@@ -69,6 +69,7 @@ fun LazyListScope.vaultAddEditPassportItems(
             currentDate = passportState.dateOfBirth,
             onDateSelect = passportHandlers.onDateOfBirthChange,
             textFieldTestTag = "PassportDateOfBirthEntry",
+            allowFutureDates = false,
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -188,6 +189,7 @@ fun LazyListScope.vaultAddEditPassportItems(
             currentDate = passportState.issueDate,
             onDateSelect = passportHandlers.onIssueDateChange,
             textFieldTestTag = "PassportIssueDateEntry",
+            allowFutureDates = false,
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()

@@ -13,11 +13,11 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

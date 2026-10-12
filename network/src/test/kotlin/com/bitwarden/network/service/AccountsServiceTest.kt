@@ -9,6 +9,7 @@ import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
+import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
@@ -166,26 +167,11 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `resetPassword with v1 request and empty response is success`() = runTest {
+    fun `resetPassword with empty response is success`() = runTest {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.resetPassword(
-            body = ResetPasswordRequestJson.V1(
-                currentPasswordHash = "",
-                newPasswordHash = "",
-                passwordHint = null,
-                key = "",
-            ),
-        )
-        assertTrue(result.isSuccess)
-    }
-
-    @Test
-    fun `resetPassword with v2 request and empty response is success`() = runTest {
-        val response = MockResponse().setBody("")
-        server.enqueue(response)
-        val result = service.resetPassword(
-            body = ResetPasswordRequestJson.V2(
+            body = ResetPasswordRequestJson(
                 currentPasswordHash = "",
                 passwordHint = null,
                 kdf = KdfJson(
@@ -203,59 +189,45 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `resetPassword with v1 request and empty response and null current password is success`() =
-        runTest {
-            val response = MockResponse().setBody("")
-            server.enqueue(response)
-            val result = service.resetPassword(
-                body = ResetPasswordRequestJson.V1(
-                    currentPasswordHash = null,
-                    newPasswordHash = "",
-                    passwordHint = null,
-                    key = "",
+    fun `resetPassword with empty response and null current password is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resetPassword(
+            body = ResetPasswordRequestJson(
+                currentPasswordHash = null,
+                passwordHint = null,
+                kdf = KdfJson(
+                    iterations = 7,
+                    memory = 1,
+                    parallelism = 2,
+                    kdfType = KdfTypeJson.ARGON2_ID,
                 ),
-            )
-            assertTrue(result.isSuccess)
-        }
+                salt = "",
+                masterPasswordAuthenticationHash = "",
+                masterKeyWrappedUserKey = "",
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
 
     @Test
-    fun `resetPassword with v2 request and empty response and null current password is success`() =
-        runTest {
-            val response = MockResponse().setBody("")
-            server.enqueue(response)
-            val result = service.resetPassword(
-                body = ResetPasswordRequestJson.V2(
-                    currentPasswordHash = null,
-                    passwordHint = null,
-                    kdf = KdfJson(
-                        iterations = 7,
-                        memory = 1,
-                        parallelism = 2,
-                        kdfType = KdfTypeJson.ARGON2_ID,
-                    ),
-                    salt = "",
-                    masterPasswordAuthenticationHash = "",
-                    masterKeyWrappedUserKey = "",
-                ),
-            )
-            assertTrue(result.isSuccess)
-        }
-
-    @Test
-    fun `setPassword with v1 request and empty response is success`() = runTest {
+    fun `setPassword with empty response is success`() = runTest {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.setPassword(
-            body = SetPasswordRequestJson.V1(
-                passwordHash = "passwordHash",
-                passwordHint = "passwordHint",
+            body = SetPasswordRequestJson(
                 organizationIdentifier = "organizationId",
-                kdfIterations = 7,
-                kdfMemory = 1,
-                kdfParallelism = 2,
-                kdfType = null,
-                key = "encryptedUserKey",
-                keys = SetPasswordRequestJson.V1.Keys(
+                passwordHint = "passwordHint",
+                kdf = KdfJson(
+                    iterations = 7,
+                    memory = 1,
+                    parallelism = 2,
+                    kdfType = KdfTypeJson.ARGON2_ID,
+                ),
+                salt = "sample@bitwarden.com",
+                masterPasswordAuthenticationHash = "passwordHash",
+                masterKeyWrappedUserKey = "encryptedUserKey",
+                keys = KeysJson(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),
@@ -265,14 +237,13 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `setPassword with v2 request and empty response is success`() = runTest {
+    fun `setPassword with null keys and empty response is success`() = runTest {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.setPassword(
-            body = SetPasswordRequestJson.V2(
-                masterPasswordAuthenticationHash = "passwordHash",
-                passwordHint = "passwordHint",
+            body = SetPasswordRequestJson(
                 organizationIdentifier = "organizationId",
+                passwordHint = "passwordHint",
                 kdf = KdfJson(
                     iterations = 7,
                     memory = 1,
@@ -280,7 +251,9 @@ class AccountsServiceTest : BaseServiceTest() {
                     kdfType = KdfTypeJson.ARGON2_ID,
                 ),
                 salt = "sample@bitwarden.com",
+                masterPasswordAuthenticationHash = "passwordHash",
                 masterKeyWrappedUserKey = "encryptedUserKey",
+                keys = null,
             ),
         )
         assertTrue(result.isSuccess)
@@ -299,7 +272,7 @@ class AccountsServiceTest : BaseServiceTest() {
                 kdfParallelism = 2,
                 kdfType = KdfTypeJson.ARGON2_ID,
                 userKey = "encryptedUserKey",
-                keys = KeyConnectorKeyRequestJson.Keys(
+                keys = KeysJson(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),

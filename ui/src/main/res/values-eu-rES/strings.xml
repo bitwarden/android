@@ -24,8 +24,8 @@
     <string name="folder_created">Karpeta berria sortua.</string>
     <string name="folder_deleted">Karpeta ezabatu da.</string>
     <string name="folder_none">Karpetarik ez</string>
-    <string name="folders">Karpetak</string>
     <string name="folder_updated">Karpeta eguneratua.</string>
+    <string name="folders">Karpetak</string>
     <string name="hide">Ezkutatu</string>
     <string name="internet_connection_required_message">Mesedez, konektatu internetera jarraitu aurretik.</string>
     <string name="internet_connection_required_title">Internet konexioa beharrezkoa da</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Pasahitz nagusia (beharrezkoa)</string>
     <string name="new_master_password_required">Pasahitz nagusi berria (beharrezkoa)</string>
     <string name="more_options">Aukera gehiago</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">Kutxa Gotorra</string>
     <string name="name">Izena</string>
     <string name="item_name_required">Elementuaren izena (beharrezkoa)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">Gutxieneko zenbaki kopurua</string>
     <string name="min_special">Gutxieneko karaktere bereziak</string>
     <string name="never">Inoiz ez</string>
-    <string name="new_item_created">Elementu berria sortua.</string>
     <string name="no_cards">Ez dago txartelik zure kutxan.</string>
     <string name="add_card">Gehitu txartela</string>
     <string name="no_logins">Ez dago saiorik zure kutxan.</string>
@@ -148,6 +149,14 @@
     <string name="select">Hautatu</string>
     <string name="item_details">Elementuaren xehetasunak</string>
     <string name="item_updated">Elementua eguneratu da.</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Bidaltzen…</string>
     <string name="syncing">Sinkronizatzen…</string>
     <string name="syncing_complete">Sinkronizatu da.</string>
@@ -282,7 +291,9 @@
     <string name="vault_is_locked">Kutxa gotorra blokeatuta dago</string>
     <string name="go_to_my_vault">Joan kutxa gotorrera</string>
     <string name="collections">Bildumak</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">Ez dago elementurik bilduma honetan.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Karpeta honetan ez dago elementurik.</string>
     <string name="no_items_trash">Zakarrontzian ez dago elementurik.</string>
     <string name="autofill_accessibility_summary">Lagundu erabiltzaile-izen eta pasahitz eremuak betetzen beste aplikazioetan eta webgunean.</string>
@@ -337,16 +348,21 @@
     <string name="move_up">Mugitu gora</string>
     <string name="owner">Jabea</string>
     <string name="no_collections_to_list">Ez dago erakusteko bildumarik.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s-era mugitu da.</string>
     <string name="select_one_collection">Gutxienez bilduma bat aukeratu behar duzu.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partekatu</string>
-    <string name="move_to_vault">Mugitu kutxara</string>
-    <string name="no_vaults_to_list">Ez dago zerrendatzeko kuxarik.</string>
-    <string name="move_to_vault_desc">Aukeratu elementu hau mugitu nahi duzun kutxa bat. Beste kutxa batera mugitzeak elementuaren jabetza erakunde horri transferitzen dio. Elementua mugitu ondoren, ez zara jabe zuzena izango.</string>
+    <string name="move_to_organization">Mugitu erakundera</string>
+    <string name="no_orgs_to_list">Ez dago erakunderik erakusteko.</string>
+    <string name="move_to_org_desc">Aukeratu elementu hau zein erakundetara eraman nahi duzun. Erakunde batera pasatzeak elementuaren jabetza erakunde horretara transferitzen du. Zu ez zara elementu honen jabe zuzena izango mugitzen duzunean.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Hitz kopurua</string>
     <string name="passphrase">Pasaesaldia</string>
     <string name="word_separator">Hitz banatzailea</string>
     <string name="clear">Ezabatu</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Sortzailea</string>
     <string name="no_folders_to_list">Ez dago erakusteko karpetarik.</string>
     <string name="fingerprint_phrase">Hatz-marka digitalaren esaldia</string>
@@ -456,6 +472,7 @@
     <string name="deletion_date">Ezabatze data</string>
     <string name="deletion_time">Ezabatutako unea</string>
     <string name="deletion_date_info">Send-a betiko ezabatuko da zehaztutako datan eta orduan.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Norak ikus dezakete</string>
     <string name="anyone_with_the_link">Esteka duen edonor</string>
     <string name="anyone_with_link_can_view_send">Esteka hau duen edonork ikus dezake bidalketa hau</string>
@@ -493,6 +510,7 @@
     <string name="two_days">2 egun</string>
     <string name="three_days">3 egun</string>
     <string name="seven_days">7 egun</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 egun</string>
     <string name="custom">Pertsonalizatua</string>
     <string name="custom_timeout">Denbora-muga pertsonalizatua</string>
@@ -501,6 +519,11 @@
     <string name="about_send">Send-i buruz</string>
     <string name="hide_email">Ezkutatu nire emaila hartzaileei</string>
     <string name="send_options_policy_in_effect">Erakundeko politika batek edo gehiagok Send-eko aukerei eragiten diote.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">Doako kontuak testuak partekatzera mugatzen dira. Premium bazkidetza behar da Send-ekin fitxategiak partekatzeko.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Pertsona zehatzekin partekatzea Premium ezaugarria da. Zure uneko planak ez du ezaugarri honetarako sarbiderik.</string>
     <string name="password_prompt">Berriro eskatu pasahitz nagusia</string>
@@ -550,8 +573,8 @@
     <string name="resend_code">Berbidali kodea</string>
     <string name="a_verification_code_was_sent_to_your_email">Egiaztatze-kodea zure emailera bidali da</string>
     <string name="submit_crash_logs">Bidali akatsen txostena</string>
-    <string name="options_expanded">Aukerak zabaldu egin dira, sakatu multzokatzeko.</string>
-    <string name="options_collapsed">Aukerak multzokatuta daude, sakatu zabaltzeko.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Letra larria (A-Z)</string>
     <string name="lowercase_ato_z">Letra txikia (a-z)</string>
     <string name="numbers_zero_to_nine">Zenbakiak (0-9)</string>
@@ -685,6 +708,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="logging_in_on">Saioa hasten</string>
     <string name="logging_in_on_with_colon">Saioa hasten:</string>
     <string name="vault">Kutxa</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">Itxura</string>
     <string name="account_security">Kontuaren segurtasuna</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>
@@ -1122,11 +1146,6 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="file_could_not_be_processed">Fitxategia ezin izan da prozesatu</string>
     <string name="file_could_not_be_processed_message">Fitxategia ezin izan da prozesatu. Ziurtatu JSON balioduna dela eta saiatu berriro. Laguntza behar duzu? Bisitatu bitwarden.com/help</string>
     <string name="get_help">Jaso laguntza</string>
-    <string name="expand_advanced_options">Zabaldu aukera aurreratuak</string>
-    <string name="local_items_are_expanded_click_to_collapse">Elementu lokalak zabalduta daude, sakatu tolesteko.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Elementu lokalak tolestuta daude, sakatu zabaltzeko.</string>
-    <string name="items_expanded_click_to_collapse">Elementuak zabalduta daude, sakatu tolesteko.</string>
-    <string name="items_are_collapsed_click_to_expand">Elementuak tolestuta daude, sakatu zabaltzeko.</string>
     <string name="error_cannot_decrypt">[errorea: ezin da desenkriptatu]</string>
     <string name="copy_error_report">Kopiatu errore-txostena</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden-ek ezin du kutxako elementu hau desenkriptatu. Kopiatu eta partekatu errore-txosten hau bezeroarentzako arretarekin datu-galera gehiago saihesteko.</string>
@@ -1135,6 +1154,7 @@ Kontu honetara aldatu nahi duzu?</string>
         <item quantity="other">Bitwarden-ek ezin du %1$d kutxako elementu desenkriptatu. Kopiatu eta partekatu errore-txosten hau bezeroarentzako arretarekin datu-galera gehiago saihesteko.</item>
     </plurals>
     <string name="select_a_card_for_x">Hautatu txartel bat %s-rako</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Aukera aurreratuak</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Gehiago bat etortzearen detekzioari burus</annotation></string>
     <string name="keep_your_credential_secure">Mantendu zure kredentzialak seguru</string>
@@ -1237,6 +1257,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="invalid_email_addresses">Helbide elektroniko baliogabeak</string>
     <string name="one_or_more_email_addresses_are_incorrect">Helbide elektroniko bat edo gehiago oker daude. Mesedez, berrikusi eta saiatu berriro.</string>
     <string name="no_email_addresses_entered">Ez da helbide elektronikorik sartu</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Sartu gutxienez helbide elektroniko baliodun bat bidalketa hau partekatzeko.</string>
     <string name="sync_with_browser">Sinkronizatu nabigatzailearekin</string>
     <string name="sync_with_browser_description">%1$s-(e)ra konektatzeko, sinkronizatu zure nabigatzaile lehenetsia Bitwarden mugikorreko aplikazioarekin. Zure nabigatzailea irekitzean, osatu saio-hasiera eskatzen bazaizu.\nSinkronizazioa amaitutakoan, aplikazio honetara itzuliko zara.</string>
@@ -1414,4 +1435,15 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="receive_24_7_priority_support">Jaso 24/7 lehentasunezko laguntza</string>
     <string name="account_creation_restricted">Kontu-sorkuntza mugatua</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s-ek gonbidatutako erabiltzaileei soilik uzten die kontuak sortzen.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

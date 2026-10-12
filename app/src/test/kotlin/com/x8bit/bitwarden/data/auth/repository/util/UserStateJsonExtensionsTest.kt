@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
@@ -1858,7 +1858,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            createMockPolicyView(
+                            createMockSdkPolicy(
                                 id = "policyId",
                                 organizationId = "organizationId",
                                 type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,
@@ -1979,7 +1979,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
                     getUserPolicies = { _, _ ->
                         listOf(
-                            createMockPolicyView(
+                            createMockSdkPolicy(
                                 id = "policyId",
                                 organizationId = "organizationId",
                                 type = PolicyType.DISABLE_PERSONAL_VAULT_EXPORT,

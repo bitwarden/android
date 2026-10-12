@@ -24,8 +24,8 @@
     <string name="folder_created">Nový priečinok vytvorený.</string>
     <string name="folder_deleted">Priečinok bol odstránený.</string>
     <string name="folder_none">Žiadny priečinok</string>
-    <string name="folders">Priečinky</string>
     <string name="folder_updated">Priečinok aktualizovaný.</string>
+    <string name="folders">Priečinky</string>
     <string name="hide">Skryť</string>
     <string name="internet_connection_required_message">Pripojte sa k internetu pred pokračovaním.</string>
     <string name="internet_connection_required_title">Vyžaduje sa internetové pripojenie</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Hlavné heslo (povinné)</string>
     <string name="new_master_password_required">Nové hlavné heslo (povinné)</string>
     <string name="more_options">Ďalšie možnosti</string>
+    <string name="my_folder">Môj priečinok</string>
+    <string name="my_folders">Moje priečinky</string>
     <string name="my_vault">Môj trezor</string>
     <string name="name">Meno</string>
     <string name="item_name_required">Názov položky (povinné)</string>
@@ -120,7 +122,6 @@
     <string name="min_numbers">Minimum číslic</string>
     <string name="min_special">Minimum špeciálnych</string>
     <string name="never">Nikdy</string>
-    <string name="new_item_created">Položka bola pridaná</string>
     <string name="no_cards">V trezore sa nenachádzajú žiadne karty.</string>
     <string name="add_card">Pridať kartu</string>
     <string name="no_logins">Vo vašom trezore nie sú žiadne prihlasovacie údaje.</string>
@@ -150,6 +151,14 @@
     <string name="select">Vybrať</string>
     <string name="item_details">Podrobnosti o položke</string>
     <string name="item_updated">Položka bola aktualizovaná.</string>
+    <string name="bank_account_saved">Bankový účet bol uložený</string>
+    <string name="card_saved">Karta bola uložená</string>
+    <string name="identity_saved">Identita bola uložená</string>
+    <string name="license_saved">Vodičský preukaz bol uložený</string>
+    <string name="login_saved">Prihlasovacie údaje boli uložené</string>
+    <string name="passport_saved">Pas bol uložený</string>
+    <string name="secure_note_saved">Zabezpečená poznámka bola uložená</string>
+    <string name="ssh_key_saved">Kľúč SSH bol uložený</string>
     <string name="submitting">Odosiela sa…</string>
     <string name="syncing">Synchronizuje sa…</string>
     <string name="syncing_complete">Synchronizácia kompletná.</string>
@@ -285,7 +294,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="vault_is_locked">Trezor je uzamknutý</string>
     <string name="go_to_my_vault">Prejsť do môjho trezora</string>
     <string name="collections">Zbierky</string>
+    <string name="shared_folders">Zdieľané priečinky</string>
     <string name="no_items_collection">V tejto zbierke sa nenachádzajú žiadne položky.</string>
+    <string name="there_are_no_items_in_this_shared_folder">V tomto zdieľanom priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_folder">V tomto priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_trash">V koši nie sú žiadne položky.</string>
     <string name="autofill_accessibility_summary">Pomáha s vypĺňaním polí používateľského mena a hesla v iných aplikáciách a na webe.</string>
@@ -342,16 +353,21 @@ Skenovanie prebehne automaticky.</string>
     <string name="move_up">Posunúť vyššie</string>
     <string name="owner">Vlastník</string>
     <string name="no_collections_to_list">Neexistujú žiadne zbierky na zobrazenie.</string>
+    <string name="there_are_no_shared_folders_to_list">Na zobrazenie nie sú žiadne zdieľané priečinky.</string>
     <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
     <string name="select_one_collection">Musíte vybrať aspoň jednu zbierku.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Musíte vybrať aspoň jeden zdieľaný priečinok.</string>
     <string name="share">Zdieľať</string>
-    <string name="move_to_vault">Presunúť do trezoru</string>
+    <string name="move_to_organization">Presunúť do Organizácie</string>
+    <string name="no_orgs_to_list">Nenašli sa žiadne organizácie.</string>
+    <string name="move_to_org_desc">Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</string>
     <string name="no_vaults_to_list">Nie sú žiadne trezory na zobrazenie.</string>
     <string name="move_to_vault_desc">Vyberte trezor, do ktorého chcete túto položku presunúť. Presunutím do iného trezoru sa vlastníctvo položky prevedie na danú organizáciu. Po presunutí už nebudete priamym vlastníkom tejto položky.</string>
     <string name="number_of_words">Počet slov</string>
     <string name="passphrase">Prístupová fráza</string>
     <string name="word_separator">Oddeľovač slov</string>
     <string name="clear">Vyčistiť</string>
+    <string name="open_calendar">otvoriť kalendár</string>
     <string name="generator">Generátor</string>
     <string name="no_folders_to_list">Neexistujú žiadne zložky.</string>
     <string name="fingerprint_phrase">Fráza odtlačku</string>
@@ -461,6 +477,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="deletion_date">Dátum odstránenia</string>
     <string name="deletion_time">Čas odstránenia</string>
     <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
+    <string name="this_date_is_enforced_by_your_organization">Tento dátum je stanovený vašou organizáciou</string>
     <string name="who_can_view">Kto môže zobraziť</string>
     <string name="anyone_with_the_link">Ktokoľvek s odkazom</string>
     <string name="anyone_with_link_can_view_send">Ktokoľvek s týmto odkazom môže zobraziť tento Send</string>
@@ -498,6 +515,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="two_days">2 dni</string>
     <string name="three_days">3 dni</string>
     <string name="seven_days">7 dní</string>
+    <string name="fourteen_days">14 dní</string>
     <string name="thirty_days">30 dní</string>
     <string name="custom">Vlastné</string>
     <string name="custom_timeout">Vlastný časový limit</string>
@@ -506,6 +524,11 @@ Skenovanie prebehne automaticky.</string>
     <string name="about_send">O Sende</string>
     <string name="hide_email">Skryť moju e-mailovú adresu pred príjemcami</string>
     <string name="send_options_policy_in_effect">Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</string>
+    <string name="organization_policy_restriction">Obmedzenie politiky organizácie</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Tento Send nie je v súlade s politikou Sendu vašej organizácie a jeho platnosť automaticky vyprší v stanovený deň odstránenia.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Vaša organizácia nepovoľuje textové Sendy a tento Send automaticky vyprší v nastavený deň odstránenia.</string>
+    <string name="to_edit_this_send_make_a_copy">Na úpravu tohto Sendu si urobte kópiu. Ak tento Send môže vypršať v stanovenom dátume na odstránenie, nemusíte nič robiť.</string>
+    <string name="make_a_copy">Vytvoriť kópiu</string>
     <string name="send_file_premium_required">Bezplatné účty sú obmedzené len na zdieľanie textu. Súborové Sendy si vyžadujú prémiové členstvo.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Zdieľanie s konkrétnymi osobami je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="password_prompt">Znova zadajte hlavné heslo</string>
@@ -559,8 +582,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="resend_code">Znova odoslať kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Na váš e-mail bol odoslaný overovací kód</string>
     <string name="submit_crash_logs">Odoslať logy o zlyhaní</string>
-    <string name="options_expanded">Možnosti sú rozbalené, ťuknutím na položku ich zbalíte.</string>
-    <string name="options_collapsed">Možnosti sú zbalené, ťuknutím na položku ich rozbalíte.</string>
+    <string name="expand">rozbaliť</string>
+    <string name="collapse">zbaliť</string>
     <string name="uppercase_ato_z">Veľké písmená (A až Z)</string>
     <string name="lowercase_ato_z">Malé písmená (a až z)</string>
     <string name="numbers_zero_to_nine">Čísla (0 až 9)</string>
@@ -695,6 +718,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="logging_in_on">Prihlásenie na</string>
     <string name="logging_in_on_with_colon">Prihlásenie na:</string>
     <string name="vault">Trezor</string>
+    <string name="select_vault">Vyberte trezor</string>
     <string name="appearance">Vzhľad</string>
     <string name="account_security">Zabezpečenie účtu</string>
     <string name="bitwarden_help_center">Centrum pomoci Bitwarden</string>
@@ -1138,11 +1162,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="file_could_not_be_processed">Súbor sa nepodarilo spracovať</string>
     <string name="file_could_not_be_processed_message">Súbor sa nedal spracovať. Uistite sa, že ide o platný JSON, a skúste to znova. Potrebujete pomoc? Navštívte stránku bitwarden.com/help</string>
     <string name="get_help">Získať pomoc</string>
-    <string name="expand_advanced_options">Rozbaliť rozšírené možnosti</string>
-    <string name="local_items_are_expanded_click_to_collapse">Miestne položky sú rozbalené, kliknutím ich zbalíte.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Miestne položky sú zbalené, kliknutím ich rozbalíte.</string>
-    <string name="items_expanded_click_to_collapse">Položky sú rozbalené, kliknutím ich zbalíte.</string>
-    <string name="items_are_collapsed_click_to_expand">Položky sú zbalené, kliknutím ich rozbalíte.</string>
     <string name="error_cannot_decrypt">[chyba: nedá sa dešifrovať]</string>
     <string name="copy_error_report">Kopírovať hlásenie o chybe</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nedokázal dešifrovať túto položku trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</string>
@@ -1153,6 +1172,7 @@ Chcete prepnúť na tento účet?</string>
         <item quantity="other">Bitwarden nedokázal dešifrovať %1$d položiek trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
     </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
+    <string name="choose_an_identity">Vyberte identitu</string>
     <string name="advanced_options">Rozšírené možnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Viac informácií o zisťovaní zhody</annotation></string>
     <string name="keep_your_credential_secure">Udržujte svoje prihlasovacie údaje v bezpečí</string>
@@ -1257,6 +1277,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="invalid_email_addresses">Neplatná e-mailová adresa</string>
     <string name="one_or_more_email_addresses_are_incorrect">Jedna alebo viaceré e-mailové adresy sú nesprávne. Skontrolujte ich a skúste to znovu.</string>
     <string name="no_email_addresses_entered">Nezadali ste žiadne e-mailové adresy</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Zahrnúť iba nasledujúce domény: %1$s. Skontrolujte to a skúste to znova.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Zadajte aspoň jednu platnú e-mailovú adresu, aby ste mohli zdieľať tento Send.</string>
     <string name="sync_with_browser">Synchronizácia s prehliadačom</string>
     <string name="sync_with_browser_description">Ak sa chcete pripojiť k %1$s, synchronizujte svoj predvolený prehliadač s mobilnou aplikáciou Bitwarden. Po otvorení prehliadača sa prihláste, ak budete vyzvaní.\nPo dokončení synchronizácie sa vrátite do tejto aplikácie.</string>
@@ -1436,4 +1457,15 @@ Chcete prepnúť na tento účet?</string>
     <string name="receive_24_7_priority_support">Získajte nonstop prioritnú podporu</string>
     <string name="account_creation_restricted">Vytvorenie účtu je obmedzené</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s umožňuje vytvárať účty iba pozvaným používateľom.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Znížiť o %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Zvýšiť o %1$s</string>
+    <string name="use_this_passphrase">Použiť túto prístupovú frázu</string>
+    <string name="use_this_password">Použiť toto heslo</string>
+    <string name="use_this_username">Použiť toto používateľské meno</string>
+    <string name="create_login">Vytvoriť prihlasovacie údaje</string>
+    <string name="keep_unlocking_with_biometrics">Naďalej odomykať pomocou biometrie</string>
+    <string name="weve_made_a_security_update">Vykonali sme bezpečnostnú aktualizáciu. Potvrďte svoje biometrické údaje ešte raz, aby ste ich mohli naďalej používať na odomknutie Bitwardenu.</string>
+    <string name="turn_off">Vypnúť</string>
+    <string name="turn_off_biometric_question">Vypnúť biometriu?</string>
+    <string name="unlocking_will_require_your_master_password">Odomknutie bude vyžadovať vaše hlavné heslo. Biometriu môžete znova zapnúť v nastaveniach.</string>
 </resources>

@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -43,12 +44,14 @@ object VaultSdkModule {
         featureFlagManager: FeatureFlagManager,
         sdkRepositoryFactory: SdkRepositoryFactory,
         sdkPlatformApiFactory: SdkPlatformApiFactory,
+        sdkLoggerFactory: SdkLoggerFactory,
     ): ScopedVaultSdkSource =
         ScopedVaultSdkSourceImpl(
             dispatcherManager = dispatcherManager,
             featureFlagManager = featureFlagManager,
             sdkRepositoryFactory = sdkRepositoryFactory,
             sdkPlatformApiFactory = sdkPlatformApiFactory,
+            sdkLoggerFactory = sdkLoggerFactory,
         )
 
     @Provides

@@ -244,7 +244,7 @@ fun RootNavScreen(
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultAddEdit(
                     args = VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = currentState.autofillSaveItem.toVaultItemCipherType(),
                     ),
                     navOptions = rootNavOptions,
@@ -255,7 +255,7 @@ fun RootNavScreen(
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultAddEdit(
                     args = VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = VaultItemCipherType.LOGIN,
                     ),
                     navOptions = rootNavOptions,

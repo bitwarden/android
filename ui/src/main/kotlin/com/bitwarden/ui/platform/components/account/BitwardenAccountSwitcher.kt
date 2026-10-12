@@ -44,10 +44,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
@@ -280,6 +282,7 @@ private fun AccountSummaryItem(
     onSwitchAccountClick: (AccountSummary) -> Unit,
     onSwitchAccountLongClick: (AccountSummary) -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -288,12 +291,15 @@ private fun AccountSummaryItem(
             .testTag("AccountCell")
             .requiredHeightIn(min = 60.dp)
             .combinedClickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+                interactionSource = interactionSource,
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 onClick = { onSwitchAccountClick(accountSummary) },
                 onLongClick = { onSwitchAccountLongClick(accountSummary) },
+                role = Role.Button,
+            )
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.row,
             )
             .padding(vertical = 8.dp)
             .then(modifier),
@@ -411,17 +417,21 @@ private fun LockOrLogoutDialog(
 private fun AddAccountItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+                interactionSource = interactionSource,
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 onClick = onClick,
+                role = Role.Button,
+            )
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.row,
             )
             .padding(vertical = 8.dp)
             .then(modifier),

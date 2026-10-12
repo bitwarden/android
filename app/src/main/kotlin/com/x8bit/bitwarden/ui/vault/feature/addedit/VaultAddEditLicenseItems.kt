@@ -96,6 +96,7 @@ fun LazyListScope.vaultAddEditLicenseItems(
             currentDate = licenseState.dateOfBirth,
             onDateSelect = licenseHandlers.onDateOfBirthChange,
             textFieldTestTag = "LicenseDateOfBirthEntry",
+            allowFutureDates = false,
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,6 +149,7 @@ fun LazyListScope.vaultAddEditLicenseItems(
             currentDate = licenseState.issueDate,
             onDateSelect = licenseHandlers.onIssueDateChange,
             textFieldTestTag = "LicenseIssueDateEntry",
+            allowFutureDates = false,
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()

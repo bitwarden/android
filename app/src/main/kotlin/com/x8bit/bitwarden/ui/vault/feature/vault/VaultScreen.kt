@@ -131,7 +131,7 @@ fun VaultScreen(
             is VaultEvent.NavigateToAddItemScreen -> {
                 onNavigateToVaultAddItemScreen(
                     VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = event.type,
                     ),
                 )

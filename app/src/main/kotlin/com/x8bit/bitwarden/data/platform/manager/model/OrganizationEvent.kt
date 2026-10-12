@@ -141,4 +141,15 @@ sealed class OrganizationEvent {
         override val type: OrganizationEventType
             get() = OrganizationEventType.ORGANIZATION_ITEM_ORGANIZATION_ACCEPTED
     }
+
+    /**
+     * Tracks when user's notification banner has the action button clicked.
+     */
+    data class OrganizationUserNotificationBannerActionClicked(
+        override val organizationId: String,
+    ) : OrganizationEvent() {
+        override val cipherId: String? = null
+        override val type: OrganizationEventType
+            get() = OrganizationEventType.ORGANIZATION_USER_NOTIFICATION_BANNER_ACTION_CLICKED
+    }
 }

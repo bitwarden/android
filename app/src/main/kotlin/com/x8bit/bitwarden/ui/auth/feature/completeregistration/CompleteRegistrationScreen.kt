@@ -269,7 +269,7 @@ private fun CompleteRegistrationContent(
                     ),
                     onClick = handler.onLearnToPreventLockout,
                     style = BitwardenTheme.typography.labelMedium,
-                    cornerSize = 0.dp,
+                    shape = BitwardenTheme.shapes.contentBottom,
                     innerPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
                     modifier = Modifier.fillMaxWidth(),
                 )

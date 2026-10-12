@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -26,6 +27,7 @@ import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
@@ -326,8 +328,10 @@ private fun ActionCard(
                     id = BitwardenString
                         .to_regain_access_to_your_archive_restart_your_premium_subscription,
                 ),
-                actionText = stringResource(id = BitwardenString.restart_premium),
-                onActionClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.restart_premium.asText(),
+                    onClick = vaultItemListingHandlers.upgradeToPremiumClick,
+                ),
                 modifier = modifier,
             )
         }

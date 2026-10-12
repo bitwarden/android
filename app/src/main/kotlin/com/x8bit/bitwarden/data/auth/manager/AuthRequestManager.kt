@@ -32,7 +32,8 @@ interface AuthRequestManager {
     fun getAuthRequestByIdFlow(requestId: String): Flow<AuthRequestUpdatesResult>
 
     /**
-     * Get all auth request and emits updates over time.
+     * Get all auth requests and emits updates over time, including when a passwordless push for
+     * the active user indicates the list changed.
      */
     fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult>
 

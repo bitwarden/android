@@ -9,5 +9,5 @@ enum class ExploreGeneratorCoachMark {
     USERNAME_MODE,
     PASSWORD_OPTIONS,
     GENERATE_BUTTON,
-    COPY_PASSWORD_BUTTON,
+    CREATE_LOGIN_BUTTON,
 }

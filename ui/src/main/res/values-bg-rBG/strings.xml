@@ -24,8 +24,8 @@
     <string name="folder_created">Папката е създадена.</string>
     <string name="folder_deleted">Папката е изтрита.</string>
     <string name="folder_none">Няма папка</string>
-    <string name="folders">Папки</string>
     <string name="folder_updated">Папката е обновена.</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скриване</string>
     <string name="internet_connection_required_message">Свържете се с Интернет, за да продължите.</string>
     <string name="internet_connection_required_title">Необходима е връзка към Интернет</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Главна парола (задължително)</string>
     <string name="new_master_password_required">Нова главна парола (задължително)</string>
     <string name="more_options">Още настройки</string>
+    <string name="my_folder">Моята папка</string>
+    <string name="my_folders">Моите папки</string>
     <string name="my_vault">Моят трезор</string>
     <string name="name">Име</string>
     <string name="item_name_required">Име на елемента (задължително)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">Минимален брой цифри</string>
     <string name="min_special">Минимален брой специални знаци</string>
     <string name="never">Никога</string>
-    <string name="new_item_created">Създаден е нов елемент.</string>
     <string name="no_cards">Няма карти в трезора.</string>
     <string name="add_card">Добавяне на карта</string>
     <string name="no_logins">Няма елементи за вписване в трезора.</string>
@@ -148,6 +149,14 @@
     <string name="select">Избор</string>
     <string name="item_details">Подробности за елемента</string>
     <string name="item_updated">Елементът е обновен.</string>
+    <string name="bank_account_saved">Банковата сметка е запазена</string>
+    <string name="card_saved">Картата е запазена</string>
+    <string name="identity_saved">Самоличността е запазена</string>
+    <string name="license_saved">Лицензът е запазен</string>
+    <string name="login_saved">Данните за вписване са запазени</string>
+    <string name="passport_saved">Паспортът е запазен</string>
+    <string name="secure_note_saved">Защитената бележка е запазена</string>
+    <string name="ssh_key_saved">SSH ключът е запазен</string>
     <string name="submitting">Подаване…</string>
     <string name="syncing">Синхронизиране…</string>
     <string name="syncing_complete">Синхронизацията завърши.</string>
@@ -283,7 +292,9 @@
     <string name="vault_is_locked">Трезорът е заключен</string>
     <string name="go_to_my_vault">Към трезора</string>
     <string name="collections">Колекции</string>
+    <string name="shared_folders">Споделени папки</string>
     <string name="no_items_collection">Няма елементи в тази колекция.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Няма елементи в тази споделена папка.</string>
     <string name="no_items_folder">Няма елементи в тази папка.</string>
     <string name="no_items_trash">Няма записи в кошчето.</string>
     <string name="autofill_accessibility_summary">Помощ с попълването на полета за потребителско име и парола в други приложения и в уеб сайтове.</string>
@@ -338,16 +349,21 @@
     <string name="move_up">Преместване нагоре</string>
     <string name="owner">Собственик</string>
     <string name="no_collections_to_list">Няма колекции за показване.</string>
+    <string name="there_are_no_shared_folders_to_list">Няма споделени папки за показване.</string>
     <string name="moved_item_to_org">%1$s се премести в %2$s.</string>
     <string name="select_one_collection">Изберете поне една колекция.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Изберете поне една споделена папка.</string>
     <string name="share">Споделяне</string>
-    <string name="move_to_vault">Преместване в трезора</string>
+    <string name="move_to_organization">Преместване в организация</string>
+    <string name="no_orgs_to_list">Няма организации за показване.</string>
+    <string name="move_to_org_desc">Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</string>
     <string name="no_vaults_to_list">Няма трезори за показване.</string>
     <string name="move_to_vault_desc">Изберете трезор, в която искате да преместите записа. Преместването към друг трезор прехвърля собствеността му към съответната организация. След това няма вече директно да го притежавате.</string>
     <string name="number_of_words">Брой думи</string>
     <string name="passphrase">Парола-фраза</string>
     <string name="word_separator">Разделител за думи</string>
     <string name="clear">Изчистване</string>
+    <string name="open_calendar">отваряне на календара</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Няма папки за показване.</string>
     <string name="fingerprint_phrase">Уникална фраза</string>
@@ -457,6 +473,7 @@
     <string name="deletion_date">Дата на изтриване</string>
     <string name="deletion_time">Време на изтриване</string>
     <string name="deletion_date_info">Изпращането ще бъде окончателно изтрито на зададената дата и време.</string>
+    <string name="this_date_is_enforced_by_your_organization">Тази дата е наложена от организацията Ви</string>
     <string name="who_can_view">Кой може да преглежда</string>
     <string name="anyone_with_the_link">Всеки с връзката</string>
     <string name="anyone_with_link_can_view_send">Всеки с тази връзка може да види това Изпращане</string>
@@ -494,6 +511,7 @@
     <string name="two_days">2 дни</string>
     <string name="three_days">3 дни</string>
     <string name="seven_days">7 дни</string>
+    <string name="fourteen_days">14 дни</string>
     <string name="thirty_days">30 дни</string>
     <string name="custom">По избор</string>
     <string name="custom_timeout">Персонализирано време за достъп</string>
@@ -502,6 +520,11 @@
     <string name="about_send">Относно изпращането</string>
     <string name="hide_email">Скриване на е-пощата ми от получателите.</string>
     <string name="send_options_policy_in_effect">Поне една политика на организация влияе на настройките за изпращане.</string>
+    <string name="organization_policy_restriction">Ограничение за политиката на организацията</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Това Изпращане не отговаря на политиката за Изпращания на организацията Ви и автоматично ще загуби давност на зададената дата за изтриване.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Текстовите Изпращания не са разрешени от организацията Ви. Това Изпращане автоматично ще загуби давност на зададената дата за изтриване.</string>
+    <string name="to_edit_this_send_make_a_copy">За да редактирате това Изпращане, първо му направете копие. Ако давността на това Изпращане може да изтече на зададена дата за изтриване, не са необходими допълнителни действия.</string>
+    <string name="make_a_copy">Създаване на копие</string>
     <string name="send_file_premium_required">Безплатните регистрации могат да споделят само текст. Необходим е платен абонамент, за да можете да изпращате файлове.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Споделянето с определени хора е платена функционалност. Текущият Ви план не включва достъп до нея.</string>
     <string name="password_prompt">Повторно запитване за главната парола</string>
@@ -551,8 +574,8 @@
     <string name="resend_code">Повторно изпращане на кода</string>
     <string name="a_verification_code_was_sent_to_your_email">На Вашата е-поща беше изпратен код за потвърждаване</string>
     <string name="submit_crash_logs">Изпращане на доклади за сривовете</string>
-    <string name="options_expanded">Възможностите са разгънати. Докоснете за свиване.</string>
-    <string name="options_collapsed">Възможностите са свити. Докоснете за разгъване.</string>
+    <string name="expand">разгъване</string>
+    <string name="collapse">свиване</string>
     <string name="uppercase_ato_z">Главни букви (A-Z)</string>
     <string name="lowercase_ato_z">Малки букви (a-z)</string>
     <string name="numbers_zero_to_nine">Числа (0-9)</string>
@@ -687,6 +710,7 @@
     <string name="logging_in_on">Вписване в</string>
     <string name="logging_in_on_with_colon">Вписване в:</string>
     <string name="vault">Трезор</string>
+    <string name="select_vault">Изберете трезор</string>
     <string name="appearance">Външен вид</string>
     <string name="account_security">Защита на регистрацията</string>
     <string name="bitwarden_help_center">Помощен център на Битуорден</string>
@@ -1126,11 +1150,6 @@
     <string name="file_could_not_be_processed">Файлът не може да бъде обработен</string>
     <string name="file_could_not_be_processed_message">Файлът не може да бъде обработен. Уверете се, че той е правилно структуриран файл JSON и опитайте отново. Ако имате нужда от помощ, прегледайте bitwarden.com/help</string>
     <string name="get_help">Потърсете помощ</string>
-    <string name="expand_advanced_options">Разгъване на разширените настройки</string>
-    <string name="local_items_are_expanded_click_to_collapse">Наличните на това устройство елементи са разгънати. Щракнете за свиване.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Наличните на това устройство елементи са свити. Щракнете за разгъване.</string>
-    <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
-    <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
     <string name="error_cannot_decrypt">[грешка: не може да се дешифрира]</string>
     <string name="copy_error_report">Копиране на доклада за грешката</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Битуорден не може да дешифрира този елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</string>
@@ -1139,6 +1158,7 @@
         <item quantity="other">Битуорден не може да дешифрира %1$d елемента от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
     </plurals>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
+    <string name="choose_an_identity">Изберете самоличност</string>
     <string name="advanced_options">Разширени настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Повече относно разпознаването на съвпадения</annotation></string>
     <string name="keep_your_credential_secure">Защитете данните си за вписване</string>
@@ -1241,6 +1261,7 @@
     <string name="invalid_email_addresses">Грешни адреси на е-пощи</string>
     <string name="one_or_more_email_addresses_are_incorrect">Един или повече от адресите на е-пощи са неправилни. Моля, прегледайте ги и опитайте отново.</string>
     <string name="no_email_addresses_entered">Няма въведени адреси на е-пощи</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Включват се само следните домейни: %1$s. Моля, прегледайте и опитайте отново.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Въведете поне един правилен адрес на е-поща, за да споделите това Изпращане.</string>
     <string name="sync_with_browser">Синхронизиране с браузъра</string>
     <string name="sync_with_browser_description">За да се свържете с %1$s, синхронизирайте стандартния си браузър с мобилното приложение на Битуорден. Когато браузърът се отвори, завършете процедурата по вписване, ако е нужно.\nСлед като синхронизирането завърши, ще се върнете автоматично в това приложение.</string>
@@ -1418,4 +1439,15 @@
     <string name="receive_24_7_priority_support">Получавайте 24-часова приоритетна поддръжка</string>
     <string name="account_creation_restricted">Създаването на акаунти е ограничено</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s разрешава само на поканените потребители да създават акаунти.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Намалявена %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Увеличаване %1$s</string>
+    <string name="use_this_passphrase">Използване на тази парола-фраза</string>
+    <string name="use_this_password">Използване на тази парола</string>
+    <string name="use_this_username">Използване на това потребителско име</string>
+    <string name="create_login">Създаване на запис за вписване</string>
+    <string name="keep_unlocking_with_biometrics">Продължаване на отключването с биометрични данни</string>
+    <string name="weve_made_a_security_update">Обновихме сигурността. Потвърдете биометричните си данни, за да продължите да ги използвате за отключване на Битуорден.</string>
+    <string name="turn_off">Изключване</string>
+    <string name="turn_off_biometric_question">Изключване на биометричните данни?</string>
+    <string name="unlocking_will_require_your_master_password">Отключването ще изисква главната парола. Можете да включите биометричните данни отново в Настройките.</string>
 </resources>

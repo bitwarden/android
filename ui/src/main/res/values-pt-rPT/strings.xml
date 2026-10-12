@@ -24,10 +24,10 @@
     <string name="folder_created">Nova pasta criada.</string>
     <string name="folder_deleted">Pasta eliminada.</string>
     <string name="folder_none">Sem pasta</string>
-    <string name="folders">Pastas</string>
     <string name="folder_updated">Pasta guardada</string>
+    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
-    <string name="internet_connection_required_message">Por favor, ligue-se à Internet antes de continuar.</string>
+    <string name="internet_connection_required_message">Estabeleça uma ligação à Internet antes de continuar.</string>
     <string name="internet_connection_required_title">Ligação à Internet necessária</string>
     <string name="invalid_master_password">Palavra-passe mestra inválida. Tente novamente.</string>
     <string name="invalid_pin">PIN inválido. Tente novamente.</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Palavra-passe mestra (obrigatório)</string>
     <string name="new_master_password_required">Nova palavra-passe mestra (obrigatório)</string>
     <string name="more_options">Mais opções</string>
+    <string name="my_folder">A minha pasta</string>
+    <string name="my_folders">As minhas pastas</string>
     <string name="my_vault">O meu cofre</string>
     <string name="name">Nome</string>
     <string name="item_name_required">Nome do item (obrigatório)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">Mínimo de números</string>
     <string name="min_special">Mínimo de caracteres especiais</string>
     <string name="never">Nunca</string>
-    <string name="new_item_created">Item adicionado</string>
     <string name="no_cards">Não existem cartões no seu cofre.</string>
     <string name="add_card">Adicionar cartão</string>
     <string name="no_logins">Não existem credenciais no seu cofre.</string>
@@ -148,6 +149,14 @@
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
     <string name="item_updated">Item guardado</string>
+    <string name="bank_account_saved">Conta bancária guardada</string>
+    <string name="card_saved">Cartão guardado</string>
+    <string name="identity_saved">Cartão de cidadão guardado</string>
+    <string name="license_saved">Carta de condução guardada</string>
+    <string name="login_saved">Credencial guardada</string>
+    <string name="passport_saved">Passaporte guardado</string>
+    <string name="secure_note_saved">Nota segura guardada</string>
+    <string name="ssh_key_saved">Chave SSH guardada</string>
     <string name="submitting">A submeter…</string>
     <string name="syncing">A sincronizar…</string>
     <string name="syncing_complete">Sincronização concluída</string>
@@ -283,7 +292,9 @@ A leitura será efetuada automaticamente.</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir para o meu cofre</string>
     <string name="collections">Coleções</string>
+    <string name="shared_folders">Pastas partilhadas</string>
     <string name="no_items_collection">Não existem itens nesta coleção.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Não existem itens nesta pasta partilhada.</string>
     <string name="no_items_folder">Não existem itens nesta pasta.</string>
     <string name="no_items_trash">Não existem itens no lixo.</string>
     <string name="autofill_accessibility_summary">Ajuda a preencher os campos de nome de utilizador e palavra-passe noutras aplicações e na web.</string>
@@ -338,16 +349,21 @@ A leitura será efetuada automaticamente.</string>
     <string name="move_up">Mover para cima</string>
     <string name="owner">Proprietário</string>
     <string name="no_collections_to_list">Não existem coleções para apresentar.</string>
+    <string name="there_are_no_shared_folders_to_list">Não existem pastas partilhadas para apresentar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Deve selecionar pelo menos uma coleção.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Tem de selecionar pelo menos uma pasta partilhada.</string>
     <string name="share">Partilhar</string>
-    <string name="move_to_vault">Mover para o cofre</string>
+    <string name="move_to_organization">Mover para organização</string>
+    <string name="no_orgs_to_list">Não existem organizações para apresentar.</string>
+    <string name="move_to_org_desc">Escolha a organização para a qual pretende mover este item. Ao movê-lo para uma organização, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="no_vaults_to_list">Não existem cofres para apresentar.</string>
     <string name="move_to_vault_desc">Escolha o cofre para o qual pretende mover este item. Ao movê-lo para outro cofre, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="number_of_words">Número de palavras</string>
     <string name="passphrase">Frase de acesso</string>
     <string name="word_separator">Separador de palavras</string>
     <string name="clear">Limpar</string>
+    <string name="open_calendar">abrir calendário</string>
     <string name="generator">Gerador</string>
     <string name="no_folders_to_list">Não existem pastas para apresentar.</string>
     <string name="fingerprint_phrase">Frase de impressão digital</string>
@@ -407,7 +423,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador</string>
     <string name="unable_to_save_attachment">Ocorreu um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre web.</string>
     <string name="save_attachment_success">Anexo guardado com sucesso</string>
-    <string name="autofill_tile_accessibility_required">Por favor, ative o “Serviço de acessibilidade de preenchimento automático” nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
+    <string name="autofill_tile_accessibility_required">Ative o “Serviço de acessibilidade para preenchimento automático” nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
     <string name="autofill_tile_uri_not_found">Nenhum campo de palavra-passe detetado</string>
     <string name="soft_deleting">A mover para o lixo…</string>
     <string name="item_soft_deleted">O item foi movido para o lixo.</string>
@@ -422,7 +438,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="enable_sync_on_refresh">Permitir a sincronização ao atualizar</string>
     <string name="enable_sync_on_refresh_description">Sincronizar o cofre com o gesto de deslizar para baixo.</string>
     <string name="log_in_sso">Início de sessão único para empresas</string>
-    <string name="log_in_sso_summary">Inicie sessão rapidamente utilizando o portal de início de sessão único da sua organização. Por favor, introduza o identificador da sua organização para começar.</string>
+    <string name="log_in_sso_summary">Inicie sessão rapidamente através do portal de início de sessão único da sua organização. Introduza o identificador da sua organização para começar.</string>
     <string name="org_identifier">Identificador da organização</string>
     <string name="login_sso_error">Atualmente não é possível iniciar sessão com SSO</string>
     <string name="set_master_password">Definir a palavra-passe mestra</string>
@@ -457,6 +473,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="deletion_date">Data de eliminação</string>
     <string name="deletion_time">Hora de eliminação</string>
     <string name="deletion_date_info">O Send será permanentemente eliminado na data e hora especificadas.</string>
+    <string name="this_date_is_enforced_by_your_organization">Esta data é imposta pela sua organização</string>
     <string name="who_can_view">Quem pode ver</string>
     <string name="anyone_with_the_link">Qualquer pessoa com o link</string>
     <string name="anyone_with_link_can_view_send">Qualquer pessoa com este link pode ver este Send</string>
@@ -494,6 +511,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="two_days">2 dias</string>
     <string name="three_days">3 dias</string>
     <string name="seven_days">7 dias</string>
+    <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
     <string name="custom">Personalizado</string>
     <string name="custom_timeout">Tempo limite personalizado</string>
@@ -502,11 +520,16 @@ A leitura será efetuada automaticamente.</string>
     <string name="about_send">Sobre o Send</string>
     <string name="hide_email">Ocultar o meu endereço de e-mail dos destinatários</string>
     <string name="send_options_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas opções do Send.</string>
+    <string name="organization_policy_restriction">Restrição da política da organização</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Este Send não está em conformidade com a política de Sends da sua organização e expirará automaticamente na data de eliminação definida.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Os Sends de texto não são permitidos na sua organização e este Send expirará automaticamente na data de eliminação definida.</string>
+    <string name="to_edit_this_send_make_a_copy">Para editar este Send, crie uma cópia. Se este Send puder expirar na data de eliminação definida, não é necessária qualquer ação.</string>
+    <string name="make_a_copy">Fazer uma cópia</string>
     <string name="send_file_premium_required">As contas gratuitas estão limitadas apenas à partilha de texto. É necessária uma subscrição Premium para utilizar ficheiros com o Send.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Partilhar com pessoas específicas é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="password_prompt">Pedir novamente a palavra-passe mestra</string>
     <string name="password_confirmation">Confirmação da palavra-passe mestra</string>
-    <string name="password_confirmation_desc">Esta ação está protegida. Para continuar, por favor, reintroduza a sua palavra-passe mestra para verificar a sua identidade.</string>
+    <string name="password_confirmation_desc">Esta ação está protegida. Para continuar, introduza novamente a sua palavra-passe mestra para confirmar a sua identidade.</string>
     <string name="update_master_password">Atualizar a palavra-passe mestra</string>
     <string name="update_master_password_warning">A sua palavra-passe mestra foi recentemente alterada por um administrador da sua organização. Para aceder ao cofre, tem de atualizar a sua palavra-passe mestra agora. Ao prosseguir, terminará a sua sessão atual e terá de iniciar sessão novamente. As sessões ativas noutros dispositivos poderão continuar ativas até uma hora.</string>
     <string name="updating_password">A atualizar palavra-passe</string>
@@ -551,8 +574,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="resend_code">Reenviar código</string>
     <string name="a_verification_code_was_sent_to_your_email">Foi enviado um código de verificação para o seu e-mail</string>
     <string name="submit_crash_logs">Submeter registo de falhas</string>
-    <string name="options_expanded">As opções estão expandidas, clique para as fechar.</string>
-    <string name="options_collapsed">As opções estão fechadas, clique para as expandir.</string>
+    <string name="expand">expandir</string>
+    <string name="collapse">recolher</string>
     <string name="uppercase_ato_z">Maiúsculas (A-Z)</string>
     <string name="lowercase_ato_z">Minúsculas (a-z)</string>
     <string name="numbers_zero_to_nine">Números (0-9)</string>
@@ -575,8 +598,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="set_up_authenticator_key">Configurar a chave de autenticação</string>
     <string name="once_the_key_is_successfully_entered">Assim que a chave for introduzida com sucesso, selecione Adicionar TOTP para guardar a chave em segurança</string>
     <string name="never_lock_warning">Ao definir as suas opções de bloqueio para \"Nunca\" mantém o seu cofre disponível para qualquer pessoa que tenha acesso ao seu dispositivo. Se utilizar esta opção, deve assegurar-se de que mantém o seu dispositivo devidamente protegido.</string>
-    <string name="environment_page_urls_error">Um ou mais URLs introduzidos são inválidos. Por favor, reveja-o e tente guardar novamente.</string>
-    <string name="generic_error_message">Não foi possível processar o seu pedido. Por favor, tente novamente ou contacte-nos.</string>
+    <string name="environment_page_urls_error">Um ou mais dos URLs introduzidos são inválidos. Reveja-os e tente guardar novamente.</string>
+    <string name="generic_error_message">Não foi possível processar o seu pedido. Tente novamente ou contacte-nos.</string>
     <string name="allow_screen_capture">Permitir a captura de ecrã</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Tem a certeza de que pretende ativar a captura de ecrã?</string>
     <string name="log_in_requested">Pedido de início de sessão</string>
@@ -630,7 +653,7 @@ Pretende mudar para esta conta?</string>
     <string name="log_in_with_master_password">Iniciar sessão com a palavra-passe mestra</string>
     <string name="log_in_initiated">A preparar o início de sessão</string>
     <string name="a_notification_has_been_sent_to_your_device">Foi enviada uma notificação para o seu dispositivo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Por favor, certifique-se de que o cofre está desbloqueado e que a frase de impressão digital corresponde à do outro dispositivo.</string>
+    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Certifique-se de que o seu cofre está desbloqueado e de que a frase de impressão digital corresponde à do outro dispositivo.</string>
     <string name="resend_notification">Reenviar notificação</string>
     <string name="view_all_login_options">Ver todas as opções de início de sessão</string>
     <string name="pending_log_in_requests">Pedidos de início de sessão pendentes</string>
@@ -639,7 +662,7 @@ Pretende mudar para esta conta?</string>
     <string name="no_pending_requests">Sem pedidos pendentes</string>
     <string name="enable_camer_permission_to_use_the_scanner">Ative a permissão da câmara para utilizar o digitalizador</string>
     <string name="language">Idioma</string>
-    <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a app para ver as alterações</string>
+    <string name="language_change_x_description">O idioma foi alterado para %1$s. Reinicie a app para ver as alterações</string>
     <string name="default_system">Predefinido (Sistema)</string>
     <string name="weak_master_password">Palavra-passe mestra fraca</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Foi identificada uma palavra-passe fraca. Utilize uma palavra-passe forte para proteger a sua conta. Tem a certeza de que pretende utilizar uma palavra-passe fraca?</string>
@@ -686,6 +709,7 @@ Pretende mudar para esta conta?</string>
     <string name="logging_in_on">A iniciar sessão em</string>
     <string name="logging_in_on_with_colon">A iniciar sessão em:</string>
     <string name="vault">Cofre</string>
+    <string name="select_vault">Selecionar cofre</string>
     <string name="appearance">Aspeto</string>
     <string name="account_security">Segurança da conta</string>
     <string name="bitwarden_help_center">Centro de ajuda do Bitwarden</string>
@@ -712,7 +736,7 @@ Pretende mudar para esta conta?</string>
     <string name="created_x">Criado a %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">A sua organização exige a definição de uma palavra-passe mestra.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</string>
-    <string name="save_passkey_as_new_login">Guarde a chave de acesso como uma nova credencial</string>
+    <string name="save_passkey_as_new_login">Guardar chave de acesso como nova credencial</string>
     <string name="overwrite_passkey">Substituir chave de acesso?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Este item já contém uma chave de acesso. Tem a certeza de que pretende substituir a chave de acesso atual?</string>
     <string name="duo_two_step_login_is_required_for_your_account">A verificação de dois passos Duo é necessária para a sua conta.</string>
@@ -793,7 +817,7 @@ Pretende mudar para esta conta?</string>
         <item quantity="other">%d caracteres</item>
     </plurals>
     <string name="expired_link">Link expirado</string>
-    <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
+    <string name="please_restart_registration_or_try_logging_in">Reinicie o registo ou tente iniciar sessão. Pode já ter uma conta.</string>
     <string name="restart_registration">Reiniciar registo</string>
     <string name="authenticator_sync">Sincronização do autenticador</string>
     <string name="allow_bitwarden_authenticator_syncing">Permitir a sincronização do autenticador</string>
@@ -990,7 +1014,7 @@ Pretende mudar para esta conta?</string>
     <string name="delete_all">Eliminar tudo</string>
     <string name="share_all">Partilhar tudo</string>
     <string name="unable_to_share">Não é possível partilhar</string>
-    <string name="please_try_again_or_select_a_different_log">Por favor, tente novamente ou selecione um registo diferente.</string>
+    <string name="please_try_again_or_select_a_different_log">Tente novamente ou selecione outro registo.</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">O ficheiro de registo que está a tentar partilhar foi removido.</string>
     <string name="delete_log">Eliminar registo</string>
     <string name="do_you_really_want_to_delete_this_log">Pretende realmente eliminar este registo?</string>
@@ -998,8 +1022,8 @@ Pretende mudar para esta conta?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Pretende realmente eliminar todos os registos gravados?</string>
     <string name="confirm_key_connector_domain">Confirmar o domínio do Key Connector</string>
     <string name="key_connector_domain">Domínio do Key Connector</string>
-    <string name="your_organization_no_longer_requires_a_master_password">A sua organização já não requer uma palavra-passe mestra para os seus membros. Por favor, verifique o domínio abaixo com o seu administrador e introduza a sua palavra-passe mestra para continuar.</string>
-    <string name="please_confirm_domain_with_admin">Por favor, confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
+    <string name="your_organization_no_longer_requires_a_master_password">A sua organização já não requer uma palavra-passe mestra para os seus membros. Verifique o domínio abaixo com o seu administrador e introduza a sua palavra-passe mestra para continuar.</string>
+    <string name="please_confirm_domain_with_admin">Confirme o domínio abaixo com o administrador da sua organização.\n\nDomínio do Key Connector:\n%1$s</string>
     <string name="flight_recorder_banner_title">Gravador de voo ativado</string>
     <string name="flight_recorder_banner_message">O gravador de voo estará ativo até %1$s a %2$s. Regresse às definições para o desativar agora.</string>
     <string name="go_to_settings">Ir para as definições</string>
@@ -1020,7 +1044,7 @@ Pretende mudar para esta conta?</string>
     <string name="use_dynamic_colors">Utilizar cores dinâmicas</string>
     <string name="use_dynamic_colors_question">Utilizar cores dinâmicas?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Este esquema de cores aplica automaticamente as cores do sistema ao Bitwarden com base no seu papel de parede atual. Essas cores podem não atender a todas as diretrizes de acessibilidade.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione “Confiar” para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação com a chave de acesso falhou porque o navegador (%1$s) não é reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações consideradas fidedignas localmente.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>
     <string name="trusted_by_you_learn_more">Estas são aplicações ou navegadores em que o Bitwarden não confia por defeito, mas que são confiadas por si para realizar operações de chave de acesso.</string>
@@ -1106,8 +1130,8 @@ Pretende mudar para esta conta?</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com a app Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Permita a sincronização da app Authenticator nas definições para visualizar todos os seus códigos de verificação aqui.</string>
     <string name="take_me_to_app_settings">Ir às definições da app</string>
-    <string name="something_went_wrong">Alguma coisa correu mal</string>
-    <string name="please_try_again">Por favor, tente novamente</string>
+    <string name="something_went_wrong">Ocorreu um problema</string>
+    <string name="please_try_again">Tente novamente</string>
     <string name="copy_to_bitwarden_vault">Copiar para o cofre Bitwarden</string>
     <string name="default_save_option">Opção de guardar predefinida</string>
     <string name="save_to_bitwarden">Guardar no Bitwarden</string>
@@ -1124,11 +1148,6 @@ Pretende mudar para esta conta?</string>
     <string name="file_could_not_be_processed">O ficheiro não pôde ser processado</string>
     <string name="file_could_not_be_processed_message">O ficheiro não pôde ser processado. Certifique-se de que se trata de um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help</string>
     <string name="get_help">Obter ajuda</string>
-    <string name="expand_advanced_options">Expandir opções avançadas</string>
-    <string name="local_items_are_expanded_click_to_collapse">Os itens locais estão expandidos, clique para recolher.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
-    <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
-    <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
     <string name="error_cannot_decrypt">[erro: não é possível desencriptar]</string>
     <string name="copy_error_report">Copiar relatório de erros</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">O Bitwarden não conseguiu desencriptar este item do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</string>
@@ -1137,6 +1156,7 @@ Pretende mudar para esta conta?</string>
         <item quantity="other">O Bitwarden não conseguiu desencriptar %1$d itens do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</item>
     </plurals>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="choose_an_identity">Escolher uma identidade</string>
     <string name="advanced_options">Opções avançadas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais informações sobre a deteção de correspondências</annotation></string>
     <string name="keep_your_credential_secure">Mantenha as suas credenciais seguras</string>
@@ -1158,7 +1178,7 @@ Pretende mudar para esta conta?</string>
     <string name="vault_sync_unsuccessful">Falha na sincronização</string>
     <string name="vault_sync_failed_description">Não foi possível sincronizar o seu cofre com o servidor. O seu cofre poderá não refletir as alterações mais recentes. Pode tentar novamente agora ou a sincronização será efetuada automaticamente mais tarde.</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Os seus itens foram importados com sucesso, mas não serão visíveis no seu cofre até que a sincronização seja efetuada.</string>
-    <string name="there_was_a_problem_importing_your_items">Ocorreu um problema ao importar os seus itens. Por favor, tente novamente. Se o problema persistir, contacte o suporte.</string>
+    <string name="there_was_a_problem_importing_your_items">Ocorreu um problema ao importar os seus itens. Tente novamente. Se o problema persistir, contacte o suporte.</string>
     <string name="saving_items">A guardar itens…</string>
     <string name="unable_to_import_your_items">Não é possível importar os seus itens</string>
     <string name="import_from_computer">Importar do computador</string>
@@ -1185,8 +1205,8 @@ Pretende mudar para esta conta?</string>
     <string name="passwords">Palavras-passe</string>
     <string name="passkeys">Chaves de acesso</string>
     <string name="why_is_this_step_required">Porque é que este passo é necessário?</string>
-    <string name="kdf_update_failed_active_account_not_found">Falha na atualização do Kdf, conta ativa não encontrada. Por favor, tente novamente ou entre em contacto connosco.</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas configurações kdf. Por favor, tente novamente ou entre em contacto connosco.</string>
+    <string name="kdf_update_failed_active_account_not_found">A atualização do KDF falhou porque não foi encontrada nenhuma conta ativa. Tente novamente ou contacte-nos.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Ocorreu um erro ao tentar atualizar as suas definições de KDF. Tente novamente ou contacte-nos.</string>
     <string name="the_import_request_could_not_be_processed">O pedido de importação não pôde ser processado.</string>
     <string name="your_vault_may_be_empty_or_import_some_item_types_isnt_supported">O seu cofre pode estar vazio ou a importação de alguns tipos de itens pode não ser permitida para a sua conta.</string>
     <string name="no_items_available_to_import">Não há itens disponíveis para importar</string>
@@ -1237,8 +1257,9 @@ Pretende mudar para esta conta?</string>
     <string name="items_transferred">Itens transferidos</string>
     <string name="updated_master_password">Palavra-passe mestra atualizada</string>
     <string name="invalid_email_addresses">Endereços de e-mail inválidos</string>
-    <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Por favor, verifique e tente novamente.</string>
+    <string name="one_or_more_email_addresses_are_incorrect">Um ou mais endereços de e-mail estão incorretos. Reveja-os e tente novamente.</string>
     <string name="no_email_addresses_entered">Nenhum endereço de e-mail introduzido</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Inclua apenas os seguintes domínios: %1$s. Reveja-os e tente novamente.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Introduza pelo menos um endereço de e-mail válido para partilhar este Send.</string>
     <string name="sync_with_browser">Sincronizar com o navegador</string>
     <string name="sync_with_browser_description">Para ligar a %1$s, sincronize o seu navegador predefinido com a app móvel Bitwarden. Quando o navegador abrir, conclua a sessão, se lhe for solicitado.\nApós a sincronização estar concluída, regressará a esta aplicação.</string>
@@ -1325,16 +1346,16 @@ Pretende mudar para esta conta?</string>
     <string name="subscription_unpaid_description">A sua subscrição foi suspensa em <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Para a reativar, regularize as faturas em atraso.</string>
     <string name="subscription_update_payment_description">Não foi possível processar o seu pagamento. Atualize o seu método de pagamento antes de a sua subscrição terminar a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
-        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
-        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Por favor, resolva as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="one">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dia a partir da data de expiração da sua subscrição. Regulzarize as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
+        <item quantity="other">Dispõe de um período de tolerância de <annotation arg="0">%1$d</annotation> dias a partir da data de expiração da sua subscrição. Regulzarize as faturas em atraso até <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation>.</item>
     </plurals>
     <string name="subscription_paused_description">A sua subscrição está suspensa. Reative-a para continuar a utilizar as funcionalidades Premium.</string>
     <string name="subscription_expired_description">A sua subscrição expirou a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Volte a subscrever para continuar a utilizar funcionalidades Premium.</string>
     <string name="loading_subscription">A carregar subscrição…</string>
     <string name="loading_portal">A carregar portal…</string>
-    <string name="portal_error">Alguma coisa correu mal</string>
+    <string name="portal_error">Ocorreu um problema</string>
     <string name="trouble_loading_portal">Tivemos problemas ao carregar o portal de gestão, por isso tente novamente.</string>
-    <string name="trouble_loading_subscription">Não foi possível carregar os detalhes da sua subscrição. Por favor, tente novamente.</string>
+    <string name="trouble_loading_subscription">Não foi possível carregar os detalhes da sua subscrição. Tente novamente.</string>
     <string name="view_bank_account">Ver conta bancária</string>
     <string name="view_license">Ver carta de condução</string>
     <string name="view_passport">Ver passaporte</string>
@@ -1390,7 +1411,7 @@ Pretende mudar para esta conta?</string>
     <string name="licenses">Cartas de condução</string>
     <string name="no_licenses">Não existem cartas de condução no seu cofre.</string>
     <string name="no_passports">Não existem passaportes no seu cofre.</string>
-    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">O seu pedido foi interrompido porque a app precisou de voltar a autenticar. Por favor, tente novamente.</string>
+    <string name="your_request_was_interrupted_because_the_app_needed_to_reauthenticate">O seu pedido foi interrompido porque a app teve de voltar a autenticar-se. Tente novamente.</string>
     <string name="passport_details">Detalhes do passaporte</string>
     <string name="sex">Género</string>
     <string name="birth_place">Local de nascimento</string>
@@ -1416,4 +1437,15 @@ Pretende mudar para esta conta?</string>
     <string name="receive_24_7_priority_support">Receba suporte prioritário 24/7</string>
     <string name="account_creation_restricted">Criação de conta restringida</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s apenas permite que utilizadores convidados criem contas.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Diminuir %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Aumentar %1$s</string>
+    <string name="use_this_passphrase">Utilizar esta frase de acesso</string>
+    <string name="use_this_password">Utilizar esta palavra-passe</string>
+    <string name="use_this_username">Utilizar este nome de utilizador</string>
+    <string name="create_login">Criar credencial</string>
+    <string name="keep_unlocking_with_biometrics">Continuar a desbloquear com biometria</string>
+    <string name="weve_made_a_security_update">Fizemos uma atualização de segurança. Confirme novamente a sua biometria para continuar a utilizá-la para desbloquear o Bitwarden.</string>
+    <string name="turn_off">Desativar</string>
+    <string name="turn_off_biometric_question">Desativar a biometria?</string>
+    <string name="unlocking_will_require_your_master_password">Para desbloquear, terá de introduzir a sua palavra-passe mestra. Pode voltar a ativar a biometria nas Definições.</string>
 </resources>

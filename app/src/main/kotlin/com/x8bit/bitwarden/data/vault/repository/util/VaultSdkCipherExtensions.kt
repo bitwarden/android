@@ -43,12 +43,14 @@ import com.bitwarden.vault.UriMatchType
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
- * [SyncResponseJson.Cipher] object.
+ * [CipherJsonRequest] object.
  *
  * @param encryptedFor The ID of the user who this cipher is encrypted by.
+ * @param encryptedByKeyId The ID of the key this cipher is encrypted by.
  */
 fun Cipher.toEncryptedNetworkCipher(
     encryptedFor: String,
+    encryptedByKeyId: String?,
 ): CipherJsonRequest =
     CipherJsonRequest(
         notes = notes,
@@ -76,6 +78,7 @@ fun Cipher.toEncryptedNetworkCipher(
         archivedDate = archivedDate,
         data = data,
         encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
     )
 
 /**
@@ -122,29 +125,51 @@ fun Cipher.toEncryptedNetworkCipherResponse(
     )
 
 /**
- * Updates a [SyncResponseJson.Cipher] with metadata from a
- * [CipherMiniResponseJson.CipherMiniResponse].
+ * Converts a [CipherMiniResponseJson.CipherMiniResponse] into a [SyncResponseJson.Cipher],
+ * taking fields the mini response lacks (folder, favorite, edit, permissions, view password,
+ * encrypted for) from [originalCipher].
  * This is useful for updating local cipher data after bulk operations that return mini responses.
  *
- * @param miniResponse The mini response containing updated cipher metadata.
- * @param collectionIds Optional list of collection IDs to update.
- * If null, keeps existing collection IDs.
- * @return A new [SyncResponseJson.Cipher] with updated fields from the mini response.
+ * @param originalCipher The local cipher to take fields missing from the mini response from.
+ * @param collectionIds Optional list of collection IDs to set.
+ * If null, keeps the collection IDs of [originalCipher].
+ * @return A new [SyncResponseJson.Cipher] built from the mini response.
  */
-fun SyncResponseJson.Cipher.updateFromMiniResponse(
-    miniResponse: CipherMiniResponseJson.CipherMiniResponse,
+fun CipherMiniResponseJson.CipherMiniResponse.toEncryptedNetworkCipher(
+    originalCipher: SyncResponseJson.Cipher,
     collectionIds: List<String>? = null,
-): SyncResponseJson.Cipher = copy(
-    organizationId = miniResponse.organizationId,
-    collectionIds = collectionIds ?: this.collectionIds,
-    revisionDate = miniResponse.revisionDate,
-    key = miniResponse.key,
-    attachments = miniResponse.attachments,
-    archivedDate = miniResponse.archivedDate,
-    deletedDate = miniResponse.deletedDate,
-    reprompt = miniResponse.reprompt,
-    shouldOrganizationUseTotp = miniResponse.shouldOrganizationUseTotp,
-    type = miniResponse.type,
+): SyncResponseJson.Cipher = SyncResponseJson.Cipher(
+    id = id,
+    organizationId = organizationId,
+    folderId = originalCipher.folderId,
+    collectionIds = collectionIds ?: originalCipher.collectionIds,
+    key = key,
+    name = name,
+    notes = notes,
+    type = type,
+    login = login,
+    identity = identity,
+    card = card,
+    secureNote = secureNote,
+    sshKey = sshKey,
+    bankAccount = bankAccount,
+    driversLicense = driversLicense,
+    passport = passport,
+    isFavorite = originalCipher.isFavorite,
+    reprompt = reprompt,
+    shouldOrganizationUseTotp = shouldOrganizationUseTotp,
+    shouldEdit = originalCipher.shouldEdit,
+    permissions = originalCipher.permissions,
+    shouldViewPassword = originalCipher.shouldViewPassword,
+    encryptedFor = originalCipher.encryptedFor,
+    attachments = attachments,
+    fields = fields,
+    passwordHistory = passwordHistory,
+    creationDate = creationDate,
+    deletedDate = deletedDate,
+    revisionDate = revisionDate,
+    archivedDate = archivedDate,
+    data = data,
 )
 
 /**
@@ -460,6 +485,7 @@ fun List<SyncResponseJson.Cipher>.toEncryptedSdkCipherList(): List<Cipher> =
  * Converts a [SyncResponseJson.Cipher] object to a corresponding
  * Bitwarden SDK [Cipher] object.
  */
+@Suppress("DEPRECATION")
 fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
     Cipher(
         id = id,
@@ -493,6 +519,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         revisionDate = revisionDate,
         archivedDate = archivedDate,
         data = data,
+        partialData = null,
     )
 
 /**
@@ -810,7 +837,10 @@ fun List<CipherListView>.sortAlphabetically(): List<CipherListView> {
  * object.
  */
 fun EncryptionContext.toEncryptedNetworkCipher(): CipherJsonRequest =
-    cipher.toEncryptedNetworkCipher(encryptedFor = encryptedFor)
+    cipher.toEncryptedNetworkCipher(
+        encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
+    )
 
 /**
  * Converts a Bitwarden SDK [EncryptionContext] object to a corresponding [SyncResponseJson.Cipher]
@@ -831,7 +861,6 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds,
-        key = key,
         name = name.orEmpty(),
         subtitle = "",
         type = when (type) {
@@ -878,4 +907,5 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         revisionDate = revisionDate,
         copyableFields = emptyList(),
         archivedDate = archivedDate,
+        partial = false,
     )

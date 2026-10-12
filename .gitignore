@@ -30,6 +30,11 @@ Thumbs.db
 local.properties
 user.properties
 
+# Claude
+.claude/worktrees
+.claude/plans
+.claude/outputs/plans
+
 # Secrets
 /keystores/*.jks
 /app/src/standardBeta/google-services.json

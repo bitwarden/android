@@ -36,10 +36,14 @@ class LoginResultExtensionsTest {
         val genericErrorResult = VaultUnlockResult.GenericError(error = error).toLoginErrorResult()
         val biometricErrorResult =
             VaultUnlockResult.BiometricDecodingError(error = error).toLoginErrorResult()
+        val keystoreAuthorizationResult = VaultUnlockResult
+            .BiometricKeystoreAuthorizationError(error = error)
+            .toLoginErrorResult()
         val expectedResult = LoginResult.Error(error = error)
 
         assertEquals(expectedResult, invalidStateResult)
         assertEquals(expectedResult, genericErrorResult)
         assertEquals(expectedResult, biometricErrorResult)
+        assertEquals(expectedResult, keystoreAuthorizationResult)
     }
 }

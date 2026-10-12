@@ -39,6 +39,7 @@ import java.time.Instant
 @Suppress("LargeClass")
 class AuthDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
+    private val fakeKeystoreEncryptedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences().apply {
         edit(commit = true) {
             putString("bwPreferencesStorage:masterKeyEncryptedUserKey", "testUserKey")
@@ -52,6 +53,7 @@ class AuthDiskSourceTest {
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
+        keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
         sharedPreferences = fakeSharedPreferences,
         legacySecureStorageMigrator = legacySecureStorageMigrator,
         json = json,
@@ -60,6 +62,42 @@ class AuthDiskSourceTest {
     @Test
     fun `initialization should kick off a legacy migration if necessary`() {
         verify(exactly = 1) { legacySecureStorageMigrator.migrateIfNecessary() }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `initialization should migrate legacy encrypted values to the keystore encrypted preferences`() {
+        val mockUserId = "mockUserId"
+        val legacyValues = mapOf(
+            "authenticatorSyncSymmetric" to "mockSyncSymmetricKey",
+            "authenticatorSyncUnlock_$mockUserId" to "mockSyncUnlockKey",
+            "accountCryptographicState_$mockUserId" to "mockCryptographicState",
+            "userKeyAutoUnlock_$mockUserId" to "mockUserAutoUnlockKey",
+            "deviceKey_$mockUserId" to "mockDeviceKey",
+            "pendingAdminAuthRequest_$mockUserId" to "mockPendingAuthRequest",
+            "biometricInitializationVector_$mockUserId" to "mockInitVector",
+            "userKeyBiometricUnlock_$mockUserId" to "mockBiometricsKey",
+            "accountTokens_$mockUserId" to "mockAccountTokens",
+        )
+        fakeEncryptedSharedPreferences.edit {
+            legacyValues.forEach { (key, value) ->
+                putString("bwSecureStorage:$key", value)
+            }
+        }
+
+        AuthDiskSourceImpl(
+            encryptedSharedPreferences = fakeEncryptedSharedPreferences,
+            keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
+            sharedPreferences = fakeSharedPreferences,
+            legacySecureStorageMigrator = legacySecureStorageMigrator,
+            json = json,
+        )
+
+        // The values are moved to the keystore encrypted preferences without the legacy prefix.
+        assertTrue(fakeEncryptedSharedPreferences.all.isEmpty())
+        legacyValues.forEach { (key, value) ->
+            assertEquals(value, fakeKeystoreEncryptedPreferences.getString(key, null))
+        }
     }
 
     @Test
@@ -339,6 +377,12 @@ class AuthDiskSourceTest {
                 wrappedUserKey2 = "wrappedUserKey2",
             ),
         )
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = "userKeyId")
+        val gracePeriodStart = Instant.parse("2025-01-13T12:00:00Z")
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = gracePeriodStart,
+        )
 
         authDiskSource.clearData(userId = userId)
 
@@ -349,6 +393,10 @@ class AuthDiskSourceTest {
         assertEquals(
             OnboardingStatus.AUTOFILL_SETUP,
             authDiskSource.getOnboardingStatus(userId = userId),
+        )
+        assertEquals(
+            gracePeriodStart,
+            authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = userId),
         )
 
         // These should be cleared
@@ -372,6 +420,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getV2UpgradeToken(userId = userId))
+        assertNull(authDiskSource.getUserKeyId(userId = userId))
     }
 
     @Test
@@ -455,12 +504,12 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getAccountCryptographicState should pull from SharedPreferences`() {
-        val accountKeysBaseKey = "bwSecureStorage:accountCryptographicState"
+        val accountKeysBaseKey = "accountCryptographicState"
         val mockUserId = "mockUserId"
         val mockAccountCryptographicState = WrappedAccountCryptographicState.V1(
             privateKey = "privateKey",
         )
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString(
                 "${accountKeysBaseKey}_$mockUserId",
                 json.encodeToString(
@@ -478,7 +527,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeAccountCryptographicState should update sharedPreferences`() {
-        val accountKeysBaseKey = "bwSecureStorage:accountCryptographicState"
+        val accountKeysBaseKey = "accountCryptographicState"
         val mockUserId = "mockUserId"
         val mockAccountCryptographicState = WrappedAccountCryptographicState.V1(
             privateKey = "privateKey",
@@ -487,7 +536,7 @@ class AuthDiskSourceTest {
             userId = mockUserId,
             accountCryptographicState = mockAccountCryptographicState,
         )
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             "${accountKeysBaseKey}_$mockUserId",
             null,
         )
@@ -498,6 +547,28 @@ class AuthDiskSourceTest {
             ),
             json.parseToJsonElement(requireNotNull(actual)),
         )
+    }
+
+    @Test
+    fun `getUserKeyId should pull from SharedPreferences`() {
+        val userKeyIdBaseKey = "bwPreferencesStorage:userKeyId"
+        val mockUserId = "mockUserId"
+        val mockUserKeyId = "mockUserKeyId"
+        fakeSharedPreferences.edit {
+            putString("${userKeyIdBaseKey}_$mockUserId", mockUserKeyId)
+        }
+        val actual = authDiskSource.getUserKeyId(userId = mockUserId)
+        assertEquals(mockUserKeyId, actual)
+    }
+
+    @Test
+    fun `storeUserKeyId should update SharedPreferences`() {
+        val userKeyIdBaseKey = "bwPreferencesStorage:userKeyId"
+        val mockUserId = "mockUserId"
+        val mockUserKeyId = "mockUserKeyId"
+        authDiskSource.storeUserKeyId(userId = mockUserId, userKeyId = mockUserKeyId)
+        val actual = fakeSharedPreferences.getString("${userKeyIdBaseKey}_$mockUserId", null)
+        assertEquals(mockUserKeyId, actual)
     }
 
     @Test
@@ -580,10 +651,10 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getUserAutoUnlockKey should pull from SharedPreferences`() {
-        val userAutoUnlockKeyBaseKey = "bwSecureStorage:userKeyAutoUnlock"
+        val userAutoUnlockKeyBaseKey = "userKeyAutoUnlock"
         val mockUserId = "mockUserId"
         val mockUserAutoUnlockKey = "mockUserAutoUnlockKey"
-        fakeEncryptedSharedPreferences
+        fakeKeystoreEncryptedPreferences
             .edit {
                 putString(
                     "${userAutoUnlockKeyBaseKey}_$mockUserId",
@@ -599,14 +670,14 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeUserAutoUnlockKey should update SharedPreferences`() {
-        val userAutoUnlockKeyBaseKey = "bwSecureStorage:userKeyAutoUnlock"
+        val userAutoUnlockKeyBaseKey = "userKeyAutoUnlock"
         val mockUserId = "mockUserId"
         val mockUserAutoUnlockKey = "mockUserAutoUnlockKey"
         authDiskSource.storeUserAutoUnlockKey(
             userId = mockUserId,
             userAutoUnlockKey = mockUserAutoUnlockKey,
         )
-        val actual = fakeEncryptedSharedPreferences
+        val actual = fakeKeystoreEncryptedPreferences
             .getString(
                 "${userAutoUnlockKeyBaseKey}_$mockUserId",
                 null,
@@ -619,23 +690,23 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getDeviceKey should pull from SharedPreferences`() {
-        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val deviceKeyBaseKey = "deviceKey"
         val mockUserId = "mockUserId"
         val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
         val devicesKey = "1234"
-        fakeEncryptedSharedPreferences.edit { putString(deviceKeyKey, devicesKey) }
+        fakeKeystoreEncryptedPreferences.edit { putString(deviceKeyKey, devicesKey) }
         val actual = authDiskSource.getDeviceKey(userId = mockUserId)
         assertEquals(devicesKey, actual)
     }
 
     @Test
     fun `storeDeviceKey for non-null values should update SharedPreferences`() {
-        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val deviceKeyBaseKey = "deviceKey"
         val mockUserId = "mockUserId"
         val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
         val devicesKey = "1234"
         authDiskSource.storeDeviceKey(userId = mockUserId, deviceKey = devicesKey)
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = deviceKeyKey,
             defaultValue = null,
         )
@@ -644,21 +715,21 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeDeviceKey for null values should clear SharedPreferences`() {
-        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val deviceKeyBaseKey = "deviceKey"
         val mockUserId = "mockUserId"
         val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
         val deviceKey = "1234"
-        fakeEncryptedSharedPreferences.edit { putString(deviceKeyKey, deviceKey) }
+        fakeKeystoreEncryptedPreferences.edit { putString(deviceKeyKey, deviceKey) }
         authDiskSource.storeDeviceKey(userId = mockUserId, deviceKey = null)
-        assertFalse(fakeEncryptedSharedPreferences.contains(deviceKeyKey))
+        assertFalse(fakeKeystoreEncryptedPreferences.contains(deviceKeyKey))
     }
 
     @Test
     fun `getPendingAuthRequest should pull from SharedPreferences`() {
-        val pendingAdminAuthRequestBaseKey = "bwSecureStorage:pendingAdminAuthRequest"
+        val pendingAdminAuthRequestBaseKey = "pendingAdminAuthRequest"
         val mockUserId = "mockUserId"
         val pendingAdminAuthRequestKey = "${pendingAdminAuthRequestBaseKey}_$mockUserId"
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString(
                 pendingAdminAuthRequestKey,
                 """
@@ -685,7 +756,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storePendingAuthRequest for non-null values should update SharedPreferences`() {
-        val pendingAdminAuthRequestKeyBaseKey = "bwSecureStorage:pendingAdminAuthRequest"
+        val pendingAdminAuthRequestKeyBaseKey = "pendingAdminAuthRequest"
         val mockUserId = "mockUserId"
         val pendingAuthRequestKey = "${pendingAdminAuthRequestKeyBaseKey}_$mockUserId"
         val pendingAdminAuthRequest = PendingAuthRequestJson(
@@ -698,7 +769,7 @@ class AuthDiskSourceTest {
             userId = mockUserId,
             pendingAuthRequest = pendingAdminAuthRequest,
         )
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = pendingAuthRequestKey,
             defaultValue = null,
         )
@@ -720,11 +791,11 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getUserBiometricUnlockKey should pull from SharedPreferences`() {
-        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val biometricsKeyBaseKey = "userKeyBiometricUnlock"
         val mockUserId = "mockUserId"
         val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
         val biometricsKey = "1234"
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString(biometricsKeyKey, biometricsKey)
         }
         val actual = authDiskSource.getUserBiometricUnlockKey(userId = mockUserId)
@@ -752,12 +823,12 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeUserBiometricInitVector for non-null values should update SharedPreferences`() {
-        val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
+        val biometricsInitVectorBaseKey = "biometricInitializationVector"
         val mockUserId = "mockUserId"
         val biometricsInitVectorKey = "${biometricsInitVectorBaseKey}_$mockUserId"
         val initVector = byteArrayOf(1, 2)
         authDiskSource.storeUserBiometricInitVector(userId = mockUserId, iv = initVector)
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = biometricsInitVectorKey,
             defaultValue = null,
         )
@@ -766,20 +837,20 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeUserBiometricInitVector for null values should clear SharedPreferences`() {
-        val biometricsInitVectorBaseKey = "bwSecureStorage:biometricInitializationVector"
+        val biometricsInitVectorBaseKey = "biometricInitializationVector"
         val mockUserId = "mockUserId"
         val biometricsInitVectorKey = "${biometricsInitVectorBaseKey}_$mockUserId"
         val initVector = "1234"
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString(biometricsInitVectorKey, initVector)
         }
         authDiskSource.storeUserBiometricInitVector(userId = mockUserId, iv = null)
-        assertFalse(fakeEncryptedSharedPreferences.contains(biometricsInitVectorKey))
+        assertFalse(fakeKeystoreEncryptedPreferences.contains(biometricsInitVectorKey))
     }
 
     @Test
     fun `storeUserBiometricUnlockKey for non-null values should update SharedPreferences`() {
-        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val biometricsKeyBaseKey = "userKeyBiometricUnlock"
         val mockUserId = "mockUserId"
         val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
         val biometricsKey = "1234"
@@ -787,7 +858,7 @@ class AuthDiskSourceTest {
             userId = mockUserId,
             biometricsKey = biometricsKey,
         )
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = biometricsKeyKey,
             defaultValue = null,
         )
@@ -796,18 +867,18 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeUserBiometricUnlockKey for null values should clear SharedPreferences`() {
-        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val biometricsKeyBaseKey = "userKeyBiometricUnlock"
         val mockUserId = "mockUserId"
         val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
         val biometricsKey = "1234"
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString(biometricsKeyKey, biometricsKey)
         }
         authDiskSource.storeUserBiometricUnlockKey(
             userId = mockUserId,
             biometricsKey = null,
         )
-        assertFalse(fakeEncryptedSharedPreferences.contains(biometricsKeyKey))
+        assertFalse(fakeKeystoreEncryptedPreferences.contains(biometricsKeyKey))
     }
 
     @Suppress("MaxLineLength")
@@ -1233,13 +1304,13 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getAccountTokens should pull from SharedPreferences`() {
-        val baseKey = "bwSecureStorage:accountTokens"
+        val baseKey = "accountTokens"
         val mockUserId = "mockUserId"
         val accountTokens = AccountTokensJson(
             accessToken = "accessToken",
             refreshToken = "refreshToken",
         )
-        fakeEncryptedSharedPreferences.edit {
+        fakeKeystoreEncryptedPreferences.edit {
             putString("${baseKey}_$mockUserId", json.encodeToString(accountTokens))
         }
         val actual = authDiskSource.getAccountTokens(userId = mockUserId)
@@ -1276,7 +1347,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeAccountTokens should update SharedPreferences`() {
-        val baseKey = "bwSecureStorage:accountTokens"
+        val baseKey = "accountTokens"
         val mockUserId = "mockUserId"
         val accountTokens = AccountTokensJson(
             accessToken = "accessToken",
@@ -1286,7 +1357,7 @@ class AuthDiskSourceTest {
             userId = mockUserId,
             accountTokens = accountTokens,
         )
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = "${baseKey}_$mockUserId",
             defaultValue = null,
         )
@@ -1298,10 +1369,10 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getAuthenticatorSyncUnlockKey should pull from SharedPreferences`() {
-        val authenticatorSyncUnlockKey = "bwSecureStorage:authenticatorSyncUnlock"
+        val authenticatorSyncUnlockKey = "authenticatorSyncUnlock"
         val mockUserId = "mockUserId"
         val mockAuthenticatorSyncUnlockKey = "mockAuthSyncUnlockKey"
-        fakeEncryptedSharedPreferences
+        fakeKeystoreEncryptedPreferences
             .edit {
                 putString(
                     "${authenticatorSyncUnlockKey}_$mockUserId",
@@ -1317,7 +1388,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeAuthenticatorSyncUnlockKey should update SharedPreferences`() {
-        val authenticatorSyncUnlockKey = "bwSecureStorage:authenticatorSyncUnlock"
+        val authenticatorSyncUnlockKey = "authenticatorSyncUnlock"
         val mockUserId = "mockUserId"
         val mockAuthenticatorSyncUnlockKey = "mockAuthSyncUnlockKey"
         authDiskSource.storeAuthenticatorSyncUnlockKey(
@@ -1325,7 +1396,7 @@ class AuthDiskSourceTest {
             authenticatorSyncUnlockKey = mockAuthenticatorSyncUnlockKey,
         )
 
-        val actual = fakeEncryptedSharedPreferences.getString(
+        val actual = fakeKeystoreEncryptedPreferences.getString(
             key = "${authenticatorSyncUnlockKey}_$mockUserId",
             defaultValue = null,
         )
@@ -1385,18 +1456,18 @@ class AuthDiskSourceTest {
 
     @Test
     fun `authenticatorSyncSymmetricKey should store and update from EncryptedSharedPreferences`() {
-        val sharedPrefsKey = "bwSecureStorage:authenticatorSyncSymmetric"
+        val sharedPrefsKey = "authenticatorSyncSymmetric"
 
         // Shared preferences and the repository start with the same value:
         assertNull(authDiskSource.authenticatorSyncSymmetricKey)
-        assertNull(fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null))
+        assertNull(fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null))
 
         // Updating the repository updates shared preferences:
         val symmetricKey = generateSecretKey().getOrThrow().encoded
         authDiskSource.authenticatorSyncSymmetricKey = symmetricKey
         assertEquals(
             symmetricKey.toString(Charsets.ISO_8859_1),
-            fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null),
+            fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null),
         )
 
         // Retrieving the key from repository should give same byte array despite String conversion:
@@ -1494,6 +1565,61 @@ class AuthDiskSourceTest {
         )
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertNull(actual)
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should pull from SharedPreferences`() {
+        val storeKey = "bwPreferencesStorage:v2EncryptedMigrationsGracePeriodStart"
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+        fakeSharedPreferences.edit {
+            putLong("${storeKey}_$mockUserId", expectedState.toEpochMilli())
+        }
+
+        val actual = authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId)
+
+        assertEquals(expectedState, actual)
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should pull null when there is no data`() {
+        val mockUserId = "mockUserId"
+
+        val actual = authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId)
+
+        assertNull(actual)
+    }
+
+    @Test
+    fun `storeV2EncryptedMigrationsGracePeriodStart should update SharedPreferences`() {
+        val mockUserId = "mockUserId"
+        val expectedState = Instant.parse("2025-01-13T12:00:00Z")
+
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = expectedState,
+        )
+
+        assertEquals(
+            expectedState,
+            authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeV2EncryptedMigrationsGracePeriodStart should clear the value when null is passed`() {
+        val mockUserId = "mockUserId"
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = Instant.parse("2025-01-13T12:00:00Z"),
+        )
+
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = mockUserId,
+            gracePeriodStart = null,
+        )
+
+        assertNull(authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = mockUserId))
     }
 }
 

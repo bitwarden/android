@@ -15,6 +15,9 @@ import kotlinx.serialization.encoding.Encoder
  * - `"v1"`: [WrappedAccountCryptographicState.V1] — wrapped private key only.
  * - `"v2"`: [WrappedAccountCryptographicState.V2] — wrapped private key, signing key, signed
  *   public key, and signed security state.
+ *
+ * All `"v2"` properties are required. Decoding a `"v2"` payload that is missing any of them fails
+ * with a `SerializationException` rather than producing a partial state.
  */
 internal class WrappedAccountCryptographicStateSerializer :
     KSerializer<WrappedAccountCryptographicState> {
@@ -77,7 +80,7 @@ private sealed class Surrogate {
         val signingKey: String,
 
         @SerialName("signedPublicKey")
-        val signedPublicKey: String?,
+        val signedPublicKey: String,
 
         @SerialName("securityState")
         val securityState: String,

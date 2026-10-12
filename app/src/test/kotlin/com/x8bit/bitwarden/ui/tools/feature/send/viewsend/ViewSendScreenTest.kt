@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
@@ -103,6 +104,163 @@ class ViewSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = message)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should not be displayed by default`() {
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `policy restriction banner should display the copy required explanation`() {
+        mutableStateFlow.update { it.copy(isSendDisabled = true, isSendControlsEnabled = true) }
+
+        // Both flags are required, so the banner is still absent until enforcement is enabled.
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(isSendControlsExistingSendsEnabled = true) }
+
+        composeTestRule
+            .onNodeWithText(text = "Organization policy restriction")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "To edit this Send, make a copy. If this Send can expire at the set " +
+                    "deletion date, no action is needed.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should display the not compliant explanation for a file send`() {
+        mutableStateFlow.update {
+            it.copy(
+                sendType = SendItemType.FILE,
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                text = "This Send is not compliant with your organization’s Send policy and will " +
+                    "automatically expire at the set deletion date.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `policy restriction banner should display the type not allowed explanation`() {
+        mutableStateFlow.update {
+            it.copy(
+                allowedSendTypes = listOf(SendTypeJson.FILE),
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                text = "Text Sends are not allowed for your organization and this Send will " +
+                    "automatically expire at the set deletion date.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `make a copy button should only be displayed when a copy is possible`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // A file send cannot be copied, so the action is not offered.
+        mutableStateFlow.update { it.copy(sendType = SendItemType.FILE) }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .assertDoesNotExist()
+
+        // Neither can a send whose type the policy no longer allows.
+        mutableStateFlow.update {
+            it.copy(sendType = SendItemType.TEXT, allowedSendTypes = listOf(SendTypeJson.FILE))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `on make a copy click should send MakeACopyClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Make a copy")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(ViewSendAction.MakeACopyClick)
+        }
+    }
+
+    @Test
+    fun `on NavigateToCopy event should navigate to add send in copy mode`() {
+        val sendType = SendItemType.TEXT
+        val sendId = "send_id"
+
+        mutableEventFlow.tryEmit(
+            ViewSendEvent.NavigateToCopy(sendType = sendType, sendId = sendId),
+        )
+
+        assertEquals(
+            AddEditSendRoute(sendId = sendId, sendType = sendType, modeType = ModeType.COPY),
+            onNavigateToAddEditRoute,
+        )
+    }
+
+    @Test
+    fun `edit fab should be hidden when a policy restriction applies`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Edit Send")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isSendDisabled = true,
+                isSendControlsEnabled = true,
+                isSendControlsExistingSendsEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Edit Send")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -289,6 +447,19 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `copy, share, and send link should be hidden when the send is disabled`() {
+        composeTestRule.onNodeWithText(text = "Copy").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Share").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Send link").performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(isSendDisabled = true) }
+
+        composeTestRule.onNodeWithText(text = "Copy").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Share").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Send link").assertDoesNotExist()
+    }
+
+    @Test
     fun `on copy notes click should send CopyNotesClick`() {
         composeTestRule
             .onNodeWithText(text = "Additional options")
@@ -357,4 +528,8 @@ private val DEFAULT_STATE = ViewSendState(
     viewState = DEFAULT_CONTENT_VIEW_STATE,
     dialogState = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
+    allowedSendTypes = null,
+    isSendDisabled = false,
+    isSendControlsEnabled = false,
+    isSendControlsExistingSendsEnabled = false,
 )

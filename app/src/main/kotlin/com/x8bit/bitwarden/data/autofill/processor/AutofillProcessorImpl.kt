@@ -97,12 +97,16 @@ class AutofillProcessorImpl(
 
                 when (autofillRequest) {
                     is AutofillRequest.Fillable -> {
-                        val intentSender = createAutofillSavedItemIntentSender(
-                            autofillAppInfo = autofillAppInfo,
-                            autofillSaveItem = autofillRequest.toAutofillSaveItem(),
-                        )
-
-                        saveCallback.onSuccess(intentSender)
+                        autofillRequest
+                            .toAutofillSaveItem()
+                            ?.let { autofillSaveItem ->
+                                createAutofillSavedItemIntentSender(
+                                    autofillAppInfo = autofillAppInfo,
+                                    autofillSaveItem = autofillSaveItem,
+                                )
+                            }
+                            ?.let { saveCallback.onSuccess(it) }
+                            ?: saveCallback.onSuccess()
                     }
 
                     AutofillRequest.Unfillable -> saveCallback.onSuccess()

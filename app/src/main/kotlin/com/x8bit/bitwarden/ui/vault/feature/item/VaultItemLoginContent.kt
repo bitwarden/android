@@ -264,7 +264,7 @@ private fun PasswordField(
                     style = BitwardenTheme.typography.labelMedium,
                     onClick = onCheckForBreachClick,
                     innerPadding = PaddingValues(all = 16.dp),
-                    cornerSize = 0.dp,
+                    shape = BitwardenTheme.shapes.contentBottom,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(tag = "LoginCheckPasswordButton"),
@@ -343,7 +343,7 @@ private fun TotpField(
                     onClick = onPremiumRequiredClick,
                     style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(all = 16.dp),
-                    cornerSize = 0.dp,
+                    shape = BitwardenTheme.shapes.contentBottom,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(tag = "TotpPremiumRequiredButton"),

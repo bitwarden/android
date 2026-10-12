@@ -136,7 +136,7 @@ fun AddEditSendScreen(
                         modifier = Modifier.testTag("SaveButton"),
                     )
                     BitwardenOverflowActionItem(
-                        isVisible = !state.isAddMode,
+                        isVisible = !state.isNewSend,
                         menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.remove_password),
@@ -173,9 +173,12 @@ fun AddEditSendScreen(
         when (val viewState = state.viewState) {
             is AddEditSendState.ViewState.Content -> AddEditSendContent(
                 state = viewState,
+                enforcedDeletionHours = state.enforcedDeletionHours,
+                enforcedWhoCanAccess = state.enforcedWhoCanAccess,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
-                isAddMode = state.isAddMode,
+                shouldHideEmailAddressToggle = state.shouldHideEmailAddressToggle,
+                isNewSend = state.isNewSend,
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,
                 permissionsManager = permissionsManager,

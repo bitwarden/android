@@ -9,7 +9,10 @@ import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
 import com.bitwarden.network.service.EventService
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
+import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -40,11 +43,6 @@ class OrganizationEventManagerTest {
     private val dispatcher = StandardTestDispatcher()
     private val fakeDispatcherManager = FakeDispatcherManager(io = dispatcher)
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(value = AuthState.Uninitialized)
-    private val authRepository = mockk<AuthRepository> {
-        every { activeUserId } returns USER_ID
-        every { authStateFlow } returns mutableAuthStateFlow
-        every { organizations } returns emptyList()
-    }
     private val mutableVaultItemStateFlow = MutableStateFlow<DataState<CipherView?>>(
         value = DataState.Loading,
     )
@@ -55,12 +53,26 @@ class OrganizationEventManagerTest {
     private val eventDiskSource = mockk<EventDiskSource> {
         coEvery { addOrganizationEvent(userId = any(), event = any()) } just runs
     }
+    private val authStateManager: AuthStateManager = mockk {
+        every { authStateFlow } returns mutableAuthStateFlow
+    }
+    private val fakeAuthDiskSource = FakeAuthDiskSource().apply {
+        userState = UserStateJson(
+            activeUserId = USER_ID,
+            accounts = mapOf(USER_ID to mockk()),
+        )
+    }
+    private val organizationManager: OrganizationManager = mockk {
+        every { organizations } returns emptyList()
+    }
 
     private val organizationEventManager: OrganizationEventManager = OrganizationEventManagerImpl(
         processLifecycleOwner = fakeLifecycleOwner,
         clock = fixedClock,
         dispatcherManager = fakeDispatcherManager,
-        authRepository = authRepository,
+        authDiskSource = fakeAuthDiskSource,
+        authStateManager = authStateManager,
+        organizationManager = organizationManager,
         vaultRepository = vaultRepository,
         eventService = eventService,
         eventDiskSource = eventDiskSource,
@@ -124,7 +136,7 @@ class OrganizationEventManagerTest {
 
     @Test
     fun `trackEvent should do nothing if there is no active user`() {
-        every { authRepository.activeUserId } returns null
+        fakeAuthDiskSource.userState = null
 
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientAutoFilled(
@@ -154,7 +166,7 @@ class OrganizationEventManagerTest {
     fun `trackEvent should do nothing if the active user has no organizations that use events`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
         val organization = createMockOrganization(number = 1)
-        every { authRepository.organizations } returns listOf(organization)
+        every { organizationManager.organizations } returns listOf(organization)
 
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientAutoFilled(
@@ -172,7 +184,7 @@ class OrganizationEventManagerTest {
     fun `trackEvent should do nothing if the cipher does not belong to an organization that uses events`() {
         mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
         val organization = createMockOrganization(number = 1, shouldUseEvents = true)
-        every { authRepository.organizations } returns listOf(organization)
+        every { organizationManager.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
 
@@ -195,7 +207,7 @@ class OrganizationEventManagerTest {
             id = "mockOrganizationId-1",
             shouldUseEvents = true,
         )
-        every { authRepository.organizations } returns listOf(organization)
+        every { organizationManager.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
 

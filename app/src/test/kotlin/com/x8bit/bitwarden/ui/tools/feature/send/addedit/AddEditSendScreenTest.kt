@@ -4,7 +4,6 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -23,6 +22,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
@@ -466,6 +466,117 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = true, deletionHours = 168)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should display the enforced option when the policy maps to one`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = true, deletionHours = 24)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "1 day")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom deletion date chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
+                isSendControlsEnabled = true,
+                deletionHours = 168,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deletion date chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(isSendControlsEnabled = false, deletionHours = 168)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(
+                text = "The Send will be permanently deleted on the specified date and time.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom deletion date chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
+                isSendControlsEnabled = false,
+                deletionHours = 168,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "This date is enforced by your organization")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(text = "Deletion date")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "1 hour")
+            .assertIsDisplayed()
+    }
+
     @Test
     fun `on name input change should send NameChange`() {
         composeTestRule
@@ -647,7 +758,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("\u2212")
+            .onNodeWithContentDescription("Decrease Maximum access count")
             .performScrollTo()
             .performClick()
     }
@@ -668,7 +779,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("\u2212")
+            .onNodeWithContentDescription("Decrease Maximum access count")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(2)) }
@@ -683,7 +794,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("+")
+            .onNodeWithContentDescription("Increase Maximum access count")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(1)) }
@@ -789,48 +900,93 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsOn()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `hide email toggle should be disabled according to state`() = runTest {
-        // Expand options section:
-        composeTestRule
-            .onNodeWithText("Additional options")
-            .performScrollTo()
-            .performClick()
+    fun `hide email toggle should be disabled when restricted and send controls is disabled`() =
+        runTest {
+            // Expand options section:
+            composeTestRule
+                .onNodeWithText("Additional options")
+                .performScrollTo()
+                .performClick()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isHideEmailAddressEnabled = false,
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = false,
+                        ),
                     ),
-                ),
-            )
+                    isSendControlsEnabled = false,
+                )
+            }
+
+            // Legacy behavior: the toggle remains visible but is not interactive.
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsNotEnabled()
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = true,
+                        ),
+                    ),
+                )
+            }
+
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsEnabled()
         }
 
-        // Toggle should be disabled
-        composeTestRule
-            .onNodeWithText("Hide my email address", substring = true)
-            .performScrollTo()
-            .assertIsDisplayed()
-            .assertIsNotEnabled()
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hide email toggle should be hidden when restricted and send controls is enabled`() =
+        runTest {
+            // Expand options section:
+            composeTestRule
+                .onNodeWithText("Additional options")
+                .performScrollTo()
+                .performClick()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        isHideEmailChecked = true,
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = false,
+                        ),
                     ),
-                ),
-            )
-        }
+                    isSendControlsEnabled = true,
+                )
+            }
 
-        // Toggle should be enabled
-        composeTestRule
-            .onNodeWithText("Hide my email address", substring = true)
-            .performScrollTo()
-            .assertIsDisplayed()
-            .assertIsEnabled()
-    }
+            // The toggle is hidden entirely rather than simply disabled.
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .assertDoesNotExist()
+
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(
+                            isHideEmailAddressEnabled = true,
+                        ),
+                    ),
+                )
+            }
+
+            composeTestRule
+                .onNodeWithText("Hide my email address", substring = true)
+                .performScrollTo()
+                .assertIsDisplayed()
+                .assertIsEnabled()
+        }
 
     @Test
     fun `progressbar should be displayed according to state`() {
@@ -1004,7 +1160,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text)
-            .assertIsNotDisplayed()
+            .assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -1020,6 +1176,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text)
             .assertIsDisplayed()
+
+        // The notice is not relevant once send controls removes the affected options entirely.
+        mutableStateFlow.update { it.copy(isSendControlsEnabled = true) }
+
+        composeTestRule
+            .onNodeWithText(text)
+            .assertDoesNotExist()
     }
 
     //region Authentication UI Tests
@@ -1541,6 +1704,129 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .assertIsNotEnabled()
     }
+
+    @Test
+    fun `who can view chooser should not open its options when enforced by policy`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Email()),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendVisibilityChooser")
+            .performScrollTo()
+            .assertIsNotEnabled()
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // The enforced option is displayed, but the other options are never composed.
+        composeTestRule
+            .onNodeWithText("Anyone with the link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should display the enforced option when locked to a password`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.PASSWORD_PROTECTED,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.Password),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when send controls is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = false,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when the policy allows any access type`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = SendAccessTypeJson.ANY,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        // ANY leaves every option available, so nothing is locked.
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Anyone with a password set by you")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `who can view chooser should open its options when the policy leaves it unset`() {
+        mutableStateFlow.update {
+            it.copy(
+                isSendControlsEnabled = true,
+                whoCanAccess = null,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(sendAuth = SendAuth.None),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("SendAuthTypeChooser")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Specific people")
+            .assertIsDisplayed()
+    }
     //endregion Authentication UI Tests
 }
 
@@ -1578,6 +1864,11 @@ private val DEFAULT_STATE = AddEditSendState(
     isShared = false,
     baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
     policyDisablesSend = false,
+    isSendControlsEnabled = false,
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    whoCanAccess = null,
     sendType = SendItemType.TEXT,
     isPremium = true,
 )

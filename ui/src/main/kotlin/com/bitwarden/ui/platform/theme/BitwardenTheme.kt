@@ -3,6 +3,7 @@ package com.bitwarden.ui.platform.theme
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -22,6 +23,7 @@ import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.toMaterialColorScheme
+import com.bitwarden.ui.platform.theme.ripple.toRippleConfig
 import com.bitwarden.ui.platform.theme.shape.BitwardenShapes
 import com.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.bitwarden.ui.platform.theme.type.BitwardenTypography
@@ -103,6 +105,7 @@ fun BitwardenTheme(
         LocalBitwardenDynamicDarkColorScheme provides darkDynamicColorScheme,
         LocalBitwardenShapes provides bitwardenShapes,
         LocalBitwardenTypography provides bitwardenTypography,
+        LocalRippleConfiguration provides bitwardenColorScheme.toRippleConfig(),
     ) {
         MaterialTheme(
             colorScheme = bitwardenColorScheme.toMaterialColorScheme(

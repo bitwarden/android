@@ -18,3 +18,20 @@ val InitUserCryptoMethod.logTag: String
         is InitUserCryptoMethod.KeyConnectorUrl -> "Key Connector Url"
         is InitUserCryptoMethod.MasterPasswordUnlock -> "Master Password Unlock"
     }
+
+/**
+ * Returns the password for the given [InitUserCryptoMethod] if available.
+ */
+val InitUserCryptoMethod.password: String?
+    get() = when (this) {
+        is InitUserCryptoMethod.MasterPasswordUnlock -> this.password
+        is InitUserCryptoMethod.AuthRequest,
+        is InitUserCryptoMethod.DecryptedKey,
+        is InitUserCryptoMethod.DeviceKey,
+        is InitUserCryptoMethod.KeyConnector,
+        is InitUserCryptoMethod.KeyConnectorUrl,
+        is InitUserCryptoMethod.Pin,
+        is InitUserCryptoMethod.PinEnvelope,
+        is InitUserCryptoMethod.PinState,
+            -> null
+    }

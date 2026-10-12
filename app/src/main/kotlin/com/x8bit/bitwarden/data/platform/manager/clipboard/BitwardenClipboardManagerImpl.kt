@@ -5,9 +5,9 @@ import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
+import android.os.PersistableBundle
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
-import androidx.core.os.persistableBundleOf
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -43,13 +43,16 @@ class BitwardenClipboardManagerImpl(
             ClipData
                 .newPlainText("", text)
                 .apply {
-                    description.extras = persistableBundleOf(
-                        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
-                            ClipDescription.EXTRA_IS_SENSITIVE to isSensitive
-                        } else {
-                            "android.content.extra.IS_SENSITIVE" to isSensitive
-                        },
-                    )
+                    description.extras = PersistableBundle().apply {
+                        this.putBoolean(
+                            if (isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
+                                ClipDescription.EXTRA_IS_SENSITIVE
+                            } else {
+                                "android.content.extra.IS_SENSITIVE"
+                            },
+                            isSensitive,
+                        )
+                    }
                 },
         )
         if (!isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {

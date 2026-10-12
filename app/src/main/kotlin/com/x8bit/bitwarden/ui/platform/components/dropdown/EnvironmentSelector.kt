@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
@@ -46,6 +47,8 @@ import kotlinx.collections.immutable.ImmutableList
  * and passes the selected option as an argument.
  * @param onHelpClick A callback that gets invoked when the help button is clicked.
  * @param modifier A [Modifier] for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param isHelpEnabled Indicates if the help button should be available.
  */
 @Suppress("LongMethod")
@@ -58,17 +61,21 @@ fun EnvironmentSelector(
     onOptionSelected: (Environment.Type) -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     isHelpEnabled: Boolean = true,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
-
     Row(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .clickable(
                 indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 onClick = { shouldShowDialog = !shouldShowDialog },
+            )
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.contentBottom,
             )
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,

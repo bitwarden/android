@@ -9,6 +9,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -21,6 +22,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -304,6 +306,31 @@ class KdfManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums should send the SDK contained key ID`() =
+        runTest {
+            coEvery {
+                vaultSdkSource.makeUpdateKdf(
+                    userId = any(),
+                    password = any(),
+                    kdf = any(),
+                )
+            } returns UPDATE_KDF_RESPONSE.asSuccess()
+
+            val requestSlot = slot<UpdateKdfJsonRequest>()
+            coEvery {
+                accountsService.updateKdf(capture(requestSlot))
+            } returns Unit.asSuccess()
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+
+            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+
+            assertEquals(UpdateKdfMinimumsResult.Success, result)
+            assertEquals(CONTAINED_KEY_ID, requestSlot.captured.unlockData.containedKeyId)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums should update userState to minimums`() =
         runTest {
             coEvery {
@@ -334,6 +361,7 @@ class KdfManagerTest {
         }
 }
 
+private const val CONTAINED_KEY_ID = "mockContainedKeyId"
 private const val EMAIL = "test@bitwarden.com"
 private const val EMAIL_2 = "test2@bitwarden.com"
 private const val PASSWORD = "password"
@@ -415,6 +443,7 @@ private val UPDATE_KDF_RESPONSE = UpdateKdfResponse(
         kdf = mockk<Kdf>(relaxed = true),
         masterKeyWrappedUserKey = "mockKey",
         salt = "mockSalt",
+        containedKeyId = CONTAINED_KEY_ID,
     ),
     oldMasterPasswordAuthenticationData = MasterPasswordAuthenticationData(
         kdf = mockk<Kdf>(relaxed = true),

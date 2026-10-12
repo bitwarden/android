@@ -39,12 +39,11 @@ class SdkRepositoryFactoryImpl(
         Repositories(
             cipher = getSdkCipherRepository(userId = userId),
             folder = null,
-            userKeyState = null,
             localUserDataKeyState = SdkLocalUserDataKeyStateRepository(
                 authDiskSource = authDiskSource,
             ),
-            ephemeralPinEnvelopeState = null,
             organizationSharedKey = null,
+            policy = null,
             send = null,
         )
 

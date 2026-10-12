@@ -11,8 +11,8 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
@@ -306,7 +306,7 @@ class AutofillProcessorTest {
             every { onSuccess() } just runs
         }
         val saveRequest: SaveRequest = mockk()
-        val policies: List<PolicyView> = listOf(mockk())
+        val policies: List<Policy> = listOf(mockk())
         every { settingsRepository.isAutofillSavePromptDisabled } returns false
         every {
             policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
@@ -415,6 +415,59 @@ class AutofillProcessorTest {
                 autofillSaveItem = autofillSaveItem,
             )
             saveCallback.onSuccess(intentSender)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processSaveRequest should invoke empty callback when autofill enabled, has fill contexts, and toAutofillSaveItem returns null`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val assistStructure: AssistStructure = mockk()
+        val fillContext: FillContext = mockk {
+            every { structure } returns assistStructure
+        }
+        val saveRequest: SaveRequest = mockk {
+            every { fillContexts } returns listOf(fillContext)
+        }
+        val autofillPartition: AutofillPartition = mockk()
+        val autofillRequest: AutofillRequest.Fillable = mockk {
+            every { packageName } returns PACKAGE_NAME
+            every { partition } returns autofillPartition
+            every { toAutofillSaveItem() } returns null
+        }
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns emptyList()
+        every {
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+        } returns autofillRequest
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verify(exactly = 1) {
+            settingsRepository.isAutofillSavePromptDisabled
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+            saveCallback.onSuccess()
+        }
+        verify(exactly = 0) {
+            createAutofillSavedItemIntentSender(any(), any())
         }
     }
 

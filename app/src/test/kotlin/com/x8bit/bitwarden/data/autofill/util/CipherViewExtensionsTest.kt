@@ -115,12 +115,65 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toAutofillCipherProvider should return a provider with the correct data for an Identity type`() =
+        runTest {
+            val cipherView = createMockCipherView(
+                number = 1,
+                cipherType = CipherType.IDENTITY,
+            )
+
+            val autofillCipherProvider = cipherView.toAutofillCipherProvider()
+
+            assertFalse(autofillCipherProvider.isVaultLocked())
+            assertEquals(
+                emptyList<AutofillCipher.Card>(),
+                autofillCipherProvider.getCardAutofillCiphers(),
+            )
+            assertEquals(
+                emptyList<AutofillCipher.Login>(),
+                autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
+            )
+            assertEquals(
+                listOf(
+                    AutofillCipher.Identity(
+                        cipherId = "mockId-1",
+                        name = "mockName-1",
+                        subtitle = "mockFirstName-1 mockLastName-1",
+                        fullName = "mockFirstName-1 mockMiddleName-1 mockLastName-1",
+                        fullAddress = "mockAddress1-1 mockAddress2-1 mockAddress3-1 " +
+                            "mockCity-1 mockState-1 mockPostalCode-1 mockCountry-1",
+                        title = "mockTitle-1",
+                        firstName = "mockFirstName-1",
+                        middleName = "mockMiddleName-1",
+                        lastName = "mockLastName-1",
+                        address1 = "mockAddress1-1",
+                        address2 = "mockAddress2-1",
+                        address3 = "mockAddress3-1",
+                        city = "mockCity-1",
+                        state = "mockState-1",
+                        postalCode = "mockPostalCode-1",
+                        country = "mockCountry-1",
+                        company = "mockCompany-1",
+                        email = "mockEmail-1",
+                        phone = "mockPhone-1",
+                        ssn = "mockSsn-1",
+                        passportNumber = "mockPassportNumber-1",
+                        licenseNumber = "mockLicenseNumber-1",
+                    ),
+                ),
+                autofillCipherProvider.getIdentityAutofillCiphers(),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `toAutofillCipherProvider should return a provider with the correct data for any other type`() =
         runTest {
             CipherType
                 .entries
                 .filterNot { it == CipherType.CARD }
                 .filterNot { it == CipherType.LOGIN }
+                .filterNot { it == CipherType.IDENTITY }
                 .forEach { cipherType ->
                     val autofillCipherProvider = createMockCipherView(
                         number = 1,
@@ -136,6 +189,10 @@ class CipherViewExtensionsTest {
                     assertEquals(
                         emptyList<AutofillCipher.Login>(),
                         autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
+                    )
+                    assertEquals(
+                        emptyList<AutofillCipher.Identity>(),
+                        autofillCipherProvider.getIdentityAutofillCiphers(),
                     )
                 }
         }

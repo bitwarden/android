@@ -18,6 +18,7 @@ import kotlinx.serialization.Serializable
 data class VaultItemRoute(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,
+    val showCreatedSnackbar: Boolean = false,
 )
 
 /**
@@ -26,6 +27,7 @@ data class VaultItemRoute(
 data class VaultItemArgs(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,
+    val showCreatedSnackbar: Boolean = false,
 )
 
 /**
@@ -33,7 +35,11 @@ data class VaultItemArgs(
  */
 fun SavedStateHandle.toVaultItemArgs(): VaultItemArgs {
     val route = this.toRoute<VaultItemRoute>()
-    return VaultItemArgs(vaultItemId = route.vaultItemId, cipherType = route.cipherType)
+    return VaultItemArgs(
+        vaultItemId = route.vaultItemId,
+        cipherType = route.cipherType,
+        showCreatedSnackbar = route.showCreatedSnackbar,
+    )
 }
 
 /**
@@ -73,6 +79,7 @@ fun NavController.navigateToVaultItem(
         route = VaultItemRoute(
             vaultItemId = args.vaultItemId,
             cipherType = args.cipherType,
+            showCreatedSnackbar = args.showCreatedSnackbar,
         ),
         navOptions = navOptions,
     )

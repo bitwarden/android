@@ -11,28 +11,61 @@ import org.junit.jupiter.api.Test
 class AuthDiskSourceTest {
 
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
+    private val fakeKeystoreEncryptedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
+        keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
         sharedPreferences = fakeSharedPreferences,
     )
 
     @Test
     @Suppress("MaxLineLength")
-    fun `authenticatorBridgeSymmetricSyncKey should store and update from EncryptedSharedPreferences`() {
-        val sharedPrefsKey = "bwSecureStorage:authenticatorSyncSymmetricKey"
+    fun `initialization should migrate legacy encrypted values to the keystore encrypted preferences`() {
+        fakeEncryptedSharedPreferences.edit {
+            putString("bwSecureStorage:userKeyBiometricUnlock", "biometricsKey")
+            putString("bwSecureStorage:biometricInitializationVector", "initVector")
+            putString("bwSecureStorage:authenticatorSyncSymmetricKey", "symmetricKey")
+        }
+
+        AuthDiskSourceImpl(
+            encryptedSharedPreferences = fakeEncryptedSharedPreferences,
+            keystoreEncryptedPreferences = fakeKeystoreEncryptedPreferences,
+            sharedPreferences = fakeSharedPreferences,
+        )
+
+        // The values are moved to the keystore encrypted preferences without the legacy prefix.
+        assertTrue(fakeEncryptedSharedPreferences.all.isEmpty())
+        assertEquals(
+            "biometricsKey",
+            fakeKeystoreEncryptedPreferences.getString("userKeyBiometricUnlock", null),
+        )
+        assertEquals(
+            "initVector",
+            fakeKeystoreEncryptedPreferences.getString("biometricInitializationVector", null),
+        )
+        assertEquals(
+            "symmetricKey",
+            fakeKeystoreEncryptedPreferences.getString("authenticatorSyncSymmetricKey", null),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `authenticatorBridgeSymmetricSyncKey should store and update from keystore encrypted preferences`() {
+        val sharedPrefsKey = "authenticatorSyncSymmetricKey"
 
         // Shared preferences and the repository start with the same value:
         assertNull(authDiskSource.authenticatorBridgeSymmetricSyncKey)
-        assertNull(fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null))
+        assertNull(fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null))
 
         // Updating the repository updates shared preferences:
         val symmetricKey = generateSecretKey().getOrThrow().encoded
         authDiskSource.authenticatorBridgeSymmetricSyncKey = symmetricKey
         assertEquals(
             symmetricKey.toString(Charsets.ISO_8859_1),
-            fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null),
+            fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null),
         )
 
         // Retrieving the key from repository should give same byte array despite String conversion:
@@ -40,19 +73,20 @@ class AuthDiskSourceTest {
     }
 
     @Test
-    fun `userBiometricKeyInitVector should store and update from EncryptedSharedPreferences`() {
-        val sharedPrefsKey = "bwSecureStorage:biometricInitializationVector"
+    @Suppress("MaxLineLength")
+    fun `userBiometricKeyInitVector should store and update from keystore encrypted preferences`() {
+        val sharedPrefsKey = "biometricInitializationVector"
 
         // Shared preferences and the repository start with the same value:
         assertNull(authDiskSource.userBiometricKeyInitVector)
-        assertNull(fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null))
+        assertNull(fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null))
 
         // Updating the repository updates shared preferences:
         val userBiometricKeyInitVector = byteArrayOf(3, 4)
         authDiskSource.userBiometricKeyInitVector = userBiometricKeyInitVector
         assertEquals(
             userBiometricKeyInitVector.toString(Charsets.ISO_8859_1),
-            fakeEncryptedSharedPreferences.getString(sharedPrefsKey, null),
+            fakeKeystoreEncryptedPreferences.getString(sharedPrefsKey, null),
         )
 
         // Retrieving the key from repository should give same byte array despite String conversion:

@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import app.cash.turbine.test
-import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -10,8 +8,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -36,14 +34,10 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { allSettingsBadgeCountFlow } returns mutableSettingsBadgeCountFlow
     }
-    private val mutableDisableSendsPolicyFlow = MutableStateFlow<List<PolicyView>>(emptyList())
+    private val mutableEffectiveSendPolicyFlow = MutableStateFlow(DEFAULT_EFFECTIVE_SEND_POLICY)
     private val policyManager: PolicyManager = mockk {
-        every {
-            getActivePoliciesFlow(PolicyType.DISABLE_SEND)
-        } returns mutableDisableSendsPolicyFlow
-        every {
-            getActivePolicies(PolicyType.DISABLE_SEND)
-        } answers { mutableDisableSendsPolicyFlow.value }
+        every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
+        every { getEffectiveSendPolicy() } answers { mutableEffectiveSendPolicyFlow.value }
     }
 
     @Suppress("MaxLineLength")
@@ -326,20 +320,19 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `DISABLE_SEND policy flow update with disabled policy should set areSendsDisabled to false`() =
+    fun `effective send policy flow update should set areSendsDisabled to match disableSend`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE.copy(areSendsDisabled = false), awaitItem())
 
-                mutableDisableSendsPolicyFlow.emit(
-                    listOf(createMockPolicyView(type = PolicyType.DISABLE_SEND)),
+                mutableEffectiveSendPolicyFlow.emit(
+                    DEFAULT_EFFECTIVE_SEND_POLICY.copy(disableSend = true),
                 )
                 assertEquals(DEFAULT_STATE.copy(areSendsDisabled = true), awaitItem())
 
-                mutableDisableSendsPolicyFlow.emit(emptyList())
+                mutableEffectiveSendPolicyFlow.emit(DEFAULT_EFFECTIVE_SEND_POLICY)
                 assertEquals(DEFAULT_STATE.copy(areSendsDisabled = false), awaitItem())
             }
         }
@@ -361,4 +354,13 @@ private val DEFAULT_STATE = VaultUnlockedNavBarState(
     vaultNavBarLabelRes = BitwardenString.my_vault,
     notificationState = DEFAULT_NOTIFICATION_STATE,
     areSendsDisabled = false,
+)
+
+private val DEFAULT_EFFECTIVE_SEND_POLICY = EffectiveSendPolicy(
+    allowedDomains = null,
+    allowedSendTypes = null,
+    deletionHours = null,
+    disableHideEmail = false,
+    disableSend = false,
+    whoCanAccess = null,
 )

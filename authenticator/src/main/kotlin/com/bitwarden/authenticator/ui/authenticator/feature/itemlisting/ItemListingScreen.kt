@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.platform.components.header.AuthenticatorExpandingHeader
 import com.bitwarden.authenticator.ui.platform.components.listitem.VaultVerificationCodeItem
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.components.listitem.model.VaultDropdownMenuAction
@@ -59,6 +58,7 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenExpandableFloatingActionButton
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabIcon
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -164,7 +164,7 @@ fun ItemListingScreen(
                         label = BitwardenString.scan_a_qr_code.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_camera_small,
-                            contentDescription = BitwardenString.scan_a_qr_code.asText(),
+                            contentDescription = null,
                             testTag = "ScanQRCodeButton",
                         ),
                         onFabOptionClick = { launcher.launch(Manifest.permission.CAMERA) },
@@ -173,7 +173,7 @@ fun ItemListingScreen(
                         label = BitwardenString.enter_key_manually.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_lock_encrypted_small,
-                            contentDescription = BitwardenString.enter_key_manually.asText(),
+                            contentDescription = null,
                             testTag = "EnterSetupKeyButton",
                         ),
                         onFabOptionClick = {
@@ -360,20 +360,14 @@ private fun ItemListingContent(
 
         if (state.shouldShowLocalHeader) {
             item(key = "local_items_header") {
-                AuthenticatorExpandingHeader(
-                    label = stringResource(
+                BitwardenExpandingHeader(
+                    collapsedText = stringResource(
                         id = BitwardenString.local_codes,
                         state.itemList.size,
                     ),
                     isExpanded = isLocalHeaderExpanded,
                     onClick = { isLocalHeaderExpanded = !isLocalHeaderExpanded },
-                    onClickLabel = stringResource(
-                        id = if (isLocalHeaderExpanded) {
-                            BitwardenString.local_items_are_expanded_click_to_collapse
-                        } else {
-                            BitwardenString.local_items_are_collapsed_click_to_expand
-                        },
-                    ),
+                    capitalizeText = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -408,19 +402,11 @@ private fun ItemListingContent(
             is SharedCodesDisplayState.Codes -> {
                 state.sharedItems.sections.forEachIndexed { _, section ->
                     item(key = "sharedSection_${section.id}") {
-                        AuthenticatorExpandingHeader(
-                            label = section.label(),
+                        BitwardenExpandingHeader(
+                            collapsedText = section.label(),
                             isExpanded = section.isExpanded,
-                            onClick = {
-                                onSectionExpandedClick(section)
-                            },
-                            onClickLabel = stringResource(
-                                id = if (section.isExpanded) {
-                                    BitwardenString.items_expanded_click_to_collapse
-                                } else {
-                                    BitwardenString.items_are_collapsed_click_to_expand
-                                },
-                            ),
+                            onClick = { onSectionExpandedClick(section) },
+                            capitalizeText = true,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .standardHorizontalMargin()
@@ -571,9 +557,11 @@ private fun ActionCard(
             BitwardenActionCard(
                 modifier = modifier,
                 cardSubtitle = stringResource(id = BitwardenString.download_bitwarden_card_message),
-                actionText = stringResource(id = BitwardenString.download_now),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.download_now.asText(),
+                    onClick = onDownloadBitwardenClick,
+                ),
                 cardTitle = stringResource(id = BitwardenString.download_bitwarden_card_title),
-                onActionClick = onDownloadBitwardenClick,
                 onDismissClick = onDownloadBitwardenDismissClick,
                 leadingContent = {
                     Icon(
@@ -589,8 +577,10 @@ private fun ActionCard(
             BitwardenActionCard(
                 modifier = modifier,
                 cardTitle = stringResource(id = BitwardenString.sync_with_the_bitwarden_app),
-                actionText = stringResource(id = BitwardenString.take_me_to_app_settings),
-                onActionClick = onSyncWithBitwardenClick,
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.take_me_to_app_settings.asText(),
+                    onClick = onSyncWithBitwardenClick,
+                ),
                 cardSubtitle = stringResource(
                     id = BitwardenString.sync_with_bitwarden_action_card_message,
                 ),

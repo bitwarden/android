@@ -19,6 +19,13 @@ interface FlightRecorderManager {
     val flightRecorderDataFlow: StateFlow<FlightRecorderDataSet>
 
     /**
+     * Emits `true` when the Flight Recorder is initialized and capable of logging, `false`
+     * otherwise. This can emit true even is the Flight Recorder is disabled, it only indicates
+     * that it could be logging.
+     */
+    val isLoggingReadyFlow: StateFlow<Boolean>
+
+    /**
      * Dismisses the all flight recorder banners.
      */
     fun dismissFlightRecorderBanner()

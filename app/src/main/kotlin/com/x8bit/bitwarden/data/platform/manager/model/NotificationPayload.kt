@@ -58,7 +58,7 @@ sealed class NotificationPayload {
         val date: Instant?,
 
         @JsonNames("Reason", "reason")
-        val pushNotificationLogOutReason: PushNotificationLogOutReason?,
+        val logOutReason: PushNotificationLogOutReason?,
     ) : NotificationPayload()
 
     /**

@@ -13,7 +13,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
@@ -100,7 +100,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
             every {
                 policyManager.getActivePolicies(PolicyType.RESTRICTED_ITEM_TYPES)
             } returns listOf(
-                createMockPolicyView(
+                createMockSdkPolicy(
                     organizationId = "org-id",
                     id = "policy-id",
                     type = PolicyType.RESTRICTED_ITEM_TYPES,

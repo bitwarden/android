@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.sdk.statebridge
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.StateBridgeForeignImpl
 import com.bitwarden.core.V2UpgradeToken
+import com.bitwarden.core.WebAuthnPrfUnlockData
 import com.bitwarden.core.WrappedAccountCryptographicState
 import com.bitwarden.crypto.EncString
 import com.bitwarden.crypto.Kdf
@@ -16,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.updateMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeTokenJson
+import java.time.Instant
 
 /**
  * A user-scoped implementation of a Bitwarden SDK [StateBridgeForeignImpl].
@@ -36,6 +38,16 @@ internal class SdkStateBridge(
 
     override suspend fun clearUserKey() {
         inMemoryUserKey = null
+    }
+
+    override suspend fun setUserKeyId(value: String) {
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = value)
+    }
+
+    override suspend fun getUserKeyId(): String? = authDiskSource.getUserKeyId(userId = userId)
+
+    override suspend fun clearUserKeyId() {
+        authDiskSource.storeUserKeyId(userId = userId, userKeyId = null)
     }
 
     override suspend fun setPersistentPinEnvelope(value: PasswordProtectedKeyEnvelope) {
@@ -154,5 +166,35 @@ internal class SdkStateBridge(
             userId = userId,
             kdf = null,
         )
+    }
+
+    override suspend fun setV2EncryptedMigrationsGracePeriodStart(value: Instant) {
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = value,
+        )
+    }
+
+    override suspend fun getV2EncryptedMigrationsGracePeriodStart(): Instant? =
+        authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = userId)
+
+    override suspend fun clearV2EncryptedMigrationsGracePeriodStart() {
+        authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+            userId = userId,
+            gracePeriodStart = null,
+        )
+    }
+
+    override suspend fun getWebauthnPrfUnlockData(): WebAuthnPrfUnlockData? {
+        // We do not support unlock with WebAuthn, so we can just return null
+        return null
+    }
+
+    override suspend fun setWebauthnPrfUnlockData(value: WebAuthnPrfUnlockData) {
+        // We do not support unlock with WebAuthn, so this is a no-op
+    }
+
+    override suspend fun clearWebauthnPrfUnlockData() {
+        // We do not support unlock with WebAuthn, so this is a no-op
     }
 }

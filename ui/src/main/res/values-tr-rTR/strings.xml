@@ -24,8 +24,8 @@
     <string name="folder_created">Yeni klasör oluşturuldu.</string>
     <string name="folder_deleted">Klasör silindi.</string>
     <string name="folder_none">Klasör yok</string>
-    <string name="folders">Klasörler</string>
     <string name="folder_updated">Klasör kaydedildi</string>
+    <string name="folders">Klasörler</string>
     <string name="hide">Gizle</string>
     <string name="internet_connection_required_message">Devam etmeden önce lütfen internete bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı gerekli</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Ana parola (gerekli)</string>
     <string name="new_master_password_required">Yeni ana parola (gerekli)</string>
     <string name="more_options">Diğer seçenekler</string>
+    <string name="my_folder">Klasörüm</string>
+    <string name="my_folders">Klasörlerim</string>
     <string name="my_vault">Kasam</string>
     <string name="name">Ad</string>
     <string name="item_name_required">Hesap adı (gerekli)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">En az rakam</string>
     <string name="min_special">En az özel karakter</string>
     <string name="never">Asla</string>
-    <string name="new_item_created">Kayıt eklendi</string>
     <string name="no_cards">Kasanızda hiç kart yok.</string>
     <string name="add_card">Kart ekle</string>
     <string name="no_logins">Kasanızda hiç hesap yok.</string>
@@ -148,6 +149,14 @@
     <string name="select">Seç</string>
     <string name="item_details">Kayıt ayrıntıları</string>
     <string name="item_updated">Öğe kaydedildi</string>
+    <string name="bank_account_saved">Banka hesabı kaydedildi</string>
+    <string name="card_saved">Kart kaydedildi</string>
+    <string name="identity_saved">Kimlik kaydedildi</string>
+    <string name="license_saved">Ehliyet kaydedildi</string>
+    <string name="login_saved">Hesap kaydedildi</string>
+    <string name="passport_saved">Pasaport kaydedildi</string>
+    <string name="secure_note_saved">Güvenli not kaydedildi</string>
+    <string name="ssh_key_saved">SSH anahtarı kaydedildi</string>
     <string name="submitting">Gönderiliyor…</string>
     <string name="syncing">Eşitleniyor…</string>
     <string name="syncing_complete">Eşitleme tamamlandı</string>
@@ -283,7 +292,9 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="vault_is_locked">Kasa kilitli</string>
     <string name="go_to_my_vault">Kasama git</string>
     <string name="collections">Koleksiyonlar</string>
+    <string name="shared_folders">Paylaşılan klasörler</string>
     <string name="no_items_collection">Bu koleksiyonda hiç kayıt yok.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
     <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
     <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
@@ -338,16 +349,21 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="move_up">Yukarı taşı</string>
     <string name="owner">Sahibi</string>
     <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_vault">Kasaya taşı</string>
-    <string name="no_vaults_to_list">Listelenecek kasa yok.</string>
+    <string name="move_to_organization">Kuruluşa taşı</string>
+    <string name="no_orgs_to_list">Listelenecek kuruluş yok.</string>
+    <string name="move_to_org_desc">Bu kaydı taşımak istediğiniz kuruluşu seçin. Taşıdığınız kaydın sahipliği seçtiğiniz kuruluşa aktarılacak. Artık bu kaydın doğrudan sahibi olmayacaksınız.</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Kelime sayısı</string>
     <string name="passphrase">Parola cümlesi</string>
     <string name="word_separator">Kelime ayracı</string>
     <string name="clear">Temizle</string>
+    <string name="open_calendar">takvimi aç</string>
     <string name="generator">Üreteç</string>
     <string name="no_folders_to_list">Listelenecek klasör yok.</string>
     <string name="fingerprint_phrase">Parmak izi ifadesi</string>
@@ -457,6 +473,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="deletion_date">Silinme tarihi</string>
     <string name="deletion_time">Silinme saati</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kim görebilir</string>
     <string name="anyone_with_the_link">Bağlantıya sahip olan herkes</string>
     <string name="anyone_with_link_can_view_send">Bu bağlantıya sahip olan herkes bu Send\'i görebilir</string>
@@ -494,6 +511,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
     <string name="seven_days">7 gün</string>
+    <string name="fourteen_days">14 gün</string>
     <string name="thirty_days">30 gün</string>
     <string name="custom">Özel</string>
     <string name="custom_timeout">Özel zaman aşımı</string>
@@ -502,6 +520,11 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="about_send">Send hakkında</string>
     <string name="hide_email">E-posta adresimi alıcılardan gizle</string>
     <string name="send_options_policy_in_effect">Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Kopya oluştur</string>
     <string name="send_file_premium_required">Ücretsiz hesaplar yalnızca metin paylaşabilir. Send ile dosya paylaşmak için premium üyelik gerekir.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Seçili kişiler ile paylaşmak bir Premium özelliğidir.Şuanki planınız bu özelliği içermiyor.</string>
     <string name="password_prompt">Ana parolayı yeniden iste</string>
@@ -551,8 +574,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="resend_code">Kodu yeniden gönder</string>
     <string name="a_verification_code_was_sent_to_your_email">E-posta adresinize doğrulama kodu gönderildi</string>
     <string name="submit_crash_logs">Çökme günlüklerini gönder</string>
-    <string name="options_expanded">Seçenekler genişletildi, daraltmak için dokunun.</string>
-    <string name="options_collapsed">Seçenekler daraltıldı, genişletmek için dokunun.</string>
+    <string name="expand">genişlet</string>
+    <string name="collapse">daralt</string>
     <string name="uppercase_ato_z">Büyük harf (A-Z)</string>
     <string name="lowercase_ato_z">Küçük harf (A-Z)</string>
     <string name="numbers_zero_to_nine">Rakamlar (0-9)</string>
@@ -686,6 +709,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="logging_in_on">Giriş yapılan konum</string>
     <string name="logging_in_on_with_colon">Giriş yapılan konum:</string>
     <string name="vault">Kasa</string>
+    <string name="select_vault">Kasa seç</string>
     <string name="appearance">Görünüm</string>
     <string name="account_security">Hesap güvenliği</string>
     <string name="bitwarden_help_center">Bitwarden yardım merkezi</string>
@@ -1123,11 +1147,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="file_could_not_be_processed">Dosya işlenemedi</string>
     <string name="file_could_not_be_processed_message">Dosya işlenemedi. Geçerli bir JSON olduğunu kontrol edip yeniden deneyin. Yardıma ihtiyacınız varsa bitwarden.com/help adresini ziyaret edebilirsiniz</string>
     <string name="get_help">Yardım al</string>
-    <string name="expand_advanced_options">Gelişmiş seçenekleri genişlet</string>
-    <string name="local_items_are_expanded_click_to_collapse">Yerel öğeler genişletildi, daraltmak için tıklayın.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Yerel öğeler daraltıldı, genişletmek için tıklayın.</string>
-    <string name="items_expanded_click_to_collapse">Öğeler genişletildi, daraltmak için tıklayın.</string>
-    <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
     <string name="error_cannot_decrypt">[hata: deşifre edilemiyor]</string>
     <string name="copy_error_report">Hata raporunu kopyala</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu kasa öğesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</string>
@@ -1136,6 +1155,7 @@ Bu hesaba geçmek ister misiniz?</string>
         <item quantity="other">Bitwarden, %1$d kasa ögesinin şifresini çözemedi. Ek veri kaybını önlemek için bu hata raporunu kopyalayıp müşteri başarı ekibiyle paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s için kart seçin</string>
+    <string name="choose_an_identity">Bir kimlik seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
     <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
@@ -1238,6 +1258,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="invalid_email_addresses">Geçersiz e-posta adresi</string>
     <string name="one_or_more_email_addresses_are_incorrect">Bir veya daha fazla e posta adresi geçersiz. Lütfen kontrol edip yeniden deneyin.</string>
     <string name="no_email_addresses_entered">E-posta adresi girilmedi</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send\'i paylaşmak için en az bir geçerli e-posta adresi girin.</string>
     <string name="sync_with_browser">Tarayıcıyla eşitleyin</string>
     <string name="sync_with_browser_description">%1$s ile bağlantı kurmak için varsayılan tarayıcını Bitwarden mobil uygulamasıyla senkronize et. Tarayıcın açıldığında istenirse oturum açma işlemini tamamla.\nSenkronizasyon tamamlandığında bu uygulamaya geri döneceksin.</string>
@@ -1415,4 +1436,15 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
+    <string name="use_this_passphrase">Bu parola cümlesini kullan</string>
+    <string name="use_this_password">Bu parolayı kullan</string>
+    <string name="use_this_username">Bu kullanıcı adını kullan</string>
+    <string name="create_login">Hesap oluştur</string>
+    <string name="keep_unlocking_with_biometrics">Kilidi biyometri ile açmaya devam edin</string>
+    <string name="weve_made_a_security_update">Bir güvenlik güncellemesi yaptık. Bitwarden kilidini açmak için biyometri kullanmaya devam etmek isterseniz biyometrinizi doğrulayın.</string>
+    <string name="turn_off">Devre dışı bırak</string>
+    <string name="turn_off_biometric_question">Biyometri devre dışı bırakılsın mı?</string>
+    <string name="unlocking_will_require_your_master_password">Kilidi açmak için ana parolanızı kullanmanız gerekecek. İstediğiniz zaman Ayarlar menüsünden biyometriyi yeniden etkinleştirebilirsiniz.</string>
 </resources>

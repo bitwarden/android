@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -306,7 +307,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     flow2 = vaultDiskSource.getCiphersFlow(activeUserId),
                 ) { receiverCurrentValue, ciphers ->
                     receiverCurrentValue && ciphers.none {
-                        it.login != null && it.organizationId == null
+                        it.type == CipherTypeJson.LOGIN && it.organizationId == null
                     }
                 }
             }

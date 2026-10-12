@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
  * @param onClick A callback for when the menu item is clicked.
  * @param isEnabled Indicates that this overflow item is enabled or not.
  * @param color The color of the content.
+ * @param testTag The test tag applied to this item.
  */
 data class OverflowMenuItemData(
     val text: String,
@@ -17,4 +18,5 @@ data class OverflowMenuItemData(
     val isExternalLink: Boolean = false,
     val isEnabled: Boolean = true,
     val color: Color = Color.Unspecified,
+    val testTag: String = "FloatingOptionsItem",
 )

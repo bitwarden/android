@@ -24,8 +24,8 @@
     <string name="folder_created">Новая папка создана.</string>
     <string name="folder_deleted">Папка удалена.</string>
     <string name="folder_none">Без папки</string>
-    <string name="folders">Папки</string>
     <string name="folder_updated">Папка сохранена</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скрыть</string>
     <string name="internet_connection_required_message">Подключитесь к интернету чтобы продолжить.</string>
     <string name="internet_connection_required_title">Требуется подключение к интернету</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Мастер-пароль (требуется)</string>
     <string name="new_master_password_required">Новый мастер-пароль (обязательно)</string>
     <string name="more_options">Больше опций</string>
+    <string name="my_folder">Моя папка</string>
+    <string name="my_folders">Мои папки</string>
     <string name="my_vault">Хранилище</string>
     <string name="name">Название</string>
     <string name="item_name_required">Название элемента (обязательно)</string>
@@ -120,7 +122,6 @@
     <string name="min_numbers">Минимум цифр</string>
     <string name="min_special">Минимум символов</string>
     <string name="never">Никогда</string>
-    <string name="new_item_created">Элемент добавлен</string>
     <string name="no_cards">В вашем хранилище нет карт.</string>
     <string name="add_card">Добавить карту</string>
     <string name="no_logins">В вашем хранилище нет логинов.</string>
@@ -150,6 +151,14 @@
     <string name="select">Выбрать</string>
     <string name="item_details">Информация об элементе</string>
     <string name="item_updated">Элемент сохранен</string>
+    <string name="bank_account_saved">Банковский счет сохранен</string>
+    <string name="card_saved">Карта сохранена</string>
+    <string name="identity_saved">Личная информация сохранена</string>
+    <string name="license_saved">Водительское удостоверение сохранено</string>
+    <string name="login_saved">Логин сохранен</string>
+    <string name="passport_saved">Паспорт сохранен</string>
+    <string name="secure_note_saved">Защищенная заметка сохранена</string>
+    <string name="ssh_key_saved">Ключ SSH сохранен</string>
     <string name="submitting">Отправка…</string>
     <string name="syncing">Синхронизация…</string>
     <string name="syncing_complete">Синхронизация выполнена</string>
@@ -285,7 +294,9 @@
     <string name="vault_is_locked">Хранилище заблокировано</string>
     <string name="go_to_my_vault">Перейти в мое хранилище</string>
     <string name="collections">Коллекции</string>
+    <string name="shared_folders">Общие папки</string>
     <string name="no_items_collection">В этой коллекции нет элементов.</string>
+    <string name="there_are_no_items_in_this_shared_folder">В этой общей папке нет элементов.</string>
     <string name="no_items_folder">В этой папке нет элементов.</string>
     <string name="no_items_trash">В корзине нет элементов.</string>
     <string name="autofill_accessibility_summary">Помощь в заполнении имени пользователя и пароля в других приложениях и в интернете.</string>
@@ -342,16 +353,21 @@
     <string name="move_up">Переместить выше</string>
     <string name="owner">Владелец</string>
     <string name="no_collections_to_list">Нет коллекций для отображения.</string>
+    <string name="there_are_no_shared_folders_to_list">Нет общих папок для отображения.</string>
     <string name="moved_item_to_org">%1$s перемещено в %2$s.</string>
     <string name="select_one_collection">Необходимо выбрать хотя бы одну коллекцию.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Необходимо выбрать хотя бы одну общую папку.</string>
     <string name="share">Поделиться</string>
-    <string name="move_to_vault">Переместить в хранилище</string>
+    <string name="move_to_organization">Переместить в организацию</string>
+    <string name="no_orgs_to_list">Нет организаций для отображения.</string>
+    <string name="move_to_org_desc">Выберите организацию, в которую вы хотите переместить этот элемент. При перемещении в организацию право собственности на элемент переходит к этой организации. Вы больше не будете прямым владельцем этого элемента после его перемещения.</string>
     <string name="no_vaults_to_list">Нет хранилища для отображения.</string>
     <string name="move_to_vault_desc">Выберите хранилище, в которое вы хотите переместить этот элемент. Перемещение в хранилище передает права на элемент этой организации. Вы больше не будете непосредственным владельцем этого элемента после его перемещения.</string>
     <string name="number_of_words">Количество слов</string>
     <string name="passphrase">Парольная фраза</string>
     <string name="word_separator">Разделитель слов</string>
     <string name="clear">Очистить</string>
+    <string name="open_calendar">открыть календарь</string>
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Нет папок для отображения.</string>
     <string name="fingerprint_phrase">Фраза отпечатка</string>
@@ -461,6 +477,7 @@
     <string name="deletion_date">Дата удаления</string>
     <string name="deletion_time">Время удаления</string>
     <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
+    <string name="this_date_is_enforced_by_your_organization">Эта дата устанавливается вашей организацией</string>
     <string name="who_can_view">Кто может просматривать</string>
     <string name="anyone_with_the_link">Любой, у кого есть ссылка</string>
     <string name="anyone_with_link_can_view_send">Любой, у кого есть эта ссылка, сможет просмотреть эту Send</string>
@@ -498,6 +515,7 @@
     <string name="two_days">2 дня</string>
     <string name="three_days">3 дня</string>
     <string name="seven_days">7 дней</string>
+    <string name="fourteen_days">14 дней</string>
     <string name="thirty_days">30 дней</string>
     <string name="custom">Пользовательский</string>
     <string name="custom_timeout">Пользовательский тайм-аут</string>
@@ -506,6 +524,11 @@
     <string name="about_send">О Send</string>
     <string name="hide_email">Скрыть мой адрес email от получателей</string>
     <string name="send_options_policy_in_effect">На параметры Send влияют одна или несколько политик организации.</string>
+    <string name="organization_policy_restriction">Ограничение политики организации</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Эта Send не совместима с политикой Send вашей организации и будет автоматически удалена в установленную дату.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Текстовые Send не разрешены в вашей организации и эта Send будет автоматически удалена в установленную дату.</string>
+    <string name="to_edit_this_send_make_a_copy">Для редактирования этой Send, сделайте копию. Если эта Send может истечь к дате удаления, никаких действий не требуется</string>
+    <string name="make_a_copy">Сделать копию</string>
     <string name="send_file_premium_required">Используя бесплатную учетную запись, можно делиться только текстом. Чтобы использовать файлы с помощью Send, требуется Премиум.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Совместное использование с конкретными пользователями является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="password_prompt">Повторный запрос мастер-пароля</string>
@@ -559,8 +582,8 @@
     <string name="resend_code">Отправить код повторно</string>
     <string name="a_verification_code_was_sent_to_your_email">Код подтверждения отправлен на вашу электронную почту.</string>
     <string name="submit_crash_logs">Отправлять отчеты о сбоях</string>
-    <string name="options_expanded">Настройки развернуты, коснитесь, чтобы свернуть.</string>
-    <string name="options_collapsed">Настройки свернуты, нажмите, чтобы развернуть.</string>
+    <string name="expand">развернуть</string>
+    <string name="collapse">свернуть</string>
     <string name="uppercase_ato_z">Прописные буквы (A-Z)</string>
     <string name="lowercase_ato_z">Строчные буквы (A-Z)</string>
     <string name="numbers_zero_to_nine">Цифры (0-9)</string>
@@ -695,6 +718,7 @@
     <string name="logging_in_on">Войти на</string>
     <string name="logging_in_on_with_colon">Войти на:</string>
     <string name="vault">Хранилище</string>
+    <string name="select_vault">Выберите хранилище</string>
     <string name="appearance">Внешний вид</string>
     <string name="account_security">Безопасность аккаунта</string>
     <string name="bitwarden_help_center">Справочный центр Bitwarden</string>
@@ -1138,11 +1162,6 @@
     <string name="file_could_not_be_processed">Файл не может быть обработан</string>
     <string name="file_could_not_be_processed_message">Файл не удалось обработать. Убедитесь, что он имеет формат JSON, и повторите попытку. Нужна помощь? Посетите bitwarden.com/help</string>
     <string name="get_help">Получить помощь</string>
-    <string name="expand_advanced_options">Развернуть дополнительные параметры</string>
-    <string name="local_items_are_expanded_click_to_collapse">Локальные элементы развернуты, нажмите, чтобы свернуть.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Локальные элементы свернуты, нажмите, чтобы развернуть.</string>
-    <string name="items_expanded_click_to_collapse">Элементы развернуты, нажмите, чтобы свернуть.</string>
-    <string name="items_are_collapsed_click_to_expand">Элементы свернуты, нажмите, чтобы развернуть.</string>
     <string name="error_cannot_decrypt">[ошибка: невозможно расшифровать]</string>
     <string name="copy_error_report">Скопировать отчет об ошибке</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не удалось расшифровать этот элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</string>
@@ -1153,6 +1172,7 @@
         <item quantity="other">Bitwarden не смог расшифровать %1$d элемента хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберите карту для %s</string>
+    <string name="choose_an_identity"></string>
     <string name="advanced_options">Расширенные настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Подробнее об обнаружении совпадений</annotation></string>
     <string name="keep_your_credential_secure">Храните свои учетные данные в безопасности</string>
@@ -1239,11 +1259,11 @@
     <string name="upgrade_to_premium">Обновить до Премиум</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Чтобы управлять подпиской Премиум, вам необходимо войти в свое веб-хранилище на компьютере.</string>
-    <string name="unlock_advanced_security_features">Разблокировать дополнительные функции безопасности</string>
+    <string name="unlock_advanced_security_features">Разблокировать дополнительные возможности безопасности</string>
     <string name="your_subscription_needs_attention">Ваша подписка требует внимания</string>
     <string name="check_your_plan_for_details">Для получения более подробной информации ознакомьтесь с вашим планом.</string>
     <string name="view_plan">Посмотреть план</string>
-    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум дает вам больше возможностей по обеспечения безопасности и контроля.</string>
+    <string name="a_premium_plan_gives_you_more_tools_to_stay_secure_and_in_control">План Премиум предлагает вам больше возможностей для обеспечения безопасности и контроля.</string>
     <string name="this_item_is_archived">Этот элемент архивирован.</string>
     <string name="introducing_archive">Представляем архив</string>
     <string name="keep_items_you_dont_need_right_now_safe_but_out_sight">Храните элементы, которые вам сейчас не нужны, в безопасности, но вне поля зрения.</string>
@@ -1257,6 +1277,7 @@
     <string name="invalid_email_addresses">Неверные адреса email</string>
     <string name="one_or_more_email_addresses_are_incorrect">Один или несколько адресов email указаны неверно. Проверьте и попробуйте еще раз.</string>
     <string name="no_email_addresses_entered">Не введены адреса email</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Включить только следующие домены: %1$s. Пожалуйста, проверьте и повторите попытку</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Введите хотя бы один действительный адрес email, чтобы поделиться этой Send.</string>
     <string name="sync_with_browser">Синхронизация с браузером</string>
     <string name="sync_with_browser_description">Чтобы подключиться к %1$s, синхронизируйте ваш браузер по умолчанию с мобильным приложением Bitwarden. Когда браузер откроется, выполните авторизацию, если будет предложено. После завершения синхронизации вы вернетесь в это приложение.</string>
@@ -1295,7 +1316,7 @@
     <string name="confirming_your_upgrade">Подтверждение перехода…</string>
     <string name="upgrade_pending">Ожидание перехода</string>
     <string name="upgrade_pending_message">Ваш переход на платный тарифный план находится в процессе обработки. До завершения перехода вы будете пользоваться бесплатным тарифным планом. Вы можете синхронизировать данные прямо сейчас, чтобы проверить, или продолжить — обновление произойдет автоматически.</string>
-    <string name="unlock_premium_features">Разблокировать дополнительные возможности с Премиум.</string>
+    <string name="unlock_premium_features">Разблокировать дополнительные возможности с планом Премиум.</string>
     <string name="per_month_cancel_anytime">/ месяц · Отмена в любое время</string>
     <string name="per_month_cancel_anytime_content_description">%1$s в месяц, можно отменить в любой момент</string>
     <string name="built_in_authenticator">Встроенный аутентификатор</string>
@@ -1436,4 +1457,15 @@
     <string name="receive_24_7_priority_support">Получите приоритетную поддержку 24/7</string>
     <string name="account_creation_restricted">Создание аккаунта запрещено</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s позволяет создавать аккаунты только приглашенным пользователям.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Уменьшить %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Увеличить %1$s</string>
+    <string name="use_this_passphrase">Использовать эту парольную фразу</string>
+    <string name="use_this_password">Использовать этот пароль</string>
+    <string name="use_this_username">Использовать это имя пользователя</string>
+    <string name="create_login">Создать логин</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

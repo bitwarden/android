@@ -23,6 +23,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 
 private const val SEND_TYPES_COUNT: Int = 2
 
@@ -33,6 +34,7 @@ private const val SEND_TYPES_COUNT: Int = 2
 @Composable
 fun SendContent(
     policyDisablesSend: Boolean,
+    shouldShowTypesSection: Boolean,
     state: SendState.ViewState.Content,
     upgradedToPremiumCardData: UpgradedToPremiumCardData?,
     sendHandlers: SendHandlers,
@@ -67,48 +69,53 @@ fun SendContent(
             }
         }
 
-        item {
-            BitwardenListHeaderText(
-                label = stringResource(id = BitwardenString.types),
-                supportingLabel = SEND_TYPES_COUNT.toString(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
+        if (shouldShowTypesSection) {
+            item {
+                BitwardenListHeaderText(
+                    label = stringResource(id = BitwardenString.types),
+                    supportingLabel = SEND_TYPES_COUNT.toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
+
+            item {
+                BitwardenGroupItem(
+                    label = stringResource(id = BitwardenString.type_text),
+                    supportingLabel = state.textTypeCount.toString(),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file_text),
+                    onClick = sendHandlers.onTextTypeClick,
+                    cardStyle = CardStyle.Top(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SendTextFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+
+            item {
+                BitwardenGroupItem(
+                    label = stringResource(id = BitwardenString.type_file),
+                    supportingLabel = state.fileTypeCount.toString(),
+                    startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file),
+                    onClick = sendHandlers.onFileTypeClick,
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("SendFileFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
-            BitwardenGroupItem(
-                label = stringResource(id = BitwardenString.type_text),
-                supportingLabel = state.textTypeCount.toString(),
-                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file_text),
-                onClick = sendHandlers.onTextTypeClick,
-                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("SendTextFilter")
-                    .standardHorizontalMargin(),
-            )
-        }
-
-        item {
-            BitwardenGroupItem(
-                label = stringResource(id = BitwardenString.type_file),
-                supportingLabel = state.fileTypeCount.toString(),
-                startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_file),
-                onClick = sendHandlers.onFileTypeClick,
-                cardStyle = CardStyle.Bottom,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("SendFileFilter")
-                    .standardHorizontalMargin(),
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = BitwardenString.all_sends),
                 supportingLabel = state.sendItems.size.toString(),
@@ -128,16 +135,34 @@ fun SendContent(
                 trailingLabelIcons = it.iconList,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
-                onViewClick = { sendHandlers.onViewSendClick(it) },
-                onCopyClick = { sendHandlers.onCopySendClick(it) },
-                onEditClick = { sendHandlers.onEditSendClick(it) },
-                onShareClick = { sendHandlers.onShareSendClick(it) },
-                onDeleteClick = { sendHandlers.onDeleteSendClick(it) },
-                onRemovePasswordClick = if (it.hasPassword) {
-                    { sendHandlers.onRemovePasswordClick(it) }
-                } else {
-                    null
+                onOverflowAction = { action ->
+                    when (action) {
+                        is ListingItemOverflowAction.SendAction.CopyUrlClick -> {
+                            sendHandlers.onCopySendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.DeleteClick -> {
+                            sendHandlers.onDeleteSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.EditClick -> {
+                            sendHandlers.onEditSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.RemovePasswordClick -> {
+                            sendHandlers.onRemovePasswordClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.ShareUrlClick -> {
+                            sendHandlers.onShareSendClick(it)
+                        }
+
+                        is ListingItemOverflowAction.SendAction.ViewClick -> {
+                            sendHandlers.onViewSendClick(it)
+                        }
+                    }
                 },
+                overflowOptions = it.overflowItems,
                 cardStyle = state
                     .sendItems
                     .toListItemCardStyle(index = index, dividerPadding = 56.dp),

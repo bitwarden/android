@@ -59,39 +59,10 @@ class FilledDataBuilderImpl(
             }
                 ?.also { inlineSuggestionsAdded += 1 }
 
-        val filledPartitions = when (autofillRequest.partition) {
-            is AutofillPartition.Card -> {
-                autofillCipherProvider
-                    .getCardAutofillCiphers()
-                    .map { autofillCipher ->
-                        fillCardPartition(
-                            autofillCipher = autofillCipher,
-                            autofillViews = autofillRequest.partition.views,
-                            inlinePresentationSpec = getCipherInlinePresentationOrNull(),
-                        )
-                    }
-            }
-
-            is AutofillPartition.Login -> {
-                autofillRequest
-                    .uri
-                    ?.let { nonNullUri ->
-                        autofillCipherProvider
-                            .getLoginAutofillCiphers(
-                                uri = nonNullUri,
-                            )
-                            .map { autofillCipher ->
-                                fillLoginPartition(
-                                    autofillCipher = autofillCipher,
-                                    autofillViews = autofillRequest.partition.views,
-                                    inlinePresentationSpec = getCipherInlinePresentationOrNull(),
-                                    packageName = autofillRequest.packageName,
-                                )
-                            }
-                    }
-                    .orEmpty()
-            }
-        }
+        val filledPartitions = buildFilledPartitions(
+            autofillRequest = autofillRequest,
+            getCipherInlinePresentationOrNull = ::getCipherInlinePresentationOrNull,
+        )
 
         // Use getOrLastOrNull so if the list has run dry take the last spec.
         val vaultItemInlinePresentationSpec = autofillRequest
@@ -108,6 +79,63 @@ class FilledDataBuilderImpl(
             vaultItemInlinePresentationSpec = vaultItemInlinePresentationSpec,
             isVaultLocked = isVaultLocked,
         )
+    }
+
+    /**
+     * Build the [FilledPartition]s for the [autofillRequest]'s partition by fetching the matching
+     * ciphers and fulfilling the partition's views with each cipher's data.
+     *
+     * Note: This must remain `inline`. A non-inlined lambda returning [InlinePresentationSpec]
+     * forces a `checkcast` against that class, which does not exist below API 30 and crashes
+     * with a `NoClassDefFoundError` on Android 10.
+     */
+    private suspend inline fun buildFilledPartitions(
+        autofillRequest: AutofillRequest.Fillable,
+        getCipherInlinePresentationOrNull: () -> InlinePresentationSpec?,
+    ): List<FilledPartition> = when (autofillRequest.partition) {
+        is AutofillPartition.Card -> {
+            autofillCipherProvider
+                .getCardAutofillCiphers()
+                .map { autofillCipher ->
+                    fillCardPartition(
+                        autofillCipher = autofillCipher,
+                        autofillViews = autofillRequest.partition.views,
+                        inlinePresentationSpec = getCipherInlinePresentationOrNull(),
+                    )
+                }
+        }
+
+        is AutofillPartition.Login -> {
+            autofillRequest
+                .uri
+                ?.let { nonNullUri ->
+                    autofillCipherProvider
+                        .getLoginAutofillCiphers(
+                            uri = nonNullUri,
+                        )
+                        .map { autofillCipher ->
+                            fillLoginPartition(
+                                autofillCipher = autofillCipher,
+                                autofillViews = autofillRequest.partition.views,
+                                inlinePresentationSpec = getCipherInlinePresentationOrNull(),
+                                packageName = autofillRequest.packageName,
+                            )
+                        }
+                }
+                .orEmpty()
+        }
+
+        is AutofillPartition.Identity -> {
+            autofillCipherProvider
+                .getIdentityAutofillCiphers()
+                .map { autofillCipher ->
+                    fillIdentityPartition(
+                        autofillCipher = autofillCipher,
+                        autofillViews = autofillRequest.partition.views,
+                        inlinePresentationSpec = getCipherInlinePresentationOrNull(),
+                    )
+                }
+        }
     }
 
     /**
@@ -154,7 +182,7 @@ class FilledDataBuilderImpl(
                 ) {
                     val value = when (autofillView) {
                         is AutofillView.Login.Email -> {
-                            if (!autofillCipher.username.isValidEmail()) {
+                            if (!autofillCipher.username.trim().isValidEmail()) {
                                 return@mapNotNull null
                             }
                             autofillCipher.username
@@ -167,6 +195,33 @@ class FilledDataBuilderImpl(
                 } else {
                     null
                 }
+            }
+
+        return FilledPartition(
+            autofillCipher = autofillCipher,
+            filledItems = filledItems,
+            inlinePresentationSpec = inlinePresentationSpec,
+        )
+    }
+
+    /**
+     * Construct a [FilledPartition] by fulfilling the identity [autofillViews] with data from the
+     * identity [autofillCipher].
+     */
+    private fun fillIdentityPartition(
+        autofillCipher: AutofillCipher.Identity,
+        autofillViews: List<AutofillView.Identity>,
+        inlinePresentationSpec: InlinePresentationSpec?,
+    ): FilledPartition {
+        val filledItems = autofillViews
+            .mapNotNull { autofillView ->
+                autofillCipher
+                    .getAutofillValueOrNull(autofillView)
+                    ?.let { value ->
+                        autofillView.buildFilledItemOrNull(
+                            value = value,
+                        )
+                    }
             }
 
         return FilledPartition(
@@ -218,6 +273,35 @@ private fun AutofillCipher.Card.getAutofillValueOrNull(autofillView: AutofillVie
             brand.takeIf { it.isNotEmpty() }
         }
     }
+
+/**
+ * Get the autofill value for the given [autofillView], or null if no value is available.
+ */
+@Suppress("CyclomaticComplexMethod")
+private fun AutofillCipher.Identity.getAutofillValueOrNull(
+    autofillView: AutofillView.Identity,
+): String? =
+    when (autofillView) {
+        is AutofillView.Identity.PersonNameFull -> fullName
+        is AutofillView.Identity.PersonNamePrefix -> title
+        is AutofillView.Identity.PersonNameGiven -> firstName
+        is AutofillView.Identity.PersonNameMiddle -> middleName
+        is AutofillView.Identity.PersonNameFamily -> lastName
+        is AutofillView.Identity.PostalAddressFull -> fullAddress
+        is AutofillView.Identity.AddressStreet -> address1
+        is AutofillView.Identity.AddressExtended -> address2
+        is AutofillView.Identity.AddressLocality -> city
+        is AutofillView.Identity.AddressRegion -> state
+        is AutofillView.Identity.AddressCountry -> country
+        is AutofillView.Identity.PostalCode -> postalCode
+        is AutofillView.Identity.PhoneFull -> phone
+        is AutofillView.Identity.Company -> company
+        is AutofillView.Identity.Email -> email
+        is AutofillView.Identity.Ssn -> ssn
+        is AutofillView.Identity.PassportNumber -> passportNumber
+        is AutofillView.Identity.LicenseNumber -> licenseNumber
+    }
+        .takeIf { it.isNotEmpty() }
 
 /**
  * Get the item at the [index]. If that fails, return the last item in the list. If that also fails,

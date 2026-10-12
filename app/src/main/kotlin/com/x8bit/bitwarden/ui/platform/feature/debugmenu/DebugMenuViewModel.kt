@@ -4,10 +4,14 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -27,17 +31,21 @@ import javax.inject.Inject
 /**
  * ViewModel for the [DebugMenuScreen]
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
+    private val settingsLogManager: SettingsLogManager,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
-    initialState = DebugMenuState(featureFlags = persistentMapOf()),
+    initialState = DebugMenuState(
+        featureFlags = persistentMapOf(),
+        mainTypeOption = DebugMenuState.MainTypeOption.FLAGS,
+    ),
 ) {
 
     private var featureFlagResetJob: Job? = null
@@ -68,11 +76,21 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetPremiumUpgradeBanner -> handleResetPremiumUpgradeBanner()
             DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
             DebugMenuAction.ResetAccessibilityDisclaimer -> handleResetAccessibilityDisclaimer()
+            DebugMenuAction.ShareSettingsClick -> onShareSettingsClick()
+            is DebugMenuAction.MainTypeOptionClick -> handleMainTypeOptionClick(action)
         }
+    }
+
+    private fun handleMainTypeOptionClick(action: DebugMenuAction.MainTypeOptionClick) {
+        mutableStateFlow.update { it.copy(mainTypeOption = action.option) }
     }
 
     private fun handleResetAccessibilityDisclaimer() {
         debugMenuRepository.resetAccessibilityDisclaimer()
+    }
+
+    private fun onShareSettingsClick() {
+        sendEvent(DebugMenuEvent.ShareText(text = settingsLogManager.data))
     }
 
     private fun handleShowUpgradedToPremiumCard() {
@@ -148,7 +166,20 @@ class DebugMenuViewModel @Inject constructor(
  */
 data class DebugMenuState(
     val featureFlags: ImmutableMap<FlagKey<Any>, Any>,
-)
+    val mainTypeOption: MainTypeOption,
+) {
+    /**
+     * Enum representing the main type options for the debug menu, such as Feature flags and
+     * options.
+     */
+    enum class MainTypeOption(
+        val label: Text,
+        val testTag: String,
+    ) {
+        FLAGS(label = BitwardenString.feature_flags.asText(), testTag = "feature_flags"),
+        OPTIONS(label = BitwardenString.debug_options.asText(), testTag = "debug_options"),
+    }
+}
 
 /**
  * Models event for the [DebugMenuViewModel] to send to the UI.
@@ -158,12 +189,23 @@ sealed class DebugMenuEvent {
      * Navigates back to previous screen.
      */
     data object NavigateBack : DebugMenuEvent()
+
+    /**
+     * Shares the given [text].
+     */
+    data class ShareText(val text: String) : DebugMenuEvent()
 }
 
 /**
  * Models action for the [DebugMenuViewModel] to handle.
  */
 sealed class DebugMenuAction {
+    /**
+     * Indicates that the main option type has been changed by the user.
+     */
+    data class MainTypeOptionClick(
+        val option: DebugMenuState.MainTypeOption,
+    ) : DebugMenuAction()
 
     /**
      * Updates a feature flag for the given [FlagKey] to the given [newValue].
@@ -232,6 +274,11 @@ sealed class DebugMenuAction {
      * User has clicked to force the "Upgraded to Premium" action card to display.
      */
     data object ShowUpgradedToPremiumCard : DebugMenuAction()
+
+    /**
+     * User has clicked the share settings button.
+     */
+    data object ShareSettingsClick : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

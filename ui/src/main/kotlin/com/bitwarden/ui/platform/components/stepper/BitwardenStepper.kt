@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -15,6 +16,7 @@ import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -88,7 +90,7 @@ fun BitwardenStepper(
  * @param textFieldReadOnly whether the text field should be read only. The stepper
  * increment and decrement buttons function regardless of this value.
  */
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 @Composable
 fun BitwardenStepper(
     label: String?,
@@ -116,7 +118,10 @@ fun BitwardenStepper(
         actions = {
             BitwardenFilledIconButton(
                 vectorIconRes = BitwardenDrawable.ic_minus,
-                contentDescription = "\u2212",
+                contentDescription = stringResource(
+                    id = BitwardenString.stepper_decrement_format,
+                    formatArgs = arrayOf(label ?: stringResource(id = BitwardenString.value)),
+                ),
                 onClick = {
                     val decrementedValue = ((clampedValue ?: 0) - 1).coerceIn(range)
                     if (decrementedValue != clampedValue) {
@@ -128,7 +133,10 @@ fun BitwardenStepper(
             )
             BitwardenFilledIconButton(
                 vectorIconRes = BitwardenDrawable.ic_plus,
-                contentDescription = "+",
+                contentDescription = stringResource(
+                    id = BitwardenString.stepper_increment_format,
+                    formatArgs = arrayOf(label ?: stringResource(id = BitwardenString.value)),
+                ),
                 onClick = {
                     val incrementedValue = ((clampedValue ?: 0) + 1).coerceIn(range)
                     if (incrementedValue != clampedValue) {

@@ -44,12 +44,13 @@ sealed class FlagKey<out T : Any> {
                 NewItemTypes,
                 DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
-                PoliciesInAcceptedState,
                 FedRamp,
                 Vfo1Foundation,
                 SendControls,
                 SendControlsExistingSends,
                 IdentityAutofill,
+                SdkPinUnlock,
+                SdkPreLogin,
             )
         }
     }
@@ -168,14 +169,6 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the Policies In Accepted State feature.
-     */
-    data object PoliciesInAcceptedState : FlagKey<Boolean>() {
-        override val keyName: String get() = "pm-34145-policies-in-accepted-state"
-        override val defaultValue: Boolean get() = false
-    }
-
-    /**
      * Data object holding the feature flag key for the FedRAMP feature.
      */
     data object FedRamp : FlagKey<Boolean>() {
@@ -225,6 +218,22 @@ sealed class FlagKey<out T : Any> {
      */
     data object IdentityAutofill : FlagKey<Boolean>() {
         override val keyName: String = "pm-38138-mobile-identity-autofill"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for gating PIN unlock through SDK.
+     */
+    data object SdkPinUnlock : FlagKey<Boolean>() {
+        override val keyName: String = "pm-31059-sdk-pin-unlock"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Pre-Login flow via the SDK.
+     */
+    data object SdkPreLogin : FlagKey<Boolean>() {
+        override val keyName: String = "pm-27060-password-prelogin-from-sdk"
         override val defaultValue: Boolean = false
     }
 

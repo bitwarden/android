@@ -427,11 +427,11 @@
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "C8:A2:E9:BC:CF:59:7C:2F:B6:DC:66:BE:E2:93:FC:13:F2:FC:47:EC:77:BC:6B:2B:0D:52:C1:1F:51:19:2A:B8"
+            "cert_fingerprint_sha256": "34:DF:0E:7A:9F:1C:F1:89:2E:45:C0:56:B4:97:3C:D8:1C:CF:14:8A:40:50:D1:1A:EA:4A:C5:A6:5F:90:0A:42"
           },
           {
-            "build": "release",
-            "cert_fingerprint_sha256": "34:DF:0E:7A:9F:1C:F1:89:2E:45:C0:56:B4:97:3C:D8:1C:CF:14:8A:40:50:D1:1A:EA:4A:C5:A6:5F:90:0A:42"
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "C8:A2:E9:BC:CF:59:7C:2F:B6:DC:66:BE:E2:93:FC:13:F2:FC:47:EC:77:BC:6B:2B:0D:52:C1:1F:51:19:2A:B8"
           }
         ]
       }
@@ -443,11 +443,11 @@
         "signatures": [
           {
             "build": "release",
-            "cert_fingerprint_sha256": "C8:A2:E9:BC:CF:59:7C:2F:B6:DC:66:BE:E2:93:FC:13:F2:FC:47:EC:77:BC:6B:2B:0D:52:C1:1F:51:19:2A:B8"
+            "cert_fingerprint_sha256": "34:DF:0E:7A:9F:1C:F1:89:2E:45:C0:56:B4:97:3C:D8:1C:CF:14:8A:40:50:D1:1A:EA:4A:C5:A6:5F:90:0A:42"
           },
           {
-            "build": "release",
-            "cert_fingerprint_sha256": "34:DF:0E:7A:9F:1C:F1:89:2E:45:C0:56:B4:97:3C:D8:1C:CF:14:8A:40:50:D1:1A:EA:4A:C5:A6:5F:90:0A:42"
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "C8:A2:E9:BC:CF:59:7C:2F:B6:DC:66:BE:E2:93:FC:13:F2:FC:47:EC:77:BC:6B:2B:0D:52:C1:1F:51:19:2A:B8"
           }
         ]
       }
@@ -924,6 +924,54 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "5D:6A:FB:F8:7F:65:2A:F0:46:47:AD:A0:DF:63:4C:F2:23:70:90:0B:16:4B:09:D5:0B:D2:3A:A2:CB:52:85:B8"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.wsapp.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "F5:21:95:30:FC:8F:87:99:3B:3C:F5:0E:83:8A:96:75:AB:3B:2D:C5:79:A2:A8:52:0D:99:87:2A:26:B1:5C:5F"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.github.jqssun.helium",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "09:55:40:49:4D:53:F4:8C:A0:51:BC:86:C3:92:C4:6E:DB:29:72:5D:A5:59:2B:D8:AF:3C:3D:02:7B:31:66:BB"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.norton.neo",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C5:2A:34:DE:F8:1E:DE:D5:3D:48:AD:D3:75:6C:73:24:A8:5B:42:04:D5:65:A7:22:0F:08:38:E3:07:6D:03:4B"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.netskope.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "B8:BB:F5:9C:BD:84:EB:21:7B:F4:3D:1C:50:E8:5C:53:43:E7:93:69:03:93:90:06:9D:C0:0B:A8:A8:8F:BA:DE"
           }
         ]
       }

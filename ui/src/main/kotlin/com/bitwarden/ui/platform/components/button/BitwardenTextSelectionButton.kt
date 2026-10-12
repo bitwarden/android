@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -113,7 +114,7 @@ fun BitwardenTextSelectionButton(
             .defaultMinSize(minHeight = 60.dp)
             .semantics {
                 role = semanticRole
-                contentDescription = "$selectedOption. $label"
+                contentDescription = "${selectedOption?.let { "$it. " }.orEmpty()}$label"
                 customActions = persistentListOfNotNull(
                     helpData?.let {
                         CustomAccessibilityAction(
@@ -180,6 +181,7 @@ fun BitwardenTextSelectionButton(
                 bitwardenTextFieldColors()
             },
             modifier = Modifier
+                .semantics { this.hideFromAccessibility() }
                 .nullableTestTag(tag = textFieldTestTag)
                 .fillMaxWidth(),
         )

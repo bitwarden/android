@@ -50,6 +50,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -59,6 +61,8 @@ import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -73,6 +77,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 
 /**
  * Displays view send screen.
@@ -92,6 +97,16 @@ fun ViewSendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ViewSendEvent.NavigateBack -> onNavigateBack()
+            is ViewSendEvent.NavigateToCopy -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        sendType = event.sendType,
+                        modeType = ModeType.COPY,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
+
             is ViewSendEvent.NavigateToEdit -> {
                 onNavigateToAddEditSend(
                     AddEditSendRoute(
@@ -153,6 +168,7 @@ fun ViewSendScreen(
             onCopyClick = { viewModel.trySendAction(ViewSendAction.CopyClick) },
             onCopyNotesClick = { viewModel.trySendAction(ViewSendAction.CopyNotesClick) },
             onDeleteClick = { viewModel.trySendAction(ViewSendAction.DeleteClick) },
+            onMakeACopyClick = { viewModel.trySendAction(ViewSendAction.MakeACopyClick) },
             onShareClick = { viewModel.trySendAction(ViewSendAction.ShareClick) },
         )
     }
@@ -187,6 +203,7 @@ private fun ViewSendScreenContent(
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -194,9 +211,12 @@ private fun ViewSendScreenContent(
         is ViewSendState.ViewState.Content -> {
             ViewStateContent(
                 state = viewState,
+                policyRestriction = state.policyRestriction,
+                isSendDisabled = state.isSendDisabled,
                 onCopyClick = onCopyClick,
                 onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
+                onMakeACopyClick = onMakeACopyClick,
                 onShareClick = onShareClick,
                 modifier = modifier,
             )
@@ -219,9 +239,12 @@ private fun ViewSendScreenContent(
 @Composable
 private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
+    policyRestriction: SendPolicyRestriction?,
+    isSendDisabled: Boolean,
     onCopyClick: () -> Unit,
     onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
+    onMakeACopyClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -229,37 +252,62 @@ private fun ViewStateContent(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
-        ShareLinkSection(
-            shareLink = state.shareLink,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-        BitwardenFilledButton(
-            label = stringResource(id = BitwardenString.copy),
-            onClick = onCopyClick,
-            icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
-            cardStyle = CardStyle.Middle(hasDivider = false),
-            cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .testTag(tag = "ViewSendCopyButton"),
-        )
-        BitwardenOutlinedButton(
-            label = stringResource(id = BitwardenString.share),
-            onClick = onShareClick,
-            icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
-            isExternalLink = true,
-            cardStyle = CardStyle.Bottom,
-            cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .testTag(tag = "ViewSendShareButton"),
-        )
+        policyRestriction?.let {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.organization_policy_restriction),
+                cardSubtitle = it.message(),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.make_a_copy.asText(),
+                    onClick = onMakeACopyClick,
+                    testTag = "SendMakeACopyButton",
+                )
+                    .takeIf { _ -> it.isCopyable },
+                leadingContent = {
+                    BitwardenIcon(
+                        iconData = IconData.Local(iconRes = BitwardenDrawable.ic_info_circle),
+                        tint = BitwardenTheme.colorScheme.icon.secondary,
+                    )
+                },
+                modifier = Modifier
+                    .testTag(tag = "SendPolicyRestrictionBanner")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
+        if (!isSendDisabled) {
+            ShareLinkSection(
+                shareLink = state.shareLink,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            BitwardenFilledButton(
+                label = stringResource(id = BitwardenString.copy),
+                onClick = onCopyClick,
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
+                cardStyle = CardStyle.Middle(hasDivider = false),
+                cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag(tag = "ViewSendCopyButton"),
+            )
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.share),
+                onClick = onShareClick,
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
+                isExternalLink = true,
+                cardStyle = CardStyle.Bottom,
+                cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag(tag = "ViewSendShareButton"),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = BitwardenString.send_details),
             modifier = Modifier

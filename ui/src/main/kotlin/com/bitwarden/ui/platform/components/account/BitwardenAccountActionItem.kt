@@ -1,9 +1,11 @@
 package com.bitwarden.ui.platform.components.account
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -15,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.R
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
@@ -30,20 +33,30 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param initials The initials of the user to be displayed on top of the icon.
  * @param color The color to be applied as the tint for the icon.
  * @param onClick An action to be invoked when the icon is clicked.
+ * @param modifier A [Modifier] for the composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  */
 @Composable
 fun BitwardenAccountActionItem(
     initials: String,
     color: Color,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val iconPainter = rememberVectorPainter(id = BitwardenDrawable.ic_account_initials_container)
     val contentDescription = stringResource(id = BitwardenString.account)
-
     IconButton(
         onClick = onClick,
         colors = bitwardenStandardIconButtonColors(),
-        modifier = Modifier.testTag("CurrentActiveAccount"),
+        interactionSource = interactionSource,
+        modifier = modifier
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.button,
+            )
+            .testTag(tag = "CurrentActiveAccount"),
     ) {
         Icon(
             painter = iconPainter,

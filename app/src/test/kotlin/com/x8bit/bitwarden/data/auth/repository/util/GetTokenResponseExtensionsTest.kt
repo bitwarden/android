@@ -40,6 +40,7 @@ class GetTokenResponseExtensionsTest {
             GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                 previousUserState = null,
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = true,
             ),
         )
     }
@@ -53,6 +54,7 @@ class GetTokenResponseExtensionsTest {
             GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                 previousUserState = SINGLE_USER_STATE_2,
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = true,
             ),
         )
     }
@@ -80,6 +82,119 @@ class GetTokenResponseExtensionsTest {
             tokenResponse.toUserState(
                 previousUserState = null,
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = true,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState with a failing password and no userDecryptionOptions sets WEAK_MASTER_PASSWORD_ON_LOGIN`() {
+        val expectedState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .WEAK_MASTER_PASSWORD_ON_LOGIN,
+                    ),
+                ),
+            ),
+        )
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN_1) } returns JWT_TOKEN_DATA
+
+        assertEquals(
+            expectedState,
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = false,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState with a failing password and userDecryptionOptions without a reason sets WEAK_MASTER_PASSWORD_ON_LOGIN`() {
+        val tokenResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            userDecryptionOptions = USER_DECRYPTION_OPTIONS_WITHOUT_REASON,
+        )
+        val expectedState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .WEAK_MASTER_PASSWORD_ON_LOGIN,
+                        userDecryptionOptions = USER_DECRYPTION_OPTIONS_WITHOUT_REASON,
+                    ),
+                ),
+            ),
+        )
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN_1) } returns JWT_TOKEN_DATA
+
+        assertEquals(
+            expectedState,
+            tokenResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = false,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState with a failing password prefers TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION`() {
+        val tokenResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            userDecryptionOptions = USER_DECRYPTION_OPTIONS,
+        )
+        val expectedState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
+                        userDecryptionOptions = USER_DECRYPTION_OPTIONS,
+                    ),
+                ),
+            ),
+        )
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN_1) } returns JWT_TOKEN_DATA
+
+        assertEquals(
+            expectedState,
+            tokenResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = false,
+            ),
+        )
+    }
+
+    @Test
+    fun `toUserState with a failing password prefers ADMIN_FORCE_PASSWORD_RESET`() {
+        val tokenResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            shouldForcePasswordReset = true,
+            userDecryptionOptions = USER_DECRYPTION_OPTIONS_WITHOUT_REASON,
+        )
+        val expectedState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .ADMIN_FORCE_PASSWORD_RESET,
+                        userDecryptionOptions = USER_DECRYPTION_OPTIONS_WITHOUT_REASON,
+                    ),
+                ),
+            ),
+        )
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN_1) } returns JWT_TOKEN_DATA
+
+        assertEquals(
+            expectedState,
+            tokenResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = false,
             ),
         )
     }
@@ -126,6 +241,17 @@ private val USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
         hasLoginApprovingDevice = true,
         hasManageResetPasswordPermission = true,
     ),
+    keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
+)
+
+/**
+ * Decryption options that produce no [ForcePasswordResetReason] of their own, so that the
+ * weak-password fallback is the only reason left in play.
+ */
+private val USER_DECRYPTION_OPTIONS_WITHOUT_REASON = UserDecryptionOptionsJson(
+    hasMasterPassword = true,
+    trustedDeviceUserDecryptionOptions = null,
     keyConnectorUserDecryptionOptions = null,
     masterPasswordUnlock = null,
 )

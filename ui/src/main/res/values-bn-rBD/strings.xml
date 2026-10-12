@@ -24,8 +24,8 @@
     <string name="folder_created">নতুন ফোল্ডার তৈরি হয়েছে।</string>
     <string name="folder_deleted">ফোল্ডারটি মুছে ফেলা হয়েছে।</string>
     <string name="folder_none">কোন ফোল্ডার নেই</string>
-    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="folder_updated">ফোল্ডার হালনাগাদকৃত।</string>
+    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="hide">লুকান</string>
     <string name="internet_connection_required_message">চালিয়ে যাওয়ার আগে দয়া করে ইন্টারনেটে সংযোগ করুন।</string>
     <string name="internet_connection_required_title">ইন্টারনেট সংযোগ প্রয়োজন</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">মাস্টার পাসওয়ার্ড (আবশ্যক)</string>
     <string name="new_master_password_required">নতুন মাস্টার পাসওয়ার্ড (আবশ্যক)</string>
     <string name="more_options">আরও বিকল্প</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">আমার ভল্ট</string>
     <string name="name">নাম</string>
     <string name="item_name_required">আইটেমের নাম (প্রয়োজনীয়)</string>
@@ -118,7 +120,6 @@
     <string name="min_numbers">সর্বনিম্ন সংখ্যা</string>
     <string name="min_special">ন্যূনতম বিশেষ</string>
     <string name="never">কখনই না</string>
-    <string name="new_item_created">আইটেম যোগ করা হয়েছে</string>
     <string name="no_cards">আপনার ভল্টে কোনও কার্ড নেই।</string>
     <string name="add_card">কার্ড যোগ করুন</string>
     <string name="no_logins">আপনার ভল্টে কোনও লগইন নেই।</string>
@@ -148,6 +149,14 @@
     <string name="select">নির্বাচন করুন</string>
     <string name="item_details">আইটেম বিবরণ</string>
     <string name="item_updated">আইটেম সংরক্ষণ করা হয়েছে</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">জমা দেওয়া হচ্ছে…</string>
     <string name="syncing">সিঙ্ক করা হচ্ছে…</string>
     <string name="syncing_complete">সিঙ্ক সম্পূর্ণ হয়েছে</string>
@@ -283,7 +292,9 @@
     <string name="vault_is_locked">ভল্ট লক করা আছে</string>
     <string name="go_to_my_vault">আমার ভল্টে যান</string>
     <string name="collections">সংগ্রহ</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">এই সংগ্রহে কোনও আইটেম নেই।</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">এই ফোল্ডারে কোনও আইটেম নেই।</string>
     <string name="no_items_trash">ট্র্যাশে কোনও আইটেম নেই।</string>
     <string name="autofill_accessibility_summary">অন্যান্য অ্যাপ এবং ওয়েবে ব্যবহারকারীর নাম এবং পাসওয়ার্ড ফিল্ড পূরণ করতে সহায়তা করুন।</string>
@@ -338,16 +349,21 @@
     <string name="move_up">উপরে উঠান</string>
     <string name="owner">মালিক</string>
     <string name="no_collections_to_list">তালিকার জন্য কোনও সংগ্রহ নেই।</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s কে %2$s-এ সরানো হয়েছে।</string>
     <string name="select_one_collection">আপনাকে কমপক্ষে একটি সংগ্রহ নির্বাচন করতে হবে।</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">শেয়ার করুন</string>
-    <string name="move_to_vault">ভল্টে সরান</string>
-    <string name="no_vaults_to_list">তালিকাভুক্ত করার মতো কোনও ভল্ট নেই।</string>
-    <string name="move_to_vault_desc">আপনি এই আইটেমটি যে ভল্টে সরাতে চান তা নির্বাচন করুন। অন্য ভল্টে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
+    <string name="move_to_organization">সংগঠনে সরান</string>
+    <string name="no_orgs_to_list">তালিকাভুক্ত করার মতো কোনও সংগঠন নেই।</string>
+    <string name="move_to_org_desc">আপনি এই আইটেমটি যে সংগঠনে সরাতে চান তা নির্বাচন করুন। একটি সংগঠনে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
+    <string name="no_vaults_to_list">No vaults to list.</string>
+    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">শব্দসংখ্যা</string>
     <string name="passphrase">গুপ্ত-বাক্যাংশ</string>
     <string name="word_separator">শব্দ বিভাজক</string>
     <string name="clear">পরিষ্কার করুন</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">জেনারেটর</string>
     <string name="no_folders_to_list">তালিকাভুক্ত করার মতো কোনও ফোল্ডার নেই।</string>
     <string name="fingerprint_phrase">ফিঙ্গারপ্রিন্ট ফ্রেজ</string>
@@ -457,6 +473,7 @@
     <string name="deletion_date">মুছে ফেলার তারিখ</string>
     <string name="deletion_time">মোছার সময়</string>
     <string name="deletion_date_info">নির্দিষ্ট তারিখ এবং সময়ে সেন্ডটি স্থায়ীভাবে মুছে ফেলা হবে।</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">কে দেখতে পারেন</string>
     <string name="anyone_with_the_link">লিঙ্ক সহ যে কেউ</string>
     <string name="anyone_with_link_can_view_send">এই লিঙ্ক সহ যে কেউ এই সেন্ড দেখতে পারেন</string>
@@ -494,6 +511,7 @@
     <string name="two_days">২ দিন</string>
     <string name="three_days">৩ দিন</string>
     <string name="seven_days">৭ দিন</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">৩০ দিন</string>
     <string name="custom">পছন্দসই</string>
     <string name="custom_timeout">কাস্টম টাইমআউট</string>
@@ -502,6 +520,11 @@
     <string name="about_send">সেন্ড সম্পর্কে</string>
     <string name="hide_email">প্রাপকদের কাছ থেকে আমার ইমেল ঠিকানা লুকান</string>
     <string name="send_options_policy_in_effect">এক বা একাধিক সংগঠন নীতি আপনার সেন্ড বিকল্পগুলিকে প্রভাবিত করছে।</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">বিনামূল্যে অ্যাকাউন্টগুলি শুধুমাত্র টেক্সট শেয়ার করার জন্য সীমাবদ্ধ। Send এর মাধ্যমে ফাইল ব্যবহার করার জন্য একটি প্রিমিয়াম সদস্যপদ প্রয়োজন।</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">নির্দিষ্ট ব্যক্তিদের সাথে শেয়ার করা একটি প্রিমিয়াম বৈশিষ্ট্য। আপনার বর্তমান প্ল্যানে এই বৈশিষ্ট্যটিতে অ্যাক্সেস অন্তর্ভুক্ত নয়।</string>
     <string name="password_prompt">মাস্টার পাসওয়ার্ড পুনরায় প্রম্পট</string>
@@ -551,8 +574,8 @@
     <string name="resend_code">কোড আবার পাঠান</string>
     <string name="a_verification_code_was_sent_to_your_email">আপনার ইমেলে একটি যাচাইকরণ কোড পাঠানো হয়েছে</string>
     <string name="submit_crash_logs">ক্র্যাশ লগ জমা দিন</string>
-    <string name="options_expanded">বিকল্পগুলি প্রসারিত, সংকুচিত করতে আলতো চাপুন।</string>
-    <string name="options_collapsed">বিকল্পগুলি সংকুচিত, প্রসারিত করতে আলতো চাপুন।</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">বড় হাতের অক্ষর (A-Z)</string>
     <string name="lowercase_ato_z">ছোট হাতের অক্ষর (A থেকে Z)</string>
     <string name="numbers_zero_to_nine">সংখ্যা (0-9)</string>
@@ -687,6 +710,7 @@
     <string name="logging_in_on">এতে লগ ইন করা হচ্ছে</string>
     <string name="logging_in_on_with_colon">এতে লগ ইন করা হচ্ছে:</string>
     <string name="vault">ভল্ট</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">অবয়ব</string>
     <string name="account_security">অ্যাকাউন্টের নিরাপত্তা</string>
     <string name="bitwarden_help_center">Bitwarden Help Center</string>
@@ -1124,11 +1148,6 @@
     <string name="file_could_not_be_processed">ফাইল প্রক্রিয়া করা যায়নি</string>
     <string name="file_could_not_be_processed_message">ফাইল প্রক্রিয়া করা যায়নি। এটি বৈধ JSON তা নিশ্চিত করে আবার চেষ্টা করুন। সাহায্য প্রয়োজন? bitwarden.com/help দেখুন</string>
     <string name="get_help">সাহায্য পান</string>
-    <string name="expand_advanced_options">উন্নত বিকল্পগুলি প্রসারিত করুন</string>
-    <string name="local_items_are_expanded_click_to_collapse">স্থানীয় আইটেমগুলি প্রসারিত, সংকুচিত করতে ক্লিক করুন।</string>
-    <string name="local_items_are_collapsed_click_to_expand">স্থানীয় আইটেমগুলি সংকুচিত, প্রসারিত করতে ক্লিক করুন।</string>
-    <string name="items_expanded_click_to_collapse">আইটেমগুলি প্রসারিত, সংকুচিত করতে ক্লিক করুন।</string>
-    <string name="items_are_collapsed_click_to_expand">আইটেমগুলি সংকুচিত, প্রসারিত করতে ক্লিক করুন।</string>
     <string name="error_cannot_decrypt">[ত্রুটি: ডিক্রিপ্ট করা যায় না]</string>
     <string name="copy_error_report">ত্রুটি প্রতিবেদন কপি করুন</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden এই ভল্ট আইটেমটি ডিক্রিপ্ট করতে পারেনি। অতিরিক্ত ডেটা ক্ষতি এড়াতে এই ত্রুটি প্রতিবেদনটি কপি করে কাস্টমার সাকসেসের সাথে শেয়ার করুন।</string>
@@ -1137,6 +1156,7 @@
         <item quantity="other">Bitwarden %1$d ভল্ট আইটেম ডিক্রিপ্ট করতে পারেনি। অতিরিক্ত ডেটা ক্ষতি এড়াতে এই ত্রুটি প্রতিবেদনটি কপি করে কাস্টমার সাকসেসের সাথে শেয়ার করুন।</item>
     </plurals>
     <string name="select_a_card_for_x">%s এর জন্য একটি কার্ড নির্বাচন করুন</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">উন্নত বিকল্প</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ম্যাচ সনাক্তকরণ সম্পর্কে আরও</annotation></string>
     <string name="keep_your_credential_secure">আপনার শংসাপত্রগুলি সুরক্ষিত রাখুন</string>
@@ -1239,6 +1259,7 @@
     <string name="invalid_email_addresses">অবৈধ ইমেল ঠিকানা</string>
     <string name="one_or_more_email_addresses_are_incorrect">এক বা একাধিক ইমেল ঠিকানা ভুল। অনুগ্রহ করে পর্যালোচনা করে আবার চেষ্টা করুন।</string>
     <string name="no_email_addresses_entered">কোন ইমেল ঠিকানা প্রবেশ করানো হয়নি</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">এই সেন্ড শেয়ার করতে কমপক্ষে একটি বৈধ ইমেল ঠিকানা লিখুন।</string>
     <string name="sync_with_browser">ব্রাউজারের সাথে সিঙ্ক করুন</string>
     <string name="sync_with_browser_description">%1$s-এর সাথে সংযোগ করতে, আপনার ডিফল্ট ব্রাউজারটিকে Bitwarden মোবাইল অ্যাপের সাথে সিঙ্ক করুন। আপনার ব্রাউজার খোলার সময়, প্রম্পট করা হলে সাইন-ইন সম্পূর্ণ করুন।\nসিঙ্ক সম্পূর্ণ হলে, আপনাকে এই অ্যাপে ফিরিয়ে আনা হবে।</string>
@@ -1416,4 +1437,15 @@
     <string name="receive_24_7_priority_support">24/7 অগ্রাধিকার সমর্থন পান</string>
     <string name="account_creation_restricted">অ্যাকাউন্ট তৈরি সীমাবদ্ধ</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s শুধুমাত্র আমন্ত্রিত ব্যবহারকারীদের অ্যাকাউন্ট তৈরি করতে অনুমতি দেয়।</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

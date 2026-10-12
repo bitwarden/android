@@ -70,9 +70,9 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectio
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -159,7 +159,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val loginInitialSavedStateHandle
         get() = createSavedStateHandleWithState(
             state = loginInitialState,
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(),
             vaultItemCipherType = VaultItemCipherType.LOGIN,
         )
 
@@ -274,7 +274,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when state is null`() = runTest {
         val expectedState = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(),
             cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
@@ -295,7 +295,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
                 state = null,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
@@ -316,7 +316,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
                 state = initState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
@@ -337,14 +337,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         } returns listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "Test Org",
                 id = "testId",
                 type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
                 enabled = true,
             ),
         )
-        val vaultAddEditType = VaultAddEditType.AddItem
+        val vaultAddEditType = VaultAddEditType.AddItem()
         val vaultItemCipherType = VaultItemCipherType.LOGIN
         mutableVaultDataFlow.value = DataState.Loaded(
             data = createVaultData(),
@@ -395,7 +395,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `Vfo1FoundationFlagUpdateReceive should re-derive the content state using the latest vault data`() =
         runTest {
-            val vaultAddEditType = VaultAddEditType.AddItem
+            val vaultAddEditType = VaultAddEditType.AddItem()
             val vaultItemCipherType = VaultItemCipherType.LOGIN
             mutableVaultDataFlow.value = DataState.Loaded(data = createVaultData())
             val viewModel = createAddVaultItemViewModel(
@@ -441,7 +441,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val autofillContentState = autofillSelectionData.toDefaultAddTypeContent(
             isIndividualVaultDisabled = false,
         )
-        val vaultAddEditType = VaultAddEditType.AddItem
+        val vaultAddEditType = VaultAddEditType.AddItem()
         val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -475,7 +475,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             autofillSaveItem = autofillSaveItem,
         )
         val autofillContentState = autofillSaveItem.toDefaultAddTypeContent(false)
-        val vaultAddEditType = VaultAddEditType.AddItem
+        val vaultAddEditType = VaultAddEditType.AddItem()
         val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -516,7 +516,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             attestationOptions = createMockPasskeyAttestationOptions(number = 1),
             isIndividualVaultDisabled = false,
         )
-        val vaultAddEditType = VaultAddEditType.AddItem
+        val vaultAddEditType = VaultAddEditType.AddItem()
         val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -543,7 +543,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial edit state should be correct`() = runTest {
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -559,14 +559,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
             organizationEventManager.trackEvent(
-                event = OrganizationEvent.CipherClientViewed(cipherId = DEFAULT_EDIT_ITEM_ID),
+                event = OrganizationEvent.CipherClientViewed(cipherId = DEFAULT_ITEM_ID),
             )
         }
     }
 
     @Test
     fun `initial clone state should be correct`() = runTest {
-        val vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -600,7 +600,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -673,7 +673,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `AttachmentsClick should emit NavigateToAttachments`() = runTest {
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -685,7 +685,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.AttachmentsClick)
             assertEquals(
-                VaultAddEditEvent.NavigateToAttachments(DEFAULT_EDIT_ITEM_ID),
+                VaultAddEditEvent.NavigateToAttachments(DEFAULT_ITEM_ID),
                 awaitItem(),
             )
         }
@@ -693,7 +693,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `MoveToOrganizationClick should emit NavigateToMoveToOrganization`() = runTest {
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -705,7 +705,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.MoveToOrganizationClick)
             assertEquals(
-                VaultAddEditEvent.NavigateToMoveToOrganization(DEFAULT_EDIT_ITEM_ID),
+                VaultAddEditEvent.NavigateToMoveToOrganization(DEFAULT_ITEM_ID),
                 awaitItem(),
             )
         }
@@ -713,7 +713,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CollectionsClick should emit NavigateToCollections`() = runTest {
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -725,7 +725,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.CollectionsClick)
             assertEquals(
-                VaultAddEditEvent.NavigateToCollections(DEFAULT_EDIT_ITEM_ID),
+                VaultAddEditEvent.NavigateToCollections(DEFAULT_ITEM_ID),
                 awaitItem(),
             )
         }
@@ -737,7 +737,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(number = 1)
             val cipherView = createMockCipherView(number = 1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
             mutableVaultDataFlow.value = DataState.Loaded(
                 data = createVaultData(cipherListView = cipherListView),
@@ -778,7 +778,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(number = 1)
             val cipherView = createMockCipherView(number = 1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
             mutableVaultDataFlow.value = DataState.Loaded(
                 data = createVaultData(cipherListView = cipherListView),
@@ -848,7 +848,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(number = 1)
             val cipherView = createMockCipherView(number = 1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
             mutableVaultDataFlow.value = DataState.Loaded(
                 data = createVaultData(cipherListView = cipherListView),
@@ -918,7 +918,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit NavigateBack`() =
+    fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit CloseAndNavigateToVaultItem`() =
         runTest {
             val stateWithDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
@@ -939,13 +939,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
@@ -955,14 +955,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
-                    VaultAddEditEvent.NavigateBack,
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
+                        cipherId = DEFAULT_ITEM_ID,
+                        cipherType = VaultItemCipherType.LOGIN,
+                    ),
                     eventFlow.awaitItem(),
-                )
-            }
-            verify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
-                    relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
             coVerify(exactly = 1) {
@@ -1004,13 +1001,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
@@ -1060,13 +1057,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
@@ -1085,7 +1082,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate back not clearing special circumstances`() =
+    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate back without clearing special circumstances`() =
         runTest {
             val autofillData = AutofillSelectionData(
                 type = AutofillSelectionData.Type.LOGIN,
@@ -1112,13 +1109,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
@@ -1126,12 +1123,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
                 assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(VaultAddEditEvent.NavigateBack, eventTurbine.awaitItem())
+                assertEquals(
+                    VaultAddEditEvent.NavigateBack,
+                    eventTurbine.awaitItem(),
+                )
             }
             assertNotNull(specialCircumstanceManager.specialCircumstance)
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
@@ -1179,7 +1179,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithNewLogin,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1205,7 +1205,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every { authRepository.activeUserId } returns "mockUserId"
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
@@ -1274,7 +1274,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every { authRepository.activeUserId } returns mockUserId
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             mutableVaultDataFlow.value = DataState.Loaded(
                 createVaultData(),
@@ -1282,7 +1282,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1338,7 +1338,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1374,7 +1374,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns Fido2RegisterCredentialResult.Success(responseJson = "mockResponse")
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
@@ -1423,7 +1423,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1470,7 +1470,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1485,9 +1485,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
     @Suppress("MaxLineLength")
-    fun `in add mode, createCipherInOrganization success should send snackbar event and NavigateBack`() =
+    @Test
+    fun `in add mode, createCipherInOrganization success should send CloseAndNavigateToVaultItem`() =
         runTest {
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
@@ -1500,22 +1500,98 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
 
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Success
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
+                        cipherId = DEFAULT_ITEM_ID,
+                        cipherType = VaultItemCipherType.LOGIN,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode with a card, createCipherInOrganization success should send CloseAndNavigateToVaultItem`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(),
+            )
+
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.CloseAndNavigateToVaultItem(
+                        cipherId = DEFAULT_ITEM_ID,
+                        cipherType = VaultItemCipherType.CARD,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `in edit mode with a card, updateCipher success should send the card saved snackbar`() =
+        runTest {
+            val cipherView = createMockCipherListView(1)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                vaultItemCipherType = VaultItemCipherType.CARD,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(),
+            )
+
+            mutableVaultDataFlow.value =
+                DataState.Loaded(createVaultData(cipherListView = cipherView))
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.updateCipher(any(), any())
+            } returns UpdateCipherResult.Success
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
-                    relay = SnackbarRelay.CIPHER_CREATED,
+                    data = BitwardenSnackbarData(BitwardenString.card_saved.asText()),
+                    relay = SnackbarRelay.CIPHER_UPDATED,
                 )
             }
         }
@@ -1534,7 +1610,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         restore = false,
                     ),
                 )
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -1607,7 +1683,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 createMockCipherListView(number = 1, collectionIds = listOf("mockId-1", "mockId-2"))
             val cipherView = createMockCipherView(1)
                 .copy(collectionIds = listOf("mockId-1", "mockId-2"))
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -1682,7 +1758,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(collectionIds = listOf("mockId-1", "mockId-2"))
             val cipherView = createMockCipherView(1)
                 .copy(collectionIds = listOf("mockId-1", "mockId-2"))
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -1757,7 +1833,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(collectionIds = listOf("mockId-1", "mockId-2"))
             val cipherView = createMockCipherView(1)
                 .copy(collectionIds = listOf("mockId-1", "mockId-2"))
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -1829,7 +1905,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherView = createMockCipherListView(1)
             val stateWithName = createVaultAddItemState(
-                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
                 ),
@@ -1841,7 +1917,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1855,7 +1931,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
                     relay = SnackbarRelay.CIPHER_UPDATED,
                 )
             }
@@ -1875,7 +1951,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1909,7 +1985,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -1956,7 +2032,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(1)
             val cipherView = createMockCipherView(1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithDialog = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 dialogState = VaultAddEditState.DialogState.Loading(
@@ -2016,7 +2092,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             coEvery {
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
             } returns UpdateCipherResult.Success
 
             viewModel.stateFlow.test {
@@ -2037,7 +2113,54 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                 )
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode during autofill selection, SaveClick should navigate back without clearing special circumstances`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = AutofillSelectionData(
+                        type = AutofillSelectionData.Type.LOGIN,
+                        framework = AutofillSelectionData.Framework.AUTOFILL,
+                        uri = "mockUri",
+                    ),
+                    shouldFinishWhenComplete = true,
+                )
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                commonContentViewState = createCommonContentViewState(name = "mockName-1"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(cipherListView = createMockCipherListView(1)),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+            coEvery {
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
+            } returns UpdateCipherResult.Success
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+
+            assertNotNull(specialCircumstanceManager.specialCircumstance)
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.login_saved.asText()),
+                    relay = SnackbarRelay.CIPHER_UPDATED,
+                )
             }
         }
 
@@ -2047,7 +2170,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(1)
             val cipherView = createMockCipherView(1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -2078,7 +2201,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns stateWithName.viewState
             val error = Throwable("Oh dang.")
             coEvery {
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
             } returns UpdateCipherResult.Error(errorMessage = null, error = error)
             mutableVaultDataFlow.value = DataState.Loaded(
                 data = createVaultData(cipherListView = cipherListView),
@@ -2105,7 +2228,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             coVerify(exactly = 1) {
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
             }
         }
 
@@ -2115,7 +2238,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(1)
             val cipherView = createMockCipherView(1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -2146,7 +2269,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             } returns stateWithName.viewState
             coEvery {
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
             } returns UpdateCipherResult.Error(errorMessage = errorMessage, error = null)
             mutableVaultDataFlow.value = DataState.Loaded(
                 createVaultData(cipherListView = cipherListView),
@@ -2172,7 +2295,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             coVerify(exactly = 1) {
-                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+                vaultRepository.updateCipher(DEFAULT_ITEM_ID, any())
             }
         }
 
@@ -2186,7 +2309,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
             val mockFido2CredentialRequest = createMockCreateCredentialRequest(number = 1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
                     name = cipherView.name,
@@ -2247,7 +2370,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             number = 1,
             fido2Credentials = createMockSdkFido2CredentialList(number = 1),
         )
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val mockFidoRequest = createMockCreateCredentialRequest(number = 1)
         val stateWithName = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -2326,7 +2449,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
             val mockFidoRequest = createMockCreateCredentialRequest(number = 1)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -2408,11 +2531,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             createSavedStateHandleWithState(
                 state = stateWithNoName,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
-        coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
+        coEvery {
+            vaultRepository.createCipher(any())
+        } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
         viewModel.stateFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
             assertEquals(stateWithNoName, awaitItem())
@@ -2436,12 +2561,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             createSavedStateHandleWithState(
                 state = errorState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
 
-        coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
+        coEvery {
+            vaultRepository.createCipher(any())
+        } returns CreateCipherResult.Success(cipherId = DEFAULT_ITEM_ID)
         viewModel.stateFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog)
             assertEquals(errorState, awaitItem())
@@ -2461,7 +2588,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = errorState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -2517,7 +2644,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `screenDisplayName should resolve new title strings for new vault item types in add mode`() {
-        val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem)
+        val baseAddState = createVaultAddItemState(vaultAddEditType = VaultAddEditType.AddItem())
         assertEquals(
             BitwardenString.add_bank_account.asText(),
             baseAddState.copy(cipherType = VaultItemCipherType.BANK_ACCOUNT).screenDisplayName,
@@ -2536,7 +2663,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `screenDisplayName should resolve new title strings for new vault item types in edit mode`() {
         val baseEditState = createVaultAddItemState(
-            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+            vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
         )
         assertEquals(
             BitwardenString.edit_bank_account.asText(),
@@ -2556,7 +2683,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `screenDisplayName should resolve new title strings for new vault item types in clone mode`() {
         val baseCloneState = createVaultAddItemState(
-            vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID),
+            vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_ITEM_ID),
         )
         assertEquals(
             BitwardenString.add_bank_account.asText(),
@@ -2576,7 +2703,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `ArchiveClick without Premium should show ArchiveRequiresPremium dialog`() = runTest {
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
@@ -2638,7 +2765,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(number = 1, isArchived = false)
             val cipherView = createMockCipherView(number = 1, isArchived = false)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
@@ -2679,7 +2806,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
@@ -2760,7 +2887,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 createMockCipherListView(number = 1, isArchived = false)
             val cipherView =
                 createMockCipherView(number = 1, isArchived = false)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -2841,7 +2968,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherListView = createMockCipherListView(number = 1, isArchived = false)
             val cipherView = createMockCipherView(number = 1, isArchived = false)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
@@ -2882,7 +3009,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
         val cipherListView = createMockCipherListView(number = 1, isArchived = false)
         val cipherView = createMockCipherView(number = 1, isArchived = false)
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = createCommonContentViewState(originalCipher = cipherView),
@@ -2962,7 +3089,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 createMockCipherListView(number = 1, isArchived = false)
             val cipherView =
                 createMockCipherView(number = 1, isArchived = false)
-            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val initState = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 commonContentViewState = createCommonContentViewState(
@@ -3140,7 +3267,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = loginState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -3276,7 +3403,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             totpCode = "testCode",
                         ),
                     ),
-                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -3348,7 +3475,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                     ),
-                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -3384,7 +3511,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                     ),
-                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -3441,7 +3568,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             ),
                         ),
                     ),
-                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -3476,7 +3603,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 state = createVaultAddItemState(
                     typeContentViewState = createLoginTypeContentViewState(),
                 ),
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
@@ -3544,7 +3671,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             identityInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             )
             viewModel = createAddVaultItemViewModel(
@@ -3839,7 +3966,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             identityInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             )
             viewModel = createAddVaultItemViewModel(
@@ -3955,7 +4082,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             sshKeyInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.SSH_KEY,
             )
             viewModel = createAddVaultItemViewModel(
@@ -3997,7 +4124,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             bankAccountInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.BANK_ACCOUNT,
             )
             viewModel = createAddVaultItemViewModel(
@@ -4176,7 +4303,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             licenseInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.DRIVERS_LICENSE,
             )
             viewModel = createAddVaultItemViewModel(
@@ -4370,7 +4497,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             passportInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.PASSPORT,
             )
             viewModel = createAddVaultItemViewModel(
@@ -4624,6 +4751,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Nested
     inner class VaultAddEditCommonActions {
+        private val createdFolderId: String = "123"
+        private val newFolderName: String = "folderName"
+        private val createdFolderView: FolderView = FolderView(
+            id = createdFolderId,
+            name = newFolderName,
+            revisionDate = fixedClock.instant(),
+        )
         private lateinit var viewModel: VaultAddEditViewModel
         private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var secureNotesInitialSavedStateHandle: SavedStateHandle
@@ -4636,7 +4770,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddItemInitialState = createVaultAddItemState()
             secureNotesInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             )
             viewModel = createAddVaultItemViewModel(
@@ -4721,20 +4855,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder action calls create folder from vault repository`() = runTest {
-            val folderName = "folderName"
-            val expectedFolderResult = FolderView(
-                id = "123",
-                name = folderName,
-                revisionDate = fixedClock.instant(),
-            )
             coEvery {
                 vaultRepository.createFolder(any())
-            } returns CreateFolderResult.Success(expectedFolderResult)
-            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+            } returns CreateFolderResult.Success(createdFolderView)
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
             coVerify {
                 vaultRepository.createFolder(
                     FolderView(
-                        name = folderName,
+                        name = newFolderName,
                         id = null,
                         revisionDate = fixedClock.instant(),
                     ),
@@ -4744,20 +4872,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
-            val folderId = "123"
-            val folderName = "folderName"
-            val expectedFolderResult = FolderView(
-                id = folderId,
-                name = folderName,
-                revisionDate = fixedClock.instant(),
-            )
             coEvery {
                 vaultRepository.createFolder(any())
-            } returns CreateFolderResult.Success(expectedFolderResult)
+            } returns CreateFolderResult.Success(createdFolderView)
 
             viewModel.stateFlow.test {
                 awaitItem() // initial state.
-                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
                 assertEquals(
                     vaultAddItemInitialState.copy(
                         dialog = VaultAddEditState.DialogState.Loading(
@@ -4770,11 +4891,35 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     createVaultAddItemState(
                         dialogState = null,
                         commonContentViewState = createCommonContentViewState(
-                            selectedFolderId = folderId,
+                            selectedFolderId = createdFolderId,
                         ),
                     ),
                     awaitItem(),
                 )
+            }
+        }
+
+        @Test
+        fun `AddNewFolder does not show the folder created snackbar on success`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(createdFolderView)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                expectNoEvents()
+            }
+        }
+
+        @Test
+        fun `AddNewFolder does not show the folder created snackbar on error`() = runTest {
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Error(error = Throwable("Fail"))
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+                expectNoEvents()
             }
         }
 
@@ -5061,7 +5206,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = initState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -5117,7 +5262,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = initState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -5184,7 +5329,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = initState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.LOGIN,
                 ),
             )
@@ -5292,7 +5437,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 every {
                     policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 } returns listOf(
-                    createMockPolicyView(
+                    createMockSdkPolicy(
                         organizationId = "Test Org",
                         id = "testId",
                         type = PolicyType.ORGANIZATION_DATA_OWNERSHIP,
@@ -5300,7 +5445,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-                val vaultAddEditType = VaultAddEditType.AddItem
+                val vaultAddEditType = VaultAddEditType.AddItem()
                 val vaultItemCipherType = VaultItemCipherType.LOGIN
                 mutableVaultDataFlow.value = DataState.Loaded(
                     data = createVaultData(),
@@ -5951,7 +6096,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             .ItemType
                             .Card(),
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6005,7 +6150,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultItemCipherType = VaultItemCipherType.CARD,
                         typeContentViewState = initialCardState,
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6032,7 +6177,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             .ItemType
                             .Card(),
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6063,7 +6208,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             .ItemType
                             .Card(),
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6092,7 +6237,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = initialState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6130,7 +6275,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = initialState,
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6170,7 +6315,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultItemCipherType = VaultItemCipherType.CARD,
                         typeContentViewState = initialCard,
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6219,7 +6364,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultItemCipherType = VaultItemCipherType.CARD,
                         typeContentViewState = typedCard,
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6273,7 +6418,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultItemCipherType = VaultItemCipherType.CARD,
                         typeContentViewState = firstScanCard,
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6324,7 +6469,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         vaultItemCipherType = VaultItemCipherType.CARD,
                         typeContentViewState = initialCard,
                     ),
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(),
                     vaultItemCipherType = VaultItemCipherType.CARD,
                 ),
             )
@@ -6363,7 +6508,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("LongParameterList")
     private fun createVaultAddItemState(
-        vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem,
+        vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem(),
         vaultItemCipherType: VaultItemCipherType = VaultItemCipherType.LOGIN,
         commonContentViewState: VaultAddEditState.ViewState.Content.Common =
             createCommonContentViewState(),
@@ -6640,7 +6785,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
                 state = initialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
@@ -6669,7 +6814,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
                 state = initialState,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
         )
@@ -6749,4 +6894,4 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
 private const val TEST_ID = "testId"
 
-private const val DEFAULT_EDIT_ITEM_ID: String = "mockId-1"
+private const val DEFAULT_ITEM_ID: String = "mockId-1"

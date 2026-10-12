@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
@@ -34,6 +36,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param buttonData The data for the button.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param colors The colors for the button.
  * @param cardStyle The optional card style to surround the button.
  * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
@@ -43,6 +47,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenOutlinedButton(
     buttonData: BitwardenButtonData,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
     cardStyle: CardStyle? = null,
     cardInsets: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
@@ -56,6 +61,7 @@ fun BitwardenOutlinedButton(
         cardStyle = cardStyle,
         colors = colors,
         cardInsets = cardInsets,
+        interactionSource = interactionSource,
         modifier = modifier.nullableTestTag(tag = buttonData.testTag),
     )
 }
@@ -66,6 +72,8 @@ fun BitwardenOutlinedButton(
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param icon The icon for the button.
  * @param isEnabled Whether the button is enabled.
  * @param isExternalLink Indicates that this button launches an external link.
@@ -79,6 +87,7 @@ fun BitwardenOutlinedButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     icon: Painter? = null,
     isEnabled: Boolean = true,
     isExternalLink: Boolean = false,
@@ -94,7 +103,7 @@ fun BitwardenOutlinedButton(
     } else {
         label
     }
-    OutlinedButton(
+    BitwardenBaseButton(
         modifier = modifier
             .semantics(mergeDescendants = true) {
                 contentDescription = formattedContentDescription
@@ -102,6 +111,7 @@ fun BitwardenOutlinedButton(
             .cardStyle(cardStyle = cardStyle, padding = cardInsets),
         onClick = throttledClick(onClick = onClick),
         enabled = isEnabled,
+        interactionSource = interactionSource,
         contentPadding = PaddingValues(
             top = 10.dp,
             bottom = 10.dp,
@@ -109,6 +119,7 @@ fun BitwardenOutlinedButton(
             end = 24.dp,
         ),
         colors = colors.materialButtonColors,
+        focusColor = colors.materialButtonColors.contentColor,
         border = BorderStroke(
             width = 1.dp,
             color = if (isEnabled) {

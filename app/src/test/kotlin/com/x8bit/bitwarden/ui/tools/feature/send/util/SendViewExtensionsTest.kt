@@ -101,6 +101,29 @@ class SendViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return overflow options without Copy, Share, Edit, and RemovePassword when the send is disabled`() {
+        val baseWebSendUrl = "www.test.com"
+        val sendView = createMockSendView(
+            number = 1,
+            // Make sure the Send is disabled to remove the edit action
+            disabled = true,
+        )
+
+        val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
+
+        assertEquals(
+            ALL_SEND_OVERFLOW_OPTIONS.filter {
+                it !is ListingItemOverflowAction.SendAction.CopyUrlClick &&
+                    it !is ListingItemOverflowAction.SendAction.ShareUrlClick &&
+                    it !is ListingItemOverflowAction.SendAction.EditClick &&
+                    it !is ListingItemOverflowAction.SendAction.RemovePasswordClick
+            },
+            result,
+        )
+    }
+
     @Test
     fun `toOverflowActions should return no overflow options when the id is null`() {
         val baseWebSendUrl = "www.test.com"

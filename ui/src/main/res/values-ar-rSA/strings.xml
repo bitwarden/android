@@ -24,8 +24,8 @@
     <string name="folder_created">نشأ مجلد جديد.</string>
     <string name="folder_deleted">حذفت المجلد.</string>
     <string name="folder_none">لا مجلد</string>
-    <string name="folders">المجلدات</string>
     <string name="folder_updated">حُفظ المجلد</string>
+    <string name="folders">المجلدات</string>
     <string name="hide">إخفاء</string>
     <string name="internet_connection_required_message">عليك الاتصال بالإنترنت قبل المواصلة.</string>
     <string name="internet_connection_required_title">الاتصال بالإنترنت مطلوب</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">كلمة المرور الرئيسية (مطلوب)</string>
     <string name="new_master_password_required">كلمة المرور الرئيسية الجديدة (مطلوب)</string>
     <string name="more_options">المزيد من الخيارات</string>
+    <string name="my_folder">My folder</string>
+    <string name="my_folders">My folders</string>
     <string name="my_vault">خزانتي</string>
     <string name="name">الاسم</string>
     <string name="item_name_required">اسم العنصر (مطلوب)</string>
@@ -122,7 +124,6 @@
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
     <string name="never">أبداً</string>
-    <string name="new_item_created">تم إنشاء عنصر جديد</string>
     <string name="no_cards">لا توجد بطاقات في خزنتك.</string>
     <string name="add_card">إضافة بطاقة</string>
     <string name="no_logins">لا يوجد أي تسجيل دخول في خزنتك.</string>
@@ -152,6 +153,14 @@
     <string name="select">تحديد</string>
     <string name="item_details">تفاصيل العنصر</string>
     <string name="item_updated">تم تحديث العنصر</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">جاري الإرسال…</string>
     <string name="syncing">جاري المزامنة…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
@@ -287,7 +296,9 @@
     <string name="vault_is_locked">الخزنة مقفلة</string>
     <string name="go_to_my_vault">الانتقال إلى خزنتي</string>
     <string name="collections">المختارات</string>
+    <string name="shared_folders">Shared folders</string>
     <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">لا توجد عناصر في هذا المجلد.</string>
     <string name="no_items_trash">لا توجد عناصر في سلة المهملات.</string>
     <string name="autofill_accessibility_summary">المساعدة في ملء اسم المستخدم وحقول كلمة المرور في التطبيقات الأخرى وعلى الويب.</string>
@@ -346,16 +357,21 @@
     <string name="move_up">التحريك للاعلى</string>
     <string name="owner">المالك</string>
     <string name="no_collections_to_list">لا توجد مجموعات لعرضها.</string>
+    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s نقل إلى %2$s.</string>
     <string name="select_one_collection">يجب اختيار مجموعة واحدة على الأقل.</string>
+    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">مشاركة</string>
-    <string name="move_to_vault">Move to vault</string>
+    <string name="move_to_organization">الانتقال إلى المنظمة</string>
+    <string name="no_orgs_to_list">لا توجد منظمات لعرضها.</string>
+    <string name="move_to_org_desc">اختر منظمة تود نقل هذا العنصر إليها. النقل إلى منظمة ينقل ملكية العنصر إليها. لن تعود المالك المباشر لهذا العنصر بمجرد نقله.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">عدد الكلمات</string>
     <string name="passphrase">جملة المرور</string>
     <string name="word_separator">فاصل الكلمات</string>
     <string name="clear">مسح</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">المولّد</string>
     <string name="no_folders_to_list">لا توجد مجلّدات لسردها.</string>
     <string name="fingerprint_phrase">عبارة بصمة الإصبع</string>
@@ -465,6 +481,7 @@
     <string name="deletion_date">تاريخ الحذف</string>
     <string name="deletion_time">وقت الحذف</string>
     <string name="deletion_date_info">سيتم حذف الإرسال بشكل دائم في التاريخ والوقت المحددين.</string>
+    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">من يمكنه الاطلاع</string>
     <string name="anyone_with_the_link">أي شخص لديه الرابط</string>
     <string name="anyone_with_link_can_view_send">أي شخص لديه هذا الرابط يمكنه عرض هذا الإرسال</string>
@@ -502,6 +519,7 @@
     <string name="two_days">يومان 2</string>
     <string name="three_days">3 أيام</string>
     <string name="seven_days">7 أيام</string>
+    <string name="fourteen_days">14 days</string>
     <string name="thirty_days">30 يوما</string>
     <string name="custom">مُخصّص</string>
     <string name="custom_timeout">مهلة مخصصة</string>
@@ -510,6 +528,11 @@
     <string name="about_send">حول إرسال</string>
     <string name="hide_email">إخفاء عنوان البريد الإلكتروني الخاص بي من المستلمين</string>
     <string name="send_options_policy_in_effect">واحدة أو أكثر من سياسات المؤسسة تؤثر على خيارات إرسال الخاص بك.</string>
+    <string name="organization_policy_restriction">Organization policy restriction</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
+    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="make_a_copy">Make a copy</string>
     <string name="send_file_premium_required">الحسابات المجانية مقيدة بمشاركة النص فقط. مطلوب عضوية مميزة لاستخدام الملفات مع الإرسال.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">ميزة المشاركة مع أشخاص محددين ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
@@ -567,8 +590,8 @@
     <string name="resend_code">إعادة إرسال الرمز</string>
     <string name="a_verification_code_was_sent_to_your_email">تم إرسال رمز التحقق إلى بريدك الإلكتروني</string>
     <string name="submit_crash_logs">إرسال سجلات الأعطال</string>
-    <string name="options_expanded">يتم توسيع الخيارات، انقر للتصغير.</string>
-    <string name="options_collapsed">الخيارات مخفية، انقر لتوسيعها.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">أحرف كبيرة (من A إلى Z)</string>
     <string name="lowercase_ato_z">أحرف صغيرة (من A إلى Z)</string>
     <string name="numbers_zero_to_nine">الأعداد (من 0 حتى 9)</string>
@@ -703,6 +726,7 @@
     <string name="logging_in_on">جارٍ تسجيل الدخول</string>
     <string name="logging_in_on_with_colon">تسجيل الدخول على:</string>
     <string name="vault">الخزنة</string>
+    <string name="select_vault">Select vault</string>
     <string name="appearance">المظهر</string>
     <string name="account_security">أمان الحساب</string>
     <string name="bitwarden_help_center">مركز المساعدة Bitwarden</string>
@@ -1153,11 +1177,6 @@
     <string name="file_could_not_be_processed">تعذر معالجة الملف</string>
     <string name="file_could_not_be_processed_message">تعذر معالجة الملف. تأكد من صلاحيتها JSON وحاول مرة أخرى. بحاجة إلى مساعدة؟ قم بزيارة bitwarden.com/help</string>
     <string name="get_help">الحصول على المساعدة</string>
-    <string name="expand_advanced_options">توسيع الخيارات المتقدمة</string>
-    <string name="local_items_are_expanded_click_to_collapse">يتم توسيع العناصر المحلية، انقر للإنهيار.</string>
-    <string name="local_items_are_collapsed_click_to_expand">تم انهيار العناصر المحلية، انقر للتوسع.</string>
-    <string name="items_expanded_click_to_collapse">العناصر متوسيعة ، انقر للانهيار.</string>
-    <string name="items_are_collapsed_click_to_expand">العناصر مخفية، انقر للتوسيع.</string>
     <string name="error_cannot_decrypt">[خطأ: لا يمكن فك التشفير]</string>
     <string name="copy_error_report">نسخ تقرير الخطأ</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">تعذر على Bitwarden فك تشفير عنصر الخزنة هذا. انسخ تقرير الخطأ هذا وشاركه مع دعم العملاء لتجنب خسارة إضافية للبيانات.</string>
@@ -1170,6 +1189,7 @@
         <item quantity="other">تعذر على Bitwarden فك تشفير %1$d عناصر خزنة. انسخ وشارك تقرير الخطأ هذا مع دعم العملاء لتجنب خسارة البيانات الإضافية.</item>
     </plurals>
     <string name="select_a_card_for_x">اختر بطاقة لـ %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">الخيارات المتقدمة</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">المزيد عن اكتشاف المطابقة</annotation></string>
     <string name="keep_your_credential_secure">حافظ على بيانات الحساب آمنة</string>
@@ -1276,6 +1296,7 @@
     <string name="invalid_email_addresses">عناوين البريد الإلكتروني غير صالحة</string>
     <string name="one_or_more_email_addresses_are_incorrect">عنوان بريد إلكتروني واحد أو أكثر غير صحيح. الرجاء المراجعة والمحاولة مرة أخرى.</string>
     <string name="no_email_addresses_entered">لم يتم إدخال عناوين البريد الإلكتروني</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">أدخل عنوان بريد إلكتروني واحدا على الأقل يكون صالح لمشاركة هذا Send.</string>
     <string name="sync_with_browser">المزامنة مع المتصفح</string>
     <string name="sync_with_browser_description">للاتصال بـ %1$s، قم بمزامنة متصفحك الافتراضي مع تطبيق Bitwarden للجوال. وعند فتح متصفحك، أكمل تسجيل الدخول إذا طلب منك ذلك.\nوبمجرد اكتمال المزامنة، سيتم إرجاعك إلى هذا التطبيق.</string>
@@ -1457,4 +1478,15 @@
     <string name="receive_24_7_priority_support">الحصول على دعم ذي أولوية على مدار الساعة طوال أيام الأسبوع</string>
     <string name="account_creation_restricted">Account creation restricted</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

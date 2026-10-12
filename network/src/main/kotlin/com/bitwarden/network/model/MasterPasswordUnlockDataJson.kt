@@ -24,4 +24,8 @@ data class MasterPasswordUnlockDataJson(
     @SerialName("masterKeyWrappedUserKey")
     @JsonNames("masterKeyEncryptedUserKey", "MasterKeyEncryptedUserKey")
     val masterKeyWrappedUserKey: String,
+
+    @SerialName("containedKeyId")
+    @JsonNames("ContainedKeyId")
+    val containedKeyId: String? = null,
 )

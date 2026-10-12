@@ -41,9 +41,7 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
                 organizations = userOrganizations.map { organization ->
                     VaultMoveToOrganizationState.ViewState.Content.Organization(
                         id = organization.id,
-                        name = organization
-                            .name
-                            .orEmpty(),
+                        name = organization.name,
                         collections = collections
                             .filter { collection ->
                                 collection.organizationId == organization.id &&

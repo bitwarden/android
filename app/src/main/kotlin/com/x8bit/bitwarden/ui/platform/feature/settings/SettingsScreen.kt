@@ -27,6 +27,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.row.BitwardenPushRow
@@ -37,6 +38,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 
 /**
  * Displays the settings screen.
@@ -107,17 +109,19 @@ fun SettingsScreen(
                     cardSubtitle = stringResource(
                         id = BitwardenString.you_now_have_access_to_all_advanced_security_features,
                     ),
-                    actionText = stringResource(id = BitwardenString.learn_more),
-                    isExternalLink = true,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.learn_more.asText(),
+                        onClick = {
+                            viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick)
+                        },
+                        isExternalLink = true,
+                    ),
                     leadingContent = {
                         Icon(
                             painter = rememberVectorPainter(id = BitwardenDrawable.ic_star),
                             contentDescription = null,
                             tint = BitwardenTheme.colorScheme.icon.secondary,
                         )
-                    },
-                    onActionClick = {
-                        viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardClick)
                     },
                     onDismissClick = {
                         viewModel.trySendAction(SettingsAction.UpgradedToPremiumCardDismiss)

@@ -57,10 +57,6 @@ class FlagKeyTest {
             "pm-4516-devices-add-last-activity-date",
         )
         assertEquals(
-            FlagKey.PoliciesInAcceptedState.keyName,
-            "pm-34145-policies-in-accepted-state",
-        )
-        assertEquals(
             FlagKey.FedRamp.keyName,
             "fedramp-gov-region",
         )
@@ -80,6 +76,14 @@ class FlagKeyTest {
             FlagKey.IdentityAutofill.keyName,
             "pm-38138-mobile-identity-autofill",
         )
+        assertEquals(
+            FlagKey.SdkPinUnlock.keyName,
+            "pm-31059-sdk-pin-unlock",
+        )
+        assertEquals(
+            FlagKey.SdkPreLogin.keyName,
+            "pm-27060-password-prelogin-from-sdk",
+        )
     }
 
     @Test
@@ -98,12 +102,13 @@ class FlagKeyTest {
                 FlagKey.NewItemTypes,
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
-                FlagKey.PoliciesInAcceptedState,
                 FlagKey.FedRamp,
                 FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,
+                FlagKey.SdkPinUnlock,
+                FlagKey.SdkPreLogin,
             ).all {
                 !it.defaultValue
             },

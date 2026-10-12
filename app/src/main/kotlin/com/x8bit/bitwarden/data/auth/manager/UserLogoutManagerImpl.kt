@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
+import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -27,7 +28,7 @@ import timber.log.Timber
  * Primary implementation of [UserLogoutManager].
  */
 @Suppress("LongParameterList")
-class UserLogoutManagerImpl(
+internal class UserLogoutManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val customHeadersManager: CustomHeadersManager,
     private val generatorDiskSource: GeneratorDiskSource,
@@ -38,6 +39,7 @@ class UserLogoutManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val userNotificationPolicyManager: UserNotificationPolicyManager,
     dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -93,6 +95,10 @@ class UserLogoutManagerImpl(
             .getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         val persistentPinProtectedUserKeyEnvelope = authDiskSource
             .getPersistentPinProtectedUserKeyEnvelope(userId = userId)
+        val shouldClearOnSoftLogout = userNotificationPolicyManager
+            .shouldClearOnSoftLogout(userId = userId)
+        val vaultPolicyBannerDismissedDate = settingsDiskSource
+            .getVaultPolicyBannerDismissedDate(userId = userId)
 
         clearData(userId = userId)
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
@@ -107,6 +113,13 @@ class UserLogoutManagerImpl(
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            if (!shouldClearOnSoftLogout) {
+                // We make sure the data is preserved if it should not be cleared.
+                storeVaultPolicyBannerDismissedDate(
+                    userId = userId,
+                    dismissalRevisionDate = vaultPolicyBannerDismissedDate,
+                )
+            }
         }
         authDiskSource.apply {
             storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)

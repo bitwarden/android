@@ -24,8 +24,8 @@
     <string name="folder_created">新文件夹已创建。</string>
     <string name="folder_deleted">文件夹已删除。</string>
     <string name="folder_none">无文件夹</string>
-    <string name="folders">文件夹</string>
     <string name="folder_updated">文件夹已保存</string>
+    <string name="folders">文件夹</string>
     <string name="hide">隐藏</string>
     <string name="internet_connection_required_message">请连接因特网后再继续。</string>
     <string name="internet_connection_required_title">需要互联网连接</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">主密码（必填）</string>
     <string name="new_master_password_required">新主密码（必填）</string>
     <string name="more_options">更多选项</string>
+    <string name="my_folder">我的文件夹</string>
+    <string name="my_folders">我的文件夹</string>
     <string name="my_vault">我的密码库</string>
     <string name="name">名称</string>
     <string name="item_name_required">项目名称 （必填）</string>
@@ -115,9 +117,8 @@
         <item quantity="other">主密码长度必须至少为 %d 个字符。</item>
     </plurals>
     <string name="min_numbers">数字最少个数</string>
-    <string name="min_special">符号最少个数</string>
+    <string name="min_special">特殊字符最少个数</string>
     <string name="never">从不</string>
-    <string name="new_item_created">项目已添加</string>
     <string name="no_cards">您的密码库中没有支付卡。</string>
     <string name="add_card">添加支付卡</string>
     <string name="no_logins">您的密码库中没有登录信息。</string>
@@ -147,6 +148,14 @@
     <string name="select">选择</string>
     <string name="item_details">项目详细信息</string>
     <string name="item_updated">项目已保存</string>
+    <string name="bank_account_saved">银行账户已保存</string>
+    <string name="card_saved">支付卡已保存</string>
+    <string name="identity_saved">身份已保存</string>
+    <string name="license_saved">许可证已保存</string>
+    <string name="login_saved">登录已保存</string>
+    <string name="passport_saved">护照已保存</string>
+    <string name="secure_note_saved">安全笔记已保存</string>
+    <string name="ssh_key_saved">SSH 密钥已保存</string>
     <string name="submitting">正在提交…</string>
     <string name="syncing">正在同步…</string>
     <string name="syncing_complete">同步完成</string>
@@ -282,11 +291,13 @@
     <string name="vault_is_locked">密码库已锁定</string>
     <string name="go_to_my_vault">前往我的密码库</string>
     <string name="collections">集合</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
+    <string name="shared_folders">共享文件夹</string>
+    <string name="no_items_collection">此集合中没有项目。</string>
+    <string name="there_are_no_items_in_this_shared_folder">此共享文件夹中没有项目。</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
     <string name="no_items_trash">回收站中没有项目。</string>
     <string name="autofill_accessibility_summary">在其他 App 和网站上辅助填充用户名和密码字段。</string>
-    <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来协助将登录信息填充到您设备上的其他 App 中。</string>
+    <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来辅助将登录信息填充到您设备上的其他 App 中。</string>
     <string name="bitwarden_autofill_go_to_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</string>
     <string name="custom_field_name">自定义字段名称</string>
     <string name="field_type_boolean">布尔型</string>
@@ -336,16 +347,21 @@
     <string name="move_up">上移</string>
     <string name="owner">所有者</string>
     <string name="no_collections_to_list">没有可列出的集合。</string>
+    <string name="there_are_no_shared_folders_to_list">没有可列出的共享文件夹。</string>
     <string name="moved_item_to_org">%1$s 已移动到 %2$s。</string>
     <string name="select_one_collection">您必须至少选择一个集合。</string>
+    <string name="you_must_select_at_least_one_shared_folder">您必须至少选择一个共享文件夹。</string>
     <string name="share">共享</string>
-    <string name="move_to_vault">Move to vault</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
+    <string name="move_to_organization">移动到组织</string>
+    <string name="no_orgs_to_list">没有可列出的组织。</string>
+    <string name="move_to_org_desc">选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
+    <string name="no_vaults_to_list">没有可列出的密码库。</string>
+    <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给对应组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="number_of_words">单词个数</string>
     <string name="passphrase">密码短语</string>
     <string name="word_separator">单词分隔符</string>
     <string name="clear">清除</string>
+    <string name="open_calendar">打开日历</string>
     <string name="generator">生成器</string>
     <string name="no_folders_to_list">没有可列出的文件夹。</string>
     <string name="fingerprint_phrase">指纹短语</string>
@@ -455,6 +471,7 @@
     <string name="deletion_date">删除日期</string>
     <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
+    <string name="this_date_is_enforced_by_your_organization">此日期由您的组织强制执行</string>
     <string name="who_can_view">谁可以查看</string>
     <string name="anyone_with_the_link">拥有链接的任何人</string>
     <string name="anyone_with_link_can_view_send">拥有此链接的任何人都可以查看此 Send</string>
@@ -492,6 +509,7 @@
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
     <string name="seven_days">7 天</string>
+    <string name="fourteen_days">14 天</string>
     <string name="thirty_days">30 天</string>
     <string name="custom">自定义</string>
     <string name="custom_timeout">自定义超时</string>
@@ -500,6 +518,11 @@
     <string name="about_send">关于 Send</string>
     <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
     <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
+    <string name="organization_policy_restriction">组织策略限制</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">此 Send 不符合您组织的 Send 策略，将在设置的删除日期自动过期。</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">您的组织不允许文本 Send，此 Send 将在设置的删除日期自动过期。</string>
+    <string name="to_edit_this_send_make_a_copy">要编辑此 Send，请创建副本。如果此 Send 可以在设置的删除日期过期，则无需任何操作。</string>
+    <string name="make_a_copy">创建副本</string>
     <string name="send_file_premium_required">免费账户仅限于共享文本。需要高级版成员资格才能使用文件 Send。</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">与指定人员共享是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="password_prompt">主密码二次验证</string>
@@ -547,8 +570,8 @@
     <string name="resend_code">重新发送代码</string>
     <string name="a_verification_code_was_sent_to_your_email">验证码已发送到您的电子邮箱</string>
     <string name="submit_crash_logs">提交崩溃日志</string>
-    <string name="options_expanded">选项已展开，点击折叠。</string>
-    <string name="options_collapsed">选项已折叠，点击展开。</string>
+    <string name="expand">展开</string>
+    <string name="collapse">折叠</string>
     <string name="uppercase_ato_z">大写 (A-Z)</string>
     <string name="lowercase_ato_z">小写 (a-z)</string>
     <string name="numbers_zero_to_nine">数字 (0-9)</string>
@@ -571,7 +594,7 @@
     <string name="set_up_authenticator_key">设置验证器密钥</string>
     <string name="once_the_key_is_successfully_entered">成功输入密钥后，
 选择「添加 TOTP」以安全地存储此密钥</string>
-    <string name="never_lock_warning">将锁定选项设置为「从不」会让任何能够访问您的设备的人都可以使用您的密码库。如果使用此选项，您应确保您的设备已受到妥善保护。</string>
+    <string name="never_lock_warning">将锁定选项设置为「从不」会让拥有您的设备访问权限的任何人都可以使用您的密码库。如果使用此选项，您应确保您的设备已受到妥善保护。</string>
     <string name="environment_page_urls_error">输入的一个或多个 URL 无效。请修改后再次尝试保存。</string>
     <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
     <string name="allow_screen_capture">允许屏幕截图</string>
@@ -683,6 +706,7 @@
     <string name="logging_in_on">正登录到</string>
     <string name="logging_in_on_with_colon">正登录到：</string>
     <string name="vault">密码库</string>
+    <string name="select_vault">选择密码库</string>
     <string name="appearance">外观</string>
     <string name="account_security">账户安全</string>
     <string name="bitwarden_help_center">Bitwarden 帮助中心</string>
@@ -1118,11 +1142,6 @@
     <string name="file_could_not_be_processed">文件无法处理</string>
     <string name="file_could_not_be_processed_message">文件无法处理。请确保它是有效的 JSON 文件然后重试。需要帮助吗？请访问 bitwarden.com/help</string>
     <string name="get_help">获取帮助</string>
-    <string name="expand_advanced_options">展开高级选项</string>
-    <string name="local_items_are_expanded_click_to_collapse">本地项目已展开，点击折叠。</string>
-    <string name="local_items_are_collapsed_click_to_expand">本地项目已折叠，点击展开。</string>
-    <string name="items_expanded_click_to_collapse">项目已展开，点击折叠。</string>
-    <string name="items_are_collapsed_click_to_expand">项目已折叠，点击展开。</string>
     <string name="error_cannot_decrypt">[错误：无法解密]</string>
     <string name="copy_error_report">复制错误报告</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden 无法解密此密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</string>
@@ -1130,6 +1149,7 @@
         <item quantity="other">Bitwarden 无法解密 %1$d 个密码库项目。复制此错误报告并将其分享给客户成功团队，以避免进一步的数据丢失。</item>
     </plurals>
     <string name="select_a_card_for_x">为 %s 选择一个支付卡</string>
+    <string name="choose_an_identity">选择身份</string>
     <string name="advanced_options">高级选项</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">更多关于匹配检测</annotation></string>
     <string name="keep_your_credential_secure">保持您的凭据安全</string>
@@ -1231,6 +1251,7 @@
     <string name="invalid_email_addresses">无效的电子邮箱地址</string>
     <string name="one_or_more_email_addresses_are_incorrect">一个或多个电子邮箱地址不正确。请检查然后重试。</string>
     <string name="no_email_addresses_entered">未输入电子邮箱地址</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">仅允许以下域名：%1$s。请检查然后重试。</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">输入至少一个有效的电子邮箱地址以分享此 Send。</string>
     <string name="sync_with_browser">与浏览器同步</string>
     <string name="sync_with_browser_description">要连接到 %1$s，请将您的默认浏览器与 Bitwarden 移动 App 同步。浏览器打开后，如果提示登录，请完成登录。\n同步完成后，您将返回此 App。</string>
@@ -1294,7 +1315,7 @@
     <string name="current_plan">当前方案</string>
     <string name="premium_plan_name">高级版</string>
     <string name="billing_amount">计费金额</string>
-    <string name="storage_cost">存储空间成本</string>
+    <string name="storage_cost">存储空间费用</string>
     <string name="discount">折扣</string>
     <string name="estimated_tax">预估税额</string>
     <string name="total">总计</string>
@@ -1303,7 +1324,7 @@
     <string name="manage_plan">管理方案</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">在 Bitwarden 网页 App 中管理您的订阅方案。</string>
     <string name="cancel_premium">取消高级版</string>
-    <string name="subscription_status_active">激活</string>
+    <string name="subscription_status_active">活动</string>
     <string name="subscription_status_canceled">已取消</string>
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>
@@ -1407,4 +1428,15 @@
     <string name="receive_24_7_priority_support">享受 7×24 小时优先支持</string>
     <string name="account_creation_restricted">账户创建受限</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s 仅允许受邀用户创建账户。</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">减少 %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">增加 %1$s</string>
+    <string name="use_this_passphrase">使用此密码短语</string>
+    <string name="use_this_password">使用此密码</string>
+    <string name="use_this_username">使用此用户名</string>
+    <string name="create_login">创建登录</string>
+    <string name="keep_unlocking_with_biometrics">继续使用生物识别解锁</string>
+    <string name="weve_made_a_security_update">我们已进行了一次安全更新。请再次确认您的生物识别，以便继续使用其来解锁 Bitwarden。</string>
+    <string name="turn_off">停用</string>
+    <string name="turn_off_biometric_question">停用生物识别吗？</string>
+    <string name="unlocking_will_require_your_master_password">解锁需要您的主密码。您可以在「设置」中重新启用生物识别。</string>
 </resources>

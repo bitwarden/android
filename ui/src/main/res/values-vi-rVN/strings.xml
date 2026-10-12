@@ -24,8 +24,8 @@
     <string name="folder_created">Đã tạo thư mục mới.</string>
     <string name="folder_deleted">Đã xóa thư mục.</string>
     <string name="folder_none">Chưa phân loại</string>
-    <string name="folders">Thư mục</string>
     <string name="folder_updated">Đã lưu thư mục</string>
+    <string name="folders">Thư mục</string>
     <string name="hide">Ẩn</string>
     <string name="internet_connection_required_message">Hãy kết nối mạng trước khi tiếp tục.</string>
     <string name="internet_connection_required_title">Cần có kết nối mạng</string>
@@ -44,6 +44,8 @@
     <string name="master_password_required">Mật khẩu chính (bắt buộc)</string>
     <string name="new_master_password_required">Mật khẩu chính mới (bắt buộc)</string>
     <string name="more_options">Thêm tuỳ chọn</string>
+    <string name="my_folder">Thư mục của tôi</string>
+    <string name="my_folders">Thư mục của tôi</string>
     <string name="my_vault">Kho lưu trữ</string>
     <string name="name">Tên</string>
     <string name="item_name_required">Tên mục (bắt buộc)</string>
@@ -117,7 +119,6 @@
     <string name="min_numbers">Số chữ số tối thiểu</string>
     <string name="min_special">Số kí tự đặc biệt tối thiểu</string>
     <string name="never">Không bao giờ</string>
-    <string name="new_item_created">Đã thêm mục</string>
     <string name="no_cards">Không có thẻ nào trong kho lưu trữ.</string>
     <string name="add_card">Thêm thẻ</string>
     <string name="no_logins">Không có tài khoản đăng nhập nào trong kho của bạn.</string>
@@ -147,6 +148,14 @@
     <string name="select">Chọn</string>
     <string name="item_details">Chi tiết mục</string>
     <string name="item_updated">Đã lưu mục</string>
+    <string name="bank_account_saved">Bank account saved</string>
+    <string name="card_saved">Card saved</string>
+    <string name="identity_saved">Identity saved</string>
+    <string name="license_saved">License saved</string>
+    <string name="login_saved">Login saved</string>
+    <string name="passport_saved">Passport saved</string>
+    <string name="secure_note_saved">Secure note saved</string>
+    <string name="ssh_key_saved">SSH key saved</string>
     <string name="submitting">Đang gửi…</string>
     <string name="syncing">Đang đồng bộ…</string>
     <string name="syncing_complete">Đồng bộ hoàn tất</string>
@@ -283,7 +292,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="vault_is_locked">Kho đã khóa</string>
     <string name="go_to_my_vault">Đến kho của tôi</string>
     <string name="collections">Các bộ sưu tập</string>
+    <string name="shared_folders">Thư mục chia sẻ</string>
     <string name="no_items_collection">Không có mục nào trong bộ sưu tập này.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Không có mục nào trong thư mục chia sẻ này.</string>
     <string name="no_items_folder">Không có mục nào trong thư mục này.</string>
     <string name="no_items_trash">Không có gì trong thùng rác.</string>
     <string name="autofill_accessibility_summary">Hỗ trợ điền tên đăng nhập và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
@@ -337,16 +348,21 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="move_up">Chuyển lên</string>
     <string name="owner">Chủ sở hữu</string>
     <string name="no_collections_to_list">Không có bộ sưu tập nào.</string>
+    <string name="there_are_no_shared_folders_to_list">Không có thư mục chia sẻ nào để hiển thị.</string>
     <string name="moved_item_to_org">%1$s đã di chuyển tới %2$s.</string>
     <string name="select_one_collection">Bạn phải chọn ít nhất một bộ sưu tập.</string>
+    <string name="you_must_select_at_least_one_shared_folder">Bạn phải chọn ít nhất một thư mục chia sẻ.</string>
     <string name="share">Chia sẻ</string>
-    <string name="move_to_vault">Chuyển vào kho lưu trữ</string>
+    <string name="move_to_organization">Chuyển tới Tổ chức</string>
+    <string name="no_orgs_to_list">Không có tổ chức.</string>
+    <string name="move_to_org_desc">Chọn một tổ chức mà bạn muốn chuyển mục này tới. Việc di chuyển đến một tổ chức sẽ chuyển quyền sở hữu của mục sang tổ chức mà bạn chọn. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này một khi nó đã được chuyển.</string>
     <string name="no_vaults_to_list">Không có kho lưu trữ nào để liệt kê.</string>
     <string name="move_to_vault_desc">Chọn một kho lưu trữ mà bạn muốn chuyển mục này đến. Việc chuyển sang kho lưu trữ khác sẽ chuyển quyền sở hữu mục này cho tổ chức đó. Bạn sẽ không còn là chủ sở hữu trực tiếp của mục này sau khi nó được di chuyển.</string>
     <string name="number_of_words">Số lượng từ</string>
     <string name="passphrase">Cụm mật khẩu</string>
     <string name="word_separator">Dấu phân cách từ</string>
     <string name="clear">Xóa</string>
+    <string name="open_calendar">open calendar</string>
     <string name="generator">Trình tạo</string>
     <string name="no_folders_to_list">Không có thư mục nào.</string>
     <string name="fingerprint_phrase">Cụm từ xác thực</string>
@@ -456,6 +472,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="deletion_date">Ngày xóa</string>
     <string name="deletion_time">Thời gian xóa</string>
     <string name="deletion_date_info">Send sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
+    <string name="this_date_is_enforced_by_your_organization">Ngày này do tổ chức của bạn quy định</string>
     <string name="who_can_view">Ai có thể xem</string>
     <string name="anyone_with_the_link">Bất kỳ ai có liên kết</string>
     <string name="anyone_with_link_can_view_send">Bất kỳ ai có liên kết đều có thể xem Send này</string>
@@ -493,6 +510,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="two_days">2 ngày</string>
     <string name="three_days">3 ngày</string>
     <string name="seven_days">7 ngày</string>
+    <string name="fourteen_days">14 ngày</string>
     <string name="thirty_days">30 ngày</string>
     <string name="custom">Tùy chỉnh</string>
     <string name="custom_timeout">Thời gian chờ tùy chỉnh</string>
@@ -501,6 +519,11 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="about_send">Về Send</string>
     <string name="hide_email">Ẩn địa chỉ email của tôi với người nhận</string>
     <string name="send_options_policy_in_effect">Các chính sách của tổ chức đang ảnh hưởng đến tùy chọn Send của bạn.</string>
+    <string name="organization_policy_restriction">Hạn chế do chính sách của tổ chức</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Send này không tuân thủ chính sách Send của tổ chức bạn và sẽ tự động hết hạn vào ngày xóa được thiết lập.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Tổ chức của bạn không cho phép các Send văn bản và Send này sẽ tự động hết hạn vào ngày xóa được thiết lập.</string>
+    <string name="to_edit_this_send_make_a_copy">Để chỉnh sửa Send này, hãy tạo một bản sao. Nếu Send này có thể hết hạn vào ngày xóa đã đặt, bạn không cần thực hiện hành động nào.</string>
+    <string name="make_a_copy">Tạo một bản sao</string>
     <string name="send_file_premium_required">Tài khoản miễn phí chỉ được gửi văn bản. Nâng cấp lên gói Cao Cấp để gửi các tập tin.</string>
     <string name="sharing_with_specific_people_is_a_premium_feature">Chia sẻ với những người cụ thể là một tính năng Cao cấp. Gói hiện tại của bạn không bao gồm quyền truy cập tính năng này.</string>
     <string name="password_prompt">Nhập lại mật khẩu chính</string>
@@ -548,8 +571,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="resend_code">Gửi lại mã</string>
     <string name="a_verification_code_was_sent_to_your_email">Mã xác minh đã được gửi đến email của bạn</string>
     <string name="submit_crash_logs">Gửi nhật ký lỗi</string>
-    <string name="options_expanded">Đã mở rộng các tuỳ chọn, nhấn để thu gọn.</string>
-    <string name="options_collapsed">Đã thu gọn các tuỳ chọn, nhấn để mở rộng.</string>
+    <string name="expand">expand</string>
+    <string name="collapse">collapse</string>
     <string name="uppercase_ato_z">Chữ hoa (A-Z)</string>
     <string name="lowercase_ato_z">Chữ thường (a-z)</string>
     <string name="numbers_zero_to_nine">Số (0-9)</string>
@@ -684,6 +707,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="logging_in_on">Đang đăng nhập vào</string>
     <string name="logging_in_on_with_colon">Đang đăng nhập vào:</string>
     <string name="vault">Kho lưu trữ</string>
+    <string name="select_vault">Chọn kho lưu trữ</string>
     <string name="appearance">Giao diện</string>
     <string name="account_security">Bảo mật tài khoản</string>
     <string name="bitwarden_help_center">Trung tâm hỗ trợ Bitwarden</string>
@@ -1120,11 +1144,6 @@ các vấn đề.</string>
     <string name="file_could_not_be_processed">Tệp không thể được xử lý</string>
     <string name="file_could_not_be_processed_message">Tệp không thể được xử lý. Hãy đảm bảo tệp JSON hợp lệ và thử lại. Cần trợ giúp? Truy cập bitwarden.com/help</string>
     <string name="get_help">Nhận trợ giúp</string>
-    <string name="expand_advanced_options">Mở rộng các tùy chọn nâng cao</string>
-    <string name="local_items_are_expanded_click_to_collapse">Các mục địa phương được mở rộng, nhấp để thu gọn.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
-    <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
-    <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
     <string name="error_cannot_decrypt">[lỗi: không thể giải mã]</string>
     <string name="copy_error_report">Sao chép báo lỗi</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden không thể giải mã mục này trong kho. Vui lòng sao chép và chia sẻ báo cáo lỗi này với bộ phận Hỗ trợ Khách hàng để tránh mất dữ liệu thêm.</string>
@@ -1132,6 +1151,7 @@ các vấn đề.</string>
         <item quantity="other">Bitwarden không thể giải mã %1$d mục trong kho. Hãy sao chép và chia sẻ báo cáo lỗi này với bộ phận hỗ trợ khách hàng để tránh mất thêm dữ liệu.</item>
     </plurals>
     <string name="select_a_card_for_x">Chọn một thẻ cho %s</string>
+    <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Tùy chọn nâng cao</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Tìm hiểu thêm về phát hiện khớp</annotation></string>
     <string name="keep_your_credential_secure">Giữ thông tin xác thực của bạn an toàn</string>
@@ -1235,6 +1255,7 @@ các vấn đề.</string>
     <string name="invalid_email_addresses">Địa chỉ email không hợp lệ</string>
     <string name="one_or_more_email_addresses_are_incorrect">Một hoặc nhiều địa chỉ email chưa chính xác. Vui lòng kiểm tra và thử lại.</string>
     <string name="no_email_addresses_entered">Chưa nhập địa chỉ email</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Chỉ bao gồm các tên miền sau: %1$s. Vui lòng xem lại và thử lại.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Nhập ít nhất một địa chỉ email hợp lệ để chia sẻ Send này.</string>
     <string name="sync_with_browser">Đồng bộ với trình duyệt</string>
     <string name="sync_with_browser_description">Để kết nối với %1$s, đồng bộ trình duyệt mặc định của bạn với ứng dụng Bitwarden. Khi trình duyệt mở lên, thực hiện đăng nhập nếu được yêu cầu\nSau khi đồng bộ hoàn tất, bạn sẽ được đưa trở lại ứng dụng này.</string>
@@ -1411,4 +1432,15 @@ các vấn đề.</string>
     <string name="receive_24_7_priority_support">Nhận hỗ trợ ưu tiên 24/7</string>
     <string name="account_creation_restricted">Hạn chế đăng ký tài khoản</string>
     <string name="only_allows_invited_users_to_create_accounts">%1$s chỉ cho phép người được mời tạo tài khoản.</string>
+    <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">Decrease %1$s</string>
+    <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">Increase %1$s</string>
+    <string name="use_this_passphrase">Use this passphrase</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
+    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
+    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_off_biometric_question">Turn off biometrics?</string>
+    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
 </resources>

@@ -40,31 +40,28 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 
 /**
- * A design component action card, which contains a title, action button, and a dismiss button
- * by default, with optional leading icon content.
+ * A design component action card, which contains a title, with an optional action button, dismiss
+ * button, and leading icon content.
  *
  * @param cardTitle The title of the card.
- * @param actionText The text content on the CTA button.
- * @param onActionClick The action to perform when the CTA button is clicked.
+ * @param modifier The [Modifier] to be applied to the card.
+ * @param actionButton The data for the CTA button, or `null` to omit it, which suits a card that
+ * only explains something.
  * @param onDismissClick Optional action to perform when the dismiss button is clicked.
  * @param cardSubtitle The subtitle of the card.
  * @param secondaryButton The optional data for a secondary button.
  * @param leadingContent Optional content to display on the leading side of the [cardTitle] [Text].
- * @param isExternalLink Whether the CTA launches an external link, which announces the
- * external-link affordance to screen readers via the shared `external_link_format` string.
  */
 @Suppress("LongMethod")
 @Composable
 fun BitwardenActionCard(
-    cardTitle: String,
-    actionText: String,
-    onActionClick: () -> Unit,
+    cardTitle: String?,
     modifier: Modifier = Modifier,
+    actionButton: BitwardenButtonData? = null,
     onDismissClick: (() -> Unit)? = null,
     cardSubtitle: String? = null,
     secondaryButton: BitwardenButtonData? = null,
     leadingContent: @Composable (() -> Unit)? = null,
-    isExternalLink: Boolean = false,
 ) {
     Card(
         modifier = modifier,
@@ -95,17 +92,24 @@ fun BitwardenActionCard(
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(
-                        text = cardTitle,
-                        style = BitwardenTheme.typography.titleMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onGloballyPositioned {
-                                titleBottomPx = it.positionInParent().y.toInt() + it.size.height
-                            },
-                    )
+                    cardTitle?.let {
+                        Text(
+                            text = it,
+                            style = BitwardenTheme.typography.titleMedium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onGloballyPositioned { coordinates ->
+                                    titleBottomPx = coordinates.positionInParent().y.toInt() +
+                                        coordinates.size.height
+                                },
+                        )
+                    }
                     cardSubtitle?.let {
-                        Spacer(modifier = Modifier.height(height = 4.dp))
+                        cardTitle?.let { _ ->
+                            // We only need this to create a gap between the title and subtitle.
+                            // So if the title is not present, we can skip the spacer.
+                            Spacer(modifier = Modifier.height(height = 4.dp))
+                        }
                         Text(
                             text = it,
                             style = BitwardenTheme.typography.bodyMedium,
@@ -114,40 +118,47 @@ fun BitwardenActionCard(
                     }
                 }
             }
-            onDismissClick?.let {
+            if (onDismissClick != null) {
                 BitwardenStandardIconButton(
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     contentDescription = stringResource(id = BitwardenString.close),
-                    onClick = it,
+                    onClick = onDismissClick,
                 )
+            } else {
+                // The dismiss button normally supplies the trailing inset, so without it the
+                // content would otherwise run to the edge of the card.
+                Spacer(modifier = Modifier.width(width = 16.dp))
             }
         }
-        if (cardSubtitle == null && rowBottomPx > titleBottomPx) {
-            // When the subtitle is missing, we want to ensure that the filled button is 16dp below
-            // the title but the close button can be taller than the title which will push the
-            // button further down. So we measure the difference and use that to offset the spacer
-            // size.
-            Spacer(
-                modifier = Modifier.height(height = 16.dp - (rowBottomPx - titleBottomPx).toDp()),
-            )
-        } else {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-        }
-        BitwardenFilledButton(
-            label = actionText,
-            onClick = onActionClick,
-            isExternalLink = isExternalLink,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
-        secondaryButton?.let {
-            BitwardenTextButton(
-                buttonData = it,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
+        if (actionButton != null || secondaryButton != null) {
+            if (cardSubtitle == null && rowBottomPx > titleBottomPx) {
+                // When the subtitle is missing, we want to ensure that the filled button is 16dp
+                // below the title but the close button can be taller than the title which will push
+                // the button further down. So we measure the difference and use that to offset the
+                // spacer size.
+                Spacer(
+                    modifier = Modifier
+                        .height(height = 16.dp - (rowBottomPx - titleBottomPx).toDp()),
+                )
+            } else {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
+            actionButton?.let {
+                BitwardenFilledButton(
+                    buttonData = it,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+            secondaryButton?.let {
+                BitwardenTextButton(
+                    buttonData = it,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
         }
         Spacer(modifier = Modifier.height(height = 16.dp))
     }
@@ -166,8 +177,10 @@ private fun BitwardenActionCardWithSubtitleNoDismiss_preview() {
     BitwardenTheme {
         BitwardenActionCard(
             cardTitle = "Title",
-            actionText = "Action",
-            onActionClick = {},
+            actionButton = BitwardenButtonData(
+                label = "Action".asText(),
+                onClick = {},
+            ),
         )
     }
 }
@@ -179,8 +192,10 @@ private fun BitwardenActionCard_preview() {
     BitwardenTheme {
         BitwardenActionCard(
             cardTitle = "Title",
-            actionText = "Action",
-            onActionClick = {},
+            actionButton = BitwardenButtonData(
+                label = "Action".asText(),
+                onClick = {},
+            ),
             onDismissClick = {},
         )
     }
@@ -193,8 +208,10 @@ private fun BitwardenActionCardWithLeadingContent_preview() {
     BitwardenTheme {
         BitwardenActionCard(
             cardTitle = "Title",
-            actionText = "Action",
-            onActionClick = {},
+            actionButton = BitwardenButtonData(
+                label = "Action".asText(),
+                onClick = {},
+            ),
             onDismissClick = {},
             leadingContent = {
                 NotificationBadge(
@@ -213,8 +230,10 @@ private fun BitwardenActionCardWithSubtitle_preview() {
         BitwardenActionCard(
             cardTitle = "Title",
             cardSubtitle = "Subtitle",
-            actionText = "Action",
-            onActionClick = {},
+            actionButton = BitwardenButtonData(
+                label = "Action".asText(),
+                onClick = {},
+            ),
             onDismissClick = {},
             secondaryButton = BitwardenButtonData(
                 label = "Learn More".asText(),

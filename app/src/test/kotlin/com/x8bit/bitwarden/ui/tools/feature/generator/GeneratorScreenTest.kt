@@ -37,6 +37,7 @@ import com.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -50,6 +51,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 @Suppress("LargeClass")
 class GeneratorScreenTest : BitwardenComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
+    private var onNavigateToVaultAddItemCalled = false
+    private var onNavigateBackCalled = false
     private var onDimNavBarRequest: Boolean? = null
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -72,8 +75,9 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         ) {
             GeneratorScreen(
                 viewModel = viewModel,
+                navigateToVaultAddItem = { onNavigateToVaultAddItemCalled = true },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
-                onNavigateBack = {},
+                onNavigateBack = { onNavigateBackCalled = true },
                 onDimNavBarRequest = { onDimNavBarRequest = it },
             )
         }
@@ -86,10 +90,87 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this password click should send SaveClick`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Password))
 
         composeTestRule
-            .onNodeWithText(text = "Apply")
+            .onNodeWithText(text = "Use this password")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with password mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Password(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
+    }
+
+    @Test
+    fun `ModalAppBar should be displayed for Passphrase Mode`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this passphrase click should send SaveClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Use this passphrase")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with passphrase mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Passphrase(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
     }
 
     @Test
@@ -97,16 +178,49 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
             ),
         )
 
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on use this username click should send SaveClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
 
         composeTestRule
-            .onNodeWithText(text = "Apply")
-            .assertIsDisplayed()
+            .onNodeWithText(text = "Use this username")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SaveClick)
+        }
+    }
+
+    @Test
+    fun `on copy icon click with username mode should send CopyClick`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
     }
 
     @Test
@@ -123,23 +237,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(GeneratorAction.CloseClick)
-        }
-    }
-
-    @Test
-    fun `on Apply click should send SaveClick`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                generatorMode = GeneratorMode.Modal.Username(website = null),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText(text = "Apply")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(GeneratorAction.SaveClick)
         }
     }
 
@@ -181,6 +278,21 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `NavigateToAddLogin event should call onNavigateToVaultAddItem`() {
+        val event = GeneratorEvent.NavigateToAddLogin(
+            initialData = VaultAddEditType.AddItem.InitialData.Username(value = "bitwarden_user"),
+        )
+        mutableEventFlow.tryEmit(event)
+        assertTrue(onNavigateToVaultAddItemCalled)
+    }
+
+    @Test
+    fun `NavigateBack event should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
     fun `Snackbar should be displayed with correct message on ShowSnackbar event`() {
         mutableEventFlow.tryEmit(GeneratorEvent.ShowSnackbar("Test Snackbar Message".asText()))
 
@@ -203,11 +315,22 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Test
     fun `clicking the Copy button should send CopyClick action`() {
         composeTestRule
-            .onNodeWithText(text = "Copy")
+            .onNodeWithContentDescription(label = "Copy")
             .performClick()
 
         verify {
             viewModel.trySendAction(GeneratorAction.CopyClick)
+        }
+    }
+
+    @Test
+    fun `clicking the Create login button should send CreateLoginClick action`() {
+        composeTestRule
+            .onNodeWithText(text = "Create login")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CreateLoginClick)
         }
     }
 
@@ -302,7 +425,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -310,7 +433,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -433,7 +556,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -454,7 +577,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -479,7 +602,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -499,7 +622,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -515,7 +638,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -536,7 +659,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -562,7 +685,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -571,7 +694,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in Password state, decrementing the minimum special characters above 9 should do nothing`() {
+    fun `in Password state, incrementing the minimum special characters above 9 should do nothing`() {
         val initialSpecialChars = 9
         updateState(
             DEFAULT_STATE.copy(
@@ -582,7 +705,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Minimum special"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -675,7 +798,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .performClick()
 
@@ -706,7 +829,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "7")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum numbers"))
             .performScrollTo()
             .assertIsDisplayed()
     }
@@ -726,7 +849,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
 
@@ -756,7 +879,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "7")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Minimum special"))
             .performScrollTo()
             .performClick()
     }
@@ -806,7 +929,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "5")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
 
@@ -836,7 +959,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
 
@@ -863,7 +986,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("\u2212"))
+            .filterToOne(hasContentDescription("Decrease Number of words"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -884,7 +1007,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Number of words"))
             .performScrollTo()
             .performClick()
         verify(exactly = 1) { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
@@ -905,7 +1028,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "3")
             .onChildren()
-            .filterToOne(hasContentDescription("+"))
+            .filterToOne(hasContentDescription("Increase Number of words"))
             .performScrollTo()
             .performClick()
 
@@ -1010,7 +1133,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "null. Service")
+            .onNodeWithContentDescription(label = "Service")
             .performScrollTo()
             .performClick()
 

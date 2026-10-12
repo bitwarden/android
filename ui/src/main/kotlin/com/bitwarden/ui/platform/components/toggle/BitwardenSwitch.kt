@@ -19,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
@@ -262,8 +264,9 @@ fun BitwardenSwitch(
                 paddingBottom = 0.dp,
             )
             .semantics(mergeDescendants = true) {
-                toggleableState = ToggleableState(isChecked)
                 this.contentDescription = contentDescription ?: label.text
+                this.role = Role.Switch
+                this.toggleableState = ToggleableState(value = isChecked)
             },
     ) {
         Row(

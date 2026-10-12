@@ -347,15 +347,19 @@ platform :android do
     package_name = options[:package_name]
     track = options[:track]
 
-    # Determine credentials file based on package name
-    case package_name
-    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
-      json_key = "secrets/play_creds.json"
-    when "com.bitwarden.authenticator"
-      json_key = "secrets/authenticator_play_store-creds.json"
+    # Determine credentials file - accept as parameter or use default based on package name
+    if options[:serviceCredentialsFile]
+      json_key = options[:serviceCredentialsFile]
     else
-      UI.important "Unexpected package name: #{package_name}, using default play store json key"
-      json_key = "secrets/play_creds.json"
+      case package_name
+      when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+        json_key = "secrets/play_creds.json"
+      when "com.bitwarden.authenticator"
+        json_key = "secrets/authenticator_play_store-creds.json"
+      else
+        UI.important "Unexpected package name: #{package_name}, using default play store json key"
+        json_key = "secrets/play_creds.json"
+      end
     end
 
     # Use supply to get detailed release status
@@ -463,6 +467,22 @@ platform :android do
     )
   end
 
+  desc "Publish release Test Harness APK to Firebase App Distribution"
+  lane :distributeTestHarnessReleaseToFirebase do |options|
+    releaseNotes = generateReleaseNotes(
+      repoName: "android",
+      actionUrl: "#{options[:actionUrl]}"
+    )
+    firebase_app_distribution(
+      app: "1:1093287226212:android:12f84f87c883e8604b2871",
+      android_artifact_type: "APK",
+      android_artifact_path: "testharness/build/outputs/apk/release/com.bitwarden.testharness.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group, livefront",
+      release_notes: "#{releaseNotes}",
+    )
+  end
+
   desc "Publish release AAB to Firebase"
   lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
     release_notes = changelog_from_git_commits(
@@ -527,14 +547,42 @@ platform :android do
   lane :promoteToProduction do |options|
     release_options = {
       package_name: options[:packageName],
-      version_code: options[:versionCode].to_i,
-      version_name: options[:versionName],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
+      # IMPORTANT: Must be true for supply_custom_promote.rb patch to run.
+      # When false, the patch calls original_promote_track (unpatched Fastlane code).
+      # When true, the patch calls custom_promote_track (our enhanced search logic that
+      # searches by version name in addition to version code, and provides better errors).
+      # DEBT: Flag name is misleading - it controls which code path to use, not whether
+      # to skip verification. Our patched code actually does real verification.
       skip_release_verification: true,
       skip_upload_apk: true,
       skip_upload_aab: true,
     }
+
+    # Only pass version_code if provided, to allow version_name-only search
+    if !options[:versionCode].nil? && !options[:versionCode].to_s.empty?
+      release_options[:version_code] = options[:versionCode].to_i
+    end
+
+    # Only pass version_name if provided
+    if !options[:versionName].nil? && !options[:versionName].to_s.empty?
+      release_options[:version_name] = options[:versionName]
+    end
+
+    # Resolve json_key the same way getLivePlayStoreVersion/getLatestPlayStoreVersion do:
+    # honor an explicit override, otherwise map from packageName. Needed so existing callers
+    # that never pass serviceCredentialsFile (e.g. bitwarden/deploy's production-promotion
+    # workflow) still authenticate with the right key for com.bitwarden.authenticator instead
+    # of silently falling through to the Appfile default (secrets/play_creds.json).
+    if options[:serviceCredentialsFile]
+      release_options[:json_key] = options[:serviceCredentialsFile]
+    else
+      case options[:packageName]
+      when "com.bitwarden.authenticator"
+        release_options[:json_key] = "secrets/authenticator_play_store-creds.json"
+      end
+    end
 
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true

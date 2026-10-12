@@ -100,7 +100,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class DeleteClick(val sendId: String) : SendAction() {
             override val title: Text get() = BitwardenString.delete.asText()
             override val contentDescription: Text get() = title
-            override val speedBump: BitwardenTwoButtonDialogData?
+            override val speedBump: BitwardenTwoButtonDialogData
                 get() = BitwardenTwoButtonDialogData(
                     title = BitwardenString.delete.asText(),
                     message = BitwardenString.are_you_sure_delete_send.asText(),
@@ -296,7 +296,7 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = BitwardenString.archive_verb.asText()
             override val requiresPasswordReprompt: Boolean get() = true
             override val contentDescription: Text get() = title
-            override val speedBump: BitwardenTwoButtonDialogData?
+            override val speedBump: BitwardenTwoButtonDialogData
                 get() = BitwardenTwoButtonDialogData(
                     title = BitwardenString.archive_item.asText(),
                     message = BitwardenString.once_archived_this_item_will_be_excluded.asText(),

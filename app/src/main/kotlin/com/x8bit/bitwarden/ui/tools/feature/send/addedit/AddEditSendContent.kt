@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
@@ -62,9 +63,12 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHan
 @Composable
 fun AddEditSendContent(
     state: AddEditSendState.ViewState.Content,
+    enforcedDeletionHours: Int?,
+    enforcedWhoCanAccess: SendAccessTypeJson?,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
-    isAddMode: Boolean,
+    shouldHideEmailAddressToggle: Boolean,
+    isNewSend: Boolean,
     isShared: Boolean,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
@@ -122,7 +126,7 @@ fun AddEditSendContent(
                     fileType = type,
                     addSendHandlers = addSendHandlers,
                     permissionsManager = permissionsManager,
-                    isAddMode = isAddMode,
+                    isNewSend = isNewSend,
                     isShared = isShared,
                 )
             }
@@ -138,8 +142,9 @@ fun AddEditSendContent(
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
-        if (isAddMode) {
+        if (isNewSend) {
             AddEditSendDeletionDateChooser(
+                enforcedDeletionHours = enforcedDeletionHours,
                 onDateSelect = addSendHandlers.onDeletionDateChange,
                 isEnabled = !policyDisablesSend,
                 modifier = Modifier
@@ -150,8 +155,9 @@ fun AddEditSendContent(
         } else {
             AddEditSendCustomDateChooser(
                 originalSelection = state.common.deletionDate,
-                isEnabled = !policyDisablesSend,
                 onDateSelect = addSendHandlers.onDeletionDateChange,
+                isDeletionDateEnforced = enforcedDeletionHours != null,
+                isEnabled = !policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendCustomDeletionDatePicker")
                     .fillMaxWidth()
@@ -170,7 +176,7 @@ fun AddEditSendContent(
             onOpenPasswordGeneratorClick = addSendHandlers.onOpenPasswordGeneratorClick,
             onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
             password = state.common.passwordInput,
-            isEnabled = !policyDisablesSend,
+            isEnabled = !policyDisablesSend && enforcedWhoCanAccess == null,
             isSendsRestrictedByPolicy = policyDisablesSend,
             modifier = Modifier
                 .testTag("SendAuthTypeChooser")
@@ -181,11 +187,12 @@ fun AddEditSendContent(
         AddEditSendOptions(
             state = state,
             isSendsRestrictedByPolicy = policyDisablesSend,
-            isAddMode = isAddMode,
+            shouldHideEmailAddressToggle = shouldHideEmailAddressToggle,
+            isNewSend = isNewSend,
             addSendHandlers = addSendHandlers,
         )
 
-        if (!isAddMode) {
+        if (!isNewSend) {
             DeleteButton(
                 onDeleteClick = addSendHandlers.onDeleteClick,
                 modifier = Modifier
@@ -266,7 +273,7 @@ private fun ColumnScope.FileTypeContent(
     fileType: AddEditSendState.ViewState.Content.SendType.File,
     addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
-    isAddMode: Boolean,
+    isNewSend: Boolean,
     isShared: Boolean,
 ) {
     val chooseFileCameraPermissionLauncher = permissionsManager.getLauncher { isGranted ->
@@ -293,7 +300,7 @@ private fun ColumnScope.FileTypeContent(
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
-    } else if (isAddMode) {
+    } else if (isNewSend) {
         fileType.name?.let {
             Box(
                 contentAlignment = Alignment.CenterStart,
@@ -374,8 +381,8 @@ private fun ColumnScope.FileTypeContent(
  * @param state The content state.
  * @param isSendsRestrictedByPolicy When `true`, indicates that there's a policy preventing the user
  * from editing or creating sends.
- * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
- * an existing send.
+ * @param isNewSend When `true`, indicates that we are creating a new send and `false` when editing
+ * an existing send. Copying a send creates a new one, so it is also `true` in that case.
  * @param addSendHandlers THe handlers various events.
  */
 @Suppress("LongMethod")
@@ -383,7 +390,8 @@ private fun ColumnScope.FileTypeContent(
 private fun AddEditSendOptions(
     state: AddEditSendState.ViewState.Content,
     isSendsRestrictedByPolicy: Boolean,
-    isAddMode: Boolean,
+    shouldHideEmailAddressToggle: Boolean,
+    isNewSend: Boolean,
     addSendHandlers: AddEditSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -416,7 +424,7 @@ private fun AddEditSendOptions(
                         targetState = state
                             .common
                             .currentAccessCount
-                            ?.takeUnless { isAddMode || state.common.maxAccessCount == null },
+                            ?.takeUnless { isNewSend || state.common.maxAccessCount == null },
                         enter = fadeIn() + expandVertically(),
                         exit = fadeOut() + shrinkVertically(),
                     ) {
@@ -466,19 +474,22 @@ private fun AddEditSendOptions(
                     },
                 )
             }
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenSwitch(
-                modifier = Modifier
-                    .testTag("SendHideEmailSwitch")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-                label = stringResource(id = BitwardenString.hide_email),
-                isChecked = state.common.isHideEmailChecked,
-                onCheckedChange = addSendHandlers.onHideEmailToggle,
-                readOnly = isSendsRestrictedByPolicy,
-                enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
-                cardStyle = CardStyle.Full,
-            )
+            if (!shouldHideEmailAddressToggle) {
+                Spacer(modifier = Modifier.height(height = 8.dp))
+                BitwardenSwitch(
+                    modifier = Modifier
+                        .testTag("SendHideEmailSwitch")
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                    label = stringResource(id = BitwardenString.hide_email),
+                    isChecked = state.common.isHideEmailChecked,
+                    onCheckedChange = addSendHandlers.onHideEmailToggle,
+                    readOnly = isSendsRestrictedByPolicy,
+                    enabled = state.common.isHideEmailChecked ||
+                        state.common.isHideEmailAddressEnabled,
+                    cardStyle = CardStyle.Full,
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = BitwardenString.private_notes),

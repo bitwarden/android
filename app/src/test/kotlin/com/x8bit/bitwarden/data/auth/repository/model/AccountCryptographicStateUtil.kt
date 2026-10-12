@@ -7,7 +7,7 @@ import com.bitwarden.core.WrappedAccountCryptographicState
  */
 fun createMockWrappedAccountCryptographicState(
     number: Int,
-    signedPublicKey: String? = "mockSignedPublicKey-$number",
+    signedPublicKey: String = "mockSignedPublicKey-$number",
     privateKey: String = "mockWrappedPrivateKey-$number",
     signingKey: String = "mockWrappedSigningKey-$number",
     securityState: String = "mockSecurityState-$number",

@@ -14,6 +14,17 @@ sealed class AddEditSendType : Parcelable {
     data object AddItem : AddEditSendType()
 
     /**
+     * Indicates that we want to create a new send item pre-filled from an existing one.
+     *
+     * This creates a send like [AddItem] does, but its initial values are loaded from the send
+     * being copied.
+     *
+     * @param sendItemId The ID of the send item to copy.
+     */
+    @Parcelize
+    data class CopyItem(val sendItemId: String) : AddEditSendType()
+
+    /**
      * Indicates that we want to edit an existing send item.
      *
      * @param sendItemId The ID of the send item to edit.

@@ -3,33 +3,40 @@ package com.bitwarden.ui.platform.components.fab
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabIcon
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.ripple.NoFocusRippleConfig
 import com.bitwarden.ui.util.Text
 import kotlinx.collections.immutable.ImmutableList
 
@@ -40,6 +47,8 @@ import kotlinx.collections.immutable.ImmutableList
  * @param items [ExpandableFabOption] buttons displayed when the FAB is expanded.
  * @param label [Text] displayed when the FAB is expanded.
  * @param modifier The modifier for this composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param initialIsExpanded The initial state of the [ExpandableFabIcon] displayed in the FAB.
  */
 @Composable
@@ -47,6 +56,7 @@ fun BitwardenExpandableFloatingActionButton(
     expandableFabIcon: ExpandableFabIcon,
     items: ImmutableList<ExpandableFabOption>,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     label: Text? = null,
     initialIsExpanded: Boolean = false,
 ) {
@@ -57,6 +67,7 @@ fun BitwardenExpandableFloatingActionButton(
         label = label,
         isExpanded = isExpanded,
         onIsExpandedChange = { isExpanded = it },
+        interactionSource = interactionSource,
         modifier = modifier,
     )
 }
@@ -68,6 +79,8 @@ fun BitwardenExpandableFloatingActionButton(
  * @param items [ExpandableFabOption] buttons displayed when the FAB is expanded.
  * @param label [Text] displayed when the FAB is expanded.
  * @param modifier The modifier for this composable.
+ * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
+ * for this component.
  * @param isExpanded whether the FAB is in the expanded state.
  * @param onIsExpandedChange Lambda invoked when the FAB expanded state changes.
  */
@@ -77,71 +90,82 @@ fun BitwardenExpandableFloatingActionButton(
     expandableFabIcon: ExpandableFabIcon,
     items: ImmutableList<ExpandableFabOption>,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     label: Text? = null,
     isExpanded: Boolean,
     onIsExpandedChange: (isExpanded: Boolean) -> Unit,
 ) {
-    Column(
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Bottom,
-        modifier = modifier.clickable(interactionSource = null, indication = null) {
-            onIsExpandedChange(false)
-        },
-    ) {
-        AnimatedVisibility(
-            visible = isExpanded,
-            label = "display_fab_options_animation",
-            modifier = Modifier.weight(weight = 1f),
+    CompositionLocalProvider(LocalRippleConfiguration provides NoFocusRippleConfig) {
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = modifier.clickable(interactionSource = null, indication = null) {
+                onIsExpandedChange(false)
+            },
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 8.dp,
-                    alignment = Alignment.Bottom,
-                ),
-                contentPadding = PaddingValues(bottom = 16.dp),
+            AnimatedVisibility(
+                visible = isExpanded,
+                label = "display_fab_options_animation",
+                modifier = Modifier.weight(weight = 1f),
             ) {
-                items(items) { expandableFabOption ->
-                    ExpandableFabOption(
-                        onFabOptionClick = {
-                            onIsExpandedChange(!isExpanded)
-                            expandableFabOption.onFabOptionClick()
-                        },
-                        expandableFabOption = expandableFabOption,
-                    )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp,
+                        alignment = Alignment.Bottom,
+                    ),
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                ) {
+                    items(items) { expandableFabOption ->
+                        ExpandableFabOption(
+                            onFabOptionClick = {
+                                onIsExpandedChange(!isExpanded)
+                                expandableFabOption.onFabOptionClick()
+                            },
+                            expandableFabOption = expandableFabOption,
+                        )
+                    }
                 }
             }
-        }
 
-        val rotation by animateFloatAsState(
-            targetValue = if (isExpanded) expandableFabIcon.iconRotation else 0f,
-            label = "add_item_rotation",
-        )
-        ExtendedFloatingActionButton(
-            onClick = { onIsExpandedChange(!isExpanded) },
-            expanded = if (label != null) !isExpanded else false,
-            containerColor = BitwardenTheme.colorScheme.filledButton.background,
-            contentColor = BitwardenTheme.colorScheme.filledButton.foreground,
-            shape = BitwardenTheme.shapes.fab,
-            text = {
-                label?.let {
-                    Text(
-                        text = it(),
-                        style = BitwardenTheme.typography.labelMedium,
+            val rotation by animateFloatAsState(
+                targetValue = if (isExpanded) expandableFabIcon.iconRotation else 0f,
+                label = "add_item_rotation",
+            )
+            val contentColor = BitwardenTheme.colorScheme.filledButton.foreground
+            ExtendedFloatingActionButton(
+                onClick = { onIsExpandedChange(!isExpanded) },
+                expanded = if (label != null) !isExpanded else false,
+                containerColor = BitwardenTheme.colorScheme.filledButton.background,
+                contentColor = contentColor,
+                shape = BitwardenTheme.shapes.fab,
+                interactionSource = interactionSource,
+                text = {
+                    label?.let {
+                        Text(
+                            text = it(),
+                            style = BitwardenTheme.typography.labelMedium,
+                        )
+                    }
+                },
+                icon = {
+                    Icon(
+                        painter = rememberVectorPainter(id = expandableFabIcon.icon.iconRes),
+                        contentDescription = expandableFabIcon.icon.contentDescription?.invoke(),
+                        modifier = Modifier
+                            .rotate(degrees = rotation)
+                            .nullableTestTag(tag = expandableFabIcon.icon.testTag),
                     )
-                }
-            },
-            icon = {
-                Icon(
-                    painter = rememberVectorPainter(id = expandableFabIcon.icon.iconRes),
-                    contentDescription = expandableFabIcon.icon.contentDescription?.invoke(),
-                    modifier = Modifier
-                        .rotate(degrees = rotation)
-                        .nullableTestTag(tag = expandableFabIcon.icon.testTag),
-                )
-            },
-        )
+                },
+                modifier = Modifier.interactiveBorder(
+                    interactionSource = interactionSource,
+                    shape = BitwardenTheme.shapes.fab,
+                    color = contentColor,
+                    inset = 2.dp,
+                ),
+            )
+        }
     }
 }
 
@@ -150,13 +174,22 @@ private fun ExpandableFabOption(
     expandableFabOption: ExpandableFabOption,
     onFabOptionClick: (option: ExpandableFabOption) -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    SmallFloatingActionButton(
+    FloatingActionButton(
         onClick = { onFabOptionClick(expandableFabOption) },
         containerColor = BitwardenTheme.colorScheme.filledButton.background,
         contentColor = BitwardenTheme.colorScheme.filledButton.foreground,
         shape = BitwardenTheme.shapes.fabItem,
-        modifier = modifier,
+        interactionSource = interactionSource,
+        modifier = modifier
+            .sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+            .interactiveBorder(
+                interactionSource = interactionSource,
+                shape = BitwardenTheme.shapes.fabItem,
+                color = BitwardenTheme.colorScheme.filledButton.foreground,
+                inset = 2.dp,
+            ),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = 12.dp),

@@ -118,6 +118,7 @@ fun BitwardenSnackbar(
                     vectorIconRes = BitwardenDrawable.ic_close,
                     contentDescription = stringResource(BitwardenString.close),
                     contentColor = BitwardenTheme.colorScheme.icon.reversed,
+                    focusColor = BitwardenTheme.colorScheme.icon.reversed,
                 )
             }
         }

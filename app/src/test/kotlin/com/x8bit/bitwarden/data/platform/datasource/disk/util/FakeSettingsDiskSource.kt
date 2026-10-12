@@ -4,12 +4,12 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.FlightRecorderDiskSource
 import com.bitwarden.data.datasource.disk.util.FakeFlightRecorderDiskSource
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -71,6 +71,7 @@ class FakeSettingsDiskSource(
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
     private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
+    private val storedVaultPolicyBannerDismissedDate = mutableMapOf<String, Instant?>()
     private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
     private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
     private val storedPremiumUpgradePending = mutableMapOf<String, Boolean?>()
@@ -125,6 +126,9 @@ class FakeSettingsDiskSource(
 
     private val mutablePremiumUpgradeBannerDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableVaultPolicyBannerDismissedFlow =
+        mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
     private val mutableUpgradedToPremiumCardConsumedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -269,6 +273,7 @@ class FakeSettingsDiskSource(
         storedFillAssistEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
+        storedVaultPolicyBannerDismissedDate.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
@@ -387,6 +392,23 @@ class FakeSettingsDiskSource(
     override fun storePremiumUpgradeBannerDismissed(userId: String, isDismissed: Boolean?) {
         storedPremiumUpgradeBannerDismissed[userId] = isDismissed
         getMutablePremiumUpgradeBannerDismissedFlow(userId = userId).tryEmit(isDismissed)
+    }
+
+    override fun getVaultPolicyBannerDismissedDate(
+        userId: String,
+    ): Instant? = storedVaultPolicyBannerDismissedDate[userId]
+
+    override fun getVaultPolicyBannerDismissedDateFlow(
+        userId: String,
+    ): Flow<Instant?> = getMutableVaultPolicyBannerDismissedFlow(userId = userId)
+        .onSubscription { emit(getVaultPolicyBannerDismissedDate(userId = userId)) }
+
+    override fun storeVaultPolicyBannerDismissedDate(
+        userId: String,
+        dismissalRevisionDate: Instant?,
+    ) {
+        storedVaultPolicyBannerDismissedDate[userId] = dismissalRevisionDate
+        getMutableVaultPolicyBannerDismissedFlow(userId = userId).tryEmit(dismissalRevisionDate)
     }
 
     override fun getUpgradedToPremiumCardConsumed(userId: String): Boolean? =
@@ -602,6 +624,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored vault policy banner dismissed value matches the [expected] one.
+     */
+    fun assertVaultPolicyBannerDismissedDate(userId: String, expected: Instant?) {
+        assertEquals(expected, storedVaultPolicyBannerDismissedDate[userId])
+    }
+
+    /**
      * Asserts that the stored "Upgraded to Premium" card consumed value matches the [expected] one.
      */
     fun assertUpgradedToPremiumCardConsumed(userId: String, expected: Boolean?) {
@@ -697,6 +726,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradeBannerDismissedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableVaultPolicyBannerDismissedFlow(
+        userId: String,
+    ): MutableSharedFlow<Instant?> =
+        mutableVaultPolicyBannerDismissedFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

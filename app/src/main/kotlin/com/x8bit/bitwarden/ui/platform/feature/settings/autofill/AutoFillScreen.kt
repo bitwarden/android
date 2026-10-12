@@ -44,6 +44,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.button.model.BitwardenHelpButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
@@ -67,6 +68,7 @@ import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivit
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
@@ -400,8 +402,10 @@ private fun AutofillCallToActionCard(
             CtaState.AUTOFILL -> {
                 BitwardenActionCard(
                     cardTitle = stringResource(id = BitwardenString.turn_on_autofill),
-                    actionText = stringResource(id = BitwardenString.get_started),
-                    onActionClick = autoFillHandlers.onAutofillActionCardClick,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.get_started.asText(),
+                        onClick = autoFillHandlers.onAutofillActionCardClick,
+                    ),
                     onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
                     leadingContent = { NotificationBadge(notificationCount = 1) },
                 )
@@ -418,8 +422,10 @@ private fun AutofillCallToActionCard(
                         id = BitwardenString.turn_on_browser_autofill_integration,
                     ),
                     cardSubtitle = stringResource(id = subTitleRes),
-                    actionText = stringResource(id = BitwardenString.get_started),
-                    onActionClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                    actionButton = BitwardenButtonData(
+                        label = BitwardenString.get_started.asText(),
+                        onClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                    ),
                     onDismissClick = autoFillHandlers.onBrowserAutofillActionCardDismissClick,
                     leadingContent = { NotificationBadge(notificationCount = 1) },
                 )

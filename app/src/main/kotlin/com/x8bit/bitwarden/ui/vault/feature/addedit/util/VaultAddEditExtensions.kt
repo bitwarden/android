@@ -1,27 +1,21 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType.AddItem.InitialData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
-
-/**
- * Default, "select" Text to show on multi select buttons in the VaultAddEdit package.
- */
-val SELECT_TEXT: Text
-    get() = "-- "
-        .asText()
-        .concat(BitwardenString.select.asText())
-        .concat(" --".asText())
 
 /**
  * Transforms a [VaultItemCipherType] into [VaultAddEditState.ViewState.Content.ItemType].
  */
-fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemType =
+fun VaultItemCipherType.toItemType(
+    initialData: InitialData?,
+): VaultAddEditState.ViewState.Content.ItemType =
     when (this) {
-        VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login()
+        VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login(
+            username = (initialData as? InitialData.Username)?.value.orEmpty(),
+            password = (initialData as? InitialData.Password)?.value.orEmpty(),
+        )
+
         VaultItemCipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card()
         VaultItemCipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity()
         VaultItemCipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
@@ -29,9 +23,11 @@ fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemTy
         VaultItemCipherType.BANK_ACCOUNT -> {
             VaultAddEditState.ViewState.Content.ItemType.BankAccount()
         }
+
         VaultItemCipherType.DRIVERS_LICENSE -> {
             VaultAddEditState.ViewState.Content.ItemType.License()
         }
+
         VaultItemCipherType.PASSPORT -> {
             VaultAddEditState.ViewState.Content.ItemType.Passport()
         }

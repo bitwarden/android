@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import javax.crypto.Cipher
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Time slice to delay auto-focusing on the password/pin field. Because of the refresh that
@@ -254,7 +255,7 @@ fun VaultUnlockScreen(
                     mutableStateOf(false)
                 }
                 LaunchedEffect(Unit) {
-                    delay(AUTO_FOCUS_DELAY)
+                    delay(AUTO_FOCUS_DELAY.milliseconds)
                     autoFocusDelayCompleted = true
                 }
                 BitwardenPasswordField(

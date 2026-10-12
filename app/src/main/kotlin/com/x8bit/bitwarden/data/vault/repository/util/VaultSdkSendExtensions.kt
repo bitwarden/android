@@ -90,6 +90,8 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         type = type.toSdkSendType(),
         file = file?.toEncryptedSdkFile(),
         text = text?.toEncryptedSdkText(),
+        // Item sends are not supported yet, see [PM-41095].
+        data = null,
         maxAccessCount = maxAccessCount?.toUInt(),
         accessCount = accessCount.toUInt(),
         disabled = isDisabled,

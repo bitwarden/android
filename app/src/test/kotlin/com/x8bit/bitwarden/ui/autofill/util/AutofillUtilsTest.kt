@@ -29,6 +29,9 @@ class AutofillUtilsTest {
         every {
             ContextCompat.getString(context, BitwardenString.type_login)
         } returns "Login"
+        every {
+            ContextCompat.getString(context, BitwardenString.type_identity)
+        } returns "Identity"
     }
 
     @AfterEach
@@ -112,6 +115,38 @@ class AutofillUtilsTest {
                     sdkInt = 34,
                 ),
                 third = "Autofill suggestion, Login, Amazon, AmazonSubtitle",
+            ),
+            Triple(
+                first = AutofillCipher.Identity(
+                    cipherId = null,
+                    name = "Cipher One",
+                    subtitle = "Subtitle",
+                    fullName = "fullName",
+                    fullAddress = "fullAddress",
+                    title = "title",
+                    firstName = "firstName",
+                    middleName = "middleName",
+                    lastName = "lastName",
+                    address1 = "address1",
+                    address2 = "address2",
+                    address3 = "address3",
+                    city = "city",
+                    state = "state",
+                    postalCode = "postalCode",
+                    country = "country",
+                    company = "company",
+                    email = "email",
+                    phone = "phone",
+                    ssn = "ssn",
+                    passportNumber = "passportNumber",
+                    licenseNumber = "licenseNumber",
+                ),
+                second = AutofillAppInfo(
+                    context = context,
+                    packageName = "com.x8bit.bitwarden",
+                    sdkInt = 34,
+                ),
+                third = "Autofill suggestion, Identity, Cipher One, Subtitle",
             ),
         )
             .forEach {

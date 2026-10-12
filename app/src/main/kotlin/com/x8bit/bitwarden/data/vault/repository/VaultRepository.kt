@@ -9,6 +9,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
@@ -33,6 +34,7 @@ import javax.crypto.Cipher
 interface VaultRepository :
     CipherManager,
     FolderManager,
+    KeyRotationManager,
     SendManager,
     VaultLockManager,
     VaultSyncManager {

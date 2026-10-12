@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.error.MissingPropertyException
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -22,6 +23,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.keyrotation.KeyRotationManager
 import com.x8bit.bitwarden.data.platform.util.isActive
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -46,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkMasterPasswordUnlock
+import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +74,7 @@ import javax.crypto.Cipher
  * Default implementation of [VaultRepository].
  */
 @Suppress("TooManyFunctions", "LongParameterList")
-class VaultRepositoryImpl(
+internal class VaultRepositoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
@@ -82,10 +86,13 @@ class VaultRepositoryImpl(
     private val vaultSyncManager: VaultSyncManager,
     private val credentialExchangeImportManager: CredentialExchangeImportManager,
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager,
+    private val keyRotationManager: KeyRotationManager,
+    private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     FolderManager by folderManager,
+    KeyRotationManager by keyRotationManager,
     SendManager by sendManager,
     VaultLockManager by vaultLockManager,
     VaultSyncManager by vaultSyncManager {
@@ -296,7 +303,7 @@ class VaultRepositoryImpl(
                         .decodeToString()
                 } catch (e: GeneralSecurityException) {
                     Timber.w(e, "unlockVaultWithBiometrics failed when decrypting biometrics key")
-                    return VaultUnlockResult.BiometricDecodingError(error = e)
+                    return e.toVaultUnlockResult()
                 }
             }
             ?: biometricsKey
@@ -310,7 +317,7 @@ class VaultRepositoryImpl(
                     .toString(Charsets.ISO_8859_1)
             } catch (e: GeneralSecurityException) {
                 Timber.w(e, "unlockVaultWithBiometrics failed to migrate the user to IV encryption")
-                return VaultUnlockResult.BiometricDecodingError(error = e)
+                return e.toVaultUnlockResult()
             }
         } else {
             null
@@ -334,6 +341,10 @@ class VaultRepositoryImpl(
                 }
                 pinProtectedUserKeyManager.deriveTemporaryPinProtectedUserKeyIfNecessary(
                     userId = userId,
+                )
+                keyRotationManager.rotateBiometricsKey(
+                    userId = userId,
+                    decryptedBiometricsUserKey = decryptedUserKey,
                 )
             }
     }
@@ -371,28 +382,16 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult {
-        val userId = activeUserId
-            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
+        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError(
+            error = NoActiveUserException(),
+        )
 
-        return authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
-            ?.let { pinProtectedUserKeyEnvelope ->
-                this.unlockVaultForUser(
-                    userId = userId,
-                    initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
-                        pin = pin,
-                        pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
-                    ),
-                )
-            }
-            ?: run {
+        return authDiskSource
+            .getPinProtectedUserKey(userId = userId)
+            ?.let { pinProtectedUserKey ->
                 // This is needed to support unlocking with a legacy pin protected user key.
                 // Once the vault is unlocked, the user's pin protected user key is migrated to
                 // a pin protected user key envelope.
-                val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-                    ?: return VaultUnlockResult.InvalidStateError(
-                        error = MissingPropertyException("Pin protected key"),
-                    )
-
                 this.unlockVaultForUser(
                     userId = userId,
                     initUserCryptoMethod = InitUserCryptoMethod.Pin(
@@ -400,6 +399,29 @@ class VaultRepositoryImpl(
                         pinProtectedUserKey = pinProtectedUserKey,
                     ),
                 )
+            }
+            ?: run {
+                if (featureFlagManager.getFeatureFlag(key = FlagKey.SdkPinUnlock)) {
+                    this.unlockVaultForUser(
+                        userId = userId,
+                        initUserCryptoMethod = InitUserCryptoMethod.PinState(pin = pin),
+                    )
+                } else {
+                    authDiskSource
+                        .getPinProtectedUserKeyEnvelope(userId = userId)
+                        ?.let { pinProtectedUserKeyEnvelope ->
+                            this.unlockVaultForUser(
+                                userId = userId,
+                                initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
+                                    pin = pin,
+                                    pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                                ),
+                            )
+                        }
+                        ?: VaultUnlockResult.InvalidStateError(
+                            error = MissingPropertyException("Pin protected key envelope"),
+                        )
+                }
             }
     }
 

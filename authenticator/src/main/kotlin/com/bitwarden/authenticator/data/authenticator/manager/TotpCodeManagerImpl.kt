@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val ONE_SECOND_MILLISECOND = 1000L
 
@@ -141,7 +142,7 @@ class TotpCodeManagerImpl @Inject constructor(
             }
 
             emit(verificationCodeItem)
-            delay(ONE_SECOND_MILLISECOND)
+            delay(ONE_SECOND_MILLISECOND.milliseconds)
         }
     }
 }

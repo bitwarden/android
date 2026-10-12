@@ -23,4 +23,9 @@ interface AutofillCipherProvider {
     suspend fun getLoginAutofillCiphers(
         uri: String,
     ): List<AutofillCipher.Login>
+
+    /**
+     * Get all [AutofillCipher.Identity]s for the current user.
+     */
+    suspend fun getIdentityAutofillCiphers(): List<AutofillCipher.Identity>
 }

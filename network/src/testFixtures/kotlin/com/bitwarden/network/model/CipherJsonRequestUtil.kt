@@ -37,6 +37,7 @@ fun createMockCipherJsonRequest(
     archivedDate: Instant? = Instant.parse("2023-10-27T12:00:00Z"),
     data: String? = "mockData-$number",
     encryptedFor: String? = "mockEncryptedFor-$number",
+    encryptedByKeyId: String? = "mockEncryptedByKeyId-$number",
 ): CipherJsonRequest =
     CipherJsonRequest(
         attachments = attachments,
@@ -62,4 +63,5 @@ fun createMockCipherJsonRequest(
         archivedDate = archivedDate,
         data = data,
         encryptedFor = encryptedFor,
+        encryptedByKeyId = encryptedByKeyId,
     )

@@ -22,7 +22,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Content view for the [VaultMoveToOrganizationScreen].
  */
-@Suppress("LongMethod")
 @Composable
 fun VaultMoveToOrganizationContent(
     state: VaultMoveToOrganizationState.ViewState.Content,
@@ -42,10 +41,6 @@ fun VaultMoveToOrganizationContent(
                 BitwardenMultiSelectButton(
                     label = stringResource(
                         id = vfo1Foundation(BitwardenString.vault, BitwardenString.organization),
-                    ),
-                    dialogTitle = vfo1Foundation(
-                        new = stringResource(id = BitwardenString.filter_by_vault),
-                        old = null,
                     ),
                     options = state
                         .organizations

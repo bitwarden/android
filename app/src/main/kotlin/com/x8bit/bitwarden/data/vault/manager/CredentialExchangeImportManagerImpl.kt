@@ -9,8 +9,8 @@ import com.bitwarden.cxf.parser.CredentialExchangePayloadParser
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.service.CiphersService
-import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.util.hasRestrictItemTypes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -63,7 +63,7 @@ class CredentialExchangeImportManagerImpl(
 
         // Filter out card ciphers if RESTRICT_ITEM_TYPES policy is active
         val filteredCipherList = if (policyManager.hasRestrictItemTypes()) {
-            allCiphers.filter { cipher -> cipher.type != CipherType.CARD }
+            allCiphers.filter { context -> context.cipher.type != CipherType.CARD }
         } else {
             allCiphers
         }
@@ -72,7 +72,7 @@ class CredentialExchangeImportManagerImpl(
             return ImportCxfPayloadResult.NoItems
         }
 
-        return uploadCiphers(userId = userId, ciphers = filteredCipherList)
+        return uploadCiphers(ciphers = filteredCipherList)
             .map { syncVault(it) }
             .fold(
                 onSuccess = { it },
@@ -81,11 +81,10 @@ class CredentialExchangeImportManagerImpl(
     }
 
     private suspend fun uploadCiphers(
-        userId: String,
-        ciphers: List<Cipher>,
+        ciphers: List<EncryptionContext>,
     ): Result<ImportCxfPayloadResult.Success> {
         val request = ImportCiphersJsonRequest(
-            ciphers = ciphers.map { it.toEncryptedNetworkCipher(encryptedFor = userId) },
+            ciphers = ciphers.map { it.toEncryptedNetworkCipher() },
             folders = emptyList(),
             folderRelationships = emptyList(),
         )

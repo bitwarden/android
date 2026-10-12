@@ -221,6 +221,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToPlan = onNavigateToPlan,
             )
             generatorGraph(
+                navigateToVaultAddItem = navigateToVaultAddItem,
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },
                 onDimNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
             )

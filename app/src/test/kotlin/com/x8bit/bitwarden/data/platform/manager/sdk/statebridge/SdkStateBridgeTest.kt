@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.sdk.statebridge
 
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.V2UpgradeToken
+import com.bitwarden.core.WebAuthnPrfUnlockData
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
@@ -53,6 +54,31 @@ class SdkStateBridgeTest {
         stateBridge.clearUserKey()
 
         assertNull(stateBridge.getUserKey())
+    }
+
+    @Test
+    fun `setUserKeyId should store the user key id`() = runTest {
+        stateBridge.setUserKeyId(value = "userKeyId")
+
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+    }
+
+    @Test
+    fun `getUserKeyId should return the stored user key id`() = runTest {
+        assertNull(stateBridge.getUserKeyId())
+
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+
+        assertEquals("userKeyId", stateBridge.getUserKeyId())
+    }
+
+    @Test
+    fun `clearUserKeyId should clear the stored user key id`() = runTest {
+        authDiskSource.storeUserKeyId(userId = USER_ID, userKeyId = "userKeyId")
+
+        stateBridge.clearUserKeyId()
+
+        authDiskSource.assertUserKeyId(userId = USER_ID, userKeyId = null)
     }
 
     @Test
@@ -187,6 +213,48 @@ class SdkStateBridgeTest {
 
         authDiskSource.assertV2UpgradeToken(userId = USER_ID, v2UpgradeToken = null)
     }
+
+    @Test
+    fun `setV2EncryptedMigrationsGracePeriodStart should store the grace period start`() = runTest {
+        stateBridge.setV2EncryptedMigrationsGracePeriodStart(value = GRACE_PERIOD_START)
+
+        authDiskSource.assertV2EncryptedMigrationsGracePeriodStart(
+            userId = USER_ID,
+            gracePeriodStart = GRACE_PERIOD_START,
+        )
+    }
+
+    @Test
+    fun `getV2EncryptedMigrationsGracePeriodStart should return the stored grace period start`() =
+        runTest {
+            assertNull(stateBridge.getV2EncryptedMigrationsGracePeriodStart())
+
+            authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = GRACE_PERIOD_START,
+            )
+
+            assertEquals(
+                GRACE_PERIOD_START,
+                stateBridge.getV2EncryptedMigrationsGracePeriodStart(),
+            )
+        }
+
+    @Test
+    fun `clearV2EncryptedMigrationsGracePeriodStart should clear the grace period start`() =
+        runTest {
+            authDiskSource.storeV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = GRACE_PERIOD_START,
+            )
+
+            stateBridge.clearV2EncryptedMigrationsGracePeriodStart()
+
+            authDiskSource.assertV2EncryptedMigrationsGracePeriodStart(
+                userId = USER_ID,
+                gracePeriodStart = null,
+            )
+        }
 
     @Test
     fun `setAccountCryptographicState should store the account cryptographic state`() = runTest {
@@ -426,6 +494,33 @@ class SdkStateBridgeTest {
 
         assertNull(authDiskSource.userState)
     }
+
+    @Test
+    fun `getWebauthnPrfUnlockData should return null since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+    }
+
+    @Test
+    fun `setWebauthnPrfUnlockData should do nothing since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.setWebauthnPrfUnlockData(value = WEBAUTHN_PRF_UNLOCK_DATA)
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+        assertEquals(USER_STATE, authDiskSource.userState)
+    }
+
+    @Test
+    fun `clearWebauthnPrfUnlockData should do nothing since unlock is unsupported`() = runTest {
+        authDiskSource.userState = USER_STATE
+
+        stateBridge.clearWebauthnPrfUnlockData()
+
+        assertNull(stateBridge.getWebauthnPrfUnlockData())
+        assertEquals(USER_STATE, authDiskSource.userState)
+    }
 }
 
 private const val USER_ID: String = "userId"
@@ -439,6 +534,8 @@ private val V2_UPGRADE_TOKEN_JSON: V2UpgradeTokenJson = V2UpgradeTokenJson(
     wrappedUserKey1 = "wrappedUserKey1",
     wrappedUserKey2 = "wrappedUserKey2",
 )
+
+private val GRACE_PERIOD_START: Instant = Instant.parse("2024-09-13T01:00:00.00Z")
 
 private val MASTER_PASSWORD_UNLOCK_DATA: MasterPasswordUnlockData = MasterPasswordUnlockData(
     kdf = Kdf.Pbkdf2(iterations = 600_000u),
@@ -457,6 +554,10 @@ private val MASTER_PASSWORD_UNLOCK_DATA_JSON: MasterPasswordUnlockDataJson =
         masterKeyWrappedUserKey = "masterKeyWrappedUserKey",
         salt = "salt",
     )
+
+private val WEBAUTHN_PRF_UNLOCK_DATA: WebAuthnPrfUnlockData = WebAuthnPrfUnlockData(
+    options = emptyList(),
+)
 
 private val ACCOUNT: AccountJson = AccountJson(
     profile = AccountJson.Profile(

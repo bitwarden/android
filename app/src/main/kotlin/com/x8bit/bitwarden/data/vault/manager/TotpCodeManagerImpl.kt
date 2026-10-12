@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import java.time.Clock
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val ONE_SECOND_MILLISECOND = 1000L
 
@@ -130,7 +131,7 @@ class TotpCodeManagerImpl(
                     item?.let {
                         emit(DataState.Loaded(it))
                     }
-                    delay(ONE_SECOND_MILLISECOND)
+                    delay(ONE_SECOND_MILLISECOND.milliseconds)
                 }
             }
                 .onCompletion {

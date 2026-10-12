@@ -7,8 +7,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -31,10 +31,11 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPolicyView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -106,7 +107,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
     }
 
-    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<PolicyView>>()
+    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<Policy>>()
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(PolicyType.PASSWORD_GENERATOR) } returns emptyList()
         every { getActivePoliciesFlow(PolicyType.PASSWORD_GENERATOR) } returns mutablePolicyFlow
@@ -230,7 +231,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             }
         """
         val policies = listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 organizationId = "organizationId",
                 id = "id",
                 type = PolicyType.PASSWORD_GENERATOR,
@@ -585,8 +586,62 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `CreateLoginClick for password state should emit NavigateToAddLogin with Password`() =
+        runTest {
+            val viewModel = createViewModel(state = initialPasscodeState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Password(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CreateLoginClick for passphrase state should emit NavigateToAddLogin with Password`() =
+        runTest {
+            val viewModel = createViewModel(state = initialPassphraseState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Password(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `CreateLoginClick for username state should emit NavigateToAddLogin with Username`() =
+        runTest {
+            val viewModel = createViewModel(state = initialUsernameState)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.CreateLoginClick)
+                assertEquals(
+                    GeneratorEvent.NavigateToAddLogin(
+                        initialData = VaultAddEditType.AddItem.InitialData.Username(
+                            value = viewModel.stateFlow.value.generatedText,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `Policy should overwrite password options if stricter`() {
-        val policy = createMockPolicyView(
+        val policy = createMockSdkPolicy(
             type = PolicyType.PASSWORD_GENERATOR,
             enabled = true,
             data = """
@@ -636,7 +691,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Policy should overwrite passphrase options if stricter`() {
-        val policy = createMockPolicyView(
+        val policy = createMockSdkPolicy(
             type = PolicyType.PASSWORD_GENERATOR,
             enabled = true,
             data = """
@@ -685,7 +740,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `Policy should overwrite passwordType if has overridePasswordType`() {
-        val policy = createMockPolicyView(
+        val policy = createMockSdkPolicy(
             type = PolicyType.PASSWORD_GENERATOR,
             enabled = true,
             data = """
@@ -713,7 +768,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `Policy should should prioritize password if multiple have OverridePasswordType`() {
         val policies = listOf(
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 1,
                 type = PolicyType.PASSWORD_GENERATOR,
                 enabled = true,
@@ -723,7 +778,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                   }
                 """,
             ),
-            createMockPolicyView(
+            createMockSdkPolicy(
                 number = 1,
                 type = PolicyType.PASSWORD_GENERATOR,
                 enabled = true,

@@ -9,6 +9,7 @@ import com.bitwarden.core.EncryptionSettingsException
 import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.ReinitUserCryptoRequest
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
@@ -70,6 +71,11 @@ class VaultSdkSourceImpl(
 
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
+    }
+
+    override fun getKeyId(userKey: String): Result<String> = runCatchingWithLogs {
+        // This can never be null, the SDK team needs to update the return type to match.
+        requireNotNull(value = globalClient.crypto().getKeyIdForSymmetricKey(key = userKey))
     }
 
     override suspend fun getTrustDevice(
@@ -186,6 +192,13 @@ class VaultSdkSourceImpl(
                 .userFingerprint(fingerprintMaterial = userId)
         }
 
+    override suspend fun reinitializeCrypto(
+        userId: String,
+        request: ReinitUserCryptoRequest,
+    ): Result<Unit> = runCatchingWithLogs {
+        getClient(userId = userId).crypto().reinitUserCrypto(req = request)
+    }
+
     override suspend fun initializeCrypto(
         userId: String,
         request: InitUserCryptoRequest,
@@ -214,6 +227,7 @@ class VaultSdkSourceImpl(
                     is EncryptionSettingsException.LocalUserDataKeyLoadFailed,
                     is EncryptionSettingsException.LocalUserDataMigrationFailed,
                     is EncryptionSettingsException.MissingPrivateKey,
+                    is EncryptionSettingsException.PinUnlockNotAvailable,
                     is EncryptionSettingsException.UserIdAlreadySet,
                     is EncryptionSettingsException.UserKeyStateRetrievalFailed,
                     is EncryptionSettingsException.UserKeyStateUpdateFailed,
@@ -565,7 +579,7 @@ class VaultSdkSourceImpl(
     override suspend fun importCxf(
         userId: String,
         payload: String,
-    ): Result<List<Cipher>> = runCatchingWithLogs {
+    ): Result<List<EncryptionContext>> = runCatchingWithLogs {
         getClient(userId = userId)
             .exporters()
             .importCxf(payload = payload)
@@ -644,7 +658,7 @@ class VaultSdkSourceImpl(
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>> = runCatchingWithLogs {
         val fido2 = getClient(userId = userId).platform().fido2()
-        cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
+        cipherViews.flatMap { fido2.getFido2AutofillCredentials(cipherView = it) }
     }
 
     override suspend fun silentlyDiscoverCredentials(

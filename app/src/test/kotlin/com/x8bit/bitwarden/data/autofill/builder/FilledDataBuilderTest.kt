@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class FilledDataBuilderTest {
     private lateinit var filledDataBuilder: FilledDataBuilder
 
@@ -236,6 +237,62 @@ class FilledDataBuilderTest {
             // Verify
             assertEquals(expected, actual)
             verify(exactly = 0) { autofillViewEmail.buildFilledItemOrNull(any()) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should fill email field when cipher username email has leading or trailing whitespace`() =
+        runTest {
+            // Setup
+            val emailUsername = " user@example.com "
+            val autofillCipher = AutofillCipher.Login(
+                cipherId = null,
+                name = "Cipher One",
+                isTotpEnabled = false,
+                password = "Password",
+                username = emailUsername,
+                subtitle = "Subtitle",
+                website = URI,
+            )
+            val filledItemEmail: FilledItem = mockk()
+            val autofillViewEmail: AutofillView.Login.Email = mockk {
+                every { data } returns mockk { every { website } returns URI }
+                every { buildFilledItemOrNull(emailUsername) } returns filledItemEmail
+            }
+            val autofillPartition = AutofillPartition.Login(views = listOf(autofillViewEmail))
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val expected = FilledData(
+                filledPartitions = listOf(
+                    FilledPartition(
+                        autofillCipher = autofillCipher,
+                        filledItems = listOf(filledItemEmail),
+                        inlinePresentationSpec = null,
+                    ),
+                ),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            coEvery {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns listOf(autofillCipher)
+
+            // Test
+            val actual = filledDataBuilder.build(autofillRequest = autofillRequest)
+
+            // Verify
+            assertEquals(expected, actual)
+            verify(exactly = 1) { autofillViewEmail.buildFilledItemOrNull(emailUsername) }
         }
 
     @Test
@@ -668,6 +725,115 @@ class FilledDataBuilderTest {
             verify(exactly = 22) {
                 autofillViewPassword.buildFilledItemOrNull(password)
                 autofillViewUsername.buildFilledItemOrNull(username)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should fill each identity view from the identity cipher and skip empty values when Identity`() =
+        runTest {
+            // Setup
+            val firstName = "John"
+            val lastName = "Doe"
+            val addressExtended = "Apt. 42"
+            val city = "Springfield"
+            val autofillCipher = AutofillCipher.Identity(
+                cipherId = null,
+                name = "Cipher One",
+                subtitle = "Subtitle",
+                fullName = "John Doe",
+                fullAddress = "",
+                title = "",
+                firstName = firstName,
+                middleName = "",
+                lastName = lastName,
+                address1 = "",
+                address2 = addressExtended,
+                address3 = "",
+                city = city,
+                state = "",
+                postalCode = "",
+                country = "",
+                company = "",
+                email = "",
+                phone = "",
+                ssn = "",
+                passportNumber = "",
+                licenseNumber = "",
+            )
+            val filledItemFirstName: FilledItem = mockk()
+            val filledItemLastName: FilledItem = mockk()
+            val filledItemAddressExtended: FilledItem = mockk()
+            val filledItemCity: FilledItem = mockk()
+            val autofillViewFirstName: AutofillView.Identity.PersonNameGiven = mockk {
+                every { buildFilledItemOrNull(firstName) } returns filledItemFirstName
+            }
+            val autofillViewLastName: AutofillView.Identity.PersonNameFamily = mockk {
+                every { buildFilledItemOrNull(lastName) } returns filledItemLastName
+            }
+            // AddressExtended must map to address2, distinctly from AddressStreet's address1.
+            val autofillViewAddressExtended: AutofillView.Identity.AddressExtended = mockk {
+                every { buildFilledItemOrNull(addressExtended) } returns filledItemAddressExtended
+            }
+            val autofillViewCity: AutofillView.Identity.AddressLocality = mockk {
+                every { buildFilledItemOrNull(city) } returns filledItemCity
+            }
+            // Empty cipher value (state is blank) -> skipped, never builds a filled item.
+            val autofillViewState: AutofillView.Identity.AddressRegion = mockk()
+            val autofillPartition = AutofillPartition.Identity(
+                views = listOf(
+                    autofillViewFirstName,
+                    autofillViewLastName,
+                    autofillViewAddressExtended,
+                    autofillViewCity,
+                    autofillViewState,
+                ),
+            )
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val filledPartition = FilledPartition(
+                autofillCipher = autofillCipher,
+                filledItems = listOf(
+                    filledItemFirstName,
+                    filledItemLastName,
+                    filledItemAddressExtended,
+                    filledItemCity,
+                ),
+                inlinePresentationSpec = null,
+            )
+            val expected = FilledData(
+                filledPartitions = listOf(
+                    filledPartition,
+                ),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            coEvery {
+                autofillCipherProvider.getIdentityAutofillCiphers()
+            } returns listOf(autofillCipher)
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            assertEquals(expected, actual)
+            coVerify(exactly = 1) {
+                autofillCipherProvider.getIdentityAutofillCiphers()
+            }
+            verify(exactly = 0) {
+                autofillViewState.buildFilledItemOrNull(any())
             }
         }
 

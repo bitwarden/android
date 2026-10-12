@@ -15,6 +15,12 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import timber.log.Timber
+import java.nio.ByteBuffer
+import java.util.Base64
+import java.util.UUID
+
+private const val B64_PREFIX: String = "b64."
+private const val UUID_BYTE_COUNT: Int = 16
 
 /**
  * Primary implementation of [Fido2CredentialStore].
@@ -83,12 +89,12 @@ class Fido2CredentialStoreImpl(
                     ?.let {
                         vaultRepository
                             .updateCipher(it, decryptedCipherView)
-                            .toCreateCipherResult()
+                            .toCreateCipherResult(cipherId = it)
                     }
                     ?: decryptedCipherView.createCipher()
 
                 when (result) {
-                    CreateCipherResult.Success -> Unit
+                    is CreateCipherResult.Success -> Unit
                     is CreateCipherResult.Error -> {
                         throw result.error ?: IllegalStateException(
                             result.errorMessage ?: "Failed to save credential",
@@ -111,9 +117,9 @@ class Fido2CredentialStoreImpl(
         }
     }
 
-    private fun UpdateCipherResult.toCreateCipherResult(): CreateCipherResult =
+    private fun UpdateCipherResult.toCreateCipherResult(cipherId: String): CreateCipherResult =
         when (this) {
-            UpdateCipherResult.Success -> CreateCipherResult.Success
+            UpdateCipherResult.Success -> CreateCipherResult.Success(cipherId = cipherId)
             is UpdateCipherResult.Error -> CreateCipherResult.Error(
                 error = error,
                 errorMessage = errorMessage,
@@ -138,15 +144,36 @@ class Fido2CredentialStoreImpl(
             val fido2CredentialIds = cipherListView.login
                 ?.fido2Credentials
                 .orEmpty()
-                .map { it.credentialId.toByteArray() }
+                .mapNotNull { it.credentialId.toGuidBytesOrNull() }
 
             val hasIntersectingCredentials = credentialIds
-                ?.intersect(fido2CredentialIds)
                 .orEmpty()
-                .isNotEmpty()
+                .any { id -> fido2CredentialIds.any { it.contentEquals(id) } }
 
             hasMatchingRpId &&
                 (skipCredentialIdFiltering || hasIntersectingCredentials)
+        }
+    }
+
+    /**
+     * Convert a stored credential ID to its raw bytes, mirroring the SDK's
+     * `string_to_guid_bytes`. Ids prefixed with "b64." are Base64 URL-safe encoded; all others
+     * are UUIDs (16 big-endian bytes). Returns null when the id is invalid.
+     */
+    private fun String.toGuidBytesOrNull(): ByteArray? {
+        return if (startsWith(B64_PREFIX)) {
+            runCatching { Base64.getUrlDecoder().decode(removePrefix(B64_PREFIX)) }
+                .getOrNull()
+        } else {
+            runCatching { UUID.fromString(this) }
+                .map {
+                    ByteBuffer
+                        .allocate(UUID_BYTE_COUNT)
+                        .putLong(it.mostSignificantBits)
+                        .putLong(it.leastSignificantBits)
+                        .array()
+                }
+                .getOrNull()
         }
     }
 

@@ -6,6 +6,7 @@ import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNot
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class OverlayNavViewModel @Inject constructor(
     cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     networkPermissionManager: NetworkPermissionManager,
+    vaultRepository: VaultRepository,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<Unit, OverlayNavEvent, OverlayNavAction>(initialState = Unit) {
     init {
@@ -45,6 +47,12 @@ class OverlayNavViewModel @Inject constructor(
             .map { OverlayNavAction.Internal.CookieAcquisitionReady }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        vaultRepository
+            .shouldRotateBiometricKey
+            .map { OverlayNavAction.Internal.RotateBiometricsKey }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: OverlayNavAction) {
@@ -63,6 +71,8 @@ class OverlayNavViewModel @Inject constructor(
             OverlayNavAction.Internal.LocalNetworkAccessRequired -> {
                 handleLocalNetworkAccessRequired()
             }
+
+            OverlayNavAction.Internal.RotateBiometricsKey -> handleRotateBiometricsKey()
         }
     }
 
@@ -77,12 +87,21 @@ class OverlayNavViewModel @Inject constructor(
     private fun handleLocalNetworkAccessRequired() {
         sendEvent(OverlayNavEvent.NavigateToLocalNetworkAccess)
     }
+
+    private fun handleRotateBiometricsKey() {
+        sendEvent(OverlayNavEvent.NavigateToUpdateBiometrics)
+    }
 }
 
 /**
  * Models events for the overlay navigation screen.
  */
 sealed class OverlayNavEvent {
+    /**
+     * Navigate to the Update Biometrics screen.
+     */
+    data object NavigateToUpdateBiometrics : OverlayNavEvent(), DeferredBackgroundEvent
+
     /**
      * Navigate to the cookie acquisition screen.
      */
@@ -123,5 +142,10 @@ sealed class OverlayNavAction {
          * Indicates that the accessibility disclosure needs to be displayed.
          */
         data object AccessibilityDisclosureRequired : Internal()
+
+        /**
+         * Indicates that Biometrics needs to be re-initialized for key rotation.
+         */
+        data object RotateBiometricsKey : Internal()
     }
 }

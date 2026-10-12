@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.auth.JitMasterPasswordRegistrationRequest
 import com.bitwarden.auth.JitMasterPasswordRegistrationResponse
 import com.bitwarden.auth.KeyConnectorRegistrationResult
+import com.bitwarden.auth.PasswordPreloginResponse
 import com.bitwarden.auth.TdeRegistrationRequest
 import com.bitwarden.auth.TdeRegistrationResponse
 import com.bitwarden.auth.UserMasterPasswordRegistrationRequest
@@ -17,8 +18,8 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.policies.OrganizationUserPolicyContext
+import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
-import com.bitwarden.policies.PolicyView
 import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
@@ -37,6 +38,14 @@ class AuthSdkSourceImpl(
     sdkClientManager: SdkClientManager,
 ) : BaseSdkSource(sdkClientManager = sdkClientManager),
     AuthSdkSource {
+
+    override suspend fun preLogin(
+        email: String,
+    ): Result<PasswordPreloginResponse> = runCatchingWithLogs {
+        withContext(context = dispatcherManager.io) {
+            useClient { auth().login().getPasswordPrelogin(email = email) }
+        }
+    }
 
     override suspend fun postKeysForJitPasswordRegistration(
         userId: String,
@@ -124,6 +133,7 @@ class AuthSdkSourceImpl(
                         providerInviteToken = null,
                         providerUserId = null,
                         salesAssistedToken = null,
+                        openOrgInvite = null,
                     ),
                 )
             }
@@ -151,14 +161,15 @@ class AuthSdkSourceImpl(
     }
 
     override suspend fun hashPassword(
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String> = runCatchingWithLogs {
         useClient {
+            // Under the hood, the "email" parameter is the salt.
             auth().hashPassword(
-                email = email,
+                email = salt,
                 password = password,
                 kdfParams = kdf,
                 purpose = purpose,
@@ -200,42 +211,40 @@ class AuthSdkSourceImpl(
             )
     }
 
-    override suspend fun passwordStrength(
+    override fun passwordStrength(
         email: String,
         password: String,
         additionalInputs: List<String>,
     ): Result<PasswordStrength> = runCatchingWithLogs {
-        useClient {
-            @Suppress("UnsafeCallOnNullableType")
-            auth()
+        requireNotNull(
+            globalClient
+                .auth()
                 .passwordStrength(
                     password = password,
                     email = email,
                     additionalInputs = additionalInputs,
                 )
-                .toPasswordStrengthOrNull()!!
-        }
+                .toPasswordStrengthOrNull(),
+        )
     }
 
-    override suspend fun satisfiesPolicy(
+    override fun satisfiesPolicy(
         password: String,
         passwordStrength: PasswordStrength,
         policy: MasterPasswordPolicyOptions,
     ): Result<Boolean> = runCatchingWithLogs {
-        useClient {
-            auth().satisfiesPolicy(
-                password = password,
-                strength = passwordStrength.toUByte(),
-                policy = policy,
-            )
-        }
+        globalClient.auth().satisfiesPolicy(
+            password = password,
+            strength = passwordStrength.toUByte(),
+            policy = policy,
+        )
     }
 
     override fun filterPolicies(
-        policies: List<PolicyView>,
+        policies: List<Policy>,
         organizations: List<OrganizationUserPolicyContext>,
         policyType: PolicyType,
-    ): Result<List<PolicyView>> = runCatchingWithLogs {
+    ): Result<List<Policy>> = runCatchingWithLogs {
         globalClient.policies().filterByType(
             policies = policies,
             organizationUserPolicyContexts = organizations,

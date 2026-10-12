@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -75,6 +76,7 @@ fun BitwardenTextRow(
                 cardStyle = cardStyle,
                 onClick = onClick,
                 clickEnabled = clickable,
+                role = Role.Button,
                 paddingHorizontal = 16.dp,
             )
             .semantics(mergeDescendants = true) { },
