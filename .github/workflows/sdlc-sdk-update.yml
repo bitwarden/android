@@ -167,7 +167,37 @@ jobs:
         run: |
           NEW_SDK_GIT_REF=$(echo "$_SDK_VERSION" | cut -d'-' -f3-)
           CHANGELOG=$(./scripts/get-repo-changelog.sh "bitwarden/sdk-internal" "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
-          PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`
+
+          # Fetch the labels of every changelog PR in a single GraphQL call, aliasing each PR as pr<number>
+          PR_NUMBERS=$(sed -nE 's|^- bitwarden/sdk-internal#([0-9]+)$|\1|p' <<< "$CHANGELOG" | sort -u)
+          BREAKING_PR_NUMBERS=""
+          if [ -n "$PR_NUMBERS" ]; then
+            PR_FIELDS=""
+            for PR_NUMBER in $PR_NUMBERS; do
+              PR_FIELDS+="pr$PR_NUMBER: pullRequest(number: $PR_NUMBER) { labels(first: 100) { nodes { name } } } "
+            done
+
+            BREAKING_PR_NUMBERS=$(gh api graphql \
+              -f query="query { repository(owner: \"bitwarden\", name: \"sdk-internal\") { $PR_FIELDS } }" \
+              --jq '.data.repository | to_entries[]
+                | select(any(.value.labels.nodes[];
+                    .name == "breaking-change" or .name == "breaking-change-android"))
+                | .key | ltrimstr("pr")')
+          fi
+
+          BREAKING_CHANGES_WARNING=""
+          if [ -n "$BREAKING_PR_NUMBERS" ]; then
+            for PR_NUMBER in $BREAKING_PR_NUMBERS; do
+              CHANGELOG=$(sed -E "s|^- bitwarden/sdk-internal#$PR_NUMBER\$|& :feelsgood:|" <<< "$CHANGELOG")
+            done
+
+            BREAKING_CHANGES_WARNING="
+
+          > [!WARNING]
+          > Breaking changes detected :feelsgood:"
+          fi
+
+          PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`${BREAKING_CHANGES_WARNING}
 
           ## What's Changed
 
