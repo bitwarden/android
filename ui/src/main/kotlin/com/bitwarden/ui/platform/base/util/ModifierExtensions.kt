@@ -9,7 +9,6 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -286,7 +285,7 @@ fun Modifier.interactiveBorder(
     inset: Dp = 0.dp,
     isEnabled: Boolean = true,
 ): Modifier = if (isEnabled) {
-    val isFocused by interactionSource.collectIsFocusedAsState()
+    val isFocused by interactionSource.collectIsFocusedByKeyboardAsState()
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isFocused) 1f else 0f,
         animationSpec = focusAnimationSpec(),
