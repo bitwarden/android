@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -15,6 +16,8 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.BankAccountListView
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -1565,6 +1568,154 @@ class VaultItemListingDataExtensionsTest {
         )
     }
 
+    @Test
+    fun `toViewState should count nested collection ciphers not in the parent collection`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+                    createMockCipherListView(number = 3, collectionIds = listOf("mockId-2")),
+                ),
+            ),
+            collectionViewList = listOf(
+                createMockCollectionView(1, "test"),
+                createMockCollectionView(2, "test/nested"),
+            ),
+            folderViewList = emptyList(),
+            sendViewList = emptyList(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayCollectionList = listOf(
+                    VaultItemListingState.CollectionDisplayItem(
+                        id = "mockId-2",
+                        name = "nested",
+                        count = 2,
+                    ),
+                ),
+                displayItemList = emptyList(),
+                displayFolderList = emptyList(),
+            ),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toViewState should exclude archived and deleted ciphers from nested counts`() {
+        val vaultData = createNestedCollectionVaultData(
+            successes = listOf(
+                createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+                createMockCipherListView(
+                    number = 3,
+                    collectionIds = listOf("mockId-2"),
+                    isArchived = true,
+                ),
+                createMockCipherListView(
+                    number = 4,
+                    collectionIds = listOf("mockId-2"),
+                    isDeleted = true,
+                ),
+            ),
+        )
+
+        val actual = vaultData.toNestedCollectionViewState()
+
+        assertEquals(createNestedCollectionContent(count = 1), actual)
+    }
+
+    @Test
+    fun `toViewState should exclude ciphers outside the vault filter from nested counts`() {
+        val vaultData = createNestedCollectionVaultData(
+            successes = listOf(
+                createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+                createMockCipherListView(number = 3, collectionIds = listOf("mockId-2")),
+            ),
+        )
+
+        val actual = vaultData.toNestedCollectionViewState(
+            vaultFilterType = VaultFilterType.OrganizationVault(
+                organizationId = "mockOrganizationId-2",
+                organizationName = "mockOrganizationName-2",
+            ),
+        )
+
+        assertEquals(createNestedCollectionContent(count = 1), actual)
+    }
+
+    @Test
+    fun `toViewState should exclude restricted item types from nested counts`() {
+        val vaultData = createNestedCollectionVaultData(
+            successes = listOf(
+                createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+                createMockCipherListView(
+                    number = 3,
+                    collectionIds = listOf("mockId-2"),
+                    type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
+                ),
+            ),
+        )
+
+        val actual = vaultData.toNestedCollectionViewState(
+            restrictItemTypesPolicyOrgIds = listOf("mockOrganizationId-3"),
+        )
+
+        assertEquals(createNestedCollectionContent(count = 1), actual)
+    }
+
+    @Test
+    fun `toViewState should include ciphers that failed to decrypt in nested counts`() {
+        val vaultData = createNestedCollectionVaultData(
+            successes = listOf(
+                createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+            ),
+            failures = listOf(
+                createMockSdkCipher(number = 3).copy(
+                    collectionIds = listOf("mockId-2"),
+                    deletedDate = null,
+                    archivedDate = null,
+                ),
+            ),
+        )
+
+        val actual = vaultData.toNestedCollectionViewState()
+
+        assertEquals(createNestedCollectionContent(count = 2), actual)
+    }
+
+    @Test
+    fun `toViewState should exclude deeper nested collection ciphers from nested counts`() {
+        val vaultData = createNestedCollectionVaultData(
+            successes = listOf(
+                createMockCipherListView(number = 2, collectionIds = listOf("mockId-2")),
+                createMockCipherListView(number = 3, collectionIds = listOf("mockId-3")),
+            ),
+            collectionViewList = listOf(
+                createMockCollectionView(1, "test"),
+                createMockCollectionView(2, "test/nested"),
+                createMockCollectionView(3, "test/nested/deeper"),
+            ),
+        )
+
+        val actual = vaultData.toNestedCollectionViewState()
+
+        assertEquals(createNestedCollectionContent(count = 1), actual)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should properly filter cards when cipher have organizationId in restrictItemTypesPolicyOrgIds`() {
@@ -1683,4 +1834,51 @@ class VaultItemListingDataExtensionsTest {
             actual,
         )
     }
+
+    private fun createNestedCollectionVaultData(
+        successes: List<CipherListView>,
+        failures: List<Cipher> = emptyList(),
+        collectionViewList: List<CollectionView> = listOf(
+            createMockCollectionView(1, "test"),
+            createMockCollectionView(2, "test/nested"),
+        ),
+    ): VaultData = VaultData(
+        decryptCipherListResult = createMockDecryptCipherListResult(
+            number = 1,
+            successes = successes,
+            failures = failures,
+        ),
+        collectionViewList = collectionViewList,
+        folderViewList = emptyList(),
+        sendViewList = emptyList(),
+    )
+
+    private fun VaultData.toNestedCollectionViewState(
+        vaultFilterType: VaultFilterType = VaultFilterType.AllVaults,
+        restrictItemTypesPolicyOrgIds: List<String> = emptyList(),
+    ): VaultItemListingState.ViewState = toViewState(
+        itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
+        vaultFilterType = vaultFilterType,
+        hasMasterPassword = true,
+        baseIconUrl = Environment.Prod.Us.baseIconUrl,
+        isIconLoadingDisabled = false,
+        autofillSelectionData = null,
+        createCredentialRequestData = null,
+        totpData = null,
+        isPremiumUser = true,
+        restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+    )
+
+    private fun createNestedCollectionContent(count: Int): VaultItemListingState.ViewState =
+        VaultItemListingState.ViewState.Content(
+            displayCollectionList = listOf(
+                VaultItemListingState.CollectionDisplayItem(
+                    id = "mockId-2",
+                    name = "nested",
+                    count = count,
+                ),
+            ),
+            displayItemList = emptyList(),
+            displayFolderList = emptyList(),
+        )
 }
