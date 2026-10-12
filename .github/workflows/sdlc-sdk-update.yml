@@ -177,12 +177,17 @@ jobs:
               PR_FIELDS+="pr$PR_NUMBER: pullRequest(number: $PR_NUMBER) { labels(first: 100) { nodes { name } } } "
             done
 
-            BREAKING_PR_NUMBERS=$(gh api graphql \
-              -f query="query { repository(owner: \"bitwarden\", name: \"sdk-internal\") { $PR_FIELDS } }" \
-              --jq '.data.repository | to_entries[]
+            # The labels are informational, so a failed lookup must not block the PR. On a partial
+            # failure (e.g. a (#N) that isn't a PR) gh exits non-zero but still prints the raw
+            # response, so filter it separately to keep the labels that did resolve.
+            LABELS_RESPONSE=$(gh api graphql \
+              -f query="query { repository(owner: \"bitwarden\", name: \"sdk-internal\") { $PR_FIELDS } }") \
+              || echo "::warning::Failed to fetch some sdk-internal PR labels; breaking-change detection may be incomplete."
+            BREAKING_PR_NUMBERS=$(jq -r '(.data.repository // {}) | to_entries[]
+                | select(.value != null)
                 | select(any(.value.labels.nodes[];
                     .name == "breaking-change" or .name == "breaking-change-android"))
-                | .key | ltrimstr("pr")')
+                | .key | ltrimstr("pr")' <<< "$LABELS_RESPONSE") || BREAKING_PR_NUMBERS=""
           fi
 
           BREAKING_CHANGES_WARNING=""
