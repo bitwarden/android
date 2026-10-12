@@ -77,7 +77,7 @@ jobs:
       - name: Switch to branch
         id: switch-branch
         run: |
-          BRANCH_NAME="pm-34536/sdk-update-test"
+          BRANCH_NAME="sdlc/sdk-update"
           echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
 
           if git switch "$BRANCH_NAME"; then
