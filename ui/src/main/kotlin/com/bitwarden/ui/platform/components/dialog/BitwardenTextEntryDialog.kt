@@ -33,6 +33,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onDismissRequest Called when the user attempts to dismiss the dialog.
  * @param autoFocus When set to true, the view will request focus after the first recomposition.
  * @param initialText The text that will be visible at the start of text entry.
+ * @param isConfirmEnabled Determines whether the confirm button is enabled for the current text.
  */
 @Composable
 fun BitwardenTextEntryDialog(
@@ -42,6 +43,7 @@ fun BitwardenTextEntryDialog(
     onDismissRequest: () -> Unit,
     autoFocus: Boolean = false,
     initialText: String? = null,
+    isConfirmEnabled: (String) -> Boolean = { true },
 ) {
     var text by remember { mutableStateOf(initialText.orEmpty()) }
     val focusRequester = remember { FocusRequester() }
@@ -60,6 +62,7 @@ fun BitwardenTextEntryDialog(
             BitwardenTextButton(
                 label = stringResource(id = BitwardenString.okay),
                 onClick = { onConfirmClick(text) },
+                isEnabled = isConfirmEnabled(text),
                 modifier = Modifier.testTag("AcceptAlertButton"),
             )
         },

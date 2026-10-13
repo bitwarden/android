@@ -88,6 +88,7 @@ fun VaultAddEditCustomField(
             onDismissRequest = { shouldShowEditDialog = false },
             autoFocus = true,
             initialText = customField.name,
+            isConfirmEnabled = { it.isNotBlank() },
             onConfirmClick = { name ->
                 onCustomFieldValueChange(customField.updateName(name))
                 shouldShowEditDialog = false

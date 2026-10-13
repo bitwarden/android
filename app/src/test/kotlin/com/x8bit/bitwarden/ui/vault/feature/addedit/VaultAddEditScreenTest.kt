@@ -4158,6 +4158,54 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `Add field name dialog Okay should be disabled for blank custom field name`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Text")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Okay")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsNotEnabled()
+
+        composeTestRule
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
+            .performTextInput("   ")
+
+        composeTestRule
+            .onAllNodesWithText(text = "Okay")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsNotEnabled()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(any<VaultAddEditAction.Common.AddNewCustomFieldClick>())
+        }
+
+        composeTestRule
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
+            .performTextInput("TestText")
+
+        composeTestRule
+            .onAllNodesWithText(text = "Okay")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsEnabled()
+    }
+
+    @Test
     fun `changing hidden field visibility state should send HiddenFieldVisibilityChange`() {
         mutableStateFlow.update {
             it.copy(
@@ -4303,6 +4351,44 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                     VaultAddEditState.Custom.BooleanField("Test ID 1", "Boolean", false),
                 ),
             )
+        }
+    }
+
+    @Test
+    fun `Edit field name dialog Okay should be disabled for blank custom field name`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Edit")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Okay")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsEnabled()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextClearance()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Okay")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsNotEnabled()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(any<VaultAddEditAction.Common.CustomFieldValueChange>())
         }
     }
 
