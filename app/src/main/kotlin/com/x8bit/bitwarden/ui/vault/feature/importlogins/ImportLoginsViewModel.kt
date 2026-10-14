@@ -88,6 +88,8 @@ class ImportLoginsViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = null)
         }
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 

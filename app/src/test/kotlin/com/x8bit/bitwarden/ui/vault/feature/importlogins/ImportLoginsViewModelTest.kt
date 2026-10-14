@@ -422,8 +422,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `FailSyncAcknowledged should remove dialog state and send NavigateBack event`() =
+    fun `FailSyncAcknowledged should remove dialog state, send NavigateBack event, and store first time values`() =
         runTest {
             coEvery {
                 vaultRepository.syncForResult(forced = true)
@@ -446,6 +447,10 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     ImportLoginsEvent.NavigateBack,
                     awaitItem(),
                 )
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+                firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
             }
         }
 
