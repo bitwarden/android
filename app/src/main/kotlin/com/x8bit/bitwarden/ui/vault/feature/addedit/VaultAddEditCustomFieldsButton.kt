@@ -58,7 +58,6 @@ fun VaultAddEditCustomFieldsButton(
             title = stringResource(id = BitwardenString.custom_field_name),
             textFieldLabel = stringResource(id = BitwardenString.name),
             onDismissRequest = { shouldShowNameDialog = false },
-            isConfirmEnabled = { it.isNotBlank() },
             onConfirmClick = {
                 shouldShowNameDialog = false
                 customFieldName = it
