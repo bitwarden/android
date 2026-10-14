@@ -31,6 +31,7 @@ jobs:
     permissions:
       pull-requests: write # required to update labels
       contents: read
+      actions: write # required to trigger sdlc-enforce-labels.yml
 
     steps:
       - name: Check out repository
@@ -88,3 +89,23 @@ jobs:
           echo ""
           python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_PR_LABELS" "$_LABEL_MODE" "$_DRY_RUN"
 
+      - name: Trigger label enforcement
+        if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          _HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          _IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
+        run: |
+          # Support workflow_dispatch testing by retrieving PR data
+          if [ -z "$_HEAD_REF" ]; then
+            echo "👀 Head ref is empty, retrieving PR data for PR #$_PR_NUMBER..."
+            PR_DATA=$(gh pr view "$_PR_NUMBER" --json headRefName,isCrossRepository)
+            _HEAD_REF=$(echo "$PR_DATA" | jq -r '.headRefName')
+            _IS_FORK=$(echo "$PR_DATA" | jq -r '.isCrossRepository')
+          fi
+          if [ "$_IS_FORK" = "true" ]; then
+            echo "⏭️ Fork PR. Label enforcement runs on the pull_request event instead."
+            exit 0
+          fi
+          # Dispatch on the PR head branch so the check attaches to the PR head SHA
+          gh workflow run sdlc-enforce-labels.yml --ref "$_HEAD_REF" -f pr-number="$_PR_NUMBER"

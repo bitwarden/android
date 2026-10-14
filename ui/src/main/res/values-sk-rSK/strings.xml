@@ -1462,6 +1462,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="use_this_passphrase">Použiť túto prístupovú frázu</string>
     <string name="use_this_password">Použiť toto heslo</string>
     <string name="use_this_username">Použiť toto používateľské meno</string>
+    <string name="create_login">Vytvoriť prihlasovacie údaje</string>
     <string name="keep_unlocking_with_biometrics">Naďalej odomykať pomocou biometrie</string>
     <string name="weve_made_a_security_update">Vykonali sme bezpečnostnú aktualizáciu. Potvrďte svoje biometrické údaje ešte raz, aby ste ich mohli naďalej používať na odomknutie Bitwardenu.</string>
     <string name="turn_off">Vypnúť</string>

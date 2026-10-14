@@ -169,8 +169,6 @@ jobs:
           CHANGELOG=$(./scripts/get-repo-changelog.sh "bitwarden/sdk-internal" "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
           PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`
 
-          ## What's Changed
-
           $CHANGELOG"
 
           EXISTING_PR=$(gh pr list --head "$_BRANCH_NAME" --base main --state open --json number --jq '.[0].number // empty')

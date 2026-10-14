@@ -1442,6 +1442,7 @@ Vill du byta till detta konto?</string>
     <string name="use_this_passphrase">Använd den här lösenordsfrasen</string>
     <string name="use_this_password">Använd det här lösenordet</string>
     <string name="use_this_username">Använd det här användarnamnet</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Behåll upplåsning med biometri</string>
     <string name="weve_made_a_security_update">Vi har gjort en säkerhetsuppdatering. Bekräfta din biometri igen för att fortsätta använda den för att låsa upp Bitwarden.</string>
     <string name="turn_off">Stäng av</string>

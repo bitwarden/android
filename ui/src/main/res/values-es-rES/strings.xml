@@ -1445,6 +1445,7 @@ cualquier problema.</string>
     <string name="use_this_passphrase">Usa esta frase de contraseña</string>
     <string name="use_this_password">Usa esta contraseña</string>
     <string name="use_this_username">Usar este nombre de usuario</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

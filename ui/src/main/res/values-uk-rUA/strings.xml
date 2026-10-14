@@ -1464,6 +1464,7 @@
     <string name="use_this_passphrase">Використати цю парольну фразу</string>
     <string name="use_this_password">Використати цей пароль</string>
     <string name="use_this_username">Використати це ім\'я користувача</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Продовжуйте розблоковувати за допомогою біометрії</string>
     <string name="weve_made_a_security_update">Ми внесли оновлення безпеки. Підтвердьте свої біометричні дані ще раз, щоб і надалі використовувати їх для розблокування Bitwarden.</string>
     <string name="turn_off">Вимкнути</string>
