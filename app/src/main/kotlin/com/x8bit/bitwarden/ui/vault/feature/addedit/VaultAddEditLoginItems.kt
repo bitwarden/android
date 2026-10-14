@@ -366,6 +366,18 @@ private fun TotpRow(
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (!canViewTotp && totpKey != null) {
+        BitwardenHiddenPasswordField(
+            label = stringResource(id = BitwardenString.authenticator_key),
+            value = totpKey,
+            passwordFieldTestTag = "LoginTotpEntry",
+            cardStyle = CardStyle.Full,
+            modifier = modifier
+                .fillMaxWidth()
+                .focusProperties { canFocus = false },
+        )
+        return
+    }
     BitwardenPasswordField(
         label = stringResource(id = BitwardenString.authenticator_key),
         value = totpKey.orEmpty(),
