@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.bitwarden.core.data.serializer.SafeListSerializer
 import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -128,7 +129,8 @@ sealed class PolicyInformation {
      * when [whoCanAccess] is [SendAccessTypeJson.SPECIFIC_PEOPLE].
      * @property deletionHours The number of hours until a Send is deleted, if enforced.
      * @property allowedSendTypes The types of Sends that are allowed to be created, if
-     * restricted.
+     * restricted. Send types unknown to this client are dropped rather than failing the decode of
+     * the whole policy.
      */
     @Serializable
     data class SendControls(
@@ -147,6 +149,7 @@ sealed class PolicyInformation {
         @SerialName("deletionHours")
         val deletionHours: Int?,
 
+        @Serializable(with = SafeListSerializer::class)
         @SerialName("allowedSendTypes")
         val allowedSendTypes: List<SendTypeJson>?,
     ) : PolicyInformation()

@@ -197,6 +197,36 @@ class SyncResponseJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `policyInformation drops unknown allowedSendTypes and keeps the rest of the SendControls policy`() {
+        val policy = createMockSdkPolicy(
+            type = PolicyType.SEND_CONTROLS,
+            data = """
+                {
+                  "disableSend": false,
+                  "disableHideEmail": true,
+                  "whoCanAccess": 2,
+                  "allowedDomains": "bitwarden.com",
+                  "deletionHours": 168,
+                  "allowedSendTypes": [0, 2]
+                }
+            """.trimIndent(),
+        )
+
+        assertEquals(
+            PolicyInformation.SendControls(
+                disableSend = false,
+                disableHideEmail = true,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                allowedDomains = "bitwarden.com",
+                deletionHours = 168,
+                allowedSendTypes = listOf(SendTypeJson.TEXT),
+            ),
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `policyInformation converts the OrganizationUserNotification Json data to policy information`() {
         val policyInformation = PolicyInformation.OrganizationUserNotification(
             headerText = "headerText",
