@@ -1337,8 +1337,14 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assertIsNotEnabled()
 
-        composeTestRule.assertScrollableNodeDoesNotExist("Delete")
-        composeTestRule.assertScrollableNodeDoesNotExist("Copy TOTP")
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Authenticator key")
+            .onChildren()
+            .filter(hasContentDescription(value = "Delete"))
+            .assertCountEquals(0)
+        composeTestRule
+            .onNodeWithContentDescription(label = "Copy TOTP")
+            .assertDoesNotExist()
         composeTestRule.assertScrollableNodeDoesNotExist("Camera")
     }
 
