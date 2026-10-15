@@ -422,9 +422,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `FailSyncAcknowledged should remove dialog state, send NavigateBack event, and store first time values`() =
+    fun `FailSyncAcknowledged clears dialog, navigates back, and stores first time values`() =
         runTest {
             coEvery {
                 vaultRepository.syncForResult(forced = true)
