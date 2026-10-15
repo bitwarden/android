@@ -85,9 +85,9 @@ class ImportLoginsViewModel @Inject constructor(
     }
 
     private fun handleFailedSyncAcknowledged() {
-        mutableStateFlow.update {
-            it.copy(dialogState = null)
-        }
+        dismissDialog()
+        firstTimeActionManager.storeShowImportLogins(showImportLogins = false)
+        firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = true)
         sendEvent(ImportLoginsEvent.NavigateBack)
     }
 
