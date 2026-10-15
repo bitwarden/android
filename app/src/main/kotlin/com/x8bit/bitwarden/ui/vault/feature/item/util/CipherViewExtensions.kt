@@ -61,14 +61,7 @@ fun CipherView.toViewState(
             name = name,
             customFields = fields
                 .orEmpty()
-                .map { fieldView ->
-                    fieldView.toCustomField(
-                        previousState = previousState
-                            ?.common
-                            ?.customFields
-                            ?.find { it.id == fieldView.hashCode().toString() },
-                    )
-                }
+                .toCustomFields(previousState = previousState?.common?.customFields)
                 .toImmutableList(),
             created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
@@ -267,21 +260,42 @@ fun CipherView.toViewState(
     )
 
 /**
+ * Transforms a list of [FieldView]s into [VaultItemState.ViewState.Content.Common.Custom]s,
+ * giving identical fields distinct ids so each keeps its own state from [previousState].
+ */
+private fun List<FieldView>.toCustomFields(
+    previousState: List<VaultItemState.ViewState.Content.Common.Custom>?,
+): List<VaultItemState.ViewState.Content.Common.Custom> {
+    val occurrencesById = mutableMapOf<String, Int>()
+    return map { fieldView ->
+        val baseId = fieldView.hashCode().toString()
+        val occurrence = occurrencesById.getOrDefault(baseId, 0)
+        occurrencesById[baseId] = occurrence + 1
+        val id = if (occurrence == 0) baseId else "${baseId}_$occurrence"
+        fieldView.toCustomField(
+            previousState = previousState?.find { it.id == id },
+            id = id,
+        )
+    }
+}
+
+/**
  * Transforms [FieldView] into [VaultItemState.ViewState.Content.Common.Custom].
  */
 fun FieldView.toCustomField(
     previousState: VaultItemState.ViewState.Content.Common.Custom?,
+    id: String = this.hashCode().toString(),
 ): VaultItemState.ViewState.Content.Common.Custom =
     when (type) {
         FieldType.TEXT -> VaultItemState.ViewState.Content.Common.Custom.TextField(
-            id = this.hashCode().toString(),
+            id = id,
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
         )
 
         FieldType.HIDDEN -> VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-            id = this.hashCode().toString(),
+            id = id,
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
@@ -292,13 +306,13 @@ fun FieldView.toCustomField(
         )
 
         FieldType.BOOLEAN -> VaultItemState.ViewState.Content.Common.Custom.BooleanField(
-            id = this.hashCode().toString(),
+            id = id,
             name = name.orEmpty(),
             value = value?.toBoolean() ?: false,
         )
 
         FieldType.LINKED -> VaultItemState.ViewState.Content.Common.Custom.LinkedField(
-            id = this.hashCode().toString(),
+            id = id,
             vaultLinkedFieldType = VaultLinkedFieldType.fromId(requireNotNull(linkedId)),
             name = name.orEmpty(),
         )

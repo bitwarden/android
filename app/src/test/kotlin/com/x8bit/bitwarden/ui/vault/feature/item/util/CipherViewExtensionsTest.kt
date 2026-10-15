@@ -4,6 +4,8 @@ import android.net.Uri
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDriversLicenseView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPassportView
@@ -71,6 +73,61 @@ class CipherViewExtensionsTest {
             ),
             viewState,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should restore hidden field visibility independently for identical hidden fields`() {
+        val hiddenFieldView = FieldView(
+            name = "hidden",
+            value = "value",
+            type = FieldType.HIDDEN,
+            linkedId = null,
+        )
+        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
+            .copy(fields = listOf(hiddenFieldView, hiddenFieldView))
+        val initialState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        ) as VaultItemState.ViewState.Content
+        val initialFields = initialState.common.customFields
+        val firstField = initialFields[0]
+            as VaultItemState.ViewState.Content.Common.Custom.HiddenField
+        val previousState = initialState.copy(
+            common = initialState.common.copy(
+                customFields = persistentListOf(
+                    firstField.copy(isVisible = true),
+                    initialFields[1],
+                ),
+            ),
+        )
+
+        val viewState = cipherView.toViewState(
+            previousState = previousState,
+            isPremiumUser = true,
+            totpCodeItemData = null,
+            clock = fixedClock,
+            canDelete = true,
+            canRestore = true,
+            canAssignToCollections = true,
+            canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
+            hasOrganizations = true,
+        )
+
+        assertEquals(previousState, viewState)
     }
 
     @Suppress("MaxLineLength")
