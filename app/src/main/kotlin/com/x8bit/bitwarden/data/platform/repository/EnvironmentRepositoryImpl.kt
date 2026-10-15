@@ -6,6 +6,7 @@ import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,7 @@ import timber.log.Timber
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
     private val authDiskSource: AuthDiskSource,
+    private val customHeadersManager: CustomHeadersManager,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 
@@ -32,7 +34,14 @@ class EnvironmentRepositoryImpl(
             .preAuthEnvironmentUrlData
             .toEnvironmentUrlsOrDefault()
         set(value) {
+            val droppedCustomHeadersId = environmentDiskSource
+                .preAuthEnvironmentUrlData
+                ?.customHeadersId
+                ?.takeUnless { it == value.environmentUrlData.customHeadersId }
             environmentDiskSource.preAuthEnvironmentUrlData = value.environmentUrlData
+            // Replacing the environment drops its reference to any stored custom headers. The
+            // removal is reference-counted, so headers still used by an account remain.
+            droppedCustomHeadersId?.let { customHeadersManager.removeCustomHeaders(id = it) }
         }
 
     override val environmentStateFlow: StateFlow<Environment> = environmentDiskSource

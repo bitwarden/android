@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CL
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_VERSION
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkPermissionManager
 import dagger.Module
@@ -64,6 +65,7 @@ object PlatformNetworkModule {
         baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
         certificateManager: CertificateManager,
+        customHeadersManager: CustomHeadersManager,
         buildInfoManager: BuildInfoManager,
         networkCookieManager: NetworkCookieManager,
         networkPermissionManager: NetworkPermissionManager,
@@ -79,6 +81,7 @@ object PlatformNetworkModule {
         authTokenProvider = authTokenManager,
         baseUrlsProvider = baseUrlsProvider,
         certificateProvider = certificateManager,
+        customHeadersProvider = customHeadersManager,
         enableHttpBodyLogging = buildInfoManager.isDevBuild,
         cookieProvider = networkCookieManager,
         permissionProvider = networkPermissionManager,

@@ -4,6 +4,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
+import com.bitwarden.network.interceptor.CustomHeadersInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
@@ -73,6 +74,9 @@ internal class BitwardenServiceClientImpl(
             ),
             cookieInterceptor = CookieInterceptor(
                 cookieProvider = cookieProvider,
+            ),
+            customHeadersInterceptor = CustomHeadersInterceptor(
+                customHeadersProvider = bitwardenServiceClientConfig.customHeadersProvider,
             ),
             permissionInterceptor = PermissionInterceptor(
                 permissionProvider = bitwardenServiceClientConfig.permissionProvider,

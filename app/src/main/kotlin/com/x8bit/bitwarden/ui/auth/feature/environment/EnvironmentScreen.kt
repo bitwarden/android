@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -43,6 +45,7 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenClientCertificateDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
@@ -339,7 +342,120 @@ fun EnvironmentScreen(
                     .testTag("ChooseSystemCertificateButton"),
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
+
+            BitwardenListHeaderText(
+                label = stringResource(id = BitwardenString.custom_headers),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            state.customHeaders.forEach { header ->
+                CustomHeaderRow(
+                    header = header,
+                    onNameChange = {
+                        viewModel.trySendAction(
+                            EnvironmentAction.HeaderNameChange(id = header.id, name = it),
+                        )
+                    },
+                    onValueChange = {
+                        viewModel.trySendAction(
+                            EnvironmentAction.HeaderValueChange(id = header.id, value = it),
+                        )
+                    },
+                    onValueVisibilityChange = {
+                        viewModel.trySendAction(
+                            EnvironmentAction.HeaderValueVisibilityChange(
+                                id = header.id,
+                                isVisible = it,
+                            ),
+                        )
+                    },
+                    onRemoveClick = {
+                        viewModel.trySendAction(
+                            EnvironmentAction.RemoveHeaderClick(id = header.id),
+                        )
+                    },
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
+
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.add_header),
+                onClick = { viewModel.trySendAction(EnvironmentAction.AddHeaderClick) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("AddHeaderButton"),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            Text(
+                text = stringResource(
+                    id = BitwardenString.custom_headers_are_sent_with_every_request_to_your_server,
+                ),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
+    }
+}
+
+/**
+ * Displays the editable name/value fields and remove button for a single custom header.
+ */
+@Composable
+private fun CustomHeaderRow(
+    header: EnvironmentState.CustomHeaderField,
+    onNameChange: (String) -> Unit,
+    onValueChange: (String) -> Unit,
+    onValueVisibilityChange: (Boolean) -> Unit,
+    onRemoveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        BitwardenTextField(
+            label = stringResource(id = BitwardenString.name),
+            value = header.name,
+            onValueChange = onNameChange,
+            textFieldTestTag = "HeaderNameEntry",
+            cardStyle = CardStyle.Top(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        BitwardenPasswordField(
+            label = stringResource(id = BitwardenString.value),
+            value = header.value,
+            showPassword = header.isValueVisible,
+            showPasswordChange = onValueVisibilityChange,
+            onValueChange = onValueChange,
+            showPasswordTestTag = "HeaderValueVisibilityToggle",
+            passwordFieldTestTag = "HeaderValueEntry",
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+
+        BitwardenOutlinedButton(
+            label = stringResource(id = BitwardenString.remove_header),
+            onClick = onRemoveClick,
+            cardStyle = CardStyle.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .testTag("RemoveHeaderButton"),
+        )
     }
 }

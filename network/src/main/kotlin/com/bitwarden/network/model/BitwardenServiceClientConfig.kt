@@ -5,6 +5,7 @@ import com.bitwarden.network.interceptor.AuthTokenProvider
 import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.provider.AppIdProvider
 import com.bitwarden.network.provider.CookieProvider
+import com.bitwarden.network.provider.CustomHeadersProvider
 import com.bitwarden.network.provider.PermissionProvider
 import com.bitwarden.network.ssl.CertificateProvider
 import java.time.Clock
@@ -19,6 +20,7 @@ data class BitwardenServiceClientConfig(
     val authTokenProvider: AuthTokenProvider,
     val certificateProvider: CertificateProvider,
     val cookieProvider: CookieProvider,
+    val customHeadersProvider: CustomHeadersProvider,
     val permissionProvider: PermissionProvider,
     val clock: Clock,
     val enableHttpBodyLogging: Boolean = false,

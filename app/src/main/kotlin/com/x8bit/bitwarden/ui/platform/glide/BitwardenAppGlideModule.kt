@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.glide
 
 import android.content.Context
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.network.interceptor.CustomHeadersInterceptor
 import com.bitwarden.network.ssl.createMtlsOkHttpClient
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
@@ -10,6 +11,7 @@ import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CustomHeadersManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -42,6 +44,11 @@ class BitwardenAppGlideModule : AppGlideModule() {
         fun certificateManager(): CertificateManager
 
         /**
+         * Provides access to the [CustomHeadersManager] for custom header authentication.
+         */
+        fun customHeadersManager(): CustomHeadersManager
+
+        /**
          * Provides access to the [NetworkCookieManager] for cookie-based authentication.
          */
         fun networkCookieManager(): NetworkCookieManager
@@ -54,16 +61,18 @@ class BitwardenAppGlideModule : AppGlideModule() {
             entryPoint = BitwardenGlideEntryPoint::class.java,
         )
         val certificateManager = entryPoint.certificateManager()
+        val customHeadersManager = entryPoint.customHeadersManager()
         val networkCookieManager = entryPoint.networkCookieManager()
 
-        // Build OkHttpClient with mTLS and cookie support
+        // Build OkHttpClient with mTLS, cookie, and custom header support
         val client = certificateManager
             .createMtlsOkHttpClient()
             .newBuilder()
             .addNetworkInterceptor(GlideCookieInterceptor(networkCookieManager))
+            .addNetworkInterceptor(CustomHeadersInterceptor(customHeadersManager))
             .build()
 
-        // Register OkHttpUrlLoader that uses our mTLS + cookie OkHttpClient
+        // Register OkHttpUrlLoader that uses our mTLS + cookie + custom header OkHttpClient
         registry.replace(
             GlideUrl::class.java,
             InputStream::class.java,

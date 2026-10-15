@@ -26,6 +26,16 @@ internal const val HEADER_KEY_USER_AGENT: String = "User-Agent"
 internal const val HEADER_KEY_DEVICE_TYPE: String = "Device-Type"
 
 /**
+ * The key used for the 'cookie' headers.
+ */
+internal const val HEADER_KEY_COOKIE: String = "Cookie"
+
+/**
+ * The key used for the 'set-cookie' headers.
+ */
+internal const val HEADER_KEY_SET_COOKIE: String = "Set-Cookie"
+
+/**
  * The bearer prefix used for the 'authorization' headers value.
  */
 internal const val HEADER_VALUE_BEARER_PREFIX: String = "Bearer "
