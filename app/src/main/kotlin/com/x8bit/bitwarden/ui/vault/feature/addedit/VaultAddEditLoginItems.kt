@@ -372,9 +372,7 @@ private fun TotpRow(
             value = totpKey,
             passwordFieldTestTag = "LoginTotpEntry",
             cardStyle = CardStyle.Full,
-            modifier = modifier
-                .fillMaxWidth()
-                .focusProperties { canFocus = false },
+            modifier = modifier.fillMaxWidth(),
         )
         return
     }
