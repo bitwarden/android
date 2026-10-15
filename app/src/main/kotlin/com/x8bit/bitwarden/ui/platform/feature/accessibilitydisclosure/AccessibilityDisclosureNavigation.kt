@@ -2,27 +2,20 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavGraph
 
 /**
- * The type-safe route for the accessibility disclosure screen.
+ * Add the accessibility disclosure screen to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object AccessibilityDisclosureRoute
-
-/**
- * Add the accessibility disclosure screen to the nav graph.
- */
-fun NavGraphBuilder.accessibilityDisclosureDestination(
+fun EntryProviderScope<OverlayNavGraph>.accessibilityDisclosureDestination(
     onDismiss: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithSlideTransitions<AccessibilityDisclosureRoute> {
+    slideUpEntry<OverlayNavGraph.AccessibilityDisclosureRoute> {
         AccessibilityDisclosureScreen(onDismiss = onDismiss)
         // If we are displaying the accessibility disclosure screen, then we can just hide
         // the splash screen.
@@ -33,8 +26,6 @@ fun NavGraphBuilder.accessibilityDisclosureDestination(
 /**
  * Navigate to the accessibility disclosure screen.
  */
-fun NavController.navigateToAccessibilityDisclosure() {
-    this.navigate(route = AccessibilityDisclosureRoute) {
-        launchSingleTop = true
-    }
+fun NavigationController<OverlayNavGraph>.navigateToAccessibilityDisclosure() {
+    this.addSingleTop(route = OverlayNavGraph.AccessibilityDisclosureRoute)
 }

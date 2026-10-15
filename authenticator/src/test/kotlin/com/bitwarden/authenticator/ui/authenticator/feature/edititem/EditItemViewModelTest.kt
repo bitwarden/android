@@ -7,6 +7,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.bitwarden.authenticator.ui.platform.model.SnackbarRelay
 import com.bitwarden.core.data.repository.model.DataState
@@ -21,15 +22,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class EditItemViewModelTest : BaseViewModelTest() {
@@ -41,20 +38,6 @@ class EditItemViewModelTest : BaseViewModelTest() {
     }
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every { sendSnackbarData(data = any(), relay = SnackbarRelay.ITEM_SAVED) } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(
-            SavedStateHandle::toEditItemArgs,
-        )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toEditItemArgs,
-        )
     }
 
     @Test
@@ -459,13 +442,11 @@ class EditItemViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: EditItemState? = null,
     ): EditItemViewModel = EditItemViewModel(
+        route = AuthenticatorGraph.EditItemRoute(itemId = state?.itemId ?: DEFAULT_ITEM_ID),
         snackbarRelayManager = snackbarRelayManager,
         authenticatorRepository = authenticatorRepository,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)
-            every { toEditItemArgs() } returns EditItemArgs(
-                itemId = state?.itemId ?: DEFAULT_ITEM_ID,
-            )
         },
     )
 }

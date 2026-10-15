@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -144,18 +145,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(
-            SavedStateHandle::toVaultItemArgs,
-            CipherView::toViewState,
-        )
+        mockkStatic(CipherView::toViewState)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toVaultItemArgs,
-            CipherView::toViewState,
-        )
+        unmockkStatic(CipherView::toViewState)
         unmockkStatic(Uri::class)
     }
 
@@ -227,17 +222,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `init should not resend ShowSnackbar when recreated with the same SavedStateHandle`() =
         runTest {
-            val savedStateHandle = SavedStateHandle().apply {
-                every {
-                    toVaultItemArgs()
-                } returns VaultItemArgs(
+            val savedStateHandle = SavedStateHandle()
+
+            fun createViewModelWithHandle(): VaultItemViewModel = VaultItemViewModel(
+                route = VaultUnlockedGraph.VaultItemRoute(
                     vaultItemId = VAULT_ITEM_ID,
                     cipherType = VaultItemCipherType.LOGIN,
                     showCreatedSnackbar = true,
-                )
-            }
-
-            fun createViewModelWithHandle(): VaultItemViewModel = VaultItemViewModel(
+                ),
                 savedStateHandle = savedStateHandle,
                 clipboardManager = clipboardManager,
                 authRepository = authRepo,
@@ -3968,16 +3960,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         environmentRepository: EnvironmentRepository = mockEnvironmentRepository,
         settingsRepository: SettingsRepository = mockSettingsRepository,
     ): VaultItemViewModel = VaultItemViewModel(
+        route = VaultUnlockedGraph.VaultItemRoute(
+            vaultItemId = vaultItemId,
+            cipherType = vaultItemCipherType,
+            showCreatedSnackbar = showCreatedSnackbar,
+        ),
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             set("tempAttachmentFile", tempAttachmentFile)
-            every {
-                toVaultItemArgs()
-            } returns VaultItemArgs(
-                vaultItemId = vaultItemId,
-                cipherType = vaultItemCipherType,
-                showCreatedSnackbar = showCreatedSnackbar,
-            )
         },
         clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,

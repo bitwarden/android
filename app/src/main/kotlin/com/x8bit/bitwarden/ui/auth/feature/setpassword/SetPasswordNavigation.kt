@@ -1,22 +1,14 @@
 package com.x8bit.bitwarden.ui.auth.feature.setpassword
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
- * The type-safe route for the set password screen.
+ * Add the Set Password screen to the navigation entries.
  */
-@Serializable
-data object SetPasswordRoute
-
-/**
- * Add the Set Password screen to the nav graph.
- */
-fun NavGraphBuilder.setPasswordDestination() {
-    composable<SetPasswordRoute> {
+fun EntryProviderScope<AuthGraph>.setPasswordDestination() {
+    entry<AuthGraph.SetPasswordRoute> {
         SetPasswordScreen()
     }
 }
@@ -24,8 +16,6 @@ fun NavGraphBuilder.setPasswordDestination() {
 /**
  * Navigate to the Set Password screen.
  */
-fun NavController.navigateToSetPassword(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = SetPasswordRoute, navOptions = navOptions)
+fun NavigationController<AuthGraph>.navigateToSetPassword() {
+    this.navigate(route = AuthGraph.SetPasswordRoute)
 }

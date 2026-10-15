@@ -31,15 +31,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.Clock
@@ -80,16 +76,6 @@ class PlanViewModelTest : BaseViewModelTest() {
     private val mockEnvironmentRepository: EnvironmentRepository = mockk {
         every { environment } answers { mutableEnvironmentFlow.value }
         every { environmentStateFlow } returns mutableEnvironmentFlow
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toPlanArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toPlanArgs)
     }
 
     // region PlanMode propagation
@@ -1803,9 +1789,9 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
         val savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
-            every { toPlanArgs() } returns PlanArgs(planMode = planMode)
         }
         return PlanViewModel(
+            planMode = planMode,
             savedStateHandle = savedStateHandle,
             authRepository = mockAuthRepository,
             billingRepository = mockBillingRepository,

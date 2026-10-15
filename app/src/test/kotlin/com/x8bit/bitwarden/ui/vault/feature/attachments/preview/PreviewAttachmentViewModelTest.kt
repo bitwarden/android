@@ -14,17 +14,15 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,15 +42,9 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(SavedStateHandle::toPreviewAttachmentArgs)
         coEvery {
             vaultRepository.downloadAttachment(cipherView = any(), attachmentId = any())
         } returns DownloadAttachmentResult.Success(mockFile)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toPreviewAttachmentArgs)
     }
 
     @Test
@@ -895,18 +887,18 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
         initialState: PreviewAttachmentState? = null,
         tempFile: File? = null,
     ): PreviewAttachmentViewModel = PreviewAttachmentViewModel(
+        route = VaultUnlockedGraph.PreviewAttachmentRoute(
+            cipherId = initialState?.cipherId ?: DEFAULT_CIPHER_ID,
+            attachmentId = initialState?.attachmentId ?: DEFAULT_ATTACHMENT_ID,
+            fileName = initialState?.fileName ?: DEFAULT_FILE_NAME,
+            displaySize = "2.89 MB",
+            isLargeFile = false,
+        ),
         fileManager = fileManager,
         vaultRepository = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
             set("tempAttachmentFile", tempFile)
-            every { toPreviewAttachmentArgs() } returns PreviewAttachmentArgs(
-                cipherId = initialState?.cipherId ?: DEFAULT_CIPHER_ID,
-                attachmentId = initialState?.attachmentId ?: DEFAULT_ATTACHMENT_ID,
-                fileName = initialState?.fileName ?: DEFAULT_FILE_NAME,
-                displaySize = "2.89 MB",
-                isLargeFile = false,
-            )
         },
     )
 }

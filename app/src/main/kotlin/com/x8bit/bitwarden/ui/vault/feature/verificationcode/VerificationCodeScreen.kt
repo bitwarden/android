@@ -46,7 +46,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.handlers.VerificationCodeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.collections.immutable.ImmutableList
@@ -63,7 +63,7 @@ fun VerificationCodeScreen(
     viewModel: VerificationCodeViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToSearch: () -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultItemScreen: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -87,7 +87,12 @@ fun VerificationCodeScreen(
         when (event) {
             is VerificationCodeEvent.NavigateBack -> onNavigateBack()
             is VerificationCodeEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItemScreen(VaultItemArgs(event.id, VaultItemCipherType.LOGIN))
+                onNavigateToVaultItemScreen(
+                    VaultUnlockedGraph.VaultItemRoute(
+                        vaultItemId = event.id,
+                        cipherType = VaultItemCipherType.LOGIN,
+                    ),
+                )
             }
 
             is VerificationCodeEvent.NavigateToVaultSearchScreen -> {

@@ -1,33 +1,18 @@
 package com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
- * The type-safe route for the expired registration link screen.
+ * Add the expired registration link screen to the navigation entries.
  */
-@Serializable
-data object ExpiredRegistrationLinkRoute
-
-/**
- * Navigate to the expired registration link screen.
- */
-fun NavController.navigateToExpiredRegistrationLinkScreen(navOptions: NavOptions? = null) {
-    this.navigate(route = ExpiredRegistrationLinkRoute, navOptions = navOptions)
-}
-
-/**
- * Add the expired registration link screen to the nav graph.
- */
-fun NavGraphBuilder.expiredRegistrationLinkDestination(
+fun EntryProviderScope<AuthGraph>.expiredRegistrationLinkDestination(
     onNavigateBack: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
-    composableWithPushTransitions<ExpiredRegistrationLinkRoute> {
+    pushEntry<AuthGraph.ExpiredRegistrationLinkRoute> {
         ExpiredRegistrationLinkScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToStartRegistration = onNavigateToStartRegistration,

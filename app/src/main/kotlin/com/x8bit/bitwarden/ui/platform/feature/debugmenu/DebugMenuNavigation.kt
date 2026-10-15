@@ -1,33 +1,25 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.main.MainGraph
 
 /**
- * The type-safe route for the debug screen.
+ * Navigate to the debug menu screen.
  */
-@Serializable
-data object DebugRoute
-
-/**
- * Navigate to the setup unlock screen.
- */
-fun NavController.navigateToDebugMenuScreen() {
-    this.navigate(route = DebugRoute) {
-        launchSingleTop = true
-    }
+fun NavigationController<MainGraph>.navigateToDebugMenuScreen() {
+    this.addSingleTop(route = MainGraph.DebugRoute)
 }
 
 /**
- * Add the setup unlock screen to the nav graph.
+ * Add the debug menu screen to the navigation entries.
  */
-fun NavGraphBuilder.debugMenuDestination(
+fun EntryProviderScope<MainGraph>.debugMenuDestination(
     onNavigateBack: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithSlideTransitions<DebugRoute> {
+    slideUpEntry<MainGraph.DebugRoute> {
         DebugMenuScreen(onNavigateBack = onNavigateBack)
         // If we are displaying the debug screen, then we can just hide the splash screen.
         onSplashScreenRemoved()

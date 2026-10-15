@@ -8,6 +8,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -162,6 +163,7 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: MasterPasswordHintState? = DEFAULT_STATE,
     ): MasterPasswordHintViewModel = MasterPasswordHintViewModel(
+        route = AuthGraph.MasterPasswordHintRoute(emailAddress = "email"),
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         authRepository = authRepository,
         networkConnectionManager = networkConnectionManager,
