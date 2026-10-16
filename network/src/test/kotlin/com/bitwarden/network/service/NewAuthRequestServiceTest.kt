@@ -39,7 +39,6 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
             )
 
             val request = server.takeRequest()
-            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
             assertEquals("$urlPrefix/auth-requests", request.requestUrl.toString())
             assertTrue(actual.isFailure)
         }
@@ -59,7 +58,6 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
                 authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
             )
             val request = server.takeRequest()
-            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
             assertEquals("$urlPrefix/auth-requests", request.requestUrl.toString())
             assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
         }

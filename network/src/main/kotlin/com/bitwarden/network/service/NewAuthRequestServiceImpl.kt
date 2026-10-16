@@ -27,7 +27,6 @@ internal class NewAuthRequestServiceImpl(
             AuthRequestTypeJson.LOGIN_WITH_DEVICE -> {
                 unauthenticatedAuthRequestsApi
                     .createAuthRequest(
-                        deviceIdentifier = deviceId,
                         body = AuthRequestRequestJson(
                             email = email,
                             publicKey = publicKey,

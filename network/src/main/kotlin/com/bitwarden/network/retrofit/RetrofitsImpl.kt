@@ -5,6 +5,7 @@ import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.CookieInterceptor
+import com.bitwarden.network.interceptor.DeviceIdentifierInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.interceptor.PermissionInterceptor
 import com.bitwarden.network.ssl.CertificateProvider
@@ -26,6 +27,7 @@ internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     cookieInterceptor: CookieInterceptor,
+    private val deviceIdentifierInterceptor: DeviceIdentifierInterceptor,
     headersInterceptor: HeadersInterceptor,
     json: Json,
     private val permissionInterceptor: PermissionInterceptor,
@@ -148,6 +150,7 @@ internal class RetrofitsImpl(
             .client(
                 authenticatedOkHttpClient
                     .newBuilder()
+                    .addInterceptor(deviceIdentifierInterceptor)
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(permissionInterceptor)
@@ -163,6 +166,7 @@ internal class RetrofitsImpl(
             .client(
                 baseOkHttpClient
                     .newBuilder()
+                    .addInterceptor(deviceIdentifierInterceptor)
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(permissionInterceptor)
