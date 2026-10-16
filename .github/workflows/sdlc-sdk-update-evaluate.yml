@@ -163,10 +163,22 @@ jobs:
             --model opus
             --allowedTools "Agent,Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
+      - name: Generate GH App token for push
+        if: steps.gate.outputs.skip == 'false'
+        # Installation tokens expire after an hour and the Claude step can outlast that, so the
+        # push authenticates with a token minted after Claude finishes.
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: push-token
+        with:
+          client-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-contents: write
+
       - name: Push any resolved fix
         if: steps.gate.outputs.skip == 'false'
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+          _PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
         run: |
           # claude-code-action treats the PR head as untrusted and restores these exact paths from
           # origin/main before running Claude, regardless of whether this branch's copy is stale.
@@ -185,5 +197,9 @@ jobs:
           if git diff --quiet "origin/$_BRANCH_NAME" HEAD; then
             echo "No new commits to push."
           else
-            git push origin "HEAD:$_BRANCH_NAME"
+            # Checkout persists its token as an Authorization extraheader that git would send
+            # alongside the URL credentials, so clear it for this push.
+            git -c http.https://github.com/.extraheader= \
+              push "https://x-access-token:${_PUSH_TOKEN}@github.com/${{ github.repository }}.git" \
+              "HEAD:$_BRANCH_NAME"
           fi
