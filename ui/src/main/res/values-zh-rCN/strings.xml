@@ -838,7 +838,7 @@
     <string name="save_and_protect_your_data">保存和保护您的数据</string>
     <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里还可以安全地存储登录、ID、支付卡和笔记。</string>
     <string name="add_login">添加登录</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上安全地与任何人共享文件和数据。您的信息将在限制曝光的同时保持端到端加密。</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上与任何人安全地分享文件和数据。您的信息将在限制暴露的同时保持端到端加密。</string>
     <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
     <string name="import_saved_logins">导入已保存的登录信息</string>
     <string name="use_a_computer_to_import_logins">使用计算机从现有密码管理器导入登录信息</string>
