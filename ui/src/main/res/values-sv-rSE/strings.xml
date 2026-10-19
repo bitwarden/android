@@ -574,8 +574,8 @@ Skanningen sker automatiskt.</string>
     <string name="resend_code">Skicka koden igen</string>
     <string name="a_verification_code_was_sent_to_your_email">En verifieringskod skickades till din e-postadress</string>
     <string name="submit_crash_logs">Skicka kraschloggar</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">fäll ut</string>
+    <string name="collapse">fäll ihop</string>
     <string name="uppercase_ato_z">Versaler (A till Z)</string>
     <string name="lowercase_ato_z">Gemener (A till Z)</string>
     <string name="numbers_zero_to_nine">Siffror (0 till 9)</string>
@@ -1442,10 +1442,10 @@ Vill du byta till detta konto?</string>
     <string name="use_this_passphrase">Använd den här lösenordsfrasen</string>
     <string name="use_this_password">Använd det här lösenordet</string>
     <string name="use_this_username">Använd det här användarnamnet</string>
-    <string name="create_login">Create login</string>
+    <string name="create_login">Skapa inloggning</string>
     <string name="keep_unlocking_with_biometrics">Behåll upplåsning med biometri</string>
     <string name="weve_made_a_security_update">Vi har gjort en säkerhetsuppdatering. Bekräfta din biometri igen för att fortsätta använda den för att låsa upp Bitwarden.</string>
     <string name="turn_off">Stäng av</string>
     <string name="turn_off_biometric_question">Stänga av biometri?</string>
-    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="unlocking_will_require_your_master_password">Upplåsning kräver ditt huvudlösenord. Du kan aktivera biometri igen i Inställningar.</string>
 </resources>

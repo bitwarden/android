@@ -1441,7 +1441,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_this_passphrase">Jelmondat használata</string>
     <string name="use_this_password">Jelszó használata</string>
     <string name="use_this_username">Felhasználónév használata</string>
-    <string name="create_login">Create login</string>
+    <string name="create_login">Bejelentkezés létrehozása</string>
     <string name="keep_unlocking_with_biometrics">Feloldás folytatása biometrikus adatokkal</string>
     <string name="weve_made_a_security_update">Biztonsági frissítés történt. Erősítsük meg újra a biometrikus adatokat, hogy továbbra is használjuk azokat a Bitwarden feloldásához.</string>
     <string name="turn_off">Kikapcsolás</string>
