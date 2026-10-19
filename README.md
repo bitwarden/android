@@ -168,15 +168,15 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: The WorkManager is used to schedule deferrable, asynchronous tasks that must be run reliably.
     - License: Apache 2.0
 
+- **Coil**
+    - https://github.com/coil-kt/coil
+    - Purpose: Image loading and caching.
+    - License: Apache 2.0
+
 - **Dagger Hilt**
     - https://github.com/google/dagger
     - Purpose: Dependency injection framework.
     - License: Apache 2.0
-
-- **Glide**
-    - https://github.com/bumptech/glide
-    - Purpose: Image loading and caching.
-    - License: BSD, part MIT and Apache 2.0
 
 - **kotlinx.collections.immutable**
     - https://github.com/Kotlin/kotlinx.collections.immutable
