@@ -3,8 +3,8 @@
 # This file is expected to be part of source control.
 androidx.databinding:databinding-common:9.4.1=classpath
 androidx.databinding:databinding-compiler-common:9.4.1=classpath
-androidx.room:androidx.room.gradle.plugin:2.8.5=classpath
-androidx.room:room-gradle-plugin:2.8.5=classpath
+androidx.room3:androidx.room3.gradle.plugin:3.0.3=classpath
+androidx.room3:room3-gradle-plugin:3.0.3=classpath
 com.android.application:com.android.application.gradle.plugin:9.4.1=classpath
 com.android.databinding:baseLibrary:9.4.1=classpath
 com.android.library:com.android.library.gradle.plugin:9.4.1=classpath

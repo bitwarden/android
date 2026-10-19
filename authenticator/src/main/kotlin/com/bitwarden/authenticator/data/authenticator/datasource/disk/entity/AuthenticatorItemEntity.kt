@@ -2,9 +2,9 @@ package com.bitwarden.authenticator.data.authenticator.datasource.disk.entity
 
 import android.net.Uri
 import androidx.core.text.htmlEncode
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room3.ColumnInfo
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 
 /**
  * Entity representing an authenticator item in the database.
