@@ -28,10 +28,11 @@ on:
 concurrency:
   group: sdlc-label-pr-${{ github.event.pull_request.number || inputs.pr-number }}
   cancel-in-progress: false
-  queue: max
+  queue: max # allows multiple pending runs
 
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
+  _PR_EVENT_LABELS: ${{ toJSON(github.event.pull_request.labels) }} # for logging purposes
 
 jobs:
   label-pr:
