@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.Query
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import kotlinx.coroutines.flow.Flow
 

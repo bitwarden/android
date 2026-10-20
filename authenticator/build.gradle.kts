@@ -8,7 +8,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.androidx.room3)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.compose.compiler)
@@ -35,7 +35,7 @@ base {
     archivesName.set("com.bitwarden.authenticator")
 }
 
-room {
+room3 {
     schemaDirectory("$projectDir/schemas")
 }
 
@@ -220,14 +220,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.testng)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room3.compiler)
+    implementation(libs.androidx.room3.runtime)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
-    implementation(libs.bumptech.glide)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.cloud.messaging)
     implementation(libs.google.firebase.crashlytics)

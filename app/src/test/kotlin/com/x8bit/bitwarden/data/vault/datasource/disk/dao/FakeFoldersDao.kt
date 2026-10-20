@@ -54,7 +54,7 @@ class FakeFoldersDao : FoldersDao {
         folderId: String,
     ): FolderEntity? = storedFolders.find { it.userId == userId && it.id == folderId }
 
-    override fun getAllFolders(
+    override suspend fun getAllFolders(
         userId: String,
     ): List<FolderEntity> = storedFolders.filter { it.userId == userId }
 
