@@ -24,16 +24,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
@@ -85,6 +89,12 @@ fun BitwardenSlider(
             )
             .semantics(mergeDescendants = true) {},
     ) {
+        val layoutDirection = LocalLayoutDirection.current
+        val sliderDelta = if (layoutDirection == LayoutDirection.Ltr) {
+            1
+        } else {
+            -1
+        }
         TextField(
             value = sliderValue.toString(),
             textStyle = BitwardenTheme.typography.bodyLarge,
@@ -107,14 +117,14 @@ fun BitwardenSlider(
             interactionSource = interactionSource,
             modifier = Modifier
                 .onPreviewKeyEvent { keyEvent ->
-                    when (keyEvent.key) {
-                        Key.DirectionUp -> {
-                            onValueChange(sliderValue + 1, true)
+                    keyEvent.type == KeyEventType.KeyDown && when (keyEvent.key) {
+                        Key.DirectionLeft -> {
+                            onValueChange(sliderValue - sliderDelta, true)
                             true
                         }
 
-                        Key.DirectionDown -> {
-                            onValueChange(sliderValue - 1, true)
+                        Key.DirectionRight -> {
+                            onValueChange(sliderValue + sliderDelta, true)
                             true
                         }
 
