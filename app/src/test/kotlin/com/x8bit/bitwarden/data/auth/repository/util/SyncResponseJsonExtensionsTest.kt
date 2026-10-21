@@ -87,6 +87,18 @@ class SyncResponseJsonExtensionsTest {
         )
     }
 
+    @Test
+    fun `toSdkProfileOrganizations should filter out organizations with null user IDs`() {
+        assertEquals(
+            listOf(createMockSdkProfileOrganization(number = 1)),
+            listOf(
+                createMockOrganizationNetwork(number = 1),
+                createMockOrganizationNetwork(number = 2, userId = null),
+            )
+                .toSdkProfileOrganizations(),
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toSdkProfileOrganizations should return empty list when all organizations have null names`() {
