@@ -2,10 +2,8 @@
 
 package com.bitwarden.testharness.ui.platform.feature.credentialmanager
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.testharness.ui.platform.feature.createpasskey.createPasskeyDestination
 import com.bitwarden.testharness.ui.platform.feature.createpasskey.navigateToCreatePasskey
@@ -17,76 +15,79 @@ import com.bitwarden.testharness.ui.platform.feature.getpassword.getPasswordDest
 import com.bitwarden.testharness.ui.platform.feature.getpassword.navigateToGetPassword
 import com.bitwarden.testharness.ui.platform.feature.getpasswordorpasskey.getPasswordOrPasskeyDestination
 import com.bitwarden.testharness.ui.platform.feature.getpasswordorpasskey.navigateToGetPasswordOrPasskey
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.rootnav.RootNavGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
 
 /**
- * Credential Manager graph route - serves as the parent for all Credential Manager API test flows.
+ * Add the Credential Manager test flow to the root navigation entries. The
+ * [RootNavGraph.CredentialManagerRoute] hosts the [CredentialManagerGraph].
  */
-@Serializable
-data object CredentialManagerGraphRoute
-
-/**
- * Credential Manager test category list screen - the start destination of the graph.
- */
-@Serializable
-data object CredentialManagerListRoute
-
-/**
- * Add Credential Manager nav graph to the root nav graph.
- *
- * This graph contains the list screen and all nested credential manager API test screens.
- */
-fun NavGraphBuilder.credentialManagerGraph(
+fun EntryProviderScope<RootNavGraph>.credentialManagerGraph(
     onNavigateBack: () -> Unit,
-    navController: NavController,
 ) {
-    navigation<CredentialManagerGraphRoute>(
-        startDestination = CredentialManagerListRoute,
-    ) {
-        credentialManagerListDestination(
-            onNavigateBack = onNavigateBack,
-            onNavigateToGetPassword = {
-                navController.navigateToGetPassword()
-            },
-            onNavigateToCreatePassword = {
-                navController.navigateToCreatePassword()
-            },
-            onNavigateToGetPasskey = {
-                navController.navigateToGetPasskey()
-            },
-            onNavigateToCreatePasskey = {
-                navController.navigateToCreatePasskey()
-            },
-            onNavigateToGetPasswordOrPasskey = {
-                navController.navigateToGetPasswordOrPasskey()
-            },
+    entry<RootNavGraph.CredentialManagerRoute> {
+        val navigationController = rememberNavigationController<CredentialManagerGraph>(
+            routes = arrayOf(CredentialManagerGraph.CredentialManagerListRoute),
         )
-
-        getPasswordDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-
-        createPasswordDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-
-        getPasskeyDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-
-        createPasskeyDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-
-        getPasswordOrPasskeyDestination(
-            onNavigateBack = { navController.popBackStack() },
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                credentialManagerDestinations(
+                    navigationController = navigationController,
+                    onNavigateBack = onNavigateBack,
+                )
+            },
         )
     }
 }
 
+/**
+ * Add all the Credential Manager test destinations to the Credential Manager navigation entries.
+ *
+ * The [CredentialManagerGraph.CredentialManagerListRoute] is the root of the Credential Manager
+ * test flow, which contains the list screen and all nested credential manager API test screens.
+ */
+private fun EntryProviderScope<CredentialManagerGraph>.credentialManagerDestinations(
+    navigationController: NavigationController<CredentialManagerGraph>,
+    onNavigateBack: () -> Unit,
+) {
+    credentialManagerListDestination(
+        onNavigateBack = onNavigateBack,
+        onNavigateToGetPassword = { navigationController.navigateToGetPassword() },
+        onNavigateToCreatePassword = { navigationController.navigateToCreatePassword() },
+        onNavigateToGetPasskey = { navigationController.navigateToGetPasskey() },
+        onNavigateToCreatePasskey = { navigationController.navigateToCreatePasskey() },
+        onNavigateToGetPasswordOrPasskey = {
+            navigationController.navigateToGetPasswordOrPasskey()
+        },
+    )
+
+    getPasswordDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+
+    createPasswordDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+
+    getPasskeyDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+
+    createPasskeyDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+
+    getPasswordOrPasskeyDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+}
+
 @Suppress("LongParameterList")
-private fun NavGraphBuilder.credentialManagerListDestination(
+private fun EntryProviderScope<CredentialManagerGraph>.credentialManagerListDestination(
     onNavigateBack: () -> Unit,
     onNavigateToGetPassword: () -> Unit,
     onNavigateToCreatePassword: () -> Unit,
@@ -94,7 +95,7 @@ private fun NavGraphBuilder.credentialManagerListDestination(
     onNavigateToCreatePasskey: () -> Unit,
     onNavigateToGetPasswordOrPasskey: () -> Unit,
 ) {
-    composableWithRootPushTransitions<CredentialManagerListRoute> {
+    rootPushEntry<CredentialManagerGraph.CredentialManagerListRoute> {
         CredentialManagerListScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToGetPassword = { onNavigateToGetPassword() },
@@ -107,8 +108,8 @@ private fun NavGraphBuilder.credentialManagerListDestination(
 }
 
 /**
- * Navigate to the Credential Manager flow.
+ * Navigate to the Credential Manager test flow.
  */
-fun NavController.navigateToCredentialManagerGraph(navOptions: NavOptions? = null) {
-    navigate(route = CredentialManagerGraphRoute, navOptions = navOptions)
+fun NavigationController<RootNavGraph>.navigateToCredentialManager() {
+    this.navigate(route = RootNavGraph.CredentialManagerRoute)
 }

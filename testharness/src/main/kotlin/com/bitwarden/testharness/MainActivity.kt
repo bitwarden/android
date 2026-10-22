@@ -7,11 +7,12 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import com.bitwarden.testharness.ui.platform.feature.main.MainGraph
 import com.bitwarden.testharness.ui.platform.feature.rootnav.RootNavScreen
-import com.bitwarden.testharness.ui.platform.feature.rootnav.RootNavigationRoute
 import com.bitwarden.testharness.ui.platform.feature.rootnav.rootNavDestination
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,18 +41,20 @@ class MainActivity : ComponentActivity() {
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
 
         setContent {
-            val navController = rememberNavController()
+            val navigationController = rememberNavigationController<MainGraph>(
+                routes = arrayOf(MainGraph.RootNavigationRoute),
+            )
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
 
             BitwardenTheme(
                 theme = state.theme,
             ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = RootNavigationRoute,
-                ) {
-                    rootNavDestination { shouldShowSplashScreen = false }
-                }
+                BitwardenNavDisplay(
+                    navigationController = navigationController,
+                    entryProvider = entryProvider {
+                        rootNavDestination { shouldShowSplashScreen = false }
+                    },
+                )
             }
         }
     }
