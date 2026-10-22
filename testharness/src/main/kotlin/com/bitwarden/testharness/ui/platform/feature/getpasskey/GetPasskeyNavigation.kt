@@ -2,26 +2,19 @@
 
 package com.bitwarden.testharness.ui.platform.feature.getpasskey
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.credentialmanager.CredentialManagerGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
 
 /**
- * Get passkey test screen.
+ * Add Get Passkey destination to the navigation entries.
  */
-@Serializable
-data object GetPasskeyRoute
-
-/**
- * Add Get Passkey destination to the nav graph.
- */
-fun NavGraphBuilder.getPasskeyDestination(
+fun EntryProviderScope<CredentialManagerGraph>.getPasskeyDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<GetPasskeyRoute> {
+    pushEntry<CredentialManagerGraph.GetPasskeyRoute> {
         GetPasskeyScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -31,6 +24,6 @@ fun NavGraphBuilder.getPasskeyDestination(
 /**
  * Navigate to the Get Passkey test screen.
  */
-fun NavController.navigateToGetPasskey(navOptions: NavOptions? = null) {
-    navigate(route = GetPasskeyRoute, navOptions = navOptions)
+fun NavigationController<CredentialManagerGraph>.navigateToGetPasskey() {
+    this.navigate(route = CredentialManagerGraph.GetPasskeyRoute)
 }
