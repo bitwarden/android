@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
@@ -55,7 +54,7 @@ import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmai
 fun CheckEmailScreen(
     onNavigateBack: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
-    viewModel: CheckEmailViewModel = hiltViewModel(),
+    viewModel: CheckEmailViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberCheckEmailHandler(viewModel = viewModel)

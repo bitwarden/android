@@ -13,6 +13,9 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -23,15 +26,15 @@ import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Instant
 import java.time.format.FormatStyle
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the other screen.
  */
-@HiltViewModel
-class OtherViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = OtherViewModel.Factory::class)
+class OtherViewModel @AssistedInject constructor(
+    @Assisted isPreAuth: Boolean,
     private val clock: Clock,
     private val settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
@@ -40,7 +43,7 @@ class OtherViewModel @Inject constructor(
 ) : BaseViewModel<OtherState, OtherEvent, OtherAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: OtherState(
-            isPreAuth = savedStateHandle.toOtherArgs().isPreAuth,
+            isPreAuth = isPreAuth,
             allowScreenCapture = settingsRepo.isScreenCaptureAllowed,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = settingsRepo.clearClipboardFrequency,
@@ -55,6 +58,17 @@ class OtherViewModel @Inject constructor(
             dialogState = null,
         ),
 ) {
+    /**
+     * Factory for creating an [OtherViewModel] for the given `isPreAuth` value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [OtherViewModel] for the given [isPreAuth].
+         */
+        fun create(isPreAuth: Boolean): OtherViewModel
+    }
+
     init {
         settingsRepo
             .vaultLastSyncStateFlow

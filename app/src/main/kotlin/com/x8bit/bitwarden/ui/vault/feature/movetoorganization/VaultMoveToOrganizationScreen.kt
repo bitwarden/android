@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -30,7 +29,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
  */
 @Composable
 fun VaultMoveToOrganizationScreen(
-    viewModel: VaultMoveToOrganizationViewModel = hiltViewModel(),
+    viewModel: VaultMoveToOrganizationViewModel,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()

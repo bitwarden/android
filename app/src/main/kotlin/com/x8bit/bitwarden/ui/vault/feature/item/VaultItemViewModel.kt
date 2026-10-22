@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -57,6 +58,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -69,7 +73,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.io.File
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
@@ -91,8 +94,9 @@ private data class VaultItemCombinedFlowData(
  * ViewModel responsible for handling user interactions in the vault item screen
  */
 @Suppress("LargeClass", "TooManyFunctions", "LongParameterList")
-@HiltViewModel
-class VaultItemViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = VaultItemViewModel.Factory::class)
+class VaultItemViewModel @AssistedInject constructor(
+    @Assisted private val route: VaultUnlockedGraph.VaultItemRoute,
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -106,19 +110,28 @@ class VaultItemViewModel @Inject constructor(
     private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toVaultItemArgs()
-        VaultItemState(
-            vaultItemId = args.vaultItemId,
-            cipherType = args.cipherType,
-            viewState = VaultItemState.ViewState.Loading,
-            dialog = null,
-            baseIconUrl = environmentRepository.environment.baseIconUrl,
-            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
+        vaultItemId = route.vaultItemId,
+        cipherType = route.cipherType,
+        viewState = VaultItemState.ViewState.Loading,
+        dialog = null,
+        baseIconUrl = environmentRepository.environment.baseIconUrl,
+        isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
+    ),
 ) {
+    /**
+     * Factory for creating a [VaultItemViewModel] for a specific
+     * [VaultUnlockedGraph.VaultItemRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultItemViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.VaultItemRoute): VaultItemViewModel
+    }
+
     /**
      * Reference to a temporary attachment saved in cache.
      */
@@ -142,7 +155,7 @@ class VaultItemViewModel @Inject constructor(
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientViewed(cipherId = state.vaultItemId),
         )
-        if (savedStateHandle.toVaultItemArgs().showCreatedSnackbar && !hasShownCreatedSnackbar) {
+        if (route.showCreatedSnackbar && !hasShownCreatedSnackbar) {
             hasShownCreatedSnackbar = true
             sendEvent(VaultItemEvent.ShowSnackbar(message = state.cipherType.savedSnackbarMessage))
         }

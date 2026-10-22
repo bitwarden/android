@@ -1,51 +1,29 @@
 package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the check email screen.
- */
-@Serializable
-data class CheckEmailRoute(
-    val emailAddress: String,
-)
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the check email screen.
  */
-fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOptions? = null) {
-    this.navigate(route = CheckEmailRoute(emailAddress = emailAddress), navOptions = navOptions)
+fun NavigationController<AuthGraph>.navigateToCheckEmail(emailAddress: String) {
+    this.navigate(route = AuthGraph.CheckEmailRoute(emailAddress = emailAddress))
 }
 
 /**
- * Class to retrieve check email arguments from the [SavedStateHandle].
+ * Add the check email screen to the navigation entries.
  */
-data class CheckEmailArgs(
-    val emailAddress: String,
-)
-
-/**
- * Constructs a [CheckEmailArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toCheckEmailArgs(): CheckEmailArgs {
-    val route = this.toRoute<CheckEmailRoute>()
-    return CheckEmailArgs(emailAddress = route.emailAddress)
-}
-
-/**
- * Add the check email screen to the nav graph.
- */
-fun NavGraphBuilder.checkEmailDestination(
+fun EntryProviderScope<AuthGraph>.checkEmailDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<CheckEmailRoute> {
+    slideUpEntry<AuthGraph.CheckEmailRoute> { route ->
         CheckEmailScreen(
+            viewModel = hiltViewModel<CheckEmailViewModel, CheckEmailViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }

@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -52,7 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Suppress("LongMethod")
 @Composable
 fun SetupBrowserAutofillScreen(
-    viewModel: SetupBrowserAutofillViewModel = hiltViewModel(),
+    viewModel: SetupBrowserAutofillViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
 ) {

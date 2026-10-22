@@ -2,36 +2,27 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.importitems
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the import items screen.
- */
-@Serializable
-data object ImportItemsRoute
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
  * Helper function to navigate to the import items screen.
  */
-fun NavController.navigateToImportItemsScreen(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = ImportItemsRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToImportItemsScreen() {
+    this.navigate(route = SettingsGraph.ImportItemsRoute)
 }
 
 /**
- * Add the import items screen to the nav graph.
+ * Add the import items screen to the navigation entries.
  */
-fun NavGraphBuilder.importItemsDestination(
+fun EntryProviderScope<SettingsGraph>.importItemsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
 ) {
-    composableWithPushTransitions<ImportItemsRoute> {
+    pushEntry<SettingsGraph.ImportItemsRoute> {
         ImportItemsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToImportFromComputer = onNavigateToImportLogins,

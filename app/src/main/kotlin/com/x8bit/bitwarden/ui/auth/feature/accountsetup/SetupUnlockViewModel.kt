@@ -14,12 +14,14 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.crypto.Cipher
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -27,8 +29,9 @@ private const val KEY_STATE = "state"
  * Models logic for the setup unlock screen.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class SetupUnlockViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SetupUnlockViewModel.Factory::class)
+class SetupUnlockViewModel @AssistedInject constructor(
+    @Assisted isInitialSetup: Boolean,
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
@@ -38,8 +41,6 @@ class SetupUnlockViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        // whether the user has completed the initial setup prior to this.
-        val isInitialSetup = savedStateHandle.toSetupUnlockArgs().isInitialSetup
         SetupUnlockState(
             userId = userId,
             isUnlockWithPasswordEnabled = authRepository
@@ -55,6 +56,17 @@ class SetupUnlockViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [SetupUnlockViewModel] for the given `isInitialSetup` value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SetupUnlockViewModel] for the given [isInitialSetup].
+         */
+        fun create(isInitialSetup: Boolean): SetupUnlockViewModel
+    }
+
     override fun handleAction(action: SetupUnlockAction) {
         when (action) {
             SetupUnlockAction.ContinueClick -> handleContinueClick()

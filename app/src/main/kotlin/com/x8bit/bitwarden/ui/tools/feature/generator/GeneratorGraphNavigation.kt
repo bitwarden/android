@@ -1,40 +1,20 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the generator graph.
+ * Add the generator destinations to the generator navigation entries. The
+ * [GeneratorGraph.GeneratorRoute] is the root of the generator tab's back stack.
  */
-@Serializable
-data object GeneratorGraphRoute
-
-/**
- * Add generator destination to the root nav graph.
- */
-fun NavGraphBuilder.generatorGraph(
-    navigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+fun EntryProviderScope<GeneratorGraph>.generatorDestinations(
+    navigateToVaultAddItem: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
 ) {
-    navigation<GeneratorGraphRoute>(
-        startDestination = GeneratorRoute.Standard,
-    ) {
-        generatorDestination(
-            navigateToVaultAddItem = navigateToVaultAddItem,
-            onNavigateToPasswordHistory = onNavigateToPasswordHistory,
-            onDimNavBarRequest = onDimNavBarRequest,
-        )
-    }
-}
-
-/**
- * Navigate to the generator graph.
- */
-fun NavController.navigateToGeneratorGraph(navOptions: NavOptions? = null) {
-    this.navigate(route = GeneratorGraphRoute, navOptions = navOptions)
+    generatorDestination(
+        navigateToVaultAddItem = navigateToVaultAddItem,
+        onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+        onDimNavBarRequest = onDimNavBarRequest,
+    )
 }
