@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -566,6 +567,38 @@ class SettingsRepositoryImpl(
                 isDismissed = true,
             )
         }
+    }
+
+    override val collapsedVaultSections: Set<VaultSection>
+        get() = activeUserId
+            ?.let { settingsDiskSource.getCollapsedVaultSections(userId = it) }
+            .orEmpty()
+
+    override fun getCollapsedVaultSectionsFlow(): StateFlow<Set<VaultSection>> {
+        val userId = activeUserId ?: return MutableStateFlow(value = emptySet())
+        return settingsDiskSource
+            .getCollapsedVaultSectionsFlow(userId = userId)
+            .map { it.orEmpty() }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = collapsedVaultSections,
+            )
+    }
+
+    override fun toggleVaultSectionCollapsed(section: VaultSection) {
+        val userId = activeUserId ?: return
+        val collapsedSections = settingsDiskSource
+            .getCollapsedVaultSections(userId = userId)
+            .orEmpty()
+        settingsDiskSource.storeCollapsedVaultSections(
+            userId = userId,
+            collapsedVaultSections = if (section in collapsedSections) {
+                collapsedSections - section
+            } else {
+                collapsedSections + section
+            },
+        )
     }
 
     override fun getPremiumUpgradeBannerDismissedFlow(): StateFlow<Boolean> {

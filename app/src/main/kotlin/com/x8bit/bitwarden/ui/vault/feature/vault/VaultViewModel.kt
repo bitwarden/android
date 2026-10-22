@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyMa
 import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -169,6 +170,7 @@ class VaultViewModel @Inject constructor(
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
             validTotpIds = persistentSetOf(),
+            collapsedSections = settingsRepository.collapsedVaultSections.toImmutableSet(),
             policyBanner = userNotificationPolicyManager.displayData?.let {
                 PolicyBanner(
                     organizationId = it.organizationId,
@@ -276,6 +278,12 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .getCollapsedVaultSectionsFlow()
+            .map { VaultAction.Internal.CollapsedSectionsReceive(collapsedSections = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -404,7 +412,12 @@ class VaultViewModel @Inject constructor(
             VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
             is VaultAction.ActionCardClick -> handleActionCardClick(action)
+            is VaultAction.SectionHeaderClick -> handleSectionHeaderClick(action)
         }
+    }
+
+    private fun handleSectionHeaderClick(action: VaultAction.SectionHeaderClick) {
+        settingsRepository.toggleVaultSectionCollapsed(section = action.section)
     }
 
     private fun handleDismissFlightRecorderSnackbar() {
@@ -1182,6 +1195,10 @@ class VaultViewModel @Inject constructor(
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
 
+            is VaultAction.Internal.CollapsedSectionsReceive -> {
+                handleCollapsedSectionsReceive(action)
+            }
+
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
             }
@@ -1331,6 +1348,14 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
+        }
+    }
+
+    private fun handleCollapsedSectionsReceive(
+        action: VaultAction.Internal.CollapsedSectionsReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(collapsedSections = action.collapsedSections.toImmutableSet())
         }
     }
 
@@ -1855,6 +1880,7 @@ data class VaultState(
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
     val validTotpIds: ImmutableSet<String>,
+    val collapsedSections: ImmutableSet<VaultSection> = persistentSetOf(),
     val isNewItemTypesEnabled: Boolean = false,
     val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
@@ -2780,6 +2806,13 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * User clicked the header of the given [section] to expand or collapse it.
+     */
+    data class SectionHeaderClick(
+        val section: VaultSection,
+    ) : VaultAction()
+
+    /**
      * User clicked the primary button on an action card.
      */
     data class ActionCardClick(
@@ -2928,6 +2961,13 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the set of collapsed vault sections has been updated.
+         */
+        data class CollapsedSectionsReceive(
+            val collapsedSections: Set<VaultSection>,
         ) : Internal()
 
         /**
