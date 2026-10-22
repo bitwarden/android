@@ -2,25 +2,16 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the migrate to my items screen.
+ * Add the migrate to my items screen to the migrate to my items navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object MigrateToMyItemsRoute
-
-/**
- * Add the migrate to my items screen to the nav graph.
- */
-fun NavGraphBuilder.migrateToMyItemsDestination(
+fun EntryProviderScope<MigrateToMyItemsGraph>.migrateToMyItemsDestination(
     onNavigateToLeaveOrganization: (organizationId: String, organizationName: String) -> Unit,
 ) {
-    composable<MigrateToMyItemsRoute> {
+    entry<MigrateToMyItemsGraph.MigrateToMyItemsRoute> {
         MigrateToMyItemsScreen(
             onNavigateToLeaveOrganization = onNavigateToLeaveOrganization,
         )

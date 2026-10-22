@@ -51,6 +51,9 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.util.toServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -59,7 +62,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlin.math.max
 
 private const val KEY_STATE = "state"
@@ -72,11 +74,13 @@ private const val NO_GENERATED_TEXT: String = "-"
  * and provides data for the UI to render. It extends a `BaseViewModel` and works
  * with a `SavedStateHandle` for state restoration.
  *
+ * @param generatorMode The [GeneratorMode] in which the generator is displayed.
  * @property savedStateHandle Handles the saved state of this ViewModel.
  */
 @Suppress("LargeClass", "LongParameterList")
-@HiltViewModel
-class GeneratorViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = GeneratorViewModel.Factory::class)
+class GeneratorViewModel @AssistedInject constructor(
+    @Assisted generatorMode: GeneratorMode,
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
@@ -86,38 +90,45 @@ class GeneratorViewModel @Inject constructor(
     private val firstTimeActionManager: FirstTimeActionManager,
     private val premiumStateManager: PremiumStateManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val generatorMode = savedStateHandle.toGeneratorArgs().type
-        GeneratorState(
-            generatedText = NO_GENERATED_TEXT,
-            selectedType = when (generatorMode) {
-                is GeneratorMode.Modal.Username -> {
-                    GeneratorState.MainType.Username(
-                        selectedType = generatorRepository
-                            .getUsernameGenerationOptions()
-                            .usernameType,
-                    )
-                }
+    initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
+        generatedText = NO_GENERATED_TEXT,
+        selectedType = when (generatorMode) {
+            is GeneratorMode.Modal.Username -> {
+                GeneratorState.MainType.Username(
+                    selectedType = generatorRepository
+                        .getUsernameGenerationOptions()
+                        .usernameType,
+                )
+            }
 
-                GeneratorMode.Modal.Password -> {
-                    generatorRepository.getPasscodeGenerationOptions().passcodeType
-                }
+            GeneratorMode.Modal.Password -> {
+                generatorRepository.getPasscodeGenerationOptions().passcodeType
+            }
 
-                GeneratorMode.Default -> GeneratorState.MainType.Password()
-            },
-            generatorMode = generatorMode,
-            currentEmailAddress = requireNotNull(
-                authRepository.userStateFlow.value?.activeAccount?.email,
-            ),
-            isUnderPolicy = policyManager
-                .getActivePolicies<PolicyInformation.PasswordGenerator>()
-                .any(),
-            website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
-            shouldShowCoachMarkTour = false,
-            isUpgradedToPremiumCardEligible = false,
-        )
-    },
+            GeneratorMode.Default -> GeneratorState.MainType.Password()
+        },
+        generatorMode = generatorMode,
+        currentEmailAddress = requireNotNull(
+            authRepository.userStateFlow.value?.activeAccount?.email,
+        ),
+        isUnderPolicy = policyManager
+            .getActivePolicies<PolicyInformation.PasswordGenerator>()
+            .any(),
+        website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
+        shouldShowCoachMarkTour = false,
+        isUpgradedToPremiumCardEligible = false,
+    ),
 ) {
+    /**
+     * Factory for creating a [GeneratorViewModel] for the given [GeneratorMode].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [GeneratorViewModel] for the given [generatorMode].
+         */
+        fun create(generatorMode: GeneratorMode): GeneratorViewModel
+    }
 
     //region Initialization and Overrides
 

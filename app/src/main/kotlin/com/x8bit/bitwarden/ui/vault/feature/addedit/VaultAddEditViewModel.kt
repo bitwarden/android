@@ -68,6 +68,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -95,6 +96,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.util.detectCardBrand
 import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -112,7 +116,6 @@ import java.time.Clock
 import java.time.LocalDate
 import java.util.Collections
 import java.util.UUID
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -120,14 +123,16 @@ private const val KEY_STATE = "state"
  * ViewModel responsible for handling user interactions in the vault add item screen
  *
  * This ViewModel processes UI actions, manages the state of the generator screen,
- * and provides data for the UI to render. It extends a `BaseViewModel` and works
- * with a `SavedStateHandle` for retrieving navigation arguments.
+ * and provides data for the UI to render. It extends a `BaseViewModel` and is created with the
+ * [VaultUnlockedGraph.VaultAddEditRoute] containing its navigation arguments.
  *
- * @param savedStateHandle Handles the navigation arguments of this ViewModel.
+ * @param route The navigation arguments of this ViewModel.
+ * @param savedStateHandle Persists the state of this ViewModel across process death.
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = VaultAddEditViewModel.Factory::class)
 @Suppress("TooManyFunctions", "LargeClass", "LongParameterList", "LongMethod")
-class VaultAddEditViewModel @Inject constructor(
+class VaultAddEditViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.VaultAddEditRoute,
     savedStateHandle: SavedStateHandle,
     featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
@@ -153,11 +158,10 @@ class VaultAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val args = savedStateHandle.toVaultAddEditArgs()
-            val vaultAddEditType = args.vaultAddEditType
-            val vaultCipherType = args.vaultItemCipherType
-            val selectedFolderId = args.selectedFolderId
-            val selectedCollectionId = args.selectedCollectionId
+            val vaultAddEditType = route.vaultAddEditType
+            val vaultCipherType = route.vaultItemCipherType
+            val selectedFolderId = route.selectedFolderId
+            val selectedCollectionId = route.selectedCollectionId
             val isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                 .any()
@@ -236,6 +240,17 @@ class VaultAddEditViewModel @Inject constructor(
             )
         },
 ) {
+    /**
+     * Factory for creating a [VaultAddEditViewModel] for a specific
+     * [VaultUnlockedGraph.VaultAddEditRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultAddEditViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.VaultAddEditRoute): VaultAddEditViewModel
+    }
 
     //region Initialization and Overrides
 

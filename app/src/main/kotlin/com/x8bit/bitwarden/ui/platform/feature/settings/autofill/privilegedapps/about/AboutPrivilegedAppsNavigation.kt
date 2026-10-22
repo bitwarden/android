@@ -2,26 +2,19 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route to the about privileged apps screen.
+ * Add the about privileged apps screen to the navigation entries.
  */
-@Serializable
-data object AboutPrivilegedAppsRoute
-
-/**
- * Add about privileged apps destination to the nav graph.
- */
-fun NavGraphBuilder.aboutPrivilegedAppsDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.aboutPrivilegedAppsDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<AboutPrivilegedAppsRoute> {
+    slideUpEntry<VaultUnlockedGraph.AboutPrivilegedAppsRoute> {
         AboutPrivilegedAppsScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -31,8 +24,6 @@ fun NavGraphBuilder.aboutPrivilegedAppsDestination(
 /**
  * Navigate to the about privileged apps screen.
  */
-fun NavController.navigateToAboutPrivilegedAppsScreen(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = AboutPrivilegedAppsRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToAboutPrivilegedAppsScreen() {
+    this.navigate(route = VaultUnlockedGraph.AboutPrivilegedAppsRoute)
 }

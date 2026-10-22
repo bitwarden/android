@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
@@ -125,7 +126,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(
-            SavedStateHandle::toAddEditSendArgs,
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
@@ -137,7 +137,6 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            SavedStateHandle::toAddEditSendArgs,
             AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
@@ -2194,12 +2193,30 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         sendType: SendItemType = SendItemType.TEXT,
         activityToken: String? = null,
     ): AddEditSendViewModel = AddEditSendViewModel(
+        route = when (addEditSendType) {
+            AddEditSendType.AddItem -> {
+                VaultUnlockedGraph.AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD)
+            }
+
+            is AddEditSendType.CopyItem -> {
+                VaultUnlockedGraph.AddEditSendRoute(
+                    sendType = sendType,
+                    modeType = ModeType.COPY,
+                    sendId = addEditSendType.sendItemId,
+                )
+            }
+
+            is AddEditSendType.EditItem -> {
+                VaultUnlockedGraph.AddEditSendRoute(
+                    sendType = sendType,
+                    modeType = ModeType.EDIT,
+                    sendId = addEditSendType.sendItemId,
+                )
+            }
+        },
         savedStateHandle = SavedStateHandle().apply {
             set("state", state?.copy(addEditSendType = addEditSendType))
             set("activityToken", activityToken)
-            every {
-                toAddEditSendArgs()
-            } returns AddEditSendArgs(sendType = sendType, addEditSendType = addEditSendType)
         },
         authRepo = authRepository,
         environmentRepo = environmentRepository,

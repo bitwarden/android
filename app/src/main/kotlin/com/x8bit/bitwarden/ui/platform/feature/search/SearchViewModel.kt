@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
@@ -68,11 +69,13 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -81,17 +84,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the search screen.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LongParameterList", "TooManyFunctions", "LargeClass")
-@HiltViewModel
-class SearchViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SearchViewModel.Factory::class)
+class SearchViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.SearchRoute,
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
@@ -111,7 +113,7 @@ class SearchViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val searchType = savedStateHandle.toSearchArgs().type
+            val searchType = route.searchType
             val userState = requireNotNull(authRepo.userStateFlow.value)
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
             val searchTerm = (specialCircumstance as? SpecialCircumstance.SearchShortcut)
@@ -145,6 +147,17 @@ class SearchViewModel @Inject constructor(
             )
         },
 ) {
+    /**
+     * Factory for creating a [SearchViewModel] for a specific [VaultUnlockedGraph.SearchRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SearchViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.SearchRoute): SearchViewModel
+    }
+
     init {
         settingsRepo
             .isIconLoadingDisabledFlow
