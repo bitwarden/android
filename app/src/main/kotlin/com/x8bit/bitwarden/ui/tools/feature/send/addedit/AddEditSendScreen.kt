@@ -13,7 +13,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -50,7 +49,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHan
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditSendScreen(
-    viewModel: AddEditSendViewModel = hiltViewModel(),
+    viewModel: AddEditSendViewModel,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,

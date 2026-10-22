@@ -18,20 +18,17 @@ import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraph
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
 
@@ -47,16 +44,6 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
 
     private val mockVaultMigrationManager: VaultMigrationManager = mockk {
         every { clearMigrationState() } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toLeaveOrganizationArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toLeaveOrganizationArgs)
     }
 
     @Test
@@ -239,6 +226,10 @@ class LeaveOrganizationViewModelTest : BaseViewModelTest() {
         state: LeaveOrganizationState = DEFAULT_STATE,
     ): LeaveOrganizationViewModel {
         return LeaveOrganizationViewModel(
+            route = MigrateToMyItemsGraph.LeaveOrganizationRoute(
+                organizationId = ORGANIZATION_ID,
+                organizationName = ORGANIZATION_NAME,
+            ),
             authRepository = mockAuthRepository,
             snackbarRelayManager = mockSnackbarRelayManager,
             vaultMigrationManager = mockVaultMigrationManager,

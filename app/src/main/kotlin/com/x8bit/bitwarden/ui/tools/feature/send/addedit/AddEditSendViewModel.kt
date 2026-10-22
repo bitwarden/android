@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
@@ -52,6 +53,9 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -68,7 +72,6 @@ import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -100,11 +103,22 @@ private fun String?.splitToDomains(): ImmutableList<String> = this
     .toImmutableList()
 
 /**
+ * Converts this [VaultUnlockedGraph.AddEditSendRoute] into the [AddEditSendType] it represents.
+ */
+private fun VaultUnlockedGraph.AddEditSendRoute.toAddEditSendType(): AddEditSendType =
+    when (modeType) {
+        ModeType.ADD -> AddEditSendType.AddItem
+        ModeType.COPY -> AddEditSendType.CopyItem(sendItemId = requireNotNull(sendId))
+        ModeType.EDIT -> AddEditSendType.EditItem(sendItemId = requireNotNull(sendId))
+    }
+
+/**
  * View model for the add/edit send screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
-@HiltViewModel
-class AddEditSendViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = AddEditSendViewModel.Factory::class)
+class AddEditSendViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.AddEditSendRoute,
     savedStateHandle: SavedStateHandle,
     authRepo: AuthRepository,
     generatorRepository: GeneratorRepository,
@@ -124,9 +138,8 @@ class AddEditSendViewModel @Inject constructor(
         // Check to see if we are navigating here from an external source
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val shareSendType = specialCircumstance.toSendType()
-        val args = savedStateHandle.toAddEditSendArgs()
-        val sendType = args.sendType
-        val addEditSendType = args.addEditSendType
+        val sendType = route.sendType
+        val addEditSendType = route.toAddEditSendType()
         val effectiveSendPolicy = policyManager.getEffectiveSendPolicy()
         val isSendControlsEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.SendControls)
 
@@ -199,6 +212,17 @@ class AddEditSendViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating an [AddEditSendViewModel] for a specific
+     * [VaultUnlockedGraph.AddEditSendRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [AddEditSendViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.AddEditSendRoute): AddEditSendViewModel
+    }
 
     init {
         state

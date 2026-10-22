@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -50,7 +49,7 @@ import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.handlers.rememberL
 @Composable
 fun LeaveOrganizationScreen(
     onNavigateBack: () -> Unit,
-    viewModel: LeaveOrganizationViewModel = hiltViewModel(),
+    viewModel: LeaveOrganizationViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()

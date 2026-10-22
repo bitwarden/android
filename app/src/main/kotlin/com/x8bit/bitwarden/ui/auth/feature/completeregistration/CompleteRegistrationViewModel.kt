@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
@@ -30,6 +31,9 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterIsInstance
@@ -39,7 +43,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val MIN_PASSWORD_LENGTH = 12
@@ -47,9 +50,10 @@ private const val MIN_PASSWORD_LENGTH = 12
 /**
  * Models logic for the Complete Registration screen.
  */
-@Suppress("TooManyFunctions")
-@HiltViewModel
-class CompleteRegistrationViewModel @Inject constructor(
+@Suppress("TooManyFunctions", "LongParameterList")
+@HiltViewModel(assistedFactory = CompleteRegistrationViewModel.Factory::class)
+class CompleteRegistrationViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.CompleteRegistrationRoute,
     savedStateHandle: SavedStateHandle,
     generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
@@ -57,22 +61,30 @@ class CompleteRegistrationViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val toastManager: ToastManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toCompleteRegistrationArgs()
-        CompleteRegistrationState(
-            userEmail = args.emailAddress,
-            emailVerificationToken = args.verificationToken,
-            fromEmail = args.fromEmail,
-            passwordInput = "",
-            confirmPasswordInput = "",
-            passwordHintInput = "",
-            isCheckDataBreachesToggled = true,
-            dialog = null,
-            passwordStrengthState = PasswordStrengthState.NONE,
-            minimumPasswordLength = MIN_PASSWORD_LENGTH,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE] ?: CompleteRegistrationState(
+        userEmail = route.emailAddress,
+        emailVerificationToken = route.verificationToken,
+        fromEmail = route.fromEmail,
+        passwordInput = "",
+        confirmPasswordInput = "",
+        passwordHintInput = "",
+        isCheckDataBreachesToggled = true,
+        dialog = null,
+        passwordStrengthState = PasswordStrengthState.NONE,
+        minimumPasswordLength = MIN_PASSWORD_LENGTH,
+    ),
 ) {
+    /**
+     * Factory for creating a [CompleteRegistrationViewModel] for a specific
+     * [AuthGraph.CompleteRegistrationRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [CompleteRegistrationViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.CompleteRegistrationRoute): CompleteRegistrationViewModel
+    }
 
     /**
      * Keeps track of async request to get password strength. Should be cancelled

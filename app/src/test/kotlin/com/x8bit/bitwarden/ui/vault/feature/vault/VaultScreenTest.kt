@@ -51,11 +51,10 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -87,8 +86,8 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
-    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
+    private var onNavigateToVaultItemRoute: VaultUnlockedGraph.VaultItemRoute? = null
+    private var onNavigateToVaultEditItemArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
@@ -116,7 +115,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemRoute = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemArgs = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
@@ -1130,8 +1129,8 @@ class VaultScreenTest : BitwardenComposeTest() {
         val type = VaultItemCipherType.LOGIN
         mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id, type = type))
         assertEquals(
-            VaultItemArgs(vaultItemId = id, cipherType = type),
-            onNavigateToVaultItemArgs,
+            VaultUnlockedGraph.VaultItemRoute(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemRoute,
         )
     }
 
@@ -1143,7 +1142,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             VaultEvent.NavigateToEditVaultItem(itemId = id, type = type),
         )
         assertEquals(
-            VaultAddEditArgs(
+            VaultUnlockedGraph.VaultAddEditRoute(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
                 vaultItemCipherType = type,
             ),
