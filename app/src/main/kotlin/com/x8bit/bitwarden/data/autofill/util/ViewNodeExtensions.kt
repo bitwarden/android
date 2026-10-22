@@ -24,6 +24,18 @@ private const val DEFAULT_SCHEME: String = "https"
 private const val AUTOFILL_HINT_ADDRESS_LINE_2: String = "address-line2"
 
 /**
+ * Card terms looked for (as substrings, after stripping non-letters) in the `idEntry` and `hint` of
+ * a field with a password input type, so that masked card fields such as `cvv_edit_text` or
+ * `creditCardCvv` are not treated as a password when the full card heuristics don't match them.
+ */
+private val MASKED_CARD_FIELD_TERMS: List<String> = listOf(
+    "cvv",
+    "cvc",
+    "cardnumber",
+    "creditcard",
+)
+
+/**
  * The supported autofill Android View hints that predate identity autofill.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
@@ -309,11 +321,12 @@ private fun AssistStructure.ViewNode.buildAutofillView(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal val AssistStructure.ViewNode.isPasswordField: Boolean
     get() {
-        val isUsernameField = this.isUsernameField
+        // A password input type is an explicit signal from the app, so it is not overridden by the
+        // ignored id/hint/HTML terms (e.g. "edit" in a `TextInputEditText` id).
         if (
             this.inputType.isPasswordInputType &&
-            !this.containsIgnoredHintTerms() &&
-            !isUsernameField
+            !this.isUsernameField &&
+            !this.isMaskedCardField
         ) {
             return true
         }
@@ -321,6 +334,32 @@ internal val AssistStructure.ViewNode.isPasswordField: Boolean
         return hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true ||
             htmlInfo.isPasswordField()
     }
+
+/**
+ * Whether this [AssistStructure.ViewNode] looks like a card field and has no password terms. Apps
+ * commonly mask card fields (e.g. a CVV) with a password input type, so such a field is not
+ * treated as a password: a field matching a card heuristic is left for it, and one that only
+ * contains one of the [MASKED_CARD_FIELD_TERMS] falls through to the remaining heuristics (usually
+ * leaving it unclassified). Keep the list of card checks in sync with the card branches in
+ * [supportedAutofillHint].
+ */
+private val AssistStructure.ViewNode.isMaskedCardField: Boolean
+    get() = !this.hasPasswordTerms() &&
+        (
+            this.isCardExpirationMonthField ||
+                this.isCardExpirationYearField ||
+                this.isCardExpirationDateField ||
+                this.isCardNumberField ||
+                this.isCardSecurityCodeField ||
+                this.isCardholderNameField ||
+                this.isCardBrandField ||
+                this.idEntry
+                    ?.toLowerCaseAndStripNonAlpha()
+                    ?.containsAnyTerms(MASKED_CARD_FIELD_TERMS) == true ||
+                this.hint
+                    ?.toLowerCaseAndStripNonAlpha()
+                    ?.containsAnyTerms(MASKED_CARD_FIELD_TERMS) == true
+        )
 
 /**
  * Check whether this [AssistStructure.ViewNode] includes any password specific terms.
@@ -647,14 +686,6 @@ internal val AssistStructure.ViewNode.isLicenseNumberField: Boolean
             ?.toLowerCaseAndStripNonAlpha()
             ?.containsAnyTerms(SUPPORTED_RAW_LICENSE_HINTS) == true ||
         htmlInfo.isLicenseNumberField()
-
-/**
- * Check whether this [AssistStructure.ViewNode] contains any ignored hint terms.
- */
-private fun AssistStructure.ViewNode.containsIgnoredHintTerms(): Boolean =
-    this.idEntry?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
-        this.hint?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
-        this.htmlInfo.hints().any { it.containsAnyTerms(IGNORED_RAW_HINTS) }
 
 /**
  * The website that this [AssistStructure.ViewNode] is a part of representing.
