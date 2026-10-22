@@ -1,13 +1,11 @@
 package com.bitwarden.authenticator.ui.platform.feature.rootnav
 
-import androidx.navigation.navOptions
-import com.bitwarden.authenticator.ui.auth.unlock.UnlockRoute
-import com.bitwarden.authenticator.ui.authenticator.feature.navbar.AuthenticatorNavbarRoute
+import androidx.compose.material3.Text
+import androidx.compose.ui.test.onNodeWithText
+import androidx.navigation3.runtime.NavEntry
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
-import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
-import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.ui.platform.base.createMockNavHostController
+import com.bitwarden.ui.platform.navigation.util.navigationControllerOf
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -18,6 +16,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 
@@ -33,17 +32,9 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         every { trySendAction(any()) } just runs
     }
 
-    private val navController = createMockNavHostController()
-
-    private val expectedNavOptions = navOptions {
-        // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(id = navController.graph.id) {
-            inclusive = false
-            saveState = false
-        }
-        launchSingleTop = true
-        restoreState = false
-    }
+    private val navigationController = navigationControllerOf<RootNavGraph>(
+        routes = arrayOf(RootNavGraph.SplashRoute),
+    )
 
     private val biometricsManager: BiometricsManager = mockk {
         every { isBiometricsSupported } returns true
@@ -57,10 +48,37 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         ) {
             RootNavScreen(
                 viewModel = viewModel,
-                navController = navController,
+                navigationController = navigationController,
+                entryProvider = { key ->
+                    NavEntry(key = key) { Text(text = key.toString()) }
+                },
                 biometricsManager = biometricsManager,
                 onSplashScreenRemoved = { onSplashScreenRemovedCalled = true },
             )
+        }
+    }
+
+    @Test
+    fun `initial back stack should display the splash screen`() {
+        composeTestRule.onNodeWithText(text = RootNavGraph.SplashRoute.toString()).assertExists()
+        composeTestRule.runOnIdle {
+            assertEquals(listOf(RootNavGraph.SplashRoute), navigationController.backStack.toList())
+            assertFalse(onSplashScreenRemovedCalled)
+        }
+    }
+
+    @Test
+    fun `back stack changes should send BackStackUpdate action`() {
+        composeTestRule.runOnIdle {
+            verify(exactly = 1) { viewModel.trySendAction(RootNavAction.BackStackUpdate) }
+        }
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            navState = RootNavState.NavState.Tutorial,
+        )
+
+        composeTestRule.runOnIdle {
+            verify(exactly = 2) { viewModel.trySendAction(RootNavAction.BackStackUpdate) }
         }
     }
 
@@ -71,12 +89,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = SplashRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.SplashRoute), navigationController.backStack.toList())
             assertFalse(onSplashScreenRemovedCalled)
         }
     }
@@ -88,12 +101,10 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = TutorialRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.TutorialRoute),
+                navigationController.backStack.toList(),
+            )
             assertTrue(onSplashScreenRemovedCalled)
         }
     }
@@ -105,30 +116,45 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = UnlockRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.UnlockRoute), navigationController.backStack.toList())
             assertTrue(onSplashScreenRemovedCalled)
         }
     }
 
     @Test
-    fun `when navState is Unlocked should show authenticator graph`() {
+    fun `when navState is Unlocked should show the authenticator section`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             navState = RootNavState.NavState.Unlocked,
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = AuthenticatorNavbarRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
             assertTrue(onSplashScreenRemovedCalled)
+        }
+    }
+
+    @Test
+    fun `back stack should not be replaced when the navState is unchanged`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            navState = RootNavState.NavState.Unlocked,
+        )
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+
+        navigationController.navigate(RootNavGraph.TutorialRoute)
+
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute, RootNavGraph.TutorialRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -169,12 +195,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = SplashRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.SplashRoute), navigationController.backStack.toList())
         }
 
         mutableStateFlow.update {
@@ -182,12 +203,10 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = TutorialRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.TutorialRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -198,12 +217,10 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = TutorialRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.TutorialRoute),
+                navigationController.backStack.toList(),
+            )
         }
 
         mutableStateFlow.update {
@@ -211,12 +228,10 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = AuthenticatorNavbarRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -227,12 +242,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = SplashRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.SplashRoute), navigationController.backStack.toList())
         }
 
         mutableStateFlow.update {
@@ -240,12 +250,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = UnlockRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.UnlockRoute), navigationController.backStack.toList())
         }
     }
 
@@ -256,12 +261,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = UnlockRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.UnlockRoute), navigationController.backStack.toList())
         }
 
         mutableStateFlow.update {
@@ -269,12 +269,33 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = AuthenticatorNavbarRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+    }
+
+    @Test
+    fun `navigation should handle Unlocked to Locked transition`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            navState = RootNavState.NavState.Unlocked,
+        )
+
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+
+        navigationController.navigate(RootNavGraph.TutorialRoute)
+        mutableStateFlow.update {
+            it.copy(navState = RootNavState.NavState.Locked)
+        }
+
+        composeTestRule.runOnIdle {
+            assertEquals(listOf(RootNavGraph.UnlockRoute), navigationController.backStack.toList())
         }
     }
 
@@ -285,12 +306,7 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = SplashRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(listOf(RootNavGraph.SplashRoute), navigationController.backStack.toList())
         }
 
         mutableStateFlow.update {
@@ -298,12 +314,10 @@ class RootNavScreenTest : AuthenticatorComposeTest() {
         }
 
         composeTestRule.runOnIdle {
-            verify {
-                navController.navigate(
-                    route = AuthenticatorNavbarRoute,
-                    navOptions = expectedNavOptions,
-                )
-            }
+            assertEquals(
+                listOf(RootNavGraph.AuthenticatorRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 }
