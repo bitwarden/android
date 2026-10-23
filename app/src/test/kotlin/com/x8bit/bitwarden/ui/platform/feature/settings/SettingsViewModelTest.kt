@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
@@ -10,18 +9,14 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SettingsViewModelTest : BaseViewModelTest() {
@@ -48,16 +43,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
             isUpgradedToPremiumCardEligibleFlow
         } returns mutableUpgradedToPremiumCardEligibleFlow
         every { isSelfHostedFlow } returns mutableIsSelfHostedFlow
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toSettingsArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toSettingsArgs)
     }
 
     @Test
@@ -374,12 +359,10 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(
+        isPreAuth = isPreAuth,
         firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
         premiumStateManager = premiumStateManager,
-        savedStateHandle = SavedStateHandle().apply {
-            every { toSettingsArgs() } returns SettingsArgs(isPreAuth = isPreAuth)
-        },
     )
 }
 

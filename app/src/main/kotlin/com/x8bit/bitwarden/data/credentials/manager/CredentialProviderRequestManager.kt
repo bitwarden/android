@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.data.credentials.manager
 
 import com.x8bit.bitwarden.CredentialProviderActivity
 import com.x8bit.bitwarden.MainActivity
-import com.x8bit.bitwarden.MainViewModel
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
+import com.x8bit.bitwarden.MainViewModel
 
 /**
  * Manages pending credential provider requests, relaying them from [CredentialProviderActivity]

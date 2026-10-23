@@ -2,50 +2,43 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.migratetomyitems
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.navigation.util.rootTransitionEntry
+import com.bitwarden.ui.platform.theme.RootTransition
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavGraph
 import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.leaveOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.leaveorganization.navigateToLeaveOrganization
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the migrate to my items graph.
+ * Add the migrate to my items section to the root navigation entries. The
+ * [RootNavGraph.MigrateToMyItemsRoute] hosts the [MigrateToMyItemsGraph].
  */
-@OmitFromCoverage
-@Serializable
-data object MigrateToMyItemsGraphRoute
-
-/**
- * Navigate to the migrate to my items graph.
- */
-fun NavController.navigateToMigrateToMyItemsGraph(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = MigrateToMyItemsGraphRoute, navOptions = navOptions)
-}
-
-/**
- * Add the migrate to my items graph to the nav graph.
- */
-fun NavGraphBuilder.migrateToMyItemsGraph(
-    navController: NavController,
-) {
-    navigation<MigrateToMyItemsGraphRoute>(
-        startDestination = MigrateToMyItemsRoute,
+fun EntryProviderScope<RootNavGraph>.migrateToMyItemsGraph() {
+    rootTransitionEntry<RootNavGraph.MigrateToMyItemsRoute>(
+        rootTransition = RootTransition.SLIDE_UP,
     ) {
-        migrateToMyItemsDestination(
-            onNavigateToLeaveOrganization = { organizationId, organizationName ->
-                navController.navigateToLeaveOrganization(
-                    organizationId = organizationId,
-                    organizationName = organizationName,
+        val navigationController = rememberNavigationController<MigrateToMyItemsGraph>(
+            routes = arrayOf(MigrateToMyItemsGraph.MigrateToMyItemsRoute),
+        )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                migrateToMyItemsDestination(
+                    onNavigateToLeaveOrganization = { organizationId, organizationName ->
+                        navigationController.navigateToLeaveOrganization(
+                            organizationId = organizationId,
+                            organizationName = organizationName,
+                        )
+                    },
+                )
+                leaveOrganizationDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
                 )
             },
-        )
-        leaveOrganizationDestination(
-            onNavigateBack = { navController.popBackStack() },
         )
     }
 }

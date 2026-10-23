@@ -15,8 +15,12 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.PasswordHistoryState.GeneratedPassword
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -26,30 +30,38 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.format.FormatStyle
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * ViewModel responsible for handling user interactions in the PasswordHistoryScreen.
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = PasswordHistoryViewModel.Factory::class)
 @Suppress("TooManyFunctions")
-class PasswordHistoryViewModel @Inject constructor(
+class PasswordHistoryViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.PasswordHistoryRoute,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
     vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            PasswordHistoryState(
-                passwordHistoryMode = savedStateHandle.toPasswordHistoryArgs().passwordHistoryMode,
-                viewState = PasswordHistoryState.ViewState.Loading,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: PasswordHistoryState(
+        passwordHistoryMode = route.passwordHistoryMode,
+        viewState = PasswordHistoryState.ViewState.Loading,
+    ),
 ) {
+    /**
+     * Factory for creating a [PasswordHistoryViewModel] for a specific
+     * [VaultUnlockedGraph.PasswordHistoryRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [PasswordHistoryViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.PasswordHistoryRoute): PasswordHistoryViewModel
+    }
 
     init {
         when (val passwordHistoryMode = state.passwordHistoryMode) {

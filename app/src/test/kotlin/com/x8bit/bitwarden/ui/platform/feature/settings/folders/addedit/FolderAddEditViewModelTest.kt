@@ -15,21 +15,18 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -46,16 +43,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     }
     private val relayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toFolderAddEditArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toFolderAddEditArgs)
     }
 
     @Test
@@ -917,17 +904,19 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     private fun createSavedStateHandleWithState(
         state: FolderAddEditState? = DEFAULT_STATE,
     ) = SavedStateHandle().apply {
-        val folderAddEditType = state?.folderAddEditType ?: FolderAddEditType.AddItem
         set("state", state)
-        every { toFolderAddEditArgs() } returns FolderAddEditArgs(
-            folderAddEditType = folderAddEditType,
-            parentFolderName = null,
-        )
     }
 
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = createSavedStateHandleWithState(),
     ): FolderAddEditViewModel = FolderAddEditViewModel(
+        route = VaultUnlockedGraph.FolderAddEditRoute(
+            folderAddEditType = savedStateHandle
+                .get<FolderAddEditState>("state")
+                ?.folderAddEditType
+                ?: FolderAddEditType.AddItem,
+            parentFolderName = null,
+        ),
         savedStateHandle = savedStateHandle,
         clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
