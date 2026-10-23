@@ -59,13 +59,13 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     @Parcelize
     data class Vault(
         override val labelRes: Int,
+        override val notificationCount: Int = 0,
     ) : VaultUnlockedNavBarTab() {
         override val iconResSelected get() = BitwardenDrawable.ic_vault_filled
         override val iconRes get() = BitwardenDrawable.ic_vault
         override val graphRoute get() = VaultGraphRoute
         override val startDestinationRoute get() = VaultRoute
         override val testTag get() = "VaultTab"
-        override val notificationCount get() = 0
     }
 
     /**

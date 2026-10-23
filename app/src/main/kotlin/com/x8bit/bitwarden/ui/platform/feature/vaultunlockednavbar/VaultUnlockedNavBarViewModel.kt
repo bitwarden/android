@@ -7,12 +7,14 @@ import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.pam.manager.PamApprovalManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -28,11 +30,13 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
     specialCircumstancesManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
     policyManager: PolicyManager,
+    pamApprovalManager: PamApprovalManager,
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
     initialState = VaultUnlockedNavBarState(
         vaultNavBarLabelRes = BitwardenString.my_vault,
         notificationState = VaultUnlockedNavBarNotificationState(
             settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
+            vaultTabNotificationCount = pamApprovalManager.pendingCountFlow.value,
         ),
         areSendsDisabled = policyManager.getEffectiveSendPolicy().disableSend,
     ),
@@ -50,6 +54,14 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             .onEach {
                 sendAction(VaultUnlockedNavBarAction.Internal.SettingsNotificationCountUpdate(it))
             }
+            .launchIn(viewModelScope)
+
+        combine(
+            pamApprovalManager.canApproveFlow,
+            pamApprovalManager.pendingCountFlow,
+        ) { canApprove, count -> if (canApprove) count else 0 }
+            .map { VaultUnlockedNavBarAction.Internal.VaultNotificationCountUpdate(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         policyManager
@@ -125,6 +137,10 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             is VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive -> {
                 handleSendPolicyUpdateReceive(action)
             }
+
+            is VaultUnlockedNavBarAction.Internal.VaultNotificationCountUpdate -> {
+                handleVaultNotificationCountUpdate(action)
+            }
         }
     }
     // #region BottomTabViewModel Action Handlers
@@ -190,6 +206,18 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
         }
     }
 
+    private fun handleVaultNotificationCountUpdate(
+        action: VaultUnlockedNavBarAction.Internal.VaultNotificationCountUpdate,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                notificationState = it.notificationState.copy(
+                    vaultTabNotificationCount = action.count,
+                ),
+            )
+        }
+    }
+
     private fun handleSendPolicyUpdateReceive(
         action: VaultUnlockedNavBarAction.Internal.SendPolicyUpdateReceive,
     ) {
@@ -212,6 +240,7 @@ data class VaultUnlockedNavBarState(
  */
 data class VaultUnlockedNavBarNotificationState(
     val settingsTabNotificationCount: Int,
+    val vaultTabNotificationCount: Int = 0,
 )
 
 /**
@@ -256,6 +285,12 @@ sealed class VaultUnlockedNavBarAction {
          * Indicates a change to the count of settings notifications to show
          */
         data class SendPolicyUpdateReceive(val hasPolicy: Boolean) : Internal()
+
+        /**
+         * Indicates a change to the count of privileged access requests waiting for the user's
+         * decision, shown as a badge on the Vault tab.
+         */
+        data class VaultNotificationCountUpdate(val count: Int) : Internal()
     }
 }
 
