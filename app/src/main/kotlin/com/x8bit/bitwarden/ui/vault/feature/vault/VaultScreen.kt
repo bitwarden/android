@@ -330,6 +330,7 @@ private fun VaultScreenScaffold(
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
                     actionCardState = state.actionCard,
+                    collapsedSections = state.collapsedSections,
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier.fillMaxSize(),
                 )

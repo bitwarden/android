@@ -49,6 +49,7 @@ import com.bitwarden.ui.util.performRemoveAccountClick
 import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
@@ -1230,7 +1231,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP (1)")
+            .onNodeWithText("TOTP")
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -1248,7 +1249,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP (1)")
+            .onNodeWithText("TOTP")
             .assertIsNotDisplayed()
 
         composeTestRule
@@ -1275,6 +1276,40 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `clicking a section header should send SectionHeaderClick with the correct section`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
+
+        composeTestRule
+            .onNodeWithText("TYPES")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.SectionHeaderClick(VaultSection.TYPES)) }
+    }
+
+    @Test
+    fun `section content should be displayed or hidden according to collapsed sections`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
+
+        composeTestRule
+            .onNodeWithTag("LoginFilter")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(collapsedSections = persistentSetOf(VaultSection.TYPES))
+        }
+
+        composeTestRule
+            .onNodeWithText("TYPES")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag("LoginFilter")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `clicking a favorite item should send VaultItemClick with the correct item`() {
         val itemText = "Test Item"
         val username = "BitWarden"
@@ -1296,7 +1331,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithText("FAVORITES (1)")
+            .onNodeWithText("FAVORITES")
             .performScrollTo()
             .assertIsDisplayed()
         // Item
@@ -1857,7 +1892,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "SHARED FOLDERS (1)"
+        val collectionsHeader = "SHARED FOLDERS"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(
@@ -1879,7 +1914,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(collectionsHeader, substring = true)
-            .assertTextEquals(collectionsHeader)
+            .assertTextEquals(collectionsHeader, "1")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithTextAfterScroll(collectionName)
@@ -2392,7 +2427,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2406,7 +2441,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2436,7 +2471,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2454,7 +2489,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule

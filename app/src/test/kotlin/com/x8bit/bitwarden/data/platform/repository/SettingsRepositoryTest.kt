@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -945,6 +946,55 @@ class SettingsRepositoryTest {
                         isDismissed = false,
                     )
                     assertFalse(awaitItem())
+                }
+        }
+
+    @Test
+    fun `toggleVaultSectionCollapsed should add or remove the section in SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.TYPES)
+        settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.FOLDERS)
+        fakeSettingsDiskSource.assertCollapsedVaultSections(
+            userId = USER_ID,
+            expected = setOf(VaultSection.TYPES, VaultSection.FOLDERS),
+        )
+
+        settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.TYPES)
+        fakeSettingsDiskSource.assertCollapsedVaultSections(
+            userId = USER_ID,
+            expected = setOf(VaultSection.FOLDERS),
+        )
+    }
+
+    @Test
+    fun `collapsedVaultSections should pull from SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertEquals(emptySet<VaultSection>(), settingsRepository.collapsedVaultSections)
+        fakeSettingsDiskSource.storeCollapsedVaultSections(
+            userId = USER_ID,
+            collapsedVaultSections = setOf(VaultSection.TOTP),
+        )
+        assertEquals(setOf(VaultSection.TOTP), settingsRepository.collapsedVaultSections)
+    }
+
+    @Test
+    fun `getCollapsedVaultSectionsFlow should react to changes in SettingsDiskSource`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            settingsRepository
+                .getCollapsedVaultSectionsFlow()
+                .test {
+                    assertEquals(emptySet<VaultSection>(), awaitItem())
+                    fakeSettingsDiskSource.storeCollapsedVaultSections(
+                        userId = USER_ID,
+                        collapsedVaultSections = setOf(VaultSection.TOTP),
+                    )
+                    assertEquals(setOf(VaultSection.TOTP), awaitItem())
+                    fakeSettingsDiskSource.storeCollapsedVaultSections(
+                        userId = USER_ID,
+                        collapsedVaultSections = null,
+                    )
+                    assertEquals(emptySet<VaultSection>(), awaitItem())
                 }
         }
 

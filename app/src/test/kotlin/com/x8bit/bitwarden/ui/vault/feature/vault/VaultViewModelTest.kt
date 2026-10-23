@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
@@ -179,6 +180,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private var mutableFlightRecorderDataFlow =
         MutableStateFlow(FlightRecorderDataSet(data = emptySet()))
     private var mutableIntroducingArchiveActionCardDismissedFlow = MutableStateFlow(false)
+    private val mutableCollapsedVaultSectionsFlow = MutableStateFlow<Set<VaultSection>>(emptySet())
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
@@ -191,6 +193,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getIntroducingArchiveActionCardDismissedFlow()
         } returns mutableIntroducingArchiveActionCardDismissedFlow
+        every { collapsedVaultSections } returns emptySet()
+        every { getCollapsedVaultSectionsFlow() } returns mutableCollapsedVaultSectionsFlow
+        every { toggleVaultSectionCollapsed(section = any()) } just runs
     }
 
     private val vaultRepository: VaultRepository = mockk {
@@ -377,6 +382,33 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE, awaitItem())
             }
         }
+
+    @Test
+    fun `CollapsedVaultSectionsFlow updates should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableCollapsedVaultSectionsFlow.value = setOf(VaultSection.TYPES)
+            assertEquals(
+                DEFAULT_STATE.copy(collapsedSections = persistentSetOf(VaultSection.TYPES)),
+                awaitItem(),
+            )
+            mutableCollapsedVaultSectionsFlow.value = emptySet()
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SectionHeaderClick should toggle the section collapsed state`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.SectionHeaderClick(section = VaultSection.FAVORITES))
+
+        verify(exactly = 1) {
+            settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.FAVORITES)
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
