@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
+import android.text.InputType
 import android.view.View
 import android.view.ViewStructure.HtmlInfo
 import android.view.autofill.AutofillId
@@ -407,6 +408,112 @@ class ViewNodeExtensionsTest {
         assertEquals(expected, actual)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should not return a login password for masked card fields without password terms`() {
+        setupUnsupportedInputFieldViewNode()
+        // Use the real input type checks (this also un-mocks isUsernameInputType, same file).
+        unmockkStatic(Int::isPasswordInputType)
+        every {
+            viewNode.inputType
+        } returns (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        val cases = listOf(
+            Triple(
+                "cvv_edit_text",
+                "CVV",
+                AutofillView.Card.SecurityCode(data = autofillViewData),
+            ),
+            Triple(
+                "card_number_edit_text",
+                SUPPORTED_RAW_CARD_NUMBER_HINTS.first(),
+                AutofillView.Card.Number(data = autofillViewData),
+            ),
+            // A full card match without "edit" in the id is a card field too.
+            Triple(
+                "cvv",
+                null,
+                AutofillView.Card.SecurityCode(data = autofillViewData),
+            ),
+            // Each card heuristic claims a masked field before the password check does.
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationMonth(
+                    data = autofillViewData,
+                    monthValue = MONTH_VALUE,
+                ),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_YEAR_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationYear(
+                    data = autofillViewData,
+                    yearValue = YEAR_VALUE,
+                ),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_DATE_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationDate(data = autofillViewData),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.first(),
+                null,
+                AutofillView.Card.CardholderName(data = autofillViewData),
+            ),
+            // Card terms that don't fully match a card heuristic leave the field unclassified.
+            Triple(
+                "cvv_edit_text",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "creditCardCvv",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "cvc_input",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "cardNumberField",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "creditCardHolder",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                null,
+                "Enter CVV",
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            // Password terms win over the card heuristics.
+            Triple(
+                "password_edit_text",
+                SUPPORTED_RAW_CARD_NUMBER_HINTS.first(),
+                AutofillView.Login.Password(
+                    data = autofillViewData.copy(hasPasswordTerms = true),
+                ),
+            ),
+        )
+        cases.forEach { (idEntry, hint, expected) ->
+            every { viewNode.idEntry } returns idEntry
+            every { viewNode.hint } returns hint
+
+            val actual = viewNode.toAutofillView(
+                parentWebsite = null,
+                isIdentityAutofillEnabled = true,
+            )
+
+            assertEquals(expected, actual, "Failed for idEntry=$idEntry, hint=$hint")
+        }
+    }
+
     @Test
     fun `toAutofillView should return AutofillView Card CardholderName when idEntry matches`() {
         setupUnsupportedInputFieldViewNode()
@@ -670,7 +777,7 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, isValidField, and isn't username`() {
+    fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, and isn't username`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
         every { any<Int>().isPasswordInputType } returns true
@@ -698,7 +805,7 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, not validInputField, and htmlInfo isPasswordField is false`() {
+    fun `isPasswordField returns true when isPasswordInputType even if idEntry or hint contains ignored terms`() {
         // Setup testing the hint
         setupUnsupportedInputFieldViewNode()
         every { any<Int>().isPasswordInputType } returns true
@@ -711,26 +818,80 @@ class ViewNodeExtensionsTest {
             val actual = viewNode.isPasswordField
 
             // Verify
-            assertFalse(actual)
+            assertTrue(actual, "hint=$hint")
         }
 
-        // Setup testing the idEntry
+        // Setup testing the idEntry, e.g. a material TextInputEditText id
         every { viewNode.hint } returns null
-        IGNORED_RAW_HINTS.forEach { hint ->
+        (IGNORED_RAW_HINTS + "text_input_edit_text_layout").forEach { idEntry ->
             // Setup
-            every { viewNode.idEntry } returns hint
+            every { viewNode.idEntry } returns idEntry
 
             // Test
             val actual = viewNode.isPasswordField
 
             // Verify
-            assertFalse(actual)
+            assertTrue(actual, "idEntry=$idEntry")
+        }
+
+        // Setup testing the html hints
+        every { viewNode.idEntry } returns null
+        IGNORED_RAW_HINTS.forEach { htmlHint ->
+            // Setup
+            every { viewNode.htmlInfo.hints() } returns listOf(htmlHint)
+
+            // Test
+            val actual = viewNode.isPasswordField
+
+            // Verify
+            assertTrue(actual, "htmlHint=$htmlHint")
+        }
+    }
+
+    @Test
+    fun `isPasswordField returns true for a text password input type when idEntry contains edit`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
+        // Use the real input type checks (this also un-mocks isUsernameInputType, same file).
+        unmockkStatic(Int::isPasswordInputType)
+        every {
+            viewNode.inputType
+        } returns (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        every { viewNode.idEntry } returns "text_input_edit_text_layout"
+
+        // Test
+        val actual = viewNode.isPasswordField
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordField returns false for non-password text variations that share bits with password variations`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
+        // Use the real input type checks (this also un-mocks isUsernameInputType, same file).
+        unmockkStatic(Int::isPasswordInputType)
+        val variationsToIdEntries = mapOf(
+            InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT to "contact_website",
+            InputType.TYPE_TEXT_VARIATION_FILTER to "filter_text",
+        )
+        variationsToIdEntries.forEach { (variation, idEntry) ->
+            every { viewNode.inputType } returns (InputType.TYPE_CLASS_TEXT or variation)
+            every { viewNode.idEntry } returns idEntry
+
+            // Test
+            val actual = viewNode.isPasswordField
+
+            // Verify
+            assertFalse(actual, "variation=0x${variation.toString(radix = 16)} idEntry=$idEntry")
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, validInputField, isUsernameField, and htmlInfo isPasswordField is false`() {
+    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, isUsernameField, and htmlInfo isPasswordField is false`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
         every { any<Int>().isPasswordInputType } returns true

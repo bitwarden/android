@@ -8,14 +8,21 @@ import org.junit.jupiter.api.Test
 class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns false when is multiline`() {
-        // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        listOf(
+            InputType.TYPE_TEXT_VARIATION_PASSWORD,
+            InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
+        ).forEach { variation ->
+            // Setup
+            val int = InputType.TYPE_CLASS_TEXT or
+                variation or
+                InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
-        // Test
-        val actual = int.isPasswordInputType
+            // Test
+            val actual = int.isPasswordInputType
 
-        // Verify
-        assertFalse(actual)
+            // Verify
+            assertFalse(actual, "variation=0x${variation.toString(radix = 16)}")
+        }
     }
 
     @Test
@@ -33,20 +40,7 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_PASSWORD`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_PASSWORD
-
-        // Test
-        val actual = int.isPasswordInputType
-
-        // Verify
-        assertTrue(actual)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_VISIBLE_PASSWORD`() {
-        // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         // Test
         val actual = int.isPasswordInputType
@@ -59,13 +53,76 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_WEB_PASSWORD`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
 
         // Test
         val actual = int.isPasswordInputType
 
         // Verify
         assertTrue(actual)
+    }
+
+    @Test
+    fun `isPasswordInputType returns true when password variation has additional text flags`() {
+        // Setup
+        val int = InputType.TYPE_CLASS_TEXT or
+            InputType.TYPE_TEXT_VARIATION_PASSWORD or
+            InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+
+        // Test
+        val actual = int.isPasswordInputType
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isPasswordInputType returns false for TYPE_TEXT_VARIATION_VISIBLE_PASSWORD`() {
+        // Setup
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
+        // Test
+        val actual = int.isPasswordInputType
+
+        // Verify
+        assertFalse(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordInputType returns false for text variations that share bits with password variations`() {
+        // These variations are enum values whose bits overlap TYPE_TEXT_VARIATION_PASSWORD (0x80),
+        // so a bit-flag check incorrectly treats them as passwords.
+        listOf(
+            InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT,
+            InputType.TYPE_TEXT_VARIATION_FILTER,
+            InputType.TYPE_TEXT_VARIATION_PHONETIC,
+            InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS,
+        ).forEach { variation ->
+            // Setup
+            val int = InputType.TYPE_CLASS_TEXT or variation
+
+            // Test
+            val actual = int.isPasswordInputType
+
+            // Verify
+            assertFalse(actual, "variation=0x${variation.toString(radix = 16)}")
+        }
+    }
+
+    @Test
+    fun `isPasswordInputType returns false for a non text class with a password-like variation`() {
+        listOf(
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_TEXT_VARIATION_PASSWORD,
+            // Numeric passwords (e.g. PINs) are intentionally not matched, unlike the framework.
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD,
+        ).forEach { int ->
+            // Test
+            val actual = int.isPasswordInputType
+
+            // Verify
+            assertFalse(actual, "inputType=0x${int.toString(radix = 16)}")
+        }
     }
 
     @Test
