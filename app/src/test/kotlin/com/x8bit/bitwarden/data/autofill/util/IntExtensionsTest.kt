@@ -8,16 +8,21 @@ import org.junit.jupiter.api.Test
 class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns false when is multiline`() {
-        // Setup
-        val int = InputType.TYPE_CLASS_TEXT or
-            InputType.TYPE_TEXT_VARIATION_PASSWORD or
-            InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        listOf(
+            InputType.TYPE_TEXT_VARIATION_PASSWORD,
+            InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
+        ).forEach { variation ->
+            // Setup
+            val int = InputType.TYPE_CLASS_TEXT or
+                variation or
+                InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
-        // Test
-        val actual = int.isPasswordInputType
+            // Test
+            val actual = int.isPasswordInputType
 
-        // Verify
-        assertFalse(actual)
+            // Verify
+            assertFalse(actual, "variation=0x${variation.toString(radix = 16)}")
+        }
     }
 
     @Test
@@ -107,14 +112,17 @@ class IntExtensionsTest {
 
     @Test
     fun `isPasswordInputType returns false for a non text class with a password-like variation`() {
-        // Setup
-        val int = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        listOf(
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_TEXT_VARIATION_PASSWORD,
+            // Numeric passwords (e.g. PINs) are intentionally not matched, unlike the framework.
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD,
+        ).forEach { int ->
+            // Test
+            val actual = int.isPasswordInputType
 
-        // Test
-        val actual = int.isPasswordInputType
-
-        // Verify
-        assertFalse(actual)
+            // Verify
+            assertFalse(actual, "inputType=0x${int.toString(radix = 16)}")
+        }
     }
 
     @Test

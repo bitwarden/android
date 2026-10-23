@@ -368,8 +368,9 @@ private fun List<AutofillView>.firstFocusedOrNull(): AutofillView? {
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
  * fields: unused fields that have password terms (see `AutofillView.Data.hasPasswordTerms`), for
- * example a field without a password input type. If the current `ViewNodeTraversalData` contains
- * at least one password fields, we do not add any fields.
+ * example a field without a password input type whose only password term is in its `idEntry`. If
+ * the current `ViewNodeTraversalData` contains at least one password field, we do not add any
+ * fields.
  */
 private fun ViewNodeTraversalData.updateForMissingPasswordFields(): ViewNodeTraversalData =
     if (this.autofillViews.none { it is AutofillView.Login.Password }) {

@@ -434,6 +434,33 @@ class ViewNodeExtensionsTest {
                 null,
                 AutofillView.Card.SecurityCode(data = autofillViewData),
             ),
+            // Each card heuristic claims a masked field before the password check does.
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_MONTH_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationMonth(
+                    data = autofillViewData,
+                    monthValue = MONTH_VALUE,
+                ),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_YEAR_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationYear(
+                    data = autofillViewData,
+                    yearValue = YEAR_VALUE,
+                ),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARD_EXP_DATE_HINTS.first(),
+                null,
+                AutofillView.Card.ExpirationDate(data = autofillViewData),
+            ),
+            Triple(
+                SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.first(),
+                null,
+                AutofillView.Card.CardholderName(data = autofillViewData),
+            ),
             // Card terms that don't fully match a card heuristic leave the field unclassified.
             Triple(
                 "cvv_edit_text",
@@ -442,6 +469,21 @@ class ViewNodeExtensionsTest {
             ),
             Triple(
                 "creditCardCvv",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "cvc_input",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "cardNumberField",
+                null,
+                AutofillView.Unused(data = autofillViewData),
+            ),
+            Triple(
+                "creditCardHolder",
                 null,
                 AutofillView.Unused(data = autofillViewData),
             ),
@@ -468,7 +510,7 @@ class ViewNodeExtensionsTest {
                 isIdentityAutofillEnabled = true,
             )
 
-            assertEquals(expected, actual, "Failed for idEntry: $idEntry")
+            assertEquals(expected, actual, "Failed for idEntry=$idEntry, hint=$hint")
         }
     }
 
@@ -735,7 +777,7 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, isValidField, and isn't username`() {
+    fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, and isn't username`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
         every { any<Int>().isPasswordInputType } returns true
@@ -791,6 +833,19 @@ class ViewNodeExtensionsTest {
             // Verify
             assertTrue(actual, "idEntry=$idEntry")
         }
+
+        // Setup testing the html hints
+        every { viewNode.idEntry } returns null
+        IGNORED_RAW_HINTS.forEach { htmlHint ->
+            // Setup
+            every { viewNode.htmlInfo.hints() } returns listOf(htmlHint)
+
+            // Test
+            val actual = viewNode.isPasswordField
+
+            // Verify
+            assertTrue(actual, "htmlHint=$htmlHint")
+        }
     }
 
     @Test
@@ -836,7 +891,7 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, validInputField, isUsernameField, and htmlInfo isPasswordField is false`() {
+    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, isUsernameField, and htmlInfo isPasswordField is false`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
         every { any<Int>().isPasswordInputType } returns true
