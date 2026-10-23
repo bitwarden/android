@@ -17,6 +17,7 @@ import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.bitwarden.ui.platform.util.toObjectNavigationRoute
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupBrowserAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
@@ -52,6 +53,7 @@ import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.navigateToMyAccess
 import com.x8bit.bitwarden.ui.platform.feature.splash.SplashRoute
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
@@ -72,6 +74,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListi
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.navigateToMigrateToMyItemsGraph
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.detail.navigateToPamApprovalDetail
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -281,6 +284,18 @@ fun RootNavScreen(
 
             is RootNavState.VaultUnlockedForPamAlert -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                when (currentState.data.type) {
+                    PamAlertType.ACCESS_REQUESTED -> {
+                        navController.navigateToPamApprovalDetail(
+                            requestId = currentState.data.requestId,
+                        )
+                    }
+
+                    PamAlertType.ACCESS_APPROVED,
+                    PamAlertType.ACCESS_DENIED,
+                    PamAlertType.ACCESS_REVOKED,
+                        -> navController.navigateToMyAccess()
+                }
             }
 
             is RootNavState.VaultUnlockedForFido2Save,

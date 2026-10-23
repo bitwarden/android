@@ -246,9 +246,13 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
     private val mutableCanApproveFlow = MutableStateFlow(false)
     private val mutablePendingApprovalCountFlow = MutableStateFlow(0)
+    private val mutableHasPamAccessFlow = MutableStateFlow(false)
+    private val mutableMyRequestCountFlow = MutableStateFlow(0)
     private val pamApprovalManager: PamApprovalManager = mockk {
         every { canApproveFlow } returns mutableCanApproveFlow
         every { pendingCountFlow } returns mutablePendingApprovalCountFlow
+        every { hasPamAccessFlow } returns mutableHasPamAccessFlow
+        every { myRequestCountFlow } returns mutableMyRequestCountFlow
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
@@ -1465,6 +1469,51 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             mutableCanApproveFlow.value = false
             assertEquals(null, awaitItem().pamApprovalCount)
+        }
+    }
+
+    @Test
+    fun `pamMyRequestCount should be null when the user has no PAM access`() = runTest {
+        mutableMyRequestCountFlow.value = 2
+        val viewModel = createViewModel()
+
+        assertEquals(null, viewModel.stateFlow.value.pamMyRequestCount)
+    }
+
+    @Test
+    fun `pamMyRequestCount should follow the request count when the user has PAM access`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(null, awaitItem().pamMyRequestCount)
+
+                mutableHasPamAccessFlow.value = true
+                assertEquals(0, awaitItem().pamMyRequestCount)
+
+                mutableMyRequestCountFlow.value = 2
+                assertEquals(2, awaitItem().pamMyRequestCount)
+
+                mutableHasPamAccessFlow.value = false
+                assertEquals(null, awaitItem().pamMyRequestCount)
+            }
+        }
+
+    @Test
+    fun `pamMyRequestCount should not depend on being an approver`() = runTest {
+        mutableHasPamAccessFlow.value = true
+        mutableMyRequestCountFlow.value = 1
+        val viewModel = createViewModel()
+
+        assertEquals(null, viewModel.stateFlow.value.pamApprovalCount)
+        assertEquals(1, viewModel.stateFlow.value.pamMyRequestCount)
+    }
+
+    @Test
+    fun `on PamMyRequestsClick should emit NavigateToPamMyAccess`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.PamMyRequestsClick)
+            assertEquals(VaultEvent.NavigateToPamMyAccess, awaitItem())
         }
     }
 

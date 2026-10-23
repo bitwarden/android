@@ -28,6 +28,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
+    private var onNavigateToMyAccessCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
@@ -46,6 +47,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
+                onNavigateToMyAccess = { onNavigateToMyAccessCalled = true },
             )
         }
     }
@@ -63,6 +65,22 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(VaultSettingsAction.ExportVaultClick)
         }
+    }
+
+    @Test
+    fun `my access requests row should only be displayed when enabled`() {
+        composeTestRule.onNodeWithText("My access requests").assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(showMyAccessRequests = true) }
+
+        composeTestRule.onNodeWithText("My access requests").performScrollTo().performClick()
+        verify { viewModel.trySendAction(VaultSettingsAction.MyAccessClick) }
+    }
+
+    @Test
+    fun `NavigateToMyAccess should call onNavigateToMyAccess`() {
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToMyAccess)
+        assertTrue(onNavigateToMyAccessCalled)
     }
 
     @Test
