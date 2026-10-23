@@ -56,6 +56,7 @@ fun VaultSettingsScreen(
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
+    onNavigateToMyAccess: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -68,6 +69,7 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
             is VaultSettingsEvent.NavigateToImportItems -> onNavigateToImportItems()
+            VaultSettingsEvent.NavigateToMyAccess -> onNavigateToMyAccess()
             is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
@@ -151,7 +153,11 @@ fun VaultSettingsScreen(
                 text = stringResource(BitwardenString.import_items),
                 onClick = { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) },
                 withDivider = false,
-                cardStyle = CardStyle.Bottom,
+                cardStyle = if (state.showMyAccessRequests) {
+                    CardStyle.Middle()
+                } else {
+                    CardStyle.Bottom
+                },
                 modifier = Modifier
                     .testTag("ImportItemsLinkItemView")
                     .standardHorizontalMargin()
@@ -167,6 +173,18 @@ fun VaultSettingsScreen(
                             .size(size = 16.dp),
                     )
                 }
+            }
+            if (state.showMyAccessRequests) {
+                BitwardenTextRow(
+                    text = stringResource(BitwardenString.pam_my_access_requests),
+                    onClick = { viewModel.trySendAction(VaultSettingsAction.MyAccessClick) },
+                    withDivider = false,
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .testTag("MyAccessRequestsLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
             }
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())

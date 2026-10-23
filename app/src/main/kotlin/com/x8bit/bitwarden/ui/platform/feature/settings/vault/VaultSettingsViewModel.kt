@@ -2,11 +2,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.policies.PolicyType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val buildInfoManager: BuildInfoManager,
+    featureFlagManager: FeatureFlagManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
@@ -62,6 +65,12 @@ class VaultSettingsViewModel @Inject constructor(
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.PamMobilePrivilegedControls)
+            .map { VaultSettingsAction.Internal.PamAvailabilityChanged(isEnabled = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultSettingsAction): Unit = when (action) {
@@ -71,6 +80,7 @@ class VaultSettingsViewModel @Inject constructor(
         VaultSettingsAction.ImportItemsClick -> handleImportItemsClicked()
         VaultSettingsAction.ImportLoginsCardCtaClick -> handleImportLoginsCardClicked()
         VaultSettingsAction.ImportLoginsCardDismissClick -> handleImportLoginsCardDismissClicked()
+        VaultSettingsAction.MyAccessClick -> sendEvent(VaultSettingsEvent.NavigateToMyAccess)
         is VaultSettingsAction.Internal -> handleInternalAction(action)
     }
 
@@ -86,6 +96,10 @@ class VaultSettingsViewModel @Inject constructor(
 
             is VaultSettingsAction.Internal.CredentialExchangeAvailabilityChanged -> {
                 handleCredentialExchangeAvailabilityChanged(action)
+            }
+
+            is VaultSettingsAction.Internal.PamAvailabilityChanged -> {
+                mutableStateFlow.update { it.copy(showMyAccessRequests = action.isEnabled) }
             }
         }
     }
@@ -148,6 +162,7 @@ class VaultSettingsViewModel @Inject constructor(
 data class VaultSettingsState(
     val showImportActionCard: Boolean,
     val showImportItemsChevron: Boolean,
+    val showMyAccessRequests: Boolean = false,
 )
 
 /**
@@ -178,6 +193,11 @@ sealed class VaultSettingsEvent {
      * Navigate to the Folders screen.
      */
     data object NavigateToFolders : VaultSettingsEvent()
+
+    /**
+     * Navigate to the My access requests screen.
+     */
+    data object NavigateToMyAccess : VaultSettingsEvent()
 
     /**
      * Shows a snackbar with the given [data].
@@ -220,6 +240,11 @@ sealed class VaultSettingsAction {
     data object ImportLoginsCardDismissClick : VaultSettingsAction()
 
     /**
+     * Indicates that the user clicked the My access requests button.
+     */
+    data object MyAccessClick : VaultSettingsAction()
+
+    /**
      * Internal actions not performed by user interation
      */
     sealed class Internal : VaultSettingsAction() {
@@ -229,6 +254,11 @@ sealed class VaultSettingsAction {
         data class CredentialExchangeAvailabilityChanged(
             val isEnabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the privileged access feature flag changed.
+         */
+        data class PamAvailabilityChanged(val isEnabled: Boolean) : Internal()
 
         /**
          * Indicates user first time state has changed.

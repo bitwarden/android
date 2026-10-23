@@ -96,6 +96,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
     private var onNavigateToPamApprovalsCalled = false
+    private var onNavigateToPamMyAccessCalled = false
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
         every { promptForReview() } just runs
@@ -132,6 +133,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
                 onNavigateToPamApprovals = { onNavigateToPamApprovalsCalled = true },
+                onNavigateToPamMyAccess = { onNavigateToPamMyAccessCalled = true },
             )
         }
     }
@@ -506,6 +508,66 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithTag("PamApprovalsRow").performClick()
 
         verify { viewModel.trySendAction(VaultAction.PamApprovalsClick) }
+    }
+
+    @Test
+    fun `my requests row should show for a non approver with a zero count`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamMyRequestCount = 0)
+        }
+
+        composeTestRule.onNodeWithTag("PamApprovalsRow").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithTag("PamMyRequestsRow")
+            .assertTextContains("My access requests")
+            .assertTextContains("0")
+        composeTestRule
+            .onNodeWithText("Access requests (1)", ignoreCase = true)
+            .assertExists()
+    }
+
+    @Test
+    fun `my requests row should show the request count`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamMyRequestCount = 2)
+        }
+
+        composeTestRule
+            .onNodeWithTag("PamMyRequestsRow")
+            .assertTextContains("2")
+    }
+
+    @Test
+    fun `access requests section should count both rows for an approver`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+                pamApprovalCount = 4,
+                pamMyRequestCount = 2,
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamApprovalsRow").assertExists()
+        composeTestRule.onNodeWithTag("PamMyRequestsRow").assertExists()
+        composeTestRule
+            .onNodeWithText("Access requests (2)", ignoreCase = true)
+            .assertExists()
+    }
+
+    @Test
+    fun `my requests row click should send PamMyRequestsClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamMyRequestCount = 2)
+        }
+        composeTestRule.onNodeWithTag("PamMyRequestsRow").performClick()
+
+        verify { viewModel.trySendAction(VaultAction.PamMyRequestsClick) }
+    }
+
+    @Test
+    fun `NavigateToPamMyAccess event should call onNavigateToPamMyAccess`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToPamMyAccess)
+        assertTrue(onNavigateToPamMyAccessCalled)
     }
 
     @Test

@@ -33,11 +33,14 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedL
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.recordedLogsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.myAccessDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.navigateToMyAccess
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlan
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planDestination
 import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsDestination
+import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -178,6 +181,11 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToImportItems = onNavigateToImportItems,
+            onNavigateToMyAccess = { navController.navigateToMyAccess() },
+        )
+        myAccessDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
         )
         importItemsDestination(
             onNavigateBack = { navController.popBackStack() },

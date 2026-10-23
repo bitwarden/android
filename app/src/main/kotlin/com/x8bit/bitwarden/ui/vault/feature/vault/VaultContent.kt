@@ -44,6 +44,7 @@ fun VaultContent(
     vaultHandlers: VaultHandlers,
     modifier: Modifier = Modifier,
     pamApprovalCount: Int? = null,
+    pamMyRequestCount: Int? = null,
 ) {
     // Handles the master password prompt for the row click
     var masterPasswordRepromptItem by rememberSaveable {
@@ -117,7 +118,7 @@ fun VaultContent(
             }
         }
 
-        val pamRowCount = listOfNotNull(pamApprovalCount).size
+        val pamRowCount = listOfNotNull(pamApprovalCount, pamMyRequestCount).size
         if (pamRowCount > 0) {
             item(key = "pam_header") {
                 BitwardenListHeaderText(
@@ -141,11 +142,36 @@ fun VaultContent(
                         label = stringResource(id = BitwardenString.pam_pending_approvals),
                         supportingLabel = count.toString(),
                         onClick = vaultHandlers.pamApprovalsClick,
-                        cardStyle = CardStyle.Full,
+                        cardStyle = if (pamMyRequestCount != null) {
+                            CardStyle.Top(dividerPadding = 56.dp)
+                        } else {
+                            CardStyle.Full
+                        },
                         modifier = Modifier
                             .animateItem()
                             .fillMaxWidth()
                             .testTag("PamApprovalsRow")
+                            .standardHorizontalMargin(),
+                    )
+                }
+            }
+
+            pamMyRequestCount?.let { count ->
+                item(key = "pam_my_requests_group") {
+                    BitwardenGroupItem(
+                        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_clock),
+                        label = stringResource(id = BitwardenString.pam_my_access_requests),
+                        supportingLabel = count.toString(),
+                        onClick = vaultHandlers.pamMyRequestsClick,
+                        cardStyle = if (pamApprovalCount != null) {
+                            CardStyle.Bottom
+                        } else {
+                            CardStyle.Full
+                        },
+                        modifier = Modifier
+                            .animateItem()
+                            .fillMaxWidth()
+                            .testTag("PamMyRequestsRow")
                             .standardHorizontalMargin(),
                     )
                 }

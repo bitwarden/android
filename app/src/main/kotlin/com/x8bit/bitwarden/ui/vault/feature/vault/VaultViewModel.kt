@@ -331,6 +331,14 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        combine(
+            pamApprovalManager.hasPamAccessFlow,
+            pamApprovalManager.myRequestCountFlow,
+        ) { hasPamAccess, count -> count.takeIf { hasPamAccess } }
+            .map { VaultAction.Internal.PamMyRequestCountReceive(count = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         if (!buildInfoManager.isFdroid) {
             viewModelScope.launch {
                 credentialExchangeRegistryManager.register()
@@ -370,6 +378,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SyncClick -> handleSyncClick()
             is VaultAction.LockClick -> handleLockClick()
             is VaultAction.PamApprovalsClick -> sendEvent(VaultEvent.NavigateToPamApprovals)
+            is VaultAction.PamMyRequestsClick -> sendEvent(VaultEvent.NavigateToPamMyAccess)
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
@@ -1209,6 +1218,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.PamApprovalCountReceive -> {
                 mutableStateFlow.update { it.copy(pamApprovalCount = action.count) }
             }
+
+            is VaultAction.Internal.PamMyRequestCountReceive -> {
+                mutableStateFlow.update { it.copy(pamMyRequestCount = action.count) }
+            }
         }
     }
 
@@ -1875,6 +1888,7 @@ data class VaultState(
     val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
     val pamApprovalCount: Int? = null,
+    val pamMyRequestCount: Int? = null,
 ) : Parcelable {
 
     /**
@@ -2549,6 +2563,11 @@ sealed class VaultEvent {
     data object NavigateToPamApprovals : VaultEvent()
 
     /**
+     * Navigate to the user's own privileged access requests ("My access") screen.
+     */
+    data object NavigateToPamMyAccess : VaultEvent()
+
+    /**
      * Navigate to settings.
      */
     data object NavigateToAbout : VaultEvent()
@@ -2636,6 +2655,11 @@ sealed class VaultAction {
      * User clicked the pending approvals row in the vault list.
      */
     data object PamApprovalsClick : VaultAction()
+
+    /**
+     * User clicked the my requests row in the vault list.
+     */
+    data object PamMyRequestsClick : VaultAction()
 
     /**
      * User selected a [VaultFilterType] from the Vault Filter menu.
@@ -2823,6 +2847,12 @@ sealed class VaultAction {
          * The [count] is `null` when the user cannot approve requests.
          */
         data class PamApprovalCountReceive(val count: Int?) : Internal()
+
+        /**
+         * Indicates the number of the user's own privileged access requests that are still
+         * current. The [count] is `null` when the user has no PAM access.
+         */
+        data class PamMyRequestCountReceive(val count: Int?) : Internal()
 
         /**
          * Indicates that the user notification policy has changed.

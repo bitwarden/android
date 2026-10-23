@@ -71,7 +71,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -99,6 +98,7 @@ fun VaultScreen(
     onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
     onNavigateToPamApprovals: () -> Unit,
+    onNavigateToPamMyAccess: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
@@ -174,6 +174,7 @@ fun VaultScreen(
 
             VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
             VaultEvent.NavigateToPamApprovals -> onNavigateToPamApprovals()
+            VaultEvent.NavigateToPamMyAccess -> onNavigateToPamMyAccess()
 
             is VaultEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
@@ -244,7 +245,7 @@ private fun VaultScreenScaffold(
                         onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOf(
+                        menuItemDataList = listOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.sync),
                                 onClick = vaultHandlers.syncAction,
@@ -253,7 +254,8 @@ private fun VaultScreenScaffold(
                                 text = stringResource(id = BitwardenString.lock),
                                 onClick = vaultHandlers.lockAction,
                             ),
-                        ),
+                        )
+                            .toImmutableList(),
                     )
                 },
             )
@@ -335,6 +337,7 @@ private fun VaultScreenScaffold(
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier.fillMaxSize(),
                     pamApprovalCount = state.pamApprovalCount,
+                    pamMyRequestCount = state.pamMyRequestCount,
                 )
 
                 is VaultState.ViewState.Loading -> BitwardenLoadingContent(

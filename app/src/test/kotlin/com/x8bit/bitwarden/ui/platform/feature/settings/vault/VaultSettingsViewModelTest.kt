@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
@@ -9,6 +10,7 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -42,11 +44,37 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { getActivePoliciesFlow(any()) } returns mutablePoliciesFlow
     }
 
+    private val mutablePamFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlagFlow(FlagKey.PamMobilePrivilegedControls) } returns mutablePamFlagFlow
+    }
+
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every {
             getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
         } returns mutableSnackbarSharedFlow
+    }
+
+    @Test
+    fun `my access requests should only be shown while the PAM feature flag is on`() = runTest {
+        val viewModel = createViewModel()
+        assertFalse(viewModel.stateFlow.value.showMyAccessRequests)
+
+        mutablePamFlagFlow.value = true
+        assertTrue(viewModel.stateFlow.value.showMyAccessRequests)
+
+        mutablePamFlagFlow.value = false
+        assertFalse(viewModel.stateFlow.value.showMyAccessRequests)
+    }
+
+    @Test
+    fun `MyAccessClick should emit NavigateToMyAccess`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultSettingsAction.MyAccessClick)
+            assertEquals(VaultSettingsEvent.NavigateToMyAccess, awaitItem())
+        }
     }
 
     @Test
@@ -221,6 +249,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         buildInfoManager = buildInfoManager,
+        featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
         policyManager = policyManager,

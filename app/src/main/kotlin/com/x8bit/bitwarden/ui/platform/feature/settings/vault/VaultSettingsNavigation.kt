@@ -15,12 +15,14 @@ data object VaultSettingsRoute
 /**
  * Add Vault Settings destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultSettingsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
+    onNavigateToMyAccess: () -> Unit,
 ) {
     composableWithPushTransitions<VaultSettingsRoute> {
         VaultSettingsScreen(
@@ -29,6 +31,7 @@ fun NavGraphBuilder.vaultSettingsDestination(
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToImportItems = onNavigateToImportItems,
+            onNavigateToMyAccess = onNavigateToMyAccess,
         )
     }
 }

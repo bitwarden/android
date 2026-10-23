@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigate
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.myAccessDestination
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavbarRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
@@ -76,6 +77,7 @@ import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCode
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMoveToOrganization
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.detail.pamApprovalDetailDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
 import kotlinx.serialization.Serializable
@@ -180,6 +182,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
         loginApprovalDestination(onNavigateBack = { navController.popBackStack() })
+        pamApprovalDetailDestination(onNavigateBack = { navController.popBackStack() })
+        myAccessDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
+        )
         pendingRequestsDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToLoginApproval = { navController.navigateToLoginApproval(it) },
