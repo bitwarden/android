@@ -1,29 +1,17 @@
 package com.bitwarden.authenticator.ui.platform.feature.tutorial
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
+import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.bitwarden.ui.platform.navigation.util.stayEntry
 
 /**
- * The type-safe route for the tutorial screen.
+ * Add the top level Tutorial screen to the root navigation entries.
  */
-@Serializable
-data object TutorialRoute
-
-/**
- * The type-safe route for the settings tutorial screen.
- */
-@Serializable
-data object SettingsTutorialRoute
-
-/**
- * Add the top level Tutorial screen to the nav graph.
- */
-fun NavGraphBuilder.tutorialDestination() {
-    composableWithStayTransitions<TutorialRoute> {
+fun EntryProviderScope<RootNavGraph>.tutorialDestination() {
+    stayEntry<RootNavGraph.TutorialRoute> {
         TutorialScreen(
             onTutorialFinished = {
                 // State-based navigation will handle this.
@@ -33,10 +21,12 @@ fun NavGraphBuilder.tutorialDestination() {
 }
 
 /**
- * Add the Settings Tutorial screen to the nav graph.
+ * Add the Settings Tutorial screen to the authenticator navigation entries.
  */
-fun NavGraphBuilder.tutorialSettingsDestination(onTutorialFinished: () -> Unit) {
-    composableWithSlideTransitions<SettingsTutorialRoute> {
+fun EntryProviderScope<AuthenticatorGraph>.tutorialSettingsDestination(
+    onTutorialFinished: () -> Unit,
+) {
+    slideUpEntry<AuthenticatorGraph.SettingsTutorialRoute> {
         TutorialScreen(
             onTutorialFinished = onTutorialFinished,
         )
@@ -44,15 +34,8 @@ fun NavGraphBuilder.tutorialSettingsDestination(onTutorialFinished: () -> Unit) 
 }
 
 /**
- * Navigate to the top level Tutorial screen.
- */
-fun NavController.navigateToTutorial(navOptions: NavOptions? = null) {
-    navigate(route = TutorialRoute, navOptions = navOptions)
-}
-
-/**
  * Navigate to the Tutorial screen within Settings.
  */
-fun NavController.navigateToSettingsTutorial(navOptions: NavOptions? = null) {
-    navigate(route = SettingsTutorialRoute, navOptions = navOptions)
+fun NavigationController<AuthenticatorGraph>.navigateToSettingsTutorial() {
+    this.navigate(route = AuthenticatorGraph.SettingsTutorialRoute)
 }

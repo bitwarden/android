@@ -1,33 +1,24 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.importing
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
 
 /**
- * The type-safe route for the import screen.
+ * Add the import screen to the navigation entries.
  */
-@Serializable
-data object ImportRoute
-
-/**
- * Add the import screen to the nav graph.
- */
-fun NavGraphBuilder.importingDestination(
+fun EntryProviderScope<SettingsGraph>.importingDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<ImportRoute> {
-        ImportingScreen(
-            onNavigateBack = onNavigateBack,
-        )
+    pushEntry<SettingsGraph.ImportRoute> {
+        ImportingScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
  * Navigate to the Import destination.
  */
-fun NavController.navigateToImporting(navOptions: NavOptions? = null) {
-    navigate(route = ImportRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToImporting() {
+    this.navigate(route = SettingsGraph.ImportRoute)
 }
