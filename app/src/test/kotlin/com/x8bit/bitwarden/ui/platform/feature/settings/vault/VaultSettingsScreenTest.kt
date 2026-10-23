@@ -10,6 +10,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -39,7 +40,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(permissionsManager = FakePermissionManager()) {
             VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -75,6 +76,18 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
 
         composeTestRule.onNodeWithText("My access requests").performScrollTo().performClick()
         verify { viewModel.trySendAction(VaultSettingsAction.MyAccessClick) }
+    }
+
+    @Test
+    fun `notifications row should only be displayed when enabled`() {
+        composeTestRule.onNodeWithText("Access request notifications").assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(showPamNotificationsRow = true) }
+
+        composeTestRule
+            .onNodeWithText("Access request notifications")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 
     @Test

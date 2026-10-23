@@ -43,6 +43,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
+import com.x8bit.bitwarden.ui.vault.feature.pamnotificationprompt.PamNotificationsSettingRow
 
 /**
  * Displays the vault settings screen.
@@ -179,9 +180,22 @@ fun VaultSettingsScreen(
                     text = stringResource(BitwardenString.pam_my_access_requests),
                     onClick = { viewModel.trySendAction(VaultSettingsAction.MyAccessClick) },
                     withDivider = false,
-                    cardStyle = CardStyle.Bottom,
+                    cardStyle = if (state.showPamNotificationsRow) {
+                        CardStyle.Middle()
+                    } else {
+                        CardStyle.Bottom
+                    },
                     modifier = Modifier
                         .testTag("MyAccessRequestsLabel")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
+            if (state.showPamNotificationsRow) {
+                PamNotificationsSettingRow(
+                    cardStyle = CardStyle.Bottom,
+                    modifier = Modifier
+                        .testTag("PamNotificationsRow")
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
