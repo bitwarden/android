@@ -2,26 +2,19 @@
 
 package com.bitwarden.testharness.ui.platform.feature.getpassword
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.credentialmanager.CredentialManagerGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
 
 /**
- * Get password test screen.
+ * Add Get Password destination to the navigation entries.
  */
-@Serializable
-data object GetPasswordRoute
-
-/**
- * Add Get Password destination to the nav graph.
- */
-fun NavGraphBuilder.getPasswordDestination(
+fun EntryProviderScope<CredentialManagerGraph>.getPasswordDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<GetPasswordRoute> {
+    pushEntry<CredentialManagerGraph.GetPasswordRoute> {
         GetPasswordScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -31,6 +24,6 @@ fun NavGraphBuilder.getPasswordDestination(
 /**
  * Navigate to the Get Password test screen.
  */
-fun NavController.navigateToGetPassword(navOptions: NavOptions? = null) {
-    navigate(route = GetPasswordRoute, navOptions = navOptions)
+fun NavigationController<CredentialManagerGraph>.navigateToGetPassword() {
+    this.navigate(route = CredentialManagerGraph.GetPasswordRoute)
 }
