@@ -43,6 +43,7 @@ fun VaultContent(
     actionCardState: VaultState.ActionCardState?,
     vaultHandlers: VaultHandlers,
     modifier: Modifier = Modifier,
+    pamApprovalCount: Int? = null,
 ) {
     // Handles the master password prompt for the row click
     var masterPasswordRepromptItem by rememberSaveable {
@@ -113,6 +114,45 @@ fun VaultContent(
                         .standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(height = 24.dp))
+            }
+        }
+
+        val pamRowCount = listOfNotNull(pamApprovalCount).size
+        if (pamRowCount > 0) {
+            item(key = "pam_header") {
+                BitwardenListHeaderText(
+                    label = stringResource(id = BitwardenString.pam_access_requests),
+                    supportingLabel = pamRowCount.toString(),
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
+
+            pamApprovalCount?.let { count ->
+                item(key = "pam_approvals_group") {
+                    BitwardenGroupItem(
+                        startIcon = IconData.Local(
+                            iconRes = BitwardenDrawable.ic_pam_lock_encrypted,
+                        ),
+                        label = stringResource(id = BitwardenString.pam_pending_approvals),
+                        supportingLabel = count.toString(),
+                        onClick = vaultHandlers.pamApprovalsClick,
+                        cardStyle = CardStyle.Full,
+                        modifier = Modifier
+                            .animateItem()
+                            .fillMaxWidth()
+                            .testTag("PamApprovalsRow")
+                            .standardHorizontalMargin(),
+                    )
+                }
+            }
+
+            item(key = "pam_footer_spacer") {
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 

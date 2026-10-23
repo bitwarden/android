@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -93,6 +95,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToSearchScreen = false
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
+    private var onNavigateToPamApprovalsCalled = false
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
         every { promptForReview() } just runs
@@ -128,6 +131,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
                 onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
+                onNavigateToPamApprovals = { onNavigateToPamApprovalsCalled = true },
             )
         }
     }
@@ -444,6 +448,70 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.SyncClick) }
+    }
+
+    @Test
+    fun `pending approvals row should not show when the user cannot approve`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
+        composeTestRule.onNodeWithTag("PamApprovalsRow").assertDoesNotExist()
+        composeTestRule
+            .onAllNodesWithText("Access requests", substring = true, ignoreCase = true)
+            .assertCountEquals(0)
+    }
+
+    @Test
+    fun `overflow menu should not show access approvals`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamApprovalCount = 3)
+        }
+        composeTestRule.onNodeWithContentDescription("More options").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Access approvals", substring = true)
+            .assertCountEquals(0)
+    }
+
+    @Test
+    fun `pending approvals row should show a zero count when none are pending`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamApprovalCount = 0)
+        }
+
+        composeTestRule
+            .onNodeWithText("Access requests", substring = true, ignoreCase = true)
+            .assertExists()
+        composeTestRule
+            .onNodeWithTag("PamApprovalsRow")
+            .assertTextContains("Pending approvals")
+            .assertTextContains("0")
+    }
+
+    @Test
+    fun `pending approvals row should show the pending count`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamApprovalCount = 3)
+        }
+
+        composeTestRule
+            .onNodeWithTag("PamApprovalsRow")
+            .assertTextContains("Pending approvals")
+            .assertTextContains("3")
+    }
+
+    @Test
+    fun `pending approvals row click should send PamApprovalsClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE, pamApprovalCount = 3)
+        }
+        composeTestRule.onNodeWithTag("PamApprovalsRow").performClick()
+
+        verify { viewModel.trySendAction(VaultAction.PamApprovalsClick) }
+    }
+
+    @Test
+    fun `NavigateToPamApprovals event should call onNavigateToPamApprovals`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToPamApprovals)
+        assertTrue(onNavigateToPamApprovalsCalled)
     }
 
     @Test

@@ -98,6 +98,7 @@ fun VaultScreen(
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
+    onNavigateToPamApprovals: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
@@ -172,6 +173,7 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
+            VaultEvent.NavigateToPamApprovals -> onNavigateToPamApprovals()
 
             is VaultEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
@@ -332,6 +334,7 @@ private fun VaultScreenScaffold(
                     actionCardState = state.actionCard,
                     vaultHandlers = vaultHandlers,
                     modifier = Modifier.fillMaxSize(),
+                    pamApprovalCount = state.pamApprovalCount,
                 )
 
                 is VaultState.ViewState.Loading -> BitwardenLoadingContent(

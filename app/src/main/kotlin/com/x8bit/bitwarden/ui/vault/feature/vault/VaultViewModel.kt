@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogMa
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
+import com.x8bit.bitwarden.data.pam.manager.PamApprovalManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -87,6 +88,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -125,6 +127,7 @@ class VaultViewModel @Inject constructor(
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val userNotificationPolicyManager: UserNotificationPolicyManager,
+    private val pamApprovalManager: PamApprovalManager,
     buildInfoManager: BuildInfoManager,
     featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
@@ -320,6 +323,14 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        combine(
+            pamApprovalManager.canApproveFlow,
+            pamApprovalManager.pendingCountFlow,
+        ) { canApprove, count -> count.takeIf { canApprove } }
+            .map { VaultAction.Internal.PamApprovalCountReceive(count = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         if (!buildInfoManager.isFdroid) {
             viewModelScope.launch {
                 credentialExchangeRegistryManager.register()
@@ -358,6 +369,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.AddAccountClick -> handleAddAccountClick()
             is VaultAction.SyncClick -> handleSyncClick()
             is VaultAction.LockClick -> handleLockClick()
+            is VaultAction.PamApprovalsClick -> sendEvent(VaultEvent.NavigateToPamApprovals)
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
@@ -1193,6 +1205,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.UserNotificationPolicyReceive -> {
                 handleUserNotificationPolicyReceive(action)
             }
+
+            is VaultAction.Internal.PamApprovalCountReceive -> {
+                mutableStateFlow.update { it.copy(pamApprovalCount = action.count) }
+            }
         }
     }
 
@@ -1858,6 +1874,7 @@ data class VaultState(
     val isNewItemTypesEnabled: Boolean = false,
     val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
+    val pamApprovalCount: Int? = null,
 ) : Parcelable {
 
     /**
@@ -2527,6 +2544,11 @@ sealed class VaultEvent {
     data object NavigateToAddFolder : VaultEvent()
 
     /**
+     * Navigate to the privileged access (PAM) approvals screen.
+     */
+    data object NavigateToPamApprovals : VaultEvent()
+
+    /**
      * Navigate to settings.
      */
     data object NavigateToAbout : VaultEvent()
@@ -2609,6 +2631,11 @@ sealed class VaultAction {
      * User clicked the Lock option in the overflow menu.
      */
     data object LockClick : VaultAction()
+
+    /**
+     * User clicked the pending approvals row in the vault list.
+     */
+    data object PamApprovalsClick : VaultAction()
 
     /**
      * User selected a [VaultFilterType] from the Vault Filter menu.
@@ -2790,6 +2817,12 @@ sealed class VaultAction {
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
+
+        /**
+         * Indicates the number of privileged access requests waiting for the user's decision.
+         * The [count] is `null` when the user cannot approve requests.
+         */
+        data class PamApprovalCountReceive(val count: Int?) : Internal()
 
         /**
          * Indicates that the user notification policy has changed.
