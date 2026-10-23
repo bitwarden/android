@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
+import com.x8bit.bitwarden.data.pam.manager.PamApprovalManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -242,6 +243,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { displayData } returns null
         every { displayDataFlow } returns mutableUserNotificationPolicyDataFlow
         every { dismissBanner() } just runs
+    }
+    private val mutableCanApproveFlow = MutableStateFlow(false)
+    private val mutablePendingApprovalCountFlow = MutableStateFlow(0)
+    private val pamApprovalManager: PamApprovalManager = mockk {
+        every { canApproveFlow } returns mutableCanApproveFlow
+        every { pendingCountFlow } returns mutablePendingApprovalCountFlow
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
     private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
@@ -1433,6 +1440,40 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.AddAccountClick)
         verify {
             authRepository.hasPendingAccountAddition = true
+        }
+    }
+
+    @Test
+    fun `pamApprovalCount should be null when the user cannot approve requests`() = runTest {
+        mutablePendingApprovalCountFlow.value = 3
+        val viewModel = createViewModel()
+
+        assertEquals(null, viewModel.stateFlow.value.pamApprovalCount)
+    }
+
+    @Test
+    fun `pamApprovalCount should follow the pending count when the user can approve`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(null, awaitItem().pamApprovalCount)
+
+            mutableCanApproveFlow.value = true
+            assertEquals(0, awaitItem().pamApprovalCount)
+
+            mutablePendingApprovalCountFlow.value = 4
+            assertEquals(4, awaitItem().pamApprovalCount)
+
+            mutableCanApproveFlow.value = false
+            assertEquals(null, awaitItem().pamApprovalCount)
+        }
+    }
+
+    @Test
+    fun `on PamApprovalsClick should emit NavigateToPamApprovals`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.PamApprovalsClick)
+            assertEquals(VaultEvent.NavigateToPamApprovals, awaitItem())
         }
     }
 
@@ -4780,6 +4821,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             browserAutofillDialogManager = browserAutofillDialogManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
             userNotificationPolicyManager = userNotificationPolicyManager,
+            pamApprovalManager = pamApprovalManager,
             buildInfoManager = buildInfoManager,
             featureFlagManager = featureFlagManager,
         )
