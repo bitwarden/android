@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.core.data.serializer.SafeListSerializer
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.network.model.MemberDecryptionType
 import com.bitwarden.network.model.OrganizationStatusType
@@ -16,6 +17,7 @@ import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import com.bitwarden.organizations.MemberDecryptionType as SdkMemberDecryptionType
 import com.bitwarden.organizations.ProductTierType as SdkProductTierType
 import com.bitwarden.organizations.ProviderType as SdkProviderType
@@ -23,6 +25,9 @@ import com.bitwarden.organizations.ProviderType as SdkProviderType
 private val JSON = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
+    serializersModule = SerializersModule {
+        contextual(List::class) { args -> SafeListSerializer(args.first()) }
+    }
 }
 
 /**

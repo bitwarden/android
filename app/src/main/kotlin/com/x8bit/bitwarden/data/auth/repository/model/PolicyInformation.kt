@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import com.bitwarden.core.data.serializer.SafeListSerializer
 import com.bitwarden.network.model.SendAccessTypeJson
 import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -149,7 +149,7 @@ sealed class PolicyInformation {
         @SerialName("deletionHours")
         val deletionHours: Int?,
 
-        @Serializable(with = SafeListSerializer::class)
+        @Contextual
         @SerialName("allowedSendTypes")
         val allowedSendTypes: List<SendTypeJson>?,
     ) : PolicyInformation()
