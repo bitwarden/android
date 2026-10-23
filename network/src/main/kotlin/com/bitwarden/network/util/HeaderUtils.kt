@@ -26,6 +26,11 @@ internal const val HEADER_KEY_USER_AGENT: String = "User-Agent"
 internal const val HEADER_KEY_DEVICE_TYPE: String = "Device-Type"
 
 /**
+ * The key used for the 'device-identifier' headers.
+ */
+internal const val HEADER_KEY_DEVICE_IDENTIFIER: String = "Device-Identifier"
+
+/**
  * The bearer prefix used for the 'authorization' headers value.
  */
 internal const val HEADER_VALUE_BEARER_PREFIX: String = "Bearer "
