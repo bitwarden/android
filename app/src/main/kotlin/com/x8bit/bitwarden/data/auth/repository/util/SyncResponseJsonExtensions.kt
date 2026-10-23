@@ -105,8 +105,7 @@ private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): Pr
             useResetPassword = this.useResetPassword,
             useSecretsManager = this.useSecretsManager,
             usePasswordManager = this.usePasswordManager,
-            // Not provided by the sync response.
-            usePam = false,
+            usePam = this.usePam,
             useActivateAutofillPolicy = this.useActivateAutofillPolicy,
             useAutomaticUserConfirmation = this.useAutomaticUserConfirmation,
             useAccessIntelligence = this.useAccessIntelligence,
