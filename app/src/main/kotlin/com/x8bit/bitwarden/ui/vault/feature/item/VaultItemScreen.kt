@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -18,9 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
@@ -44,6 +48,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemPamBanner
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemPamRequestSheet
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -73,6 +79,13 @@ fun VaultItemScreen(
     onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    LifecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> viewModel.trySendAction(VaultItemAction.Pam.Resume)
+            Lifecycle.Event.ON_PAUSE -> viewModel.trySendAction(VaultItemAction.Pam.Pause)
+            else -> Unit
+        }
+    }
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
             ?.let {
@@ -157,6 +170,7 @@ fun VaultItemScreen(
         onUpgradeToPremiumClick = {
             viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
         },
+        onPamAction = viewModel::trySendAction,
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -201,7 +215,7 @@ fun VaultItemScreen(
                                     viewModel.trySendAction(VaultItemAction.Common.CloneClick)
                                 },
                             )
-                                .takeUnless { state.isCipherInCollection },
+                                .takeUnless { state.isCipherInCollection || state.isPamGated },
                             OverflowMenuItemData(
                                 text = stringResource(
                                     id = vfo1Foundation(
@@ -280,38 +294,56 @@ fun VaultItemScreen(
             BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
-        VaultItemContent(
-            viewState = state.viewState,
-            modifier = Modifier
-                .fillMaxSize(),
-            vaultCommonItemTypeHandlers = remember(viewModel) {
-                VaultCommonItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultLoginItemTypeHandlers = remember(viewModel) {
-                VaultLoginItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultCardItemTypeHandlers = remember(viewModel) {
-                VaultCardItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultSshKeyItemTypeHandlers = remember(viewModel) {
-                VaultSshKeyItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultIdentityItemTypeHandlers = remember(viewModel) {
-                VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultBankAccountItemTypeHandlers = remember(viewModel) {
-                VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
-                VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
-            },
-            vaultPassportItemTypeHandlers = rememberVaultPassportItemTypeHandlers(
-                viewModel = viewModel,
-            ),
-        )
+        Column(modifier = Modifier.fillMaxSize()) {
+            state.pamAccess?.let { pamState ->
+                VaultItemPamBanner(
+                    pamState = pamState,
+                    onRequestAccessClick = {
+                        viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+                    },
+                    onStartAccessClick = {
+                        viewModel.trySendAction(VaultItemAction.Pam.StartAccessClick)
+                    },
+                    onCancelRequestClick = {
+                        viewModel.trySendAction(VaultItemAction.Pam.CancelRequestClick)
+                    },
+                )
+            }
+            VaultItemContent(
+                viewState = state.viewState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(weight = 1f),
+                vaultCommonItemTypeHandlers = remember(viewModel) {
+                    VaultCommonItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultLoginItemTypeHandlers = remember(viewModel) {
+                    VaultLoginItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultCardItemTypeHandlers = remember(viewModel) {
+                    VaultCardItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultSshKeyItemTypeHandlers = remember(viewModel) {
+                    VaultSshKeyItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultIdentityItemTypeHandlers = remember(viewModel) {
+                    VaultIdentityItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultBankAccountItemTypeHandlers = remember(viewModel) {
+                    VaultBankAccountItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultDriversLicenseItemTypeHandlers = remember(viewModel) {
+                    VaultDriversLicenseItemTypeHandlers.create(viewModel = viewModel)
+                },
+                vaultPassportItemTypeHandlers = rememberVaultPassportItemTypeHandlers(
+                    viewModel = viewModel,
+                ),
+            )
+        }
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
@@ -320,8 +352,35 @@ private fun VaultItemDialogs(
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
     onUpgradeToPremiumClick: () -> Unit,
+    onPamAction: (VaultItemAction.Pam) -> Unit,
 ) {
     when (dialog) {
+        is VaultItemState.DialogState.PamRequestAccess -> {
+            VaultItemPamRequestSheet(
+                form = dialog.form,
+                onDurationChange = { onPamAction(VaultItemAction.Pam.DurationChange(it)) },
+                onStartDateChange = { onPamAction(VaultItemAction.Pam.StartDateChange(it)) },
+                onStartTimeChange = { onPamAction(VaultItemAction.Pam.StartTimeChange(it)) },
+                onEndDateChange = { onPamAction(VaultItemAction.Pam.EndDateChange(it)) },
+                onEndTimeChange = { onPamAction(VaultItemAction.Pam.EndTimeChange(it)) },
+                onReasonChange = { onPamAction(VaultItemAction.Pam.ReasonChange(it)) },
+                onSubmitClick = { onPamAction(VaultItemAction.Pam.SubmitRequestClick) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        VaultItemState.DialogState.PamConfirmCancelRequest -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = BitwardenString.pam_cancel_request_confirm_title),
+                message = stringResource(id = BitwardenString.pam_cancel_request_confirm_message),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.no),
+                onConfirmClick = { onPamAction(VaultItemAction.Pam.ConfirmCancelRequestClick) },
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         is VaultItemState.DialogState.RequiresPremium -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(id = BitwardenString.premium_subscription_required),
