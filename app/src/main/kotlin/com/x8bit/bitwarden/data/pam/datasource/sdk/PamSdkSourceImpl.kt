@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.pam.datasource.sdk
 
+import com.bitwarden.pam.AccessDecisionRequest
 import com.bitwarden.pam.AccessLeaseExtensionRequest
 import com.bitwarden.pam.AccessLeaseRevokeRequest
 import com.bitwarden.pam.AccessLeaseView
@@ -130,5 +131,37 @@ class PamSdkSourceImpl(
             .pam()
             .leases()
             .extend(leaseId = leaseId, request = request)
+    }
+
+    override suspend fun listApprovalInbox(
+        userId: String,
+    ): Result<List<AccessRequestView>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .commercial()
+            .pam()
+            .approvals()
+            .listInbox()
+    }
+
+    override suspend fun listApprovalHistory(
+        userId: String,
+    ): Result<List<AccessRequestView>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .commercial()
+            .pam()
+            .approvals()
+            .listHistory()
+    }
+
+    override suspend fun decideAccessRequest(
+        userId: String,
+        requestId: String,
+        request: AccessDecisionRequest,
+    ): Result<AccessRequestView> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .commercial()
+            .pam()
+            .approvals()
+            .decide(id = requestId, request = request)
     }
 }
