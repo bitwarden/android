@@ -64,6 +64,15 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
+     * The app was launched from a PAM alert notification in order to show the access request it
+     * is about.
+     */
+    @Parcelize
+    data class PamAlert(
+        val pamAlertData: PamAlertData,
+    ) : SpecialCircumstance()
+
+    /**
      * The app was launched via the [CredentialManager] framework in order to allow the user to
      * manually save a credential to their vault.
      */

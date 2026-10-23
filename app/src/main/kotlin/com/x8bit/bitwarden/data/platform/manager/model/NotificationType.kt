@@ -72,6 +72,12 @@ enum class NotificationType {
 
     @SerialName("29")
     REFRESH_ACCESS_REQUEST,
+
+    @SerialName("30")
+    PAM_ACCESS_REQUESTED,
+
+    @SerialName("31")
+    PAM_ACCESS_DECIDED,
 }
 
 @Keep
