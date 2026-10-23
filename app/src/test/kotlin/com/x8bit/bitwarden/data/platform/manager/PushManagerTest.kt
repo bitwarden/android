@@ -256,6 +256,33 @@ class PushManagerTest {
             }
 
         @Test
+        fun `onMessageReceived with refresh approver inbox emits to pamRefreshFlow`() = runTest {
+            pushManager.pamRefreshFlow.test {
+                pushManager.onMessageReceived(PAM_REFRESH_APPROVER_INBOX_NOTIFICATION_MAP)
+                assertEquals(Unit, awaitItem())
+            }
+        }
+
+        @Test
+        fun `onMessageReceived with refresh access request emits to pamRefreshFlow`() = runTest {
+            pushManager.pamRefreshFlow.test {
+                pushManager.onMessageReceived(PAM_REFRESH_ACCESS_REQUEST_NOTIFICATION_MAP)
+                assertEquals(Unit, awaitItem())
+            }
+        }
+
+        @Test
+        fun `onMessageReceived from this app does not emit to pamRefreshFlow`() = runTest {
+            pushManager.pamRefreshFlow.test {
+                pushManager.onMessageReceived(
+                    PAM_REFRESH_APPROVER_INBOX_NOTIFICATION_MAP +
+                        ("contextId" to authDiskSource.uniqueAppId),
+                )
+                expectNoEvents()
+            }
+        }
+
+        @Test
         fun `onMessageReceived with Premium status changed with null fields does not emit`() =
             runTest {
                 pushManager.premiumStatusChangedFlow.test {
@@ -1248,5 +1275,21 @@ private val PREMIUM_STATUS_CHANGED_NULL_FIELDS_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": null,
       "Premium": null
+    }""",
+)
+
+private val PAM_REFRESH_APPROVER_INBOX_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "28",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
+    }""",
+)
+
+private val PAM_REFRESH_ACCESS_REQUEST_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "29",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
     }""",
 )

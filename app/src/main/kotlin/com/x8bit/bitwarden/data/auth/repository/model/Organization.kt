@@ -15,6 +15,10 @@ import com.bitwarden.network.model.OrganizationType
  * @property userIsClaimedByOrganization Indicates that the user is claimed by the organization.
  * @property limitItemDeletion Indicates that the organization limits item deletion.
  * @property shouldUseEvents Indicates if the organization uses tracking events.
+ * @property usePam Indicates that the organization has Privileged Access Management.
+ * @property isProviderUser Indicates that the user accesses the organization through a provider.
+ * @property canEditAllCiphers Indicates that the user can manage every collection of the
+ * organization without being assigned to it.
  */
 data class Organization(
     val id: String,
@@ -26,4 +30,7 @@ data class Organization(
     val userIsClaimedByOrganization: Boolean,
     val limitItemDeletion: Boolean,
     val shouldUseEvents: Boolean,
+    val usePam: Boolean,
+    val isProviderUser: Boolean,
+    val canEditAllCiphers: Boolean,
 )

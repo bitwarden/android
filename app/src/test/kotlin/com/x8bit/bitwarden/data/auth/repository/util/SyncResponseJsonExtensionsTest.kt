@@ -27,6 +27,54 @@ class SyncResponseJsonExtensionsTest {
     }
 
     @Test
+    fun `toOrganization should map the PAM, provider and edit all ciphers properties`() {
+        assertEquals(
+            createMockOrganization(
+                number = 1,
+                usePam = true,
+                isProviderUser = true,
+                canEditAllCiphers = true,
+            ),
+            createMockOrganizationNetwork(
+                number = 1,
+                usePam = true,
+                isProviderUser = true,
+                allowAdminAccessToAllCollectionItems = true,
+            )
+                .toOrganization(),
+        )
+    }
+
+    @Test
+    fun `toOrganization should not allow editing all ciphers for an admin without admin access`() {
+        assertEquals(
+            createMockOrganization(number = 1, canEditAllCiphers = false),
+            createMockOrganizationNetwork(
+                number = 1,
+                allowAdminAccessToAllCollectionItems = false,
+            )
+                .toOrganization(),
+        )
+    }
+
+    @Test
+    fun `toOrganization should allow editing all ciphers for custom edit any collection`() {
+        assertEquals(
+            createMockOrganization(
+                number = 1,
+                role = OrganizationType.CUSTOM,
+                canEditAllCiphers = true,
+            ),
+            createMockOrganizationNetwork(
+                number = 1,
+                type = OrganizationType.CUSTOM,
+                permissions = createMockPermissions(editAnyCollection = true),
+            )
+                .toOrganization(),
+        )
+    }
+
+    @Test
     fun `toOrganizations should output the correct list of organizations`() {
         assertEquals(
             listOf(

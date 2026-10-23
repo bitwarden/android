@@ -17,6 +17,9 @@ fun createMockOrganization(
     userIsClaimedByOrganization: Boolean = false,
     limitItemDeletion: Boolean = false,
     shouldUseEvents: Boolean = false,
+    usePam: Boolean = false,
+    isProviderUser: Boolean = false,
+    canEditAllCiphers: Boolean = false,
 ): Organization =
     Organization(
         id = id,
@@ -28,4 +31,7 @@ fun createMockOrganization(
         userIsClaimedByOrganization = userIsClaimedByOrganization,
         limitItemDeletion = limitItemDeletion,
         shouldUseEvents = shouldUseEvents,
+        usePam = usePam,
+        isProviderUser = isProviderUser,
+        canEditAllCiphers = canEditAllCiphers,
     )
