@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -42,8 +41,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -62,14 +60,14 @@ import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VaultItemScreen(
-    viewModel: VaultItemViewModel = hiltViewModel(),
+    viewModel: VaultItemViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToVaultAddEditItem: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultAddEditItem: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
-    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPreviewAttachment: (route: VaultUnlockedGraph.PreviewAttachmentRoute) -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -89,7 +87,7 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToAddEdit -> {
                 onNavigateToVaultAddEditItem(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = if (event.isClone) {
                             VaultAddEditType.CloneItem(vaultItemId = event.itemId)
                         } else {
@@ -128,7 +126,7 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToPreviewAttachment -> {
                 onNavigateToPreviewAttachment(
-                    PreviewAttachmentRoute(
+                    VaultUnlockedGraph.PreviewAttachmentRoute(
                         cipherId = event.cipherId,
                         attachmentId = event.attachmentId,
                         fileName = event.fileName,

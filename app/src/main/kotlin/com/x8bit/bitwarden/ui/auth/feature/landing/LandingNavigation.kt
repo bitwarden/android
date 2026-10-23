@@ -1,34 +1,27 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the landing screen.
- */
-@Serializable
-data object LandingRoute
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.stayEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the landing screen.
  */
-fun NavController.navigateToLanding(navOptions: NavOptions? = null) {
-    this.navigate(route = LandingRoute, navOptions = navOptions)
+fun NavigationController<AuthGraph>.navigateToLanding() {
+    this.navigate(route = AuthGraph.LandingRoute)
 }
 
 /**
- * Add the Landing screen to the nav graph.
+ * Add the Landing screen to the navigation entries.
  */
-fun NavGraphBuilder.landingDestination(
+fun EntryProviderScope<AuthGraph>.landingDestination(
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
     onNavigateToPreAuthSettings: () -> Unit,
 ) {
-    composableWithStayTransitions<LandingRoute> {
+    stayEntry<AuthGraph.LandingRoute> {
         LandingScreen(
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,

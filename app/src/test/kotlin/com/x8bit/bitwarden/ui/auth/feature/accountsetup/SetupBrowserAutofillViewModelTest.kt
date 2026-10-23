@@ -13,16 +13,12 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.B
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SetupBrowserAutofillViewModelTest {
@@ -41,16 +37,6 @@ class SetupBrowserAutofillViewModelTest {
     }
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { storeShowBrowserAutofillSettingBadge(showBadge = any()) } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toSetupBrowserAutofillArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toSetupBrowserAutofillArgs)
     }
 
     @Test
@@ -210,11 +196,9 @@ class SetupBrowserAutofillViewModelTest {
     private fun createViewModel(
         initialState: SetupBrowserAutofillState? = null,
     ): SetupBrowserAutofillViewModel = SetupBrowserAutofillViewModel(
+        isInitialSetup = true,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = initialState)
-            every {
-                toSetupBrowserAutofillArgs()
-            } returns SetupBrowserAutofillScreenArgs(isInitialSetup = true)
         },
         authRepository = authRepository,
         browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,

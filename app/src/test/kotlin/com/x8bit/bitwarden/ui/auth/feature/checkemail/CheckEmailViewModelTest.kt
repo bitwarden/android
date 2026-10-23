@@ -3,26 +3,12 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import io.mockk.every
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class CheckEmailViewModelTest : BaseViewModelTest() {
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toCheckEmailArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toCheckEmailArgs)
-    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -81,9 +67,9 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =
         CheckEmailViewModel(
+            route = AuthGraph.CheckEmailRoute(emailAddress = EMAIL),
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toCheckEmailArgs() } returns CheckEmailArgs(emailAddress = EMAIL)
             },
         )
 }

@@ -2,78 +2,64 @@
 
 package com.bitwarden.authenticator.ui.authenticator.feature.authenticator
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navigation
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.editItemDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.navigateToEditItem
 import com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.manualCodeEntryDestination
-import com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.navigateToManualCodeEntryScreen
-import com.bitwarden.authenticator.ui.authenticator.feature.navbar.AuthenticatorNavbarRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.navbar.authenticatorNavBarDestination
-import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.qrCodeScanDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.search.itemSearchDestination
-import com.bitwarden.authenticator.ui.authenticator.feature.search.navigateToSearch
-import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToSettingsTutorial
+import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavGraph
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialSettingsDestination
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 
 /**
- * The type-safe route for the authenticator graph.
+ * Add the authenticator section to the root navigation entries. The
+ * [RootNavGraph.AuthenticatorRoute] hosts the [AuthenticatorGraph].
+ *
+ * @param onBackStackUpdate Invoked whenever the back stack of the [AuthenticatorGraph] changes.
  */
-@Serializable
-data object AuthenticatorGraphRoute
-
-/**
- * Navigate to the authenticator graph
- */
-fun NavController.navigateToAuthenticatorGraph(navOptions: NavOptions? = null) {
-    navigate(route = AuthenticatorNavbarRoute, navOptions = navOptions)
-}
-
-/**
- * Add the top authenticator graph to the nav graph.
- */
-fun NavGraphBuilder.authenticatorGraph(
-    navController: NavController,
+fun EntryProviderScope<RootNavGraph>.authenticatorGraph(
+    onBackStackUpdate: () -> Unit,
 ) {
-    navigation<AuthenticatorGraphRoute>(
-        startDestination = AuthenticatorNavbarRoute,
-    ) {
-        authenticatorNavBarDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToSearch = { navController.navigateToSearch() },
-            onNavigateToQrCodeScanner = { navController.navigateToQrCodeScanScreen() },
-            onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
-            onNavigateToEditItem = { navController.navigateToEditItem(itemId = it) },
-            onNavigateToTutorial = { navController.navigateToSettingsTutorial() },
+    entry<RootNavGraph.AuthenticatorRoute> {
+        val navigationController = rememberNavigationController<AuthenticatorGraph>(
+            routes = arrayOf(AuthenticatorGraph.NavBarRoute),
         )
-        editItemDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        itemSearchDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToEdit = { navController.navigateToEditItem(itemId = it) },
-        )
-        qrCodeScanDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToManualCodeEntryScreen = {
-                navController.popBackStack()
-                navController.navigateToManualCodeEntryScreen()
+        LaunchedEffect(key1 = navigationController) {
+            navigationController.backStackSnapshot.collect { onBackStackUpdate() }
+        }
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                authenticatorNavBarDestination(navigationController = navigationController)
+                editItemDestination(onNavigateBack = { navigationController.navigateBack() })
+                itemSearchDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                    onNavigateToEdit = { navigationController.navigateToEditItem(itemId = it) },
+                )
+                qrCodeScanDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                    onNavigateToManualCodeEntryScreen = {
+                        navigationController.replaceLast(
+                            route = AuthenticatorGraph.ManualCodeEntryRoute,
+                        )
+                    },
+                )
+                manualCodeEntryDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                    onNavigateToQrCodeScreen = {
+                        navigationController.replaceLast(route = AuthenticatorGraph.QrCodeScanRoute)
+                    },
+                )
+                tutorialSettingsDestination(
+                    onTutorialFinished = { navigationController.navigateBack() },
+                )
             },
-        )
-        manualCodeEntryDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToQrCodeScreen = {
-                navController.popBackStack()
-                navController.navigateToQrCodeScanScreen()
-            },
-        )
-        tutorialSettingsDestination(
-            onTutorialFinished = { navController.popBackStack() },
         )
     }
 }

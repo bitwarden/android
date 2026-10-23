@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -72,7 +71,7 @@ fun CompleteRegistrationScreen(
     onNavigateToPasswordGuidance: () -> Unit,
     onNavigateToPreventAccountLockout: () -> Unit,
     onNavigateToLogin: (email: String) -> Unit,
-    viewModel: CompleteRegistrationViewModel = hiltViewModel(),
+    viewModel: CompleteRegistrationViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberCompleteRegistrationHandler(viewModel = viewModel)

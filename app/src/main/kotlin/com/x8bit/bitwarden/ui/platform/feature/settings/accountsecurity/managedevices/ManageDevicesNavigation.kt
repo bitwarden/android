@@ -1,25 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the manage devices screen.
+ * Add the manage devices screen to the navigation entries.
  */
-@Serializable
-data object ManageDevicesRoute
-
-/**
- * Add manage devices destinations to the nav graph.
- */
-fun NavGraphBuilder.manageDevicesDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.manageDevicesDestination(
     onNavigateBack: () -> Unit,
     onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
 ) {
-    composableWithSlideTransitions<ManageDevicesRoute> {
+    slideUpEntry<VaultUnlockedGraph.ManageDevicesRoute> {
         ManageDevicesScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToLoginApproval = onNavigateToLoginApproval,
@@ -30,8 +23,6 @@ fun NavGraphBuilder.manageDevicesDestination(
 /**
  * Navigate to the Manage Devices screen.
  */
-fun NavController.navigateToManageDevices(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = ManageDevicesRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToManageDevices() {
+    this.navigate(route = VaultUnlockedGraph.ManageDevicesRoute)
 }
