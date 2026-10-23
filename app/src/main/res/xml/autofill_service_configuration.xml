@@ -14,6 +14,9 @@
         android:name="alook.browser.google"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="app.newsdiary"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="app.vanadium.browser"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
