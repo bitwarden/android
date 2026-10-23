@@ -114,6 +114,12 @@ class SettingsRepositoryImpl(
             settingsDiskSource.initialAutofillDialogShown = value
         }
 
+    override var hasShownPamNotificationPrompt: Boolean
+        get() = settingsDiskSource.hasShownPamNotificationPrompt ?: false
+        set(value) {
+            settingsDiskSource.hasShownPamNotificationPrompt = value
+        }
+
     override var vaultLastSync: Instant?
         get() = vaultLastSyncStateFlow.value
         set(value) {

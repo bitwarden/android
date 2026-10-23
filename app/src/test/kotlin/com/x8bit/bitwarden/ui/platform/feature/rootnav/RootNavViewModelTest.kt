@@ -27,6 +27,8 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
@@ -486,6 +488,52 @@ class RootNavViewModelTest : BaseViewModelTest() {
             RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the vault is unlocked and there is a PamAlert special circumstance the nav state should be VaultUnlockedForPamAlert`() {
+        val data = PamAlertData(
+            userId = "activeUserId",
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_REQUESTED,
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PamAlert(data)
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+
+        val viewModel = createViewModel()
+
+        assertEquals(RootNavState.VaultUnlockedForPamAlert(data), viewModel.stateFlow.value)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the vault is locked a PamAlert is kept until the vault is unlocked and then routed`() {
+        val data = PamAlertData(
+            userId = "activeUserId",
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_APPROVED,
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PamAlert(data)
+        mutableUserStateFlow.tryEmit(
+            MOCK_VAULT_UNLOCKED_USER_STATE.copy(
+                accounts = MOCK_VAULT_UNLOCKED_USER_STATE
+                    .accounts
+                    .map { it.copy(isVaultUnlocked = false) },
+            ),
+        )
+
+        val viewModel = createViewModel()
+
+        assertEquals(RootNavState.VaultLocked, viewModel.stateFlow.value)
+        assertEquals(
+            SpecialCircumstance.PamAlert(data),
+            specialCircumstanceManager.specialCircumstance,
+        )
+
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+
+        assertEquals(RootNavState.VaultUnlockedForPamAlert(data), viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")

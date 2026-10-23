@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu.handler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.DebugMenuAction
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.DebugMenuState
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.DebugMenuViewModel
@@ -27,6 +28,7 @@ class DebugMenuHandler(
     val onShareSettingsClick: () -> Unit,
     val onGenerateErrorReportClick: () -> Unit,
     val onGenerateCrashClick: () -> Unit,
+    val onSendPamAlertClick: (type: PamAlertType) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -69,6 +71,9 @@ class DebugMenuHandler(
                 viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick)
             },
             onGenerateCrashClick = { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) },
+            onSendPamAlertClick = {
+                viewModel.trySendAction(DebugMenuAction.SendPamAlertClick(type = it))
+            },
         )
 
         /**
@@ -91,6 +96,7 @@ class DebugMenuHandler(
             onShareSettingsClick = { },
             onGenerateErrorReportClick = { },
             onGenerateCrashClick = { },
+            onSendPamAlertClick = { },
         )
     }
 }
