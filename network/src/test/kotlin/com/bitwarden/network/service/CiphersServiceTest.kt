@@ -34,6 +34,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -456,6 +457,100 @@ class CiphersServiceTest : BaseServiceTest() {
             result.getOrThrow(),
         )
     }
+
+    @Test
+    fun `getCipher with partialData should deserialize partialData onto the cipher`() = runTest {
+        server.enqueue(
+            MockResponse().setBody(
+                CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON.replaceFirst(
+                    "{",
+                    "{\n  \"partialData\": \"mockPartialData\",",
+                ),
+            ),
+        )
+        val result = ciphersService.getCipher(cipherId = "mockId-1")
+        assertEquals(
+            GetCipherResponse.Success(
+                cipher = createMockCipher(number = 1, partialData = "mockPartialData"),
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `getCipher without partialData should deserialize a null partialData`() = runTest {
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
+        val result = ciphersService.getCipher(cipherId = "mockId-1")
+        assertNull((result.getOrThrow() as GetCipherResponse.Success).cipher.partialData)
+    }
+
+    @Test
+    fun `updateCipher with partialData should keep partialData on the response cipher`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setBody(
+                    CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON.replaceFirst(
+                        "{",
+                        "{\n  \"partialData\": \"mockPartialData\",",
+                    ),
+                ),
+            )
+            val result = ciphersService.updateCipher(
+                cipherId = "cipherId",
+                body = createMockCipherJsonRequest(number = 1),
+            )
+            assertEquals(
+                UpdateCipherResponseJson.Success(
+                    cipher = createMockCipher(number = 1, partialData = "mockPartialData"),
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Test
+    fun `bulkShareCiphers with partialData should deserialize partialData on mini responses`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setResponseCode(200).setBody(
+                    """
+                    {
+                      "data": [
+                        {
+                          "id": "mockId-1",
+                          "organizationId": "mockOrgId-1",
+                          "type": 1,
+                          "partialData": "mockPartialData",
+                          "organizationUseTotp": false,
+                          "revisionDate": "2023-10-27T12:00:00.00Z",
+                          "creationDate": "2023-10-27T12:00:00.00Z",
+                          "reprompt": 0
+                        },
+                        {
+                          "id": "mockId-2",
+                          "organizationId": "mockOrgId-1",
+                          "type": 1,
+                          "organizationUseTotp": false,
+                          "revisionDate": "2023-10-27T12:00:00.00Z",
+                          "creationDate": "2023-10-27T12:00:00.00Z",
+                          "reprompt": 0
+                        }
+                      ]
+                    }
+                    """.trimIndent(),
+                ),
+            )
+
+            val result = ciphersService.bulkShareCiphers(
+                body = BulkShareCiphersJsonRequest(
+                    ciphers = emptyList(),
+                    collectionIds = listOf("mockId-1"),
+                ),
+            )
+
+            val responses = result.getOrThrow().cipherMiniResponse
+            assertEquals("mockPartialData", responses[0].partialData)
+            assertNull(responses[1].partialData)
+        }
 
     @Test
     fun `getSend with 404 should return the NotFound response`() = runTest {
