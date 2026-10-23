@@ -99,7 +99,12 @@ class VaultSettingsViewModel @Inject constructor(
             }
 
             is VaultSettingsAction.Internal.PamAvailabilityChanged -> {
-                mutableStateFlow.update { it.copy(showMyAccessRequests = action.isEnabled) }
+                mutableStateFlow.update {
+                    it.copy(
+                        showMyAccessRequests = action.isEnabled,
+                        showPamNotificationsRow = action.isEnabled && !buildInfoManager.isFdroid,
+                    )
+                }
             }
         }
     }
@@ -163,6 +168,7 @@ data class VaultSettingsState(
     val showImportActionCard: Boolean,
     val showImportItemsChevron: Boolean,
     val showMyAccessRequests: Boolean = false,
+    val showPamNotificationsRow: Boolean = false,
 )
 
 /**

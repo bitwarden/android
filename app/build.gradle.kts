@@ -166,6 +166,16 @@ configure<ApplicationExtension> {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
+        // On-demand PAM screenshot test (PamScreenshotTest): only runs with -PpamScreenshots.
+        unitTests.all { test ->
+            if (project.hasProperty("pamScreenshots")) {
+                test.systemProperty("pam.screenshots", "true")
+                test.outputs.upToDateWhen { false }
+                (project.findProperty("pamScreenshotsDir") as? String)?.let {
+                    test.systemProperty("pam.screenshots.dir", it)
+                }
+            }
+        }
     }
     lint {
         disable += listOf(

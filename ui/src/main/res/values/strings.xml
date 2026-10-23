@@ -1520,6 +1520,9 @@ Do you want to switch to this account?</string>
     <string name="pam_enable_notifications_description">Know when a request needs your approval. Notifications never include item or user names.</string>
     <string name="pam_notifications_off_title">Notifications are off</string>
     <string name="pam_notifications_off_message">To get notified about access requests, allow notifications for Bitwarden in your device settings.</string>
+    <string name="pam_access_request_notifications">Access request notifications</string>
+    <string name="pam_notifications_state_on">On</string>
+    <string name="pam_notifications_state_off">Off</string>
     <string name="pam_reason">Reason</string>
     <string name="pam_approval_detail_title">Access request</string>
     <string name="pam_approval_not_found">This request is no longer available.</string>
