@@ -15,7 +15,7 @@
     <string name="fastmail" translatable="false">Fastmail</string>
     <string name="forward_email" translatable="false">ForwardEmail</string>
     <string name="x_ellipses" translatable="false">%s…</string>
-    <string name="shared_accounts_header" translatable="false">%1$s | %2$s (%3$d)</string>
+    <string name="shared_accounts_header" translatable="false">%1$s | %2$s</string>
 
     <!-- region Debug Menu -->
     <string name="feature_flags">Feature Flags</string>

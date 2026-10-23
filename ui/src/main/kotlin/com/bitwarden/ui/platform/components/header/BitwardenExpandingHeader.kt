@@ -44,6 +44,7 @@ fun BitwardenExpandingHeader(
         shape = shape,
         insets = insets,
         showExpansionIndicator = showExpansionIndicator,
+        expansionIndicatorColor = BitwardenTheme.colorScheme.icon.secondary,
         interactionSource = interactionSource,
         modifier = modifier,
     ) {

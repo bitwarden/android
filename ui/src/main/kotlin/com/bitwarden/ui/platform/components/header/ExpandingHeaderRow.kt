@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -25,7 +26,6 @@ import com.bitwarden.ui.platform.base.util.interactiveBorder
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The clickable row shared by the expanding header components. It handles the interaction,
@@ -37,6 +37,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param shape The [Shape] used to clip the header and draw the interactive border.
  * @param insets Additional padding applied inside the header, after the horizontal padding.
  * @param showExpansionIndicator Whether to show an indicator to expand or collapse the content.
+ * @param expansionIndicatorColor The tint applied to the expansion indicator.
  * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
  * for this component.
  * @param modifier The [Modifier] to be applied to the header.
@@ -49,6 +50,7 @@ internal fun ExpandingHeaderRow(
     shape: Shape,
     insets: PaddingValues,
     showExpansionIndicator: Boolean,
+    expansionIndicatorColor: Color,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
@@ -80,7 +82,7 @@ internal fun ExpandingHeaderRow(
             Icon(
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_up_small),
                 contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.secondary,
+                tint = expansionIndicatorColor,
                 modifier = Modifier.rotate(degrees = iconRotationDegrees),
             )
         }

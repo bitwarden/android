@@ -361,10 +361,8 @@ private fun ItemListingContent(
         if (state.shouldShowLocalHeader) {
             item(key = "local_items_header") {
                 BitwardenExpandingListHeader(
-                    label = stringResource(
-                        id = BitwardenString.local_codes,
-                        state.itemList.size,
-                    ),
+                    label = stringResource(id = BitwardenString.local_codes_header),
+                    supportingLabel = state.itemList.size.toString(),
                     isExpanded = isLocalHeaderExpanded,
                     onClick = { isLocalHeaderExpanded = !isLocalHeaderExpanded },
                     modifier = Modifier
@@ -403,6 +401,7 @@ private fun ItemListingContent(
                     item(key = "sharedSection_${section.id}") {
                         BitwardenExpandingListHeader(
                             label = section.label(),
+                            supportingLabel = section.codes.size.toString(),
                             isExpanded = section.isExpanded,
                             onClick = { onSectionExpandedClick(section) },
                             modifier = Modifier

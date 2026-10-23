@@ -42,7 +42,6 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
                 label = BitwardenString.shared_accounts_header.asText(
                     it.key.email,
                     it.key.environmentLabel,
-                    it.value.size,
                 ),
                 codes = it.value.sortAlphabetically().toImmutableList(),
                 isExpanded = currentSections

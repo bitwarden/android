@@ -50,6 +50,7 @@ fun BitwardenExpandingListHeader(
         shape = shape,
         insets = PaddingValues(),
         showExpansionIndicator = true,
+        expansionIndicatorColor = BitwardenTheme.colorScheme.text.secondary,
         interactionSource = interactionSource,
         modifier = modifier,
     ) {
