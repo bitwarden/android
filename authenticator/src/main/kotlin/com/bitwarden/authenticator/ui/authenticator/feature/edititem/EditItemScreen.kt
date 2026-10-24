@@ -156,7 +156,7 @@ fun EditItemContent(
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit = {},
     onTotpCodeTextChange: (String) -> Unit = {},
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit = {},
-    onRefreshPeriodOptionClicked: (AuthenticatorRefreshPeriodOption) -> Unit = {},
+    onRefreshPeriodOptionClicked: (Int) -> Unit = {},
     onNumberOfDigitsChanged: (Int) -> Unit = {},
     onExpandAdvancedOptionsClicked: () -> Unit = {},
 ) {
@@ -261,7 +261,7 @@ private fun LazyListScope.advancedOptions(
     viewState: EditItemState.ViewState.Content,
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit,
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit,
-    onRefreshPeriodOptionClicked: (AuthenticatorRefreshPeriodOption) -> Unit,
+    onRefreshPeriodOptionClicked: (Int) -> Unit,
     onNumberOfDigitsChanged: (Int) -> Unit,
 ) {
     item(key = "OtpItemTypeSelector") {
@@ -312,11 +312,16 @@ private fun LazyListScope.advancedOptions(
 
     item(key = "RefreshPeriodItemTypePicker") {
         val possibleRefreshPeriodOptions = AuthenticatorRefreshPeriodOption.entries
+            .map { it.seconds }
+            .plus(viewState.itemData.originalRefreshPeriod)
+            .plus(viewState.itemData.refreshPeriod)
+            .distinct()
+            .sorted()
         val refreshPeriodOptionsWithStrings = possibleRefreshPeriodOptions.associateWith {
             pluralStringResource(
                 id = BitwardenPlurals.refresh_period_seconds,
-                count = it.seconds,
-                formatArgs = arrayOf(it.seconds),
+                count = it,
+                formatArgs = arrayOf(it),
             )
         }
         BitwardenMultiSelectButton(
@@ -406,7 +411,8 @@ private fun EditItemContentExpandedOptionsPreview() {
         viewState = EditItemState.ViewState.Content(
             isAdvancedOptionsExpanded = true,
             itemData = EditItemData(
-                refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
+                refreshPeriod = 45,
+                originalRefreshPeriod = 45,
                 totpCode = "123456",
                 type = AuthenticatorItemType.TOTP,
                 username = "account name",
@@ -428,7 +434,8 @@ private fun EditItemContentCollapsedOptionsPreview() {
         viewState = EditItemState.ViewState.Content(
             isAdvancedOptionsExpanded = false,
             itemData = EditItemData(
-                refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
+                refreshPeriod = 30,
+                originalRefreshPeriod = 30,
                 totpCode = "123456",
                 type = AuthenticatorItemType.TOTP,
                 username = "account name",
