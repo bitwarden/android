@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2Cre
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -117,6 +118,38 @@ class CipherViewExtensionsTest {
             ),
             result,
         )
+    }
+
+    @Test
+    fun `card brands from other clients should survive an edit round trip`() {
+        mapOf(
+            "DinaCard" to VaultCardBrand.DINA_CARD,
+            "Mir" to VaultCardBrand.MIR,
+        )
+            .forEach { (storedBrand, expectedBrand) ->
+                val cipherView = DEFAULT_CARD_CIPHER_VIEW.copy(
+                    card = DEFAULT_CARD_CIPHER_VIEW.card!!.copy(brand = storedBrand),
+                )
+                val state = cipherView.toViewState(
+                    isClone = false,
+                    isPremium = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = FIXED_CLOCK,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+
+                assertEquals(
+                    expectedBrand,
+                    (state.type as VaultAddEditState.ViewState.Content.ItemType.Card).brand,
+                )
+                assertEquals(
+                    storedBrand,
+                    state.toCipherView(clock = FIXED_CLOCK, isPremiumUser = false).card?.brand,
+                )
+            }
     }
 
     @Test
