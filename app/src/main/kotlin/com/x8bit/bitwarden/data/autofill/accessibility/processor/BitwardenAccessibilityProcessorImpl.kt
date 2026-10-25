@@ -96,11 +96,7 @@ class BitwardenAccessibilityProcessorImpl(
     private fun handleAttemptParseUri(rootNode: AccessibilityNodeInfo) {
         accessibilityParser
             .parseForUriOrPackageName(rootNode = rootNode)
-            ?.takeIf {
-                accessibilityParser
-                    .parseForFillableFields(rootNode = rootNode, uri = it)
-                    .hasFields
-            }
+            // A page may only contain a TOTP field, so a valid URI is enough to show matching items.
             ?.let { uri ->
                 context.startActivity(
                     createAutofillSelectionIntent(

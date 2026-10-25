@@ -259,7 +259,7 @@ class BitwardenAccessibilityProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processAccessibilityEvent with AttemptParseUri and a valid uri but no fields to fill display toast`() {
+    fun `processAccessibilityEvent with AttemptParseUri and a valid uri should start the main activity without requiring fillable fields`() {
         val testPackageName = "com.android.chrome"
         val rootNode = mockk<AccessibilityNodeInfo> {
             every { packageName } returns testPackageName
@@ -289,9 +289,6 @@ class BitwardenAccessibilityProcessorTest {
         } returns mockk()
         val uri = mockk<Uri>()
         every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns uri
-        every {
-            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
-        } returns mockk { every { hasFields } returns false }
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
 
@@ -303,61 +300,6 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction
             accessibilityAutofillManager.accessibilityAction = null
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
-            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
-            toastManager.show(
-                messageId = BitwardenString.autofill_tile_uri_not_found,
-                duration = Toast.LENGTH_LONG,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `processAccessibilityEvent with AttemptParseUri and a valid uri should start the main activity`() {
-        val testPackageName = "com.android.chrome"
-        val rootNode = mockk<AccessibilityNodeInfo> {
-            every { packageName } returns testPackageName
-        }
-        val node = mockk<AccessibilityNodeInfo> {
-            every { isSystemPackage } returns false
-            every { shouldSkipPackage } returns false
-            every { packageName } returns testPackageName
-        }
-        val event = mockk<AccessibilityEvent> {
-            every { source } returns node
-            every { packageName } returns testPackageName
-        }
-        every { powerManager.isInteractive } returns true
-        every { launcherPackageNameManager.launcherPackages } returns emptyList()
-        every {
-            accessibilityAutofillManager.accessibilityAction
-        } returns AccessibilityAction.AttemptParseUri
-        every { accessibilityAutofillManager.accessibilityAction = null } just runs
-        every {
-            createAutofillSelectionIntent(
-                context = context,
-                framework = AutofillSelectionData.Framework.ACCESSIBILITY,
-                type = AutofillSelectionData.Type.LOGIN,
-                uri = any(),
-            )
-        } returns mockk()
-        val uri = mockk<Uri>()
-        every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns uri
-        every {
-            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
-        } returns mockk { every { hasFields } returns true }
-
-        bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
-
-        verify(exactly = 1) {
-            powerManager.isInteractive
-            node.isSystemPackage
-            node.shouldSkipPackage
-            launcherPackageNameManager.launcherPackages
-            accessibilityAutofillManager.accessibilityAction
-            accessibilityAutofillManager.accessibilityAction = null
-            accessibilityParser.parseForUriOrPackageName(rootNode = node)
-            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
             createAutofillSelectionIntent(
                 context = context,
                 framework = AutofillSelectionData.Framework.ACCESSIBILITY,
@@ -365,6 +307,13 @@ class BitwardenAccessibilityProcessorTest {
                 uri = any(),
             )
             context.startActivity(any())
+        }
+        verify(exactly = 0) {
+            accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
+            toastManager.show(
+                messageId = BitwardenString.autofill_tile_uri_not_found,
+                duration = Toast.LENGTH_LONG,
+            )
         }
     }
 
