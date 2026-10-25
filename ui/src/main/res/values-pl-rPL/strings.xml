@@ -582,8 +582,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="resend_code">Wyślij ponownie kod</string>
     <string name="a_verification_code_was_sent_to_your_email">Kod weryfikacyjny został wysłany na adres e-mail</string>
     <string name="submit_crash_logs">Wyślij logi awarii</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">rozwiń</string>
+    <string name="collapse">zwiń</string>
     <string name="uppercase_ato_z">Wielkie litery (A-Z)</string>
     <string name="lowercase_ato_z">Małe litery (a-z)</string>
     <string name="numbers_zero_to_nine">Cyfry (0-9)</string>
@@ -1462,9 +1462,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="use_this_password">Użyj tego hasła</string>
     <string name="use_this_username">Użyj tej nazwy użytkownika</string>
     <string name="create_login">Utwórz dane logowania</string>
-    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
-    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
-    <string name="turn_off">Turn off</string>
-    <string name="turn_off_biometric_question">Turn off biometrics?</string>
-    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="keep_unlocking_with_biometrics">Zachowaj odblokowanie biometrią</string>
+    <string name="weve_made_a_security_update">Wprowadziliśmy aktualizację zabezpieczeń. Potwierdź dane biometryczne, aby móc nadal z nich korzystać.</string>
+    <string name="turn_off">Wyłącz</string>
+    <string name="turn_off_biometric_question">Wyłączyć biometrię?</string>
+    <string name="unlocking_will_require_your_master_password">Do odblokowania będzie wymagane hasło główne. W ułatwieniach możesz ponownie włączyć dane biometryczne.</string>
 </resources>
