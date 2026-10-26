@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.pam.util.getPamAlertDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -64,6 +65,8 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -114,7 +117,11 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val mutableIsVfo1FoundationEnabledFlow = MutableStateFlow(false)
+    private var isPamMobileEnabled = true
     private val featureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+        } answers { isPamMobileEnabled }
         every {
             getFeatureFlag(FlagKey.Vfo1Foundation)
         } answers { mutableIsVfo1FoundationEnabledFlow.value }
@@ -195,6 +202,7 @@ class MainViewModelTest : BaseViewModelTest() {
         mockkStatic(
             Intent::getTotpDataOrNull,
             Intent::getPasswordlessRequestDataIntentOrNull,
+            Intent::getPamAlertDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
@@ -228,6 +236,7 @@ class MainViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             Intent::getTotpDataOrNull,
             Intent::getPasswordlessRequestDataIntentOrNull,
+            Intent::getPamAlertDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
@@ -705,6 +714,84 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
             specialCircumstanceManager.specialCircumstance,
         )
+    }
+
+    @Test
+    fun `on ReceiveFirstIntent with PAM alert data for the active account should set PamAlert`() {
+        mutableUserStateFlow.value = PAM_USER_STATE
+        val viewModel = createViewModel()
+        val data = PamAlertData(
+            userId = ACTIVE_USER_ID,
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_REQUESTED,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(intent = createMockIntent(mockPamAlertData = data)),
+        )
+
+        assertEquals(
+            SpecialCircumstance.PamAlert(pamAlertData = data),
+            specialCircumstanceManager.specialCircumstance,
+        )
+        verify(exactly = 0) { authRepository.switchAccount(any()) }
+    }
+
+    @Test
+    fun `on ReceiveNewIntent with PAM alert data for another account should switch account`() {
+        mutableUserStateFlow.value = PAM_USER_STATE
+        val viewModel = createViewModel()
+        val data = PamAlertData(
+            userId = "otherUserId",
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_APPROVED,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = createMockIntent(mockPamAlertData = data)),
+        )
+
+        verify(exactly = 1) { authRepository.switchAccount("otherUserId") }
+        assertEquals(
+            SpecialCircumstance.PamAlert(pamAlertData = data),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Test
+    fun `on ReceiveNewIntent with PAM alert data for an unknown account should be ignored`() {
+        mutableUserStateFlow.value = PAM_USER_STATE
+        val viewModel = createViewModel()
+        val data = PamAlertData(
+            userId = "removedUserId",
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_REQUESTED,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = createMockIntent(mockPamAlertData = data)),
+        )
+
+        verify(exactly = 0) { authRepository.switchAccount(any()) }
+        assertNull(specialCircumstanceManager.specialCircumstance)
+    }
+
+    @Test
+    fun `on ReceiveNewIntent with PAM alert data and the flag off should be ignored`() {
+        isPamMobileEnabled = false
+        mutableUserStateFlow.value = PAM_USER_STATE
+        val viewModel = createViewModel()
+        val data = PamAlertData(
+            userId = ACTIVE_USER_ID,
+            requestId = "requestId",
+            type = PamAlertType.ACCESS_REQUESTED,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(intent = createMockIntent(mockPamAlertData = data)),
+        )
+
+        assertNull(specialCircumstanceManager.specialCircumstance)
     }
 
     @Suppress("MaxLineLength")
@@ -1412,6 +1499,10 @@ private val DEFAULT_USER_STATE = UserState(
     accounts = listOf(DEFAULT_ACCOUNT),
 )
 
+private val PAM_USER_STATE = DEFAULT_USER_STATE.copy(
+    accounts = listOf(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT.copy(userId = "otherUserId")),
+)
+
 private val DEFAULT_PASSWORDLESS_REQUEST_DATA = PasswordlessRequestData(
     userId = "activeUserId",
     loginRequestId = "",
@@ -1421,6 +1512,7 @@ private val DEFAULT_PASSWORDLESS_REQUEST_DATA = PasswordlessRequestData(
 private fun createMockIntent(
     mockTotpData: TotpData? = null,
     mockPasswordlessRequestData: PasswordlessRequestData? = null,
+    mockPamAlertData: PamAlertData? = null,
     mockAutofillSaveItem: AutofillSaveItem? = null,
     mockAutofillSelectionData: AutofillSelectionData? = null,
     mockCompleteRegistrationData: CompleteRegistrationData? = null,
@@ -1434,6 +1526,7 @@ private fun createMockIntent(
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
+    every { getPamAlertDataIntentOrNull() } returns mockPamAlertData
     every { getAutofillSaveItemOrNull() } returns mockAutofillSaveItem
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData

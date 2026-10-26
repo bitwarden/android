@@ -5,11 +5,15 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.assertCoroutineThrows
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import io.mockk.coEvery
@@ -18,12 +22,17 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class DebugMenuViewModelTest : BaseViewModelTest() {
@@ -62,6 +71,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
+
+    private val pushManager = mockk<PushManager> {
+        every { onMessageReceived(data = any()) } just runs
+    }
 
     @Test
     fun `initial state should be correct`() {
@@ -126,6 +139,58 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             logsManager.trackNonFatalException(throwable = any())
         }
+    }
+
+    @Test
+    fun `SendPamAlertClick for a request should feed the push manager a type 30 payload`() {
+        every { mockAuthRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
+        createViewModel().trySendAction(
+            DebugMenuAction.SendPamAlertClick(type = PamAlertType.ACCESS_REQUESTED),
+        )
+
+        val data = slot<Map<String, String>>()
+        verify(exactly = 1) { pushManager.onMessageReceived(data = capture(data)) }
+        assertEquals("30", data.captured["type"])
+        val payload = Json.decodeFromString<NotificationPayload.PamAccessNotification>(
+            requireNotNull(data.captured["payload"]),
+        )
+        assertEquals("activeUserId", payload.userId)
+        assertFalse(payload.requestId.isNullOrBlank())
+        assertNull(payload.outcome)
+    }
+
+    @Test
+    fun `SendPamAlertClick for a decision should feed the push manager a type 31 payload`() {
+        every { mockAuthRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
+        val viewModel = createViewModel()
+        val outcomes = listOf(
+            PamAlertType.ACCESS_APPROVED to 1,
+            PamAlertType.ACCESS_DENIED to 2,
+            PamAlertType.ACCESS_REVOKED to 3,
+        )
+        outcomes.forEach { (type, _) ->
+            viewModel.trySendAction(DebugMenuAction.SendPamAlertClick(type = type))
+        }
+
+        val data = mutableListOf<Map<String, String>>()
+        verify(exactly = 3) { pushManager.onMessageReceived(data = capture(data)) }
+        data.zip(outcomes).forEach { (sent, expected) ->
+            assertEquals("31", sent["type"])
+            val payload = Json.decodeFromString<NotificationPayload.PamAccessNotification>(
+                requireNotNull(sent["payload"]),
+            )
+            assertEquals("activeUserId", payload.userId)
+            assertEquals(expected.second, payload.outcome)
+        }
+    }
+
+    @Test
+    fun `SendPamAlertClick without an active user should not send anything`() {
+        every { mockAuthRepository.userStateFlow } returns MutableStateFlow(null)
+        createViewModel().trySendAction(
+            DebugMenuAction.SendPamAlertClick(type = PamAlertType.ACCESS_APPROVED),
+        )
+        verify(exactly = 0) { pushManager.onMessageReceived(data = any()) }
     }
 
     @Test
@@ -237,7 +302,12 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         settingsLogManager = settingsLogManager,
         cookieAcquisitionRequestManager = mockCookieAcquisitionRequestManager,
         environmentRepository = fakeEnvironmentRepository,
+        pushManager = pushManager,
     )
+}
+
+private val USER_STATE = mockk<UserState> {
+    every { activeUserId } returns "activeUserId"
 }
 
 private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
