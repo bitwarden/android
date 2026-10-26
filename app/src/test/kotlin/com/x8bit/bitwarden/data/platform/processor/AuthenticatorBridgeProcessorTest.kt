@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.RemoteCallbackList
+import android.os.RemoteException
+import androidx.credentials.provider.RemoteEntry
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
 import com.bitwarden.authenticatorbridge.model.AddTotpLoginItemData
@@ -25,6 +27,7 @@ import com.bitwarden.ui.platform.util.getTotpDataOrNull
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
+import io.mockk.clearConstructorMockk
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -257,6 +260,86 @@ class AuthenticatorBridgeProcessorTest {
                     .getBroadcastItem(0)
             } returns serviceCallback
             lastAccountsSync = null
+        }
+
+        @Test
+        fun `syncAccounts should only fetch callbacks within the broadcast count`() {
+            clearConstructorMockk(RemoteCallbackList::class, answers = false)
+            val sharedAccountData = mockk<SharedAccountData>()
+            val expected = mockk<EncryptedSharedAccountData>()
+
+            every {
+                authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+            } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+
+            coEvery {
+                authenticatorBridgeRepository.getSharedAccounts()
+            } returns sharedAccountData
+
+            every {
+                sharedAccountData.encrypt(SYMMETRIC_KEY)
+            } returns expected.asSuccess()
+
+            getDefaultBinder().syncAccounts()
+
+            assertEquals(expected, lastAccountsSync)
+            verify(exactly = 1) {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(0)
+            }
+
+            verify(exactly = 0) {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(1)
+            }
+
+            verify(exactly = 1) {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .finishBroadcast()
+            }
+        }
+
+        @Test
+        fun `syncAccounts should still notify later callbacks when an earlier one fails`() {
+            val deadCallback = object : IAuthenticatorBridgeServiceCallback.Stub() {
+                override fun onAccountsSync(data: EncryptedSharedAccountData?) {
+                    throw RemoteException("process died")
+                }
+            }
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .beginBroadcast()
+            } returns 2
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(0)
+            } returns deadCallback
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(1)
+            } returns serviceCallback
+
+            val sharedAccountData = mockk<SharedAccountData>()
+            val expected = mockk<EncryptedSharedAccountData>()
+
+            every {
+                authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+            } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+
+            coEvery {
+                authenticatorBridgeRepository.getSharedAccounts()
+            } returns sharedAccountData
+
+            every {
+                sharedAccountData.encrypt(SYMMETRIC_KEY)
+            } returns expected.asSuccess()
+
+            getDefaultBinder().syncAccounts()
+
+            assertEquals(expected, lastAccountsSync)
         }
 
         @Test

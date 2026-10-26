@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.os.IInterface
 import android.os.RemoteCallbackList
+import android.os.RemoteException
+import android.util.Log
 import androidx.core.net.toUri
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
@@ -150,8 +152,17 @@ class AuthenticatorBridgeProcessorImpl(
 private fun <T : IInterface> RemoteCallbackList<T>.forEach(action: (T) -> Unit) {
     val count = this.beginBroadcast()
     try {
-        for (index in 0..count) {
-            action(this.getBroadcastItem(index))
+        for (index in 0 until count) {
+            try {
+                action(this.getBroadcastItem(index))
+            } catch (e: RemoteException) {
+                // authenticator's app process died
+                // RemoteCallbackList handles unregistering callback, but need to catch exception
+                Timber.w(e, "Bridge callback failed")
+            } catch (e: RuntimeException) {
+                // Exception thrown processing callback
+                Timber.e(e, "Bridge callback threw unexpectedly")
+            }
         }
     } catch (e: Exception) {
         // Broadcast failed
