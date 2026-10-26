@@ -6383,7 +6383,6 @@ class AuthRepositoryTest {
         coEvery {
             accountsService.resendVerificationCodeEmail(
                 body = ResendEmailRequestJson(
-                    deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     ssoToken = null,
@@ -6395,7 +6394,6 @@ class AuthRepositoryTest {
         coVerify {
             accountsService.resendVerificationCodeEmail(
                 body = ResendEmailRequestJson(
-                    deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     ssoToken = null,
@@ -6449,7 +6447,6 @@ class AuthRepositoryTest {
             coEvery {
                 accountsService.resendVerificationCodeEmail(
                     body = ResendEmailRequestJson(
-                        deviceIdentifier = UNIQUE_APP_ID,
                         email = EMAIL,
                         passwordHash = PASSWORD_HASH,
                         ssoToken = null,
@@ -6466,7 +6463,6 @@ class AuthRepositoryTest {
             coVerify {
                 accountsService.resendVerificationCodeEmail(
                     body = ResendEmailRequestJson(
-                        deviceIdentifier = UNIQUE_APP_ID,
                         email = EMAIL,
                         passwordHash = PASSWORD_HASH,
                         ssoToken = null,

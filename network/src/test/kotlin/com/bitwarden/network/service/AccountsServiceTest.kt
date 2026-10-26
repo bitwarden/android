@@ -134,7 +134,6 @@ class AccountsServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = service.resendVerificationCodeEmail(
             body = ResendEmailRequestJson(
-                deviceIdentifier = "3",
                 email = "example@email.com",
                 passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
                 ssoToken = null,
@@ -149,7 +148,6 @@ class AccountsServiceTest : BaseServiceTest() {
         server.enqueue(response)
         val result = service.resendVerificationCodeEmail(
             body = ResendEmailRequestJson(
-                deviceIdentifier = "3",
                 email = "example@email.com",
                 passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
                 ssoToken = null,

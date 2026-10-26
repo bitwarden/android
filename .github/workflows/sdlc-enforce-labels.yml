@@ -7,6 +7,10 @@ on:
         description: "Pull Request Number"
         required: true
         type: number
+      event-labels:
+        description: "PR labels from the triggering event payload (logging only)"
+        required: false
+        type: string
 
 permissions: {}
 
