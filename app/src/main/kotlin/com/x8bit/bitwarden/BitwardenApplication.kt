@@ -8,6 +8,7 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
+import com.x8bit.bitwarden.data.pam.manager.PamLeaseReminderManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.DiskSourceMigrationLogger
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
@@ -44,6 +45,9 @@ class BitwardenApplication : Application(), SingletonImageLoader.Factory {
 
     @Inject
     lateinit var authRequestNotificationManager: AuthRequestNotificationManager
+
+    @Inject
+    lateinit var pamLeaseReminderManager: PamLeaseReminderManager
 
     @Inject
     lateinit var organizationEventManager: OrganizationEventManager
