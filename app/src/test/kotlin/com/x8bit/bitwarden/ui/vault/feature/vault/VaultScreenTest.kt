@@ -9,7 +9,6 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
@@ -1293,7 +1292,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `section content should be displayed or hidden according to collapsed sections`() {
         val vaultItem = VaultState.ViewState.VaultItem.Login(
             id = "12345",
-            name = "Test Item".asText(),
+            name = "Favorite Item".asText(),
             username = "Bitwarden".asText(),
             overflowOptions = persistentListOf(),
             shouldShowMasterPasswordReprompt = false,
@@ -1311,7 +1310,9 @@ class VaultScreenTest : BitwardenComposeTest() {
                             itemCount = 1,
                         ),
                     ),
-                    noFolderItems = listOf(vaultItem.copy(id = "67890")),
+                    noFolderItems = listOf(
+                        vaultItem.copy(id = "67890", name = "No Folder Item".asText()),
+                    ),
                     collectionItems = listOf(
                         VaultState.ViewState.CollectionItem(
                             id = "12345",
@@ -1322,19 +1323,18 @@ class VaultScreenTest : BitwardenComposeTest() {
                 ),
             )
         }
-        val sectionContentTags = listOf(
-            "VerificationCodesFilter",
-            "CipherCell",
-            "LoginFilter",
-            "FolderFilter",
-            "CollectionFilter",
-            "ArchiveFilter",
-            "TrashFilter",
+        val sectionContentLabels = listOf(
+            "Verification codes",
+            "Favorite Item",
+            "Login",
+            "Test Folder",
+            "No Folder Item",
+            "Test Collection",
+            "Archive",
+            "Trash",
         )
-        sectionContentTags.forEach { tag ->
-            composeTestRule
-                .onNode(hasScrollToNodeAction())
-                .performScrollToNode(hasTestTag(tag))
+        sectionContentLabels.forEach { label ->
+            composeTestRule.onNodeWithTextAfterScroll(text = label).assertIsDisplayed()
         }
 
         mutableStateFlow.update {
@@ -1352,8 +1352,8 @@ class VaultScreenTest : BitwardenComposeTest() {
         ).forEach { header ->
             composeTestRule.onNodeWithTextAfterScroll(text = header).assertIsDisplayed()
         }
-        sectionContentTags.forEach { tag ->
-            composeTestRule.onNodeWithTag(tag).assertDoesNotExist()
+        sectionContentLabels.forEach { label ->
+            composeTestRule.onNodeWithText(text = label).assertDoesNotExist()
         }
     }
 
@@ -2057,7 +2057,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         // Scroll past the item so its overflow button is not covered by the FAB.
         composeTestRule
             .onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasTestTag("TrashFilter"))
+            .performScrollToNode(hasText("Trash"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
@@ -2131,7 +2131,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         // Scroll past the item so its overflow button is not covered by the FAB.
         composeTestRule
             .onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasTestTag("TrashFilter"))
+            .performScrollToNode(hasText("Trash"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
