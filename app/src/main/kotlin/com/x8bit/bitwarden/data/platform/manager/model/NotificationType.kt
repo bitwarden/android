@@ -66,6 +66,12 @@ enum class NotificationType {
 
     @SerialName("27")
     PREMIUM_STATUS_CHANGED,
+
+    @SerialName("28")
+    REFRESH_APPROVER_INBOX,
+
+    @SerialName("29")
+    REFRESH_ACCESS_REQUEST,
 }
 
 @Keep
