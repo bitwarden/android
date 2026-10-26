@@ -1441,7 +1441,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="use_this_passphrase">Diese Passphrase verwenden</string>
     <string name="use_this_password">Dieses Passwort verwenden</string>
     <string name="use_this_username">Diesen Benutzernamen verwenden</string>
-    <string name="create_login">Create login</string>
+    <string name="create_login">Zugangsdaten erstellen</string>
     <string name="keep_unlocking_with_biometrics">Weiterhin mit Biometrie entsperren</string>
     <string name="weve_made_a_security_update">Wir haben eine Sicherheitsaktualisierung durchgeführt. Bitte bestätige deine biometrischen Daten erneut, um sie weiterhin zum Entsperren von Bitwarden nutzen zu können.</string>
     <string name="turn_off">Deaktivieren</string>

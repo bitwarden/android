@@ -1441,7 +1441,7 @@ Deseja trocar para esta conta?</string>
     <string name="use_this_passphrase">Usar esta frase secreta</string>
     <string name="use_this_password">Usar esta senha</string>
     <string name="use_this_username">Usar este nome de usuário</string>
-    <string name="create_login">Create login</string>
+    <string name="create_login">Criar login</string>
     <string name="keep_unlocking_with_biometrics">Desbloquear com biometria</string>
     <string name="weve_made_a_security_update">Fizemos uma atualização de segurança. Confirme seus dados biométricos novamente para continuar usando-os para desbloquear o Bitwarden.</string>
     <string name="turn_off">Desativar</string>
