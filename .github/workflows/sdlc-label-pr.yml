@@ -25,6 +25,11 @@ on:
         type: boolean
         default: false
 
+concurrency:
+  group: sdlc-label-pr-${{ github.event.pull_request.number || inputs.pr-number }}
+  cancel-in-progress: false
+  queue: max # allows multiple pending runs
+
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
 
@@ -104,3 +109,4 @@ jobs:
     uses: ./.github/workflows/sdlc-enforce-labels.yml
     with:
       pr-number: ${{ github.event.pull_request.number || inputs.pr-number }}
+      event-labels: ${{ toJSON(github.event.pull_request.labels) }}

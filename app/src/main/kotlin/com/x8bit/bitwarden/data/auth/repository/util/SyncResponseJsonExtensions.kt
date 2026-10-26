@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.core.data.serializer.SafeListSerializer
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.network.model.MemberDecryptionType
 import com.bitwarden.network.model.OrganizationStatusType
@@ -7,15 +8,23 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.ProductTierType
 import com.bitwarden.network.model.ProviderType
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.organizations.CollectionManagementSettings
+import com.bitwarden.organizations.FamilySponsorship
+import com.bitwarden.organizations.OrganizationDetails
+import com.bitwarden.organizations.OrganizationMembership
+import com.bitwarden.organizations.OrganizationPlan
+import com.bitwarden.organizations.OrganizationProvider
 import com.bitwarden.organizations.OrganizationUserStatusType
 import com.bitwarden.organizations.OrganizationUserType
 import com.bitwarden.organizations.Permissions
 import com.bitwarden.organizations.ProfileOrganization
+import com.bitwarden.organizations.SsoSettings
 import com.bitwarden.policies.Policy
 import com.bitwarden.policies.PolicyType
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import com.bitwarden.organizations.MemberDecryptionType as SdkMemberDecryptionType
 import com.bitwarden.organizations.ProductTierType as SdkProductTierType
 import com.bitwarden.organizations.ProviderType as SdkProviderType
@@ -23,6 +32,9 @@ import com.bitwarden.organizations.ProviderType as SdkProviderType
 private val JSON = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
+    serializersModule = SerializersModule {
+        contextual(List::class) { args -> SafeListSerializer(args.first()) }
+    }
 }
 
 /**
@@ -61,17 +73,28 @@ fun List<SyncResponseJson.Profile.Organization>.toSdkProfileOrganizations(): Lis
 
 /**
  * Maps the given [SyncResponseJson.Profile.Organization] to a [ProfileOrganization] or `null` if
- * the [SyncResponseJson.Profile.Organization.name] is not present.
+ * the [SyncResponseJson.Profile.Organization.name] or
+ * [SyncResponseJson.Profile.Organization.userId] is not present.
  */
 @Suppress("LongMethod")
-private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): ProfileOrganization? =
-    this.name?.let {
-        ProfileOrganization(
+private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): ProfileOrganization? {
+    val organizationName = this.name ?: return null
+    // The SDK requires a non-null user ID, so an organization without one cannot be mapped.
+    val memberUserId = this.userId ?: return null
+    return ProfileOrganization(
+        details = OrganizationDetails(
             id = this.id,
-            name = it,
-            status = this.status.toSdkOrganizationUserStatusType(),
-            type = this.type.toSdkOrganizationUserType(),
+            name = organizationName,
             enabled = this.isEnabled,
+            hasPublicAndPrivateKeys = this.hasPublicAndPrivateKeys,
+        ),
+        plan = OrganizationPlan(
+            productTierType = this.productTierType.toSdkProductTierType(),
+            seats = this.seats,
+            maxCollections = this.maxCollections,
+            maxStorageGb = this.maxStorageGb,
+            selfHost = this.isSelfHost,
+            usersGetPremium = this.shouldUsersGetPremium,
             usePolicies = this.shouldUsePolicies,
             useGroups = this.shouldUseGroups,
             useDirectory = this.shouldUseDirectory,
@@ -87,49 +110,63 @@ private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): Pr
             useResetPassword = this.useResetPassword,
             useSecretsManager = this.useSecretsManager,
             usePasswordManager = this.usePasswordManager,
+            // Not provided by the sync response.
+            usePam = false,
             useActivateAutofillPolicy = this.useActivateAutofillPolicy,
             useAutomaticUserConfirmation = this.useAutomaticUserConfirmation,
-            selfHost = this.isSelfHost,
-            usersGetPremium = this.shouldUsersGetPremium,
-            seats = this.seats,
-            maxCollections = this.maxCollections,
-            maxStorageGb = this.maxStorageGb,
-            ssoBound = this.ssoBound,
-            identifier = this.identifier,
+            useAccessIntelligence = this.useAccessIntelligence,
+            useAdminSponsoredFamilies = this.useAdminSponsoredFamilies,
+            useDisableSmAdsForUsers = this.useDisableSmAdsForUsers,
+            usePhishingBlocker = this.usePhishingBlocker,
+            useMyItems = this.useMyItems,
+            // Not provided by the sync response.
+            useInviteLinks = false,
+        ),
+        membership = OrganizationMembership(
+            status = this.status.toSdkOrganizationUserStatusType(),
+            type = this.type.toSdkOrganizationUserType(),
             permissions = this.permissions.toSdkPermissions(),
-            resetPasswordEnrolled = this.resetPasswordEnrolled,
-            userId = this.userId,
+            userId = memberUserId,
             organizationUserId = this.organizationUserId,
-            hasPublicAndPrivateKeys = this.hasPublicAndPrivateKeys,
-            providerId = this.providerId,
-            providerName = this.providerName,
-            providerType = this.providerType?.toSdkProviderType(),
-            isProviderUser = this.isProviderUser,
             isMember = this.isMember,
-            familySponsorshipFriendlyName = this.familySponsorshipFriendlyName,
-            familySponsorshipAvailable = this.familySponsorshipAvailable,
-            productTierType = this.productTierType.toSdkProductTierType(),
-            keyConnectorEnabled = this.isKeyConnectorEnabled,
-            keyConnectorUrl = this.keyConnectorUrl,
-            familySponsorshipLastSyncDate = this.familySponsorshipLastSyncDate,
-            familySponsorshipValidUntil = this.familySponsorshipValidUntil,
-            familySponsorshipToDelete = this.familySponsorshipToDelete,
+            isProviderUser = this.isProviderUser,
+            resetPasswordEnrolled = this.resetPasswordEnrolled,
+            ssoBound = this.ssoBound,
+            userIsClaimedByOrganization = this.userIsClaimedByOrganization,
             accessSecretsManager = this.accessSecretsManager,
+        ),
+        collectionManagement = CollectionManagementSettings(
             limitCollectionCreation = this.limitCollectionCreation,
             limitCollectionDeletion = this.limitCollectionDeletion,
             limitItemDeletion = this.limitItemDeletion,
             allowAdminAccessToAllCollectionItems = this.allowAdminAccessToAllCollectionItems,
-            userIsManagedByOrganization = this.userIsClaimedByOrganization,
-            useAccessIntelligence = this.useAccessIntelligence,
-            useAdminSponsoredFamilies = this.useAdminSponsoredFamilies,
-            useDisableSmAdsForUsers = this.useDisableSmAdsForUsers,
+        ),
+        provider = this.providerId?.let { providerId ->
+            this.providerType?.let { providerType ->
+                OrganizationProvider(
+                    id = providerId,
+                    type = providerType.toSdkProviderType(),
+                    name = this.providerName,
+                )
+            }
+        },
+        sso = SsoSettings(
+            enabled = this.ssoEnabled,
+            identifier = this.identifier,
+            memberDecryptionType = this.ssoMemberDecryptionType?.toSdkMemberDecryptionType(),
+            keyConnectorEnabled = this.isKeyConnectorEnabled,
+            keyConnectorUrl = this.keyConnectorUrl,
+        ),
+        familySponsorship = FamilySponsorship(
+            available = this.familySponsorshipAvailable,
+            friendlyName = this.familySponsorshipFriendlyName,
+            validUntil = this.familySponsorshipValidUntil,
+            lastSyncDate = this.familySponsorshipLastSyncDate,
+            toDelete = this.familySponsorshipToDelete,
             isAdminInitiated = this.isAdminInitiated,
-            ssoEnabled = this.ssoEnabled,
-            ssoMemberDecryptionType = this.ssoMemberDecryptionType?.toSdkMemberDecryptionType(),
-            usePhishingBlocker = this.usePhishingBlocker,
-            useMyItems = this.useMyItems,
-        )
-    }
+        ),
+    )
+}
 
 /**
  * Convert the JSON data of the [Policy] object into [PolicyInformation] data.

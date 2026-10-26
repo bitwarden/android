@@ -1781,7 +1781,6 @@ internal class AuthRepositoryImpl(
         twoFactorResponse = loginResponse
         twoFactorDeviceData = deviceData
         resendEmailRequestJson = ResendEmailRequestJson(
-            deviceIdentifier = authDiskSource.uniqueAppId,
             email = email,
             passwordHash = authModel.password,
             ssoToken = loginResponse.ssoToken,
