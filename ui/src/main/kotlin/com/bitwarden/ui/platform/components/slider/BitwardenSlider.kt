@@ -90,11 +90,14 @@ fun BitwardenSlider(
             .semantics(mergeDescendants = true) {},
     ) {
         val layoutDirection = LocalLayoutDirection.current
-        val sliderDelta = if (layoutDirection == LayoutDirection.Ltr) {
-            1
-        } else {
-            -1
+        val sliderDelta = remember(layoutDirection) {
+            if (layoutDirection == LayoutDirection.Ltr) {
+                1
+            } else {
+                -1
+            }
         }
+
         TextField(
             value = sliderValue.toString(),
             textStyle = BitwardenTheme.typography.bodyLarge,
