@@ -2,48 +2,39 @@
 
 package com.bitwarden.testharness.ui.platform.feature.autofill
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.rootnav.RootNavGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
 
 /**
- * Autofill graph route - serves as the parent for all Autofill test flows.
+ * Add the Autofill test flow to the root navigation entries. The [RootNavGraph.AutofillRoute]
+ * hosts the [AutofillGraph].
  */
-@Serializable
-data object AutofillGraphRoute
-
-/**
- * Autofill test placeholder screen - the start destination of the graph.
- */
-@Serializable
-data object AutofillPlaceholderRoute
-
-/**
- * Add Autofill nav graph to the root nav graph.
- *
- * This graph contains the placeholder screen and can be expanded with
- * additional autofill test screens as needed.
- */
-fun NavGraphBuilder.autofillGraph(
+fun EntryProviderScope<RootNavGraph>.autofillGraph(
     onNavigateBack: () -> Unit,
 ) {
-    navigation<AutofillGraphRoute>(
-        startDestination = AutofillPlaceholderRoute,
-    ) {
-        autofillPlaceholderDestination(
-            onNavigateBack = onNavigateBack,
+    entry<RootNavGraph.AutofillRoute> {
+        val navigationController = rememberNavigationController<AutofillGraph>(
+            routes = arrayOf(AutofillGraph.AutofillPlaceholderRoute),
+        )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                autofillPlaceholderDestination(onNavigateBack = onNavigateBack)
+            },
         )
     }
 }
 
-private fun NavGraphBuilder.autofillPlaceholderDestination(
+private fun EntryProviderScope<AutofillGraph>.autofillPlaceholderDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithRootPushTransitions<AutofillPlaceholderRoute> {
+    rootPushEntry<AutofillGraph.AutofillPlaceholderRoute> {
         AutofillPlaceholderScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -51,8 +42,8 @@ private fun NavGraphBuilder.autofillPlaceholderDestination(
 }
 
 /**
- * Navigate to the Autofill graph.
+ * Navigate to the Autofill test flow.
  */
-fun NavController.navigateToAutofillGraph(navOptions: NavOptions? = null) {
-    navigate(route = AutofillGraphRoute, navOptions = navOptions)
+fun NavigationController<RootNavGraph>.navigateToAutofill() {
+    this.navigate(route = RootNavGraph.AutofillRoute)
 }
