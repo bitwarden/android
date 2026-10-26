@@ -8,33 +8,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingGraphRoute
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingRoute
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
-import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraphRoute
-import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsRoute
-import com.bitwarden.authenticator.ui.platform.feature.settings.export.navigateToExport
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.navigateToImporting
-import com.bitwarden.authenticator.ui.platform.feature.settings.settingsGraph
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.navigateToTabOrRoot
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
+import com.bitwarden.ui.platform.navigation.BottomNavigationController
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -43,68 +27,49 @@ import kotlinx.parcelize.Parcelize
 @Composable
 fun AuthenticatorNavBarScreen(
     viewModel: AuthenticatorNavBarViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
-    onNavigateBack: () -> Unit,
-    onNavigateToSearch: () -> Unit,
-    onNavigateToQrCodeScanner: () -> Unit,
-    onNavigateToManualKeyEntry: () -> Unit,
-    onNavigateToEditItem: (itemId: String) -> Unit,
-    onNavigateToTutorial: () -> Unit,
+    bottomNavigationController: BottomNavigationController<AuthenticatorNavBarGraph>,
+    content: @Composable () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
-        navController.navigateToTabOrRoot(target = event.tab)
+        bottomNavigationController.navigateToTabOrPopToRoot(route = event.tab.rootRoute)
     }
 
-    LaunchedEffect(Unit) {
-        navController
-            .currentBackStackEntryFlow
-            .onEach {
-                viewModel.trySendAction(AuthenticatorNavBarAction.BackStackUpdate)
-            }
-            .launchIn(this)
+    LaunchedEffect(key1 = bottomNavigationController) {
+        snapshotFlow { bottomNavigationController.backStacks }.collect {
+            viewModel.trySendAction(AuthenticatorNavBarAction.BackStackUpdate)
+        }
     }
 
     AuthenticatorNavBarScaffold(
-        navController = navController,
+        selectedTab = bottomNavigationController.root.backStack.last(),
         verificationTabClickedAction = {
             viewModel.trySendAction(AuthenticatorNavBarAction.VerificationCodesTabClick)
         },
         settingsTabClickedAction = {
             viewModel.trySendAction(AuthenticatorNavBarAction.SettingsTabClick)
         },
-        navigateBack = onNavigateBack,
-        navigateToSearch = onNavigateToSearch,
-        navigateToQrCodeScanner = onNavigateToQrCodeScanner,
-        navigateToManualKeyEntry = onNavigateToManualKeyEntry,
-        navigateToEditItem = onNavigateToEditItem,
-        onNavigateToTutorial = onNavigateToTutorial,
+        content = content,
     )
 }
 
 @Composable
 private fun AuthenticatorNavBarScaffold(
-    navController: NavHostController,
+    selectedTab: AuthenticatorNavBarGraph,
     verificationTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateBack: () -> Unit,
-    navigateToSearch: () -> Unit,
-    navigateToQrCodeScanner: () -> Unit,
-    navigateToManualKeyEntry: () -> Unit,
-    navigateToEditItem: (itemId: String) -> Unit,
-    onNavigateToTutorial: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the all insets here and let the content screens handle it themselves.
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
     BitwardenScaffold(
         contentWindowInsets = WindowInsets(),
         navigationData = ScaffoldNavigationData(
             navigationItems = AuthenticatorNavBarTab.navigationItems,
             selectedNavigationItem = AuthenticatorNavBarTab
                 .navigationItems
-                .find { navBackStackEntry.isCurrentRoute(route = it.graphRoute) },
+                .find { it.rootRoute == selectedTab },
             onNavigationClick = { navigationItem ->
                 when (navigationItem) {
                     AuthenticatorNavBarTab.VerificationCodes -> verificationTabClickedAction()
@@ -113,30 +78,8 @@ private fun AuthenticatorNavBarScaffold(
             },
             shouldDimNavigation = shouldDimNavBar,
         ),
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = ItemListingGraphRoute,
-            enterTransition = RootTransitionProviders.Enter.fadeIn,
-            exitTransition = RootTransitionProviders.Exit.fadeOut,
-            popEnterTransition = RootTransitionProviders.Enter.fadeIn,
-            popExitTransition = RootTransitionProviders.Exit.fadeOut,
-        ) {
-            itemListingGraph(
-                onNavigateBack = navigateBack,
-                onNavigateToSearch = navigateToSearch,
-                onNavigateToQrCodeScanner = navigateToQrCodeScanner,
-                onNavigateToManualKeyEntry = navigateToManualKeyEntry,
-                onNavigateToEditItem = navigateToEditItem,
-            )
-            settingsGraph(
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToTutorial = onNavigateToTutorial,
-                onNavigateToExport = { navController.navigateToExport() },
-                onNavigateToImport = { navController.navigateToImporting() },
-            )
-        }
-    }
+        content = content,
+    )
 }
 
 /**
@@ -153,6 +96,10 @@ private fun AuthenticatorNavBarScaffold(
  */
 @Parcelize
 sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
+    /**
+     * The route of the tab within the [AuthenticatorNavBarGraph].
+     */
+    abstract override val rootRoute: AuthenticatorNavBarGraph
 
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -173,8 +120,7 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_verification_codes_filled
         override val iconRes get() = BitwardenDrawable.ic_verification_codes
         override val labelRes get() = BitwardenString.verification_codes
-        override val graphRoute get() = ItemListingGraphRoute
-        override val startDestinationRoute get() = ItemListingRoute
+        override val rootRoute get() = AuthenticatorNavBarGraph.VerificationCodes
         override val testTag get() = "VerificationCodesTab"
         override val notificationCount: Int get() = 0
     }
@@ -187,18 +133,8 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
         override val iconResSelected get() = BitwardenDrawable.ic_settings_filled
         override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = BitwardenString.settings
-        override val graphRoute get() = SettingsGraphRoute
-        override val startDestinationRoute get() = SettingsRoute
+        override val rootRoute get() = AuthenticatorNavBarGraph.Settings
         override val testTag get() = "SettingsTab"
         override val notificationCount: Int get() = 0
     }
 }
-
-/**
- * Determine if the current destination is the same as the given tab.
- */
-private fun NavBackStackEntry?.isCurrentRoute(route: Any): Boolean =
-    this
-        ?.destination
-        ?.parent
-        ?.route == route.toObjectNavigationRoute()

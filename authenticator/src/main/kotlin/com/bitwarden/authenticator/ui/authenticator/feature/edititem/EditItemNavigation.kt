@@ -1,44 +1,22 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
 
 /**
- * The type-safe route for the edit item screen.
+ * Add the edit item screen to the navigation entries.
  */
-@Serializable
-data class EditItemRoute(
-    val itemId: String,
-)
-
-/**
- * Class to retrieve authenticator item arguments from the [SavedStateHandle].
- *
- * @property itemId ID of the item to be edited.
- */
-data class EditItemArgs(val itemId: String)
-
-/**
- * Constructs a [EditItemArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toEditItemArgs(): EditItemArgs {
-    val route = this.toRoute<EditItemRoute>()
-    return EditItemArgs(itemId = route.itemId)
-}
-
-/**
- * Add the edit item screen to the nav graph.
- */
-fun NavGraphBuilder.editItemDestination(
+fun EntryProviderScope<AuthenticatorGraph>.editItemDestination(
     onNavigateBack: () -> Unit = { },
 ) {
-    composableWithSlideTransitions<EditItemRoute> {
+    slideUpEntry<AuthenticatorGraph.EditItemRoute> { route ->
         EditItemScreen(
+            viewModel = hiltViewModel<EditItemViewModel, EditItemViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }
@@ -47,12 +25,8 @@ fun NavGraphBuilder.editItemDestination(
 /**
  * Navigate to the edit item screen.
  */
-fun NavController.navigateToEditItem(
+fun NavigationController<AuthenticatorGraph>.navigateToEditItem(
     itemId: String,
-    navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = EditItemRoute(itemId = itemId),
-        navOptions = navOptions,
-    )
+    this.navigate(route = AuthenticatorGraph.EditItemRoute(itemId = itemId))
 }
