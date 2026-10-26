@@ -9,6 +9,10 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.detail.navigateToPamApprovalDetail
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.detail.pamApprovalDetailDestination
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.navigateToPamApprovals
+import com.x8bit.bitwarden.ui.vault.feature.pamapprovals.pamApprovalsDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
 import kotlinx.serialization.Serializable
@@ -54,6 +58,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToAboutScreen = onNavigateToAboutScreen,
             onNavigateToAutofillScreen = onNavigateToAutofillScreen,
             onNavigateToPlan = onNavigateToPlan,
+            onNavigateToPamApprovals = { navController.navigateToPamApprovals() },
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -72,6 +77,14 @@ fun NavGraphBuilder.vaultGraph(
                 onNavigateToSearchVault(SearchType.Vault.VerificationCodes)
             },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
+        )
+
+        pamApprovalsDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToDetail = { navController.navigateToPamApprovalDetail(requestId = it) },
+        )
+        pamApprovalDetailDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }
