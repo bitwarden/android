@@ -7,19 +7,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.compose.NavHost
 
 typealias EnterTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)
+    @JvmSuppressWildcards AnimatedContentTransitionScope<*>.() -> EnterTransition
 
 typealias ExitTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)
-
-typealias NonNullEnterTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)
-
-typealias NonNullExitTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)
+    @JvmSuppressWildcards AnimatedContentTransitionScope<*>.() -> ExitTransition
 
 /**
  * The default transition time (in milliseconds) for all fade transitions in the
@@ -46,25 +39,15 @@ const val DEFAULT_PUSH_TRANSITION_TIME_MS: Int = 350
  * This should be at least as large as any other transition that might also be happening during a
  * navigation.
  */
-val DEFAULT_STAY_TRANSITION_TIME_MS: Int =
-    maxOf(
-        DEFAULT_FADE_TRANSITION_TIME_MS,
-        DEFAULT_SLIDE_TRANSITION_TIME_MS,
-        DEFAULT_PUSH_TRANSITION_TIME_MS,
-    )
+val DEFAULT_STAY_TRANSITION_TIME_MS: Int = maxOf(
+    DEFAULT_FADE_TRANSITION_TIME_MS,
+    DEFAULT_SLIDE_TRANSITION_TIME_MS,
+    DEFAULT_PUSH_TRANSITION_TIME_MS,
+)
 
 /**
- * Checks if the parent of the destination before and after the navigation is the same. This is
- * useful to ignore certain enter/exit transitions when navigating between distinct, nested flows.
- */
-val AnimatedContentTransitionScope<NavBackStackEntry>.isSameGraphNavigation: Boolean
-    get() = initialState.destination.parent == targetState.destination.parent
-
-/**
- * Contains standard "transition providers" that may be used to specify the [EnterTransition] and
- * [ExitTransition] used when building a typical composable destination. These may return `null`
- * values in order to allow transitions between nested navigation graphs to be specified by
- * components higher up in the graph.
+ * Contains the standard, reusable "transition providers" that are used to build the
+ * [EntryTransitions] for navigation entries and the default transitions of a navigation display.
  */
 object TransitionProviders {
     /**
@@ -73,160 +56,22 @@ object TransitionProviders {
     object Enter {
         /**
          * Fades the new screen in.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
          */
         val fadeIn: EnterTransitionProvider = {
-            RootTransitionProviders
-                .Enter
-                .fadeIn(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the new screen in from the start (left) of the screen towards the end (right).
-         */
-        val pushToEnd: EnterTransitionProvider = {
-            RootTransitionProviders
-                .Enter
-                .pushToEnd(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the new screen in from the end (right) of the screen towards the start (left).
-         */
-        val pushToStart: EnterTransitionProvider = {
-            RootTransitionProviders
-                .Enter
-                .pushToStart(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the new screen in from the bottom of the screen.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
-         */
-        val slideUp: EnterTransitionProvider = {
-            RootTransitionProviders
-                .Enter
-                .slideUp(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * A "no-op" transition: this changes nothing about the screen but "lasts" as long as
-         * other standard transitions in order to leave the screen in place such that it does not
-         * immediately appear while the other screen transitions away.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
-         */
-        val stay: EnterTransitionProvider = {
-            RootTransitionProviders
-                .Enter
-                .stay(this)
-                .takeIf { isSameGraphNavigation }
-        }
-    }
-
-    /**
-     * The standard set of "exit" transition providers.
-     */
-    object Exit {
-        /**
-         * Fades the current screen out.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
-         */
-        val fadeOut: ExitTransitionProvider = {
-            RootTransitionProviders
-                .Exit
-                .fadeOut(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the current screen out to the start (left) of the screen towards the end (right).
-         */
-        val pushToStart: ExitTransitionProvider = {
-            RootTransitionProviders
-                .Exit
-                .pushToStart(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the current screen out to the end (right) of the screen towards the start (left).
-         */
-        val pushToEnd: ExitTransitionProvider = {
-            RootTransitionProviders
-                .Exit
-                .pushToEnd(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * Slides the current screen down to the bottom of the screen.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
-         */
-        val slideDown: ExitTransitionProvider = {
-            RootTransitionProviders
-                .Exit
-                .slideDown(this)
-                .takeIf { isSameGraphNavigation }
-        }
-
-        /**
-         * A "no-op" transition: this changes nothing about the screen but "lasts" as long as
-         * other standard transitions in order to leave the screen in place such that it does not
-         * immediately disappear while the other screen transitions into place.
-         *
-         * Note that this represents a `null` transition when navigating between different nested
-         * navigation graphs.
-         */
-        val stay: ExitTransitionProvider = {
-            RootTransitionProviders
-                .Exit
-                .stay(this)
-                .takeIf { isSameGraphNavigation }
-        }
-    }
-}
-
-/**
- * Contains standard "transition providers" that may be used to specify the [EnterTransition] and
- * [ExitTransition] used when building a root [NavHost], which requires a non-null value.
- */
-object RootTransitionProviders {
-    /**
-     * The standard set of "enter" transition providers.
-     */
-    object Enter {
-        /**
-         * Fades the new screen in.
-         */
-        val fadeIn: NonNullEnterTransitionProvider = {
-            fadeIn(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
+            fadeIn(animationSpec = tween(durationMillis = DEFAULT_FADE_TRANSITION_TIME_MS))
         }
 
         /**
          * There is no transition for the entering screen.
          */
-        val none: NonNullEnterTransitionProvider = {
+        val none: EnterTransitionProvider = {
             EnterTransition.None
         }
 
         /**
          * Slides the new screen in from the start (left) of the screen towards the end (right).
          */
-        val pushToEnd: NonNullEnterTransitionProvider = {
+        val pushToEnd: EnterTransitionProvider = {
             val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.End,
@@ -243,7 +88,7 @@ object RootTransitionProviders {
         /**
          * Slides the new screen in from the end (right) of the screen towards the start (left).
          */
-        val pushToStart: NonNullEnterTransitionProvider = {
+        val pushToStart: EnterTransitionProvider = {
             val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -260,10 +105,10 @@ object RootTransitionProviders {
         /**
          * Slides the new screen in from the bottom of the screen.
          */
-        val slideUp: NonNullEnterTransitionProvider = {
+        val slideUp: EnterTransitionProvider = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(DEFAULT_SLIDE_TRANSITION_TIME_MS),
+                animationSpec = tween(durationMillis = DEFAULT_SLIDE_TRANSITION_TIME_MS),
             )
         }
 
@@ -272,9 +117,9 @@ object RootTransitionProviders {
          * other standard transitions in order to leave the screen in place such that it does not
          * immediately appear while the other screen transitions away.
          */
-        val stay: NonNullEnterTransitionProvider = {
+        val stay: EnterTransitionProvider = {
             fadeIn(
-                animationSpec = tween(DEFAULT_STAY_TRANSITION_TIME_MS),
+                animationSpec = tween(durationMillis = DEFAULT_STAY_TRANSITION_TIME_MS),
                 initialAlpha = 1f,
             )
         }
@@ -287,18 +132,18 @@ object RootTransitionProviders {
         /**
          * Fades the current screen out.
          */
-        val fadeOut: NonNullExitTransitionProvider = {
-            fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
+        val fadeOut: ExitTransitionProvider = {
+            fadeOut(animationSpec = tween(durationMillis = DEFAULT_FADE_TRANSITION_TIME_MS))
         }
 
         /**
          * There is no transition for the exiting screen.
          *
-         * Unlike the [RootTransitionProviders.Exit.stay] transition, this will immediately remove
+         * Unlike the [TransitionProviders.Exit.stay] transition, this will immediately remove
          * the outgoing screen even if there is an ongoing enter transition happening for the new
          * screen.
          */
-        val none: NonNullExitTransitionProvider = {
+        val none: ExitTransitionProvider = {
             ExitTransition.None
         }
 
@@ -306,7 +151,7 @@ object RootTransitionProviders {
          * Slides the current screen out to the start (left) of the screen towards the end (right).
          */
         @Suppress("MagicNumber")
-        val pushToStart: NonNullExitTransitionProvider = {
+        val pushToStart: ExitTransitionProvider = {
             val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
             val delayMs = totalTransitionDurationMs / 7
             val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
@@ -329,7 +174,7 @@ object RootTransitionProviders {
          * Slides the current screen out to the end (right) of the screen towards the start (left).
          */
         @Suppress("MagicNumber")
-        val pushToEnd: NonNullExitTransitionProvider = {
+        val pushToEnd: ExitTransitionProvider = {
             val totalTransitionDurationMs = DEFAULT_PUSH_TRANSITION_TIME_MS
             val delayMs = totalTransitionDurationMs / 7
             val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
@@ -351,10 +196,10 @@ object RootTransitionProviders {
         /**
          * Slides the current screen down to the bottom of the screen.
          */
-        val slideDown: NonNullExitTransitionProvider = {
+        val slideDown: ExitTransitionProvider = {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                animationSpec = tween(DEFAULT_SLIDE_TRANSITION_TIME_MS),
+                animationSpec = tween(durationMillis = DEFAULT_SLIDE_TRANSITION_TIME_MS),
             )
         }
 
@@ -363,11 +208,59 @@ object RootTransitionProviders {
          * other standard transitions in order to leave the screen in place such that it does not
          * immediately disappear while the other screen transitions into place.
          */
-        val stay: NonNullExitTransitionProvider = {
+        val stay: ExitTransitionProvider = {
             fadeOut(
-                animationSpec = tween(DEFAULT_STAY_TRANSITION_TIME_MS),
+                animationSpec = tween(durationMillis = DEFAULT_STAY_TRANSITION_TIME_MS),
                 targetAlpha = 0.99f,
             )
         }
+    }
+}
+
+/**
+ * Legacy non-null "enter" transition provider used by Navigation Compose `NavHost`s.
+ *
+ * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
+ */
+typealias NonNullEnterTransitionProvider =
+    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)
+
+/**
+ * Legacy non-null "exit" transition provider used by Navigation Compose `NavHost`s.
+ *
+ * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
+ */
+typealias NonNullExitTransitionProvider =
+    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)
+
+/**
+ * Legacy transition providers used by root Navigation Compose `NavHost`s, which delegate to the
+ * standard [TransitionProviders].
+ *
+ * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
+ */
+object RootTransitionProviders {
+    /**
+     * The standard set of "enter" transition providers.
+     */
+    object Enter {
+        val fadeIn: EnterTransitionProvider = TransitionProviders.Enter.fadeIn
+        val none: EnterTransitionProvider = TransitionProviders.Enter.none
+        val pushToEnd: EnterTransitionProvider = TransitionProviders.Enter.pushToEnd
+        val pushToStart: EnterTransitionProvider = TransitionProviders.Enter.pushToStart
+        val slideUp: EnterTransitionProvider = TransitionProviders.Enter.slideUp
+        val stay: EnterTransitionProvider = TransitionProviders.Enter.stay
+    }
+
+    /**
+     * The standard set of "exit" transition providers.
+     */
+    object Exit {
+        val fadeOut: ExitTransitionProvider = TransitionProviders.Exit.fadeOut
+        val none: ExitTransitionProvider = TransitionProviders.Exit.none
+        val pushToEnd: ExitTransitionProvider = TransitionProviders.Exit.pushToEnd
+        val pushToStart: ExitTransitionProvider = TransitionProviders.Exit.pushToStart
+        val slideDown: ExitTransitionProvider = TransitionProviders.Exit.slideDown
+        val stay: ExitTransitionProvider = TransitionProviders.Exit.stay
     }
 }
