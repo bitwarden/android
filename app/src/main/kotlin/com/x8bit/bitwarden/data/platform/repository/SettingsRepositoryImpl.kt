@@ -574,16 +574,11 @@ class SettingsRepositoryImpl(
             ?.let { settingsDiskSource.getCollapsedVaultSections(userId = it) }
             .orEmpty()
 
-    override fun getCollapsedVaultSectionsFlow(): StateFlow<Set<VaultSection>> {
-        val userId = activeUserId ?: return MutableStateFlow(value = emptySet())
+    override fun getCollapsedVaultSectionsFlow(): Flow<Set<VaultSection>> {
+        val userId = activeUserId ?: return flowOf(emptySet())
         return settingsDiskSource
             .getCollapsedVaultSectionsFlow(userId = userId)
             .map { it.orEmpty() }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = collapsedVaultSections,
-            )
     }
 
     override fun toggleVaultSectionCollapsed(section: VaultSection) {

@@ -287,7 +287,7 @@ interface SettingsRepository : FlightRecorderManager {
     /**
      * Gets updates for the set of collapsed vault sections for the active user.
      */
-    fun getCollapsedVaultSectionsFlow(): StateFlow<Set<VaultSection>>
+    fun getCollapsedVaultSectionsFlow(): Flow<Set<VaultSection>>
 
     /**
      * Toggles whether the given [section] is collapsed for the active user.
