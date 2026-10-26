@@ -2054,7 +2054,10 @@ class VaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        // Scroll past the item so its overflow button is not covered by the FAB.
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("TrashFilter"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
@@ -2125,7 +2128,10 @@ class VaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        // Scroll past the item so its overflow button is not covered by the FAB.
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasTestTag("TrashFilter"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()

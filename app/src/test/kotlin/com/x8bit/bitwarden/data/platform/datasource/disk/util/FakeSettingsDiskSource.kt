@@ -269,7 +269,6 @@ class FakeSettingsDiskSource(
     }
 
     override fun clearData(userId: String) {
-        storeCollapsedVaultSections(userId = userId, collapsedVaultSections = null)
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)
         storedUriMatchTypes.remove(userId)
@@ -281,6 +280,7 @@ class FakeSettingsDiskSource(
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
         storedVaultPolicyBannerDismissedDate.remove(userId)
+        storedCollapsedVaultSections.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
