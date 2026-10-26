@@ -20,7 +20,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
@@ -37,7 +37,7 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToSearchCalled = false
-    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
+    private var onNavigateToVaultItemRoute: VaultUnlockedGraph.VaultItemRoute? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VerificationCodeEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -55,7 +55,7 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
             VerificationCodeScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemRoute = it },
                 onNavigateToSearch = { onNavigateToSearchCalled = true },
             )
         }
@@ -78,8 +78,11 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
         val id = "id4321"
         mutableEventFlow.tryEmit(VerificationCodeEvent.NavigateToVaultItem(id = id))
         assertEquals(
-            VaultItemArgs(vaultItemId = id, cipherType = VaultItemCipherType.LOGIN),
-            onNavigateToVaultItemArgs,
+            VaultUnlockedGraph.VaultItemRoute(
+                vaultItemId = id,
+                cipherType = VaultItemCipherType.LOGIN,
+            ),
+            onNavigateToVaultItemRoute,
         )
     }
 

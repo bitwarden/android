@@ -12,9 +12,13 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -23,7 +27,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -31,24 +34,33 @@ private const val KEY_STATE = "state"
  * Manages application state for the Login with Device screen.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class LoginWithDeviceViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = LoginWithDeviceViewModel.Factory::class)
+class LoginWithDeviceViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.LoginWithDeviceRoute,
     private val authRepository: AuthRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = savedStateHandle.toLoginWithDeviceArgs()
-            LoginWithDeviceState(
-                loginWithDeviceType = args.loginType,
-                emailAddress = args.emailAddress,
-                viewState = LoginWithDeviceState.ViewState.Loading,
-                dialogState = null,
-                loginData = null,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: LoginWithDeviceState(
+        loginWithDeviceType = route.loginType,
+        emailAddress = route.emailAddress,
+        viewState = LoginWithDeviceState.ViewState.Loading,
+        dialogState = null,
+        loginData = null,
+    ),
 ) {
+    /**
+     * Factory for creating a [LoginWithDeviceViewModel] for a specific
+     * [AuthGraph.LoginWithDeviceRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [LoginWithDeviceViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.LoginWithDeviceRoute): LoginWithDeviceViewModel
+    }
+
     private var authJob: Job = Job().apply { complete() }
 
     init {

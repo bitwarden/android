@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * This activity does not host any UI itself. It acts as a trampoline that:
  * 1. Receives the credential intent from the CredentialManager framework
  * 2. Sets the pending credential request via [CredentialProviderViewModel], which stores
- *    it in `CredentialProviderRequestManager` for secure relay to [MainViewModel]
+ *    it in `CredentialProviderRequestManager` for secure relay to `MainViewModel`
  * 3. Launches [MainActivity] to handle the actual credential UI
  * 4. Forwards the result back to the CredentialManager framework
  *

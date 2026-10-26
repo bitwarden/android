@@ -9,7 +9,6 @@ import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -111,7 +110,11 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -125,17 +128,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
  * and launches [VaultItemListingEvent] for the [VaultItemListingScreen].
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = VaultItemListingViewModel.Factory::class)
 @Suppress("MagicNumber", "TooManyFunctions", "LongParameterList", "LargeClass")
-class VaultItemListingViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class VaultItemListingViewModel @AssistedInject constructor(
+    @Assisted vaultItemListingType: VaultItemListingType,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -168,10 +170,7 @@ class VaultItemListingViewModel @Inject constructor(
         val fido2AssertCredentialRequest = specialCircumstance?.toFido2AssertionRequestOrNull()
         val passwordGetCredentialRequest = specialCircumstance?.toPasswordGetRequestOrNull()
         VaultItemListingState(
-            itemListingType = savedStateHandle
-                .toVaultItemListingArgs()
-                .vaultItemListingType
-                .toItemListingType(),
+            itemListingType = vaultItemListingType.toItemListingType(),
             activeAccountSummary = activeAccountSummary,
             accountSummaries = accountSummaries,
             viewState = VaultItemListingState.ViewState.Loading,
@@ -199,6 +198,16 @@ class VaultItemListingViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [VaultItemListingViewModel] for the given [VaultItemListingType].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultItemListingViewModel] for the given [vaultItemListingType].
+         */
+        fun create(vaultItemListingType: VaultItemListingType): VaultItemListingViewModel
+    }
 
     init {
         settingsRepository

@@ -35,6 +35,9 @@ import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toBillingAmount
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toDiscountMoneyText
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toPresentMoneyText
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.util.toRequiredMoneyText
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -50,7 +53,6 @@ import java.time.Clock
 import java.time.Instant
 import java.time.format.FormatStyle
 import java.util.Locale
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val MONTHS_PER_YEAR = 12
@@ -66,8 +68,9 @@ const val PREMIUM_CHECKOUT_CALLBACK_URL = "bitwarden://premium-checkout-result"
  * the subscription management surface for premium users.
  */
 @Suppress("TooManyFunctions", "LargeClass", "LongParameterList")
-@HiltViewModel
-class PlanViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = PlanViewModel.Factory::class)
+class PlanViewModel @AssistedInject constructor(
+    @Assisted planMode: PlanMode,
     savedStateHandle: SavedStateHandle,
     private val billingRepository: BillingRepository,
     private val authRepository: AuthRepository,
@@ -78,7 +81,6 @@ class PlanViewModel @Inject constructor(
     private val clock: Clock,
 ) : BaseViewModel<PlanState, PlanEvent, PlanAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val planMode = savedStateHandle.toPlanArgs().planMode
         val isPremium = authRepository
             .userStateFlow
             .value
@@ -115,6 +117,16 @@ class PlanViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [PlanViewModel] for the given [PlanMode].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [PlanViewModel] for the given [planMode].
+         */
+        fun create(planMode: PlanMode): PlanViewModel
+    }
 
     private val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
 
