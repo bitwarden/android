@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -27,8 +28,10 @@ import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.bottomsheet.IsBottomSheetKey
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -48,6 +51,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamRequestForm
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultBankAccountType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -66,6 +71,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.Instant
+import java.time.LocalDate
 
 @Suppress("LargeClass")
 class VaultItemScreenTest : BitwardenComposeTest() {
@@ -4045,6 +4051,345 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     //endregion passport
+
+    //region pam
+    @Test
+    fun `pam banner should not be displayed when there is no pam state`() {
+        composeTestRule.onNodeWithTag("PamBanner").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamRequestAccessButton").assertDoesNotExist()
+    }
+
+    @Test
+    fun `pam can request banner should show the copy and the request access button`() {
+        mutableStateFlow.update { it.copy(pamAccess = PAM_CAN_REQUEST) }
+
+        composeTestRule
+            .onNodeWithText("You can request access", substring = true)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Credentials are masked until access is granted.", substring = true)
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamSlotHeldWarning").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithTag("PamRequestAccessButton")
+            .assertIsDisplayed()
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun `pam request access button click should send RequestAccessClick`() {
+        mutableStateFlow.update { it.copy(pamAccess = PAM_CAN_REQUEST) }
+
+        composeTestRule.onNodeWithTag("PamRequestAccessButton").performClick()
+
+        verify { viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick) }
+    }
+
+    @Test
+    fun `pam banner should disable request access when another member holds the lease slot`() {
+        mutableStateFlow.update {
+            it.copy(pamAccess = PAM_CAN_REQUEST.copy(isSlotHeldByAnotherMember = true))
+        }
+
+        composeTestRule.onNodeWithTag("PamSlotHeldWarning").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Another member has access").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Another member has access").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Request access will be available when their access ends.")
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText("You can request access").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamRequestAccessButton").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `pam pending banner should be displayed without a request button`() {
+        mutableStateFlow.update { it.copy(pamAccess = VaultItemPamState.Pending) }
+
+        composeTestRule.onNodeWithText("Waiting for approval").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Waiting for approval").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamRequestAccessButton").assertDoesNotExist()
+    }
+
+    @Test
+    fun `pam approved banner should be displayed`() {
+        mutableStateFlow.update {
+            it.copy(pamAccess = VaultItemPamState.Approved(requestId = "r1"))
+        }
+
+        composeTestRule.onNodeWithText("Access approved").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Access approved").assertIsDisplayed()
+    }
+
+    @Test
+    fun `pam approved banner should offer start access and cancel request`() {
+        mutableStateFlow.update {
+            it.copy(pamAccess = VaultItemPamState.Approved(requestId = "r1"))
+        }
+
+        composeTestRule.onNodeWithTag("PamStartAccessButton").assertIsDisplayed().performClick()
+        verify { viewModel.trySendAction(VaultItemAction.Pam.StartAccessClick) }
+        composeTestRule.onNodeWithTag("PamCancelRequestButton").assertIsDisplayed().performClick()
+        verify { viewModel.trySendAction(VaultItemAction.Pam.CancelRequestClick) }
+    }
+
+    @Test
+    fun `pam approved banner without a request id should not offer actions`() {
+        mutableStateFlow.update {
+            it.copy(pamAccess = VaultItemPamState.Approved(requestId = null))
+        }
+
+        composeTestRule.onNodeWithText("Access approved").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamStartAccessButton").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamCancelRequestButton").assertDoesNotExist()
+    }
+
+    @Test
+    fun `pam cancel request confirmation should send ConfirmCancelRequestClick`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.PamConfirmCancelRequest)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultItemAction.Pam.ConfirmCancelRequestClick) }
+    }
+
+    @Test
+    fun `pam active banner should show the remaining time`() {
+        mutableStateFlow.update {
+            it.copy(pamAccess = VaultItemPamState.Active(remainingMinutes = 90L))
+        }
+
+        composeTestRule.onNodeWithText("You have access").assertIsDisplayed()
+        composeTestRule.onNodeWithText("You have access").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamRemainingProgress").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag("PamRemainingTime")
+            .assertTextEquals("1 hour, 30 minutes left")
+
+        mutableStateFlow.update {
+            it.copy(pamAccess = VaultItemPamState.Active(remainingMinutes = 5L))
+        }
+
+        composeTestRule.onNodeWithTag("PamRemainingTime").assertTextEquals("5 minutes left")
+    }
+
+    @Test
+    fun `pam automatic request sheet should ask for a duration and submit`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamStartDateField").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamReasonField").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamDurationField").assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsEnabled().performClick()
+        verify { viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick) }
+    }
+
+    @Test
+    fun `pam automatic request sheet should show the duration in words`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamDurationField").assertTextEquals(
+            "Duration (required)",
+            "1 hour",
+        )
+    }
+
+    @Test
+    fun `pam automatic request sheet duration selection should send DurationChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamDurationField").performClick()
+        composeTestRule
+            .onAllNodesWithText("2 hours")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Pam.DurationChange(durationMinutes = "120"))
+        }
+    }
+
+    @Test
+    fun `pam automatic request sheet should only offer durations up to the maximum`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamDurationField").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("8 hours")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("1 day").assertCountEquals(0)
+        composeTestRule.onAllNodesWithText("525600 minutes").assertCountEquals(0)
+    }
+
+    @Test
+    fun `pam automatic request sheet submit should be disabled for an invalid duration`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(
+                    form = PAM_AUTOMATIC_FORM.copy(durationMinutes = ""),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `pam human request sheet should ask for start, end and a required reason`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_HUMAN_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamDurationField").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("PamStartDateField").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamStartTimeField").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("PamEndDateField").assertExists()
+        composeTestRule.onNodeWithTag("PamEndTimeField").assertExists()
+        composeTestRule.onNodeWithTag("PamReasonField").assertExists()
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsNotEnabled()
+
+        composeTestRule.onNodeWithTag("PamReasonField").performTextInput("Fix")
+        verify { viewModel.trySendAction(VaultItemAction.Pam.ReasonChange(reason = "Fix")) }
+    }
+
+    @Test
+    fun `pam Resume action should be sent when the screen is resumed`() {
+        verify { viewModel.trySendAction(VaultItemAction.Pam.Resume) }
+    }
+
+    @Test
+    fun `pam human request sheet should mark the reason as required`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_HUMAN_FORM),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Reason (required)").assertExists()
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `pam automatic request sheet should be a bottom sheet with a required duration`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Duration (required)")
+            .assert(hasAnyAncestor(SemanticsMatcher.expectValue(IsBottomSheetKey, true)))
+        composeTestRule.onNodeWithText("Submit request").assertExists()
+    }
+
+    @Test
+    fun `pam human request sheet should show an error when the end is before the start`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(
+                    form = PAM_HUMAN_FORM.copy(endMinutes = 11 * 60, reason = "Fix"),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("The end must be after the start.", useUnmergedTree = true)
+            .assertExists()
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `pam human request sheet should show an error when the window exceeds the maximum`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(
+                    form = PAM_HUMAN_FORM.copy(
+                        endDate = LocalDate.of(2026, 1, 2),
+                        reason = "Fix",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("The access window can be at most 8 hours.", useUnmergedTree = true)
+            .assertExists()
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsNotEnabled()
+    }
+
+    @Test
+    fun `pam human request sheet should not show an error for a valid window`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(
+                    form = PAM_HUMAN_FORM.copy(reason = "Fix"),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("The end must be after the start.", useUnmergedTree = true)
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `pam human request sheet should enable submit once a reason is given`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(
+                    form = PAM_HUMAN_FORM.copy(reason = "Fix the outage"),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithTag("PamSubmitRequestButton").assertIsEnabled().performClick()
+
+        verify { viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick) }
+    }
+
+    @Test
+    fun `pam request sheet close should send DismissDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.PamRequestAccess(form = PAM_AUTOMATIC_FORM),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription(label = "Close")
+            .filterToOne(hasAnyAncestor(SemanticsMatcher.expectValue(IsBottomSheetKey, true)))
+            .performClick()
+
+        composeTestRule.waitForIdle()
+        verify { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
+    }
+    //endregion pam
 }
 
 //region Helper functions
@@ -4538,3 +4883,23 @@ private val DEFAULT_VIEW_STATES = listOf(
     DEFAULT_SECURE_NOTE_VIEW_STATE,
     DEFAULT_SSH_KEY_VIEW_STATE,
 )
+
+private val PAM_CAN_REQUEST = VaultItemPamState.CanRequest(
+    isHumanApproval = false,
+    defaultDurationMinutes = 60L,
+    maxDurationMinutes = 480L,
+    isSlotHeldByAnotherMember = false,
+)
+
+private val PAM_AUTOMATIC_FORM = VaultItemPamRequestForm(
+    isHumanApproval = false,
+    durationMinutes = "60",
+    maxDurationMinutes = 480L,
+    startDate = LocalDate.of(2026, 1, 1),
+    startMinutes = 12 * 60,
+    endDate = LocalDate.of(2026, 1, 1),
+    endMinutes = 13 * 60,
+    reason = "",
+)
+
+private val PAM_HUMAN_FORM = PAM_AUTOMATIC_FORM.copy(isHumanApproval = true)
