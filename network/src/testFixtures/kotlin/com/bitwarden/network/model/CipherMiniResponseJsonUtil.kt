@@ -7,11 +7,13 @@ import java.time.Instant
  */
 fun createMockCipherMiniResponse(
     number: Int,
+    partialData: String? = null,
 ): CipherMiniResponseJson.CipherMiniResponse = CipherMiniResponseJson.CipherMiniResponse(
     id = "mockId-$number",
     organizationId = "mockOrgId-$number",
     type = CipherTypeJson.LOGIN,
     data = "mockData-$number",
+    partialData = partialData,
     attachments = null,
     shouldOrganizationUseTotp = false,
     revisionDate = Instant.parse("2023-10-27T12:00:00.000Z"),

@@ -45,6 +45,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.IdentityAutofill,
     FlagKey.SdkPinUnlock,
     FlagKey.SdkPreLogin,
+    FlagKey.PamMobilePrivilegedControls,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -117,4 +118,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.IdentityAutofill -> stringResource(BitwardenString.identity_autofill)
     FlagKey.SdkPinUnlock -> stringResource(BitwardenString.sdk_pin_unlock)
     FlagKey.SdkPreLogin -> stringResource(BitwardenString.sdk_pre_login)
+    FlagKey.PamMobilePrivilegedControls -> {
+        stringResource(BitwardenString.pam_mobile_privileged_controls)
+    }
 }

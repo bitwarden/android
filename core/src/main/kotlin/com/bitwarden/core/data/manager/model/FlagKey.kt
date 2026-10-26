@@ -51,6 +51,7 @@ sealed class FlagKey<out T : Any> {
                 IdentityAutofill,
                 SdkPinUnlock,
                 SdkPreLogin,
+                PamMobilePrivilegedControls,
             )
         }
     }
@@ -234,6 +235,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object SdkPreLogin : FlagKey<Boolean>() {
         override val keyName: String = "pm-27060-password-prelogin-from-sdk"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for Privileged Access Management (PAM) privileged
+     * controls on mobile (masked items and access requests).
+     */
+    data object PamMobilePrivilegedControls : FlagKey<Boolean>() {
+        override val keyName: String = "pam-262-mobile-privileged-controls"
         override val defaultValue: Boolean = false
     }
 
