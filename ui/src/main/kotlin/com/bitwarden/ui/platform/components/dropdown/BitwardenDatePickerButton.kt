@@ -6,11 +6,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.LocalPinnableContainer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -102,6 +104,14 @@ fun BitwardenDatePickerButton(
         },
     )
     if (shouldShowDialog) {
+        // Keep this button composed while the dialog is showing. In a lazy list, the button can
+        // scroll out of view when the soft keyboard opens, and disposing it would dismiss the
+        // dialog and recreate it once the keyboard closes.
+        val pinnableContainer = LocalPinnableContainer.current
+        DisposableEffect(pinnableContainer) {
+            val pinnedHandle = pinnableContainer?.pin()
+            onDispose { pinnedHandle?.release() }
+        }
         BitwardenDatePickerDialog(
             initialDate = currentDate,
             onDateSelect = { date ->
