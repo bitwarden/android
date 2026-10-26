@@ -978,6 +978,20 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `collapsed vault sections should be empty and unchanged when there is no active user`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+            settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.TYPES)
+
+            fakeSettingsDiskSource.assertCollapsedVaultSections(userId = USER_ID, expected = null)
+            assertEquals(emptySet<VaultSection>(), settingsRepository.collapsedVaultSections)
+            settingsRepository.getCollapsedVaultSectionsFlow().test {
+                assertEquals(emptySet<VaultSection>(), awaitItem())
+                awaitComplete()
+            }
+        }
+
+    @Test
     fun `getCollapsedVaultSectionsFlow should react to changes in SettingsDiskSource`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE

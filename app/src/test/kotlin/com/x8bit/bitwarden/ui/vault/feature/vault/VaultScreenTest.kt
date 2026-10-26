@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
@@ -69,6 +70,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -1289,24 +1291,70 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `section content should be displayed or hidden according to collapsed sections`() {
-        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
-
-        composeTestRule
-            .onNodeWithTag("LoginFilter")
-            .performScrollTo()
-            .assertIsDisplayed()
-
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = "Test Item".asText(),
+            username = "Bitwarden".asText(),
+            overflowOptions = persistentListOf(),
+            shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
+        )
         mutableStateFlow.update {
-            it.copy(collapsedSections = persistentSetOf(VaultSection.TYPES))
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 1,
+                    favoriteItems = listOf(vaultItem),
+                    folderItems = listOf(
+                        VaultState.ViewState.FolderItem(
+                            id = "12345",
+                            name = "Test Folder".asText(),
+                            itemCount = 1,
+                        ),
+                    ),
+                    noFolderItems = listOf(vaultItem.copy(id = "67890")),
+                    collectionItems = listOf(
+                        VaultState.ViewState.CollectionItem(
+                            id = "12345",
+                            name = "Test Collection",
+                            itemCount = 1,
+                        ),
+                    ),
+                ),
+            )
+        }
+        val sectionContentTags = listOf(
+            "VerificationCodesFilter",
+            "CipherCell",
+            "LoginFilter",
+            "FolderFilter",
+            "CollectionFilter",
+            "ArchiveFilter",
+            "TrashFilter",
+        )
+        sectionContentTags.forEach { tag ->
+            composeTestRule
+                .onNode(hasScrollToNodeAction())
+                .performScrollToNode(hasTestTag(tag))
         }
 
-        composeTestRule
-            .onNodeWithText("TYPES")
-            .performScrollTo()
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithTag("LoginFilter")
-            .assertDoesNotExist()
+        mutableStateFlow.update {
+            it.copy(collapsedSections = VaultSection.entries.toImmutableSet())
+        }
+
+        listOf(
+            "TOTP",
+            "FAVORITES",
+            "TYPES",
+            "MY FOLDERS",
+            "NO FOLDER",
+            "SHARED FOLDERS",
+            "HIDDEN ITEMS",
+        ).forEach { header ->
+            composeTestRule.onNodeWithTextAfterScroll(text = header).assertIsDisplayed()
+        }
+        sectionContentTags.forEach { tag ->
+            composeTestRule.onNodeWithTag(tag).assertDoesNotExist()
+        }
     }
 
     @Test
