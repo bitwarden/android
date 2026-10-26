@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.myAccessDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.vault.myaccess.navigateToMyAccess
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
@@ -59,6 +61,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToAutofillScreen = onNavigateToAutofillScreen,
             onNavigateToPlan = onNavigateToPlan,
             onNavigateToPamApprovals = { navController.navigateToPamApprovals() },
+            onNavigateToPamMyAccess = { navController.navigateToMyAccess() },
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -85,6 +88,10 @@ fun NavGraphBuilder.vaultGraph(
         )
         pamApprovalDetailDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        myAccessDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultItem = onNavigateToVaultItemScreen,
         )
     }
 }
