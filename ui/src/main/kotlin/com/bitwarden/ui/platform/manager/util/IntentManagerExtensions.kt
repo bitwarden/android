@@ -37,6 +37,15 @@ fun IntentManager.startAppSettingsActivity(): Boolean {
 }
 
 /**
+ * Starts the system notification settings activity for the application.
+ */
+fun IntentManager.startAppNotificationSettingsActivity(): Boolean {
+    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+    return startActivity(intent = intent)
+}
+
+/**
  * Open the default email app on device.
  */
 fun IntentManager.startDefaultEmailApplication(): Boolean {

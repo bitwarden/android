@@ -69,6 +69,30 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `notifications row should only be shown while the PAM feature flag is on`() = runTest {
+        val viewModel = createViewModel()
+        assertFalse(viewModel.stateFlow.value.showPamNotificationsRow)
+
+        mutablePamFlagFlow.value = true
+        assertTrue(viewModel.stateFlow.value.showPamNotificationsRow)
+
+        mutablePamFlagFlow.value = false
+        assertFalse(viewModel.stateFlow.value.showPamNotificationsRow)
+    }
+
+    @Test
+    fun `notifications row should be hidden on F-Droid even when the PAM feature flag is on`() =
+        runTest {
+            every { buildInfoManager.isFdroid } returns true
+            val viewModel = createViewModel()
+
+            mutablePamFlagFlow.value = true
+
+            assertTrue(viewModel.stateFlow.value.showMyAccessRequests)
+            assertFalse(viewModel.stateFlow.value.showPamNotificationsRow)
+        }
+
+    @Test
     fun `MyAccessClick should emit NavigateToMyAccess`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
