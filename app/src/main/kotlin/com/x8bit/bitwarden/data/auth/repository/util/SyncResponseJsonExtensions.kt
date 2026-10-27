@@ -211,6 +211,7 @@ val Policy.policyInformation: PolicyInformation?
             PolicyType.AUTOMATIC_USER_CONFIRMATION,
             PolicyType.BLOCK_CLAIMED_DOMAIN_ACCOUNT_CREATION,
             PolicyType.FILL_ASSIST,
+            PolicyType.AUTOTYPE_GA_POLICY,
                 -> null
         }
     }
