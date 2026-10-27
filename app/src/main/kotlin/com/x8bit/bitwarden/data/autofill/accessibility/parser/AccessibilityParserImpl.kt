@@ -24,7 +24,7 @@ internal class AccessibilityParserImpl(
     ): FillableFields {
         val nodes = accessibilityNodeInfoManager
             .findAccessibilityNodeInfoList(rootNode = rootNode) {
-                it.isEditText || it.isPassword
+                it.isEditText || it.isPassword || it.isTotp
             }
         val passwordNodes = nodes.filter { it.isPassword }
         return FillableFields(

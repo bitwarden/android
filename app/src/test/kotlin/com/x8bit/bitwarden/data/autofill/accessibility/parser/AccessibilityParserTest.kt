@@ -9,9 +9,11 @@ import com.x8bit.bitwarden.data.autofill.accessibility.model.Browser
 import com.x8bit.bitwarden.data.autofill.accessibility.model.FillableFields
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AccessibilityParserTest : BaseRobolectricTest() {
@@ -163,6 +165,35 @@ class AccessibilityParserTest : BaseRobolectricTest() {
         )
 
         assertEquals(expectedResult, result)
+    }
+
+    @Test
+    fun `parseForFillableFields should include TOTP fields in the node search`() {
+        val uri = mockk<Uri>()
+        val rootNode = mockk<AccessibilityNodeInfo>()
+        val predicate = slot<(AccessibilityNodeInfo) -> Boolean>()
+        every {
+            accessibilityNodeInfoManager.findAccessibilityNodeInfoList(
+                rootNode = rootNode,
+                predicate = capture(predicate),
+            )
+        } returns emptyList()
+        every {
+            accessibilityNodeInfoManager.findUsernameAccessibilityNodeInfo(
+                uri = uri,
+                allNodes = emptyList(),
+                passwordNodes = emptyList(),
+            )
+        } returns null
+        val totpField = mockk<AccessibilityNodeInfo>(relaxed = true) {
+            every { className } returns "android.view.View"
+            every { isPassword } returns false
+            every { viewIdResourceName } returns "otp_input"
+        }
+
+        accessibilityParser.parseForFillableFields(rootNode = rootNode, uri = uri)
+
+        assertTrue(predicate.captured(totpField))
     }
 
     @Suppress("MaxLineLength")
