@@ -129,6 +129,7 @@ private fun SyncResponseJson.Profile.Organization.toSdkProfileOrganization(): Pr
             ssoBound = this.ssoBound,
             userIsClaimedByOrganization = this.userIsClaimedByOrganization,
             accessSecretsManager = this.accessSecretsManager,
+            accessPam = this.accessPam,
         ),
         collectionManagement = CollectionManagementSettings(
             limitCollectionCreation = this.limitCollectionCreation,
@@ -228,6 +229,9 @@ private fun SyncResponseJson.Profile.Permissions.toSdkPermissions(): Permissions
         manageUsers = this.manageUsers,
         manageResetPassword = this.shouldManageResetPassword,
         manageScim = this.manageScim,
+        manageAccessRules = this.manageAccessRules,
+        // Not provided by the sync response.
+        manageRotation = false,
     )
 
 private fun OrganizationStatusType.toSdkOrganizationUserStatusType(): OrganizationUserStatusType =
