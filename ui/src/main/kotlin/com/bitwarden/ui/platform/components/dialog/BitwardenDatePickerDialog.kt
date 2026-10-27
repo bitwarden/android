@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -16,21 +14,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerColors
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -71,9 +60,6 @@ fun BitwardenDatePickerDialog(
     allowToday: Boolean = true,
     clock: Clock = LocalClock.current,
 ) {
-    // Read the keyboard insets from the screen hosting the dialog, which animate as the keyboard
-    // opens and closes.
-    val isKeyboardVisible = WindowInsets.ime.getBottom(density = LocalDensity.current) > 0
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = initialDate
             ?.atStartOfDay(ZoneOffset.UTC)
@@ -114,21 +100,6 @@ fun BitwardenDatePickerDialog(
             .wrapContentHeight(),
     ) {
         val colors = bitwardenDatePickerColors()
-        val focusManager = LocalFocusManager.current
-        val keyboardAwareState = remember(datePickerState) {
-            KeyboardAwareDatePickerState(delegate = datePickerState)
-        }
-        LaunchedEffect(keyboardAwareState.pendingDisplayMode, isKeyboardVisible) {
-            val pendingDisplayMode = keyboardAwareState.pendingDisplayMode
-                ?: return@LaunchedEffect
-            if (pendingDisplayMode == DisplayMode.Picker && isKeyboardVisible) {
-                // Hide the keyboard before showing the calendar. Switching while the keyboard is
-                // still closing resizes the dialog twice and causes a visible jump.
-                focusManager.clearFocus()
-            } else {
-                keyboardAwareState.applyPendingDisplayMode()
-            }
-        }
         Surface(
             modifier = Modifier
                 // The Date picker has specific requirements in order to look correct.
@@ -145,7 +116,7 @@ fun BitwardenDatePickerDialog(
                 Box(modifier = Modifier.weight(weight = 1f, fill = false)) {
                     DatePicker(
                         modifier = Modifier.verticalScroll(state = rememberScrollState()),
-                        state = keyboardAwareState,
+                        state = datePickerState,
                         colors = colors,
                     )
                 }
@@ -224,34 +195,5 @@ private fun BitwardenDatePickerDialog_preview() {
             onDateSelect = {},
             onDismissRequest = {},
         )
-    }
-}
-
-/**
- * A [DatePickerState] that defers display mode changes until they are applied with
- * [applyPendingDisplayMode], allowing the keyboard to be hidden before switching modes.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-private class KeyboardAwareDatePickerState(
-    private val delegate: DatePickerState,
-) : DatePickerState by delegate {
-    /**
-     * The display mode that was requested but not yet applied.
-     */
-    var pendingDisplayMode: DisplayMode? by mutableStateOf(value = null)
-        private set
-
-    override var displayMode: DisplayMode
-        get() = delegate.displayMode
-        set(value) {
-            pendingDisplayMode = value
-        }
-
-    /**
-     * Applies the [pendingDisplayMode], if any.
-     */
-    fun applyPendingDisplayMode() {
-        pendingDisplayMode?.let { delegate.displayMode = it }
-        pendingDisplayMode = null
     }
 }

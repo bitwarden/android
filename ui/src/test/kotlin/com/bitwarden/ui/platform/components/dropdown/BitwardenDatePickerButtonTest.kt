@@ -64,33 +64,6 @@ class BitwardenDatePickerButtonTest : BaseComposeTest() {
         composeTestRule.onNodeWithTag(testTag = "DatePickerDialog").assertIsDisplayed()
         composeTestRule.onNodeWithText(text = "Selected date").assertIsDisplayed()
     }
-
-    @Test
-    fun `date picker dialog should switch between calendar and text input modes`() {
-        setTestContent {
-            BitwardenTheme {
-                BitwardenDatePickerButton(
-                    label = LABEL,
-                    currentDate = null,
-                    onDateSelect = {},
-                    cardStyle = null,
-                    clock = FIXED_CLOCK,
-                )
-            }
-        }
-        composeTestRule.onNodeWithText(text = LABEL).performClick()
-        composeTestRule.onNodeWithText(text = "Selected date").assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithContentDescription(label = "Switch to text input mode")
-            .performClick()
-        composeTestRule.onNodeWithText(text = "Entered date").assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithContentDescription(label = "Switch to calendar input mode")
-            .performClick()
-        composeTestRule.onNodeWithText(text = "Selected date").assertIsDisplayed()
-    }
 }
 
 private const val LABEL: String = "Date of birth"
