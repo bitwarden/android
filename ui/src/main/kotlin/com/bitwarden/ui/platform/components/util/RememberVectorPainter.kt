@@ -81,11 +81,11 @@ private fun ImageVector.Builder.cloneVectorGroupWithUpdatedColors(
                     pathFillType = vectorNode.pathFillType,
                     name = vectorNode.name,
                     fill = when (vectorNode.name) {
-                        "outline" -> SolidColor(colors.illustration.outline)
-                        "primary" -> SolidColor(colors.illustration.backgroundPrimary)
-                        "secondary" -> SolidColor(colors.illustration.backgroundSecondary)
-                        "tertiary" -> SolidColor(colors.illustration.backgroundTertiary)
-                        "accent" -> SolidColor(colors.illustration.accent)
+                        "stroke" -> SolidColor(colors.illustration.stroke)
+                        "fillPrimary" -> SolidColor(colors.illustration.fillPrimary)
+                        "fillSecondary" -> SolidColor(colors.illustration.fillSecondary)
+                        "fillTertiary" -> SolidColor(colors.illustration.fillTertiary)
+                        "fillAccent" -> SolidColor(colors.illustration.fillAccent)
                         "logo" -> SolidColor(colors.illustration.logo)
                         "navigation" -> SolidColor(colors.icon.secondary)
                         "navigationActiveAccent" -> SolidColor(colors.icon.navActiveAccent)

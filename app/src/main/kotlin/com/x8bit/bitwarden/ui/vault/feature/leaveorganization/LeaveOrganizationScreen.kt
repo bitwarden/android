@@ -146,7 +146,7 @@ private fun LeaveOrganizationContent(
         Spacer(modifier = Modifier.height(32.dp))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_leave_organization),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_business_warning),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

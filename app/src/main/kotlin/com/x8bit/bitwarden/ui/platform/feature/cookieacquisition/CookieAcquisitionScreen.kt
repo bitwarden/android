@@ -135,7 +135,7 @@ private fun CookieAcquisitionContent(
         Spacer(modifier = Modifier.height(32.dp))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_sso_cookie_sync),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_keyhole),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

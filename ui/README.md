@@ -37,11 +37,11 @@ All illustrations and multi-tonal icons require the svg paths to be tagged with 
 
 The supported tags are as follows:
 
-* outline
-* primary
-* secondary
-* tertiary
-* accent
+* stroke
+* fillPrimary
+* fillSecondary
+* fillTertiary
+* fillAccent
 * logo
 * navigation
 * navigationActiveAccent

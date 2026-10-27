@@ -337,7 +337,7 @@ private fun ItemHeaderIcon(
         modifier = modifier.then(
             if (applyBackgroundFill) {
                 Modifier.background(
-                    color = BitwardenTheme.colorScheme.illustration.backgroundPrimary,
+                    color = BitwardenTheme.colorScheme.illustration.fillPrimary,
                     shape = BitwardenTheme.shapes.favicon,
                 )
             } else {
@@ -348,7 +348,7 @@ private fun ItemHeaderIcon(
         BitwardenIcon(
             iconData = iconData,
             tint = if (applyBackgroundFill) {
-                BitwardenTheme.colorScheme.illustration.outline
+                BitwardenTheme.colorScheme.illustration.stroke
             } else {
                 Color.Unspecified
             },
