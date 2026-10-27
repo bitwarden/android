@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.model.FillableFields
 import com.x8bit.bitwarden.data.autofill.accessibility.parser.util.logAccessibilityNodeInfo
 import com.x8bit.bitwarden.data.autofill.accessibility.util.getSupportedBrowserOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isEditText
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isTotp
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
 import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 
@@ -33,6 +34,7 @@ internal class AccessibilityParserImpl(
                 passwordNodes = passwordNodes,
             ),
             passwordFields = passwordNodes,
+            totpFields = nodes.filter { it.isTotp },
         )
     }
 

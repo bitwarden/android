@@ -42,6 +42,7 @@ class AccessibilityParserTest : BaseRobolectricTest() {
         val expectedResult = FillableFields(
             usernameField = null,
             passwordFields = emptyList(),
+            totpFields = emptyList(),
         )
 
         val result = accessibilityParser.parseForFillableFields(
@@ -57,7 +58,7 @@ class AccessibilityParserTest : BaseRobolectricTest() {
     fun `parseForFillableFields with password fields should return no username field and all password fields`() {
         val uri = mockk<Uri>()
         val rootNode = mockk<AccessibilityNodeInfo>()
-        val passwordField = mockk<AccessibilityNodeInfo> {
+        val passwordField = mockk<AccessibilityNodeInfo>(relaxed = true) {
             every { isPassword } returns true
         }
         val allFields = listOf(passwordField, passwordField)
@@ -77,6 +78,7 @@ class AccessibilityParserTest : BaseRobolectricTest() {
         val expectedResult = FillableFields(
             usernameField = null,
             passwordFields = allFields,
+            totpFields = emptyList(),
         )
 
         val result = accessibilityParser.parseForFillableFields(
@@ -92,10 +94,10 @@ class AccessibilityParserTest : BaseRobolectricTest() {
     fun `parseForFillableFields with password fields and username field should return username field and all password fields`() {
         val uri = mockk<Uri>()
         val rootNode = mockk<AccessibilityNodeInfo>()
-        val usernameField = mockk<AccessibilityNodeInfo> {
+        val usernameField = mockk<AccessibilityNodeInfo>(relaxed = true) {
             every { isPassword } returns false
         }
-        val passwordField = mockk<AccessibilityNodeInfo> {
+        val passwordField = mockk<AccessibilityNodeInfo>(relaxed = true) {
             every { isPassword } returns true
         }
         val allFields = listOf(usernameField, passwordField, passwordField)
@@ -116,6 +118,43 @@ class AccessibilityParserTest : BaseRobolectricTest() {
         val expectedResult = FillableFields(
             usernameField = usernameField,
             passwordFields = passwordFields,
+            totpFields = emptyList(),
+        )
+
+        val result = accessibilityParser.parseForFillableFields(
+            rootNode = rootNode,
+            uri = uri,
+        )
+
+        assertEquals(expectedResult, result)
+    }
+
+    @Test
+    fun `parseForFillableFields with TOTP field should return the TOTP field`() {
+        val uri = mockk<Uri>()
+        val rootNode = mockk<AccessibilityNodeInfo>()
+        val totpField = mockk<AccessibilityNodeInfo>(relaxed = true) {
+            every { isPassword } returns false
+            every { viewIdResourceName } returns "authentication-code"
+        }
+        val allFields = listOf(totpField)
+        every {
+            accessibilityNodeInfoManager.findAccessibilityNodeInfoList(
+                rootNode = rootNode,
+                predicate = any(),
+            )
+        } returns allFields
+        every {
+            accessibilityNodeInfoManager.findUsernameAccessibilityNodeInfo(
+                uri = uri,
+                allNodes = allFields,
+                passwordNodes = emptyList(),
+            )
+        } returns null
+        val expectedResult = FillableFields(
+            usernameField = null,
+            passwordFields = emptyList(),
+            totpFields = allFields,
         )
 
         val result = accessibilityParser.parseForFillableFields(
