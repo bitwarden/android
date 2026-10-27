@@ -117,6 +117,7 @@ fun createMockOrganizationNetwork(
     familySponsorshipAvailable: Boolean = false,
     productTierType: ProductTierType = ProductTierType.FREE,
     accessSecretsManager: Boolean = false,
+    accessPam: Boolean = false,
     limitCollectionCreation: Boolean = false,
     limitCollectionDeletion: Boolean = false,
     allowAdminAccessToAllCollectionItems: Boolean = false,
@@ -181,6 +182,7 @@ fun createMockOrganizationNetwork(
         familySponsorshipAvailable = familySponsorshipAvailable,
         productTierType = productTierType,
         accessSecretsManager = accessSecretsManager,
+        accessPam = accessPam,
         limitCollectionCreation = limitCollectionCreation,
         limitCollectionDeletion = limitCollectionDeletion,
         allowAdminAccessToAllCollectionItems = allowAdminAccessToAllCollectionItems,
@@ -221,6 +223,7 @@ fun createMockPermissions(
     manageSso: Boolean = false,
     manageUsers: Boolean = false,
     manageScim: Boolean = false,
+    manageAccessRules: Boolean = false,
 ): SyncResponseJson.Profile.Permissions =
     SyncResponseJson.Profile.Permissions(
         shouldManageResetPassword = shouldManageResetPassword,
@@ -235,6 +238,7 @@ fun createMockPermissions(
         manageSso = manageSso,
         manageUsers = manageUsers,
         manageScim = manageScim,
+        manageAccessRules = manageAccessRules,
     )
 
 /**
