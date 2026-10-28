@@ -73,15 +73,8 @@ class PremiumStateManagerTest {
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
     }
 
-    private val mutableMobilePremiumUpgradeFlagFlow = MutableStateFlow(true)
     private val mutableDebugDisableSelfHostPremiumCheckFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade)
-        } returns mutableMobilePremiumUpgradeFlagFlow
-        every {
-            getFeatureFlag(FlagKey.MobilePremiumUpgrade)
-        } answers { mutableMobilePremiumUpgradeFlagFlow.value }
         every {
             getFeatureFlag(FlagKey.DebugDisableSelfHostPremiumCheck)
         } answers { mutableDebugDisableSelfHostPremiumCheckFlagFlow.value }
@@ -140,15 +133,6 @@ class PremiumStateManagerTest {
                 assertEquals(PremiumCard.NONE, awaitItem())
             }
         }
-
-    @Test
-    fun `ineligible when feature flag is disabled should emit NONE`() = runTest {
-        mutableMobilePremiumUpgradeFlagFlow.value = false
-        val manager = createManager()
-        manager.premiumCardStateFlow.test {
-            assertEquals(PremiumCard.NONE, awaitItem())
-        }
-    }
 
     @Test
     fun `ineligible when banner is dismissed should emit NONE`() = runTest {
@@ -356,7 +340,7 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `isInAppUpgradeAvailable should return true when billing supported and flag enabled`() {
+    fun `isInAppUpgradeAvailable should return true when billing is supported`() {
         val manager = createManager()
         assertTrue(manager.isInAppUpgradeAvailable())
     }
@@ -364,21 +348,6 @@ class PremiumStateManagerTest {
     @Test
     fun `isInAppUpgradeAvailable should return false when billing not supported`() {
         mutableIsInAppBillingSupportedFlow.value = false
-        val manager = createManager()
-        assertFalse(manager.isInAppUpgradeAvailable())
-    }
-
-    @Test
-    fun `isInAppUpgradeAvailable should return false when feature flag disabled`() {
-        mutableMobilePremiumUpgradeFlagFlow.value = false
-        val manager = createManager()
-        assertFalse(manager.isInAppUpgradeAvailable())
-    }
-
-    @Test
-    fun `isInAppUpgradeAvailable should return false when both conditions are false`() {
-        mutableIsInAppBillingSupportedFlow.value = false
-        mutableMobilePremiumUpgradeFlagFlow.value = false
         val manager = createManager()
         assertFalse(manager.isInAppUpgradeAvailable())
     }
@@ -474,14 +443,13 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `isPlanRowEligibleFlow emits true for a free user when feature flag is enabled`() =
-        runTest {
-            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
-            val manager = createManager()
-            manager.isPlanRowEligibleFlow.test {
-                assertTrue(awaitItem())
-            }
+    fun `isPlanRowEligibleFlow emits true when user is a free user`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertTrue(awaitItem())
         }
+    }
 
     @Test
     fun `isPlanRowEligibleFlow emits true for a personal Premium user`() = runTest {
@@ -505,15 +473,6 @@ class PremiumStateManagerTest {
                 assertFalse(awaitItem())
             }
         }
-
-    @Test
-    fun `isPlanRowEligibleFlow emits false when feature flag is disabled`() = runTest {
-        mutableMobilePremiumUpgradeFlagFlow.value = false
-        val manager = createManager()
-        manager.isPlanRowEligibleFlow.test {
-            assertFalse(awaitItem())
-        }
-    }
 
     @Test
     fun `isPlanRowEligibleFlow emits false when userState is null`() = runTest {

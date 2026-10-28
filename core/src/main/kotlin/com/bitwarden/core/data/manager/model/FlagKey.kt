@@ -34,7 +34,6 @@ sealed class FlagKey<out T : Any> {
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 CardScanner,
-                MobilePremiumUpgrade,
                 ManageDevices,
                 AttachmentUpdates,
                 V2EncryptionJitPassword,
@@ -92,14 +91,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CardScanner : FlagKey<Boolean>() {
         override val keyName: String = "pm-34171-card-scanner"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the mobile Premium upgrade feature.
-     */
-    data object MobilePremiumUpgrade : FlagKey<Boolean>() {
-        override val keyName: String = "pm-31697-premium-upgrade-path"
         override val defaultValue: Boolean = false
     }
 
