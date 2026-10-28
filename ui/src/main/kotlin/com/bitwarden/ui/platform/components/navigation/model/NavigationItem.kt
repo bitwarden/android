@@ -5,11 +5,6 @@ package com.bitwarden.ui.platform.components.navigation.model
  */
 interface NavigationItem {
     /**
-     * The resource ID for the icon representing the tab when it is selected.
-     */
-    val iconResSelected: Int
-
-    /**
      * Resource id for the icon representing the tab.
      */
     val iconRes: Int

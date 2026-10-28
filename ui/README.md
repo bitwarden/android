@@ -43,5 +43,3 @@ The supported tags are as follows:
 * fillTertiary
 * fillAccent
 * logo
-* navigation
-* navigationActiveAccent

@@ -143,13 +143,8 @@ private fun AuthenticatorNavBarScaffold(
  * Represents the different tabs available in the navigation bar
  * for the authenticator screens.
  *
- * Each tab is modeled with properties that provide information on:
- * - Regular icon resource
- * - Icon resource when selected
- * and other essential UI and navigational data.
- *
- * @property iconRes The resource ID for the regular (unselected) icon representing the tab.
- * @property iconResSelected The resource ID for the icon representing the tab when it's selected.
+ * Each tab is modeled with properties that provide information on essential UI and
+ * navigational data.
  */
 @Parcelize
 sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
@@ -170,7 +165,6 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
      */
     @Parcelize
     data object VerificationCodes : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = BitwardenDrawable.ic_verification_codes_filled
         override val iconRes get() = BitwardenDrawable.ic_verification_codes
         override val labelRes get() = BitwardenString.verification_codes
         override val graphRoute get() = ItemListingGraphRoute
@@ -184,7 +178,6 @@ sealed class AuthenticatorNavBarTab : NavigationItem, Parcelable {
      */
     @Parcelize
     data object Settings : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = BitwardenDrawable.ic_settings_filled
         override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = BitwardenString.settings
         override val graphRoute get() = SettingsGraphRoute

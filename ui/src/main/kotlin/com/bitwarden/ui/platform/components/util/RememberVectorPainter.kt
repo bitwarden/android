@@ -87,8 +87,6 @@ private fun ImageVector.Builder.cloneVectorGroupWithUpdatedColors(
                         "fillTertiary" -> SolidColor(colors.illustration.fillTertiary)
                         "fillAccent" -> SolidColor(colors.illustration.fillAccent)
                         "logo" -> SolidColor(colors.illustration.logo)
-                        "navigation" -> SolidColor(colors.icon.secondary)
-                        "navigationActiveAccent" -> SolidColor(colors.icon.navActiveAccent)
                         else -> vectorNode.fill
                     },
                     fillAlpha = vectorNode.fillAlpha,
