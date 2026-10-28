@@ -41,6 +41,7 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
@@ -3568,10 +3569,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = true,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             coEvery {
@@ -3633,10 +3636,12 @@ class AuthRepositoryTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             coEvery {
@@ -3717,10 +3722,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             val accountCryptographicState = WrappedAccountCryptographicState.V1("privateKey")
@@ -3807,11 +3814,13 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             val accountCryptographicState = WrappedAccountCryptographicState.V1(
@@ -3901,10 +3910,12 @@ class AuthRepositoryTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -3993,10 +4004,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -4123,10 +4136,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -4167,10 +4182,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -7509,7 +7526,6 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
-    keyConnectorUrl = null,
 )
 private val GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     accessToken = ACCESS_TOKEN,
@@ -7541,7 +7557,6 @@ private val GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS = GetTokenResponseJson.
             salt = SALT,
         ),
     ),
-    keyConnectorUrl = null,
 )
 private val BASE_PROFILE_1 = AccountJson.Profile(
     userId = USER_ID_1,
