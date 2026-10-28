@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
@@ -449,7 +450,12 @@ class AuthRepositoryTest {
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
@@ -459,7 +465,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         }
     }
 
@@ -471,7 +482,12 @@ class AuthRepositoryTest {
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(
@@ -487,7 +503,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
             accountsService.deleteAccount(
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
@@ -502,7 +523,12 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(
@@ -521,7 +547,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
             accountsService.deleteAccount(
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
@@ -4992,7 +5023,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `removePassword with no masterKeyWrappedUserKey should return error`() = runTest {
+    fun `removePassword with no userDecryptionOptions should return error`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1.copy(
@@ -5004,7 +5035,7 @@ class AuthRepositoryTest {
         val result = repository.removePassword(masterPassword = PASSWORD)
 
         assertEquals(
-            RemovePasswordResult.Error(error = MissingPropertyException("User Key")),
+            RemovePasswordResult.Error(error = MissingPropertyException("Master Password Unlock")),
             result,
         )
     }
@@ -5044,15 +5075,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns error.asFailure()
 
@@ -5076,15 +5108,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns expectedResult.asSuccess()
 
@@ -5111,15 +5144,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns expectedResult.asSuccess()
 
@@ -5136,6 +5170,7 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             val url = "www.example.com"
             val organizations = listOf(
                 createMockOrganization(
@@ -5150,10 +5185,10 @@ class AuthRepositoryTest {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns MigrateExistingUserToKeyConnectorResult.Success.asSuccess()
             every {
@@ -5294,7 +5329,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
-                salt = EMAIL,
+                salt = SALT,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -5319,7 +5354,7 @@ class AuthRepositoryTest {
         )
         coVerify {
             authSdkSource.hashPassword(
-                salt = EMAIL,
+                salt = SALT,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -6037,7 +6072,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = organizationIdentifier,
                 passwordHint = passwordHint,
                 kdf = profile.toKdfRequestModel(),
-                salt = profile.email,
+                salt = SALT,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
                 keys = KeysJson(
@@ -6070,7 +6105,13 @@ class AuthRepositoryTest {
                     privateKey = privateRsaKey,
                 ),
             )
-            fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
+            fakeAuthDiskSource.assertUserState(
+                SINGLE_USER_STATE_1.copy(
+                    accounts = mapOf(
+                        USER_ID_1 to ACCOUNT_1.copy(profile = PROFILE_1_WITH_EMAIL_SALT),
+                    ),
+                ),
+            )
             coVerify(exactly = 1) {
                 authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
                 accountsService.setPassword(body = setPasswordRequestJson)
@@ -7523,6 +7564,19 @@ private val BASE_PROFILE_1 = AccountJson.Profile(
 )
 
 private val PROFILE_1 = BASE_PROFILE_1.copy(
+    userDecryptionOptions = UserDecryptionOptionsJson(
+        hasMasterPassword = true,
+        trustedDeviceUserDecryptionOptions = null,
+        keyConnectorUserDecryptionOptions = null,
+        masterPasswordUnlock = MasterPasswordUnlockDataJson(
+            kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+            masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
+            salt = SALT,
+        ),
+    ),
+)
+
+private val PROFILE_1_WITH_EMAIL_SALT = BASE_PROFILE_1.copy(
     userDecryptionOptions = UserDecryptionOptionsJson(
         hasMasterPassword = true,
         trustedDeviceUserDecryptionOptions = null,
