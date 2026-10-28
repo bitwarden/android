@@ -72,10 +72,11 @@ internal class UserLogoutManagerImpl(
 
         clearData(userId = userId)
 
+        // biometric data is handled independently of blanket clearData() call
         if(reason.shouldClearBiometrics()){
             biometricEncryptionManager.clearBiometrics(userId = userId)
         }
-        
+
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 

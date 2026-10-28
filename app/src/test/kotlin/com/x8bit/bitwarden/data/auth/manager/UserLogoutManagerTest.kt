@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
@@ -65,6 +66,9 @@ class UserLogoutManagerTest {
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any()) } just runs
     }
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
+        every { clearBiometrics(userId = any()) } just runs
+    }
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
         coEvery { unregister() } returns UnregisterExportResult.Success
     }
@@ -82,6 +86,7 @@ class UserLogoutManagerTest {
             toastManager = toastManager,
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
+            biometricEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = FakeDispatcherManager(),
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
             userNotificationPolicyManager = userNotificationPolicyManager,
@@ -385,6 +390,82 @@ class UserLogoutManagerTest {
         }
     }
 
+    @Test
+    fun `logout with a reason that keeps biometrics should not clear biometrics`() {
+        val userId = USER_ID_1
+        every {
+            authDiskSource.userState
+        } returns SINGLE_USER_STATE_1
+
+        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+            userLogoutManager.logout(
+                userId = userId,
+                reason = reason
+            )
+        }
+
+        verify(exactly = 0) {
+            biometricsEncryptionManager.clearBiometrics(userId = any())
+        }
+    }
+
+    @Test
+    fun `logout with a reason that deletes biometrics should clear biometrics`() {
+        val userId = USER_ID_1
+        every {
+            authDiskSource.userState
+        } returns SINGLE_USER_STATE_1
+
+        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+            userLogoutManager.logout(
+                userId = userId,
+                reason = reason
+            )
+        }
+
+        verify(exactly = BIOMETRICS_DELETE_REASONS.size) {
+            biometricsEncryptionManager.clearBiometrics(userId = any())
+        }
+    }
+
+    @Test
+    fun `soft logout with a reason that keeps biometrics should not clear biometrics`() {
+        val userId = USER_ID_1
+        every {
+            authDiskSource.userState
+        } returns SINGLE_USER_STATE_1
+
+        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+            userLogoutManager.softLogout(
+                userId = userId,
+                reason = reason
+            )
+        }
+
+        verify(exactly = 0) {
+            biometricsEncryptionManager.clearBiometrics(userId = any())
+        }
+    }
+
+    @Test
+    fun `soft logout with a reason that deletes biometrics should clear biometrics`() {
+        val userId = USER_ID_1
+        every {
+            authDiskSource.userState
+        } returns SINGLE_USER_STATE_1
+
+        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+            userLogoutManager.softLogout(
+                userId = userId,
+                reason = reason
+            )
+        }
+
+        verify(exactly = BIOMETRICS_DELETE_REASONS.size) {
+            biometricsEncryptionManager.clearBiometrics(userId = any())
+        }
+    }
+
     private fun setupSoftLogoutStubs(userId: String) {
         every { settingsDiskSource.getVaultTimeoutInMinutes(userId = userId) } returns 360
         every {
@@ -512,4 +593,30 @@ private val MULTI_USER_STATE = UserStateJson(
         USER_ID_1 to ACCOUNT_1,
         USER_ID_2 to ACCOUNT_2,
     ),
+)
+
+/**
+ * Logout reasons after which biometric data must NOT be cleared from device
+ */
+private val BIOMETRICS_KEEP_REASONS: List<LogoutReason> = listOf(
+    LogoutReason.Click(source = "test"),
+    LogoutReason.Timeout,
+    LogoutReason.InvalidGrant,
+    LogoutReason.RefreshForbidden,
+    LogoutReason.RefreshUnauthorized,
+    LogoutReason.Notification
+)
+
+/**
+ * Logout reasons after which biometric data MUST be cleared
+ */
+private val BIOMETRICS_DELETE_REASONS: List<LogoutReason> = listOf(
+    LogoutReason.AccountDelete,
+    LogoutReason.PasswordReset,
+    LogoutReason.SecurityStamp,
+    LogoutReason.TooManyUnlockAttempts,
+    LogoutReason.LeftOrganization,
+    LogoutReason.InvalidState(source = "test"),
+    LogoutReason.Biometrics.Lockout,
+    LogoutReason.Biometrics.NoLongerSupported
 )
