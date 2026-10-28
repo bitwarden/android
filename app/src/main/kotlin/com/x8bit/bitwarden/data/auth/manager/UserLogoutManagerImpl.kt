@@ -73,7 +73,7 @@ internal class UserLogoutManagerImpl(
         clearData(userId = userId)
 
         // biometric data is handled independently of blanket clearData() call
-        if(reason.shouldClearBiometrics()){
+        if (reason.shouldClearBiometrics()) {
             biometricEncryptionManager.clearBiometrics(userId = userId)
         }
 
@@ -102,6 +102,11 @@ internal class UserLogoutManagerImpl(
             .getVaultPolicyBannerDismissedDate(userId = userId)
 
         clearData(userId = userId)
+
+        // biometric data is handled independently of blanket clearData() call
+        if (reason.shouldClearBiometrics()) {
+            biometricEncryptionManager.clearBiometrics(userId = userId)
+        }
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
 
         // Restore data that is still required
@@ -195,7 +200,25 @@ internal class UserLogoutManagerImpl(
  * Reasons that reflect an intentional or recoverable logout keep it so biometrics is
  * available again after next login
  */
-private fun LogoutReason.shouldClearBiometrics() : Boolean {
-    // TODO add cases for each logout reason (once confirmed with product)
-    return false
+private fun LogoutReason.shouldClearBiometrics(): Boolean {
+    // TODO confirm cases for each logout reason with Product
+    return when (this) {
+        LogoutReason.AccountDelete,
+        LogoutReason.PasswordReset,
+        LogoutReason.SecurityStamp,
+        LogoutReason.TooManyUnlockAttempts,
+        LogoutReason.LeftOrganization,
+        is LogoutReason.InvalidState,
+        LogoutReason.Biometrics.Lockout,
+        LogoutReason.Biometrics.NoLongerSupported,
+            -> true
+
+        is LogoutReason.Click,
+        LogoutReason.Timeout,
+        LogoutReason.InvalidGrant,
+        LogoutReason.RefreshForbidden,
+        LogoutReason.RefreshUnauthorized,
+        LogoutReason.Notification,
+            -> false
+    }
 }

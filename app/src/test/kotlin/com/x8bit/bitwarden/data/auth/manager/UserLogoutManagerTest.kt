@@ -416,7 +416,7 @@ class UserLogoutManagerTest {
             authDiskSource.userState
         } returns SINGLE_USER_STATE_1
 
-        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+        BIOMETRICS_DELETE_REASONS.forEach { reason ->
             userLogoutManager.logout(
                 userId = userId,
                 reason = reason
@@ -434,6 +434,7 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.userState
         } returns SINGLE_USER_STATE_1
+        setupSoftLogoutStubs(userId = userId)
 
         BIOMETRICS_KEEP_REASONS.forEach { reason ->
             userLogoutManager.softLogout(
@@ -453,8 +454,9 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.userState
         } returns SINGLE_USER_STATE_1
+        setupSoftLogoutStubs(userId = userId)
 
-        BIOMETRICS_KEEP_REASONS.forEach { reason ->
+        BIOMETRICS_DELETE_REASONS.forEach { reason ->
             userLogoutManager.softLogout(
                 userId = userId,
                 reason = reason
