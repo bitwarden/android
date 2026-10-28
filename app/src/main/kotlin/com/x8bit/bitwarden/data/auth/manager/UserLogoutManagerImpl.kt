@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -37,6 +38,7 @@ internal class UserLogoutManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val biometricEncryptionManager: BiometricsEncryptionManager,
     private val userNotificationPolicyManager: UserNotificationPolicyManager,
     dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
@@ -69,6 +71,11 @@ internal class UserLogoutManagerImpl(
         }
 
         clearData(userId = userId)
+
+        if(reason.shouldClearBiometrics()){
+            biometricEncryptionManager.clearBiometrics(userId = userId)
+        }
+        
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
@@ -134,6 +141,7 @@ internal class UserLogoutManagerImpl(
         generatorDiskSource.clearData(userId = userId)
         pushDiskSource.clearData(userId = userId)
         settingsDiskSource.clearData(userId = userId)
+        biometricEncryptionManager
         unconfinedScope.launch {
             passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
             vaultDiskSource.deleteVaultData(userId = userId)
@@ -179,4 +187,14 @@ internal class UserLogoutManagerImpl(
             false
         }
     }
+}
+
+/**
+ * Whether biometric unlock data should be wiped for this logout reason.
+ * Reasons that reflect an intentional or recoverable logout keep it so biometrics is
+ * available again after next login
+ */
+private fun LogoutReason.shouldClearBiometrics() : Boolean {
+    // TODO add cases for each logout reason (once confirmed with product)
+    return false
 }

@@ -183,8 +183,6 @@ class AuthDiskSourceImpl(
         storeAccountCryptographicState(userId = userId, accountCryptographicState = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
-        storeUserBiometricInitVector(userId = userId, iv = null)
-        storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
         storeAccountTokens(userId = userId, accountTokens = null)
@@ -211,6 +209,8 @@ class AuthDiskSourceImpl(
         // * PendingAuthRequest
         // * OnboardingStatus
         // * V2EncryptedMigrationsGracePeriodStart
+        // * Biometric IV
+        // * Biometric Key
     }
 
     override fun getAuthenticatorSyncUnlockKey(userId: String): String? =
