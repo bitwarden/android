@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.util.FakeAuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.entity.createMockAuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
+import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockAuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
@@ -38,11 +39,13 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -333,6 +336,46 @@ class AuthenticatorRepositoryTest {
 
         assertEquals(ExportDataResult.Success, result)
         coVerify { mockFileManager.stringToUri(fileUri = mockUri, dataString = any()) }
+    }
+
+    @Test
+    fun `exportVaultData with JSON format should preserve favorite flag`() = runTest {
+        val mockItem = createMockAuthenticatorItemEntity(1).copy(favorite = true)
+        fakeAuthenticatorDiskSource.saveItem(mockItem)
+        val mockUri = mockk<Uri>()
+        val dataStringSlot = slot<String>()
+
+        coEvery {
+            mockFileManager.stringToUri(fileUri = mockUri, dataString = capture(dataStringSlot))
+        } returns true
+
+        val result = authenticatorRepository.exportVaultData(
+            format = ExportVaultFormat.JSON,
+            fileUri = mockUri,
+        )
+
+        assertEquals(ExportDataResult.Success, result)
+        assertEquals(
+            ExportJsonData(
+                encrypted = false,
+                items = listOf(
+                    ExportJsonData.ExportItem(
+                        id = "mockId-1",
+                        name = "mockIssuer-1",
+                        folderId = null,
+                        organizationId = null,
+                        collectionIds = null,
+                        notes = null,
+                        type = 1,
+                        login = ExportJsonData.ExportItem.ItemLoginData(
+                            totp = "otpauth://totp/mockIssuer:mockAccountName",
+                        ),
+                        favorite = true,
+                    ),
+                ),
+            ),
+            Json.decodeFromString<ExportJsonData>(dataStringSlot.captured),
+        )
     }
 
     @Test
