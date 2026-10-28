@@ -210,7 +210,7 @@ class VaultSdkSourceTest {
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
-            val email = "email"
+            val salt = "salt"
             val password = "password"
             val expectedResult = "expectedResult"
             val kdf = mockk<Kdf>()
@@ -218,7 +218,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -227,7 +227,7 @@ class VaultSdkSourceTest {
             val result = vaultSdkSource.deriveKeyConnector(
                 userId = userId,
                 userKeyEncrypted = userKeyEncrypted,
-                email = email,
+                salt = salt,
                 password = password,
                 kdf = kdf,
             )
@@ -240,7 +240,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -254,14 +254,14 @@ class VaultSdkSourceTest {
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
-            val email = "email"
+            val salt = "salt"
             val password = "password"
             val kdf = mockk<Kdf>()
             coEvery {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -272,7 +272,7 @@ class VaultSdkSourceTest {
             val result = vaultSdkSource.deriveKeyConnector(
                 userId = userId,
                 userKeyEncrypted = userKeyEncrypted,
-                email = email,
+                salt = salt,
                 password = password,
                 kdf = kdf,
             )
@@ -285,7 +285,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -299,7 +299,7 @@ class VaultSdkSourceTest {
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
-            val email = "email"
+            val salt = "salt"
             val password = "password"
             val error = BitwardenException.DeriveKeyConnector(
                 v1 = DeriveKeyConnectorException.Crypto(message = "mock message"),
@@ -309,7 +309,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -318,7 +318,7 @@ class VaultSdkSourceTest {
             val result = vaultSdkSource.deriveKeyConnector(
                 userId = userId,
                 userKeyEncrypted = userKeyEncrypted,
-                email = email,
+                salt = salt,
                 password = password,
                 kdf = kdf,
             )
@@ -331,7 +331,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -344,7 +344,7 @@ class VaultSdkSourceTest {
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
-            val email = "email"
+            val salt = "salt"
             val password = "password"
             val error = mockk<BitwardenException> {
                 every { message } returns "Other error"
@@ -354,7 +354,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),
@@ -363,7 +363,7 @@ class VaultSdkSourceTest {
             val result = vaultSdkSource.deriveKeyConnector(
                 userId = userId,
                 userKeyEncrypted = userKeyEncrypted,
-                email = email,
+                salt = salt,
                 password = password,
                 kdf = kdf,
             )
@@ -376,7 +376,7 @@ class VaultSdkSourceTest {
                 clientCrypto.deriveKeyConnector(
                     request = DeriveKeyConnectorRequest(
                         userKeyEncrypted = userKeyEncrypted,
-                        email = email,
+                        email = salt,
                         password = password,
                         kdf = kdf,
                     ),

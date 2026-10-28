@@ -2,33 +2,17 @@ package com.bitwarden.ui.platform.components.header
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.AnimationConstants
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.platform.base.util.interactiveBorder
-import com.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -42,7 +26,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param interactionSource A [MutableInteractionSource] for observing and emitting interactions
  * for this component.
  */
-@Suppress("LongMethod")
 @Composable
 fun BitwardenExpandingHeader(
     isExpanded: Boolean,
@@ -54,25 +37,16 @@ fun BitwardenExpandingHeader(
     showExpansionIndicator: Boolean = true,
     shape: Shape = BitwardenTheme.shapes.content,
     insets: PaddingValues = PaddingValues(top = 16.dp, bottom = 8.dp),
-    capitalizeText: Boolean = false,
 ) {
-    Row(
-        modifier = modifier
-            .clip(shape = shape)
-            .interactiveBorder(interactionSource = interactionSource, shape = shape)
-            .clickable(
-                onClickLabel = stringResource(
-                    id = if (isExpanded) BitwardenString.collapse else BitwardenString.expand,
-                ),
-                onClick = onClick,
-                interactionSource = interactionSource,
-                role = Role.Button,
-            )
-            .minimumInteractiveComponentSize()
-            .padding(horizontal = 16.dp)
-            .padding(paddingValues = insets)
-            .semantics(mergeDescendants = true) { heading() },
-        verticalAlignment = Alignment.CenterVertically,
+    ExpandingHeaderRow(
+        isExpanded = isExpanded,
+        onClick = onClick,
+        shape = shape,
+        insets = insets,
+        showExpansionIndicator = showExpansionIndicator,
+        expansionIndicatorColor = BitwardenTheme.colorScheme.icon.secondary,
+        interactionSource = interactionSource,
+        modifier = modifier,
     ) {
         Crossfade(
             targetState = isExpanded,
@@ -90,39 +64,19 @@ fun BitwardenExpandingHeader(
         ) { expanded ->
             if (expanded) {
                 Text(
-                    text = if (capitalizeText) {
-                        expandedText.toUpperCase(locale = LocalLocale.current)
-                    } else {
-                        expandedText
-                    },
+                    text = expandedText,
                     color = BitwardenTheme.colorScheme.text.interaction,
                     style = BitwardenTheme.typography.labelLarge,
                     modifier = Modifier.padding(end = 8.dp),
                 )
             } else {
                 Text(
-                    text = if (capitalizeText) {
-                        collapsedText.toUpperCase(locale = LocalLocale.current)
-                    } else {
-                        collapsedText
-                    },
+                    text = collapsedText,
                     color = BitwardenTheme.colorScheme.text.interaction,
                     style = BitwardenTheme.typography.labelLarge,
                     modifier = Modifier.padding(end = 8.dp),
                 )
             }
-        }
-        if (showExpansionIndicator) {
-            val iconRotationDegrees = animateFloatAsState(
-                targetValue = if (isExpanded) 0f else 180f,
-                label = "expanderIconRotationAnimation",
-            )
-            Icon(
-                painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_up_small),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.secondary,
-                modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
-            )
         }
     }
 }

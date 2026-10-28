@@ -156,11 +156,11 @@ data class BitwardenColorScheme(
      */
     @Immutable
     data class IllustrationColors(
-        val outline: Color,
-        val backgroundPrimary: Color,
-        val backgroundSecondary: Color,
-        val backgroundTertiary: Color,
-        val accent: Color,
+        val stroke: Color,
+        val fillPrimary: Color,
+        val fillSecondary: Color,
+        val fillTertiary: Color,
+        val fillAccent: Color,
         val logo: Color,
     )
 }

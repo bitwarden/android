@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,6 +21,7 @@ import java.time.Instant
 /**
  * Fake, memory-based implementation of [SettingsDiskSource].
  */
+@Suppress("LargeClass")
 class FakeSettingsDiskSource(
     flightRecorderDiskSource: FakeFlightRecorderDiskSource = FakeFlightRecorderDiskSource(),
 ) : SettingsDiskSource,
@@ -70,6 +72,7 @@ class FakeSettingsDiskSource(
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
+    private var storedCollapsedVaultSections = mutableMapOf<String, Set<VaultSection>?>()
     private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
     private val storedVaultPolicyBannerDismissedDate = mutableMapOf<String, Instant?>()
     private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
@@ -123,6 +126,9 @@ class FakeSettingsDiskSource(
 
     private val mutableIntroducingArchiveActionCardDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableCollapsedVaultSectionsFlow =
+        mutableMapOf<String, MutableSharedFlow<Set<VaultSection>?>>()
 
     private val mutablePremiumUpgradeBannerDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -274,6 +280,7 @@ class FakeSettingsDiskSource(
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
         storedVaultPolicyBannerDismissedDate.remove(userId)
+        storedCollapsedVaultSections.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
@@ -381,6 +388,21 @@ class FakeSettingsDiskSource(
         storedIntroducingArchiveActionCardDismissed[userId] = isDismissed
         getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
     }
+
+    override fun getCollapsedVaultSections(userId: String): Set<VaultSection>? =
+        storedCollapsedVaultSections[userId]
+
+    override fun storeCollapsedVaultSections(
+        userId: String,
+        collapsedVaultSections: Set<VaultSection>?,
+    ) {
+        storedCollapsedVaultSections[userId] = collapsedVaultSections
+        getMutableCollapsedVaultSectionsFlow(userId = userId).tryEmit(collapsedVaultSections)
+    }
+
+    override fun getCollapsedVaultSectionsFlow(userId: String): Flow<Set<VaultSection>?> =
+        getMutableCollapsedVaultSectionsFlow(userId = userId)
+            .onSubscription { emit(getCollapsedVaultSections(userId = userId)) }
 
     override fun getPremiumUpgradeBannerDismissed(userId: String): Boolean? =
         storedPremiumUpgradeBannerDismissed[userId]
@@ -617,6 +639,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored collapsed vault sections match the [expected] ones.
+     */
+    fun assertCollapsedVaultSections(userId: String, expected: Set<VaultSection>?) {
+        assertEquals(expected, storedCollapsedVaultSections[userId])
+    }
+
+    /**
      * Asserts that the stored Premium upgrade banner dismissed matches the [expected] one.
      */
     fun assertPremiumUpgradeBannerDismissed(userId: String, expected: Boolean?) {
@@ -719,6 +748,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableIntroducingArchiveActionCardDismissedFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableCollapsedVaultSectionsFlow(
+        userId: String,
+    ): MutableSharedFlow<Set<VaultSection>?> =
+        mutableCollapsedVaultSectionsFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

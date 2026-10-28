@@ -98,7 +98,8 @@ private const val SYNC_SUCCESS_JSON = """
           "accessEventLogs": false,
           "createNewCollections": false,
           "editAssignedCollections": false,
-          "manageScim": false
+          "manageScim": false,
+          "manageAccessRules": false
         },
         "providerId": "mockProviderId-1",
         "id": "mockId-1",
@@ -140,6 +141,7 @@ private const val SYNC_SUCCESS_JSON = """
         "familySponsorshipAvailable": false,
         "productTierType": 0,
         "accessSecretsManager": false,
+        "accessPam": false,
         "limitCollectionCreation": false,
         "limitCollectionDeletion": false,
         "limitItemDeletion": false,
@@ -179,7 +181,8 @@ private const val SYNC_SUCCESS_JSON = """
           "accessEventLogs": false,
           "createNewCollections": false,
           "editAssignedCollections": false,
-          "manageScim": false
+          "manageScim": false,
+          "manageAccessRules": false
         },
         "providerId": "mockProviderId-1",
         "id": "mockId-1",
@@ -221,6 +224,7 @@ private const val SYNC_SUCCESS_JSON = """
         "familySponsorshipAvailable": false,
         "productTierType": 0,
         "accessSecretsManager": false,
+        "accessPam": false,
         "limitCollectionCreation": false,
         "limitCollectionDeletion": false,
         "limitItemDeletion": false,
@@ -252,7 +256,8 @@ private const val SYNC_SUCCESS_JSON = """
           "accessEventLogs": false,
           "createNewCollections": false,
           "editAssignedCollections": false,
-          "manageScim": false
+          "manageScim": false,
+          "manageAccessRules": false
         },
         "name": "mockName-1",
         "id": "mockId-1",
@@ -288,7 +293,8 @@ private const val SYNC_SUCCESS_JSON = """
           "accessEventLogs": false,
           "createNewCollections": false,
           "editAssignedCollections": false,
-          "manageScim": false
+          "manageScim": false,
+          "manageAccessRules": false
         },
         "providerId": "mockProviderId-1",
         "id": "mockId-1",
@@ -330,6 +336,7 @@ private const val SYNC_SUCCESS_JSON = """
         "familySponsorshipAvailable": false,
         "productTierType": 0,
         "accessSecretsManager": false,
+        "accessPam": false,
         "limitCollectionCreation": false,
         "limitCollectionDeletion": false,
         "limitItemDeletion": false,

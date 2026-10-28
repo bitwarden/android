@@ -52,8 +52,10 @@ import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyMa
 import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -169,6 +171,7 @@ class VaultViewModel @Inject constructor(
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
             validTotpIds = persistentSetOf(),
+            collapsedSections = settingsRepository.collapsedVaultSections.toImmutableSet(),
             policyBanner = userNotificationPolicyManager.displayData?.let {
                 PolicyBanner(
                     organizationId = it.organizationId,
@@ -276,6 +279,12 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .getCollapsedVaultSectionsFlow()
+            .map { VaultAction.Internal.CollapsedSectionsReceive(collapsedSections = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -404,7 +413,12 @@ class VaultViewModel @Inject constructor(
             VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
             is VaultAction.ActionCardClick -> handleActionCardClick(action)
+            is VaultAction.SectionHeaderClick -> handleSectionHeaderClick(action)
         }
+    }
+
+    private fun handleSectionHeaderClick(action: VaultAction.SectionHeaderClick) {
+        settingsRepository.toggleVaultSectionCollapsed(section = action.section)
     }
 
     private fun handleDismissFlightRecorderSnackbar() {
@@ -679,7 +693,7 @@ class VaultViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(dialog = VaultState.DialogState.Syncing)
             }
-            vaultRepository.sync(forced = true)
+            syncForResult(forced = true, isManualSync = true)
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -772,7 +786,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = VaultState.DialogState.Syncing)
         }
-        vaultRepository.sync(forced = true)
+        syncForResult(forced = true, isManualSync = true)
     }
 
     private fun handleDialogDismiss() {
@@ -787,10 +801,26 @@ class VaultViewModel @Inject constructor(
         viewModelScope.launch {
             delay(250.milliseconds)
             if (networkConnectionManager.isNetworkConnected) {
-                vaultRepository.sync(forced = false)
+                sendAction(
+                    VaultAction.Internal.SyncResultReceive(
+                        result = vaultRepository.syncForResult(forced = false),
+                        isManualSync = false,
+                    ),
+                )
             } else {
                 sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
             }
+        }
+    }
+
+    private fun syncForResult(forced: Boolean, isManualSync: Boolean) {
+        viewModelScope.launch {
+            sendAction(
+                VaultAction.Internal.SyncResultReceive(
+                    result = vaultRepository.syncForResult(forced = forced),
+                    isManualSync = isManualSync,
+                ),
+            )
         }
     }
 
@@ -1168,6 +1198,8 @@ class VaultViewModel @Inject constructor(
                 handleKdfSyncCompletedReceive()
             }
 
+            is VaultAction.Internal.SyncResultReceive -> handleSyncResultReceive(action)
+
             is VaultAction.Internal.NewItemTypesFlagUpdateReceive -> {
                 handleNewItemTypesFlagUpdateReceive(action)
             }
@@ -1182,6 +1214,10 @@ class VaultViewModel @Inject constructor(
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
 
+            is VaultAction.Internal.CollapsedSectionsReceive -> {
+                handleCollapsedSectionsReceive(action)
+            }
+
             is VaultAction.Internal.PremiumUpgradeBannerEligibilityReceive -> {
                 handlePremiumUpgradeBannerEligibilityReceive(action)
             }
@@ -1192,6 +1228,41 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.UserNotificationPolicyReceive -> {
                 handleUserNotificationPolicyReceive(action)
+            }
+        }
+    }
+
+    private fun handleSyncResultReceive(action: VaultAction.Internal.SyncResultReceive) {
+        when (action.result) {
+            is SyncVaultDataResult.Success -> {
+                sendEvent(VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = it.dialog.takeUnless { dialog ->
+                            dialog == VaultState.DialogState.Syncing
+                        },
+                        isRefreshing = false,
+                    )
+                }
+            }
+
+            is SyncVaultDataResult.Error -> {
+                if (action.isManualSync) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = VaultState.DialogState.SyncError(
+                                title = BitwardenString.vault_sync_unsuccessful.asText(),
+                                message = BitwardenString.vault_sync_failed_description.asText(),
+                            ),
+                            isRefreshing = false,
+                        )
+                    }
+                } else {
+                    sendEvent(
+                        VaultEvent.ShowSnackbar(BitwardenString.vault_sync_unsuccessful.asText()),
+                    )
+                    mutableStateFlow.update { it.copy(isRefreshing = false) }
+                }
             }
         }
     }
@@ -1331,6 +1402,14 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
+        }
+    }
+
+    private fun handleCollapsedSectionsReceive(
+        action: VaultAction.Internal.CollapsedSectionsReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(collapsedSections = action.collapsedSections.toImmutableSet())
         }
     }
 
@@ -1567,10 +1646,6 @@ class VaultViewModel @Inject constructor(
         vaultData: DataState.Loaded<VaultData>,
         validTotpIds: Set<String>,
     ) {
-        if (state.dialog == VaultState.DialogState.Syncing) {
-            sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
-        }
-
         val shouldShowDecryptionAlert = !state.hasShownDecryptionFailureAlert &&
             vaultData.data.decryptCipherListResult.failures.isNotEmpty() &&
             state.dialog == null
@@ -1671,6 +1746,8 @@ class VaultViewModel @Inject constructor(
         updateVaultState(
             vaultData = data,
             validTotpIds = validTotpIds,
+            // Keep a sync error the sync result already surfaced.
+            dialog = state.dialog as? VaultState.DialogState.SyncError,
         )
     }
 
@@ -1855,6 +1932,7 @@ data class VaultState(
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
     val validTotpIds: ImmutableSet<String>,
+    val collapsedSections: ImmutableSet<VaultSection> = persistentSetOf(),
     val isNewItemTypesEnabled: Boolean = false,
     val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
@@ -2780,6 +2858,13 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * User clicked the header of the given [section] to expand or collapse it.
+     */
+    data class SectionHeaderClick(
+        val section: VaultSection,
+    ) : VaultAction()
+
+    /**
      * User clicked the primary button on an action card.
      */
     data class ActionCardClick(
@@ -2896,6 +2981,17 @@ sealed class VaultAction {
         data object KdfSyncCompletedReceive : Internal()
 
         /**
+         * Indicates a vault sync started from the vault screen has completed.
+         *
+         * @property isManualSync whether the sync was started from the sync button or "try again"
+         * rather than pull to refresh.
+         */
+        data class SyncResultReceive(
+            val result: SyncVaultDataResult,
+            val isManualSync: Boolean,
+        ) : Internal()
+
+        /**
          * Indicates that the New Item Types feature flag has been updated.
          */
         data class NewItemTypesFlagUpdateReceive(
@@ -2928,6 +3024,13 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the set of collapsed vault sections has been updated.
+         */
+        data class CollapsedSectionsReceive(
+            val collapsedSections: Set<VaultSection>,
         ) : Internal()
 
         /**

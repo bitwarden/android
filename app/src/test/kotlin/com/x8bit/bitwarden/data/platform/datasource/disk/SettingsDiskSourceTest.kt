@@ -10,6 +10,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -175,6 +176,10 @@ class SettingsDiskSourceTest {
             lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
         )
         settingsDiskSource.storeClearClipboardFrequencySeconds(userId = userId, frequency = 5)
+        settingsDiskSource.storeCollapsedVaultSections(
+            userId = userId,
+            collapsedVaultSections = setOf(VaultSection.TYPES),
+        )
         val systemBioIntegrityState = "system_biometrics_integrity_state"
         settingsDiskSource.storeAccountBiometricIntegrityValidity(
             userId = userId,
@@ -226,6 +231,7 @@ class SettingsDiskSourceTest {
             ),
         )
         assertNull(settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId))
+        assertNull(settingsDiskSource.getCollapsedVaultSections(userId = userId))
     }
 
     @Suppress("MaxLineLength")
@@ -914,6 +920,70 @@ class SettingsDiskSourceTest {
                         isDismissed = true,
                     )
                     assertEquals(true, awaitItem())
+                }
+        }
+
+    @Test
+    fun `getCollapsedVaultSections when values are present should pull from SharedPreferences`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getCollapsedVaultSections(userId = mockUserId))
+        fakeSharedPreferences.edit {
+            putString(collapsedVaultSectionsKey, """["types","hiddenItems"]""")
+        }
+        assertEquals(
+            setOf(VaultSection.TYPES, VaultSection.HIDDEN_ITEMS),
+            settingsDiskSource.getCollapsedVaultSections(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `getCollapsedVaultSections should skip unknown stored values`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putString(collapsedVaultSectionsKey, """["types","unknownSection"]""")
+        }
+        assertEquals(
+            setOf(VaultSection.TYPES),
+            settingsDiskSource.getCollapsedVaultSections(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeCollapsedVaultSections should update SharedPreferences`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        settingsDiskSource.storeCollapsedVaultSections(
+            userId = mockUserId,
+            collapsedVaultSections = setOf(VaultSection.NO_FOLDER),
+        )
+        assertEquals(
+            """["noFolder"]""",
+            fakeSharedPreferences.getString(collapsedVaultSectionsKey, null),
+        )
+    }
+
+    @Test
+    fun `getCollapsedVaultSectionsFlow should react to changes in storeCollapsedVaultSections`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getCollapsedVaultSectionsFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(settingsDiskSource.getCollapsedVaultSections(userId = mockUserId))
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storeCollapsedVaultSections(
+                        userId = mockUserId,
+                        collapsedVaultSections = setOf(VaultSection.FAVORITES),
+                    )
+                    assertEquals(setOf(VaultSection.FAVORITES), awaitItem())
                 }
         }
 

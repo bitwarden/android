@@ -18,7 +18,7 @@ interface KeyConnectorManager {
         userId: String,
         url: String,
         userKeyEncrypted: String,
-        email: String,
+        salt: String,
         masterPassword: String,
         kdf: Kdf,
     ): Result<MigrateExistingUserToKeyConnectorResult>

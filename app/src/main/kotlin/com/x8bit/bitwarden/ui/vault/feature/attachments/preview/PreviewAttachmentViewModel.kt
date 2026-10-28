@@ -70,7 +70,7 @@ class PreviewAttachmentViewModel @Inject constructor(
             } else if (isLargeFile) {
                 PreviewAttachmentState.ViewState.Error(
                     message = BitwardenString.this_file_is_too_large_to_preview.asText(),
-                    illustrationRes = BitwardenDrawable.ill_file_error,
+                    illustrationRes = BitwardenDrawable.ill_data_breach,
                 )
             } else {
                 PreviewAttachmentState.ViewState.Loading()
@@ -379,7 +379,7 @@ class PreviewAttachmentViewModel @Inject constructor(
             it.copy(
                 viewState = PreviewAttachmentState.ViewState.Error(
                     message = BitwardenString.preview_unavailable_for_this_file.asText(),
-                    illustrationRes = BitwardenDrawable.ill_file_error,
+                    illustrationRes = BitwardenDrawable.ill_data_breach,
                 ),
             )
         }

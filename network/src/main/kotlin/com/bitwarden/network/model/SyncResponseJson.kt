@@ -332,6 +332,8 @@ data class SyncResponseJson(
          * decryption.
          * @property accessSecretsManager Whether the current user has access to Secrets Manager
          * for this organization.
+         * @property accessPam Whether the current user has access to Privileged Controls for this
+         * organization.
          * @property limitCollectionCreation Whether collection creation is restricted to owners
          * and admins only. When false, any member can create collections and automatically
          * receives manage permissions over collections they create.
@@ -515,6 +517,9 @@ data class SyncResponseJson(
             @SerialName("accessSecretsManager")
             val accessSecretsManager: Boolean = false,
 
+            @SerialName("accessPam")
+            val accessPam: Boolean = false,
+
             @SerialName("limitCollectionCreation")
             val limitCollectionCreation: Boolean = false,
 
@@ -611,6 +616,7 @@ data class SyncResponseJson(
          * @property manageUsers Can manage organization members.
          * @property manageScim Can manage SCIM (System for Cross-domain Identity Management)
          * configuration.
+         * @property manageAccessRules Can manage access rules in Privileged Controls.
          */
         @Serializable
         data class Permissions(
@@ -649,6 +655,9 @@ data class SyncResponseJson(
 
             @SerialName("manageScim")
             val manageScim: Boolean = false,
+
+            @SerialName("manageAccessRules")
+            val manageAccessRules: Boolean = false,
         )
     }
 

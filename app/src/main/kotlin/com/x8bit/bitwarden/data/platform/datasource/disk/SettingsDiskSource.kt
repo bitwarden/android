@@ -5,6 +5,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -133,6 +134,27 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * Emits updates that track [getIntroducingArchiveActionCardDismissed] for the given [userId].
      */
     fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored set of collapsed vault sections for the given [userId].
+     *
+     * Returns `null` if no value has been stored, which is equivalent to every section being
+     * expanded. Stored values that do not match a known [VaultSection] are skipped.
+     */
+    fun getCollapsedVaultSections(userId: String): Set<VaultSection>?
+
+    /**
+     * Stores the given set of [collapsedVaultSections] for the given [userId].
+     */
+    fun storeCollapsedVaultSections(
+        userId: String,
+        collapsedVaultSections: Set<VaultSection>?,
+    )
+
+    /**
+     * Emits updates that track [getCollapsedVaultSections] for the given [userId].
+     */
+    fun getCollapsedVaultSectionsFlow(userId: String): Flow<Set<VaultSection>?>
 
     /**
      * Retrieves the stored value of whether the Premium upgrade banner has been dismissed.
