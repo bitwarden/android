@@ -128,7 +128,7 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
 val TwoFactorAuthMethod.imageRes: Int?
     get() = when (this) {
         TwoFactorAuthMethod.YUBI_KEY -> BitwardenDrawable.ill_yubi_key
-        TwoFactorAuthMethod.EMAIL -> BitwardenDrawable.ill_new_device_verification
+        TwoFactorAuthMethod.EMAIL -> BitwardenDrawable.ill_email_code
         TwoFactorAuthMethod.AUTHENTICATOR_APP -> BitwardenDrawable.ill_authenticator
         else -> null
     }

@@ -242,7 +242,7 @@ private fun SetUpLaterButton(
 private fun ColumnScope.SetupUnlockHeaderCompact() {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
-        painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
+        painter = rememberVectorPainter(id = BitwardenDrawable.ill_fingerprint_unlock),
         contentDescription = null,
         modifier = Modifier
             .standardHorizontalMargin()
@@ -286,7 +286,7 @@ private fun SetupUnlockHeaderMedium(
             .standardHorizontalMargin(),
     ) {
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_fingerprint_unlock),
             contentDescription = null,
             modifier = Modifier
                 .size(size = 100.dp)

@@ -149,7 +149,7 @@ private fun UpdateBiometricsContent(
         Spacer(modifier = Modifier.height(height = 32.dp))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_fingerprint_unlock),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
