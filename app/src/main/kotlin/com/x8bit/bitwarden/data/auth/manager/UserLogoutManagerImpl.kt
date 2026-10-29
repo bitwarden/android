@@ -147,7 +147,6 @@ internal class UserLogoutManagerImpl(
         generatorDiskSource.clearData(userId = userId)
         pushDiskSource.clearData(userId = userId)
         settingsDiskSource.clearData(userId = userId)
-        biometricEncryptionManager
         unconfinedScope.launch {
             passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
             vaultDiskSource.deleteVaultData(userId = userId)
