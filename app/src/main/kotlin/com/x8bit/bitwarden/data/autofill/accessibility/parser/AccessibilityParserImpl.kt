@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.model.FillableFields
 import com.x8bit.bitwarden.data.autofill.accessibility.parser.util.logAccessibilityNodeInfo
 import com.x8bit.bitwarden.data.autofill.accessibility.util.getSupportedBrowserOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isEditText
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isTotp
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
 import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 
@@ -23,7 +24,7 @@ internal class AccessibilityParserImpl(
     ): FillableFields {
         val nodes = accessibilityNodeInfoManager
             .findAccessibilityNodeInfoList(rootNode = rootNode) {
-                it.isEditText || it.isPassword
+                it.isEditText || it.isPassword || it.isTotp
             }
         val passwordNodes = nodes.filter { it.isPassword }
         return FillableFields(
@@ -33,6 +34,7 @@ internal class AccessibilityParserImpl(
                 passwordNodes = passwordNodes,
             ),
             passwordFields = passwordNodes,
+            totpFields = nodes.filter { it.isTotp },
         )
     }
 

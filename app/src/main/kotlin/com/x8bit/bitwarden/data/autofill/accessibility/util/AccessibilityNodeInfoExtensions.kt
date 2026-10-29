@@ -26,6 +26,18 @@ private val PACKAGE_NAME_BLOCK_LIST: List<String> = listOf(
     "com.ss.squarehome2",
     "com.treydev.pns",
 )
+private val TOTP_FIELD_HINT_PATTERNS: List<Regex> = listOf(
+    Regex(
+        pattern = "(?:^|[^a-z0-9])(?:totp|otp|2fa)(?:$|[^a-z0-9])",
+        option = RegexOption.IGNORE_CASE,
+    ),
+    Regex(
+        pattern = "(?:one[^a-z0-9]*time|authentication|verification|two[^a-z0-9]*factor)" +
+            "[^a-z0-9]*(?:code|password)",
+        option = RegexOption.IGNORE_CASE,
+    ),
+    Regex(pattern = "(?:Totp|Otp|TOTP|OTP|2Fa|2FA)(?:$|(?=[A-Z]))"),
+)
 
 /**
  * Returns true if the event is for an unsupported package.
@@ -71,6 +83,19 @@ val AccessibilityNodeInfo.isEditText: Boolean
         }
         ?.let { EditText::class.java.isAssignableFrom(it) }
         ?: (className?.contains(other = "EditText") == true)
+
+/**
+ * Determines if the [AccessibilityNodeInfo] represents a TOTP input field.
+ */
+val AccessibilityNodeInfo.isTotp: Boolean
+    get() = listOfNotNull(
+        viewIdResourceName,
+        hintText?.toString(),
+        contentDescription?.toString(),
+    )
+        .any { hint ->
+            TOTP_FIELD_HINT_PATTERNS.any { pattern -> pattern.containsMatchIn(input = hint) }
+        }
 
 /**
  * Determines if the [AccessibilityNodeInfo] is a username field.
