@@ -70,6 +70,15 @@ class UriExtensionsTest {
     }
 
     @Test
+    fun `parseDomainOrNull should return host when it is IPv6 address`() {
+        val actual = URI("https://[2001:db8::1]:8443/login").parseDomainOrNull(
+            resourceCacheManager = resourceCacheManager,
+        )
+
+        assertEquals("[2001:db8::1]", actual)
+    }
+
+    @Test
     fun `parseDomainOrNull should return domain name when it matches exception suffix`() {
         // Setup
         val uri: URI = mockk()

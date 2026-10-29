@@ -18,7 +18,8 @@ private const val IP_REGEX: String =
  */
 fun URI.parseDomainOrNull(resourceCacheManager: ResourceCacheManager): String? {
     val host = this.host ?: return null
-    val isIpAddress = host.matches(IP_REGEX.toRegex())
+    // java.net.URI only produces a bracketed host for IPv6 literals.
+    val isIpAddress = host.matches(IP_REGEX.toRegex()) || host.startsWith("[")
 
     return if (host == "localhost" || isIpAddress) {
         host
