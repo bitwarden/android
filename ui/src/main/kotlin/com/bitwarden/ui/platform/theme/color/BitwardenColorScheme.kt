@@ -68,7 +68,6 @@ data class BitwardenColorScheme(
         val reversed: Color,
         val badgeBackground: Color,
         val badgeForeground: Color,
-        val navActiveAccent: Color,
     )
 
     /**

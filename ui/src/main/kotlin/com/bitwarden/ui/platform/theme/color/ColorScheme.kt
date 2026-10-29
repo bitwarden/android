@@ -36,7 +36,6 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         reversed = PrimitiveColors.gray1100,
         badgeBackground = PrimitiveColors.pink200,
         badgeForeground = PrimitiveColors.gray1100,
-        navActiveAccent = PrimitiveColors.blue500,
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue400,
@@ -137,7 +136,6 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         reversed = PrimitiveColors.gray100,
         badgeBackground = PrimitiveColors.pink100,
         badgeForeground = PrimitiveColors.gray100,
-        navActiveAccent = PrimitiveColors.blue100,
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue500,
@@ -245,7 +243,6 @@ internal fun dynamicBitwardenColorScheme(
             reversed = materialColorScheme.inversePrimary,
             badgeBackground = materialColorScheme.error,
             badgeForeground = materialColorScheme.onError,
-            navActiveAccent = materialColorScheme.onPrimary,
         ),
         filledButton = BitwardenColorScheme.FilledButtonColors(
             background = materialColorScheme.primary,
