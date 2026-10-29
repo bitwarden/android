@@ -38,7 +38,7 @@ GEM
     commander (4.6.0)
       highline (~> 2.0.0)
     csv (3.3.6)
-    date (3.5.1)
+    date (3.6.0)
     declarative (0.0.20)
     digest-crc (0.7.0)
       rake (>= 12.0.0, < 14.0.0)
@@ -234,7 +234,7 @@ GEM
     terminal-notifier (3.1.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
-    time (0.4.2)
+    time (0.5.0)
       date
     trailblazer-option (0.1.2)
     tsort (0.2.0)
@@ -271,7 +271,7 @@ DEPENDENCIES
   mutex_m (= 0.3.0)
   nkf (= 0.2.0)
   ostruct (= 0.6.3)
-  time (= 0.4.2)
+  time (= 0.5.0)
 
 RUBY VERSION
    ruby 3.4.2p28
