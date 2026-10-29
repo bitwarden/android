@@ -1673,11 +1673,9 @@ internal class AuthRepositoryImpl(
             },
         ) {
             val keyConnectorUrl = loginResponse
-                .keyConnectorUrl
-                ?: loginResponse
-                    .userDecryptionOptions
-                    ?.keyConnectorUserDecryptionOptions
-                    ?.keyConnectorUrl
+                .userDecryptionOptions
+                ?.keyConnectorUserDecryptionOptions
+                ?.keyConnectorUrl
             val isDeviceUnlockAvailable = deviceData != null ||
                 loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
             // if possible attempt to unlock the vault with trusted device data
