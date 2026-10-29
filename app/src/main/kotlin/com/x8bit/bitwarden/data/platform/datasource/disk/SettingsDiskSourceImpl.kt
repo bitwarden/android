@@ -279,7 +279,6 @@ class SettingsDiskSourceImpl(
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
-        removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeAppResumeScreen(userId = userId, screenData = null)
         storeVaultPolicyBannerDismissedDate(userId = userId, dismissalRevisionDate = null)
         storeCollapsedVaultSections(userId = userId, collapsedVaultSections = null)
@@ -297,6 +296,7 @@ class SettingsDiskSourceImpl(
         // - Upgraded to Premium action card pending
         // - Premium upgrade pending
         // - Has shown accessibility disclaimer dialog
+        // - Account Biometric Integrity
     }
 
     override fun getIntroducingArchiveActionCardDismissed(userId: String): Boolean? =

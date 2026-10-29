@@ -312,11 +312,15 @@ class AuthDiskSourceTest {
         authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         val deviceKey = "deviceKey"
         authDiskSource.storeDeviceKey(userId = userId, deviceKey = deviceKey)
-        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = byteArrayOf())
+
+        val biometricIV = byteArrayOf(1, 2, 3)
+        val biometricKey = "1234-9678-0192"
+        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = biometricIV)
         authDiskSource.storeUserBiometricUnlockKey(
             userId = userId,
-            biometricsKey = "1234-9876-0192",
+            biometricsKey = biometricKey,
         )
+
         authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
@@ -399,9 +403,13 @@ class AuthDiskSourceTest {
             authDiskSource.getV2EncryptedMigrationsGracePeriodStart(userId = userId),
         )
 
+        assertTrue(
+            biometricIV.contentEquals(
+                authDiskSource.getUserBiometricInitVector(userId = userId)
+            )
+        )
+
         // These should be cleared
-        assertNull(authDiskSource.getUserBiometricInitVector(userId = userId))
-        assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
         assertNull(authDiskSource.getAccountCryptographicState(userId = userId))
