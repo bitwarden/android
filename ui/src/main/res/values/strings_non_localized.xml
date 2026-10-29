@@ -48,7 +48,6 @@
     <string name="migrate_my_vault_to_my_items">Migrate My Vault to My Items</string>
     <string name="trigger_cookie_acquisition">Trigger cookie acquisition</string>
     <string name="clear_sso_cookies">Clear SSO cookies</string>
-    <string name="mobile_premium_upgrade">Mobile Premium Upgrade</string>
     <string name="attachment_updates">Attachment Updates</string>
     <string name="v2_encryption_tde">V2 Encryption - TDE</string>
     <string name="v2_encryption_key_connector">V2 Encryption - Key Connector</string>

@@ -5,7 +5,6 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
@@ -52,7 +51,7 @@ class PremiumStateManagerImpl(
     private val billingRepository: BillingRepository,
     private val settingsDiskSource: SettingsDiskSource,
     vaultRepository: VaultRepository,
-    private val featureFlagManager: FeatureFlagManager,
+    featureFlagManager: FeatureFlagManager,
     environmentRepository: EnvironmentRepository,
     pushManager: PushManager,
     private val clock: Clock,
@@ -130,7 +129,7 @@ class PremiumStateManagerImpl(
         combine(
             authDiskSource.userStateFlow.map { it?.activeAccount },
             billingRepository.isInAppBillingSupportedFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
+            upgradeLifecycleStateFlow,
             authDiskSource.activeUserIdChangesFlow.flatMapLatest { userId ->
                 userId
                     ?.let { id ->
@@ -144,47 +143,35 @@ class PremiumStateManagerImpl(
         ) {
                 account,
                 isInAppBillingSupported,
-                featureFlagEnabled,
+                lifecycle,
                 isUpgradeCardDismissed,
                 vaultDataState,
             ->
-            BannerInputs(
-                account = account,
-                isInAppBillingSupported = isInAppBillingSupported,
-                featureFlagEnabled = featureFlagEnabled,
-                isUpgradeCardDismissed = isUpgradeCardDismissed,
-                vaultDataState = vaultDataState,
-            )
-        }
-            .combine(upgradeLifecycleStateFlow) { inputs, lifecycle ->
-                val profile = inputs.account?.profile ?: return@combine PremiumCard.NONE
-                if (!inputs.featureFlagEnabled) return@combine PremiumCard.NONE
-                val initialCard = when (lifecycle) {
-                    UpgradeLifecycleState.Free -> PremiumCard.UPGRADE
-                    UpgradeLifecycleState.UpgradePending -> PremiumCard.NONE
-                    is UpgradeLifecycleState.Premium -> {
-                        lifecycle.subscriptionStatus.premiumCardState()
-                    }
-                }
-                when (initialCard) {
-                    PremiumCard.UPGRADE -> {
-                        val isAccountOldEnough = profile.creationDate.isOlderThanDays(
-                            days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
-                            clock = clock,
-                        )
-                        val itemCount = inputs.vaultDataState.activeVaultItemCount()
-                        val showCard = inputs.isInAppBillingSupported &&
-                            isAccountOldEnough &&
-                            itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS &&
-                            !inputs.isUpgradeCardDismissed
-                        initialCard.takeIf { showCard } ?: PremiumCard.NONE
-                    }
-
-                    PremiumCard.NEEDS_ATTENTION,
-                    PremiumCard.NONE,
-                        -> initialCard
-                }
+            val profile = account?.profile ?: return@combine PremiumCard.NONE
+            val initialCard = when (lifecycle) {
+                UpgradeLifecycleState.Free -> PremiumCard.UPGRADE
+                UpgradeLifecycleState.UpgradePending -> PremiumCard.NONE
+                is UpgradeLifecycleState.Premium -> lifecycle.subscriptionStatus.premiumCardState()
             }
+            when (initialCard) {
+                PremiumCard.UPGRADE -> {
+                    val isAccountOldEnough = profile.creationDate.isOlderThanDays(
+                        days = PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS,
+                        clock = clock,
+                    )
+                    val itemCount = vaultDataState.activeVaultItemCount()
+                    val showCard = isInAppBillingSupported &&
+                        isAccountOldEnough &&
+                        itemCount >= PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS &&
+                        !isUpgradeCardDismissed
+                    initialCard.takeIf { showCard } ?: PremiumCard.NONE
+                }
+
+                PremiumCard.NEEDS_ATTENTION,
+                PremiumCard.NONE,
+                    -> initialCard
+            }
+        }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
@@ -211,17 +198,16 @@ class PremiumStateManagerImpl(
      * personal subscription to manage.
      */
     override val isPlanRowEligibleFlow: StateFlow<Boolean> =
-        combine(
-            authDiskSource.userStateFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.MobilePremiumUpgrade),
-        ) { userState, featureFlagEnabled ->
-            val profile = userState?.activeAccount?.profile ?: return@combine false
-            val hasPremium = profile.hasPremiumPersonally == true ||
-                profile.hasPremiumFromOrganization == true
-            val isPremiumFromSelf = profile.hasPremiumPersonally == true
-            val isOrgOnlyPremium = hasPremium && !isPremiumFromSelf
-            featureFlagEnabled && !isOrgOnlyPremium
-        }
+        authDiskSource
+            .userStateFlow
+            .map { userState ->
+                val profile = userState?.activeAccount?.profile ?: return@map false
+                val hasPremium = profile.hasPremiumPersonally == true ||
+                    profile.hasPremiumFromOrganization == true
+                val isPremiumFromSelf = profile.hasPremiumPersonally == true
+                val isOrgOnlyPremium = hasPremium && !isPremiumFromSelf
+                !isOrgOnlyPremium
+            }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
@@ -311,8 +297,7 @@ class PremiumStateManagerImpl(
     override val isSelfHosted: Boolean get() = isSelfHostedFlow.value
 
     override fun isInAppUpgradeAvailable(): Boolean =
-        billingRepository.isInAppBillingSupportedFlow.value &&
-            featureFlagManager.getFeatureFlag(FlagKey.MobilePremiumUpgrade)
+        billingRepository.isInAppBillingSupportedFlow.value
 
     override fun dismissPremiumUpgradeBanner() {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return
@@ -405,14 +390,6 @@ class PremiumStateManagerImpl(
             is SubscriptionResult.Error -> SubscriptionStatusState.Error(throwable = result.error)
         }
 }
-
-private data class BannerInputs(
-    val account: AccountJson?,
-    val isInAppBillingSupported: Boolean,
-    val featureFlagEnabled: Boolean,
-    val isUpgradeCardDismissed: Boolean,
-    val vaultDataState: DataState<VaultData>,
-)
 
 /**
  * Returns a [PremiumCard] for the given [SubscriptionStatusState] and subscription substate.

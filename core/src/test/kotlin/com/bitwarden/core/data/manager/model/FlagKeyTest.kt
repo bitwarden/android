@@ -21,10 +21,6 @@ class FlagKeyTest {
             "pm-20558-migrate-myvault-to-myitems",
         )
         assertEquals(
-            FlagKey.MobilePremiumUpgrade.keyName,
-            "pm-31697-premium-upgrade-path",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -93,7 +89,6 @@ class FlagKeyTest {
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
