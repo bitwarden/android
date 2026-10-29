@@ -359,6 +359,7 @@ data class SyncResponseJson(
          * @property useMyItems Whether the organization has access to the My Items collection
          * feature. This allows users to store personal items in the organization vault if the
          * Centralize Organization Ownership policy is enabled.
+         * @property usePam Whether the organization has access to Privileged Access Management.
          */
         @Serializable
         data class Organization(
@@ -552,6 +553,9 @@ data class SyncResponseJson(
 
             @SerialName("useMyItems")
             val useMyItems: Boolean = false,
+
+            @SerialName("usePam")
+            val usePam: Boolean = false,
         )
 
         /**
@@ -765,6 +769,9 @@ data class SyncResponseJson(
 
         @SerialName("data")
         val data: String?,
+
+        @SerialName("partialData")
+        val partialData: String? = null,
 
         @Deprecated("V2 encryption uses `data` and this will always be null")
         @SerialName("login")
