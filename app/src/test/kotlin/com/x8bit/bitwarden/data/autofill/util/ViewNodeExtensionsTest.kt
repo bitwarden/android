@@ -1262,7 +1262,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val webDomain = "www.google.com"
         val webScheme = "http"
-        val expected = "http://www.google.com"
+        val expected = "http://www.google.com/"
         every { viewNode.webDomain } returns webDomain
         every { viewNode.webScheme } returns webScheme
 
@@ -1278,7 +1278,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val webDomain = "www.google.com"
         val webScheme = null
-        val expected = "https://www.google.com"
+        val expected = "https://www.google.com/"
         every { viewNode.webDomain } returns webDomain
         every { viewNode.webScheme } returns webScheme
 
@@ -1294,7 +1294,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val webDomain = "www.google.com"
         val webScheme = " "
-        val expected = "https://www.google.com"
+        val expected = "https://www.google.com/"
         every { viewNode.webDomain } returns webDomain
         every { viewNode.webScheme } returns webScheme
 
