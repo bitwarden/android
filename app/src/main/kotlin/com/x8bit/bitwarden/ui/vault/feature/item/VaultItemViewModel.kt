@@ -8,6 +8,7 @@ import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
+import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.manager.file.FileManager
@@ -31,6 +32,12 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.pam.repository.PamRepository
+import com.x8bit.bitwarden.data.pam.repository.model.PamAccessRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamAccessStatus
+import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalMode
+import com.x8bit.bitwarden.data.pam.repository.model.PamItemAccess
+import com.x8bit.bitwarden.data.pam.repository.model.RequestPamAccessResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
@@ -48,6 +55,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamRequestForm
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
@@ -60,6 +69,8 @@ import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -69,11 +80,21 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.io.File
+import java.time.Clock
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 private const val KEY_HAS_SHOWN_CREATED_SNACKBAR = "hasShownCreatedSnackbar"
+private const val MINUTES_PER_HOUR = 60
+private const val SECONDS_PER_MINUTE = 60L
+private const val MIN_PAM_EXPIRY_REFRESH_MILLIS = 1_000L
+private const val MILLIS_PER_MINUTE = 60_000L
 
 /**
  * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block, used to free
@@ -104,6 +125,8 @@ class VaultItemViewModel @Inject constructor(
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val premiumStateManager: PremiumStateManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val pamRepository: PamRepository,
+    private val clock: Clock,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -116,6 +139,7 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
+            pamAccess = null,
         )
     },
 ) {
@@ -137,6 +161,17 @@ class VaultItemViewModel @Inject constructor(
             savedStateHandle[KEY_HAS_SHOWN_CREATED_SNACKBAR] = value
         }
 
+    private var latestVaultDataReceive: VaultItemAction.Internal.VaultDataReceive? = null
+    private var lastPamRefreshRevision: Instant? = null
+    private var leasedCipher: CipherView? = null
+    private var leaseExpiresAt: Instant? = null
+    private var leaseBaselineExpiresAt: Instant? = null
+    private var leaseTotalMinutes: Long = 0L
+    private var pamRefreshJob: Job? = null
+    private var pamExpiryJob: Job? = null
+    private var pamTickJob: Job? = null
+    private var isScreenActive = false
+
     //region Initialization and Overrides
     init {
         organizationEventManager.trackEvent(
@@ -146,6 +181,11 @@ class VaultItemViewModel @Inject constructor(
             hasShownCreatedSnackbar = true
             sendEvent(VaultItemEvent.ShowSnackbar(message = state.cipherType.savedSnackbarMessage))
         }
+        pamRepository
+            .accessChangedFlow
+            .map { VaultItemAction.Internal.PamAccessChanged }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
@@ -310,6 +350,7 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.ItemType.Passport -> handlePassportTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
+            is VaultItemAction.Pam -> handlePamActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
     }
@@ -1407,6 +1448,426 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Passport Type Handlers
 
+    //region Pam Handlers
+
+    private fun handlePamActions(action: VaultItemAction.Pam) {
+        when (action) {
+            VaultItemAction.Pam.RequestAccessClick -> handlePamRequestAccessClick()
+            is VaultItemAction.Pam.DurationChange -> {
+                updatePamForm { it.copy(durationMinutes = action.durationMinutes) }
+            }
+
+            is VaultItemAction.Pam.StartDateChange -> {
+                updatePamForm { it.copy(startDate = action.date) }
+            }
+
+            is VaultItemAction.Pam.StartTimeChange -> {
+                updatePamForm { it.copy(startMinutes = action.totalMinutes) }
+            }
+
+            is VaultItemAction.Pam.EndDateChange -> {
+                updatePamForm { it.copy(endDate = action.date) }
+            }
+
+            is VaultItemAction.Pam.EndTimeChange -> {
+                updatePamForm { it.copy(endMinutes = action.totalMinutes) }
+            }
+
+            is VaultItemAction.Pam.ReasonChange -> {
+                updatePamForm { it.copy(reason = action.reason) }
+            }
+
+            VaultItemAction.Pam.SubmitRequestClick -> handlePamSubmitRequestClick()
+            VaultItemAction.Pam.StartAccessClick -> handlePamStartAccessClick()
+            VaultItemAction.Pam.CancelRequestClick -> handlePamCancelRequestClick()
+            VaultItemAction.Pam.ConfirmCancelRequestClick -> handlePamConfirmCancelRequestClick()
+            VaultItemAction.Pam.Resume -> {
+                isScreenActive = true
+                dropExpiredLeasedCipher()
+                startPamTicker()
+            }
+
+            VaultItemAction.Pam.Pause -> {
+                isScreenActive = false
+                pamTickJob?.cancel()
+            }
+        }
+    }
+
+    private fun handlePamRequestAccessClick() {
+        val canRequest = state.pamAccess as? VaultItemPamState.CanRequest ?: return
+        val now = LocalDateTime.now(clock)
+        val end = now.plusMinutes(canRequest.defaultDurationMinutes)
+        updateDialogState(
+            dialog = VaultItemState.DialogState.PamRequestAccess(
+                form = VaultItemPamRequestForm(
+                    isHumanApproval = canRequest.isHumanApproval,
+                    durationMinutes = canRequest.defaultDurationMinutes.toString(),
+                    maxDurationMinutes = canRequest.maxDurationMinutes,
+                    startDate = now.toLocalDate(),
+                    startMinutes = now.hour * MINUTES_PER_HOUR + now.minute,
+                    endDate = end.toLocalDate(),
+                    endMinutes = end.hour * MINUTES_PER_HOUR + end.minute,
+                    reason = "",
+                ),
+            ),
+        )
+    }
+
+    private inline fun updatePamForm(
+        crossinline transform: (VaultItemPamRequestForm) -> VaultItemPamRequestForm,
+    ) {
+        val dialog = state.dialog as? VaultItemState.DialogState.PamRequestAccess ?: return
+        updateDialogState(dialog = dialog.copy(form = transform(dialog.form)))
+    }
+
+    private fun handlePamSubmitRequestClick() {
+        val form = (state.dialog as? VaultItemState.DialogState.PamRequestAccess)
+            ?.form
+            ?.takeIf { it.isSubmittable }
+            ?: return
+        val request = if (form.isHumanApproval) {
+            val start = form.startDate.toInstant(minutes = form.startMinutes)
+            val end = form.endDate.toInstant(minutes = form.endMinutes)
+            if (start == null || end == null || !end.isAfter(start)) {
+                updateDialogState(
+                    dialog = VaultItemState.DialogState.Generic(
+                        message = BitwardenString.pam_request_invalid.asText(),
+                    ),
+                )
+                return
+            }
+            PamAccessRequest.Human(start = start, end = end, reason = form.reason.trim())
+        } else {
+            val minutes = form.durationMinutesOrNull ?: return
+            PamAccessRequest.Automatic(durationSeconds = minutes * SECONDS_PER_MINUTE)
+        }
+        updateDialogState(
+            dialog = VaultItemState.DialogState.Loading(
+                message = BitwardenString.loading.asText(),
+            ),
+        )
+        viewModelScope.launch {
+            sendAction(
+                VaultItemAction.Internal.PamRequestAccessReceive(
+                    result = pamRepository.requestAccess(
+                        cipherId = state.vaultItemId,
+                        request = request,
+                    ),
+                ),
+            )
+        }
+    }
+
+    private fun LocalDate?.toInstant(minutes: Int): Instant? = this
+        ?.let {
+            LocalDateTime
+                .of(it, LocalTime.of(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR))
+                .atZone(clock.zone)
+                .toInstant()
+        }
+
+    private fun handlePamStartAccessClick() {
+        val requestId = (state.pamAccess as? VaultItemPamState.Approved)?.requestId ?: return
+        updateDialogState(VaultItemState.DialogState.Loading(BitwardenString.loading.asText()))
+        viewModelScope.launch {
+            sendAction(
+                VaultItemAction.Internal.PamRequestActionReceive(
+                    result = pamRepository.startAccess(requestId = requestId),
+                    successMessage = BitwardenString.pam_access_started.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun handlePamCancelRequestClick() {
+        if ((state.pamAccess as? VaultItemPamState.Approved)?.requestId == null) return
+        updateDialogState(VaultItemState.DialogState.PamConfirmCancelRequest)
+    }
+
+    private fun handlePamConfirmCancelRequestClick() {
+        val requestId = (state.pamAccess as? VaultItemPamState.Approved)?.requestId ?: return
+        updateDialogState(VaultItemState.DialogState.Loading(BitwardenString.loading.asText()))
+        viewModelScope.launch {
+            sendAction(
+                VaultItemAction.Internal.PamRequestActionReceive(
+                    result = pamRepository.cancelAccessRequest(requestId = requestId),
+                    successMessage = BitwardenString.pam_request_cancelled.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun handlePamRequestActionReceive(
+        action: VaultItemAction.Internal.PamRequestActionReceive,
+    ) {
+        action.result.fold(
+            onSuccess = {
+                dismissDialog()
+                sendEvent(VaultItemEvent.ShowSnackbar(message = action.successMessage))
+            },
+            onFailure = {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = BitwardenString.pam_action_failed.asText(),
+                        error = it,
+                    ),
+                )
+            },
+        )
+        refreshAfterPamChange()
+    }
+
+    private fun handlePamRequestAccessReceive(
+        action: VaultItemAction.Internal.PamRequestAccessReceive,
+    ) {
+        when (val result = action.result) {
+            RequestPamAccessResult.Success -> {
+                dismissDialog()
+                sendEvent(
+                    VaultItemEvent.ShowSnackbar(
+                        message = BitwardenString.pam_request_submitted.asText(),
+                    ),
+                )
+                refreshAfterPamChange()
+            }
+
+            is RequestPamAccessResult.ValidationError -> {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = BitwardenString.pam_request_invalid.asText(),
+                    ),
+                )
+                refreshAfterPamChange()
+            }
+
+            is RequestPamAccessResult.Conflict -> {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = BitwardenString.pam_request_conflict.asText(),
+                    ),
+                )
+                refreshAfterPamChange()
+            }
+
+            is RequestPamAccessResult.Error -> {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = BitwardenString.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
+            }
+        }
+    }
+
+    /**
+     * Refreshes both the vault item and the PAM access state after a request changed (or turned
+     * out to conflict with) the state of the item on the server.
+     */
+    private fun refreshAfterPamChange() {
+        vaultRepository.sync(forced = true)
+        refreshPamAccess(force = true)
+    }
+
+    /**
+     * Loads the PAM access state when the feature flag is on and the item is gated (partial).
+     * Unless [force] is set, this only reloads when the synced cipher has changed.
+     */
+    private fun refreshPamAccess(force: Boolean) {
+        val cipher = latestVaultDataReceive?.vaultDataState?.data?.cipher
+        if (cipher == null || !cipher.partial) {
+            clearPamAccess()
+            return
+        }
+        if (!force && cipher.revisionDate == lastPamRefreshRevision && state.pamAccess != null) {
+            return
+        }
+        lastPamRefreshRevision = cipher.revisionDate
+        pamRefreshJob?.cancel()
+        pamRefreshJob = viewModelScope.launch {
+            if (!featureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)) {
+                clearPamAccess()
+                return@launch
+            }
+            sendAction(
+                VaultItemAction.Internal.PamAccessReceive(
+                    result = pamRepository.getItemAccess(cipherId = state.vaultItemId),
+                ),
+            )
+        }
+    }
+
+    private fun clearPamAccess() {
+        pamExpiryJob?.cancel()
+        pamTickJob?.cancel()
+        lastPamRefreshRevision = null
+        val hadLeasedCipher = leasedCipher != null
+        leasedCipher = null
+        leaseExpiresAt = null
+        leaseBaselineExpiresAt = null
+        if (state.pamAccess != null) {
+            mutableStateFlow.update { it.copy(pamAccess = null) }
+        }
+        if (hadLeasedCipher) rerenderLatestVaultData()
+    }
+
+    private fun rerenderLatestVaultData() {
+        latestVaultDataReceive?.let { renderVaultData(receivedAction = it) }
+    }
+
+    private fun handlePamAccessReceive(action: VaultItemAction.Internal.PamAccessReceive) {
+        action.result.fold(
+            onFailure = {
+                pamTickJob?.cancel()
+                setLeasedCipher(cipher = null)
+                mutableStateFlow.update { it.copy(pamAccess = null) }
+            },
+            onSuccess = { access ->
+                mutableStateFlow.update { it.copy(pamAccess = access.toPamState()) }
+                val status = access.status
+                if (status is PamAccessStatus.Active) {
+                    leaseExpiresAt = status.expiresAt
+                    schedulePamExpiryRefresh(expiresAt = status.expiresAt)
+                    startPamTicker()
+                    viewModelScope.launch {
+                        sendAction(
+                            VaultItemAction.Internal.PamLeasedCipherReceive(
+                                result = pamRepository.getLeasedCipher(
+                                    cipherId = state.vaultItemId,
+                                ),
+                            ),
+                        )
+                    }
+                } else {
+                    pamExpiryJob?.cancel()
+                    pamTickJob?.cancel()
+                    leaseExpiresAt = null
+                    setLeasedCipher(cipher = null)
+                }
+            },
+        )
+    }
+
+    private fun handlePamLeasedCipherReceive(
+        action: VaultItemAction.Internal.PamLeasedCipherReceive,
+    ) {
+        val cipher = action.result
+            .getOrNull()
+            .takeIf { state.pamAccess is VaultItemPamState.Active && isLeaseValid() }
+        setLeasedCipher(cipher = cipher)
+    }
+
+    private fun setLeasedCipher(cipher: CipherView?) {
+        if (leasedCipher == null && cipher == null) return
+        leasedCipher = cipher
+        rerenderLatestVaultData()
+    }
+
+    /**
+     * Keeps the remaining time of an active lease up to date, with minute granularity, for as long
+     * as the screen is active. Each pass sleeps until the displayed minute count changes.
+     */
+    private fun startPamTicker() {
+        pamTickJob?.cancel()
+        if (!isScreenActive) return
+        val expiresAt = leaseExpiresAt ?: return
+        if (state.pamAccess !is VaultItemPamState.Active) return
+        pamTickJob = viewModelScope.launch {
+            while (true) {
+                val remainingMillis = Duration
+                    .between(clock.instant(), expiresAt)
+                    .toMillis()
+                    .coerceAtLeast(0L)
+                val remainingMinutes = remainingMillis.millisToMinutesRoundedUp()
+                mutableStateFlow.update { current ->
+                    if (current.pamAccess is VaultItemPamState.Active) {
+                        current.copy(
+                            pamAccess = VaultItemPamState.Active(
+                                remainingMinutes = remainingMinutes,
+                                totalMinutes = maxOf(leaseTotalMinutes, remainingMinutes),
+                            ),
+                        )
+                    } else {
+                        current
+                    }
+                }
+                if (remainingMillis == 0L) break
+                delay(remainingMillis - (remainingMinutes - 1) * MILLIS_PER_MINUTE)
+            }
+        }
+    }
+
+    private fun schedulePamExpiryRefresh(expiresAt: Instant) {
+        pamExpiryJob?.cancel()
+        pamExpiryJob = viewModelScope.launch {
+            delay(Duration.between(clock.instant(), expiresAt).toMillis().coerceAtLeast(0L))
+            dropExpiredLeasedCipher()
+            delay(MIN_PAM_EXPIRY_REFRESH_MILLIS)
+            refreshPamAccess(force = true)
+        }
+    }
+
+    /**
+     * Drops the leased cipher and re-renders when the lease has ended.
+     */
+    private fun dropExpiredLeasedCipher() {
+        if (leasedCipher == null || isLeaseValid()) return
+        leasedCipher = null
+        rerenderLatestVaultData()
+    }
+
+    private fun isLeaseValid(): Boolean =
+        leaseExpiresAt?.let { clock.instant().isBefore(it) } == true
+
+    private fun PamItemAccess.toPamState(): VaultItemPamState = when (val status = this.status) {
+        PamAccessStatus.Privileged -> VaultItemPamState.CanRequest(
+            isHumanApproval = approvalMode != PamApprovalMode.AUTOMATIC,
+            defaultDurationMinutes = defaultDurationSeconds.secondsToMinutesRoundedUp(),
+            maxDurationMinutes = maxDurationSeconds.secondsToMinutesRoundedUp(),
+            isSlotHeldByAnotherMember = isSlotHeldByAnotherMember,
+            slotFreesAt = slotFreesAt?.takeIf { isSlotHeldByAnotherMember },
+        )
+
+        PamAccessStatus.Pending -> VaultItemPamState.Pending
+        is PamAccessStatus.Approved -> VaultItemPamState.Approved(requestId = status.requestId)
+        is PamAccessStatus.Active -> {
+            val remainingMinutes = Duration
+                .between(clock.instant(), status.expiresAt)
+                .toMillis()
+                .coerceAtLeast(0L)
+                .millisToMinutesRoundedUp()
+            if (leaseBaselineExpiresAt != status.expiresAt) {
+                leaseBaselineExpiresAt = status.expiresAt
+                leaseTotalMinutes = remainingMinutes
+            }
+            VaultItemPamState.Active(
+                remainingMinutes = remainingMinutes,
+                totalMinutes = maxOf(leaseTotalMinutes, remainingMinutes),
+            )
+        }
+    }
+
+    private fun Long.secondsToMinutesRoundedUp(): Long =
+        (this + SECONDS_PER_MINUTE - 1) / SECONDS_PER_MINUTE
+
+    private fun Long.millisToMinutesRoundedUp(): Long =
+        (this + MILLIS_PER_MINUTE - 1) / MILLIS_PER_MINUTE
+
+    private fun VaultItemAction.Internal.VaultDataReceive.withLeasedCipher():
+        VaultItemAction.Internal.VaultDataReceive {
+        val leased = leasedCipher?.takeIf { isLeaseValid() } ?: return this
+        val data = vaultDataState.data ?: return this
+        val gated = data.cipher
+        return if (gated?.partial == true && gated.id == leased.id) {
+            copy(vaultDataState = vaultDataState.map { it.copy(cipher = leased) })
+        } else {
+            this
+        }
+    }
+
+    //endregion Pam Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -1432,6 +1893,20 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultItemAction.Internal.UnarchiveCipherReceive -> {
                 handleUnarchiveCipherReceive(action)
+            }
+
+            VaultItemAction.Internal.PamAccessChanged -> refreshPamAccess(force = true)
+            is VaultItemAction.Internal.PamAccessReceive -> handlePamAccessReceive(action)
+            is VaultItemAction.Internal.PamLeasedCipherReceive -> {
+                handlePamLeasedCipherReceive(action)
+            }
+
+            is VaultItemAction.Internal.PamRequestActionReceive -> {
+                handlePamRequestActionReceive(action)
+            }
+
+            is VaultItemAction.Internal.PamRequestAccessReceive -> {
+                handlePamRequestAccessReceive(action)
             }
         }
     }
@@ -1471,8 +1946,15 @@ class VaultItemViewModel @Inject constructor(
         updateDialogState(dialogState)
     }
 
-    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultItemAction.Internal.VaultDataReceive) {
+        latestVaultDataReceive = action
+        renderVaultData(receivedAction = action)
+        refreshPamAccess(force = false)
+    }
+
+    @Suppress("LongMethod")
+    private fun renderVaultData(receivedAction: VaultItemAction.Internal.VaultDataReceive) {
+        val action = receivedAction.withLeasedCipher()
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
         val userState = action.userState ?: return
@@ -1848,6 +2330,7 @@ data class VaultItemState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val hasPremium: Boolean,
+    val pamAccess: VaultItemPamState? = null,
 ) : Parcelable {
 
     /**
@@ -1885,7 +2368,14 @@ data class VaultItemState(
     val isFabVisible: Boolean
         get() = viewState is ViewState.Content &&
             !isCipherDeleted &&
-            isCipherEditable
+            isCipherEditable &&
+            !isPamGated
+
+    /**
+     * Whether the item is gated by privileged access. Gated items cannot be edited or cloned.
+     */
+    val isPamGated: Boolean
+        get() = pamAccess != null
 
     /**
      * Whether the cipher is in a collection.
@@ -2457,6 +2947,20 @@ data class VaultItemState(
          */
         @Parcelize
         data object RestoreItemDialog : DialogState()
+
+        /**
+         * Displays the form to request access to a gated item.
+         */
+        @Parcelize
+        data class PamRequestAccess(
+            val form: VaultItemPamRequestForm,
+        ) : DialogState()
+
+        /**
+         * Asks the user to confirm cancelling the approved access request.
+         */
+        @Parcelize
+        data object PamConfirmCancelRequest : DialogState()
     }
 }
 
@@ -2563,6 +3067,77 @@ sealed class VaultItemEvent {
  * Each subclass of this sealed class denotes a distinct action that can be taken.
  */
 sealed class VaultItemAction {
+
+    /**
+     * Represents actions related to privileged access (PAM) to a gated item.
+     */
+    sealed class Pam : VaultItemAction() {
+        /**
+         * The screen was resumed, so a lease that ended while it was in the background must be
+         * hidden right away.
+         */
+        data object Resume : Pam()
+
+        /**
+         * The screen was paused, so the periodic refresh of the remaining lease time stops.
+         */
+        data object Pause : Pam()
+
+        /**
+         * The user has clicked the start access button of an approved request.
+         */
+        data object StartAccessClick : Pam()
+
+        /**
+         * The user has clicked the cancel request button of an approved request.
+         */
+        data object CancelRequestClick : Pam()
+
+        /**
+         * The user confirmed cancelling the approved request.
+         */
+        data object ConfirmCancelRequestClick : Pam()
+
+        /**
+         * The user has clicked the request access button.
+         */
+        data object RequestAccessClick : Pam()
+
+        /**
+         * The user changed the requested duration (automatic approval).
+         */
+        data class DurationChange(val durationMinutes: String) : Pam()
+
+        /**
+         * The user changed the start date (human approval).
+         */
+        data class StartDateChange(val date: LocalDate?) : Pam()
+
+        /**
+         * The user changed the start time, in minutes since midnight (human approval).
+         */
+        data class StartTimeChange(val totalMinutes: Int) : Pam()
+
+        /**
+         * The user changed the end date (human approval).
+         */
+        data class EndDateChange(val date: LocalDate?) : Pam()
+
+        /**
+         * The user changed the end time, in minutes since midnight (human approval).
+         */
+        data class EndTimeChange(val totalMinutes: Int) : Pam()
+
+        /**
+         * The user changed the reason (human approval).
+         */
+        data class ReasonChange(val reason: String) : Pam()
+
+        /**
+         * The user has submitted the request form.
+         */
+        data object SubmitRequestClick : Pam()
+    }
 
     /**
      * Represents actions common across all item types.
@@ -2975,6 +3550,42 @@ sealed class VaultItemAction {
      * Models actions that the [VaultItemViewModel] itself might send.
      */
     sealed class Internal : VaultItemAction() {
+
+        /**
+         * Indicates that the PAM access information for the item has been received.
+         */
+        data class PamAccessReceive(
+            val result: Result<PamItemAccess>,
+        ) : Internal()
+
+        /**
+         * Indicates that the lease-decrypted cipher has been received.
+         */
+        data class PamLeasedCipherReceive(
+            val result: Result<CipherView?>,
+        ) : Internal()
+
+        /**
+         * Indicates that access to a gated item was started, ended, extended or cancelled
+         * elsewhere in the app, so the PAM state (and the masking) must be re-evaluated.
+         */
+        data object PamAccessChanged : Internal()
+
+        /**
+         * Indicates that the result of requesting access has been received.
+         */
+        data class PamRequestAccessReceive(
+            val result: RequestPamAccessResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a start access or cancel request call finished, with the
+         * [successMessage] to show when it succeeded.
+         */
+        data class PamRequestActionReceive(
+            val result: Result<Unit>,
+            val successMessage: Text,
+        ) : Internal()
 
         /**
          * Copies the given [value] to the clipboard.

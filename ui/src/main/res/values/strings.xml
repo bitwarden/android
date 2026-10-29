@@ -1449,6 +1449,44 @@ Do you want to switch to this account?</string>
     <string name="turn_off">Turn off</string>
     <string name="turn_off_biometric_question">Turn off biometrics?</string>
     <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="pam_can_request_access">You can request access</string>
+    <string name="pam_credentials_masked">Credentials are masked until access is granted.</string>
+    <string name="pam_request_access">Request access</string>
+    <string name="pam_access_pending">Waiting for approval</string>
+    <string name="pam_access_approved">Access approved</string>
+    <string name="pam_less_than_a_minute">less than a minute</string>
+    <string name="pam_request_access_dialog_title">Request access</string>
+    <string name="pam_start_date">Start date</string>
+    <string name="pam_start_time">Start time</string>
+    <string name="pam_end_date">End date</string>
+    <string name="pam_end_time">End time</string>
+    <string name="pam_request_submitted">Access request submitted</string>
+    <string name="pam_request_invalid">Your access request is not valid. Check the details and try again.</string>
+    <string name="pam_request_conflict">The access to this item changed. The latest status is shown.</string>
+    <string name="pam_start_access">Start access</string>
+    <string name="pam_cancel_request">Cancel request</string>
+    <string name="pam_cancel_request_confirm_title">Cancel request</string>
+    <string name="pam_cancel_request_confirm_message">Do you want to cancel this access request?</string>
+    <string name="pam_access_started">Access started</string>
+    <string name="pam_request_cancelled">Request cancelled</string>
+    <string name="pam_action_failed">That did not work. The latest status is shown. Try again.</string>
+    <string name="pam_slot_held_title">Another member has access</string>
+    <string name="pam_slot_held_message">Request access will be available when their access ends.</string>
+    <string name="pam_slot_held_message_until">Request access will be available around %1$s.</string>
+    <string name="pam_access_pending_message">An approver needs to respond before you can see the credentials.</string>
+    <string name="pam_access_approved_message">Start access when you are ready to use the credentials.</string>
+    <string name="pam_access_active_title">You have access</string>
+    <string name="pam_access_active_message">Credentials are visible until your access ends.</string>
+    <string name="pam_access_time_left">%1$s left</string>
+    <string name="pam_submit_request">Submit request</string>
+    <string name="pam_duration_required_label">Duration (required)</string>
+    <string name="pam_reason_required_label">Reason (required)</string>
+    <plurals name="pam_days_format" comment="A number of days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <string name="pam_the_end_must_be_after_the_start">The end must be after the start.</string>
+    <string name="pam_the_window_can_be_at_most_format" comment="Value will be a duration such as 8 hours or 1 day">The access window can be at most %1$s.</string>
     <string name="pam_access_reminders_channel">Privileged access reminders</string>
     <string name="pam_access_ending_soon_title">Privileged access ending soon</string>
     <string name="pam_access_ending_soon_text">Your access ends in about 5 minutes. Extend it if you need more time.</string>
