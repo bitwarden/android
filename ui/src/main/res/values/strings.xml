@@ -1449,4 +1449,7 @@ Do you want to switch to this account?</string>
     <string name="turn_off">Turn off</string>
     <string name="turn_off_biometric_question">Turn off biometrics?</string>
     <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="pam_access_reminders_channel">Privileged access reminders</string>
+    <string name="pam_access_ending_soon_title">Privileged access ending soon</string>
+    <string name="pam_access_ending_soon_text">Your access ends in about 5 minutes. Extend it if you need more time.</string>
 </resources>

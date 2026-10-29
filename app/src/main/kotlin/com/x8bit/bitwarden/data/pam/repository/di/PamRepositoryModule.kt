@@ -2,12 +2,14 @@ package com.x8bit.bitwarden.data.pam.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.pam.datasource.sdk.PamSdkSource
+import com.x8bit.bitwarden.data.pam.manager.PamLeaseReminderManager
 import com.x8bit.bitwarden.data.pam.repository.PamRepository
 import com.x8bit.bitwarden.data.pam.repository.PamRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -22,8 +24,12 @@ object PamRepositoryModule {
     fun providesPamRepository(
         authDiskSource: AuthDiskSource,
         pamSdkSource: PamSdkSource,
+        pamLeaseReminderManager: PamLeaseReminderManager,
+        clock: Clock,
     ): PamRepository = PamRepositoryImpl(
         authDiskSource = authDiskSource,
         pamSdkSource = pamSdkSource,
+        pamLeaseReminderManager = pamLeaseReminderManager,
+        clock = clock,
     )
 }
