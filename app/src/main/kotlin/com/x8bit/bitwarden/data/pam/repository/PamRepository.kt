@@ -1,10 +1,14 @@
 package com.x8bit.bitwarden.data.pam.repository
 
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.pam.repository.model.DecidePamAccessResult
 import com.x8bit.bitwarden.data.pam.repository.model.PamAccessRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamDecisionVerdict
 import com.x8bit.bitwarden.data.pam.repository.model.PamItemAccess
 import com.x8bit.bitwarden.data.pam.repository.model.PamMyAccessRequest
 import com.x8bit.bitwarden.data.pam.repository.model.RequestPamAccessResult
+import com.x8bit.bitwarden.data.pam.repository.model.RevokePamAccessResult
 import kotlinx.coroutines.flow.SharedFlow
 
 /**
@@ -77,4 +81,31 @@ interface PamRepository {
         durationSeconds: Long,
         reason: String,
     ): Result<Unit>
+
+    /**
+     * Returns the pending requests of other members that the active user can decide on, as an
+     * approver. Only requests whose window has not elapsed are returned.
+     */
+    suspend fun getApprovalInbox(): Result<List<PamApprovalRequest>>
+
+    /**
+     * Returns the requests the active user has decided on, newest first.
+     */
+    suspend fun getApprovalHistory(): Result<List<PamApprovalRequest>>
+
+    /**
+     * Records the [verdict] of the active user on the given [request], with an optional
+     * [comment]. Own requests are never sent.
+     */
+    suspend fun decideAccessRequest(
+        request: PamApprovalRequest,
+        verdict: PamDecisionVerdict,
+        comment: String?,
+    ): DecidePamAccessResult
+
+    /**
+     * Ends the active lease that the given [request] produced, as an approver. Another member's
+     * access ends immediately; the active user's own lease is never sent.
+     */
+    suspend fun revokeAccess(request: PamApprovalRequest): RevokePamAccessResult
 }

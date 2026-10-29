@@ -31,6 +31,13 @@ interface PushManager {
     val passwordlessRequestFlow: Flow<PasswordlessRequestData>
 
     /**
+     * Flow that emits whenever the server signals that the privileged access (PAM) requests of
+     * the user changed (a request was submitted, decided or cancelled) and any cached data derived
+     * from them, such as the approver inbox count, should be refreshed.
+     */
+    val pamRefreshFlow: Flow<Unit>
+
+    /**
      * Flow that represents Premium status change notifications.
      */
     val premiumStatusChangedFlow: Flow<PremiumStatusChangedData>

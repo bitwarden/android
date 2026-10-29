@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.pam.datasource.sdk
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.pam.AccessDecisionRequest
+import com.bitwarden.pam.AccessDecisionVerdict
 import com.bitwarden.pam.AccessLeaseExtensionRequest
 import com.bitwarden.pam.AccessLeaseRevokeRequest
 import com.bitwarden.pam.AccessLeaseView
@@ -11,6 +13,7 @@ import com.bitwarden.pam.AccessRequestResultView
 import com.bitwarden.pam.AccessRequestView
 import com.bitwarden.pam.CipherAccessStateView
 import com.bitwarden.sdk.AccessRequestsClient
+import com.bitwarden.sdk.ApprovalsClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.CommercialClient
 import com.bitwarden.sdk.LeasesClient
@@ -29,9 +32,11 @@ import org.junit.jupiter.api.Test
 class PamSdkSourceTest {
     private val accessRequestsClient = mockk<AccessRequestsClient>()
     private val leasesClient = mockk<LeasesClient>()
+    private val approvalsClient = mockk<ApprovalsClient>()
     private val pamClient = mockk<PamClient> {
         every { accessRequests() } returns accessRequestsClient
         every { leases() } returns leasesClient
+        every { approvals() } returns approvalsClient
     }
     private val commercialClient = mockk<CommercialClient> {
         every { pam() } returns pamClient
@@ -200,6 +205,68 @@ class PamSdkSourceTest {
         )
 
         assertEquals(expected.asSuccess(), result)
+    }
+
+    @Test
+    fun `listApprovalInbox should call the SDK and return the requests`() = runTest {
+        val expected = listOf(mockk<AccessRequestView>())
+        coEvery { approvalsClient.listInbox() } returns expected
+
+        assertEquals(expected.asSuccess(), pamSdkSource.listApprovalInbox(userId = USER_ID))
+    }
+
+    @Test
+    fun `listApprovalInbox should return a failure when the SDK throws`() = runTest {
+        val error = IllegalStateException("fail")
+        coEvery { approvalsClient.listInbox() } throws error
+
+        assertEquals(error.asFailure(), pamSdkSource.listApprovalInbox(userId = USER_ID))
+    }
+
+    @Test
+    fun `listApprovalHistory should call the SDK and return the requests`() = runTest {
+        val expected = listOf(mockk<AccessRequestView>())
+        coEvery { approvalsClient.listHistory() } returns expected
+
+        assertEquals(expected.asSuccess(), pamSdkSource.listApprovalHistory(userId = USER_ID))
+    }
+
+    @Test
+    fun `listApprovalHistory should return a failure when the SDK throws`() = runTest {
+        val error = IllegalStateException("fail")
+        coEvery { approvalsClient.listHistory() } throws error
+
+        assertEquals(error.asFailure(), pamSdkSource.listApprovalHistory(userId = USER_ID))
+    }
+
+    @Test
+    fun `decideAccessRequest should call the SDK and return the decided request`() = runTest {
+        val request = AccessDecisionRequest(verdict = AccessDecisionVerdict.DENY, comment = "No")
+        val expected = mockk<AccessRequestView>()
+        coEvery { approvalsClient.decide(id = REQUEST_ID, request = request) } returns expected
+
+        val result = pamSdkSource.decideAccessRequest(
+            userId = USER_ID,
+            requestId = REQUEST_ID,
+            request = request,
+        )
+
+        assertEquals(expected.asSuccess(), result)
+    }
+
+    @Test
+    fun `decideAccessRequest should return a failure when the SDK throws`() = runTest {
+        val error = IllegalStateException("fail")
+        val request = AccessDecisionRequest(verdict = AccessDecisionVerdict.APPROVE, comment = null)
+        coEvery { approvalsClient.decide(id = REQUEST_ID, request = request) } throws error
+
+        val result = pamSdkSource.decideAccessRequest(
+            userId = USER_ID,
+            requestId = REQUEST_ID,
+            request = request,
+        )
+
+        assertEquals(error.asFailure(), result)
     }
 }
 
