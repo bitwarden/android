@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material3.Text
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -216,11 +215,11 @@ data class SettingsState(
     val shouldShowUpgradedToPremiumCard: Boolean = !isPreAuth && isUpgradedToPremiumCardEligible
 
     /**
-     * Whether the plan row should be shown. The row is visible post-authentication when the user
-     * is eligible per [PremiumStateManager.isPlanRowEligibleFlow] — currently, when the in-app
-     * upgrade feature is enabled and the user is not relying solely on organization-granted
-     * Premium — and the account is on a cloud-hosted environment. Self-hosted users manage their
-     * subscription on the web vault.
+     * Whether the plan row should be shown.
+     * The row is visible when all are true:
+     * * In a post-authentication state.
+     * * The user is eligible per [PremiumStateManager.isPlanRowEligibleFlow].
+     * * Not a Self-hosted users as they manage their subscription on the web vault.
      */
     private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible && !isSelfHosted
 
