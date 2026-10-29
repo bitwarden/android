@@ -42,6 +42,11 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     var initialAutofillDialogShown: Boolean?
 
     /**
+     * Has the PAM approver notification prompt been shown to the user.
+     */
+    var hasShownPamNotificationPrompt: Boolean?
+
+    /**
      * Indicates if the accessibility disclaimer has been displayed to the user.
      */
     var hasShownAccessibilityDisclaimer: Boolean?

@@ -1452,4 +1452,10 @@ Do you want to switch to this account?</string>
     <string name="pam_access_reminders_channel">Privileged access reminders</string>
     <string name="pam_access_ending_soon_title">Privileged access ending soon</string>
     <string name="pam_access_ending_soon_text">Your access ends in about 5 minutes. Extend it if you need more time.</string>
+    <string name="pam_access_alerts_channel">Privileged access requests</string>
+    <string name="pam_alert_title">Privileged access</string>
+    <string name="pam_alert_requested">A request needs your approval</string>
+    <string name="pam_alert_approved">Your access request was approved</string>
+    <string name="pam_alert_denied">Your access request was denied</string>
+    <string name="pam_alert_revoked">Your access was revoked</string>
 </resources>

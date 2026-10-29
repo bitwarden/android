@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.compose.animation.AnimatedContent
@@ -45,6 +47,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.handler.DebugMenuHandler
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.handler.rememberDebugMenuHandler
 import kotlinx.collections.immutable.ImmutableMap
@@ -184,6 +187,9 @@ private fun DebugOptionsContent(
         PremiumSection(handler = handler)
 
         Spacer(modifier = Modifier.height(height = 16.dp))
+        PamAlertsSection(handler = handler)
+
+        Spacer(modifier = Modifier.height(height = 16.dp))
         ReportsSection(handler = handler)
 
         Spacer(modifier = Modifier.height(height = 16.dp))
@@ -307,6 +313,49 @@ private fun PremiumSection(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenHorizontalDivider()
+    }
+}
+
+@Composable
+private fun PamAlertsSection(
+    handler: DebugMenuHandler,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        BitwardenListHeaderText(
+            label = stringResource(id = BitwardenString.pam_alerts),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        Text(
+            text = stringResource(
+                id = BitwardenString.posts_a_sample_notification_through_the_real_push_handler,
+            ),
+            style = BitwardenTheme.typography.bodySmall,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        listOf(
+            PamAlertType.ACCESS_REQUESTED to BitwardenString.pam_alert_access_requested_approver,
+            PamAlertType.ACCESS_APPROVED to BitwardenString.pam_alert_access_approved,
+            PamAlertType.ACCESS_DENIED to BitwardenString.pam_alert_access_denied,
+            PamAlertType.ACCESS_REVOKED to BitwardenString.pam_alert_access_revoked,
+        ).forEach { (type, label) ->
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            BitwardenFilledButton(
+                label = stringResource(id = label),
+                onClick = { handler.onSendPamAlertClick(type) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenHorizontalDivider()
     }

@@ -214,6 +214,8 @@ class FakeSettingsDiskSource(
             mutableIsIconLoadingDisabled.tryEmit(value)
         }
 
+    override var hasShownPamNotificationPrompt: Boolean? = null
+
     override var initialAutofillDialogShown: Boolean?
         get() = storedInitialAutofillDialogShown
         set(value) {

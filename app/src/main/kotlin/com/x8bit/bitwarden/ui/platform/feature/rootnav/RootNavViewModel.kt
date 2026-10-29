@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.data.vault.manager.model.VaultMigrationData
@@ -153,6 +154,12 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.PasswordlessRequest -> {
                         RootNavState.VaultUnlockedForAuthRequest
+                    }
+
+                    is SpecialCircumstance.PamAlert -> {
+                        RootNavState.VaultUnlockedForPamAlert(
+                            data = specialCircumstance.pamAlertData,
+                        )
                     }
 
                     is SpecialCircumstance.ProviderCreateCredential -> {
@@ -301,6 +308,7 @@ class RootNavViewModel @Inject constructor(
             is SpecialCircumstance.AutofillSelection,
             is SpecialCircumstance.CredentialExchangeExport,
             is SpecialCircumstance.Fido2Assertion,
+            is SpecialCircumstance.PamAlert,
             is SpecialCircumstance.PasswordlessRequest,
             is SpecialCircumstance.ProviderGetCredentials,
             is SpecialCircumstance.ProviderGetPasswordRequest,
@@ -482,6 +490,13 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlockedForAuthRequest : RootNavState()
+
+    /**
+     * App should show the vault unlocked nav graph and then the PAM access request a push
+     * notification was about.
+     */
+    @Parcelize
+    data class VaultUnlockedForPamAlert(val data: PamAlertData) : RootNavState()
 
     /**
      * App should show the expired registration link screen.

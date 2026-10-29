@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -41,6 +42,12 @@ interface PushManager {
      * Flow that represents Premium status change notifications.
      */
     val premiumStatusChangedFlow: Flow<PremiumStatusChangedData>
+
+    /**
+     * Flow of the alert style PAM pushes (access requested and access decided), these are only
+     * emitted when the PAM mobile feature flag is enabled.
+     */
+    val pamAlertFlow: Flow<PamAlertData>
 
     /**
      * Flow that represents requests intended to trigger a sync cipher delete.

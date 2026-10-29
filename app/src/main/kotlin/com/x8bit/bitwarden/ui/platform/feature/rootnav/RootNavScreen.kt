@@ -137,6 +137,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForNewSend,
         is RootNavState.VaultUnlockedForNewTotp,
         is RootNavState.VaultUnlockedForAuthRequest,
+        is RootNavState.VaultUnlockedForPamAlert,
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForPasswordGet,
@@ -276,6 +277,10 @@ fun RootNavScreen(
                     fingerprint = null,
                     navOptions = rootNavOptions,
                 )
+            }
+
+            is RootNavState.VaultUnlockedForPamAlert -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
             }
 
             is RootNavState.VaultUnlockedForFido2Save,
