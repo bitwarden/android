@@ -21,10 +21,13 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.util.toImportCredentialsRequestDataOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -43,8 +46,9 @@ private const val KEY_STATE = "state"
  * operation.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class VerifyPasswordViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = VerifyPasswordViewModel.Factory::class)
+class VerifyPasswordViewModel @AssistedInject constructor(
+    @Assisted route: ExportItemsGraph.VerifyPasswordRoute,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val policyManager: PolicyManager,
@@ -53,7 +57,6 @@ class VerifyPasswordViewModel @Inject constructor(
 ) : BaseViewModel<VerifyPasswordState, VerifyPasswordEvent, VerifyPasswordAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val args = savedStateHandle.toVerifyPasswordArgs()
             val importRequest = requireNotNull(
                 specialCircumstanceManager
                     .specialCircumstance
@@ -63,7 +66,7 @@ class VerifyPasswordViewModel @Inject constructor(
                 .userStateFlow
                 .value
                 ?.accounts
-                ?.firstOrNull { it.userId == args.userId }
+                ?.firstOrNull { it.userId == route.userId }
                 ?: throw IllegalStateException("Account not found")
 
             val restrictedItemPolicyOrgIds = policyManager
@@ -76,7 +79,7 @@ class VerifyPasswordViewModel @Inject constructor(
                 viewState = VerifyPasswordState.ViewState.Loading,
                 dialog = null,
                 accountSummaryListItem = AccountSelectionListItem(
-                    userId = args.userId,
+                    userId = route.userId,
                     avatarColorHex = account.avatarColorHex,
                     email = account.email,
                     initials = account.initials,
@@ -85,10 +88,21 @@ class VerifyPasswordViewModel @Inject constructor(
                         .any { it.id in restrictedItemPolicyOrgIds },
                 ),
                 hasMasterPassword = account.hasMasterPassword,
-                hasOtherAccounts = args.hasOtherAccounts,
+                hasOtherAccounts = route.hasOtherAccounts,
             )
         },
 ) {
+    /**
+     * Factory for creating a [VerifyPasswordViewModel] for a specific
+     * [ExportItemsGraph.VerifyPasswordRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VerifyPasswordViewModel] for the given [route].
+         */
+        fun create(route: ExportItemsGraph.VerifyPasswordRoute): VerifyPasswordViewModel
+    }
 
     init {
         // As state updates, write to saved state handle.

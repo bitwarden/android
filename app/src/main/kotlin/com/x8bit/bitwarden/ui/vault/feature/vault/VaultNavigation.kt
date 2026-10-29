@@ -2,33 +2,22 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the vault screen.
- */
-@OmitFromCoverage
-@Serializable
-data object VaultRoute
-
-/**
- * Add vault destination to the nav graph.
+ * Add vault destination to the navigation entries.
  */
 @Suppress("LongParameterList")
-fun NavGraphBuilder.vaultDestination(
-    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+fun EntryProviderScope<VaultGraph>.vaultDestination(
+    onNavigateToVaultAddItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
-    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItemScreen: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
+    onNavigateToVaultEditItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
@@ -38,7 +27,7 @@ fun NavGraphBuilder.vaultDestination(
     onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
-    composableWithRootPushTransitions<VaultRoute> {
+    rootPushEntry<VaultGraph.VaultRoute> {
         VaultScreen(
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
@@ -54,11 +43,4 @@ fun NavGraphBuilder.vaultDestination(
             onNavigateToPlan = onNavigateToPlan,
         )
     }
-}
-
-/**
- * Navigate to the [VaultScreen].
- */
-fun NavController.navigateToVault(navOptions: NavOptions? = null) {
-    this.navigate(route = VaultRoute, navOptions = navOptions)
 }

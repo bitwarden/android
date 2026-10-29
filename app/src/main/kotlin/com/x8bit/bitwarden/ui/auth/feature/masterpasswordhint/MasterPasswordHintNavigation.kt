@@ -1,54 +1,39 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the master password hint screen.
- */
-@Serializable
-data class MasterPasswordHintRoute(
-    val emailAddress: String,
-)
-
-/**
- * Class to retrieve login arguments from the [SavedStateHandle].
- */
-data class MasterPasswordHintArgs(val emailAddress: String)
-
-/**
- * Constructs a [MasterPasswordHintArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toMasterPasswordHintArgs(): MasterPasswordHintArgs {
-    val route = this.toRoute<MasterPasswordHintRoute>()
-    return MasterPasswordHintArgs(emailAddress = route.emailAddress)
-}
+import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the master password hint screen.
  */
-fun NavController.navigateToMasterPasswordHint(
+fun NavigationController<AuthGraph>.navigateToMasterPasswordHint(
     emailAddress: String,
-    navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = MasterPasswordHintRoute(emailAddress = emailAddress),
-        navOptions = navOptions,
-    )
+    this.navigate(route = AuthGraph.MasterPasswordHintRoute(emailAddress = emailAddress))
 }
 
 /**
- * Add the master password hint screen to the nav graph.
+ * Add the master password hint screen to the navigation entries.
  */
-fun NavGraphBuilder.masterPasswordHintDestination(
+fun EntryProviderScope<AuthGraph>.masterPasswordHintDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<MasterPasswordHintRoute> {
-        MasterPasswordHintScreen(onNavigateBack = onNavigateBack)
+    slideUpEntry<AuthGraph.MasterPasswordHintRoute> { route ->
+        MasterPasswordHintScreen(
+            viewModel = masterPasswordHintViewModel(route = route),
+            onNavigateBack = onNavigateBack,
+        )
     }
 }
+
+@Composable
+private fun masterPasswordHintViewModel(
+    route: AuthGraph.MasterPasswordHintRoute,
+): MasterPasswordHintViewModel =
+    hiltViewModel<MasterPasswordHintViewModel, MasterPasswordHintViewModel.Factory>(
+        creationCallback = { factory -> factory.create(route = route) },
+    )

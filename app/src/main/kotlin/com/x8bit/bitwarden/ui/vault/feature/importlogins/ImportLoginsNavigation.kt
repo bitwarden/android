@@ -1,33 +1,24 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the import logins screen.
- */
-@Serializable
-data object ImportLoginsRoute
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
  * Helper function to navigate to the import logins screen.
  */
-fun NavController.navigateToImportLoginsScreen(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = ImportLoginsRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToImportLoginsScreen() {
+    this.navigate(route = VaultUnlockedGraph.ImportLoginsRoute)
 }
 
 /**
- * Adds the import logins screen to the navigation graph.
+ * Adds the import logins screen to the navigation entries.
  */
-fun NavGraphBuilder.importLoginsScreenDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.importLoginsScreenDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<ImportLoginsRoute> {
+    slideUpEntry<VaultUnlockedGraph.ImportLoginsRoute> {
         ImportLoginsScreen(
             onNavigateBack = onNavigateBack,
         )

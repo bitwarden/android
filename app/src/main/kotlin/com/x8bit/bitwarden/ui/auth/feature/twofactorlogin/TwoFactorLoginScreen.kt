@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.network.model.TwoFactorAuthMethod
@@ -68,7 +67,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun TwoFactorLoginScreen(
     onNavigateBack: () -> Unit,
-    viewModel: TwoFactorLoginViewModel = hiltViewModel(),
+    viewModel: TwoFactorLoginViewModel,
     authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
     intentManager: IntentManager = LocalIntentManager.current,
     nfcManager: NfcManager = LocalNfcManager.current,

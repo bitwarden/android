@@ -2,58 +2,26 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.leaveorganization
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraph
 
 /**
- * The type-safe route for the leave organization screen.
- *
- * @property organizationId The ID of the organization to leave.
- * @property organizationName The name of the organization to leave.
+ * Add the leave organization screen to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data class LeaveOrganizationRoute(
-    val organizationId: String,
-    val organizationName: String,
-)
-
-/**
- * Class to retrieve leave organization arguments from the [SavedStateHandle].
- *
- * @property organizationId The ID of the organization to leave.
- * @property organizationName The name of the organization to leave.
- */
-data class LeaveOrganizationArgs(
-    val organizationId: String,
-    val organizationName: String,
-)
-
-/**
- * Constructs a [LeaveOrganizationArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toLeaveOrganizationArgs(): LeaveOrganizationArgs {
-    val route = this.toRoute<LeaveOrganizationRoute>()
-    return LeaveOrganizationArgs(
-        organizationId = route.organizationId,
-        organizationName = route.organizationName,
-    )
-}
-
-/**
- * Add the leave organization screen to the nav graph.
- */
-fun NavGraphBuilder.leaveOrganizationDestination(
+fun EntryProviderScope<MigrateToMyItemsGraph>.leaveOrganizationDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<LeaveOrganizationRoute> {
+    pushEntry<MigrateToMyItemsGraph.LeaveOrganizationRoute> { route ->
         LeaveOrganizationScreen(
+            viewModel = hiltViewModel(
+                creationCallback = { factory: LeaveOrganizationViewModel.Factory ->
+                    factory.create(route = route)
+                },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }
@@ -65,16 +33,14 @@ fun NavGraphBuilder.leaveOrganizationDestination(
  * @param organizationId The ID of the organization to leave.
  * @param organizationName The name of the organization to leave.
  */
-fun NavController.navigateToLeaveOrganization(
+fun NavigationController<MigrateToMyItemsGraph>.navigateToLeaveOrganization(
     organizationId: String,
     organizationName: String,
-    navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = LeaveOrganizationRoute(
+        route = MigrateToMyItemsGraph.LeaveOrganizationRoute(
             organizationId = organizationId,
             organizationName = organizationName,
         ),
-        navOptions = navOptions,
     )
 }

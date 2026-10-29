@@ -1,24 +1,17 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the pending requests screen.
+ * Add the Export Vault screen to the navigation entries.
  */
-@Serializable
-data object ExportVaultRoute
-
-/**
- * Add the Export Vault screen to the nav graph.
- */
-fun NavGraphBuilder.exportVaultDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.exportVaultDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<ExportVaultRoute> {
+    slideUpEntry<VaultUnlockedGraph.ExportVaultRoute> {
         ExportVaultScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -28,6 +21,6 @@ fun NavGraphBuilder.exportVaultDestination(
 /**
  * Navigate to the Export Vault screen.
  */
-fun NavController.navigateToExportVault(navOptions: NavOptions? = null) {
-    this.navigate(route = ExportVaultRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToExportVault() {
+    this.navigate(route = VaultUnlockedGraph.ExportVaultRoute)
 }
