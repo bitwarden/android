@@ -3,6 +3,18 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.byarchitect.dejavu",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "AD:2C:4C:E3:BD:3A:A1:30:A4:3C:6E:6F:81:4A:14:7C:91:80:EE:3F:C1:80:A1:89:54:87:06:64:F1:47:F1:4A"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.iode.firefox",
         "signatures": [
           {
