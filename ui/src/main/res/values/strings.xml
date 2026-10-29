@@ -1470,6 +1470,27 @@ Do you want to switch to this account?</string>
     <string name="pam_access_started">Access started</string>
     <string name="pam_request_cancelled">Request cancelled</string>
     <string name="pam_action_failed">That did not work. The latest status is shown. Try again.</string>
+    <string name="pam_tab_history">History</string>
+    <string name="pam_status_pending">Pending</string>
+    <string name="pam_status_approved">Approved</string>
+    <string name="pam_status_denied">Denied</string>
+    <string name="pam_status_cancelled">Cancelled</string>
+    <string name="pam_status_expired">Expired</string>
+    <string name="pam_status_unknown">Unknown</string>
+    <string name="pam_item_fallback_name">Privileged item</string>
+    <string name="pam_approvals">Access approvals</string>
+    <string name="pam_approvals_inbox_tab">Inbox</string>
+    <string name="pam_inbox_zero">You’re all caught up</string>
+    <string name="pam_inbox_empty_description">There are no requests waiting for your decision.</string>
+    <string name="pam_approvals_load_failed">Could not load access requests</string>
+    <string name="pam_approvals_history_empty_title">No decisions yet</string>
+    <string name="pam_approvals_history_empty_message">Requests you approve or deny will show up here.</string>
+    <string name="pam_unknown_requester">Unknown requester</string>
+    <string name="pam_window_range">%1$s to %2$s</string>
+    <string name="pam_duration_minutes_value">%1$d min</string>
+    <string name="pam_duration_hours_value">%1$d h</string>
+    <string name="pam_duration_hours_minutes_value">%1$d h %2$d min</string>
+    <string name="pam_cannot_decide_own">You cannot approve your own request.</string>
     <string name="pam_slot_held_title">Another member has access</string>
     <string name="pam_slot_held_message">Request access will be available when their access ends.</string>
     <string name="pam_slot_held_message_until">Request access will be available around %1$s.</string>
@@ -1496,4 +1517,8 @@ Do you want to switch to this account?</string>
     <string name="pam_alert_approved">Your access request was approved</string>
     <string name="pam_alert_denied">Your access request was denied</string>
     <string name="pam_alert_revoked">Your access was revoked</string>
+    <string name="pam_enable_notifications_title">Get notified about access requests</string>
+    <string name="pam_enable_notifications_description">Know when a request needs your approval. Notifications never include item or user names.</string>
+    <string name="pam_notifications_off_title">Notifications are off</string>
+    <string name="pam_notifications_off_message">To get notified about access requests, allow notifications for Bitwarden in your device settings.</string>
 </resources>
