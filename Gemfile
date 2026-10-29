@@ -15,7 +15,7 @@ gem 'mutex_m', '0.3.0'
 gem 'csv', '3.3.6'
 
 # Since ruby 3.4.1 these are not included in the standard library
-gem 'nkf', '0.2.0'
+gem 'nkf', '0.3.0'
 
 # Starting with Ruby 3.5.0, these are not included in the standard library
 gem 'ostruct', '0.6.3'
