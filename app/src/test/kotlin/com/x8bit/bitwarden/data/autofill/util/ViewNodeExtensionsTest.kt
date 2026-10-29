@@ -62,6 +62,7 @@ class ViewNodeExtensionsTest {
         mockkStatic(Int::isUsernameInputType)
         mockkStatic(AutofillValue::extractMonthValue)
         mockkStatic(AutofillValue::extractYearValue)
+        mockkStatic(AutofillValue::extractCardBrandValue)
         mockkStatic(AutofillValue::extractTextValue)
         every {
             testAutofillValue.extractMonthValue(
@@ -85,7 +86,93 @@ class ViewNodeExtensionsTest {
         unmockkStatic(Int::isUsernameInputType)
         unmockkStatic(AutofillValue::extractMonthValue)
         unmockkStatic(AutofillValue::extractYearValue)
+        unmockkStatic(AutofillValue::extractCardBrandValue)
         unmockkStatic(AutofillValue::extractTextValue)
+    }
+
+    @Test
+    fun `HTML card autofill hints classify localized fields without heuristic hints`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.hint } returns "رقم البطاقة"
+        every {
+            testAutofillValue.extractCardBrandValue(autofillOptions = AUTOFILL_OPTIONS_LIST)
+        } returns null
+        val cases = listOf(
+            "cc-number" to AutofillView.Card.Number(data = autofillViewData),
+            "cc-exp" to AutofillView.Card.ExpirationDate(data = autofillViewData),
+            "cc-exp-month" to AutofillView.Card.ExpirationMonth(
+                data = autofillViewData,
+                monthValue = MONTH_VALUE,
+            ),
+            "cc-exp-year" to AutofillView.Card.ExpirationYear(
+                data = autofillViewData,
+                yearValue = YEAR_VALUE,
+            ),
+            "cc-csc" to AutofillView.Card.SecurityCode(data = autofillViewData),
+            "cc-name" to AutofillView.Card.CardholderName(data = autofillViewData),
+            "cc-type" to AutofillView.Card.Brand(data = autofillViewData, brandValue = null),
+        )
+
+        cases.forEach { (hint, expected) ->
+            every { viewNode.autofillHints } returns arrayOf(hint)
+
+            listOf(false, true).forEach { identityAutofillEnabled ->
+                val actual = viewNode.toAutofillView(
+                    parentWebsite = null,
+                    isIdentityAutofillEnabled = identityAutofillEnabled,
+                )
+
+                assertEquals(expected, actual, "Failed for HTML hint: $hint")
+            }
+        }
+    }
+
+    @Test
+    fun `HTML security code hint takes precedence over password field heuristics`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.autofillHints } returns arrayOf("cc-csc")
+        every { viewNode.htmlInfo.isPasswordField() } returns true
+        every { viewNode.htmlInfo.hints() } returns listOf("password")
+        val expected = AutofillView.Card.SecurityCode(
+            data = autofillViewData.copy(hasPasswordTerms = true),
+        )
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `unknown HTML card hint does not classify an otherwise unsupported field`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.autofillHints } returns arrayOf("cc-unknown")
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Unused(data = autofillViewData), actual)
+    }
+
+    @Test
+    fun `unsupported hints are skipped while supported hint order is preserved`() {
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.autofillHints } returns arrayOf(
+            "cc-unknown",
+            View.AUTOFILL_HINT_PASSWORD,
+            "cc-number",
+        )
+
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = false,
+        )
+
+        assertEquals(AutofillView.Login.Password(data = autofillViewData), actual)
     }
 
     @Suppress("MaxLineLength")
