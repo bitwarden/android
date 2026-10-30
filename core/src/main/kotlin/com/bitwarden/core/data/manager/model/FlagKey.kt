@@ -43,7 +43,6 @@ sealed class FlagKey<out T : Any> {
                 NewItemTypes,
                 DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
-                FedRamp,
                 Vfo1Foundation,
                 SendControls,
                 SendControlsExistingSends,
@@ -157,14 +156,6 @@ sealed class FlagKey<out T : Any> {
     data object FillAssistTargetingRules : FlagKey<Boolean>() {
         override val keyName: String = "fill-assist-targeting-rules"
         override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the FedRAMP feature.
-     */
-    data object FedRamp : FlagKey<Boolean>() {
-        override val keyName: String get() = "fedramp-gov-region"
-        override val defaultValue: Boolean get() = false
     }
 
     /**

@@ -53,10 +53,6 @@ class FlagKeyTest {
             "pm-4516-devices-add-last-activity-date",
         )
         assertEquals(
-            FlagKey.FedRamp.keyName,
-            "fedramp-gov-region",
-        )
-        assertEquals(
             FlagKey.Vfo1Foundation.keyName,
             "vfo1-foundation",
         )
@@ -97,7 +93,6 @@ class FlagKeyTest {
                 FlagKey.NewItemTypes,
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
-                FlagKey.FedRamp,
                 FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
