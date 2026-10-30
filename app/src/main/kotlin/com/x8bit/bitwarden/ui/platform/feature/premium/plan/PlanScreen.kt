@@ -182,7 +182,7 @@ fun PlanScreen(
 
             is PlanState.ViewState.Error -> {
                 BitwardenErrorContent(
-                    illustrationData = IconData.Local(iconRes = BitwardenDrawable.ill_file_error),
+                    illustrationData = IconData.Local(iconRes = BitwardenDrawable.ill_data_breach),
                     message = viewState.message(),
                     buttonData = BitwardenButtonData(
                         label = BitwardenString.try_again.asText(),

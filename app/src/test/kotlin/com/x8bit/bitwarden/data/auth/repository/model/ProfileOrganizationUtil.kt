@@ -74,6 +74,7 @@ fun createMockSdkProfileOrganization(
     familySponsorshipAvailable: Boolean = false,
     productTierType: ProductTierType = ProductTierType.FREE,
     accessSecretsManager: Boolean = false,
+    accessPam: Boolean = false,
     limitCollectionCreation: Boolean = false,
     limitCollectionDeletion: Boolean = false,
     allowAdminAccessToAllCollectionItems: Boolean = false,
@@ -139,6 +140,7 @@ fun createMockSdkProfileOrganization(
             ssoBound = ssoBound,
             userIsClaimedByOrganization = userIsClaimedByOrganization,
             accessSecretsManager = accessSecretsManager,
+            accessPam = accessPam,
         ),
         collectionManagement = CollectionManagementSettings(
             limitCollectionCreation = limitCollectionCreation,
@@ -185,6 +187,8 @@ fun createMockSdkPermissions(
     manageSso: Boolean = false,
     manageUsers: Boolean = false,
     manageScim: Boolean = false,
+    manageAccessRules: Boolean = false,
+    manageRotation: Boolean = false,
 ): Permissions =
     Permissions(
         manageResetPassword = shouldManageResetPassword,
@@ -199,4 +203,6 @@ fun createMockSdkPermissions(
         manageSso = manageSso,
         manageUsers = manageUsers,
         manageScim = manageScim,
+        manageAccessRules = manageAccessRules,
+        manageRotation = manageRotation,
     )

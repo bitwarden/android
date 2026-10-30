@@ -205,7 +205,7 @@ private fun ReviewExportContent(
             .padding(top = 24.dp, bottom = 16.dp),
     ) {
         Image(
-            painter = painterResource(id = BitwardenDrawable.ill_import_logins),
+            painter = painterResource(id = BitwardenDrawable.ill_import),
             contentDescription = null,
             modifier = Modifier.height(160.dp),
             contentScale = ContentScale.Fit,

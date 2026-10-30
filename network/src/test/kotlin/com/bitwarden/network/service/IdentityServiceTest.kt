@@ -585,7 +585,6 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
         ),
         masterPasswordUnlock = null,
     ),
-    keyConnectorUrl = "keyConnectorUrl",
 )
 
 private const val INVALID_LOGIN_JSON = """

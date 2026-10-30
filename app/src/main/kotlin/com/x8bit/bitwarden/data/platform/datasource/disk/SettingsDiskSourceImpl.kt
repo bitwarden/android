@@ -10,6 +10,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -54,6 +55,7 @@ private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogRe
 private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
     "introducingArchiveActionCardDismissed"
 private const val PREMIUM_UPGRADE_BANNER_DISMISSED = "premiumUpgradeBannerDismissed"
+private const val COLLAPSED_VAULT_SECTIONS = "collapsedVaultSections"
 private const val VAULT_POLICY_BANNER_DISMISSED_DATE = "vaultPolicyBannerDismissedDate"
 private const val UPGRADED_TO_PREMIUM_CARD_CONSUMED = "upgradedToPremiumCardConsumed"
 private const val UPGRADED_TO_PREMIUM_CARD_PENDING = "upgradedToPremiumCardPending"
@@ -104,6 +106,9 @@ class SettingsDiskSourceImpl(
 
     private val mutablePremiumUpgradeBannerDismissedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableCollapsedVaultSectionsFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Set<VaultSection>?>>()
 
     private val mutableVaultPolicyBannerDismissedDateFlowMap =
         mutableMapOf<String, MutableSharedFlow<Instant?>>()
@@ -277,6 +282,7 @@ class SettingsDiskSourceImpl(
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
         storeAppResumeScreen(userId = userId, screenData = null)
         storeVaultPolicyBannerDismissedDate(userId = userId, dismissalRevisionDate = null)
+        storeCollapsedVaultSections(userId = userId, collapsedVaultSections = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -312,6 +318,32 @@ class SettingsDiskSourceImpl(
     override fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?> =
         getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId)
             .onSubscription { emit(getIntroducingArchiveActionCardDismissed(userId = userId)) }
+
+    override fun getCollapsedVaultSections(userId: String): Set<VaultSection>? =
+        getString(key = COLLAPSED_VAULT_SECTIONS.appendIdentifier(identifier = userId))
+            ?.let { json.decodeFromStringOrNull<Set<String>>(it) }
+            ?.mapNotNull { storedValue ->
+                // Unknown values are skipped so the remaining sections are preserved.
+                VaultSection.entries.firstOrNull { it.value == storedValue }
+            }
+            ?.toSet()
+
+    override fun storeCollapsedVaultSections(
+        userId: String,
+        collapsedVaultSections: Set<VaultSection>?,
+    ) {
+        putString(
+            key = COLLAPSED_VAULT_SECTIONS.appendIdentifier(identifier = userId),
+            value = collapsedVaultSections?.let { sections ->
+                json.encodeToString(sections.map { it.value }.toSet())
+            },
+        )
+        getMutableCollapsedVaultSectionsFlow(userId = userId).tryEmit(collapsedVaultSections)
+    }
+
+    override fun getCollapsedVaultSectionsFlow(userId: String): Flow<Set<VaultSection>?> =
+        getMutableCollapsedVaultSectionsFlow(userId = userId)
+            .onSubscription { emit(getCollapsedVaultSections(userId = userId)) }
 
     override fun getPremiumUpgradeBannerDismissed(userId: String): Boolean? =
         getBoolean(
@@ -771,6 +803,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutableIntroducingArchiveActionCardDismissedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableCollapsedVaultSectionsFlow(
+        userId: String,
+    ): MutableSharedFlow<Set<VaultSection>?> =
+        mutableCollapsedVaultSectionsFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

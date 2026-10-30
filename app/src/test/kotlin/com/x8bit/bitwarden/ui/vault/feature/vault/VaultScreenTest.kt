@@ -49,6 +49,7 @@ import com.bitwarden.ui.util.performRemoveAccountClick
 import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
@@ -68,6 +69,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -1230,7 +1232,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP (1)")
+            .onNodeWithText("TOTP")
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -1248,7 +1250,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("TOTP (1)")
+            .onNodeWithText("TOTP")
             .assertIsNotDisplayed()
 
         composeTestRule
@@ -1275,6 +1277,87 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `clicking a section header should send SectionHeaderClick with the correct section`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
+
+        composeTestRule
+            .onNodeWithText("TYPES")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.SectionHeaderClick(VaultSection.TYPES)) }
+    }
+
+    @Test
+    fun `section content should be displayed or hidden according to collapsed sections`() {
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = "Favorite Item".asText(),
+            username = "Bitwarden".asText(),
+            overflowOptions = persistentListOf(),
+            shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 1,
+                    favoriteItems = listOf(vaultItem),
+                    folderItems = listOf(
+                        VaultState.ViewState.FolderItem(
+                            id = "12345",
+                            name = "Test Folder".asText(),
+                            itemCount = 1,
+                        ),
+                    ),
+                    noFolderItems = listOf(
+                        vaultItem.copy(id = "67890", name = "No Folder Item".asText()),
+                    ),
+                    collectionItems = listOf(
+                        VaultState.ViewState.CollectionItem(
+                            id = "12345",
+                            name = "Test Collection",
+                            itemCount = 1,
+                        ),
+                    ),
+                ),
+            )
+        }
+        val sectionContentLabels = listOf(
+            "Verification codes",
+            "Favorite Item",
+            "Login",
+            "Test Folder",
+            "No Folder Item",
+            "Test Collection",
+            "Archive",
+            "Trash",
+        )
+        sectionContentLabels.forEach { label ->
+            composeTestRule.onNodeWithTextAfterScroll(text = label).assertIsDisplayed()
+        }
+
+        mutableStateFlow.update {
+            it.copy(collapsedSections = VaultSection.entries.toImmutableSet())
+        }
+
+        listOf(
+            "TOTP",
+            "FAVORITES",
+            "TYPES",
+            "MY FOLDERS",
+            "NO FOLDER",
+            "SHARED FOLDERS",
+            "HIDDEN ITEMS",
+        ).forEach { header ->
+            composeTestRule.onNodeWithTextAfterScroll(text = header).assertIsDisplayed()
+        }
+        sectionContentLabels.forEach { label ->
+            composeTestRule.onNodeWithText(text = label).assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun `clicking a favorite item should send VaultItemClick with the correct item`() {
         val itemText = "Test Item"
         val username = "BitWarden"
@@ -1296,7 +1379,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithText("FAVORITES (1)")
+            .onNodeWithText("FAVORITES")
             .performScrollTo()
             .assertIsDisplayed()
         // Item
@@ -1857,7 +1940,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `collection data should update according to the state`() {
-        val collectionsHeader = "SHARED FOLDERS (1)"
+        val collectionsHeader = "SHARED FOLDERS"
         val collectionName = "Test Collection"
         val collectionCount = 3
         val collectionItem = VaultState.ViewState.CollectionItem(
@@ -1879,7 +1962,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(collectionsHeader, substring = true)
-            .assertTextEquals(collectionsHeader)
+            .assertTextEquals(collectionsHeader, "1")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithTextAfterScroll(collectionName)
@@ -1971,7 +2054,10 @@ class VaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        // Scroll past the item so its overflow button is not covered by the FAB.
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText("Trash"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
@@ -2042,7 +2128,10 @@ class VaultScreenTest : BitwardenComposeTest() {
             )
         }
 
-        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        // Scroll past the item so its overflow button is not covered by the FAB.
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText("Trash"))
         composeTestRule
             .onNodeWithText(text = itemText)
             .onChildren()
@@ -2392,7 +2481,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2406,7 +2495,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2436,7 +2525,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -2454,7 +2543,7 @@ class VaultScreenTest : BitwardenComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS")
             .assertIsDisplayed()
         // Item
         composeTestRule

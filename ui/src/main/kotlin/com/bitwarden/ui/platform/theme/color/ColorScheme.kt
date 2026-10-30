@@ -36,7 +36,6 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         reversed = PrimitiveColors.gray1100,
         badgeBackground = PrimitiveColors.pink200,
         badgeForeground = PrimitiveColors.gray1100,
-        navActiveAccent = PrimitiveColors.blue500,
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue400,
@@ -95,11 +94,11 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         ),
     ),
     illustration = BitwardenColorScheme.IllustrationColors(
-        outline = PrimitiveColors.blue500,
-        backgroundPrimary = PrimitiveColors.blue200,
-        backgroundSecondary = PrimitiveColors.blue300,
-        backgroundTertiary = PrimitiveColors.gray200,
-        accent = PrimitiveColors.yellow200,
+        stroke = PrimitiveColors.gray1100,
+        fillPrimary = PrimitiveColors.blue200,
+        fillSecondary = PrimitiveColors.blue300,
+        fillTertiary = PrimitiveColors.blue100,
+        fillAccent = PrimitiveColors.teal400,
         logo = PrimitiveColors.gray100,
     ),
 )
@@ -137,7 +136,6 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         reversed = PrimitiveColors.gray100,
         badgeBackground = PrimitiveColors.pink100,
         badgeForeground = PrimitiveColors.gray100,
-        navActiveAccent = PrimitiveColors.blue100,
     ),
     filledButton = BitwardenColorScheme.FilledButtonColors(
         background = PrimitiveColors.blue500,
@@ -197,11 +195,11 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         ),
     ),
     illustration = BitwardenColorScheme.IllustrationColors(
-        outline = PrimitiveColors.blue700,
-        backgroundPrimary = PrimitiveColors.blue100,
-        backgroundSecondary = PrimitiveColors.blue200,
-        backgroundTertiary = PrimitiveColors.gray100,
-        accent = PrimitiveColors.yellow200,
+        stroke = PrimitiveColors.blue600,
+        fillPrimary = PrimitiveColors.blue050,
+        fillSecondary = PrimitiveColors.blue200,
+        fillTertiary = PrimitiveColors.gray100,
+        fillAccent = PrimitiveColors.teal400,
         logo = PrimitiveColors.blue500,
     ),
 )
@@ -245,7 +243,6 @@ internal fun dynamicBitwardenColorScheme(
             reversed = materialColorScheme.inversePrimary,
             badgeBackground = materialColorScheme.error,
             badgeForeground = materialColorScheme.onError,
-            navActiveAccent = materialColorScheme.onPrimary,
         ),
         filledButton = BitwardenColorScheme.FilledButtonColors(
             background = materialColorScheme.primary,
@@ -288,19 +285,19 @@ internal fun dynamicBitwardenColorScheme(
             primary = defaultTheme.statusBadge.primary,
         ),
         illustration = BitwardenColorScheme.IllustrationColors(
-            outline = materialColorScheme.onSurface,
-            backgroundPrimary = if (isDarkTheme) {
+            stroke = materialColorScheme.onSurface,
+            fillPrimary = if (isDarkTheme) {
                 materialColorScheme.outlineVariant
             } else {
                 materialColorScheme.surfaceContainerHighest
             },
-            backgroundSecondary = if (isDarkTheme) {
+            fillSecondary = if (isDarkTheme) {
                 materialColorScheme.surfaceContainerHighest
             } else {
                 materialColorScheme.outlineVariant
             },
-            backgroundTertiary = materialColorScheme.surface,
-            accent = materialColorScheme.tertiaryContainer,
+            fillTertiary = materialColorScheme.surface,
+            fillAccent = materialColorScheme.tertiaryContainer,
             logo = materialColorScheme.primary,
         ),
     )
@@ -345,6 +342,8 @@ private data object PrimitiveColors {
     val blue500: Color = Color(color = 0xFF175DDC)
     val blue600: Color = Color(color = 0xFF1A41AC)
     val blue700: Color = Color(color = 0xFF020F66)
+
+    val teal400: Color = Color(color = 0xFF2CDDE9)
 
     val green050: Color = Color(color = 0xFFF0FDF4)
     val green100: Color = Color(color = 0xFFBFECC3)

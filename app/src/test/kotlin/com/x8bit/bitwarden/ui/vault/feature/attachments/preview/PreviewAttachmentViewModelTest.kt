@@ -158,7 +158,7 @@ class PreviewAttachmentViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     viewState = PreviewAttachmentState.ViewState.Error(
                         message = BitwardenString.preview_unavailable_for_this_file.asText(),
-                        illustrationRes = BitwardenDrawable.ill_file_error,
+                        illustrationRes = BitwardenDrawable.ill_data_breach,
                     ),
                 ),
                 awaitItem(),

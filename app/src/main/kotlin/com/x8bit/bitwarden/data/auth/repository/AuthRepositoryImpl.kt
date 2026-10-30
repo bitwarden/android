@@ -934,11 +934,12 @@ internal class AuthRepositoryImpl(
             ?.profile
             ?: return RemovePasswordResult.Error(error = NoActiveUserException())
         val userId = profile.userId
-        val userKey = profile
+        val masterPasswordUnlock = profile
             .userDecryptionOptions
             ?.masterPasswordUnlock
-            ?.masterKeyWrappedUserKey
-            ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
+            ?: return RemovePasswordResult.Error(
+                error = MissingPropertyException("Master Password Unlock"),
+            )
         val keyConnectorUrl = organizations
             .find {
                 it.isKeyConnectorEnabled &&
@@ -953,10 +954,10 @@ internal class AuthRepositoryImpl(
             .migrateExistingUserToKeyConnector(
                 userId = userId,
                 url = keyConnectorUrl,
-                userKeyEncrypted = userKey,
-                email = profile.email,
+                userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                salt = masterPasswordUnlock.salt,
                 masterPassword = masterPassword,
-                kdf = profile.toSdkParams(),
+                kdf = masterPasswordUnlock.kdf.toKdf(),
             )
             .map { migrateResult: MigrateExistingUserToKeyConnectorResult ->
                 when (migrateResult) {
@@ -1672,11 +1673,9 @@ internal class AuthRepositoryImpl(
             },
         ) {
             val keyConnectorUrl = loginResponse
-                .keyConnectorUrl
-                ?: loginResponse
-                    .userDecryptionOptions
-                    ?.keyConnectorUserDecryptionOptions
-                    ?.keyConnectorUrl
+                .userDecryptionOptions
+                ?.keyConnectorUserDecryptionOptions
+                ?.keyConnectorUrl
             val isDeviceUnlockAvailable = deviceData != null ||
                 loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
             // if possible attempt to unlock the vault with trusted device data

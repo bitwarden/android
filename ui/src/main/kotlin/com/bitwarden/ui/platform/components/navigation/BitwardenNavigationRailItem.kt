@@ -9,7 +9,6 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -19,14 +18,12 @@ import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationRailItemColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A custom Bitwarden-themed navigation rail item.
  *
  * @param labelRes The custom label for the navigation item.
- * @param selectedIconRes The icon to be displayed when the navigation item is selected.
- * @param unselectedIconRes The icon to be displayed when the navigation item is not selected.
+ * @param iconRes The icon to be displayed on the navigation item.
  * @param isSelected Indicates that the navigation item is selected.
  * @param onClick The lambda to be invoked when the navigation item is clicked.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
@@ -35,8 +32,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun ColumnScope.BitwardenNavigationRailItem(
     @StringRes labelRes: Int,
-    @DrawableRes selectedIconRes: Int,
-    @DrawableRes unselectedIconRes: Int,
+    @DrawableRes iconRes: Int,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,16 +49,8 @@ fun ColumnScope.BitwardenNavigationRailItem(
                 },
             ) {
                 Icon(
-                    painter = rememberVectorPainter(
-                        id = if (isSelected) selectedIconRes else unselectedIconRes,
-                    ),
+                    painter = rememberVectorPainter(id = iconRes),
                     contentDescription = null,
-                    tint = if (isSelected) {
-                        // This is unspecified because selected icons are multi-tonal.
-                        Color.Unspecified
-                    } else {
-                        BitwardenTheme.colorScheme.icon.primary
-                    },
                 )
             }
         },

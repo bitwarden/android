@@ -325,7 +325,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_devices),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

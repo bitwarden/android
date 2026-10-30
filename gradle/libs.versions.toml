@@ -3,7 +3,7 @@
 
 # App version
 appVersionCode = "1"
-appVersionName = "2026.9.0"
+appVersionName = "2026.11.0"
 
 # SDK Versions
 compileSdk = "37"
@@ -29,7 +29,7 @@ androidxRoom3 = "3.0.3"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.12.0"
-bitwardenSdk = "4.0.0-9547-06f2c6f3"
+bitwardenSdk = "4.0.0-9737-d9119f7a"
 coil = "3.6.3"
 crashlytics = "3.0.8"
 detekt = "1.23.8"
@@ -51,7 +51,7 @@ kotlinxSerialization = "1.11.0"
 kotlinxKover = "0.9.11"
 ksp = "2.3.12"
 mockk = "1.14.11"
-okhttp = "5.5.0"
+okhttp = "5.5.1"
 retrofitBom = "3.0.0"
 robolectric = "4.16.1"
 testng = "7.12.0"
