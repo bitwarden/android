@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApplicationExtension
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
@@ -180,6 +181,15 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
 }
 
 subprojects {
+    // Prints the NDK version AGP uses to strip native libraries (its default unless a module sets
+    // ndkVersion) so CI can install it without hardcoding a version.
+    plugins.withId("com.android.application") {
+        val android = extensions.getByType<ApplicationExtension>()
+        tasks.register("printNdkVersion") {
+            val ndkVersion = android.ndkVersion
+            doLast { println("ndkVersion=$ndkVersion") }
+        }
+    }
     tasks.withType<JavaCompile>().configureEach {
         options.isFork = true
     }

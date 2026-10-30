@@ -1,5 +1,5 @@
 name: 'Setup Android Build'
-description: 'Setup Android build environment with Gradle, Ruby, and Fastlane'
+description: 'Setup Android build environment with Gradle, Ruby, JDK, Android NDK, and Fastlane'
 inputs:
   java-version:
     description: 'Java version to use'
@@ -21,6 +21,21 @@ runs:
       with:
         distribution: "temurin"
         java-version: ${{ inputs.java-version }}
+
+    - name: Install Android NDK
+      shell: bash
+      run: |
+        # AGP strips native libraries with the NDK reported by printNdkVersion (AGP's default
+        # unless a module sets ndkVersion). Install it so stripping doesn't depend on the runner image.
+        NDK_VERSIONS=$(./gradlew -q printNdkVersion | sed -n 's/^ndkVersion=//p' | sort -u)
+        if [ -z "$NDK_VERSIONS" ]; then
+          echo "::error::Unable to determine the NDK version from ./gradlew printNdkVersion"
+          exit 1
+        fi
+        for NDK_VERSION in $NDK_VERSIONS; do
+          echo "Installing NDK $NDK_VERSION"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
+        done
 
     - name: Install Fastlane
       shell: bash
