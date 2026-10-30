@@ -193,21 +193,36 @@ class PremiumStateManagerImpl(
             )
 
     /**
-     * Eligibility is keyed on the user holding personal Premium (or being eligible to purchase
-     * it). Organization-granted Premium does not surface the Plan row, since the user has no
-     * personal subscription to manage.
+     * * Free users always see the Plan row so they can purchase Premium, regardless of the
+     *   subscription state.
+     * * Personal Premium users only see the row once their subscription is available; it is
+     *   hidden while the subscription is loading, when the fetch fails, and when the server
+     *   reports no subscription (404).
+     * * Organization-only Premium never surfaces the Plan row, since the user has no personal
+     *   subscription to manage.
+     * * The row is also hidden when there is no active user.
      */
     override val isPlanRowEligibleFlow: StateFlow<Boolean> =
-        authDiskSource
-            .userStateFlow
-            .map { userState ->
-                val profile = userState?.activeAccount?.profile ?: return@map false
-                val hasPremium = profile.hasPremiumPersonally == true ||
-                    profile.hasPremiumFromOrganization == true
-                val isPremiumFromSelf = profile.hasPremiumPersonally == true
-                val isOrgOnlyPremium = hasPremium && !isPremiumFromSelf
-                !isOrgOnlyPremium
+        combine(
+            authDiskSource.userStateFlow,
+            subscriptionStatusStateFlow,
+        ) { userState, subscriptionStatus ->
+            val profile = userState?.activeAccount?.profile ?: return@combine false
+            val isPremiumFromSelf = profile.hasPremiumPersonally == true
+            val isPremiumFromOrg = profile.hasPremiumFromOrganization == true
+            val hasPremium = isPremiumFromSelf || isPremiumFromOrg
+            val isOrgOnlyPremium = isPremiumFromOrg && !isPremiumFromSelf
+            val hasSubscription = when (subscriptionStatus) {
+                is SubscriptionStatusState.Available -> true
+                is SubscriptionStatusState.Error,
+                SubscriptionStatusState.Loading,
+                SubscriptionStatusState.NoSubscription,
+                    -> false
             }
+            // The Plan Row is hidden if the user has premium but does not have
+            // a subscription or the premium status was granted by an organization.
+            !((hasPremium && !hasSubscription) || isOrgOnlyPremium)
+        }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
