@@ -1,5 +1,5 @@
 name: 'Setup Android Build'
-description: 'Setup Android build environment with Gradle, Ruby, and Fastlane'
+description: 'Setup Android build environment with Gradle, Ruby, JDK, Android NDK, and Fastlane'
 inputs:
   java-version:
     description: 'Java version to use'
@@ -21,6 +21,17 @@ runs:
       with:
         distribution: "temurin"
         java-version: ${{ inputs.java-version }}
+
+    - name: Install Android NDK
+      shell: bash
+      run: |
+        NDK_VERSION=$(sed -n 's/^ndk = "\(.*\)"$/\1/p' gradle/libs.versions.toml)
+        if [ -z "$NDK_VERSION" ]; then
+          echo "::error::Unable to read ndk version from gradle/libs.versions.toml"
+          exit 1
+        fi
+        echo "Installing NDK $NDK_VERSION"
+        "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
 
     - name: Install Fastlane
       shell: bash

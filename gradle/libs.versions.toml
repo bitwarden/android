@@ -10,6 +10,9 @@ compileSdk = "37"
 targetSdk = "37"
 minSdk = "29"
 
+# NDK Version (used to strip native library debug symbols; installed in CI by setup-android-build)
+ndk = "28.2.13676358"
+
 # Dependency Versions
 androidGradlePlugin = "9.4.1"
 androidxActivity = "1.13.0"
