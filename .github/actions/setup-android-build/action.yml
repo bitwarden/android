@@ -25,13 +25,17 @@ runs:
     - name: Install Android NDK
       shell: bash
       run: |
-        NDK_VERSION=$(sed -n 's/^ndk = "\(.*\)"$/\1/p' gradle/libs.versions.toml)
-        if [ -z "$NDK_VERSION" ]; then
-          echo "::error::Unable to read ndk version from gradle/libs.versions.toml"
+        # AGP strips native libraries with the NDK reported by printNdkVersion (AGP's default
+        # unless a module sets ndkVersion). Install it so stripping doesn't depend on the runner image.
+        NDK_VERSIONS=$(./gradlew -q printNdkVersion | sed -n 's/^ndkVersion=//p' | sort -u)
+        if [ -z "$NDK_VERSIONS" ]; then
+          echo "::error::Unable to determine the NDK version from ./gradlew printNdkVersion"
           exit 1
         fi
-        echo "Installing NDK $NDK_VERSION"
-        "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
+        for NDK_VERSION in $NDK_VERSIONS; do
+          echo "Installing NDK $NDK_VERSION"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
+        done
 
     - name: Install Fastlane
       shell: bash

@@ -44,7 +44,6 @@ configure<ApplicationExtension> {
     compileSdk {
         version = release(libs.versions.compileSdk.get().toInt())
     }
-    ndkVersion = libs.versions.ndk.get()
 
     defaultConfig {
         applicationId = "com.bitwarden.authenticator"

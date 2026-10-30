@@ -59,7 +59,7 @@ for archive in "${archives[@]}"; do
 done
 
 if [ "$failures" -gt 0 ]; then
-    echo "::error::Found $failures unstripped native libraries. Check the strip*DebugSymbols output (run with --info) and make sure the NDK set as ndkVersion in gradle/libs.versions.toml is installed."
+    echo "::error::Found $failures unstripped native libraries. Check the strip*DebugSymbols output (run with --info) and make sure the NDK reported by ./gradlew printNdkVersion is installed."
     exit 1
 fi
 
