@@ -671,7 +671,21 @@ class CipherViewExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform full CipherView into ViewState Card content with iconData based on payment card brand`() {
-        mapOf<VaultCardBrand, Int>()
+        mapOf<VaultCardBrand, Int?>(
+            VaultCardBrand.VISA to BitwardenDrawable.ic_payment_card_brand_visa,
+            VaultCardBrand.MASTERCARD to BitwardenDrawable.ic_payment_card_brand_mastercard,
+            VaultCardBrand.AMEX to BitwardenDrawable.ic_payment_card_brand_amex,
+            VaultCardBrand.DINA_CARD to null,
+            VaultCardBrand.DINERS_CLUB to BitwardenDrawable.ic_payment_card_brand_diners_club,
+            VaultCardBrand.DISCOVER to BitwardenDrawable.ic_payment_card_brand_discover,
+            VaultCardBrand.JCB to BitwardenDrawable.ic_payment_card_brand_jcb,
+            VaultCardBrand.MAESTRO to BitwardenDrawable.ic_payment_card_brand_maestro,
+            VaultCardBrand.MIR to null,
+            VaultCardBrand.RUPAY to BitwardenDrawable.ic_payment_card_brand_ru_pay,
+            VaultCardBrand.UNIONPAY to BitwardenDrawable.ic_payment_card_brand_union_pay,
+            VaultCardBrand.OTHER to null,
+            VaultCardBrand.SELECT to null,
+        )
             .forEach {
                 val cipherView = createCipherView(type = CipherType.CARD, isEmpty = false)
                     .copy(card = createMockCardView(number = 1, brand = it.key.toString()))
@@ -690,11 +704,15 @@ class CipherViewExtensionsTest {
                     hasOrganizations = true,
                 )
                 assertEquals(
-                    IconData.Local(it.value),
+                    it.value?.let { iconRes -> IconData.Local(iconRes) },
                     (viewState
                         .asContentOrNull()
                         ?.type as? VaultItemState.ViewState.Content.ItemType.Card)
                         ?.paymentCardBrandIconData,
+                )
+                assertEquals(
+                    IconData.Local(it.value ?: BitwardenDrawable.ic_payment_card),
+                    viewState.asContentOrNull()?.common?.iconData,
                 )
             }
     }
