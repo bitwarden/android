@@ -1143,6 +1143,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="save_option_as_default">Enregistrer l\'option par défaut</string>
     <string name="account_synced_from_bitwarden_app">Compte synchronisé depuis l\'application Bitwarden</string>
     <string name="local_codes">Codes locaux (%1$d)</string>
+    <string name="local_codes_header">Codes locaux</string>
     <string name="required_information_missing">Informations requises manquantes</string>
     <string name="required_information_missing_message">Les informations requises sont manquantes (par exemple, ‘services’ ou ‘secret’). Vérifiez votre fichier et réessayez. Visitez bitwarden.com/help pour obtenir de l\'aide</string>
     <string name="file_could_not_be_processed">Le fichier n\'a pas pu être traité</string>

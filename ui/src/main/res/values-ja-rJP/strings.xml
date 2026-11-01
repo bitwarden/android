@@ -1041,9 +1041,9 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">ブラウザ (%1$s) が認識されないため、パスキー操作に失敗しました。「信頼」を選択して %1$s をローカルで信頼するアプリケーションのリストに追加してください。</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">ブラウザが信頼されていないため、パスキー操作に失敗しました。</string>
     <string name="trust">信頼</string>
-    <string name="trusted_by_you_learn_more">これらは、Bitwardenがデフォルトで信頼していないアプリケーションまたはブラウザですが、パスキー操作を実行することを信頼します。</string>
-    <string name="trusted_by_community_learn_more">Google Playストアに含まれていないアプリケーションです。 しかし、Bitwarden はコミュニティメンバーが安全として使用し報告した後にパスキー操作を行うことを信頼しています。</string>
-    <string name="trusted_by_google_learn_more">これらはGoogleが安全と考えているアプリケーションであり、Google Play ストアで利用できます。</string>
+    <string name="trusted_by_you_learn_more">これらは、Bitwarden がデフォルトでは信頼していないものの、パスキー操作を実行することをユーザーが信頼しているアプリまたはブラウザです。</string>
+    <string name="trusted_by_community_learn_more">これらは、Google Play ストアでは提供されていないアプリです。しかし、コミュニティのメンバーが実際に使用し、安全であると報告したものを、Bitwarden はパスキー操作を実行することを信頼しています。</string>
+    <string name="trusted_by_google_learn_more">これらは、Google が安全であると判断し、Google Play ストアで提供されているアプリです。</string>
     <string name="trusted_by_you">あなたによる信頼</string>
     <string name="trusted_by_the_community">コミュニティによる信頼</string>
     <string name="trusted_by_google">Google による信頼</string>
@@ -1052,7 +1052,7 @@
     <string name="learn_more_about_privileged_apps">特権アプリに関する詳細</string>
     <string name="privileged_apps">特権アプリ</string>
     <string name="unrecognized_browser">認識されないブラウザ</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwardenでのパスキーの使用について詳しくはこちら。</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden でのパスキーの使用方法に関する詳細はこちらをご覧ください。</string>
     <string name="all_trusted_apps">すべての信頼できるアプリ</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s を信頼しないようにしてもよろしいですか？</string>
     <string name="installed_apps">インストール済みアプリ</string>
@@ -1136,6 +1136,7 @@
     <string name="save_option_as_default">選択をデフォルトとして保存</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden アプリからアカウントが同期されました</string>
     <string name="local_codes">ローカルコード (%1$d)</string>
+    <string name="local_codes_header">ローカルのコード</string>
     <string name="required_information_missing">必須の情報がありません</string>
     <string name="required_information_missing_message">必須の情報がありません（例：「サービス」または「シークレット」）。ファイルを確認して再度お試しください。サポートが必要な場合は bitwarden.com/help をご覧ください</string>
     <string name="file_could_not_be_processed">ファイルを処理できませんでした</string>

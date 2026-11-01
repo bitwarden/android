@@ -1150,6 +1150,7 @@ bilo kakav problem.</string>
     <string name="save_option_as_default">Spremi opciju kao zadanu</string>
     <string name="account_synced_from_bitwarden_app">Račun sinkroniziran iz aplikacije Bitwarden</string>
     <string name="local_codes">Lokalni kodovi (%1$d)</string>
+    <string name="local_codes_header">Lokalni kodovi</string>
     <string name="required_information_missing">Potrebni podaci nedostaju</string>
     <string name="required_information_missing_message">Nedostaju potrebni podaci (npr. „usluge” ili „tajno”). Provjeri svoju datoteku i pokušaj ponovno. Posjeti bitwarden.com/help za podršku</string>
     <string name="file_could_not_be_processed">Datoteka se ne može obraditi</string>

@@ -1143,6 +1143,7 @@ Vill du byta till detta konto?</string>
     <string name="save_option_as_default">Spara alternativ som standard</string>
     <string name="account_synced_from_bitwarden_app">Konto synkroniserat från Bitwarden-appen</string>
     <string name="local_codes">Lokala koder (%1$d)</string>
+    <string name="local_codes_header">Lokala koder</string>
     <string name="required_information_missing">Nödvändig information saknas</string>
     <string name="required_information_missing_message">Nödvändig information saknas (t.ex. ”services” eller ”secret”). Kontrollera din fil och försök igen. Besök bitwarden.com/help för support</string>
     <string name="file_could_not_be_processed">Filen kunde inte behandlas</string>

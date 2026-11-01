@@ -1172,6 +1172,7 @@
     <string name="save_option_as_default">حفظ الخيار كخيار افتراضي</string>
     <string name="account_synced_from_bitwarden_app">تمت مزامنة الحساب من تطبيق Bitwarden</string>
     <string name="local_codes">الرموز المحلية (%1$d)</string>
+    <string name="local_codes_header">الرموز المحلية</string>
     <string name="required_information_missing">المعلومات المطلوبة غير موجودة</string>
     <string name="required_information_missing_message">المعلومات المطلوبة مفقودة (على سبيل المثال، \"خدمات\" أو \"سري\"). تحقق من ملفك وحاول مرة أخرى. قم بزيارة bitwarden.com/help للحصول على الدعم</string>
     <string name="file_could_not_be_processed">تعذر معالجة الملف</string>

@@ -1146,6 +1146,7 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="save_option_as_default">Bewaar opsie as verstek</string>
     <string name="account_synced_from_bitwarden_app">Rekening vanaf Bitwarden-toep gesinchroniseer</string>
     <string name="local_codes">Plaaslike kodes (%1$d)</string>
+    <string name="local_codes_header">Plaaslike kodes</string>
     <string name="required_information_missing">Vereiste inligting ontbreek</string>
     <string name="required_information_missing_message">Vereiste inligting ontbreek (bv. ‘dienste’ of ‘geheim’). Kontroleer u lêer en probeer weer. Besoek bitwarden.com/help vir ondersteuning</string>
     <string name="file_could_not_be_processed">Lêer kon nie verwerk word nie</string>

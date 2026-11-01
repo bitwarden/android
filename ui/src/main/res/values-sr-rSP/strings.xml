@@ -1152,6 +1152,7 @@
     <string name="save_option_as_default">Сачувај опцију као подразумевану</string>
     <string name="account_synced_from_bitwarden_app">Налог је синхронизован из апликације Bitwarden</string>
     <string name="local_codes">Локални кодови (%1$d)</string>
+    <string name="local_codes_header">Локални кодови</string>
     <string name="required_information_missing">Недостају потребне информације</string>
     <string name="required_information_missing_message">Потребне информације недостају (нпр. \"услуге\" или \"тајна\"). Проверите своју датотеку и покушајте поново. Посетите bitwarden.com/help за подршку</string>
     <string name="file_could_not_be_processed">Није могуће обрадити датотеку</string>

@@ -1150,6 +1150,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="save_option_as_default">Saglabāt iespēju kā noklusējuma</string>
     <string name="account_synced_from_bitwarden_app">Konts vienādots no Bitwarden lietotnes</string>
     <string name="local_codes">Vietējie kodi (%1$d)</string>
+    <string name="local_codes_header">Vietējie kodi</string>
     <string name="required_information_missing">Trūkst nepieciešamās informācijas</string>
     <string name="required_information_missing_message">Trūkst nepieciešamās informācijas (piemēram, ‘services’ vai ‘secret’). Jāpārbauda datne un jāmēģina vēlreiz. Atbalsts ir pieejams bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Datni nevarēja apstrādāt</string>

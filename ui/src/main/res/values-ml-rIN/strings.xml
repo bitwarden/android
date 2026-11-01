@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">സംരക്ഷണ ഓപ്ഷൻ സ്വതവേയാക്കുക</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden ആപ്പിൽ നിന്ന് സമന്വയിപ്പിച്ച അക്കൗണ്ട്</string>
     <string name="local_codes">പ്രാദേശിക കോഡുകൾ (%1$d)</string>
+    <string name="local_codes_header">പ്രാദേശിക കോഡുകൾ</string>
     <string name="required_information_missing">ആവശ്യമായ വിവരങ്ങൾ നൽകിയിട്ടില്ല</string>
     <string name="required_information_missing_message">ആവശ്യമായ വിവരങ്ങൾ നൽകിയിട്ടില്ല (ഉദാ: ‘services’ അല്ലെങ്കിൽ ‘secret’). നിങ്ങളുടെ ഫയൽ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക. പിന്തുണയ്ക്കായി bitwarden.com/help സന്ദർശിക്കുക</string>
     <string name="file_could_not_be_processed">ഫയൽ പ്രോസസ്സ് ചെയ്യാനായില്ല</string>

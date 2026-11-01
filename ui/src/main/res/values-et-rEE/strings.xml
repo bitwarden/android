@@ -1143,6 +1143,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="save_option_as_default">Salvesta valik vaikimisi kasutamiseks</string>
     <string name="account_synced_from_bitwarden_app">Konto sünkroniseeritud Bitwardeni rakendusest</string>
     <string name="local_codes">Kohalikud koodid (%1$d)</string>
+    <string name="local_codes_header">Kohalikud koodid</string>
     <string name="required_information_missing">Puudub nõutud informatsiooni</string>
     <string name="required_information_missing_message">Puudub nõutud informatsiooni (nt \"teenused\" või \"saladused\"). Kontrolli oma faili ja proovi uuesti. Abi saamiseks külasta bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Faili ei õnnestunud töödelda</string>

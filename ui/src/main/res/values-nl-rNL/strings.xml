@@ -640,7 +640,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="accessibility_disclosure_start_up_text_1">This notice is required before Bitwarden can offer accessibility-based autofill.</string>
     <string name="accessibility_disclosure_start_up_text_2">Bitwarden offers an optional autofill method that uses Android’s Accessibility Service to detect login fields. If you enable it, Bitwarden will identify the appropriate fields and fill in your credentials when a match is found.</string>
     <string name="accessibility_disclosure_start_up_text_3">We don’t store any information about what’s onscreen while you use the Accessibility Service, and we don’t control any onscreen elements beyond credential entry.</string>
-    <string name="i_understand">I understand</string>
+    <string name="i_understand">Ik begrijp het</string>
     <string name="accept">Accepteren</string>
     <string name="decline">Weigeren</string>
     <string name="login_request_has_already_expired">Inlogverzoek is al verlopen.</string>
@@ -1022,7 +1022,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Weet je zeker dat je alle logs wilt verwijderen?</string>
     <string name="confirm_key_connector_domain">Key Connector domein bevestigen</string>
     <string name="key_connector_domain">Key Connector domein:</string>
-    <string name="your_organization_no_longer_requires_a_master_password">Your organization no longer requires a master password for its members. Please verify the domain below with your admin and enter your master password to continue.</string>
+    <string name="your_organization_no_longer_requires_a_master_password">Je organisatie heeft niet langer een hoofdwachtwoord nodig voor de leden. Controleer het onderstaande domein met uw beheerder en voer uw hoofdwachtwoord in om door te gaan.</string>
     <string name="please_confirm_domain_with_admin">Bevestig het onderstaande domein met je organisatiebeheerder.\n\nKey Connector domein:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder aan</string>
     <string name="flight_recorder_banner_message">Flight Recorder zal actief zijn tot %1$s om %2$s. Terug naar instellingen om nu te deactiveren.</string>
@@ -1143,6 +1143,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="save_option_as_default">Opslaan optie als standaard</string>
     <string name="account_synced_from_bitwarden_app">Account gesynchroniseerd vanuit Bitwarden app</string>
     <string name="local_codes">Lokale codes (%1$d)</string>
+    <string name="local_codes_header">Lokale codes</string>
     <string name="required_information_missing">Verplichte informatie ontbreekt</string>
     <string name="required_information_missing_message">Vereiste informatie ontbreekt (bijv. \'services\' of \'secret\'). Controleer je bestand en probeer het opnieuw. Bezoek bitwarden.com/help voor ondersteuning</string>
     <string name="file_could_not_be_processed">Bestand kon niet worden verwerkt</string>
@@ -1259,7 +1260,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="invalid_email_addresses">Ongeldige e-mailadressen</string>
     <string name="one_or_more_email_addresses_are_incorrect">Een of meer e-mailadressen zijn onjuist. Controleer en probeer het opnieuw.</string>
     <string name="no_email_addresses_entered">Geen e-mailadressen ingevoerd</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Voeg alleen de volgende domeinen toe: %1$s. Controleer en probeer het opnieuw.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Voer ten minste één geldig e-mailadres in om deze Send te delen.</string>
     <string name="sync_with_browser">Synchroniseren met browser</string>
     <string name="sync_with_browser_description">Om verbinding te maken met %1$s, synchroniseer je je standaardbrowser met de mobiele Bitwarden-app. Als je browser opent, voltooi je indien gevraagd je aanmelding.\nZodra de synchronisatie is voltooid, keer je terug naar deze app.</string>
@@ -1320,15 +1321,15 @@ Wilt u naar dit account wisselen?</string>
     <string name="archive_item">Item archiveren</string>
     <string name="once_archived_this_item_will_be_excluded">Eenmaal gearchiveerd wordt dit item uitgesloten van zoekresultaten en suggesties voor automatisch invullen.</string>
     <string name="pricing_unavailable">Prijzen niet beschikbaar</string>
-    <string name="current_plan">Current plan</string>
+    <string name="current_plan">Huidig abonnement</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Factuurbedrag</string>
     <string name="storage_cost">Kosten voor opslag</string>
     <string name="discount">Korting</string>
     <string name="estimated_tax">Geschatte belasting</string>
     <string name="total">Totaal</string>
-    <string name="billing_rate_per_year">%1$s / year</string>
-    <string name="billing_rate_per_month">%1$s / month</string>
+    <string name="billing_rate_per_year">%1$s / jaar</string>
+    <string name="billing_rate_per_month">%1$s / maand</string>
     <string name="manage_plan">Abonnement beheren</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">Je abonnement beheren in de Bitwarden-webapp.</string>
     <string name="cancel_premium">Premium annuleren</string>
@@ -1336,7 +1337,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="subscription_status_canceled">Geannuleerd</string>
     <string name="subscription_status_expired">Verlopen</string>
     <string name="subscription_status_past_due">Verlopen</string>
-    <string name="subscription_status_paused">Paused</string>
+    <string name="subscription_status_paused">Gepauzeerd</string>
     <string name="subscription_status_unpaid">Openstaand</string>
     <string name="subscription_status_update_payment">Betalingswijze bijwerken</string>
     <string name="subscription_status_pending_cancellation">In afwachting van opzegging</string>
@@ -1344,14 +1345,14 @@ Wilt u naar dit account wisselen?</string>
     <string name="premium_next_charge_summary">Je volgende rekening wordt %1$s USD voor %2$s.</string>
     <string name="subscription_canceled_description">Je abonnement is op %1$s geannuleerd. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
     <string name="subscription_unpaid_description">Je abonnement is geschorst op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Om te reactiveren, moet je je achterstallige facturen betalen.</string>
-    <string name="subscription_update_payment_description">We couldn’t process your payment. Update your payment method before your subscription ends on <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
+    <string name="subscription_update_payment_description">We konden uw betaling niet verwerken. Werk uw betaalmethode bij voordat uw abonnement eindigt op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <plurals name="subscription_past_due_description">
         <item quantity="one">Je hebt gratie voor een periode van %1$d dag vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
         <item quantity="other">Je hebt gratie voor een periode van %1$d dagen vanaf de vervaldatum van je abonnement. Betaal de achterstallige facturen vóór **%2$s**.</item>
     </plurals>
-    <string name="subscription_paused_description">Your subscription is paused. Resume to continue using premium features.</string>
+    <string name="subscription_paused_description">Uw abonnement is onderbroken. Hervat om gebruik te blijven maken van premium functies.</string>
     <string name="subscription_expired_description">Je abonnement is verlopen op <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Activeer je abonnement opnieuw om gebruik te blijven maken van premium-functies.</string>
-    <string name="loading_subscription">Loading subscription…</string>
+    <string name="loading_subscription">Abonnementen laden…</string>
     <string name="loading_portal">Loading portal…</string>
     <string name="portal_error">Er is iets fout gegaan</string>
     <string name="trouble_loading_portal">We had trouble loading the management portal, so try again.</string>

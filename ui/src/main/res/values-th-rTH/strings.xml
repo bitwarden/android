@@ -1136,6 +1136,7 @@
     <string name="save_option_as_default">บันทึกตัวเลือกเป็นค่าเริ่มต้น</string>
     <string name="account_synced_from_bitwarden_app">บัญชีซิงค์จากแอป Bitwarden</string>
     <string name="local_codes">รหัสในเครื่อง (%1$d)</string>
+    <string name="local_codes_header">รหัสในเครื่อง</string>
     <string name="required_information_missing">ข้อมูลที่จำเป็นหายไป</string>
     <string name="required_information_missing_message">ข้อมูลที่จำเป็นหายไป (เช่น ‘services’ หรือ ‘secret’) ตรวจสอบไฟล์ของคุณแล้วลองอีกครั้ง เยี่ยมชม bitwarden.com/help เพื่อขอความช่วยเหลือ</string>
     <string name="file_could_not_be_processed">ไม่สามารถประมวลผลไฟล์ได้</string>

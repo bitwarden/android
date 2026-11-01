@@ -1145,6 +1145,7 @@
     <string name="save_option_as_default">Запазване на настройката като стандартна</string>
     <string name="account_synced_from_bitwarden_app">Акаунтът е синхронизиран от приложението на Битуорден</string>
     <string name="local_codes">Достъпни на това устройство кодове (%1$d)</string>
+    <string name="local_codes_header">Кодове, налични на това устройство</string>
     <string name="required_information_missing">Липсва задължителна информация</string>
     <string name="required_information_missing_message">Липсва задължителна информация (като „services“ или „secret“). Проверете файла си и опитайте отново. Отворете bitwarden.com/help за помощ</string>
     <string name="file_could_not_be_processed">Файлът не може да бъде обработен</string>

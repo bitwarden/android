@@ -1143,6 +1143,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="save_option_as_default">Tallenna vaihtoehto oletukseksi</string>
     <string name="account_synced_from_bitwarden_app">Tili synkronoitu Bitwarden-sovellukseen</string>
     <string name="local_codes">Paikalliset koodit (%1$d)</string>
+    <string name="local_codes_header">Paikalliset koodit</string>
     <string name="required_information_missing">Tarpeellisia tietoja puuttuu</string>
     <string name="required_information_missing_message">Vaaditua tietoa puuttuu (esim. ‘services‘ tai ‘secret’). Tarkista tiedostosi ja yritä uudelleen. Katso bitwarden.com/help, jos tarvitse apua</string>
     <string name="file_could_not_be_processed">Tiedostoa ei voitu käsitellä</string>

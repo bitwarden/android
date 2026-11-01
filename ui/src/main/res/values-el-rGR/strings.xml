@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">Αποθήκευση ως προεπιλογή</string>
     <string name="account_synced_from_bitwarden_app">Ο λογαριασμός συγχρονίστηκε από το Bitwarden</string>
     <string name="local_codes">Τοπικοί κωδικοί (%1$d)</string>
+    <string name="local_codes_header">Τοπικοί κωδικοί</string>
     <string name="required_information_missing">Λείπουν απαιτούμενες πληροφορίες</string>
     <string name="required_information_missing_message">Λείπουν απαιτούμενες πληροφορίες (π.χ. «υπηρεσίες» ή «μυστικό»). Ελέγξτε το αρχείο σας και δοκιμάστε ξανά. Επισκεφτείτε το bitwarden.com/help για υποστήριξη</string>
     <string name="file_could_not_be_processed">Το αρχείο δεν ήταν δυνατό να υποβληθεί σε επεξεργασία</string>

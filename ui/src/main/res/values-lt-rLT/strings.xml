@@ -1157,6 +1157,7 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="save_option_as_default">Nustatyti išsaugojimo parinktį kaip numatytąją</string>
     <string name="account_synced_from_bitwarden_app">Paskyra sinchronizuota iš „Bitwarden“ programos</string>
     <string name="local_codes">Vietiniai kodai (%1$d)</string>
+    <string name="local_codes_header">Vietiniai kodai</string>
     <string name="required_information_missing">Trūksta reikalingos informacijos</string>
     <string name="required_information_missing_message">Trūksta reikalingos informacijos (pvz., „services“ arba „secret“). Patikrinkite savo failą ir bandykite dar kartą. Dėl pagalbos apsilankykite bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Failo nepavyko apdoroti</string>

@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">बचत विकल्पलाई पूर्वनिर्धारितको रूपमा बचत गर्नुहोस्</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden एपबाट सिङ्क गरिएको खाता</string>
     <string name="local_codes">स्थानीय कोडहरू (%1$d)</string>
+    <string name="local_codes_header">स्थानीय कोडहरू</string>
     <string name="required_information_missing">आवश्यक जानकारी हराइरहेको छ</string>
     <string name="required_information_missing_message">आवश्यक जानकारी हराइरहेको छ (जस्तै, ‘services’ वा ‘secret’)। आफ्नो फाइल जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्। सहायताको लागि bitwarden.com/help मा जानुहोस्</string>
     <string name="file_could_not_be_processed">फाइल प्रशोधन गर्न सकिएन</string>

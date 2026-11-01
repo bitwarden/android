@@ -1150,6 +1150,7 @@ Doriți să comutați la acest cont?</string>
     <string name="save_option_as_default">Salvează opțiunea ca implicită</string>
     <string name="account_synced_from_bitwarden_app">Cont sincronizat din aplicația Bitwarden</string>
     <string name="local_codes">Coduri locale (%1$d)</string>
+    <string name="local_codes_header">Coduri locale</string>
     <string name="required_information_missing">Lipsesc informații obligatorii</string>
     <string name="required_information_missing_message">Lipsesc informații obligatorii (de ex., „services” sau „secret”). Verifică fișierul și încearcă din nou. Vizitează bitwarden.com/help pentru asistență</string>
     <string name="file_could_not_be_processed">Fișierul nu a putut fi procesat</string>

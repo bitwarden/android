@@ -1158,6 +1158,7 @@ při opakování problémů.</string>
     <string name="save_option_as_default">Uložit volbu jako výchozí</string>
     <string name="account_synced_from_bitwarden_app">Účet je synchronizován s aplikací Bitwarden</string>
     <string name="local_codes">Místní kódy (%1$d)</string>
+    <string name="local_codes_header">Místní kódy</string>
     <string name="required_information_missing">Chybí požadované informace</string>
     <string name="required_information_missing_message">Chybí požadované informace (např. \"služby\" nebo \"tajné\"). Zkontrolujte soubor a zkuste to znovu. Navštivte bitwarden.com/help pro pomoc.</string>
     <string name="file_could_not_be_processed">Soubor nelze zpracovat</string>

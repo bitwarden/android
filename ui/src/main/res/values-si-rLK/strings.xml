@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">විකල්පය පෙරනිමි ලෙස සුරකින්න</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden යෙදුමෙන් සමමුහුර්ත කළ ගිණුම</string>
     <string name="local_codes">දේශීය කේත (%1$d)</string>
+    <string name="local_codes_header">දේශීය කේත</string>
     <string name="required_information_missing">අවශ්‍ය තොරතුරු අතුරුදහන්</string>
     <string name="required_information_missing_message">අවශ්‍ය තොරතුරු අතුරුදහන් වී ඇත (උදා: ‘services’ හෝ ‘secret’). ඔබගේ ගොනුව පරීක්ෂා කර නැවත උත්සාහ කරන්න. සහාය සඳහා bitwarden.com/help වෙත පිවිසෙන්න</string>
     <string name="file_could_not_be_processed">ගොනුව සැකසිය නොහැකි විය</string>

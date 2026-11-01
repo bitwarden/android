@@ -1136,6 +1136,7 @@
     <string name="save_option_as_default">저장 옵션을 기본값으로 설정</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden 앱에서 계정 동기화됨</string>
     <string name="local_codes">로컬 코드 (%1$d)</string>
+    <string name="local_codes_header">로컬 코드</string>
     <string name="required_information_missing">필수 정보 누락</string>
     <string name="required_information_missing_message">필수적인 정보(예: ‘서비스’ 또는 ‘비밀’)가 누락되었습니다. 파일을 확인하고 다시 시도하세요. 도움이 필요하면 bitwarden.com/help 사이트에 방문하세요</string>
     <string name="file_could_not_be_processed">파일을 처리할 수 없음</string>

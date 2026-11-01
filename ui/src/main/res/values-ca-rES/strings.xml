@@ -1143,6 +1143,7 @@ Voleu canviar a aquest compte?</string>
     <string name="save_option_as_default">Desa l\'opció com a predeterminada</string>
     <string name="account_synced_from_bitwarden_app">Compte sincronitzat des de l\'aplicació Bitwarden</string>
     <string name="local_codes">Codis locals (%1$d)</string>
+    <string name="local_codes_header">Codis locals</string>
     <string name="required_information_missing">Falta informació obligatòria</string>
     <string name="required_information_missing_message">Falta informació obligatòria (p. ex., ‘services’ o ‘secret’). Revisa el teu fitxer i torna a provar. Visita bitwarden.com/help per obtenir suport</string>
     <string name="file_could_not_be_processed">No s\'ha pogut processar el fitxer</string>
