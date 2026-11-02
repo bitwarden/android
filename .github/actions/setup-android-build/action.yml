@@ -32,7 +32,28 @@ runs:
           echo "::error::Unable to determine the NDK version from ./gradlew printNdkVersion"
           exit 1
         fi
+        MISSING_NDK_VERSIONS=""
         for NDK_VERSION in $NDK_VERSIONS; do
+          if [ -f "$ANDROID_HOME/ndk/$NDK_VERSION/source.properties" ]; then
+            echo "NDK $NDK_VERSION is already installed"
+          else
+            MISSING_NDK_VERSIONS="$MISSING_NDK_VERSIONS $NDK_VERSION"
+          fi
+        done
+        if [ -z "$MISSING_NDK_VERSIONS" ]; then
+          exit 0
+        fi
+
+        # Flag installs so it's visible when the runner image no longer ships the NDK AGP expects.
+        echo "::warning title=Android NDK not on runner image::Installing NDK$MISSING_NDK_VERSIONS"
+        {
+          echo "### :warning: Android NDK not on runner image"
+          echo "The following NDK versions were not preinstalled on the runner and were installed by \`setup-android-build\`:"
+          for NDK_VERSION in $MISSING_NDK_VERSIONS; do
+            echo "- \`$NDK_VERSION\`"
+          done
+        } >> "$GITHUB_STEP_SUMMARY"
+        for NDK_VERSION in $MISSING_NDK_VERSIONS; do
           echo "Installing NDK $NDK_VERSION"
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
         done
