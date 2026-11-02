@@ -69,7 +69,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether the password field is enabled.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
@@ -101,7 +100,6 @@ fun BitwardenPasswordField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
-    enabled: Boolean = true,
     singleLine: Boolean = true,
     showPasswordTestTag: String? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
@@ -166,7 +164,7 @@ fun BitwardenPasswordField(
                 },
                 visualTransformation = when {
                     !showPassword -> passwordVisualTransformation(
-                        staticCharacterCount = 8.takeIf { readOnly || !enabled },
+                        staticCharacterCount = 8.takeIf { readOnly },
                     )
 
                     readOnly -> nonLetterColorVisualTransformation()
@@ -174,7 +172,6 @@ fun BitwardenPasswordField(
                 },
                 singleLine = singleLine,
                 readOnly = readOnly,
-                enabled = enabled,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = keyboardType,
                     imeAction = imeAction,
@@ -199,7 +196,6 @@ fun BitwardenPasswordField(
                                     },
                                 ),
                                 onClick = { showPasswordChange.invoke(!showPassword) },
-                                isEnabled = enabled,
                             )
                             actions?.invoke(this)
                         },
@@ -238,7 +234,6 @@ fun BitwardenPasswordField(
  * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether the password field is enabled.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param supportingText An optional supporting text that will appear below the text input.
@@ -269,7 +264,6 @@ fun BitwardenPasswordField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
-    enabled: Boolean = true,
     singleLine: Boolean = true,
     supportingText: String? = null,
     showPasswordTestTag: String? = null,
@@ -293,7 +287,6 @@ fun BitwardenPasswordField(
         interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
-        enabled = enabled,
         singleLine = singleLine,
         supportingContent = supportingText?.let {
             {
@@ -332,7 +325,6 @@ fun BitwardenPasswordField(
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether the password field is enabled.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param supportingContent An optional supporting content that will appear below the text input.
@@ -364,7 +356,6 @@ fun BitwardenPasswordField(
     helpData: BitwardenHelpButtonData? = null,
     initialShowPassword: Boolean = false,
     readOnly: Boolean = false,
-    enabled: Boolean = true,
     singleLine: Boolean = true,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     showPasswordTestTag: String? = null,
@@ -389,7 +380,6 @@ fun BitwardenPasswordField(
         interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
-        enabled = enabled,
         singleLine = singleLine,
         supportingContent = supportingContent,
         supportingContentPadding = supportingContentPadding,
@@ -417,7 +407,6 @@ fun BitwardenPasswordField(
  * for this component.
  * @param helpData An optional help button to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
- * @param enabled Whether the password field is enabled.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param supportingText An optional supporting text that will appear below the text input.
@@ -447,7 +436,6 @@ fun BitwardenPasswordField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     helpData: BitwardenHelpButtonData? = null,
     readOnly: Boolean = false,
-    enabled: Boolean = true,
     singleLine: Boolean = true,
     supportingText: String? = null,
     initialShowPassword: Boolean = false,
@@ -471,7 +459,6 @@ fun BitwardenPasswordField(
         interactionSource = interactionSource,
         helpData = helpData,
         readOnly = readOnly,
-        enabled = enabled,
         singleLine = singleLine,
         supportingText = supportingText,
         showPasswordTestTag = showPasswordTestTag,

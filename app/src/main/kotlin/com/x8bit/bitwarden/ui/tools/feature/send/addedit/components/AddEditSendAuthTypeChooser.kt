@@ -19,6 +19,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -32,9 +33,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 /**
- * Stand-in value for a locked password field. The existing password is never readable, and the
- * field masks any non-empty value with a fixed number of dots, so this only signals that a
- * password is set.
+ * Stand-in value for a locked password field. The existing password is never readable, and
+ * [BitwardenHiddenPasswordField] masks any non-empty value with a fixed number of dots, so this
+ * only signals that a password is set.
  */
 private const val LOCKED_PASSWORD_PLACEHOLDER: String = "locked"
 
@@ -123,17 +124,24 @@ fun AddEditSendAuthTypeChooser(
             }
 
             is SendAuth.Password -> {
-                BitwardenPasswordField(
-                    label = stringResource(id = BitwardenString.password),
-                    value = if (isExistingPasswordLocked) LOCKED_PASSWORD_PLACEHOLDER else password,
-                    onValueChange = onPasswordChange,
-                    cardStyle = CardStyle.Bottom,
-                    passwordFieldTestTag = "SendPasswordEntry",
-                    readOnly = isSendsRestrictedByPolicy,
-                    enabled = !isExistingPasswordLocked,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    if (!isExistingPasswordLocked) {
+                if (isExistingPasswordLocked) {
+                    BitwardenHiddenPasswordField(
+                        label = stringResource(id = BitwardenString.password),
+                        value = LOCKED_PASSWORD_PLACEHOLDER,
+                        cardStyle = CardStyle.Bottom,
+                        passwordFieldTestTag = "SendPasswordEntry",
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                } else {
+                    BitwardenPasswordField(
+                        label = stringResource(id = BitwardenString.password),
+                        value = password,
+                        onValueChange = onPasswordChange,
+                        cardStyle = CardStyle.Bottom,
+                        passwordFieldTestTag = "SendPasswordEntry",
+                        readOnly = isSendsRestrictedByPolicy,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_generate,
                             contentDescription = stringResource(
