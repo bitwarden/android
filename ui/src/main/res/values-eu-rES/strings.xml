@@ -1141,6 +1141,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="save_option_as_default">Ezarri aukera lehenetsi gisa</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden aplikaziotik sinkronizatutako kontua</string>
     <string name="local_codes">Kode lokalak (%1$d)</string>
+    <string name="local_codes_header">Kode lokalak</string>
     <string name="required_information_missing">Beharrezko informazioa falta da</string>
     <string name="required_information_missing_message">Beharrezko informazioa falta da (adibidez, \'zerbitzuak\' edo \'sekretua\'). Egiaztatu zure fitxategia eta saiatu berriro. Bisitatu bitwarden.com/help laguntza jasotzeko</string>
     <string name="file_could_not_be_processed">Fitxategia ezin izan da prozesatu</string>

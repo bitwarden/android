@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">این گزینه را به‌عنوان پیش‌فرض ذخیره کن</string>
     <string name="account_synced_from_bitwarden_app">حساب از برنامه Bitwarden همگام‌سازی شد</string>
     <string name="local_codes">کدهای محلی (%1$d)</string>
+    <string name="local_codes_header">کدهای محلی</string>
     <string name="required_information_missing">اطلاعات مورد نیاز موجود نیست</string>
     <string name="required_information_missing_message">اطلاعات ضروری موجود نیست (مانند «سرویس‌ها» یا «رمز محرمانه»). پرونده خود را بررسی کنید و دوباره تلاش کنید. برای پشتیبانی به bitwarden.com/help مراجعه کنید</string>
     <string name="file_could_not_be_processed">پرونده قابل پردازش نیست</string>

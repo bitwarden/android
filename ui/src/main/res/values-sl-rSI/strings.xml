@@ -1157,6 +1157,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="save_option_as_default">Shrani možnost kot privzeto</string>
     <string name="account_synced_from_bitwarden_app">Račun sinhroniziran iz aplikacije Bitwarden</string>
     <string name="local_codes">Lokalne kode (%1$d)</string>
+    <string name="local_codes_header">Lokalne kode</string>
     <string name="required_information_missing">Manjkajo obvezne informacije</string>
     <string name="required_information_missing_message">Manjkajo obvezne informacije (npr. »services« ali »secret«). Preverite svojo datoteko in poskusite znova. Za podporo obiščite bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Datoteke ni bilo mogoče obdelati</string>

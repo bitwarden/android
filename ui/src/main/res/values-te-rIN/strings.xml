@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">భద్రపరిచే ఎంపికను డిఫాల్ట్‌గా భద్రపరచు</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden యాప్ నుండి ఖాతా సింక్ చేయబడింది</string>
     <string name="local_codes">స్థానిక కోడ్‌లు (%1$d)</string>
+    <string name="local_codes_header">స్థానిక కోడ్‌లు</string>
     <string name="required_information_missing">అవసరమైన సమాచారం లేదు</string>
     <string name="required_information_missing_message">అవసరమైన సమాచారం లేదు (ఉదా., ‘services’ లేదా ‘secret’). మీ ఫైల్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి. మద్దతు కోసం bitwarden.com/help సందర్శించండి</string>
     <string name="file_could_not_be_processed">ఫైల్ ప్రాసెస్ చేయలేకపోయింది</string>

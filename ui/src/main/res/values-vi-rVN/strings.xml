@@ -1139,6 +1139,7 @@ các vấn đề.</string>
     <string name="save_option_as_default">Lưu tùy chọn làm mặc định</string>
     <string name="account_synced_from_bitwarden_app">Tài khoản đã đồng bộ từ ứng dụng Bitwarden</string>
     <string name="local_codes">Mã địa phương (%1$d)</string>
+    <string name="local_codes_header">Mã cục bộ</string>
     <string name="required_information_missing">Thông tin bắt buộc còn thiếu</string>
     <string name="required_information_missing_message">Thông tin bắt buộc còn thiếu (ví dụ: ‘dịch vụ’ hoặc ‘bí mật’). Vui lòng kiểm tra lại tệp của bạn và thử lại. Truy cập bitwarden.com/help để được hỗ trợ</string>
     <string name="file_could_not_be_processed">Tệp không thể được xử lý</string>

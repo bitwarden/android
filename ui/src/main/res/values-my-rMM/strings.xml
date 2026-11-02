@@ -1136,6 +1136,7 @@
     <string name="save_option_as_default">သိမ်းဆည်းရန် ရွေးချယ်မှုကို မူရင်းအဖြစ် သတ်မှတ်ပါ</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden အက်ပ်မှ ထပ်တူပြုထားသော အကောင့်</string>
     <string name="local_codes">ဒေသဆိုင်ရာ ကုဒ်များ (%1$d)</string>
+    <string name="local_codes_header">ဒေသဆိုင်ရာ ကုဒ်များ</string>
     <string name="required_information_missing">လိုအပ်သောအချက်အလက် ပျောက်နေသည်</string>
     <string name="required_information_missing_message">လိုအပ်သော အချက်အလက် ပျောက်နေသည် (ဥပမာ ‘services’ သို့မဟုတ် ‘secret’)။ သင့်ဖိုင်ကို စစ်ဆေးပြီး ထပ်စမ်းကြည့်ပါ။ အကူအညီအတွက် bitwarden.com/help သို့ သွားရောက်ပါ။</string>
     <string name="file_could_not_be_processed">ဖိုင်ကို ဆောင်ရွက်၍ မရပါ</string>

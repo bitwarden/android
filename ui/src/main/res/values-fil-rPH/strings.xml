@@ -1143,6 +1143,7 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="save_option_as_default">I-save ang opsyon bilang default</string>
     <string name="account_synced_from_bitwarden_app">Account na na-sync mula sa Bitwarden app</string>
     <string name="local_codes">Lokal na mga code (%1$d)</string>
+    <string name="local_codes_header">Lokal na mga code</string>
     <string name="required_information_missing">Nawawala ang Kinakailangang Impormasyon</string>
     <string name="required_information_missing_message">Nawawala ang kinakailangang impormasyon (hal., \'services\' o \'secret\'). Suriin ang iyong file at subukan muli. Bisitahin ang bitwarden.com/help para sa suporta</string>
     <string name="file_could_not_be_processed">Hindi Maproseso ang File</string>

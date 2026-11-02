@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">ସଞ୍ଚୟ ବିକଳ୍ପକୁ ଡିଫଲ୍ଟ କରନ୍ତୁ</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden ଆପ୍‌ରୁ ସିଙ୍କ ହୋଇଥିବା ଖାତା</string>
     <string name="local_codes">ସ୍ଥାନୀୟ କୋଡ୍ (%1$d)</string>
+    <string name="local_codes_header">ସ୍ଥାନୀୟ କୋଡ୍</string>
     <string name="required_information_missing">ଆବଶ୍ୟକ ସୂଚନା ନାହିଁ</string>
     <string name="required_information_missing_message">ଆବଶ୍ୟକ ସୂଚନା ନାହିଁ (ଯେପରିକି ‘services’ କିମ୍ବା ‘secret’)। ଆପଣଙ୍କ ଫାଇଲ୍ ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ପୁନଃ ଚେଷ୍ଟା। ସମର୍ଥନ ପାଇଁ bitwarden.com/help ଦେଖନ୍ତୁ</string>
     <string name="file_could_not_be_processed">ଫାଇଲ୍ ପ୍ରକ୍ରିୟାକରଣ ହୋଇପାରିଲା ନାହିଁ</string>

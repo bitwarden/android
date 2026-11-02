@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">Сактоо опциясын дөөлөттүү кылып коюу</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden колдонмосунан синхрондоштурулган каттоо эсеби</string>
     <string name="local_codes">Жергиликтүү коддор (%1$d)</string>
+    <string name="local_codes_header">Жергиликтүү коддор</string>
     <string name="required_information_missing">Талап кылынган маалымат жок</string>
     <string name="required_information_missing_message">Талап кылынган маалымат жок (мисалы, ‘services’ же ‘secret’). Файлыңызды текшерип, кайра аракет кылыңыз. Жардам алуу үчүн bitwarden.com/help сайтына кириңиз</string>
     <string name="file_could_not_be_processed">Файлды иштетүү мүмкүн болбой калды</string>

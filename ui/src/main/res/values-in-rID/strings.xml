@@ -1136,6 +1136,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="save_option_as_default">Simpan opsi sebagai bawaan</string>
     <string name="account_synced_from_bitwarden_app">Akun tersinkron dari aplikasi Bitwarden</string>
     <string name="local_codes">Kode lokal (%1$d)</string>
+    <string name="local_codes_header">Kode lokal</string>
     <string name="required_information_missing">Informasi Wajib Masih Kosong</string>
     <string name="required_information_missing_message">Informasi yang diperlukan hilang (misalnya: ‘layanan’ atau ‘rahasia’). Periksa file Anda dan coba lagi. Kunjungi bitwarden.com/help untuk dukungan</string>
     <string name="file_could_not_be_processed">File Tidak Dapat Diproses</string>

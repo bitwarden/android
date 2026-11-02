@@ -1142,6 +1142,7 @@
     <string name="save_option_as_default">सहेजें विकल्प को डिफ़ॉल्ट के रूप में सेट करें</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden ऐप से सिंक किया गया खाता</string>
     <string name="local_codes">स्थानीय कोड (%1$d)</string>
+    <string name="local_codes_header">स्थानीय कोड</string>
     <string name="required_information_missing">आवश्यक जानकारी गायब</string>
     <string name="required_information_missing_message">आवश्यक जानकारी गायब है (जैसे, ‘services’ या ‘secret’)। अपनी फ़ाइल जांचें और पुनः प्रयास करें। सहायता के लिए bitwarden.com/help पर जाएं</string>
     <string name="file_could_not_be_processed">फ़ाइल संसाधित नहीं की जा सकी</string>

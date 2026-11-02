@@ -1143,6 +1143,7 @@ Skift til denne konto?</string>
     <string name="save_option_as_default">Gem valg som standard</string>
     <string name="account_synced_from_bitwarden_app">Konto synket fra Bitwarden-appen</string>
     <string name="local_codes">Lokale koder (%1$d)</string>
+    <string name="local_codes_header">Lokale koder</string>
     <string name="required_information_missing">Påkrævet information mangler</string>
     <string name="required_information_missing_message">Påkrævet info mangler (f.eks. \'services\' eller \'secret\'). Kontrollér din fil, og prøv igen. Besøg bitwarden.com/help for support</string>
     <string name="file_could_not_be_processed">Filen kunne ikke behandles</string>

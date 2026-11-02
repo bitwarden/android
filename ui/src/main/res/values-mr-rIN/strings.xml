@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">जतन पर्याय डिफॉल्ट म्हणून सेट करा</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden अॅपमधून समक्रमित केलेले खाते</string>
     <string name="local_codes">स्थानिक कोड (%1$d)</string>
+    <string name="local_codes_header">स्थानिक कोड</string>
     <string name="required_information_missing">आवश्यक माहिती गहाळ</string>
     <string name="required_information_missing_message">आवश्यक माहिती गहाळ आहे (उदा., ‘services’ किंवा ‘secret’). तुमची फाइल तपासा आणि पुन्हा प्रयत्न करा. समर्थनासाठी bitwarden.com/help ला भेट द्या</string>
     <string name="file_could_not_be_processed">फाइलवर प्रक्रिया करता आली नाही</string>

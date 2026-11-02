@@ -611,7 +611,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="select_time">Selecionar hora</string>
     <string name="switch_input_mode">Alterar o modo de entrada</string>
     <string name="confirm_log_in">Confirmar início de sessão</string>
-    <string name="deny_log_in">Recusar início de sessão</string>
+    <string name="deny_log_in">Negar início de sessão</string>
     <string name="log_in_denied">Início de sessão recusado</string>
     <string name="approve_login_requests">Aprovar pedidos de início de sessão</string>
     <string name="no_thanks">Não, obrigado</string>
@@ -1102,7 +1102,7 @@ Pretende mudar para esta conta?</string>
     <string name="export_confirmation_title">Confirmar a exportação</string>
     <string name="export_success">Dados exportados com sucesso</string>
     <string name="included_in_this_export">Incluído nesta exportação</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Apenas os códigos armazenados localmente neste dispositivo serão exportados. Os códigos sincronizados não estão incluídos</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">Só serão exportados os códigos guardados localmente neste dispositivo. Os códigos sincronizados não serão incluídos</string>
     <string name="security">Segurança</string>
     <string name="too_many_failed_biometric_attempts">Demasiadas tentativas falhadas de biometria.</string>
     <string name="version">Versão</string>
@@ -1143,6 +1143,7 @@ Pretende mudar para esta conta?</string>
     <string name="save_option_as_default">Guardar opção como predefinição</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada a partir da app Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
+    <string name="local_codes_header">Códigos locais</string>
     <string name="required_information_missing">Informações necessárias em falta</string>
     <string name="required_information_missing_message">A informação necessária está em falta (por exemplo, \"serviços\" ou \"segredo\"). Verifique o seu ficheiro e tente novamente. Visite bitwarden.com/help para obter suporte</string>
     <string name="file_could_not_be_processed">O ficheiro não pôde ser processado</string>

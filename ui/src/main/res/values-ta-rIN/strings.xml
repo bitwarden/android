@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">விருப்பத்தை இயல்புநிலையாக சேமி</string>
     <string name="account_synced_from_bitwarden_app">கணக்கு Bitwarden செயலியிலிருந்து ஒத்திசைக்கப்பட்டது</string>
     <string name="local_codes">உள்ளூர் குறியீடுகள் (%1$d)</string>
+    <string name="local_codes_header">உள்ளூர் குறியீடுகள்</string>
     <string name="required_information_missing">தேவையான தகவல் இல்லை</string>
     <string name="required_information_missing_message">தேவையான தகவல் இல்லை (எ.கா., ‘services’ அல்லது ‘secret’). உங்கள் கோப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். ஆதரவிற்கு bitwarden.com/help-ஐப் பார்வையிடவும்</string>
     <string name="file_could_not_be_processed">கோப்பைச் செயல்படுத்த முடியவில்லை</string>

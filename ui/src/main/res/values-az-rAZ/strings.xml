@@ -1144,6 +1144,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="save_option_as_default">Seçənəyi ilkin olaraq saxla</string>
     <string name="account_synced_from_bitwarden_app">Hesab, Bitwarden tətbiqindən sinxronlaşdırıldı</string>
     <string name="local_codes">Lokal kodlar (%1$d)</string>
+    <string name="local_codes_header">Lokal kodlar</string>
     <string name="required_information_missing">Tələb olunan məlumat əskikdir</string>
     <string name="required_information_missing_message">Tələb olunan məlumatlar əskikdir (məs. \'xidmətlər\' və ya \'sirr\'). Faylınızı yoxlayıb yenidən sınayın. Dəstək üçün bitwarden.com/help ünvanını ziyarət edin</string>
     <string name="file_could_not_be_processed">Fayl emal oluna bilmədi</string>

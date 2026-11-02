@@ -1142,6 +1142,7 @@ Vuoi passare a questo account?</string>
     <string name="save_option_as_default">Salva in modo predefinito</string>
     <string name="account_synced_from_bitwarden_app">Account sincronizzato dall\'app Bitwarden</string>
     <string name="local_codes">Codici sul dispositivo (%1$d)</string>
+    <string name="local_codes_header">Codici locali</string>
     <string name="required_information_missing">Informazioni Richieste Mancanti</string>
     <string name="required_information_missing_message">Mancano informazioni richieste (ad es. ‘servizi’ o ‘segreto’). Controlla il tuo file e riprova. Visita bitwarden.com/help per assistenza</string>
     <string name="file_could_not_be_processed">Il file non può essere elaborato</string>
