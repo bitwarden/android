@@ -47,6 +47,8 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
  * @param isEnabled Whether the chooser is enabled.
  * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
+ * @param isExistingPasswordLocked Whether the send already has a password that cannot be
+ * overwritten and must be removed before a new one can be set.
  * @param modifier Modifier for the composable.
  */
 @Suppress("LongMethod")
@@ -63,6 +65,7 @@ fun AddEditSendAuthTypeChooser(
     password: String,
     isEnabled: Boolean,
     isSendsRestrictedByPolicy: Boolean,
+    isExistingPasswordLocked: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -119,30 +122,34 @@ fun AddEditSendAuthTypeChooser(
                     onValueChange = onPasswordChange,
                     cardStyle = CardStyle.Bottom,
                     passwordFieldTestTag = "SendPasswordEntry",
-                    readOnly = isSendsRestrictedByPolicy,
+                    readOnly = isSendsRestrictedByPolicy || isExistingPasswordLocked,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_generate,
-                        contentDescription = stringResource(id = BitwardenString.generate_password),
-                        onClick = {
-                            if (password.isEmpty()) {
-                                onOpenPasswordGeneratorClick()
-                            } else {
-                                shouldShowDialog = true
-                            }
-                        },
-                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
-                    )
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = BitwardenString.copy_password),
-                        isEnabled = password.isNotEmpty(),
-                        onClick = {
-                            onPasswordCopyClick(password)
-                        },
-                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
-                    )
+                    if (!isExistingPasswordLocked) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_generate,
+                            contentDescription = stringResource(
+                                id = BitwardenString.generate_password,
+                            ),
+                            onClick = {
+                                if (password.isEmpty()) {
+                                    onOpenPasswordGeneratorClick()
+                                } else {
+                                    shouldShowDialog = true
+                                }
+                            },
+                            modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                        )
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_copy,
+                            contentDescription = stringResource(id = BitwardenString.copy_password),
+                            isEnabled = password.isNotEmpty(),
+                            onClick = {
+                                onPasswordCopyClick(password)
+                            },
+                            modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                        )
+                    }
                 }
             }
 
