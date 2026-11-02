@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">সংরক্ষণ বিকল্পটি ডিফল্ট হিসাবে</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden অ্যাপ থেকে সিঙ্ক করা অ্যাকাউন্ট</string>
     <string name="local_codes">স্থানীয় কোড (%1$d)</string>
+    <string name="local_codes_header">স্থানীয় কোড</string>
     <string name="required_information_missing">প্রয়োজনীয় তথ্য অনুপস্থিত</string>
     <string name="required_information_missing_message">প্রয়োজনীয় তথ্য অনুপস্থিত (যেমন, \'পরিষেবা\' বা \'গোপন\')। আপনার ফাইল পরীক্ষা করে আবার চেষ্টা করুন। সহায়তার জন্য bitwarden.com/help দেখুন</string>
     <string name="file_could_not_be_processed">ফাইল প্রক্রিয়া করা যায়নি</string>

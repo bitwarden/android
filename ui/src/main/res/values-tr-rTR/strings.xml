@@ -1142,6 +1142,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="save_option_as_default">Seçeneği varsayılan olarak kaydet</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden uygulamasından eşitlenen hesap</string>
     <string name="local_codes">Yerel kodlar (%1$d)</string>
+    <string name="local_codes_header">Yerel kodlar</string>
     <string name="required_information_missing">Gerekli bilgiler eksik</string>
     <string name="required_information_missing_message">Gerekli bilgiler eksik (örn. ‘services’ or ‘secret’). Dosyanızı kontrol edip yeniden deneyin. Destek için bitwarden.com/help adresini ziyaret edebilirsiniz</string>
     <string name="file_could_not_be_processed">Dosya işlenemedi</string>

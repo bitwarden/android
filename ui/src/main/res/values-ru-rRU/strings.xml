@@ -1157,6 +1157,7 @@
     <string name="save_option_as_default">Сохранить опцию по умолчанию</string>
     <string name="account_synced_from_bitwarden_app">Аккаунт синхронизирован с приложением Bitwarden</string>
     <string name="local_codes">Коды, доступные на устройстве (%1$d)</string>
+    <string name="local_codes_header">Локальные коды</string>
     <string name="required_information_missing">Отсутствует необходимая информация</string>
     <string name="required_information_missing_message">Отсутствует необходимая информация (например, ‘services’ или ‘secret’). Проверьте файл и повторите попытку. Посетите bitwarden.com/help для получения помощи</string>
     <string name="file_could_not_be_processed">Файл не может быть обработан</string>
@@ -1172,7 +1173,7 @@
         <item quantity="other">Bitwarden не смог расшифровать %1$d элемента хранилища. Скопируйте и отправьте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
     </plurals>
     <string name="select_a_card_for_x">Выберите карту для %s</string>
-    <string name="choose_an_identity"></string>
+    <string name="choose_an_identity">Выберите личную информацию</string>
     <string name="advanced_options">Расширенные настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Подробнее об обнаружении совпадений</annotation></string>
     <string name="keep_your_credential_secure">Храните свои учетные данные в безопасности</string>
@@ -1463,9 +1464,9 @@
     <string name="use_this_password">Использовать этот пароль</string>
     <string name="use_this_username">Использовать это имя пользователя</string>
     <string name="create_login">Создать логин</string>
-    <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
-    <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
-    <string name="turn_off">Turn off</string>
-    <string name="turn_off_biometric_question">Turn off biometrics?</string>
-    <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="keep_unlocking_with_biometrics">Продолжить использование разблокировки с помощью биометрии</string>
+    <string name="weve_made_a_security_update">Мы выпустили обновление, касающееся безопасности. Пожалуйста, подтвердите вашу биометрию еще раз, чтобы и дальше использовать ее для разблокировки Bitwarden.</string>
+    <string name="turn_off">Отключить</string>
+    <string name="turn_off_biometric_question">Отключить биометрию?</string>
+    <string name="unlocking_will_require_your_master_password">Для разблокировки потребуется ваш мастер-пароль. Вы можете снова включить биометрию в настройках.</string>
 </resources>

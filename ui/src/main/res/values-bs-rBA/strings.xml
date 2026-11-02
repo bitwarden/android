@@ -1149,6 +1149,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="save_option_as_default">Sačuvaj opciju kao zadanu</string>
     <string name="account_synced_from_bitwarden_app">Račun sinhroniziran iz Bitwarden aplikacije</string>
     <string name="local_codes">Lokalni kodovi (%1$d)</string>
+    <string name="local_codes_header">Lokalni kodovi</string>
     <string name="required_information_missing">Nedostaju potrebne informacije</string>
     <string name="required_information_missing_message">Nedostaju potrebne informacije (npr. „services” ili „secret”). Provjerite svoju datoteku i pokušajte ponovo. Posjetite bitwarden.com/help za podršku</string>
     <string name="file_could_not_be_processed">Datoteka se ne može obraditi</string>

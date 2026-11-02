@@ -1143,6 +1143,7 @@ Do you want to switch to this account?</string>
     <string name="save_option_as_default">Save option as default</string>
     <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
     <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes_header">Local codes</string>
     <string name="required_information_missing">Required Information Missing</string>
     <string name="required_information_missing_message">Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support</string>
     <string name="file_could_not_be_processed">File Could Not Be Processed</string>

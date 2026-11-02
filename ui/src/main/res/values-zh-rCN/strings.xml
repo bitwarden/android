@@ -1096,7 +1096,7 @@
     <string name="export_confirmation_title">确认导出</string>
     <string name="export_success">数据导出成功</string>
     <string name="included_in_this_export">包含在此导出中</string>
-    <string name="only_codes_stored_locally_on_this_device_will_be_exported">只有此设备上本地存储的代码会被导出。不包含已同步的代码</string>
+    <string name="only_codes_stored_locally_on_this_device_will_be_exported">仅会导出此设备上本地存储的代码。不包括已同步的代码</string>
     <string name="security">安全</string>
     <string name="too_many_failed_biometric_attempts">失败的生物识别尝试次数过多。</string>
     <string name="version">版本</string>
@@ -1137,6 +1137,7 @@
     <string name="save_option_as_default">保存选项为默认值</string>
     <string name="account_synced_from_bitwarden_app">账户已从 Bitwarden App 同步</string>
     <string name="local_codes">本地代码 (%1$d)</string>
+    <string name="local_codes_header">本地代码</string>
     <string name="required_information_missing">缺少所需信息</string>
     <string name="required_information_missing_message">缺少所需信息（例如，「services」或「secret」）。请检查您的文件然后重试。请访问 bitwarden.com/help 以获取支持</string>
     <string name="file_could_not_be_processed">文件无法处理</string>

@@ -1156,6 +1156,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="save_option_as_default">Zapisz opcję jako domyślną</string>
     <string name="account_synced_from_bitwarden_app">Konto zostało zsynchronizowane z aplikacji Bitwarden</string>
     <string name="local_codes">Kody lokalne (%1$d)</string>
+    <string name="local_codes_header">Kody lokalne</string>
     <string name="required_information_missing">Brak wymaganych informacji</string>
     <string name="required_information_missing_message">Brak wymaganych informacji (np. usług lub sekretów). Sprawdź plik i spróbuj ponownie. Odwiedź bitwarden.com/help, aby uzyskać wsparcie</string>
     <string name="file_could_not_be_processed">Plik nie może zostać przetworzony</string>

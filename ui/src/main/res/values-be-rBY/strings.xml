@@ -1153,6 +1153,7 @@
     <string name="save_option_as_default">Захаваць параметр як прадвызначаны</string>
     <string name="account_synced_from_bitwarden_app">Уліковы запіс сінхранізаваны з праграмай Bitwarden</string>
     <string name="local_codes">Лакальныя коды (%1$d)</string>
+    <string name="local_codes_header">Лакальныя коды</string>
     <string name="required_information_missing">Адсутнічае абавязковая інфармацыя</string>
     <string name="required_information_missing_message">Адсутнічае абавязковая інфармацыя (напрыклад, «services» або «secret»). Праверце свой файл і паспрабуйце яшчэ раз. Наведайце bitwarden.com/help для атрымання падтрымкі</string>
     <string name="file_could_not_be_processed">Не ўдалося апрацаваць файл</string>

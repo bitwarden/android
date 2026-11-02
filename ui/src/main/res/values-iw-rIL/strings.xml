@@ -1150,6 +1150,7 @@
     <string name="save_option_as_default">שמור אפשרות כברירת מחדל</string>
     <string name="account_synced_from_bitwarden_app">חשבון המיובא מתוך יישום Bitwarden</string>
     <string name="local_codes">קודים מקומיים (%1$d)</string>
+    <string name="local_codes_header">קודים מקומיים</string>
     <string name="required_information_missing">חסר מידע נדרש</string>
     <string name="required_information_missing_message">חסר מידע נדרש (למשל \'שירותים\' או \'סוד\'). בדוק את הקובץ שלך ונסה שוב. בקר ב־bitwarden.com/help עבור תמיכה</string>
     <string name="file_could_not_be_processed">לא היה ניתן לעבד את הקובץ</string>

@@ -1157,6 +1157,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="save_option_as_default">Uložiť voľbu ako predvolenú</string>
     <string name="account_synced_from_bitwarden_app">Účet je synchronizovaný s apkou Bitwarden</string>
     <string name="local_codes">Miestne kódy (%1$d)</string>
+    <string name="local_codes_header">Miestne kódy</string>
     <string name="required_information_missing">Chýbajúce požadované informácie</string>
     <string name="required_information_missing_message">Chýbajú požadované informácie (napr. \"services\" alebo \"secret\"). Skontrolujte súbor a skúste to znova. Navštívte stránku bitwarden.com/help, kde nájdete podporu</string>
     <string name="file_could_not_be_processed">Súbor sa nepodarilo spracovať</string>

@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">ნაგულისხმევად შენახვის ვარიანტი</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden აპიდან სინქრონიზებული ანგარიში</string>
     <string name="local_codes">ლოკალური კოდები (%1$d)</string>
+    <string name="local_codes_header">ლოკალური კოდები</string>
     <string name="required_information_missing">აკლია საჭირო ინფორმაცია</string>
     <string name="required_information_missing_message">აკლია საჭირო ინფორმაცია (მაგ., ‘services’ ან ‘secret’). შეამოწმეთ თქვენი ფაილი და სცადეთ ხელახლა. მხარდაჭერისთვის ეწვიეთ bitwarden.com/help</string>
     <string name="file_could_not_be_processed">ფაილის დამუშავება ვერ მოხერხდა</string>

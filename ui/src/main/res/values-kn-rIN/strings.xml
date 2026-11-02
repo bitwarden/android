@@ -1143,6 +1143,7 @@
     <string name="save_option_as_default">ಉಳಿಸುವ ಆಯ್ಕೆಯನ್ನು ಡೀಫಾಲ್ಟ್ ಆಗಿ ಹೊಂದಿಸಿ</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden ಅಪ್ಲಿಕೇಶನ್ನಿಂದ ಸಿಂಕ್ ಮಾಡಿದ ಖಾತೆ</string>
     <string name="local_codes">ಸ್ಥಳೀಯ ಕೋಡ್ಗಳು (%1$d)</string>
+    <string name="local_codes_header">ಸ್ಥಳೀಯ ಕೋಡ್ಗಳು</string>
     <string name="required_information_missing">ಅಗತ್ಯ ಮಾಹಿತಿ ಕಾಣೆಯಾಗಿದೆ</string>
     <string name="required_information_missing_message">ಅಗತ್ಯ ಮಾಹಿತಿ ಕಾಣೆಯಾಗಿದೆ (ಉದಾ, ‘services’ ಅಥವಾ ‘secret’). ನಿಮ್ಮ ಫೈಲ್ ಅನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ. ಬೆಂಬಲಕ್ಕಾಗಿ bitwarden.com/help ಗೆ ಭೇಟಿ ನೀಡಿ</string>
     <string name="file_could_not_be_processed">ಫೈಲ್ ಅನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>

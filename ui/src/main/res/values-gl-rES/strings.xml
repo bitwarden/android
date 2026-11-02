@@ -1143,6 +1143,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="save_option_as_default">Gardar opción como predeterminada</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada desde a aplicación Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
+    <string name="local_codes_header">Códigos locais</string>
     <string name="required_information_missing">Falta información obrigatoria</string>
     <string name="required_information_missing_message">Falta información obrigatoria (p. ex., \'services\' ou \'secret\'). Comproba o teu ficheiro e inténtao de novo. Visita bitwarden.com/help para obter axuda</string>
     <string name="file_could_not_be_processed">Non se puido procesar o ficheiro</string>

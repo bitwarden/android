@@ -1142,6 +1142,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="save_option_as_default">Opció mentése alapértelmezettként</string>
     <string name="account_synced_from_bitwarden_app">A fiók szinkronizálva lett a Bitwarden alkalmazásból.</string>
     <string name="local_codes">Helyi kódok (%1$d)</string>
+    <string name="local_codes_header">Helyi kódok</string>
     <string name="required_information_missing">Hiányzik a szükséges információ.</string>
     <string name="required_information_missing_message">Hiányzik a szükséges információ (például ‘services’ vagy ‘secret’). Ellenőrizzük a fájlt és próbáljuk újra. Támogatásért látogassunk el a bitwarden.com/help oldalra</string>
     <string name="file_could_not_be_processed">A fájl nem dolgozható fel.</string>

@@ -1142,6 +1142,7 @@ Deseja trocar para esta conta?</string>
     <string name="save_option_as_default">Salvar opção como padrão</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada do aplicativo do Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
+    <string name="local_codes_header">Códigos locais</string>
     <string name="required_information_missing">Informações necessárias ausentes</string>
     <string name="required_information_missing_message">Certas informações necessárias estão faltando (p. ex.: \'serviço\' ou \'segredo\'). Confira o seu arquivo e tente novamente. Visite bitwarden.com/help para obter suporte</string>
     <string name="file_could_not_be_processed">O arquivo não pôde ser processado</string>

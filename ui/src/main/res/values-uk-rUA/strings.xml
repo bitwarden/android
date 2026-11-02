@@ -1159,6 +1159,7 @@
     <string name="save_option_as_default">Зробити цю дію типовою</string>
     <string name="account_synced_from_bitwarden_app">Обліковий запис синхронізовано з програми Bitwarden</string>
     <string name="local_codes">Локальні коди (%1$d)</string>
+    <string name="local_codes_header">Локальні коди</string>
     <string name="required_information_missing">Відсутня необхідна інформація</string>
     <string name="required_information_missing_message">Необхідна інформація відсутня (наприклад, \'services\' або \'secret\'). Перевірте свій файл і повторіть спробу. Відвідайте bitwarden.com/help для підтримки</string>
     <string name="file_could_not_be_processed">Неможливо обробити файл</string>

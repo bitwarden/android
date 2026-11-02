@@ -1171,6 +1171,7 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="save_option_as_default">Cadw opsiwn fel diofyn</string>
     <string name="account_synced_from_bitwarden_app">Cyfrif wedi\'i gydamseru o ap Bitwarden</string>
     <string name="local_codes">Codau lleol (%1$d)</string>
+    <string name="local_codes_header">Codau lleol</string>
     <string name="required_information_missing">Gwybodaeth Ofynnol ar Goll</string>
     <string name="required_information_missing_message">Mae gwybodaeth ofynnol ar goll (e.e., \'services\' neu \'secret\'). Gwiriwch eich ffeil a cheisiwch eto. Ewch i bitwarden.com/help am gymorth</string>
     <string name="file_could_not_be_processed">Ni ellid Prosesu\'r Ffeil</string>

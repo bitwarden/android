@@ -1146,6 +1146,7 @@ cualquier problema.</string>
     <string name="save_option_as_default">Guardar opción por defecto</string>
     <string name="account_synced_from_bitwarden_app">Cuenta sincronizada desde la aplicación de Bitwarden</string>
     <string name="local_codes">Códigos locales (%1$d)</string>
+    <string name="local_codes_header">Códigos locales</string>
     <string name="required_information_missing">Información requerida faltante</string>
     <string name="required_information_missing_message">Falta información requerida (por ejemplo, \'servicios\' o \'secreto\'). Revisa tu archivo e inténtalo de nuevo. Visita bitwarden.com/help para obtener soporte</string>
     <string name="file_could_not_be_processed">No se pudo procesar el archivo</string>

@@ -1142,6 +1142,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="save_option_as_default">Option als Standard speichern</string>
     <string name="account_synced_from_bitwarden_app">Konto über Bitwarden App synchronisiert</string>
     <string name="local_codes">Lokale Codes (%1$d)</string>
+    <string name="local_codes_header">Lokale Codes</string>
     <string name="required_information_missing">Erforderliche Informationen fehlen</string>
     <string name="required_information_missing_message">Benötigte Informationen fehlen (z.B. „Dienste“ oder „Geheimnis“). Überprüfe deine Datei und versuche es erneut. Besuche bitwarden.com/help für Unterstützung</string>
     <string name="file_could_not_be_processed">Datei konnte nicht verarbeitet werden</string>
