@@ -7,12 +7,18 @@ import com.bitwarden.network.ssl.createMtlsOkHttpClient
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkCookieManager
 import com.x8bit.bitwarden.ui.platform.image.ImageCookieInterceptor
+import com.x8bit.bitwarden.ui.platform.image.ImageNotFoundCacheInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Cache
+import java.io.File
 import javax.inject.Singleton
+
+private const val NOT_FOUND_CACHE_DIR = "image_not_found_cache"
+private const val NOT_FOUND_CACHE_BYTES = 1L * 1024 * 1024
 
 /**
  * Provides dependencies for loading images.
@@ -46,6 +52,13 @@ object ImageModule {
                             .createMtlsOkHttpClient()
                             .newBuilder()
                             .addNetworkInterceptor(ImageCookieInterceptor(networkCookieManager))
+                            .addNetworkInterceptor(ImageNotFoundCacheInterceptor())
+                            .cache(
+                                Cache(
+                                    directory = File(context.cacheDir, NOT_FOUND_CACHE_DIR),
+                                    maxSize = NOT_FOUND_CACHE_BYTES,
+                                ),
+                            )
                             .build()
                     },
                 ),
