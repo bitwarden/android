@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.RemoteCallbackList
 import android.os.RemoteException
-import androidx.credentials.provider.RemoteEntry
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
 import com.bitwarden.authenticatorbridge.model.AddTotpLoginItemData
@@ -340,6 +339,53 @@ class AuthenticatorBridgeProcessorTest {
             getDefaultBinder().syncAccounts()
 
             assertEquals(expected, lastAccountsSync)
+        }
+
+        @Test
+        fun `syncAccounts should still notify later callbacks when one throws unexpectedly`() {
+            val faultyCallback = object : IAuthenticatorBridgeServiceCallback.Stub() {
+                override fun onAccountsSync(data: EncryptedSharedAccountData?) {
+                    throw IllegalStateException("unexpected failure")
+                }
+            }
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .beginBroadcast()
+            } returns 2
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(0)
+            } returns faultyCallback
+
+            every {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .getBroadcastItem(1)
+            } returns serviceCallback
+
+            val sharedAccountData = mockk<SharedAccountData>()
+            val expected = mockk<EncryptedSharedAccountData>()
+
+            every {
+                authenticatorBridgeRepository.authenticatorSyncSymmetricKey
+            } returns SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
+
+            coEvery {
+                authenticatorBridgeRepository.getSharedAccounts()
+            } returns sharedAccountData
+
+            every {
+                sharedAccountData.encrypt(SYMMETRIC_KEY)
+            } returns expected.asSuccess()
+
+            getDefaultBinder().syncAccounts()
+
+            assertEquals(expected, lastAccountsSync)
+            verify(exactly = 1) {
+                anyConstructed<RemoteCallbackList<IAuthenticatorBridgeServiceCallback>>()
+                    .finishBroadcast()
+            }
         }
 
         @Test

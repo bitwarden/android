@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.IInterface
 import android.os.RemoteCallbackList
 import android.os.RemoteException
-import android.util.Log
 import androidx.core.net.toUri
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeServiceCallback
@@ -146,7 +145,9 @@ class AuthenticatorBridgeProcessorImpl(
 }
 
 /**
- * This function mirrors the hidden "RemoteCallbackList.broadcast" function.
+ * Invokes [action] on each registered callback, similar to the hidden
+ * "RemoteCallbackList.broadcast" function. A failure in one callback is logged and does not
+ * prevent the remaining callbacks from being invoked.
  */
 @Suppress("TooGenericExceptionCaught")
 private fun <T : IInterface> RemoteCallbackList<T>.forEach(action: (T) -> Unit) {
@@ -156,16 +157,13 @@ private fun <T : IInterface> RemoteCallbackList<T>.forEach(action: (T) -> Unit) 
             try {
                 action(this.getBroadcastItem(index))
             } catch (e: RemoteException) {
-                // authenticator's app process died
-                // RemoteCallbackList handles unregistering callback, but need to catch exception
+                // Callback process died; RemoteCallbackList unregisters it via binderDied.
                 Timber.w(e, "Bridge callback failed")
             } catch (e: RuntimeException) {
-                // Exception thrown processing callback
+                // Catch broadly so one misbehaving callback cannot block the rest.
                 Timber.e(e, "Bridge callback threw unexpectedly")
             }
         }
-    } catch (e: Exception) {
-        // Broadcast failed
     } finally {
         this.finishBroadcast()
     }
