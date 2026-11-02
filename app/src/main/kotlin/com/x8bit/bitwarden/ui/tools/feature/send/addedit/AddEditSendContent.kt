@@ -177,8 +177,8 @@ fun AddEditSendContent(
             onPasswordCopyClick = addSendHandlers.onPasswordCopyClick,
             password = state.common.passwordInput,
             isEnabled = !policyDisablesSend && enforcedWhoCanAccess == null,
-            isSendsRestrictedByPolicy = policyDisablesSend,
             isExistingPasswordLocked = state.common.hasPassword,
+            isSendsRestrictedByPolicy = policyDisablesSend,
             modifier = Modifier
                 .testTag("SendAuthTypeChooser")
                 .fillMaxWidth()

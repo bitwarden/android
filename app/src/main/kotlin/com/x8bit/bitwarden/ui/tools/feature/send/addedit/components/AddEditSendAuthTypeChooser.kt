@@ -49,13 +49,13 @@ private const val LOCKED_PASSWORD_PLACEHOLDER: String = "locked"
  * (only relevant for [SendAuth.Email]).
  * @param onAddNewEmailClick Callback invoked when adding a new email.
  * @param onRemoveEmailClick Callback invoked when removing an email.
- * @param password The current password value (only relevant for [SendAuth.Password]).
  * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
  * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
+ * @param password The current password value (only relevant for [SendAuth.Password]).
  * @param isEnabled Whether the chooser is enabled.
- * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
  * @param isExistingPasswordLocked Whether the send already has a password that cannot be
  * overwritten and must be removed before a new one can be set.
+ * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
 @Suppress("LongMethod")
@@ -71,8 +71,8 @@ fun AddEditSendAuthTypeChooser(
     onPasswordCopyClick: (String) -> Unit,
     password: String,
     isEnabled: Boolean,
-    isSendsRestrictedByPolicy: Boolean,
     isExistingPasswordLocked: Boolean,
+    isSendsRestrictedByPolicy: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
