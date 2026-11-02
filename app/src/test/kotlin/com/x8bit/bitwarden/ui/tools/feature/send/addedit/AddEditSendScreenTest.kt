@@ -303,7 +303,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `password field should be read-only when the send already has a password`() {
+    fun `password field should be disabled when the send already has a password`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
@@ -318,6 +318,8 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTag(testTag = "SendPasswordEntry")
             .performScrollTo()
+            .assertTextEquals("Password", "••••••••")
+            .assertIsNotEnabled()
             .assert(!hasSetTextAction())
     }
 
