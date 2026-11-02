@@ -22,7 +22,8 @@ runs:
         distribution: "temurin"
         java-version: ${{ inputs.java-version }}
 
-    - name: Install Android NDK
+    - name: Determine Android NDK versions
+      id: ndk
       shell: bash
       run: |
         # AGP strips native libraries with the NDK reported by printNdkVersion (AGP's default
@@ -53,9 +54,50 @@ runs:
             echo "- \`$NDK_VERSION\`"
           done
         } >> "$GITHUB_STEP_SUMMARY"
-        for NDK_VERSION in $MISSING_NDK_VERSIONS; do
-          echo "Installing NDK $NDK_VERSION"
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null
+
+        {
+          echo "missing=${MISSING_NDK_VERSIONS# }"
+          echo "cache-key=android-ndk-${RUNNER_OS}-$(echo $MISSING_NDK_VERSIONS | tr ' ' '-')"
+          echo "paths<<EOF"
+          for NDK_VERSION in $MISSING_NDK_VERSIONS; do
+            echo "$ANDROID_HOME/ndk/$NDK_VERSION"
+          done
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Restore Android NDK from cache
+      if: ${{ steps.ndk.outputs.missing != '' }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.ndk.outputs.paths }}
+        key: ${{ steps.ndk.outputs.cache-key }}
+
+    - name: Install Android NDK
+      if: ${{ steps.ndk.outputs.missing != '' }}
+      shell: bash
+      env:
+        NDK_VERSIONS: ${{ steps.ndk.outputs.missing }}
+      run: |
+        for NDK_VERSION in $NDK_VERSIONS; do
+          NDK_DIR="$ANDROID_HOME/ndk/$NDK_VERSION"
+          if [ -f "$NDK_DIR/source.properties" ]; then
+            echo "NDK $NDK_VERSION restored from cache"
+            continue
+          fi
+          # Downloads occasionally fail or stall with a corrupt archive, so retry with a timeout.
+          for ATTEMPT in 1 2 3; do
+            echo "Installing NDK $NDK_VERSION (attempt $ATTEMPT of 3)"
+            if timeout 10m "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null \
+              && [ -f "$NDK_DIR/source.properties" ]; then
+              break
+            fi
+            rm -rf "$NDK_DIR"
+            if [ "$ATTEMPT" -eq 3 ]; then
+              echo "::error::Failed to install NDK $NDK_VERSION after 3 attempts"
+              exit 1
+            fi
+            sleep 15
+          done
         done
 
     - name: Install Fastlane
