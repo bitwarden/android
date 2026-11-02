@@ -402,12 +402,12 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertExists()
 
         composeTestRule
-            .onNodeWithText("A—Z")
+            .onNodeWithText("A-Z")
             .performScrollTo()
             .assertIsOn()
 
         composeTestRule
-            .onNodeWithText("a—z")
+            .onNodeWithText("a-z")
             .performScrollTo()
             .assertIsOn()
 
@@ -489,7 +489,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
-        composeTestRule.onNodeWithText("A—Z")
+        composeTestRule.onNodeWithText("A-Z")
             .performScrollTo()
             .performClick()
 
@@ -505,7 +505,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
-        composeTestRule.onNodeWithText("a—z")
+        composeTestRule.onNodeWithText("a-z")
             .performScrollTo()
             .performClick()
 
@@ -742,10 +742,10 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithText("A—Z")
+        composeTestRule.onNodeWithText("A-Z")
             .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText("a—z")
+        composeTestRule.onNodeWithText("a-z")
             .performScrollTo()
             .performClick()
         composeTestRule.onNodeWithText("0-9")
