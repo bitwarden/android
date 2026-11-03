@@ -343,7 +343,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `generate and copy buttons should be hidden when the send already has a password`() {
+    fun `password action buttons should be hidden when the send already has a password`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
@@ -361,10 +361,13 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithTag(testTag = "CopyPasswordButton")
             .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertDoesNotExist()
     }
 
     @Test
-    fun `generate and copy buttons should be displayed when the send has no password`() {
+    fun `password action buttons should be displayed when the send has no password`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
@@ -382,6 +385,10 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithTag(testTag = "CopyPasswordButton")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
             .performScrollTo()
             .assertIsDisplayed()
     }
