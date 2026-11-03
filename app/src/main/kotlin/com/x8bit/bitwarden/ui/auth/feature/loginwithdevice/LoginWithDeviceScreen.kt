@@ -130,7 +130,7 @@ private fun LoginWithDeviceScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = state.subtitle(),
+            text = state.subTitle(),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -182,18 +182,6 @@ private fun LoginWithDeviceScreenContent(
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
-
-        Text(
-            text = state.otherOptions(),
-            textAlign = TextAlign.Center,
-            style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.secondary,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(height = 12.dp))
 
         BitwardenHyperTextLink(
             annotatedResId = BitwardenString.need_another_option_view_all_login_options,

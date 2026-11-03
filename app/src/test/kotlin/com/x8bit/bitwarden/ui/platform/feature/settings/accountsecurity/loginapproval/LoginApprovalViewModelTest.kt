@@ -134,7 +134,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 requestId = "",
                 viewState = LoginApprovalState.ViewState.Loading,
                 dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                    message = BitwardenString.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                    message = BitwardenString.access_attempt_from_x_do_you_want_to_switch_to_this_account
                         .asText(EMAIL_2),
                 ),
             ),
@@ -158,7 +158,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             state = DEFAULT_STATE.copy(
                 specialCircumstance = specialCircumstance,
                 dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                    message = BitwardenString.login_attempt_from_x_do_you_want_to_switch_to_this_account
+                    message = BitwardenString.access_attempt_from_x_do_you_want_to_switch_to_this_account
                         .asText(EMAIL_2),
                 ),
             ),
@@ -286,7 +286,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
         verify {
             snackbarRelayManager.sendSnackbarData(
-                data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                data = BitwardenSnackbarData(message = BitwardenString.access_approved.asText()),
                 relay = SnackbarRelay.LOGIN_APPROVAL,
             )
         }
@@ -333,7 +333,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
             }
             verify {
-                toastManager.show(messageId = BitwardenString.login_approved)
+                toastManager.show(messageId = BitwardenString.access_approved)
             }
         }
 
@@ -355,7 +355,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         }
         verify {
             snackbarRelayManager.sendSnackbarData(
-                data = BitwardenSnackbarData(message = BitwardenString.log_in_denied.asText()),
+                data = BitwardenSnackbarData(message = BitwardenString.access_denied.asText()),
                 relay = SnackbarRelay.LOGIN_APPROVAL,
             )
         }
@@ -402,7 +402,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
             }
             verify {
-                toastManager.show(messageId = BitwardenString.log_in_denied)
+                toastManager.show(messageId = BitwardenString.access_denied)
             }
         }
 
