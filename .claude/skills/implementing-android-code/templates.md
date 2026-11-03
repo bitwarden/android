@@ -87,19 +87,24 @@ private const val KEY_STATE = "state"
 /**
  * ViewModel for the Example screen.
  */
-@HiltViewModel
-class ExampleViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ExampleViewModel.Factory::class)
+class ExampleViewModel @AssistedInject constructor(
+    @Assisted route: ExampleGraph.ExampleRoute,
     savedStateHandle: SavedStateHandle,
     private val exampleRepository: ExampleRepository,
 ) : BaseViewModel<ExampleState, ExampleEvent, ExampleAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = savedStateHandle.toExampleArgs()
-            ExampleState(
-                data = args.itemId,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: ExampleState(data = route.itemId),
 ) {
+    /**
+     * Factory for creating an [ExampleViewModel] for a specific [ExampleGraph.ExampleRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [ExampleViewModel] for the given [route].
+         */
+        fun create(route: ExampleGraph.ExampleRoute): ExampleViewModel
+    }
 
     init {
         // Persist state for process death recovery
@@ -212,79 +217,68 @@ class ExampleViewModel @Inject constructor(
 
 ---
 
-## Navigation Template (Type-Safe Routes)
+## Navigation Template (Navigation 3)
 
-**Based on**: `app/src/main/kotlin/com/x8bit/bitwarden/ui/auth/feature/login/LoginNavigation.kt`
+**Based on**: `app/src/main/kotlin/com/x8bit/bitwarden/ui/vault/feature/item/VaultItemNavigation.kt`
+
+The route is declared in the graph of the `NavDisplay` that shows the screen (see
+`app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlocked/VaultUnlockedGraph.kt`):
+
+```kotlin
+/**
+ * Represents the hierarchy of the Example UI navigation graph and provides type-safe routes to
+ * each destination available in the graph.
+ */
+@Serializable
+sealed class ExampleGraph : NavKey {
+    /**
+     * The type-safe route for the Example screen.
+     */
+    @Serializable
+    data class ExampleRoute(
+        val itemId: String,
+        val isEditMode: Boolean = false,
+    ) : ExampleGraph()
+}
+```
 
 ```kotlin
 @file:OmitFromCoverage
 
 package com.x8bit.bitwarden.ui.feature.example
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * Route for the Example screen.
- */
-@Serializable
-@OmitFromCoverage
-data class ExampleRoute(
-    val itemId: String,
-    val isEditMode: Boolean = false,
-)
-
-/**
- * Args extracted from [SavedStateHandle] for the Example screen.
- */
-@OmitFromCoverage
-data class ExampleArgs(
-    val itemId: String,
-    val isEditMode: Boolean,
-)
-
-/**
- * Extracts [ExampleArgs] from the [SavedStateHandle].
- */
-fun SavedStateHandle.toExampleArgs(): ExampleArgs {
-    val route = this.toRoute<ExampleRoute>()
-    return ExampleArgs(
-        itemId = route.itemId,
-        isEditMode = route.isEditMode,
-    )
-}
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
 
 /**
  * Navigate to the Example screen.
  */
-fun NavController.navigateToExample(
+fun NavigationController<ExampleGraph>.navigateToExample(
     itemId: String,
     isEditMode: Boolean = false,
-    navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = ExampleRoute(
+    navigate(
+        route = ExampleGraph.ExampleRoute(
             itemId = itemId,
             isEditMode = isEditMode,
         ),
-        navOptions = navOptions,
     )
 }
 
 /**
- * Add the Example screen destination to the navigation graph.
+ * Add the Example screen to the example navigation entries.
  */
-fun NavGraphBuilder.exampleDestination(
+fun EntryProviderScope<ExampleGraph>.exampleDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<ExampleRoute> {
+    slideUpEntry<ExampleGraph.ExampleRoute> { route ->
         ExampleScreen(
+            viewModel = hiltViewModel<ExampleViewModel, ExampleViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }
@@ -310,7 +304,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -326,7 +319,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 @Composable
 fun ExampleScreen(
     onNavigateBack: () -> Unit,
-    viewModel: ExampleViewModel = hiltViewModel(),
+    viewModel: ExampleViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -594,6 +587,7 @@ class ExampleViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: ExampleState? = DEFAULT_STATE,
     ): ExampleViewModel = ExampleViewModel(
+        route = ExampleGraph.ExampleRoute(itemId = "itemId"),
         savedStateHandle = SavedStateHandle(
             mapOf(KEY_STATE to state),
         ),

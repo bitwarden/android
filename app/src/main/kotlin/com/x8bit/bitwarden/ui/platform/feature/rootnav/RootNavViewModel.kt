@@ -125,25 +125,27 @@ class RootNavViewModel @Inject constructor(
                 when (specialCircumstance) {
                     is SpecialCircumstance.AutofillSave -> {
                         RootNavState.VaultUnlockedForAutofillSave(
+                            activeUserId = userState.activeUserId,
                             autofillSaveItem = specialCircumstance.autofillSaveItem,
                         )
                     }
 
                     is SpecialCircumstance.AutofillSelection -> {
                         RootNavState.VaultUnlockedForAutofillSelection(
-                            activeUserId = userState.activeAccount.userId,
+                            activeUserId = userState.activeUserId,
                             type = specialCircumstance.autofillSelectionData.type,
                         )
                     }
 
                     is SpecialCircumstance.AddTotpLoginItem -> {
                         RootNavState.VaultUnlockedForNewTotp(
-                            activeUserId = userState.activeAccount.userId,
+                            activeUserId = userState.activeUserId,
                         )
                     }
 
                     is SpecialCircumstance.ShareNewSend -> {
                         RootNavState.VaultUnlockedForNewSend(
+                            activeUserId = userState.activeUserId,
                             sendType = when (specialCircumstance.data) {
                                 is ShareData.FileSend -> SendItemType.FILE
                                 is ShareData.TextSend -> SendItemType.TEXT
@@ -152,7 +154,9 @@ class RootNavViewModel @Inject constructor(
                     }
 
                     is SpecialCircumstance.PasswordlessRequest -> {
-                        RootNavState.VaultUnlockedForAuthRequest
+                        RootNavState.VaultUnlockedForAuthRequest(
+                            activeUserId = userState.activeUserId,
+                        )
                     }
 
                     is SpecialCircumstance.ProviderCreateCredential -> {
@@ -170,6 +174,7 @@ class RootNavViewModel @Inject constructor(
 
                             passwordRequest != null -> {
                                 RootNavState.VaultUnlockedForCreatePasswordRequest(
+                                    activeUserId = userState.activeAccount.userId,
                                     username = passwordRequest.id,
                                     password = passwordRequest.password,
                                     uri = request
@@ -373,8 +378,8 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data class VaultUnlocked(
-        val activeUserId: String,
-    ) : RootNavState()
+        override val activeUserId: String,
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show an add item screen for a user to complete the saving of data collected by
@@ -382,17 +387,18 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data class VaultUnlockedForAutofillSave(
+        override val activeUserId: String,
         val autofillSaveItem: AutofillSaveItem,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show a selection screen for autofill for an unlocked user.
      */
     @Parcelize
     data class VaultUnlockedForAutofillSelection(
-        val activeUserId: String,
+        override val activeUserId: String,
         val type: AutofillSelectionData.Type,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show an add item screen for a user to complete the saving of data collected by
@@ -404,9 +410,9 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data class VaultUnlockedForFido2Save(
-        val activeUserId: String,
+        override val activeUserId: String,
         val createCredentialRequest: CreateCredentialRequest,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show an add item screen for a user to complete the saving of data collected by
@@ -418,53 +424,55 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data class VaultUnlockedForCreatePasswordRequest(
+        override val activeUserId: String,
         val username: String,
         val password: String,
         val uri: String,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should perform FIDO 2 credential assertion for the user.
      */
     @Parcelize
     data class VaultUnlockedForFido2Assertion(
-        val activeUserId: String,
+        override val activeUserId: String,
         val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should retrieve the requested credential from the provided user's vault.
      */
     @Parcelize
     data class VaultUnlockedForPasswordGet(
-        val activeUserId: String,
+        override val activeUserId: String,
         val providerGetPasswordCredentialRequest: ProviderGetPasswordCredentialRequest,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should unlock the user's vault and retrieve credentials matching the given request.
      */
     @Parcelize
     data class VaultUnlockedForProviderGetCredentials(
-        val activeUserId: String,
+        override val activeUserId: String,
         val getCredentialsRequest: GetCredentialsRequest,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show the new verification codes listing screen for an unlocked user.
      */
     @Parcelize
     data class VaultUnlockedForNewTotp(
-        val activeUserId: String,
-    ) : RootNavState()
+        override val activeUserId: String,
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show the new send screen for an unlocked user.
      */
     @Parcelize
     data class VaultUnlockedForNewSend(
+        override val activeUserId: String,
         val sendType: SendItemType,
-    ) : RootNavState()
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show the screen to complete an ongoing registration process.
@@ -481,7 +489,9 @@ sealed class RootNavState : Parcelable {
      * App should show the auth confirmation screen for an unlocked user.
      */
     @Parcelize
-    data object VaultUnlockedForAuthRequest : RootNavState()
+    data class VaultUnlockedForAuthRequest(
+        override val activeUserId: String,
+    ) : RootNavState(), UserScoped
 
     /**
      * App should show the expired registration link screen.
@@ -526,6 +536,17 @@ sealed class RootNavState : Parcelable {
     data class CredentialExchangeExportSkipAccountSelection(
         val userId: String,
     ) : RootNavState()
+}
+
+/**
+ * Indicates that this state should be displayed for a given user ID and if the same state needs to
+ * be displayed again but for a different user ID, a new destination should be created.
+ */
+interface UserScoped {
+    /**
+     * The active user ID used when displaying this the [RootNavState].
+     */
+    val activeUserId: String
 }
 
 /**

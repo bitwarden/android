@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
@@ -32,19 +33,15 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -82,16 +79,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val vaultLockManager: VaultLockManager = mockk(relaxed = true) {
         every { isFromLockFlow } returns false
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toVaultUnlockArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toVaultUnlockArgs)
     }
 
     @Test
@@ -1569,9 +1556,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         vaultRepo: VaultRepository = vaultRepository,
         lockManager: VaultLockManager = vaultLockManager,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
+        route = when (unlockType) {
+            UnlockType.STANDARD -> AuthGraph.VaultUnlockRoute.Standard
+            UnlockType.TDE -> AuthGraph.VaultUnlockRoute.Tde
+        },
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            every { toVaultUnlockArgs() } returns VaultUnlockArgs(unlockType = unlockType)
         },
         authRepository = authRepository,
         vaultRepo = vaultRepo,

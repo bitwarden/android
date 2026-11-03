@@ -20,6 +20,7 @@
     - [State-based Navigation](#state-based-navigation)
     - [Event-based Navigation](#event-based-navigation)
     - [Navigation Implementation](#navigation-implementation)
+    - [Transitions](#transitions)
     - [Example](#example-2)
 
 ## Overview
@@ -100,7 +101,7 @@ Each screen in the app is associated with at least the following three classes/f
 
 - A `...ViewModel` class responsible for managing the data and state for the screen.
 - A `...Screen` class that contains the Compose implementation of the UI.
-- A `...Navigation` file containing the details for how to add the screen to the overall navigation graph and how navigate to it within the graph.
+- A `...Navigation` file containing the screen's route along with the details for how to add the screen to the navigation entries and how to navigate to it.
 
 ### ViewModels / MVVM
 
@@ -116,13 +117,13 @@ The app's approach to MVVM is based around the handling of "state", "actions", a
 
 - **Events:** The "events" represent discrete, one-shot side-effects and are typically associated with navigation events triggered by some user action. They are sent internally using `BaseViewModel.sendEvent` and may be consumed by the UI layer via the `BaseViewModel.eventFlow` property. An [EventsEffect](../app/src/main/java/com/x8bit/bitwarden/ui/platform/base/util/EventsEffect.kt) should typically be used to simplify the consumption of these events.
 
-VMs are typically injected using [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) by annotating them with `@HiltViewModel`. This allows them to be constructed, retrieved, and cached in the Compose UI layer by calling `hiltViewModel()` with the appropriate type. Dependencies passed into the VM constructor will typically be singletons of the graph, such as [AuthRepository](../app/src/main/java/com/x8bit/bitwarden/data/auth/repository/AuthRepository.kt). In cases where the VM needs to initialized with some specific data (like an ID) that is sent from the previous screen, this data should be retrieved by injecting the [SavedStateHandle](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) and pulling out data using a type-safe wrapper (ex: [LoginArgs](../app/src/main/java/com/x8bit/bitwarden/ui/auth/feature/login/LoginNavigation.kt)).
+VMs are typically injected using [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) by annotating them with `@HiltViewModel`. This allows them to be constructed, retrieved, and cached in the Compose UI layer by calling `hiltViewModel()` with the appropriate type. Dependencies passed into the VM constructor will typically be singletons of the graph, such as [AuthRepository](../app/src/main/java/com/x8bit/bitwarden/data/auth/repository/AuthRepository.kt). In cases where the VM needs to be initialized with some specific data (like an ID) that is sent from the previous screen, the VM should receive the screen's type-safe route via [assisted injection](https://dagger.dev/hilt/view-model#assisted-injection): the VM is annotated with `@HiltViewModel(assistedFactory = ...)`, its constructor with `@AssistedInject`, the route parameter with `@Assisted`, and it declares an `@AssistedFactory` interface. The navigation entry then creates the VM with `hiltViewModel<ExampleViewModel, ExampleViewModel.Factory>(creationCallback = { factory -> factory.create(route = route) })` (ex: [VaultItemViewModel](../app/src/main/kotlin/com/x8bit/bitwarden/ui/vault/feature/item/VaultItemViewModel.kt)). The [SavedStateHandle](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) is still available for injection and should be used to persist state across process death, but it is no longer used to retrieve navigation arguments.
 
 #### Example
 
 The following is an example that demonstrates many of the above principles and best practices when using `BaseViewModel` to implement a VM. It has the following features:
 
-- It is injected with a repository (`ExampleRepository`) that provides streaming `ExampleData` and a `SavedStateHandle` in order to pull initial data using a `ExampleArgs` wrapper class.
+- It receives its `ExampleRoute` via assisted injection in order to pull initial navigation data, and it is injected with a repository (`ExampleRepository`) that provides streaming `ExampleData` and a `SavedStateHandle`.
 - It has state that manages several properties of interest to the UI: `exampleData`, `isToggledEnabled`, and `dialogState`.
 - It receives external actions from the UI (`ContinueButtonClick` and `ToggleValueUpdate`) as well as internal actions launch from inside different coroutines coroutines (`Internal.ExampleDataReceive`, `Internal.ToggleValueSync`). These actions result in state updates or the emission of an event (`NavigateToNextScreen`).
 - It saves the current state to the `SavedStateHandle` in order to restore it later after process death and restoration. This ensures the user's actions and associated state will not be lost if the app goes into the background and is temporarily killed by the OS to conserve memory.
@@ -134,8 +135,9 @@ The following is an example that demonstrates many of the above principles and b
 ```kotlin
 private const val KEY_STATE = "state"
 
-@HiltViewModel
-class ExampleViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ExampleViewModel.Factory::class)
+class ExampleViewModel @AssistedInject constructor(
+    @Assisted route: ExampleRoute,
     private val exampleRepository: ExampleRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ExampleState, ExampleEvent, ExampleAction>(
@@ -143,10 +145,21 @@ class ExampleViewModel @Inject constructor(
     // state, otherwise initialize from repository and navigation data.
     initialState = savedStateHandle[KEY_STATE] ?: ExampleState(
         exampleData = exampleRepository.exampleDataStateFlow.value,
-        isToggleEnabled = ExampleArgs(savedStateHandle).isToggleEnabledInitialValue,
+        isToggleEnabled = route.isToggleEnabled,
         dialogState = null,
     )
 ) {
+    /**
+     * Factory for creating an [ExampleViewModel] for a specific [ExampleRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [ExampleViewModel] for the given [route].
+         */
+        fun create(route: ExampleRoute): ExampleViewModel
+    }
+
     init {
         // As the state updates, write to saved state handle for retrieval after process death and
         // restoration.
@@ -304,8 +317,8 @@ These rules can lead to some notable differences in how certain dialogs are hand
 
 The following shows off the basic structure of a composable `...Screen` implementation. Note that:
 
-- The VM is "injected" using the `hiltViewModel()` helper function. This will correctly create, cache, and scope the VM in production code while making it easier to pass in mock/fake implementations in test code.
-- An `onNavigateToNextScreen` function is also passed in, which can be called to trigger a navigation via a call to a [NavController](https://developer.android.com/reference/androidx/navigation/NavController) in the outer layers of the navigation graph. Passing in a function rather than the `NavController` itself decouples the screen code from the navigation framework and greatly simplifies the testing of screens.
+- The VM is passed in by the navigation entry, which creates it using the `hiltViewModel()` helper function (for VMs without navigation arguments, the screen may instead default the parameter to `hiltViewModel()`). This will correctly create, cache, and scope the VM to the navigation entry in production code while making it easier to pass in mock/fake implementations in test code.
+- An `onNavigateToNextScreen` function is also passed in, which can be called to trigger a navigation using a [NavigationController](../ui/src/main/kotlin/com/bitwarden/ui/platform/navigation/NavigationController.kt) in the outer layers of the navigation hierarchy. Passing in a function rather than the navigation controller itself decouples the screen code from the navigation framework and greatly simplifies the testing of screens.
 - The VM "state" is consumed using `viewModel.stateFlow.collectAsStateWithLifecycle()`. This will cause the composable to "recompose" and update whenever updates are pushed to the `viewModel.stateFlow`.
 - The VM "events" are consumed using an [EventsEffect](../app/src/main/java/com/x8bit/bitwarden/ui/platform/base/util/EventsEffect.kt) and demonstrate how the `onNavigateToNextScreen` may be triggered.
 - The current state of the text, switch, and button are hoisted to the VM and pulled out from the `state`. User interactions with the switch and button result in "actions" being sent to the VM using `viewModel.trySendAction`.
@@ -317,8 +330,8 @@ The following shows off the basic structure of a composable `...Screen` implemen
 ```kotlin
 @Composable
 fun ExampleScreen(
+    viewModel: ExampleViewModel,
     onNavigateToNextScreen: (CompletionData) -> Unit,
-    viewModel: ExampleViewModel = hiltViewModel(),
 ) {
     // Collect state
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -388,11 +401,26 @@ fun ExampleScreen(
 
 ### Navigation
 
-Navigation in the app is achieved via the [Compose Navigation](https://developer.android.com/develop/ui/compose/navigation) component. This involves specifying "destinations" within a [NavHost](https://developer.android.com/reference/androidx/navigation/NavHost) and using a [NavController](https://developer.android.com/reference/androidx/navigation/NavController) to trigger actual navigation events. The app uses a mix of state-based navigation at the highest level (in order to determine the overall app flow the user is in) and event-based navigation (to handle navigation within a flow based on user interactions).
+Navigation in the app is achieved via [Navigation 3](https://developer.android.com/guide/navigation/navigation-3). In Navigation 3, the back stack is simply observable state owned by the app: a list of type-safe, `@Serializable` [NavKey](https://developer.android.com/reference/kotlin/androidx/navigation3/runtime/NavKey) routes. A [NavDisplay](https://developer.android.com/reference/kotlin/androidx/navigation3/ui/package-summary#NavDisplay) observes the back stack and renders the `NavEntry` that an `entryProvider` creates for each route. The app uses a mix of state-based navigation at the highest level (in order to determine the overall app flow the user is in) and event-based navigation (to handle navigation within a flow based on user interactions).
+
+The back stack is never modified directly. Instead, every back stack is owned by a [NavigationController](../ui/src/main/kotlin/com/bitwarden/ui/platform/navigation/NavigationController.kt), which exposes the back stack as a read-only list and provides the operations used to change it (`navigate`, `navigateBack`, `addSingleTop`, `popUpTo`, `navigatePoppingUpTo`, `replaceAll`, and `navigateToTopLevelRoute`). Navigation controllers are created with `rememberNavigationController` so that their back stacks survive configuration changes and process death.
+
+##### Navigation Graphs
+
+Every `NavDisplay` displays exactly one navigation graph: a `@Serializable` sealed class implementing `NavKey` (named `...Graph`) whose nested subclasses are the type-safe routes of every destination that the `NavDisplay` can show. Its `NavigationController` is typed by the graph (for example, `NavigationController<AuthGraph>`), so it is impossible to navigate to a route that the `NavDisplay` cannot show. A route of one graph may host a nested graph, in which case its entry displays another `NavDisplay` with its own `NavigationController`:
+
+- [MainGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/main/MainGraph.kt) is displayed by `MainActivity` and hosts the overlay navigation and the debug menu.
+- [OverlayNavGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/overlaynav/OverlayNavGraph.kt) is displayed by the [OverlayNavScreen](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/overlaynav/OverlayNavScreen.kt) and hosts the root navigation and any screen that can appear on top of it.
+- [RootNavGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavGraph.kt) is displayed by the [RootNavScreen](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavScreen.kt) and contains one route for each top-level section of the app (see "State-based Navigation"). Each section consisting of multiple screens hosts its own graph, such as the [AuthGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/auth/feature/auth/AuthGraph.kt) or the [VaultUnlockedGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlocked/VaultUnlockedGraph.kt), and the section route holds the initial back stack of that graph.
+- [VaultUnlockedNavBarGraph](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlockednavbar/VaultUnlockedNavBarGraph.kt) is displayed by the [VaultUnlockedNavBarScreen](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlockednavbar/VaultUnlockedNavBarScreen.kt) and contains one route for each bottom navigation tab. Each tab hosts its own graph (`VaultGraph`, `SendGraph`, `GeneratorGraph`, and `SettingsGraph`). The navigation controller and entries of every tab are owned by the navigation bar so that the state of each tab is retained while another tab is selected.
+
+A screen that is displayed by multiple graphs (such as the settings screens that are also available before logging in via the `PreAuthSettingsGraph`) has a route in each graph and a separate `...Destination` function for each graph. Its VM is created with the arguments it needs rather than with a route.
+
+Every `NavDisplay` uses the `rememberBitwardenNavEntryDecorators()` (or a helper built on them, such as `BitwardenNavDisplay`), which give each entry its own saveable state and `ViewModelStore`. This ensures that ViewModels are scoped to their entry and cleared once the entry is popped off of the back stack.
 
 #### State-based Navigation
 
-State-based navigation is handled by the [RootNavViewModel](../app/src/main/java/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavViewModel.kt) and [RootNavScreen](../app/src/main/java/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavScreen.kt). The current navigation state is determined within the `RootNavViewModel` by monitoring the overall [UserState](../app/src/main/java/com/x8bit/bitwarden/data/auth/repository/model/UserState.kt) along with any [SpecialCircumstance](../app/src/main/java/com/x8bit/bitwarden/data/platform/manager/model/SpecialCircumstance.kt). The `UserState` encodes whether there are any user accounts, whether they are logged in, etc., while the `SpecialCircumstance` describes a particular circumstance under which the app may have been launched (such as being opened in order to manually select an autofill value). The `RootNavState` calculated by the `RootNavViewModel` is then used by the `RootNavScreen` in order to trigger a navigation only if the overall state has changed.
+State-based navigation is handled by the [RootNavViewModel](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavViewModel.kt) and [RootNavScreen](../app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavScreen.kt). The current navigation state is determined within the `RootNavViewModel` by monitoring the overall [UserState](../app/src/main/kotlin/com/x8bit/bitwarden/data/auth/repository/model/UserState.kt) along with any [SpecialCircumstance](../app/src/main/kotlin/com/x8bit/bitwarden/data/platform/manager/model/SpecialCircumstance.kt). The `UserState` encodes whether there are any user accounts, whether they are logged in, etc., while the `SpecialCircumstance` describes a particular circumstance under which the app may have been launched (such as being opened in order to manually select an autofill value). The `RootNavState` calculated by the `RootNavViewModel` is then mapped by the `RootNavScreen` to the `RootNavGraph` route of the section for that state (including the initial back stack of the section's graph), which replaces the current back stack only if the overall state has changed. Every replacement gives the section a fresh instance (and fresh ViewModels), even if an equal route was already present.
 
 The benefit of state-based navigation at this level is that it allows for a variety of state changes that may happen deep within the data layer to automatically trigger navigation to the correct top-level flow without the rest of the UI needing to be concerned with these details. For example, when logging out the current user, the data layer can decide the new state and the `RootNavViewModel` can decide where to go next, rather than having the screen that triggered the logout action choose the next navigation state (which would then need to be redundantly handled in multiple places in the app).
 
@@ -400,62 +428,63 @@ State-based navigation should be limited to specific cases that affect the overa
 
 #### Event-based Navigation
 
-Event-based navigation is ultimately the result of some "action" sent to a VM, whether that comes directly from a user-interaction with the current screen or from some internal action of the VM sent as the result of some asynchronous call. The VM will send an "event" to the Compose layer, which will trigger a callback that will eventually make a call to a [NavController](https://developer.android.com/reference/androidx/navigation/NavController).
+Event-based navigation is ultimately the result of some "action" sent to a VM, whether that comes directly from a user-interaction with the current screen or from some internal action of the VM sent as the result of some asynchronous call. The VM will send an "event" to the Compose layer, which will trigger a callback that will eventually navigate using a `NavigationController`.
 
 #### Navigation Implementation
 
-At its most basic level, Compose Navigation relies on constructing String-based URIs with a root path to specify a destination and both path and query parameters to handle the passing of required and optional parameters. This process can typically be very error prone. The Bitwarden app borrows a pattern best exemplified by the [Now In Android sample project](https://github.com/android/nowinandroid) in order to make this process more type-safe. This consists of:
+The Bitwarden app keeps navigation type-safe and encapsulated by grouping the details for each screen into a single `...Navigation.kt` file. This consists of:
 
-- A type-safe `...Destination` extension function on [NavGraphBuilder](https://developer.android.com/reference/kotlin/androidx/navigation/NavGraphBuilder) for any single screen destination or a type-safe `...Graph` extension function on [NavGraphBuilder](https://developer.android.com/reference/kotlin/androidx/navigation/NavGraphBuilder) for any nested graph destination.
-- A type-safe `navigateTo...` extension function on [NavController](https://developer.android.com/reference/androidx/navigation/NavController) for any destination that is not simply the root of a graph.
-- A type-safe `...Args` class that pulls data from a `SavedStateHandle` for consumption by a VM.
+- A `@Serializable` `...Route`, nested within the `...Graph` sealed class of every graph that displays the destination, that holds all of the arguments for the destination. Routes may hold any `@Serializable` type, so arguments do not need to be flattened into primitives.
+- A `...Destination` extension function on [EntryProviderScope](https://developer.android.com/reference/kotlin/androidx/navigation3/runtime/EntryProviderScope) of the graph (for example, `EntryProviderScope<AuthGraph>`) that adds the screen's `entry` to the entry provider, creates the VM for the route, and declares the entry's transitions. Related destinations that make up a flow are grouped in a `...Destinations` extension function, and a route hosting a nested graph is added by a `...Graph` extension function.
+- A `navigateTo...` extension function on the `NavigationController` of the graph (for example, `NavigationController<AuthGraph>`) for any destination that is navigated to from elsewhere in the app.
 
-These are all then grouped into a single `...Navigation.kt` file where all of the raw String-based details can be hidden and only the exposed type-safe functions must be used by the rest of the app.
+Only the exposed type-safe functions must be used by the rest of the app.
+
+#### Transitions
+
+Transitions are declared in each entry's metadata using the reusable [EntryTransitions](../ui/src/main/kotlin/com/bitwarden/ui/platform/theme/EntryTransitions.kt) (`slideUp`, `push`, `rootPush`, and `stay`), which are built from the reusable animations in [TransitionProviders](../ui/src/main/kotlin/com/bitwarden/ui/platform/theme/Transition.kt). The entry being pushed (or popped) owns the entire transition, including how the entry beneath it animates. Entry transitions only apply to navigation within a flow; when a back stack is replaced or a different tab is selected, the default transitions of the hosting `NavDisplay` are used instead (see `NavDisplayTransitions`). Each section route of the `RootNavGraph` may declare how the whole section animates when the root back stack is replaced using `EntryTransitions.rootTransition(...)`.
 
 #### Example
 
 The following example demonstrates a sample `ExampleNavigation.kt` file with:
 
-- An `ExampleArgs` class that wraps `SavedStateHandle` and allows for the `isToggleEnabledInitialValue` to be extracted in a type-safe way.
-- A `NavGraphBuilder.exampleDestination` extension function that can be used to safely add the `ExampleScreen` to the navigation graph.
-- A `NavController.navigateToExample` extension function that can be called to navigate to the `ExampleScreen` in a type-safe way.
+- An `ExampleGraph.ExampleRoute` (declared in the `ExampleGraph` sealed class of the graph displaying the screen) that holds the `isToggleEnabled` argument in a type-safe way.
+- An `EntryProviderScope<ExampleGraph>.exampleDestination` extension function that can be used to safely add the `ExampleScreen` to the navigation entries, using slide transitions and creating the `ExampleViewModel` for the route.
+- A `NavigationController<ExampleGraph>.navigateToExample` extension function that can be called to navigate to the `ExampleScreen` in a type-safe way.
 
-Note in particular how consumers of the above **do not need to know the details of the actual route or path parameter**.
+Note in particular how consumers of the above **do not need to know the details of the actual route**.
 
 <details>
 <summary>Show example</summary>
 
 ```kotlin
+// ExampleGraph.kt
 @Serializable
-data class ExampleRoute(
-    val isToggleEnabled: Boolean,
-)
-
-data class ExampleArgs(
-    val isToggleEnabledInitialValue: Boolean,
-)
-
-fun SavedStateHandle.toExampleArgs(): ExampleArgs {
-    val route = this.toRoute<ExampleRoute>()
-    return ExampleArgs(isToggleEnabledInitialValue = route.isToggleEnabled)
+sealed class ExampleGraph : NavKey {
+    @Serializable
+    data class ExampleRoute(
+        val isToggleEnabled: Boolean,
+    ) : ExampleGraph()
 }
 
-fun NavGraphBuilder.exampleDestination(
+// ExampleNavigation.kt
+fun EntryProviderScope<ExampleGraph>.exampleDestination(
     onNavigateToNextScreen: (CompletionData) -> Unit,
 ) {
-    composableWithSlideTransitions<ExampleRoute> {
-        ExampleScreen(onNavigateToNextScreen = onNavigateToNextScreen)
+    entry<ExampleGraph.ExampleRoute>(metadata = EntryTransitions.slideUp) { route ->
+        ExampleScreen(
+            viewModel = hiltViewModel<ExampleViewModel, ExampleViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
+            onNavigateToNextScreen = onNavigateToNextScreen,
+        )
     }
 }
 
-fun NavController.navigateToExample(
+fun NavigationController<ExampleGraph>.navigateToExample(
     isToggleEnabled: Boolean,
-    navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = ExampleRoute(isToggleEnabled = isToggleEnabled),
-        navOptions = navOptions,
-    )
+    this.navigate(route = ExampleGraph.ExampleRoute(isToggleEnabled = isToggleEnabled))
 }
 ```
 

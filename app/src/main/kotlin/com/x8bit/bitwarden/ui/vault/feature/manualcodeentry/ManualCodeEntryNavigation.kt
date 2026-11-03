@@ -1,25 +1,18 @@
 package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the manual code entry screen.
+ * Add the manual code entry screen to the navigation entries.
  */
-@Serializable
-data object ManualCodeEntryRoute
-
-/**
- * Add the manual code entry screen to the nav graph.
- */
-fun NavGraphBuilder.vaultManualCodeEntryDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.vaultManualCodeEntryDestination(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScreen: () -> Unit,
 ) {
-    composableWithSlideTransitions<ManualCodeEntryRoute> {
+    slideUpEntry<VaultUnlockedGraph.ManualCodeEntryRoute> {
         ManualCodeEntryScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToQrCodeScreen = onNavigateToQrCodeScreen,
@@ -30,8 +23,6 @@ fun NavGraphBuilder.vaultManualCodeEntryDestination(
 /**
  * Navigate to the manual code entry screen.
  */
-fun NavController.navigateToManualCodeEntryScreen(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = ManualCodeEntryRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToManualCodeEntryScreen() {
+    this.navigate(route = VaultUnlockedGraph.ManualCodeEntryRoute)
 }

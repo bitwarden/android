@@ -1,32 +1,17 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.util.stayEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
- * The type-safe route for the welcome screen.
+ * Add the Welcome screen to the navigation entries.
  */
-@Serializable
-data object WelcomeRoute
-
-/**
- * Navigate to the welcome screen.
- */
-fun NavController.navigateToWelcome(navOptions: NavOptions? = null) {
-    this.navigate(route = WelcomeRoute, navOptions = navOptions)
-}
-
-/**
- * Add the Welcome screen to the nav graph.
- */
-fun NavGraphBuilder.welcomeDestination(
+fun EntryProviderScope<AuthGraph>.welcomeDestination(
     onNavigateToLogin: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
 ) {
-    composableWithStayTransitions<WelcomeRoute> {
+    stayEntry<AuthGraph.WelcomeRoute> {
         WelcomeScreen(
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToStartRegistration = onNavigateToStartRegistration,

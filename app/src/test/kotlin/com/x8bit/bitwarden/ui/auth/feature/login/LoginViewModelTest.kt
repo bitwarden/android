@@ -17,22 +17,19 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
@@ -50,20 +47,6 @@ class LoginViewModelTest : BaseViewModelTest() {
         every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-
-    @BeforeEach
-    fun setUp() {
-        mockkStatic(
-            SavedStateHandle::toLoginArgs,
-        )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toLoginArgs,
-        )
-    }
 
     @Test
     fun `initial state should be correct for non-custom Environments`() = runTest {
@@ -705,12 +688,12 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(state: LoginState? = null): LoginViewModel =
         LoginViewModel(
+            route = AuthGraph.LoginRoute(emailAddress = EMAIL),
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
             vaultRepository = vaultRepository,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL)
             },
         )
 

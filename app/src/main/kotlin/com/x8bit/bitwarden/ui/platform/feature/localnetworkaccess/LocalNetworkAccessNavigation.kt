@@ -2,27 +2,20 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavGraph
 
 /**
- * The type-safe route for the local network access screen.
+ * Add the local network access screen to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object LocalNetworkAccessRoute
-
-/**
- * Add the local network access screen to the nav graph.
- */
-fun NavGraphBuilder.localNetworkAccessDestination(
+fun EntryProviderScope<OverlayNavGraph>.localNetworkAccessDestination(
     onDismiss: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithSlideTransitions<LocalNetworkAccessRoute> {
+    slideUpEntry<OverlayNavGraph.LocalNetworkAccessRoute> {
         LocalNetworkAccessScreen(onDismiss = onDismiss)
         // If we are displaying the local network access screen, then we can just hide
         // the splash screen.
@@ -33,8 +26,6 @@ fun NavGraphBuilder.localNetworkAccessDestination(
 /**
  * Navigate to the local network access screen.
  */
-fun NavController.navigateToLocalNetworkAccess() {
-    this.navigate(route = LocalNetworkAccessRoute) {
-        launchSingleTop = true
-    }
+fun NavigationController<OverlayNavGraph>.navigateToLocalNetworkAccess() {
+    this.addSingleTop(route = OverlayNavGraph.LocalNetworkAccessRoute)
 }

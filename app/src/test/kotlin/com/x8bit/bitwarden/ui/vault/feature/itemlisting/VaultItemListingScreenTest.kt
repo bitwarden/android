@@ -57,15 +57,12 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -93,10 +90,10 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToAddEditSendScreenRoute: AddEditSendRoute? = null
-    private var onNavigateToViewSendScreenRoute: ViewSendRoute? = null
-    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
-    private var onNavigateToVaultEditItemScreenArgs: VaultAddEditArgs? = null
+    private var onNavigateToAddEditSendScreenRoute: VaultUnlockedGraph.AddEditSendRoute? = null
+    private var onNavigateToViewSendScreenRoute: VaultUnlockedGraph.ViewSendRoute? = null
+    private var onNavigateToVaultItemRoute: VaultUnlockedGraph.VaultItemRoute? = null
+    private var onNavigateToVaultEditItemScreenArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
     private var onNavigateToSearchType: SearchType? = null
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
     private var onNavigateToAddFolderCalled = false
@@ -138,7 +135,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemRoute = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
                 onNavigateToAddEditSendItem = { onNavigateToAddEditSendScreenRoute = it },
                 onNavigateToViewSendItem = { onNavigateToViewSendScreenRoute = it },
@@ -558,7 +555,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val sendType = SendItemType.TEXT
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem(sendType = sendType))
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD),
+            VaultUnlockedGraph.AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD),
             onNavigateToAddEditSendScreenRoute,
         )
     }
@@ -571,7 +568,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToViewSendItem(id = sendId, sendType = sendType),
         )
         assertEquals(
-            ViewSendRoute(sendId = sendId, sendType = sendType),
+            VaultUnlockedGraph.ViewSendRoute(sendId = sendId, sendType = sendType),
             onNavigateToViewSendScreenRoute,
         )
     }
@@ -591,7 +588,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToEditCipher(cipherId = cipherId, cipherType = type),
         )
         assertEquals(
-            VaultAddEditArgs(
+            VaultUnlockedGraph.VaultAddEditRoute(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = cipherId),
                 vaultItemCipherType = type,
             ),
@@ -607,7 +604,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToEditSendItem(id = sendId, sendType = sendType),
         )
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            VaultUnlockedGraph.AddEditSendRoute(
+                sendType = sendType,
+                modeType = ModeType.EDIT,
+                sendId = sendId,
+            ),
             onNavigateToAddEditSendScreenRoute,
         )
     }
@@ -618,8 +619,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val type = VaultItemCipherType.LOGIN
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToVaultItem(id = id, type = type))
         assertEquals(
-            VaultItemArgs(vaultItemId = id, cipherType = type),
-            onNavigateToVaultItemArgs,
+            VaultUnlockedGraph.VaultItemRoute(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemRoute,
         )
     }
 

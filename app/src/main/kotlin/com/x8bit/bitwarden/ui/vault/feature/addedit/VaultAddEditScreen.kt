@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -112,7 +111,7 @@ fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateToCardScanScreen: () -> Unit,
-    viewModel: VaultAddEditViewModel = hiltViewModel(),
+    viewModel: VaultAddEditViewModel,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     exitManager: ExitManager = LocalExitManager.current,

@@ -21,21 +21,18 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -65,16 +62,6 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     }
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any()) } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toLoginApprovalArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toLoginApprovalArgs)
     }
 
     @Test
@@ -438,6 +425,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: LoginApprovalState? = DEFAULT_STATE,
     ): LoginApprovalViewModel = LoginApprovalViewModel(
+        route = VaultUnlockedGraph.LoginApprovalRoute(fingerprint = FINGERPRINT),
         clock = fixedClock,
         authRepository = mockAuthRepository,
         specialCircumstanceManager = mockSpecialCircumstanceManager,
@@ -445,7 +433,6 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         toastManager = toastManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            every { toLoginApprovalArgs() } returns LoginApprovalArgs(fingerprint = FINGERPRINT)
         },
     )
 }

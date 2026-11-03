@@ -1,11 +1,10 @@
 package com.x8bit.bitwarden.ui.auth.feature.auth
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
-import androidx.navigation.navOptions
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
@@ -16,7 +15,6 @@ import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterprise
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.expiredRegistrationLinkDestination
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingRoute
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
 import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestination
@@ -36,181 +34,181 @@ import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.setPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.navigateToStartRegistration
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.startRegistrationDestination
+import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceDestination
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToTdeVaultUnlock
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.tdeVaultUnlockDestination
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.welcomeDestination
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToPreAuthSettings
-import com.x8bit.bitwarden.ui.platform.feature.settings.preAuthSettingsDestinations
-import kotlinx.serialization.Serializable
+import com.x8bit.bitwarden.ui.platform.feature.settings.preAuthSettingsDestination
 
 /**
- * The type-safe route for the auth graph.
+ * Add the auth section to the root navigation entries. The [RootNavGraph.AuthRoute] hosts the
+ * [AuthGraph].
  */
-@Serializable
-data object AuthGraphRoute
-
-/**
- * Add auth destinations to the nav graph.
- */
-@Suppress("LongMethod")
-fun NavGraphBuilder.authGraph(
-    navController: NavHostController,
-) {
-    navigation<AuthGraphRoute>(
-        startDestination = LandingRoute,
-    ) {
-        startRegistrationDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToCompleteRegistration = { emailAddress, verificationToken ->
-                navController.navigateToCompleteRegistration(
-                    emailAddress = emailAddress,
-                    verificationToken = verificationToken,
-                    fromEmail = false,
-                )
-            },
-            onNavigateToCheckEmail = { emailAddress ->
-                navController.navigateToCheckEmail(emailAddress = emailAddress)
-            },
-            onNavigateToEnvironment = { navController.navigateToEnvironment() },
+fun EntryProviderScope<RootNavGraph>.authGraph() {
+    entry<RootNavGraph.AuthRoute> { route ->
+        val navigationController = rememberNavigationController(
+            routes = route.backStack.toTypedArray(),
         )
-        checkEmailDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        completeRegistrationDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToPasswordGuidance = {
-                navController.navigateToMasterPasswordGuidance()
-            },
-            onNavigateToPreventAccountLockout = {
-                navController.navigateToPreventAccountLockout(isPasswordReset = false)
-            },
-            onNavigateToLogin = { emailAddress ->
-                navController.navigateToLogin(
-                    emailAddress = emailAddress,
-                    navOptions = navOptions {
-                        popUpTo(route = LandingRoute)
-                    },
-                )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                authDestinations(navigationController = navigationController)
             },
         )
-        enterpriseSignOnDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToSetPassword = { navController.navigateToSetPassword() },
-            onNavigateToTwoFactorLogin = { emailAddress, orgIdentifier ->
-                navController.navigateToTwoFactorLogin(
-                    emailAddress = emailAddress,
-                    password = null,
-                    orgIdentifier = orgIdentifier,
-                )
-            },
-        )
-        setPasswordDestination()
-        landingDestination(
-            onNavigateToLogin = { emailAddress ->
-                navController.navigateToLogin(
-                    emailAddress = emailAddress,
-                )
-            },
-            onNavigateToEnvironment = {
-                navController.navigateToEnvironment()
-            },
-            onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
-            onNavigateToPreAuthSettings = { navController.navigateToPreAuthSettings() },
-        )
-        welcomeDestination(
-            onNavigateToLogin = { navController.navigateToLanding() },
-            onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
-        )
-        loginDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToMasterPasswordHint = { emailAddress ->
-                navController.navigateToMasterPasswordHint(
-                    emailAddress = emailAddress,
-                )
-            },
-            onNavigateToEnterpriseSignOn = { emailAddress ->
-                navController.navigateToEnterpriseSignOn(
-                    emailAddress = emailAddress,
-                )
-            },
-            onNavigateToLoginWithDevice = { emailAddress ->
-                navController.navigateToLoginWithDevice(
-                    emailAddress = emailAddress,
-                    loginType = LoginWithDeviceType.OTHER_DEVICE,
-                )
-            },
-            onNavigateToTwoFactorLogin = { emailAddress, password, isNewDeviceVerification ->
-                navController.navigateToTwoFactorLogin(
-                    emailAddress = emailAddress,
-                    password = password,
-                    orgIdentifier = null,
-                    isNewDeviceVerification = isNewDeviceVerification,
-                )
-            },
-        )
-        loginWithDeviceDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToTwoFactorLogin = {
-                navController.navigateToTwoFactorLogin(
-                    emailAddress = it,
-                    password = null,
-                    orgIdentifier = null,
-                )
-            },
-        )
-        environmentDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        masterPasswordHintDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        twoFactorLoginDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        masterPasswordGuidanceDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToGeneratePassword = { navController.navigateToMasterPasswordGenerator() },
-        )
-        preventAccountLockoutDestination(
-            isPasswordReset = false,
-            onNavigateBack = { navController.popBackStack() },
-        )
-        masterPasswordGeneratorDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToPreventLockout = {
-                navController.navigateToPreventAccountLockout(isPasswordReset = false)
-            },
-            onNavigateBackWithPassword = {
-                navController.popUpToCompleteRegistration()
-            },
-        )
-        expiredRegistrationLinkDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToStartRegistration = {
-                navController.navigateToStartRegistration(
-                    navOptions = navOptions {
-                        popUpTo(route = LandingRoute)
-                    },
-                )
-            },
-            onNavigateToLogin = {
-                navController.navigateToLanding(
-                    navOptions = navOptions {
-                        popUpTo(route = LandingRoute)
-                    },
-                )
-            },
-        )
-        preAuthSettingsDestinations(navController = navController)
     }
 }
 
-/**
- * Navigate to the auth screen. Note this will only work if auth destination was added
- * via [authGraph].
- */
-fun NavController.navigateToAuthGraph(
-    navOptions: NavOptions? = null,
+@Suppress("LongMethod")
+private fun EntryProviderScope<AuthGraph>.authDestinations(
+    navigationController: NavigationController<AuthGraph>,
 ) {
-    navigate(route = AuthGraphRoute, navOptions = navOptions)
+    startRegistrationDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToCompleteRegistration = { emailAddress, verificationToken ->
+            navigationController.navigateToCompleteRegistration(
+                emailAddress = emailAddress,
+                verificationToken = verificationToken,
+                fromEmail = false,
+            )
+        },
+        onNavigateToCheckEmail = { emailAddress ->
+            navigationController.navigateToCheckEmail(emailAddress = emailAddress)
+        },
+        onNavigateToEnvironment = { navigationController.navigateToEnvironment() },
+    )
+    checkEmailDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    completeRegistrationDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToPasswordGuidance = { navigationController.navigateToMasterPasswordGuidance() },
+        onNavigateToPreventAccountLockout = {
+            navigationController.navigateToPreventAccountLockout()
+        },
+        onNavigateToLogin = { emailAddress ->
+            navigationController.navigatePoppingUpTo(
+                route = AuthGraph.LoginRoute(emailAddress = emailAddress),
+                predicate = { it is AuthGraph.LoginRoute },
+            )
+        },
+    )
+    enterpriseSignOnDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToSetPassword = { navigationController.navigateToSetPassword() },
+        onNavigateToTwoFactorLogin = { emailAddress, orgIdentifier ->
+            navigationController.navigateToTwoFactorLogin(
+                emailAddress = emailAddress,
+                password = null,
+                orgIdentifier = orgIdentifier,
+            )
+        },
+    )
+    setPasswordDestination()
+    landingDestination(
+        onNavigateToLogin = { emailAddress ->
+            navigationController.navigateToLogin(emailAddress = emailAddress)
+        },
+        onNavigateToEnvironment = { navigationController.navigateToEnvironment() },
+        onNavigateToStartRegistration = { navigationController.navigateToStartRegistration() },
+        onNavigateToPreAuthSettings = { navigationController.navigateToPreAuthSettings() },
+    )
+    welcomeDestination(
+        onNavigateToLogin = { navigationController.navigateToLanding() },
+        onNavigateToStartRegistration = { navigationController.navigateToStartRegistration() },
+    )
+    loginDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToMasterPasswordHint = { emailAddress ->
+            navigationController.navigateToMasterPasswordHint(emailAddress = emailAddress)
+        },
+        onNavigateToEnterpriseSignOn = { emailAddress ->
+            navigationController.navigateToEnterpriseSignOn(emailAddress = emailAddress)
+        },
+        onNavigateToLoginWithDevice = { emailAddress ->
+            navigationController.navigateToLoginWithDevice(
+                emailAddress = emailAddress,
+                loginType = LoginWithDeviceType.OTHER_DEVICE,
+            )
+        },
+        onNavigateToTwoFactorLogin = { emailAddress, password, isNewDeviceVerification ->
+            navigationController.navigateToTwoFactorLogin(
+                emailAddress = emailAddress,
+                password = password,
+                orgIdentifier = null,
+                isNewDeviceVerification = isNewDeviceVerification,
+            )
+        },
+    )
+    loginWithDeviceDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToTwoFactorLogin = {
+            navigationController.navigateToTwoFactorLogin(
+                emailAddress = it,
+                password = null,
+                orgIdentifier = null,
+            )
+        },
+    )
+    environmentDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    masterPasswordHintDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    twoFactorLoginDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    masterPasswordGuidanceDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToGeneratePassword = { navigationController.navigateToMasterPasswordGenerator() },
+    )
+    preventAccountLockoutDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    masterPasswordGeneratorDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToPreventLockout = { navigationController.navigateToPreventAccountLockout() },
+        onNavigateBackWithPassword = { navigationController.popUpToCompleteRegistration() },
+    )
+    expiredRegistrationLinkDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToStartRegistration = {
+            navigationController.navigatePoppingUpTo(
+                route = AuthGraph.StartRegistrationRoute,
+                predicate = { it is AuthGraph.LandingRoute },
+            )
+        },
+        onNavigateToLogin = {
+            // The landing screen is replaced, rather than duplicated, since every entry in the
+            // back stack must be unique.
+            navigationController.navigatePoppingUpTo(
+                route = AuthGraph.LandingRoute,
+                inclusive = true,
+                predicate = { it is AuthGraph.LandingRoute },
+            )
+        },
+    )
+    preAuthSettingsDestination(onNavigateBack = { navigationController.navigateBack() })
+    trustedDeviceDestination(
+        onNavigateToAdminApproval = {
+            navigationController.navigateToLoginWithDevice(
+                emailAddress = it,
+                loginType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+            )
+        },
+        onNavigateToLoginWithOtherDevice = {
+            navigationController.navigateToLoginWithDevice(
+                emailAddress = it,
+                loginType = LoginWithDeviceType.SSO_OTHER_DEVICE,
+            )
+        },
+        onNavigateToLock = { navigationController.navigateToTdeVaultUnlock() },
+    )
+    tdeVaultUnlockDestination()
+    vaultUnlockDestination()
 }

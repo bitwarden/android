@@ -49,13 +49,12 @@ import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.selectionText
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -65,8 +64,8 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
-    onNavigateToAddEditSend: (AddEditSendRoute) -> Unit,
-    onNavigateToViewSend: (ViewSendRoute) -> Unit,
+    onNavigateToAddEditSend: (VaultUnlockedGraph.AddEditSendRoute) -> Unit,
+    onNavigateToViewSend: (VaultUnlockedGraph.ViewSendRoute) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -95,13 +94,16 @@ fun SendScreen(
 
             is SendEvent.NavigateNewSend -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(modeType = ModeType.ADD, sendType = event.sendType),
+                    VaultUnlockedGraph.AddEditSendRoute(
+                        modeType = ModeType.ADD,
+                        sendType = event.sendType,
+                    ),
                 )
             }
 
             is SendEvent.NavigateToEditSend -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         modeType = ModeType.EDIT,
                         sendType = event.sendType,
                         sendId = event.sendId,
@@ -111,7 +113,10 @@ fun SendScreen(
 
             is SendEvent.NavigateToViewSend -> {
                 onNavigateToViewSend(
-                    ViewSendRoute(sendId = event.sendId, sendType = event.sendType),
+                    VaultUnlockedGraph.ViewSendRoute(
+                        sendId = event.sendId,
+                        sendType = event.sendType,
+                    ),
                 )
             }
 

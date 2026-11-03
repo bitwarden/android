@@ -1,62 +1,44 @@
 package com.x8bit.bitwarden.ui.auth.feature.resetpassword
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToPreventAccountLockout
-import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.preventAccountLockoutDestination
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.navigation.util.rootTransitionEntry
+import com.bitwarden.ui.platform.theme.RootTransition
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToResetPasswordPreventAccountLockout
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.resetPasswordPreventAccountLockoutDestination
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavGraph
 
 /**
- * The type-safe route for the reset password graph.
+ * Add the reset password section to the root navigation entries. The
+ * [RootNavGraph.ResetPasswordRoute] hosts the [ResetPasswordGraph].
  */
-@Serializable
-data object ResetPasswordGraphRoute
-
-/**
- * The type-safe route for the reset password screen.
- */
-@Serializable
-data object ResetPasswordRoute
-
-/**
- * Add password reset destinations to the nav graph.
- */
-fun NavGraphBuilder.passwordResetGraph(navController: NavHostController) {
-    navigation<ResetPasswordGraphRoute>(
-        startDestination = ResetPasswordRoute,
-    ) {
-        resetPasswordDestination(
-            onNavigateToPreventAccountLockOut = {
-                navController.navigateToPreventAccountLockout(isPasswordReset = true)
+fun EntryProviderScope<RootNavGraph>.resetPasswordGraph() {
+    rootTransitionEntry<RootNavGraph.ResetPasswordRoute>(rootTransition = RootTransition.SLIDE_UP) {
+        val navigationController = rememberNavigationController<ResetPasswordGraph>(
+            routes = arrayOf(ResetPasswordGraph.ResetPasswordRoute),
+        )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                resetPasswordDestination(
+                    onNavigateToPreventAccountLockOut = {
+                        navigationController.navigateToResetPasswordPreventAccountLockout()
+                    },
+                )
+                resetPasswordPreventAccountLockoutDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                )
             },
         )
-        preventAccountLockoutDestination(
-            isPasswordReset = true,
-            onNavigateBack = { navController.popBackStack() },
-        )
     }
 }
 
-/**
- * Add the Reset Password screen to the nav graph.
- */
-fun NavGraphBuilder.resetPasswordDestination(
+private fun EntryProviderScope<ResetPasswordGraph>.resetPasswordDestination(
     onNavigateToPreventAccountLockOut: () -> Unit,
 ) {
-    composable<ResetPasswordRoute> {
+    entry<ResetPasswordGraph.ResetPasswordRoute> {
         ResetPasswordScreen(onNavigateToPreventAccountLockOut = onNavigateToPreventAccountLockOut)
     }
-}
-
-/**
- * Navigate to the Reset Password graph.
- */
-fun NavController.navigateToResetPasswordGraph(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = ResetPasswordGraphRoute, navOptions = navOptions)
 }

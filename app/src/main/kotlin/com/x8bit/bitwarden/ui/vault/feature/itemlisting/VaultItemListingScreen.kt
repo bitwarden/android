@@ -16,7 +16,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
@@ -56,13 +55,10 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -76,13 +72,13 @@ import kotlinx.collections.immutable.persistentListOf
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
-    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItemScreen: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
+    onNavigateToVaultEditItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultAddItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToAddFolder: (selectedFolderId: String?) -> Unit,
-    onNavigateToAddEditSendItem: (route: AddEditSendRoute) -> Unit,
-    onNavigateToViewSendItem: (route: ViewSendRoute) -> Unit,
+    onNavigateToAddEditSendItem: (route: VaultUnlockedGraph.AddEditSendRoute) -> Unit,
+    onNavigateToViewSendItem: (route: VaultUnlockedGraph.ViewSendRoute) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -90,7 +86,7 @@ fun VaultItemListingScreen(
     credentialProviderCompletionManager: CredentialProviderCompletionManager =
         LocalCredentialProviderCompletionManager.current,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
-    viewModel: VaultItemListingViewModel = hiltViewModel(),
+    viewModel: VaultItemListingViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val userVerificationHandlers = remember(viewModel) {
@@ -108,7 +104,7 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemListingEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItemScreen(VaultItemArgs(event.id, event.type))
+                onNavigateToVaultItemScreen(VaultUnlockedGraph.VaultItemRoute(event.id, event.type))
             }
 
             is VaultItemListingEvent.ShowShareSheet -> {
@@ -117,7 +113,7 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = event.vaultItemCipherType,
                         selectedFolderId = event.selectedFolderId,
@@ -128,13 +124,13 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToViewSendItem -> {
                 onNavigateToViewSendItem(
-                    ViewSendRoute(sendId = event.id, sendType = event.sendType),
+                    VaultUnlockedGraph.ViewSendRoute(sendId = event.id, sendType = event.sendType),
                 )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
                 onNavigateToVaultEditItemScreen(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.cipherId),
                         vaultItemCipherType = event.cipherType,
                     ),
@@ -149,7 +145,7 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddSendItem -> {
                 onNavigateToAddEditSendItem(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         sendType = event.sendType,
                         modeType = ModeType.ADD,
                     ),
@@ -158,7 +154,7 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToEditSendItem -> {
                 onNavigateToAddEditSendItem(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         sendType = event.sendType,
                         modeType = ModeType.EDIT,
                         sendId = event.id,
