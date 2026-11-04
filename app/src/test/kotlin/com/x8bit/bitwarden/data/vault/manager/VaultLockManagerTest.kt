@@ -114,9 +114,9 @@ class VaultLockManagerTest {
         every { elapsedRealtimeMs } returns FIXED_CLOCK.millis()
     }
     private val kdfManager: KdfManager = mockk {
-        every { needsKdfUpdateToMinimums() } returns false
+        every { needsKdfUpdateToMinimums(userId = any()) } returns false
         coEvery {
-            updateKdfToMinimumsIfNeeded(password = any())
+            updateKdfToMinimumsIfNeeded(userId = any(), password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
     private val pinProtectedUserKeyManager: PinProtectedUserKeyManager = mockk {
@@ -922,7 +922,6 @@ class VaultLockManagerTest {
     @Test
     fun `unlockVault with initializeCrypto success for a non-Never VaultTimeout should return Success`() =
         runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
             val masterPassword = "mockValue"
@@ -1013,7 +1012,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
-                kdfManager.updateKdfToMinimumsIfNeeded(masterPassword)
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID, password = masterPassword)
                 keyRotationManager.rotateAutoUnlockKey(userId = USER_ID)
                 keyRotationManager.rotateAuthenticatorSyncKey(userId = USER_ID)
             }
@@ -1775,7 +1774,6 @@ class VaultLockManagerTest {
     @Test
     fun `unlockVault with initUserCryptoMethod masterPasswordUnlock success should hash and store master password`() =
         runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
             val masterPassword = "mockValue"
@@ -1861,7 +1859,7 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
                 trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
-                kdfManager.updateKdfToMinimumsIfNeeded(password = masterPassword)
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID, password = masterPassword)
                 authSdkSource.hashPassword(
                     salt = MOCK_MASTER_PASSWORD_UNLOCK_DATA.salt,
                     password = masterPassword,
@@ -1875,7 +1873,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock success for a non-active user should not update the KDF`() =
+    fun `unlockVault with initUserCryptoMethod masterPasswordUnlock success for a non-active user should update the KDF for the unlocking user`() =
         runTest {
             val kdf = MOCK_PROFILE.toSdkParams()
             val email = MOCK_PROFILE.email
@@ -1923,8 +1921,8 @@ class VaultLockManagerTest {
             )
 
             assertEquals(VaultUnlockResult.Success, result)
-            coVerify(exactly = 0) {
-                kdfManager.updateKdfToMinimumsIfNeeded(password = any())
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID, password = masterPassword)
             }
         }
 

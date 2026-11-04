@@ -30,7 +30,7 @@ class KdfManagerImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    override fun needsKdfUpdateToMinimums(): Boolean {
+    override fun needsKdfUpdateToMinimums(userId: String): Boolean {
         if (!featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)) {
             return false
         }
@@ -38,7 +38,7 @@ class KdfManagerImpl(
         val account = authDiskSource
             .userState
             ?.accounts
-            ?.get(activeUserId)
+            ?.get(userId)
             ?: return false
 
         if (account.profile.userDecryptionOptions != null &&
@@ -52,10 +52,19 @@ class KdfManagerImpl(
             account.profile.kdfIterations < DEFAULT_PBKDF2_ITERATIONS
     }
 
-    override suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult {
-        val userId = activeUserId ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
+    override suspend fun updateKdfToMinimumsIfNeeded(
+        userId: String,
+        password: String,
+    ): UpdateKdfMinimumsResult {
+        // The update request is authenticated as the active user, so only update the KDF when
+        // the given user is the active user. This prevents updating the KDF of a user that is not
+        // active yet, such as when logging in to an additional account.
+        if (userId != activeUserId) {
+            Timber.w("[Auth] Skipped KDF update for a user that is not the active user")
+            return UpdateKdfMinimumsResult.ActiveAccountNotFound
+        }
 
-        if (!needsKdfUpdateToMinimums()) {
+        if (!needsKdfUpdateToMinimums(userId = userId)) {
             return UpdateKdfMinimumsResult.Success
         }
         return vaultSdkSource
@@ -70,7 +79,7 @@ class KdfManagerImpl(
             .fold(
                 onSuccess = {
                     authDiskSource.userState = authDiskSource.userState
-                        ?.toUserStateJsonKdfUpdatedMinimums()
+                        ?.toUserStateJsonKdfUpdatedMinimums(userId = userId)
                     Timber.d("[Auth] Upgraded user's KDF to minimums")
                     UpdateKdfMinimumsResult.Success
                 },

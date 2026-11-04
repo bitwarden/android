@@ -734,17 +734,17 @@ internal class VaultLockManagerImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ) {
         val password = initUserCryptoMethod.password ?: return
-        // The KdfManager operates on the active user, so only update the KDF when the unlocking
-        // user is the active user. When logging in to an additional account, the new account is
-        // not active yet and the login flow updates the KDF once the account becomes active.
-        if (userId != activeUserId) return
         kdfManager
             .updateKdfToMinimumsIfNeeded(
+                userId = userId,
                 password = password,
             )
             .also { result ->
                 if (result is UpdateKdfMinimumsResult.Error) {
-                    Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                    Timber.e(
+                        result.error,
+                        message = "Failed to silent update KDF settings on vault unlock.",
+                    )
                 }
             }
     }

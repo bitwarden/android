@@ -274,9 +274,9 @@ class AuthRepositoryTest {
         coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
     }
     private val kdfManager: KdfManager = mockk {
-        every { needsKdfUpdateToMinimums() } returns false
+        every { needsKdfUpdateToMinimums(userId = any()) } returns false
         coEvery {
-            updateKdfToMinimumsIfNeeded(password = any())
+            updateKdfToMinimumsIfNeeded(userId = any(), password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
     private val toastManager: ToastManager = mockk {
@@ -2058,6 +2058,136 @@ class AuthRepositoryTest {
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login get token succeeds for the first account should update the KDF for the logging in user after saving the user state`() =
+        runTest {
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns SINGLE_USER_STATE_1
+            var userStateDuringKdfUpdate: UserStateJson? = null
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } answers {
+                userStateDuringKdfUpdate = fakeAuthDiskSource.userState
+                UpdateKdfMinimumsResult.Success
+            }
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            // The logging in user must already be saved as the active user when the KDF is
+            // updated, so the update is performed for that user.
+            assertEquals(SINGLE_USER_STATE_1, userStateDuringKdfUpdate)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login get token succeeds when adding an account should update the KDF only for the logging in user after saving the user state`() =
+        runTest {
+            // User 2 is the active user when User 1 is added.
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            repository.hasPendingAccountAddition = true
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            var userStateDuringUnlock: UserStateJson? = null
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } answers {
+                userStateDuringUnlock = fakeAuthDiskSource.userState
+                VaultUnlockResult.Success
+            }
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = SINGLE_USER_STATE_2,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns MULTI_USER_STATE
+            var userStateDuringKdfUpdate: UserStateJson? = null
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } answers {
+                userStateDuringKdfUpdate = fakeAuthDiskSource.userState
+                UpdateKdfMinimumsResult.Success
+            }
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            // The previously active user is still active on disk while the new user's vault is
+            // unlocked, so the KDF must not be updated at that point.
+            assertEquals(SINGLE_USER_STATE_2, userStateDuringUnlock)
+            // The new user must already be saved as the active user when the KDF is updated.
+            assertEquals(MULTI_USER_STATE, userStateDuringKdfUpdate)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+            // The KDF of the previously active user must never be updated with the new user's
+            // password.
+            coVerify(exactly = 0) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_2, password = any())
             }
         }
 
@@ -6539,6 +6669,47 @@ class AuthRepositoryTest {
             ),
             result,
         )
+    }
+
+    @Test
+    fun `needsKdfUpdateToMinimums with no active user should return false`() {
+        fakeAuthDiskSource.userState = null
+
+        assertFalse(repository.needsKdfUpdateToMinimums())
+        verify(exactly = 0) { kdfManager.needsKdfUpdateToMinimums(userId = any()) }
+    }
+
+    @Test
+    fun `needsKdfUpdateToMinimums should check the active user`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        every { kdfManager.needsKdfUpdateToMinimums(userId = USER_ID_1) } returns true
+
+        assertTrue(repository.needsKdfUpdateToMinimums())
+    }
+
+    @Test
+    fun `updateKdfToMinimumsIfNeeded with no active user should return ActiveAccountNotFound`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+
+            assertEquals(UpdateKdfMinimumsResult.ActiveAccountNotFound, result)
+            coVerify(exactly = 0) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = any(), password = any())
+            }
+        }
+
+    @Test
+    fun `updateKdfToMinimumsIfNeeded should update the active user`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+
+        assertEquals(UpdateKdfMinimumsResult.Success, result)
+        coVerify(exactly = 1) {
+            kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+        }
     }
 
     @Test

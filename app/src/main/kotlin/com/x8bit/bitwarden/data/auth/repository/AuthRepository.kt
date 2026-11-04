@@ -5,7 +5,6 @@ import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
-import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -26,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
@@ -49,7 +49,6 @@ interface AuthRepository :
     AuthRequestManager,
     AuthStateManager,
     BiometricsEncryptionManager,
-    KdfManager,
     OrganizationManager,
     PasswordPolicyManager,
     UserStateManager {
@@ -58,6 +57,16 @@ interface AuthRepository :
      * in order to receive updates whenever [setDuoCallbackTokenResult] is called.
      */
     val duoTokenResultFlow: Flow<DuoCallbackTokenResult>
+
+    /**
+     * Checks if the active user's KDF settings are below the minimums and need an update.
+     */
+    fun needsKdfUpdateToMinimums(): Boolean
+
+    /**
+     * Updates the active user's KDF settings if below the minimums.
+     */
+    suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult
 
     /**
      * Flow of the current [SsoCallbackResult]. Subscribers should listen to the flow in order to
