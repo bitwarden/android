@@ -6672,47 +6672,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `needsKdfUpdateToMinimums with no active user should return false`() {
-        fakeAuthDiskSource.userState = null
-
-        assertFalse(repository.needsKdfUpdateToMinimums())
-        verify(exactly = 0) { kdfManager.needsKdfUpdateToMinimums(userId = any()) }
-    }
-
-    @Test
-    fun `needsKdfUpdateToMinimums should check the active user`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        every { kdfManager.needsKdfUpdateToMinimums(userId = USER_ID_1) } returns true
-
-        assertTrue(repository.needsKdfUpdateToMinimums())
-    }
-
-    @Test
-    fun `updateKdfToMinimumsIfNeeded with no active user should return ActiveAccountNotFound`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
-
-            assertEquals(UpdateKdfMinimumsResult.ActiveAccountNotFound, result)
-            coVerify(exactly = 0) {
-                kdfManager.updateKdfToMinimumsIfNeeded(userId = any(), password = any())
-            }
-        }
-
-    @Test
-    fun `updateKdfToMinimumsIfNeeded should update the active user`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
-
-        assertEquals(UpdateKdfMinimumsResult.Success, result)
-        coVerify(exactly = 1) {
-            kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
-        }
-    }
-
-    @Test
     fun `switchAccount when there is no saved UserState should do nothing`() {
         val updatedUserId = USER_ID_2
 

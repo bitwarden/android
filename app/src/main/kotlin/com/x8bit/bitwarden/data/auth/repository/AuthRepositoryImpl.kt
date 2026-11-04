@@ -179,6 +179,7 @@ internal class AuthRepositoryImpl(
     AuthRequestManager by authRequestManager,
     AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
+    KdfManager by kdfManager,
     OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
@@ -793,18 +794,6 @@ internal class AuthRepositoryImpl(
                 message = null,
                 error = MissingPropertyException("Resend New Device OTP Request"),
             )
-
-    override fun needsKdfUpdateToMinimums(): Boolean =
-        activeUserId
-            ?.let { kdfManager.needsKdfUpdateToMinimums(userId = it) }
-            ?: false
-
-    override suspend fun updateKdfToMinimumsIfNeeded(
-        password: String,
-    ): UpdateKdfMinimumsResult =
-        activeUserId
-            ?.let { kdfManager.updateKdfToMinimumsIfNeeded(userId = it, password = password) }
-            ?: UpdateKdfMinimumsResult.ActiveAccountNotFound
 
     override fun switchAccount(userId: String): SwitchAccountResult {
         val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
