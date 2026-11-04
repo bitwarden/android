@@ -933,7 +933,7 @@ private fun PasswordCapitalLettersToggleItem(
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
-        label = "A-Z",
+        label = "A\u2013Z",
         contentDescription = stringResource(id = BitwardenString.uppercase_ato_z),
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
@@ -951,7 +951,7 @@ private fun PasswordLowercaseLettersToggleItem(
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
-        label = "a-z",
+        label = "a\u2013z",
         contentDescription = stringResource(id = BitwardenString.lowercase_ato_z),
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
@@ -969,7 +969,7 @@ private fun PasswordNumbersToggleItem(
     enabled: Boolean = true,
 ) {
     BitwardenSwitch(
-        label = "0-9",
+        label = "0\u20139",
         contentDescription = stringResource(id = BitwardenString.numbers_zero_to_nine),
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
