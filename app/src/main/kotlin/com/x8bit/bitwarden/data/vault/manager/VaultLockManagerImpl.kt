@@ -266,7 +266,7 @@ internal class VaultLockManagerImpl(
         processMasterPassword(initUserCryptoMethod = initUserCryptoMethod, userId = userId)
         clearInvalidUnlockCount(userId = userId)
         trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
-        updateKdfIfNeeded(initUserCryptoMethod)
+        updateKdfIfNeeded(userId = userId, initUserCryptoMethod = initUserCryptoMethod)
         pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = userId)
         setVaultToUnlocked(userId = userId)
         keyRotationManager.rotateAutoUnlockKey(userId = userId)
@@ -729,8 +729,15 @@ internal class VaultLockManagerImpl(
         return (accounts.find { it.userId == userId }?.isLoggedIn) == false
     }
 
-    private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
+    private suspend fun updateKdfIfNeeded(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
         val password = initUserCryptoMethod.password ?: return
+        // The KdfManager operates on the active user, so only update the KDF when the unlocking
+        // user is the active user. When logging in to an additional account, the new account is
+        // not active yet and the login flow updates the KDF once the account becomes active.
+        if (userId != activeUserId) return
         kdfManager
             .updateKdfToMinimumsIfNeeded(
                 password = password,
