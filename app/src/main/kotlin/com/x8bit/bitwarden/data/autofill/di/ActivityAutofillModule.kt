@@ -32,8 +32,10 @@ object ActivityAutofillModule {
     @Provides
     fun provideActivityScopedBrowserThirdPartyAutofillManager(
         activity: Activity,
+        dispatcherManager: DispatcherManager,
     ): BrowserThirdPartyAutofillManager = BrowserThirdPartyAutofillManagerImpl(
         context = activity.baseContext,
+        dispatcherManager = dispatcherManager,
     )
 
     @ActivityScoped
@@ -45,7 +47,6 @@ object ActivityAutofillModule {
         autofillEnabledManager: AutofillEnabledManager,
         lifecycleScope: LifecycleCoroutineScope,
         browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
-        dispatcherManager: DispatcherManager,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
@@ -54,7 +55,6 @@ object ActivityAutofillModule {
             autofillEnabledManager = autofillEnabledManager,
             lifecycleScope = lifecycleScope,
             browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
-            dispatcherManager = dispatcherManager,
         )
 
     /**

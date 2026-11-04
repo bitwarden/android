@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.autofill.manager
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
@@ -11,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofi
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -42,11 +42,11 @@ class AutofillActivityManagerTest {
         every { coroutineContext } returns UnconfinedTestDispatcher()
     }
     private val browserThirdPartyAutofillManager = mockk<BrowserThirdPartyAutofillManager> {
-        every { stableBraveAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
-        every { stableChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
-        every { betaChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
-        every { stableVivaldiAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
-        every { defaultBrowserPackageName } returns null
+        coEvery { getStableBraveAutofillStatus() } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        coEvery { getStableChromeAutofillStatus() } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        coEvery { getBetaChromeAutofillStatus() } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        coEvery { getStableVivaldiAutofillStatus() } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        coEvery { getDefaultBrowserPackageName() } returns null
     }
 
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager =
@@ -61,7 +61,6 @@ class AutofillActivityManagerTest {
         lifecycleScope = lifecycleScope,
         browserThirdPartyAutofillManager = browserThirdPartyAutofillManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
-        dispatcherManager = FakeDispatcherManager(),
     )
 
     private var isAutofillEnabledAndSupported = false
@@ -101,7 +100,7 @@ class AutofillActivityManagerTest {
                     DEFAULT_EXPECTED_AUTOFILL_STATUS,
                     awaitItem(),
                 )
-                every { browserThirdPartyAutofillManager.betaChromeAutofillStatus } returns
+                coEvery { browserThirdPartyAutofillManager.getBetaChromeAutofillStatus() } returns
                     updatedBetaState
                 mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
                 assertEquals(

@@ -2,20 +2,17 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
  * Primary implementation of [AutofillActivityManager].
  */
-@Suppress("LongParameterList")
 class AutofillActivityManagerImpl(
     private val autofillManager: AutofillManager,
     private val browserThirdPartyAutofillManager: BrowserThirdPartyAutofillManager,
@@ -23,7 +20,6 @@ class AutofillActivityManagerImpl(
     appStateManager: AppStateManager,
     lifecycleScope: LifecycleCoroutineScope,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
-    private val dispatcherManager: DispatcherManager,
 ) : AutofillActivityManager {
     private val autofillManagerIsEnabled: Boolean
         get() = try {
@@ -54,19 +50,18 @@ class AutofillActivityManagerImpl(
             autofillManagerHasEnabledAutofillServices &&
             autofillManagerIsAutofillSupported
 
-    /**
-     * Queries each browser's content provider, which is cross-process I/O. This must not be read
-     * on the main thread.
-     */
-    private val browserAutofillStatus: BrowserThirdPartyAutofillStatus
-        get() = BrowserThirdPartyAutofillStatus(
-            braveStableStatusData = browserThirdPartyAutofillManager.stableBraveAutofillStatus,
-            chromeStableStatusData = browserThirdPartyAutofillManager.stableChromeAutofillStatus,
-            chromeBetaChannelStatusData = browserThirdPartyAutofillManager.betaChromeAutofillStatus,
+    private suspend fun getBrowserAutofillStatus(): BrowserThirdPartyAutofillStatus =
+        BrowserThirdPartyAutofillStatus(
+            braveStableStatusData = browserThirdPartyAutofillManager
+                .getStableBraveAutofillStatus(),
+            chromeStableStatusData = browserThirdPartyAutofillManager
+                .getStableChromeAutofillStatus(),
+            chromeBetaChannelStatusData = browserThirdPartyAutofillManager
+                .getBetaChromeAutofillStatus(),
             vivaldiStableChannelStatusData = browserThirdPartyAutofillManager
-                .stableVivaldiAutofillStatus,
+                .getStableVivaldiAutofillStatus(),
             defaultBrowserPackageName = browserThirdPartyAutofillManager
-                .defaultBrowserPackageName,
+                .getDefaultBrowserPackageName(),
         )
 
     init {
@@ -75,7 +70,7 @@ class AutofillActivityManagerImpl(
             .onEach {
                 autofillEnabledManager.isAutofillEnabled = isAutofillEnabledAndSupported
                 browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
-                    withContext(context = dispatcherManager.io) { browserAutofillStatus }
+                    getBrowserAutofillStatus()
             }
             .launchIn(lifecycleScope)
     }
