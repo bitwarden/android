@@ -13,6 +13,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,13 +23,25 @@ import com.bitwarden.ui.R
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
+ * The app's primary font family, backed by the Inter variable font. Each weight used by the app
+ * is declared so that the matching [FontWeight] renders the real weight from the font's weight
+ * axis instead of a synthesized one.
+ */
+val bitwardenFontFamily: FontFamily = FontFamily(
+    interVariableFont(weight = FontWeight.W400),
+    interVariableFont(weight = FontWeight.W500),
+    interVariableFont(weight = FontWeight.W600),
+    interVariableFont(weight = FontWeight.W700),
+)
+
+/**
  * The default [BitwardenTypography] for the app.
  */
 val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     displayLarge = TextStyle(
         fontSize = 56.sp,
         lineHeight = 64.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -40,7 +53,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     displayMedium = TextStyle(
         fontSize = 44.sp,
         lineHeight = 52.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -52,7 +65,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     displaySmall = TextStyle(
         fontSize = 36.sp,
         lineHeight = 44.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -64,7 +77,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     headlineLarge = TextStyle(
         fontSize = 32.sp,
         lineHeight = 40.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -76,7 +89,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     headlineMedium = TextStyle(
         fontSize = 28.sp,
         lineHeight = 36.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -88,7 +101,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     headlineSmall = TextStyle(
         fontSize = 18.sp,
         lineHeight = 22.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -100,7 +113,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     titleExtraLarge = TextStyle(
         fontSize = 24.sp,
         lineHeight = 28.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -112,7 +125,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     titleLarge = TextStyle(
         fontSize = 19.sp,
         lineHeight = 28.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -124,7 +137,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     titleMedium = TextStyle(
         fontSize = 16.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -136,7 +149,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     titleSmall = TextStyle(
         fontSize = 14.sp,
         lineHeight = 18.sp,
-        fontFamily = FontFamily(Font(R.font.inter_medium)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -148,7 +161,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     bodyLarge = TextStyle(
         fontSize = 15.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -160,7 +173,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     bodyLargeEmphasis = TextStyle(
         fontSize = 15.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W700,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -172,7 +185,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     bodyMedium = TextStyle(
         fontSize = 13.sp,
         lineHeight = 18.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -184,7 +197,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     bodyMediumEmphasis = TextStyle(
         fontSize = 13.sp,
         lineHeight = 18.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W700,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -196,7 +209,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     bodySmall = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -208,7 +221,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     labelLarge = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -220,7 +233,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     labelLargeEmphasis = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W700,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -232,7 +245,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     labelLargeRegular = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -244,7 +257,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     labelMedium = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W600,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -256,7 +269,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     labelSmall = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        fontFamily = FontFamily(Font(R.font.inter_regular)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W400,
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
@@ -292,7 +305,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
     eyebrowMedium = TextStyle(
         fontSize = 12.sp,
         lineHeight = 18.sp,
-        fontFamily = FontFamily(Font(R.font.inter_bold)),
+        fontFamily = bitwardenFontFamily,
         fontWeight = FontWeight.W700,
         letterSpacing = 0.6.sp,
         lineHeightStyle = LineHeightStyle(
@@ -360,3 +373,10 @@ private fun BitwardenTypography_preview() {
         }
     }
 }
+
+private fun interVariableFont(weight: FontWeight): Font =
+    Font(
+        resId = R.font.inter_variable,
+        weight = weight,
+        variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight)),
+    )
