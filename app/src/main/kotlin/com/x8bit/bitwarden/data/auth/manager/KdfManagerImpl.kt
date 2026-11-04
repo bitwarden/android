@@ -59,10 +59,7 @@ class KdfManagerImpl(
         // The update request is authenticated as the active user, so only update the KDF when
         // the given user is the active user. This prevents updating the KDF of a user that is not
         // active yet, such as when logging in to an additional account.
-        if (userId != activeUserId) {
-            Timber.w("[Auth] Skipped KDF update for a user that is not the active user")
-            return UpdateKdfMinimumsResult.ActiveAccountNotFound
-        }
+        if (userId != activeUserId) return UpdateKdfMinimumsResult.ActiveAccountNotFound
 
         if (!needsKdfUpdateToMinimums(userId = userId)) {
             return UpdateKdfMinimumsResult.Success
