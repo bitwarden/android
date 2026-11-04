@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -50,6 +51,39 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `loading view state should display the loading content and hide the save button`() {
+        mutableStateFlow.update { it.copy(viewState = ResetPasswordState.ViewState.Loading) }
+
+        composeTestRule.onNodeWithText("Syncing…").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Save").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Re-type new master password (required)")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `error view state should display the error content and hide the save button`() {
+        mutableStateFlow.update {
+            it.copy(viewState = ResetPasswordState.ViewState.Error(message = "Fail".asText()))
+        }
+
+        composeTestRule.onNodeWithText("Fail").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Try again").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Save").assertDoesNotExist()
+    }
+
+    @Test
+    fun `try again click in error state should send RetryClick action`() {
+        mutableStateFlow.update {
+            it.copy(viewState = ResetPasswordState.ViewState.Error(message = "Fail".asText()))
+        }
+
+        composeTestRule.onNodeWithText("Try again").performClick()
+
+        verify { viewModel.trySendAction(ResetPasswordAction.RetryClick) }
     }
 
     @Test
@@ -120,6 +154,7 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
     fun `submit button click should emit SubmitClick`() {
         composeTestRule
             .onNodeWithText("Save")
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -140,7 +175,9 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                viewState = DEFAULT_CONTENT.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                ),
             )
         }
 
@@ -165,7 +202,9 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                policies = listOf("Make password better".asText()),
+                viewState = DEFAULT_CONTENT.copy(
+                    policies = persistentListOf("Make password better".asText()),
+                ),
             )
         }
 
@@ -180,7 +219,9 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                viewState = DEFAULT_CONTENT.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                ),
             )
         }
 
@@ -208,7 +249,9 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                viewState = DEFAULT_CONTENT.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                ),
             )
         }
 
@@ -289,14 +332,18 @@ class ResetPasswordScreenTest : BitwardenComposeTest() {
     }
 }
 
-private val DEFAULT_STATE = ResetPasswordState(
-    policies = emptyList(),
+private val DEFAULT_CONTENT = ResetPasswordState.ViewState.Content(
     resetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-    dialogState = null,
+    policies = persistentListOf(),
+    minimumPasswordLength = 12,
     currentPasswordInput = "",
     passwordInput = "",
     retypePasswordInput = "",
     passwordHintInput = "",
     passwordStrengthState = PasswordStrengthState.NONE,
-    minimumPasswordLength = 12,
+)
+
+private val DEFAULT_STATE = ResetPasswordState(
+    viewState = DEFAULT_CONTENT,
+    dialogState = null,
 )

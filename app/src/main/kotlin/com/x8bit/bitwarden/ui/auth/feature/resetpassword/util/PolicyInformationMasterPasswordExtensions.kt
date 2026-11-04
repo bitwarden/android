@@ -4,12 +4,14 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Convert a list of master password policies into a list of text instructions
  * for the user about what requirements the password must meet.
  */
-fun List<PolicyInformation.MasterPassword>.toDisplayLabels(): List<Text> {
+fun List<PolicyInformation.MasterPassword>.toDisplayLabels(): ImmutableList<Text> {
     val list = mutableListOf<Text>()
 
     mapNotNull { it.minLength }.maxOrNull()?.let {
@@ -36,5 +38,5 @@ fun List<PolicyInformation.MasterPassword>.toDisplayLabels(): List<Text> {
         list.add(BitwardenString.policy_in_effect_special.asText())
     }
 
-    return list
+    return list.toImmutableList()
 }
