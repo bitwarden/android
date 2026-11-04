@@ -313,6 +313,12 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 }
 
 afterEvaluate {
