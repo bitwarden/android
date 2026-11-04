@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.onEach
  * The default implementation of the [AuthRequestNotificationManager].
  */
 @OmitFromCoverage
-class AuthRequestNotificationManagerImpl(
+internal class AuthRequestNotificationManagerImpl(
     private val context: Context,
     private val authDiskSource: AuthDiskSource,
     pushManager: PushManager,
@@ -49,14 +49,14 @@ class AuthRequestNotificationManagerImpl(
                     NOTIFICATION_CHANNEL_ID,
                     NotificationManagerCompat.IMPORTANCE_DEFAULT,
                 )
-                .setName(context.getString(BitwardenString.pending_log_in_requests))
+                .setName(context.getString(BitwardenString.pending_access_requests))
                 .build(),
         )
         if (!notificationManager.areNotificationsEnabled(NOTIFICATION_CHANNEL_ID)) return
         // Create the notification
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentIntent(createContentIntent(data))
-            .setContentTitle(context.getString(BitwardenString.log_in_requested))
+            .setContentTitle(context.getString(BitwardenString.account_access_requested))
             .setContentText(
                 authDiskSource
                     .userState
@@ -64,8 +64,8 @@ class AuthRequestNotificationManagerImpl(
                     ?.get(data.userId)
                     ?.profile
                     ?.email
-                    ?.let { context.getString(BitwardenString.confim_log_in_attemp_for_x, it) }
-                    ?: context.getString(BitwardenString.confirm_log_in),
+                    ?.let { context.getString(BitwardenString.confirm_access_attempt_for_x, it) }
+                    ?: context.getString(BitwardenString.confirm_access),
             )
             .setSmallIcon(BitwardenDrawable.ic_notification)
             .setColor(Color.White.value.toInt())

@@ -153,7 +153,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = null,
-                            message = BitwardenString.login_request_has_already_expired.asText(),
+                            message = BitwardenString.access_request_has_already_expired.asText(),
                         ),
                     )
                 }
@@ -204,7 +204,7 @@ class LoginWithDeviceViewModel @Inject constructor(
 
             is LoginResult.Success -> {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.access_approved.asText()),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
                 mutableStateFlow.update { it.copy(dialogState = null) }
@@ -342,54 +342,50 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> BitwardenString.log_in_initiated.asText()
+                        -> BitwardenString.request_sent_to_your_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
                         -> BitwardenString.admin_approval_requested.asText()
                 }
 
             /**
-             * The subtitle text for the UI.
-             */
-            val subtitle: Text
-                get() = when (loginWithDeviceType) {
-                    LoginWithDeviceType.OTHER_DEVICE,
-                    LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> BitwardenString.a_notification_has_been_sent_to_your_device.asText()
-
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> BitwardenString.your_request_has_been_sent_to_your_admin.asText()
-                }
-
-            /**
-             * The description text for the UI.
+             * The first part of the description text for the UI.
              */
             @Suppress("MaxLineLength")
-            val description: Text
-                get() = when (loginWithDeviceType) {
-                    LoginWithDeviceType.OTHER_DEVICE,
-                    LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> BitwardenString.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
-
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> BitwardenString.you_will_be_notified_once_approved.asText()
-                }
-
-            /**
-             * The text to display indicating that there are other option for logging in.
-             */
-            val otherOptions: Text
+            val subTitle: Text
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
                         -> {
                         BitwardenString
-                            .log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app
+                            .approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app
                             .asText()
                     }
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL -> {
-                        BitwardenString.trouble_logging_in.asText()
+                        BitwardenString
+                            .your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved
+                            .asText()
+                    }
+                }
+
+            /**
+             * The third part of the description text for the UI.
+             */
+            val description: Text
+                get() = when (loginWithDeviceType) {
+                    LoginWithDeviceType.OTHER_DEVICE,
+                    LoginWithDeviceType.SSO_OTHER_DEVICE,
+                        -> {
+                        BitwardenString
+                            .make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving
+                            .asText()
+                    }
+
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> {
+                        BitwardenString
+                            .your_admin_may_ask_you_to_confirm_this_fingerprint_phrase
+                            .asText()
                     }
                 }
 
