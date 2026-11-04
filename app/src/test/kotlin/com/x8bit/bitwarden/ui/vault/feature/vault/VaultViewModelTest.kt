@@ -4769,9 +4769,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `on KdfUpdatePasswordRepromptSubmit with no active user should show the active account not found error`() =
+    fun `on KdfUpdatePasswordRepromptSubmit with no active user should show an error`() =
         runTest {
             val viewModel = createViewModel()
             mutableUserStateFlow.value = null

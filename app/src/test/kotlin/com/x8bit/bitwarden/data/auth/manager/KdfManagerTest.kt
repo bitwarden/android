@@ -210,8 +210,7 @@ class KdfManagerTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `updateKdfToMinimumsIfNeeded for a user that is not active should return ActiveAccountNotFound without updating`() =
+    fun `updateKdfToMinimumsIfNeeded for a non-active user should return ActiveAccountNotFound`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
                 accounts = mapOf(

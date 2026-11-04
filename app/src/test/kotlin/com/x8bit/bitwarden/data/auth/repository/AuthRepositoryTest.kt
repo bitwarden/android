@@ -2062,8 +2062,7 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `login get token succeeds for the first account should update the KDF for the logging in user after saving the user state`() =
+    fun `login for the first account should update the user's KDF after saving it`() =
         runTest {
             coEvery {
                 authSdkSource.preLogin(email = EMAIL)
@@ -2120,8 +2119,58 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `login get token succeeds when adding an account should update the KDF only for the logging in user after saving the user state`() =
+    fun `login get token succeeds when the KDF update fails should still return Success`() =
+        runTest {
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns SINGLE_USER_STATE_1
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } returns UpdateKdfMinimumsResult.Error(error = Throwable("Fail"))
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            fakeAuthDiskSource.assertUserState(userState = SINGLE_USER_STATE_1)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+        }
+
+    @Test
+    fun `login adding an account should only update the new user's KDF after saving it`() =
         runTest {
             // User 2 is the active user when User 1 is added.
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2

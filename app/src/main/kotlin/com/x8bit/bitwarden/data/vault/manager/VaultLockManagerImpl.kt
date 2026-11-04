@@ -742,7 +742,7 @@ internal class VaultLockManagerImpl(
             .also { result ->
                 if (result is UpdateKdfMinimumsResult.Error) {
                     Timber.e(
-                        result.error,
+                        t = result.error,
                         message = "Failed to silent update KDF settings on vault unlock.",
                     )
                 }
