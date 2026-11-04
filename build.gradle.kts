@@ -186,6 +186,7 @@ subprojects {
     plugins.withId("com.android.application") {
         val android = extensions.getByType<ApplicationExtension>()
         tasks.register("printNdkVersion") {
+            description = "Prints the NDK version AGP uses to strip native libraries."
             val ndkVersion = android.ndkVersion
             doLast { println("ndkVersion=$ndkVersion") }
         }
