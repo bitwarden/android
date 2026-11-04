@@ -42,6 +42,7 @@ runs:
           fi
         done
         if [ -z "$MISSING_NDK_VERSIONS" ]; then
+          echo "No missing NDK versions found"
           exit 0
         fi
 
