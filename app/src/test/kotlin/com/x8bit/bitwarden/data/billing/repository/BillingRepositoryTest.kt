@@ -5,11 +5,11 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CadenceTypeJson
-import com.bitwarden.network.model.CartItemJson
-import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.GetSubscriptionResponse
-import com.bitwarden.network.model.PasswordManagerCartItemsJson
+import com.bitwarden.network.model.InvoicePreviewItemJson
+import com.bitwarden.network.model.InvoicePreviewJson
+import com.bitwarden.network.model.PasswordManagerInvoicePreviewJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
 import com.bitwarden.network.model.SubscriptionStatusJson
@@ -308,25 +308,26 @@ private const val ANNUAL_PRICE = 19.99
 
 private val ACTIVE_SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
     status = SubscriptionStatusJson.ACTIVE,
-    cart = CartJson(
-        passwordManager = PasswordManagerCartItemsJson(
-            seats = CartItemJson(
-                translationKey = "premiumMembership",
+    invoicePreview = InvoicePreviewJson(
+        passwordManager = PasswordManagerInvoicePreviewJson(
+            seats = InvoicePreviewItemJson(
                 quantity = 1,
                 cost = BigDecimal("19.80"),
-                discount = null,
+                discounts = null,
             ),
             additionalStorage = null,
         ),
-        secretsManager = null,
         cadence = CadenceTypeJson.ANNUALLY,
-        discount = null,
+        discounts = null,
+        startingBalance = null,
         estimatedTax = BigDecimal.ZERO,
+        total = BigDecimal("19.80"),
+        amountDue = BigDecimal("19.80"),
+        nextPaymentAttempt = null,
     ),
     storage = null,
     cancelAt = null,
     canceled = null,
-    nextCharge = null,
     suspension = null,
     gracePeriod = null,
 )
