@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.manager
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
@@ -60,6 +61,7 @@ class AutofillActivityManagerTest {
         lifecycleScope = lifecycleScope,
         browserThirdPartyAutofillManager = browserThirdPartyAutofillManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        dispatcherManager = FakeDispatcherManager(),
     )
 
     private var isAutofillEnabledAndSupported = false

@@ -5,6 +5,7 @@ import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
@@ -44,6 +45,7 @@ object ActivityAutofillModule {
         autofillEnabledManager: AutofillEnabledManager,
         lifecycleScope: LifecycleCoroutineScope,
         browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        dispatcherManager: DispatcherManager,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
@@ -52,6 +54,7 @@ object ActivityAutofillModule {
             autofillEnabledManager = autofillEnabledManager,
             lifecycleScope = lifecycleScope,
             browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+            dispatcherManager = dispatcherManager,
         )
 
     /**
