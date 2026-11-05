@@ -137,44 +137,58 @@ jobs:
           _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
           _FDROID_ONLY: ${{ inputs.fdroid-only }}
         run: |
-          # Only artifacts listed here are included in the release.
-          # Always request 2+ artifacts so gh extracts each into its own subdirectory,
-          # which the "Create Release" step relies on.
-          case "$_APP_NAME_SUFFIX" in
-            bwpm)
-              artifacts=(
-                "com.x8bit.bitwarden-fdroid.apk"
-                "com.x8bit.bitwarden-fdroid.apk-sha256.txt"
+          gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH"
+          file_count=$(find "$ARTIFACTS_PATH" -type f | wc -l)
+          echo "Downloaded $file_count file(s)."
+          if [ "$file_count" -gt 0 ]; then
+            echo "Downloaded files:"
+            find "$ARTIFACTS_PATH" -type f
+          fi
+
+          # Artifacts that will be included in the release. Everything else is removed.
+          # gh extracts each artifact into a subdirectory named after the artifact.
+          artifacts_to_keep=(
+            "version-info"
+          )
+
+          if [[ "$_APP_NAME_SUFFIX" == "bwpm" ]]; then
+            artifacts_to_keep+=(
+              "com.x8bit.bitwarden-fdroid.apk"
+              "com.x8bit.bitwarden-fdroid.apk-sha256.txt"
+            )
+            if [[ "$_FDROID_ONLY" != "true" ]]; then
+              artifacts_to_keep+=(
+                "com.x8bit.bitwarden.apk"
+                "com.x8bit.bitwarden.apk-sha256.txt"
               )
-              if [[ "$_FDROID_ONLY" != "true" ]]; then
-                artifacts+=(
-                  "com.x8bit.bitwarden.apk"
-                  "com.x8bit.bitwarden.apk-sha256.txt"
-                )
+            fi
+          elif [[ "$_APP_NAME_SUFFIX" == "bwa" ]]; then
+            artifacts_to_keep+=(
+              "com.bitwarden.authenticator.apk"
+              "authenticator-android-apk-sha256.txt"
+            )
+          else
+            echo "::error::Unknown app name suffix: $_APP_NAME_SUFFIX"
+            exit 1
+          fi
+
+          for artifact_dir in "$ARTIFACTS_PATH"/*/; do
+            artifact=$(basename "$artifact_dir")
+            keep=false
+            for k in "${artifacts_to_keep[@]}"; do
+              if [[ "$artifact" == "$k" ]]; then
+                keep=true
+                break
               fi
-              ;;
-            bwa)
-              artifacts=(
-                "com.bitwarden.authenticator.apk"
-                "authenticator-android-apk-sha256.txt"
-              )
-              ;;
-            *)
-              echo "::error::Unknown app name suffix: $_APP_NAME_SUFFIX"
-              exit 1
-              ;;
-          esac
-          artifacts+=("version-info")
-
-          name_args=()
-          for artifact in "${artifacts[@]}"; do
-            name_args+=(-n "$artifact")
+            done
+            if [[ "$keep" == false ]]; then
+              rm -rf -- "$artifact_dir"
+            fi
           done
-          gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH" "${name_args[@]}"
+          echo "🔖 Removed artifacts not in the keep list."
 
-          # gh silently skips requested names that don't exist, so verify each one was downloaded
           missing=0
-          for artifact in "${artifacts[@]}"; do
+          for artifact in "${artifacts_to_keep[@]}"; do
             if [[ -z "$(find "$ARTIFACTS_PATH/$artifact" -type f 2>/dev/null)" ]]; then
               echo "::error::Artifact '$artifact' not found in run $ARTIFACT_RUN_ID."
               missing=1
@@ -184,6 +198,7 @@ jobs:
             exit 1
           fi
 
+          echo ""
           echo "🔖 Files to be included in the release:"
           find "$ARTIFACTS_PATH" -type f
 
