@@ -122,6 +122,9 @@ jobs:
           keyAlias:"bitwardentestharness" \
           keyPassword:"$KEY_PASSWORD"
 
+      - name: Verify native libraries are stripped
+        run: ./.github/scripts/verify-native-libs-stripped.sh testharness/build/outputs
+
       - name: Upload Test Harness Release APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
