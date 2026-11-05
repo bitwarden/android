@@ -116,8 +116,7 @@ jobs:
           echo "🔖 New tag name: $tag_name"
           echo "tag_name=$tag_name" >> "$GITHUB_OUTPUT"
 
-          # Exclude F-Droid only release tags so changelogs are based on the last full release
-          last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | grep -v -- "-fdroid$" | head -n 1)
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> "$GITHUB_OUTPUT"
 
@@ -244,20 +243,16 @@ jobs:
             is_latest_release=true
           fi
 
-          tag_name="$_TAG_NAME"
           release_title="$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)"
 
-          # F-Droid only releases must not collide with the full release tag or be marked latest,
-          # since they lack the standard Play Store APK.
+          # F-Droid only releases must not be marked latest, since they lack the standard Play Store APK.
           if [[ "$_FDROID_ONLY" == "true" ]]; then
             is_latest_release=false
-            tag_name="$_TAG_NAME-fdroid" # e.g. v2025.6.0-bwpm-fdroid
             release_title="$release_title (F-Droid)"
           fi
-          echo "tag_name=$tag_name" >> "$GITHUB_OUTPUT"
 
           echo "⌛️ Creating release $release_title on $_TARGET_COMMIT"
-          release_url=$(gh release create "$tag_name" \
+          release_url=$(gh release create "$_TAG_NAME" \
             --title "$release_title" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
@@ -301,7 +296,7 @@ jobs:
 
       - name: Add Release Summary
         env:
-          _RELEASE_TAG: ${{ steps.create_release.outputs.tag_name }}
+          _RELEASE_TAG: ${{ steps.get_release_info.outputs.tag_name }}
           _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
