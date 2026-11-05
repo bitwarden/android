@@ -30,8 +30,10 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.awaitCancellation
@@ -75,6 +77,7 @@ class PlanViewModelTest : BaseViewModelTest() {
         every { subscriptionStatusStateFlow } returns mutableSubscriptionStatusStateFlow
         every { upgradeLifecycleStateFlow } returns mutableLifecycleStateFlow
         every { isSelfHosted } answers { mockIsSelfHosted }
+        every { dismissPlanBadge() } just runs
     }
     private val mutableEnvironmentFlow = MutableStateFlow<Environment>(Environment.Prod.Us)
     private val mockEnvironmentRepository: EnvironmentRepository = mockk {
@@ -115,6 +118,15 @@ class PlanViewModelTest : BaseViewModelTest() {
         }
 
     // endregion PlanMode propagation
+
+    @Test
+    fun `initialization should dismiss the plan badge`() {
+        createViewModel()
+
+        verify(exactly = 1) {
+            mockPremiumStateManager.dismissPlanBadge()
+        }
+    }
 
     // region Free user path
 

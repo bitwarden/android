@@ -624,7 +624,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleArchiveClick() {
         if (!state.hasPremium) {
             mutableStateFlow.update {
-                it.copy(dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -3404,7 +3408,9 @@ data class VaultAddEditState(
         /**
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Displays a generic dialog to the user.

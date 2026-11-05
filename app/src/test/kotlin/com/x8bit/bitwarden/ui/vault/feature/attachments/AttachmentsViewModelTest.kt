@@ -122,7 +122,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             DEFAULT_STATE.copy(
-                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                dialogState = AttachmentsState.DialogState.RequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
                 isPremiumUser = false,
             ),
             viewModel.stateFlow.value,
@@ -229,7 +231,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
-                dialogState = AttachmentsState.DialogState.RequiresPremium,
+                dialogState = AttachmentsState.DialogState.RequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
                 isPremiumUser = false,
             ),
             viewModel.stateFlow.value,

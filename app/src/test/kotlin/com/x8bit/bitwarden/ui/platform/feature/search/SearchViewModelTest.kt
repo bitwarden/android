@@ -354,7 +354,9 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 isPremium = false,
-                dialogState = SearchState.DialogState.ArchiveRequiresPremium,
+                dialogState = SearchState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )

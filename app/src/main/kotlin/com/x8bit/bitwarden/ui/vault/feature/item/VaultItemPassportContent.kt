@@ -428,6 +428,7 @@ fun VaultItemPassportContent(
         )
 
         vaultItemAttachments(
+            isInAppUpgradeAvailable = commonState.isInAppUpgradeAvailable,
             attachments = commonState.attachments,
             vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
         )
@@ -481,7 +482,7 @@ private fun PassportCopyField(
 @Preview(showBackground = true, heightDp = 1200)
 private fun VaultItemPassportContent_Preview() {
     BitwardenTheme {
-        BitwardenScaffold() {
+        BitwardenScaffold {
             VaultItemPassportContent(
                 commonState = PREVIEW_COMMON,
                 passportState = PREVIEW_PASSPORT,
@@ -512,6 +513,7 @@ private val PREVIEW_COMMON: VaultItemState.ViewState.Content.Common =
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_passport),
         relatedLocations = persistentListOf(),
         hasOrganizations = false,
+        isInAppUpgradeAvailable = true,
     )
 
 private val PREVIEW_PASSPORT: VaultItemState.ViewState.Content.ItemType.Passport =

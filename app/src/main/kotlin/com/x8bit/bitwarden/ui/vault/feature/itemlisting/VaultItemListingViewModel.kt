@@ -864,7 +864,9 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun fileSendRequiresPremiumDialog(): VaultItemListingState.DialogState =
         if (premiumStateManager.isInAppUpgradeAvailable()) {
-            VaultItemListingState.DialogState.FileTypeRequiresPremium
+            VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+            )
         } else {
             VaultItemListingState.DialogState.Error(
                 title = BitwardenString.send.asText(),
@@ -1447,7 +1449,11 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -3244,14 +3250,18 @@ data class VaultItemListingState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Displays a dialog to the user indicating that creating a File-type Send
          * requires a Premium account.
          */
         @Parcelize
-        data object FileTypeRequiresPremium : DialogState()
+        data class FileTypeRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
     }
 
     /**
