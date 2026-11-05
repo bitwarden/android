@@ -77,14 +77,22 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkConstructor
 import io.mockk.verify
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
@@ -1446,6 +1454,109 @@ class VaultSyncManagerTest {
             }
             coVerify(exactly = 0) { syncService.sync() }
             verify(exactly = 0) { fillAssistManager.syncIfNecessary() }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `syncForResult should return error when the sync is cancelled by a user switch`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } just awaits
+
+            val result = async { vaultSyncManager.syncForResult() }
+            runCurrent()
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = "mockId-2",
+                accounts = mapOf("mockId-2" to mockk()),
+            )
+
+            val error = result.await() as SyncVaultDataResult.Error
+            assertTrue(error.throwable is CancellationException)
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `syncForResult should propagate cancellation of the calling coroutine`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
+        var isResultReceived = false
+
+        val job = launch {
+            vaultSyncManager.syncForResult()
+            isResultReceived = true
+        }
+        runCurrent()
+        job.cancel()
+        runCurrent()
+
+        assertTrue(job.isCancelled)
+        assertFalse(isResultReceived)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `sync should not start a new sync while syncForResult is in progress`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
+
+        backgroundScope.launch { vaultSyncManager.syncForResult() }
+        runCurrent()
+        vaultSyncManager.sync()
+
+        coVerify(exactly = 1) { syncService.sync() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `syncForResult should join an in-progress sync and return its result`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val throwable = Throwable()
+            val syncResponse = CompletableDeferred<Result<SyncResponseJson>>()
+            coEvery { syncService.sync() } coAnswers { syncResponse.await() }
+
+            vaultSyncManager.sync()
+            val result = async { vaultSyncManager.syncForResult() }
+            runCurrent()
+            coVerify(exactly = 1) { syncService.sync() }
+
+            syncResponse.complete(throwable.asFailure())
+
+            assertEquals(SyncVaultDataResult.Error(throwable = throwable), result.await())
+            coVerify(exactly = 1) { syncService.sync() }
+        }
+
+    @Test
+    fun `syncForResult should return error when there is no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = vaultSyncManager.syncForResult()
+
+        assertEquals(SyncVaultDataResult.Error(throwable = NoActiveUserException()), result)
+        coVerify(exactly = 0) {
+            syncService.getAccountRevisionDateMillis()
+            syncService.sync()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `syncForResult should not sync when the in-progress sync is cancelled by a user switch`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } just awaits
+
+            vaultSyncManager.sync()
+            val result = async { vaultSyncManager.syncForResult() }
+            runCurrent()
+            fakeAuthDiskSource.userState = UserStateJson(
+                activeUserId = "mockId-2",
+                accounts = mapOf("mockId-2" to mockk()),
+            )
+
+            val error = result.await() as SyncVaultDataResult.Error
+            assertTrue(error.throwable is CancellationException)
+            coVerify(exactly = 1) { syncService.sync() }
         }
 
     //region Helper functions
