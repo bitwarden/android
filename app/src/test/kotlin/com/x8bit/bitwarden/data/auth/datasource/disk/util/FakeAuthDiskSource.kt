@@ -50,6 +50,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
     private val storedPinProtectedUserKeys = mutableMapOf<String, Pair<String?, Boolean>>()
     private val storedEncryptedPins = mutableMapOf<String, String?>()
+    private val storedPinLengths = mutableMapOf<String, Int?>()
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
@@ -100,6 +101,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedEphemeralPinProtectedUserKeyEnvelopes.remove(userId)
         storedPersistentPinProtectedUserKeyEnvelopes.remove(userId)
         storedEncryptedPins.remove(userId)
+        storedPinLengths.remove(userId)
         storedPinProtectedUserKeys.remove(userId)
         storedV2UpgradeTokens.remove(userId)
         storedUserKeyIds.remove(userId)
@@ -243,6 +245,12 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeEncryptedPin(userId: String, encryptedPin: String?) {
         storedEncryptedPins[userId] = encryptedPin
+    }
+
+    override fun getPinLength(userId: String): Int? = storedPinLengths[userId]
+
+    override fun storePinLength(userId: String, pinLength: Int?) {
+        storedPinLengths[userId] = pinLength
     }
 
     override fun getOrganizationKeys(
@@ -521,6 +529,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertEncryptedPin(userId: String, encryptedPin: String?) {
         assertEquals(encryptedPin, storedEncryptedPins[userId])
+    }
+
+    /**
+     * Assert that the [pinLength] was stored successfully using the [userId].
+     */
+    fun assertPinLength(userId: String, pinLength: Int?) {
+        assertEquals(pinLength, storedPinLengths[userId])
     }
 
     /**
