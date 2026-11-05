@@ -2603,7 +2603,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -2624,7 +2628,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `FileTypeRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -2643,7 +2651,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `FileTypeRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule

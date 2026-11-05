@@ -54,6 +54,7 @@ fun CipherView.toViewState(
     isIconLoadingDisabled: Boolean,
     relatedLocations: ImmutableList<VaultItemLocation>,
     hasOrganizations: Boolean,
+    isInAppUpgradeAvailable: Boolean,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -122,6 +123,7 @@ fun CipherView.toViewState(
             ),
             relatedLocations = relatedLocations,
             hasOrganizations = hasOrganizations,
+            isInAppUpgradeAvailable = isInAppUpgradeAvailable,
         ),
         type = when (type) {
             CipherType.LOGIN -> {

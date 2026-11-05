@@ -21,7 +21,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -138,13 +138,10 @@ private fun AttachmentsDialogs(
     attachmentsHandlers: AttachmentsHandlers,
 ) {
     when (dialogState) {
-        AttachmentsState.DialogState.RequiresPremium -> BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.premium_subscription_required),
+        is AttachmentsState.DialogState.RequiresPremium -> PremiumRequiredDialog(
             message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
-            confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-            onConfirmClick = attachmentsHandlers.onUpgradeToPremiumClick,
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onDismissClick = attachmentsHandlers.onDismissRequest,
+            isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+            onUpgradeToPremiumClick = attachmentsHandlers.onUpgradeToPremiumClick,
             onDismissRequest = attachmentsHandlers.onDismissRequest,
         )
 

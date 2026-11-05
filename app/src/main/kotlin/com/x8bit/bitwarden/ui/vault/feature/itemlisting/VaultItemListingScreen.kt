@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.BitwardenPullToRefreshState
@@ -402,25 +403,19 @@ private fun VaultItemListingDialogs(
         }
 
         is VaultItemListingState.DialogState.ArchiveRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,
-                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = vaultItemListingHandlers.upgradeToPremiumClick,
                 onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             )
         }
 
         is VaultItemListingState.DialogState.FileTypeRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.send_file_premium_required),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = vaultItemListingHandlers.upgradeToPremiumClick,
-                onDismissClick = vaultItemListingHandlers.dismissDialogRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = vaultItemListingHandlers.upgradeToPremiumClick,
                 onDismissRequest = vaultItemListingHandlers.dismissDialogRequest,
             )
         }

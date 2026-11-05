@@ -734,7 +734,11 @@ class VaultViewModel @Inject constructor(
             sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
         } else {
             mutableStateFlow.update {
-                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
         }
     }
@@ -1082,7 +1086,11 @@ class VaultViewModel @Inject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -2407,7 +2415,9 @@ data class VaultState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Displays a dialog with a loading indicator.

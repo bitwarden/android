@@ -198,6 +198,7 @@ fun VaultItemLoginContent(
         )
 
         vaultItemAttachments(
+            isInAppUpgradeAvailable = commonState.isInAppUpgradeAvailable,
             attachments = commonState.attachments,
             vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
         )

@@ -163,6 +163,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isPending = true,
         )
+        settingsDiskSource.storeShouldShowPlanBadge(
+            userId = userId,
+            shouldShow = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -200,18 +204,10 @@ class SettingsDiskSourceTest {
         assertTrue(
             settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = userId) ?: false,
         )
-        assertTrue(
-            settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getPremiumUpgradePending(userId = userId) ?: false,
-        )
+        assertTrue(settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getPremiumUpgradePending(userId = userId) ?: false)
 
         // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
@@ -232,6 +228,7 @@ class SettingsDiskSourceTest {
         )
         assertNull(settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId))
         assertNull(settingsDiskSource.getCollapsedVaultSections(userId = userId))
+        assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = userId))
     }
 
     @Suppress("MaxLineLength")
@@ -1217,6 +1214,62 @@ class SettingsDiskSourceTest {
                     settingsDiskSource.storePremiumUpgradePending(
                         userId = mockUserId,
                         isPending = false,
+                    )
+                    assertEquals(false, awaitItem())
+                }
+        }
+
+    @Test
+    fun `getShouldShowPlanBadge when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeShouldShowPlanBadge for non-null values should update SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        settingsDiskSource.storeShouldShowPlanBadge(userId = mockUserId, shouldShow = true)
+        assertTrue(fakeSharedPreferences.getBoolean(key, false))
+    }
+
+    @Test
+    fun `storeShouldShowPlanBadge for null values should clear SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        settingsDiskSource.storeShouldShowPlanBadge(userId = mockUserId, shouldShow = null)
+        assertFalse(fakeSharedPreferences.contains(key))
+    }
+
+    @Test
+    fun `getShouldShowPlanBadgeFlow should react to changes in storeShouldShowPlanBadge`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getShouldShowPlanBadgeFlow(userId = mockUserId)
+                .test {
+                    assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId))
+                    assertNull(awaitItem())
+
+                    settingsDiskSource.storeShouldShowPlanBadge(
+                        userId = mockUserId,
+                        shouldShow = true,
+                    )
+                    assertEquals(true, awaitItem())
+
+                    settingsDiskSource.storeShouldShowPlanBadge(
+                        userId = mockUserId,
+                        shouldShow = false,
                     )
                     assertEquals(false, awaitItem())
                 }

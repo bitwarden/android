@@ -1180,6 +1180,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     message = BitwardenString
                         .sharing_with_specific_people_is_a_premium_feature
                         .asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
@@ -1205,6 +1206,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     message = BitwardenString
                         .sharing_with_specific_people_is_a_premium_feature
                         .asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
@@ -1224,6 +1226,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
                     message = BitwardenString
                         .sharing_with_specific_people_is_a_premium_feature
                         .asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }

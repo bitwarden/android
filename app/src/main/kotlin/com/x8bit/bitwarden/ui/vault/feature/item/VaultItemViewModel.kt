@@ -760,6 +760,7 @@ class VaultItemViewModel @AssistedInject constructor(
                 it.copy(
                     dialog = VaultItemState.DialogState.RequiresPremium(
                         message = BitwardenString.archiving_items_is_a_premium_feature.asText(),
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
                     ),
                 )
             }
@@ -817,6 +818,7 @@ class VaultItemViewModel @AssistedInject constructor(
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = BitwardenString.totp_is_a_premium_feature.asText(),
+                    isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
                 ),
             )
         }
@@ -1562,6 +1564,7 @@ class VaultItemViewModel @AssistedInject constructor(
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
             hasOrganizations = this.data?.hasOrganizations == true,
+            isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -2003,6 +2006,7 @@ data class VaultItemState(
              * @property favorite Indicates that the cipher is favorite.
              * @property passwordHistoryCount An integer indicating how many times the password.
              * @property hasOrganizations Indicates if the user has organizations.
+             * @property isInAppUpgradeAvailable Indicates that in-app billing is supported.
              */
             @Parcelize
             data class Common(
@@ -2025,6 +2029,7 @@ data class VaultItemState(
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,
                 val hasOrganizations: Boolean,
+                val isInAppUpgradeAvailable: Boolean,
             ) : Parcelable {
 
                 /**
@@ -2419,6 +2424,7 @@ data class VaultItemState(
         @Parcelize
         data class RequiresPremium(
             val message: Text,
+            val isInAppUpgradeAvailable: Boolean,
         ) : DialogState()
 
         /**

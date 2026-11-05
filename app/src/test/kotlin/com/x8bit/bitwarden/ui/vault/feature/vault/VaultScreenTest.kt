@@ -937,7 +937,11 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule

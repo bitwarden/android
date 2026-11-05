@@ -720,6 +720,7 @@ class AddEditSendViewModel @AssistedInject constructor(
                         message = BitwardenString
                             .sharing_with_specific_people_is_a_premium_feature
                             .asText(),
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
                     ),
                 )
             }
@@ -878,6 +879,8 @@ class AddEditSendViewModel @AssistedInject constructor(
                             it.copy(
                                 dialogState = AddEditSendState.DialogState.PremiumRequired(
                                     message = BitwardenString.send_file_premium_required.asText(),
+                                    isInAppUpgradeAvailable = premiumStateManager
+                                        .isInAppUpgradeAvailable(),
                                 ),
                             )
                         }
@@ -1289,6 +1292,7 @@ data class AddEditSendState(
         @Parcelize
         data class PremiumRequired(
             val message: Text,
+            val isInAppUpgradeAvailable: Boolean,
         ) : DialogState()
     }
 }
