@@ -75,7 +75,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Confirm login should send ApproveRequestClick`() = runTest {
         composeTestRule
-            .onNodeWithText("Confirm login")
+            .onNodeWithText("Confirm access")
             .performScrollTo()
             .performClick()
 
@@ -87,7 +87,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Deny login should send DeclineRequestClick`() = runTest {
         composeTestRule
-            .onNodeWithText("Deny login")
+            .onNodeWithText("Deny access")
             .performScrollTo()
             .performClick()
         verify {
@@ -138,7 +138,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText(text = "Login requested")
+            .onAllNodesWithText(text = "Access requested")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -167,7 +167,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText(text = "Login requested")
+            .onAllNodesWithText(text = "Access requested")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

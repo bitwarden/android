@@ -72,7 +72,7 @@ class LoginApprovalViewModel @Inject constructor(
                         it.copy(
                             dialogState = LoginApprovalState.DialogState.ChangeAccount(
                                 message = BitwardenString
-                                    .login_attempt_from_x_do_you_want_to_switch_to_this_account
+                                    .access_attempt_from_x_do_you_want_to_switch_to_this_account
                                     .asText(
                                         authRepository
                                             .userStateFlow
@@ -189,7 +189,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = BitwardenString.login_approved)
+                sendClosingEvent(messageId = BitwardenString.access_approved)
             }
 
             is AuthRequestResult.Error -> {
@@ -252,7 +252,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = BitwardenString.log_in_denied)
+                sendClosingEvent(messageId = BitwardenString.access_denied)
             }
 
             is AuthRequestResult.Error -> {

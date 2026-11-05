@@ -7,8 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
+import kotlinx.coroutines.withContext
 
 private const val CONTENT_PROVIDER_NAME = ".AutofillThirdPartyModeContentProvider"
 private const val THIRD_PARTY_MODE_COLUMN = "autofill_third_party_state"
@@ -23,29 +25,33 @@ private const val THIRD_PARTY_MODE_ACTIONS_URI_PATH = "autofill_third_party_mode
 @OmitFromCoverage
 class BrowserThirdPartyAutofillManagerImpl(
     private val context: Context,
+    private val dispatcherManager: DispatcherManager,
 ) : BrowserThirdPartyAutofillManager {
-    override val stableBraveAutofillStatus: BrowserThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.BRAVE_RELEASE)
-    override val stableChromeAutofillStatus: BrowserThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
-    override val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_BETA)
-    override val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.VIVALDI_STABLE)
+    override suspend fun getStableBraveAutofillStatus(): BrowserThirdPartyAutoFillData =
+        getThirdPartyAutoFillStatusForChannel(BrowserPackage.BRAVE_RELEASE)
 
-    override val defaultBrowserPackageName: String?
-        get() {
+    override suspend fun getStableChromeAutofillStatus(): BrowserThirdPartyAutoFillData =
+        getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
+
+    override suspend fun getBetaChromeAutofillStatus(): BrowserThirdPartyAutoFillData =
+        getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_BETA)
+
+    override suspend fun getStableVivaldiAutofillStatus(): BrowserThirdPartyAutoFillData =
+        getThirdPartyAutoFillStatusForChannel(BrowserPackage.VIVALDI_STABLE)
+
+    override suspend fun getDefaultBrowserPackageName(): String? =
+        withContext(context = dispatcherManager.io) {
             val intent = Intent(Intent.ACTION_VIEW, "https://example.com".toUri())
-            return context
+            context
                 .packageManager
                 .resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
                 ?.activityInfo
                 ?.packageName
         }
 
-    private fun getThirdPartyAutoFillStatusForChannel(
+    private suspend fun getThirdPartyAutoFillStatusForChannel(
         releaseChannel: BrowserPackage,
-    ): BrowserThirdPartyAutoFillData {
+    ): BrowserThirdPartyAutoFillData = withContext(context = dispatcherManager.io) {
         val uri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(releaseChannel.packageName + CONTENT_PROVIDER_NAME)
@@ -75,7 +81,7 @@ class BrowserThirdPartyAutofillManagerImpl(
                 }
             }
             ?: false
-        return BrowserThirdPartyAutoFillData(
+        BrowserThirdPartyAutoFillData(
             isAvailable = isThirdPartyAvailable,
             isThirdPartyEnabled = thirdPartyEnabled,
         )

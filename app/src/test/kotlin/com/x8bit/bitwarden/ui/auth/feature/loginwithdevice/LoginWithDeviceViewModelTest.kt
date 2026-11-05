@@ -214,7 +214,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.access_approved.asText(),
+                    ),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -284,7 +286,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.access_approved.asText(),
+                    ),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -663,7 +667,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = null,
-                    message = BitwardenString.login_request_has_already_expired.asText(),
+                    message = BitwardenString.access_request_has_already_expired.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

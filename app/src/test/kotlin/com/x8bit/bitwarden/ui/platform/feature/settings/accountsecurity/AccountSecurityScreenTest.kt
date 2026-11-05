@@ -118,7 +118,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     @Test
     fun `on pending login requests click should send PendingLoginRequestsClick`() {
         composeTestRule
-            .onNodeWithText("Pending login requests")
+            .onNodeWithText("Pending access requests")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
@@ -1772,7 +1772,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     @Test
     fun `pending login requests row should be visible when isManageDevicesEnabled is false`() {
         composeTestRule
-            .onNodeWithText("Pending login requests")
+            .onNodeWithText("Pending access requests")
             .performScrollTo()
             .assertIsDisplayed()
     }
@@ -1781,7 +1781,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     fun `pending login requests row should not be visible when isManageDevicesEnabled is true`() {
         mutableStateFlow.update { it.copy(isManageDevicesEnabled = true) }
         composeTestRule
-            .onNodeWithText("Pending login requests")
+            .onNodeWithText("Pending access requests")
             .assertDoesNotExist()
     }
 
