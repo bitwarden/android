@@ -11,6 +11,11 @@ on:
         description: "Release Ticket ID - e.g. RELEASE-1762"
         required: true
         type: string
+      fdroid-only:
+        description: "Optional. Create a Password Manager release containing only the F-Droid artifacts."
+        required: false
+        default: false
+        type: boolean
 
 env:
   ARTIFACTS_PATH: artifacts
@@ -111,7 +116,8 @@ jobs:
           echo "🔖 New tag name: $tag_name"
           echo "tag_name=$tag_name" >> "$GITHUB_OUTPUT"
 
-          last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | head -n 1)
+          # Exclude F-Droid only release tags so changelogs are based on the last full release
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | grep -v -- "-fdroid$" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> "$GITHUB_OUTPUT"
 
@@ -119,40 +125,60 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
+          _FDROID_ONLY: ${{ inputs.fdroid-only }}
         run: |
-          gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH"
-          file_count=$(find "$ARTIFACTS_PATH" -type f | wc -l)
-          echo "Downloaded $file_count file(s)."
-          if [ "$file_count" -gt 0 ]; then
-            echo "Downloaded files:"
-            find "$ARTIFACTS_PATH" -type f
+          # Only artifacts listed here are included in the release.
+          # Always request 2+ artifacts so gh extracts each into its own subdirectory,
+          # which the "Create Release" step relies on.
+          case "$_APP_NAME_SUFFIX" in
+            bwpm)
+              artifacts=(
+                "com.x8bit.bitwarden-fdroid.apk"
+                "com.x8bit.bitwarden-fdroid.apk-sha256.txt"
+              )
+              if [[ "$_FDROID_ONLY" != "true" ]]; then
+                artifacts+=(
+                  "com.x8bit.bitwarden.apk"
+                  "com.x8bit.bitwarden.apk-sha256.txt"
+                )
+              fi
+              ;;
+            bwa)
+              if [[ "$_FDROID_ONLY" == "true" ]]; then
+                echo "::error::F-Droid only releases are only supported for Password Manager."
+                exit 1
+              fi
+              artifacts=(
+                "com.bitwarden.authenticator.apk"
+                "authenticator-android-apk-sha256.txt"
+              )
+              ;;
+            *)
+              echo "::error::Unknown app name suffix: $_APP_NAME_SUFFIX"
+              exit 1
+              ;;
+          esac
+          artifacts+=("version-info")
+
+          name_args=()
+          for artifact in "${artifacts[@]}"; do
+            name_args+=(-n "$artifact")
+          done
+          gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH" "${name_args[@]}"
+
+          # gh silently skips requested names that don't exist, so verify each one was downloaded
+          missing=0
+          for artifact in "${artifacts[@]}"; do
+            if [[ -z "$(find "$ARTIFACTS_PATH/$artifact" -type f 2>/dev/null)" ]]; then
+              echo "::error::Artifact '$artifact' not found in run $ARTIFACT_RUN_ID."
+              missing=1
+            fi
+          done
+          if [[ "$missing" -ne 0 ]]; then
+            exit 1
           fi
 
-          # Files that won't be included in any release
-          files_to_remove=(
-            "com.x8bit.bitwarden.aab"
-            "com.x8bit.bitwarden.aab-sha256.txt"
-
-            "com.x8bit.bitwarden.beta.apk"
-            "com.x8bit.bitwarden.beta.apk-sha256.txt"
-            "com.x8bit.bitwarden.beta.aab"
-            "com.x8bit.bitwarden.beta.aab-sha256.txt"
-
-            "com.x8bit.bitwarden.beta-fdroid.apk"
-            "com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt"
-
-            "com.x8bit.bitwarden.dev.apk"
-            "com.x8bit.bitwarden.dev.apk-sha256.txt"
-
-            "com.bitwarden.authenticator.aab"
-            "authenticator-android-aab-sha256.txt"
-          )
-
-          for file in "${files_to_remove[@]}"; do
-            find "$ARTIFACTS_PATH" -name "$file" -type f -delete
-          done
-          echo "🔖 Removed internal artifacts."
-          echo ""
           echo "🔖 Files to be included in the release:"
           find "$ARTIFACTS_PATH" -type f
 
@@ -211,15 +237,28 @@ jobs:
           _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
           _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
           _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
+          _FDROID_ONLY: ${{ inputs.fdroid-only }}
         run: |
           is_latest_release=false
           if [[ "$_APP_NAME" == "Password Manager" ]]; then
             is_latest_release=true
           fi
 
-          echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
-          release_url=$(gh release create "$_TAG_NAME" \
-            --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
+          tag_name="$_TAG_NAME"
+          release_title="$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)"
+
+          # F-Droid only releases must not collide with the full release tag or be marked latest,
+          # since they lack the standard Play Store APK.
+          if [[ "$_FDROID_ONLY" == "true" ]]; then
+            is_latest_release=false
+            tag_name="$_TAG_NAME-fdroid" # e.g. v2025.6.0-bwpm-fdroid
+            release_title="$release_title (F-Droid)"
+          fi
+          echo "tag_name=$tag_name" >> "$GITHUB_OUTPUT"
+
+          echo "⌛️ Creating release $release_title on $_TARGET_COMMIT"
+          release_url=$(gh release create "$tag_name" \
+            --title "$release_title" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
             --notes-start-tag "$_LAST_RELEASE_TAG" \
@@ -262,7 +301,7 @@ jobs:
 
       - name: Add Release Summary
         env:
-          _RELEASE_TAG: ${{ steps.get_release_info.outputs.tag_name }}
+          _RELEASE_TAG: ${{ steps.create_release.outputs.tag_name }}
           _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
