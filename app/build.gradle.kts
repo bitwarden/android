@@ -71,6 +71,8 @@ configure<ApplicationExtension> {
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Each instrumented test starts from a freshly cleared app (requires the orchestrator).
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
 
         buildConfigField(
             type = "String",
@@ -163,6 +165,9 @@ configure<ApplicationExtension> {
         }
     }
     testOptions {
+        // Instrumented tests: isolates each test in its own process (enables clearPackageData).
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
@@ -313,6 +318,16 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    // Compose pulls in Espresso 3.5.0, which crashes on API 37 (InputManager.getInstance removed).
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestUtil(libs.androidx.test.services)
 }
 
 afterEvaluate {
