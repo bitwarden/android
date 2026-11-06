@@ -55,6 +55,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * The top level composable for the Landing screen.
@@ -120,7 +121,8 @@ fun LandingScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .testTag(tag = ScreenTags.LANDING),
         topBar = {
             if (state.isAppBarVisible) {
                 BitwardenTopAppBar(

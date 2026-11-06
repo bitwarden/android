@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +39,7 @@ import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Top-level composable for the Accessibility Disclosure screen.
@@ -57,6 +59,7 @@ fun AccessibilityDisclosureScreen(
 
     BackHandler { viewModel.trySendAction(AccessibilityDisclosureAction.CloseAppClick) }
     BitwardenScaffold(
+        modifier = Modifier.testTag(tag = ScreenTags.ACCESSIBILITY_DISCLOSURE),
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets
             .union(WindowInsets.displayCutout)

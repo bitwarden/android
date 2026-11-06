@@ -46,6 +46,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenClientCertificateDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import kotlinx.coroutines.launch
 
 /**
@@ -159,7 +160,8 @@ fun EnvironmentScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .testTag(tag = ScreenTags.ENVIRONMENT),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = BitwardenString.settings),

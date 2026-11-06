@@ -49,6 +49,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -103,7 +104,8 @@ fun LoginScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .testTag(tag = ScreenTags.LOGIN),
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.app_name),

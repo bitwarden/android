@@ -51,6 +51,7 @@ import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import kotlinx.coroutines.launch
 
 /**
@@ -83,7 +84,9 @@ fun WelcomeScreen(
     }
 
     BitwardenScaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(tag = ScreenTags.WELCOME),
         containerColor = BitwardenTheme.colorScheme.background.secondary,
         contentColor = BitwardenTheme.colorScheme.text.secondary,
     ) {
