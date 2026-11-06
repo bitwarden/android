@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.e2e.robots
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Opens the [VaultRobot] and runs [block] on it.
@@ -14,17 +14,16 @@ fun ComposeTestRule.vault(
 ): VaultRobot = VaultRobot(rule = this).apply(block)
 
 /**
- * Robot for the unlocked vault with the bottom tab bar.
+ * Robot for the vault list screen. The bottom tab bar is a separate screen: [NavBarRobot].
  */
 class VaultRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.VAULT) {
     /**
-     * Asserts the unlocked vault is shown. The settings tab only exists in the unlocked vault's
-     * navigation bar.
+     * Asserts the vault list screen is shown.
      */
     fun assertVaultIsDisplayed() {
-        waitForTag(Tags.SETTINGS_TAB).assertIsDisplayed()
+        assertScreenIsDisplayed()
     }
 
     /**
@@ -35,7 +34,6 @@ class VaultRobot(
     }
 
     private object Tags {
-        const val SETTINGS_TAB = "SettingsTab"
         const val CIPHER_CELL = "CipherCell"
     }
 }

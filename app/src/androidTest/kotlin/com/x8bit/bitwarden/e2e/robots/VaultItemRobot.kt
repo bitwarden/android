@@ -4,6 +4,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import com.x8bit.bitwarden.e2e.screens.displayedText
 import com.x8bit.bitwarden.e2e.screens.rawText
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 
@@ -19,7 +20,7 @@ fun ComposeTestRule.vaultItem(
  */
 class VaultItemRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.VAULT_ITEM) {
     /**
      * Taps the button that shows the password.
      */

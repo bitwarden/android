@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.e2e.robots
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Opens the [EnvironmentRobot] and runs [block] on it.
@@ -16,7 +17,7 @@ fun ComposeTestRule.environment(
  */
 class EnvironmentRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.ENVIRONMENT) {
     /**
      * Enters [url] as the server URL.
      */

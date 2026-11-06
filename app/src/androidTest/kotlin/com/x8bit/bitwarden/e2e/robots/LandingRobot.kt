@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.e2e.robots
 
-import androidx.compose.ui.test.hasAnyDescendant
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
@@ -9,6 +7,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.e2e.screens.appString
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Opens the [LandingRobot] and runs [block] on it.
@@ -22,16 +21,12 @@ fun ComposeTestRule.landing(
  */
 class LandingRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.LANDING) {
     /**
-     * Picks "Self-hosted" in the region selector, which opens the Environment screen.
+     * Opens the region selector dialog. Pick a region with `alertDialog { selectOption(...) }`.
      */
-    fun selectSelfHostedRegion() {
+    fun tapRegionSelector() {
         waitForTag(Tags.REGION_SELECTOR).performClick()
-        waitForNode(
-            hasTestTag(Tags.REGION_OPTION) and
-                hasAnyDescendant(hasText(appString(BitwardenString.self_hosted))),
-        ).performClick()
     }
 
     /**
@@ -52,7 +47,6 @@ class LandingRobot(
 
     private object Tags {
         const val REGION_SELECTOR = "RegionSelectorDropdown"
-        const val REGION_OPTION = "AlertRadioButtonOption"
         const val EMAIL_FIELD = "EmailAddressEntry"
         const val CONTINUE_BUTTON = "ContinueButton"
     }

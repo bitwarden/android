@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.e2e
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.x8bit.bitwarden.e2e.robots.alertDialog
 import com.x8bit.bitwarden.e2e.robots.goToLoginScreen
 import com.x8bit.bitwarden.e2e.robots.logInWithMasterPassword
 import com.x8bit.bitwarden.e2e.robots.login
+import com.x8bit.bitwarden.e2e.robots.navBar
 import com.x8bit.bitwarden.e2e.robots.vault
 import com.x8bit.bitwarden.e2e.robots.vaultItem
 import com.x8bit.bitwarden.e2e.seeder.LoginItem
@@ -39,6 +41,9 @@ class VaultLoginRobotTest : BaseE2eTest() {
                 vault {
                     assertVaultIsDisplayed()
                 }
+                navBar {
+                    assertSettingsTabIsDisplayed()
+                }
             }
         }
     }
@@ -58,7 +63,9 @@ class VaultLoginRobotTest : BaseE2eTest() {
                 enterMasterPassword(password = "${account.password}-wrong")
                 tapLogInWithMasterPassword()
 
-                assertErrorDialogIsDisplayed()
+                alertDialog {
+                    assertAlertIsDisplayed()
+                }
             }
         }
     }

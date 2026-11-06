@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.e2e.robots
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Opens the [WelcomeRobot] and runs [block] on it.
@@ -15,7 +16,7 @@ fun ComposeTestRule.welcome(
  */
 class WelcomeRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.WELCOME) {
     /**
      * Taps "Log in" to log in with an existing account.
      */

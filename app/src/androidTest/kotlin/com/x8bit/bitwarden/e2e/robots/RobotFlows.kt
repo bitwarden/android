@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.e2e.robots
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.e2e.screens.appString
 import com.x8bit.bitwarden.e2e.seeder.SeededAccount
 
 /**
@@ -15,7 +17,11 @@ fun ComposeTestRule.goToLoginScreen(serverUrl: String, email: String) {
         tapLogIn()
     }
     landing {
-        selectSelfHostedRegion()
+        tapRegionSelector()
+
+        alertDialog {
+            selectOption(text = appString(BitwardenString.self_hosted))
+        }
     }
     environment {
         enterServerUrl(url = serverUrl)

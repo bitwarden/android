@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoF
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
@@ -166,6 +169,7 @@ private fun VaultUnlockedNavBarScaffold(
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
     )
     BitwardenScaffold(
+        modifier = Modifier.testTag(tag = ScreenTags.VAULT_UNLOCKED_NAV_BAR),
         contentWindowInsets = WindowInsets(0.dp),
         navigationData = ScaffoldNavigationData(
             navigationItems = navigationItems,

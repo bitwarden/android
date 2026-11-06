@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.e2e.screens.appString
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Opens the [AccessibilityDisclosureRobot] and runs [block] on it.
@@ -21,7 +22,7 @@ fun ComposeTestRule.accessibilityDisclosure(
  */
 class AccessibilityDisclosureRobot(
     rule: ComposeTestRule,
-) : BaseRobot(rule) {
+) : BaseRobot(rule = rule, screenTag = ScreenTags.ACCESSIBILITY_DISCLOSURE) {
     /**
      * Taps "I understand" to acknowledge the disclosure.
      */
