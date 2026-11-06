@@ -263,6 +263,8 @@ Common testing mistakes in Bitwarden. **For complete details and examples:** See
 - **Null stream testing** - Test null returns from ContentResolver operations
 - **bufferedMutableSharedFlow** - Use with `.onSubscription { emit(state) }` in Fakes
 - **Test factory methods** - Accept domain state types, not SavedStateHandle
+- **Navigation arguments** - ViewModels receive their route via assisted injection; construct them with `route = XGraph.XRoute(...)` (never mock `SavedStateHandle` extensions for arguments)
+- **Navigation hosts** - Pass a real `navigationControllerOf(...)` and a fake `entryProvider`/content to hosts with a `NavDisplay`, then assert `navigationController.backStack`
 
 ---
 
