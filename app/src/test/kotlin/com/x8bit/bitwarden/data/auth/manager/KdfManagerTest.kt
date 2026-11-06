@@ -48,10 +48,10 @@ class KdfManagerTest {
     )
 
     @Test
-    fun `needsKdfUpdateToMinimums with no active user should return false`() = runTest {
+    fun `needsKdfUpdateToMinimums with no account for the user should return false`() = runTest {
         fakeAuthDiskSource.userState = null
 
-        val result = manager.needsKdfUpdateToMinimums()
+        val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
 
         assertFalse(result)
     }
@@ -70,7 +70,7 @@ class KdfManagerTest {
             ),
         )
 
-        val result = manager.needsKdfUpdateToMinimums()
+        val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
 
         assertFalse(result)
     }
@@ -95,7 +95,7 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.needsKdfUpdateToMinimums()
+            val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
             assertFalse(result)
         }
 
@@ -104,7 +104,7 @@ class KdfManagerTest {
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-            val result = manager.needsKdfUpdateToMinimums()
+            val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_2)
 
             assertTrue(result)
         }
@@ -124,7 +124,7 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.needsKdfUpdateToMinimums()
+            val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
 
             assertFalse(result)
         }
@@ -144,7 +144,7 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.needsKdfUpdateToMinimums()
+            val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
 
             assertFalse(result)
         }
@@ -164,7 +164,7 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.needsKdfUpdateToMinimums()
+            val result = manager.needsKdfUpdateToMinimums(userId = USER_ID_1)
 
             assertFalse(result)
         }
@@ -174,12 +174,71 @@ class KdfManagerTest {
         runTest {
             fakeAuthDiskSource.userState = null
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_1,
+                password = PASSWORD,
+            )
 
             assertEquals(
                 UpdateKdfMinimumsResult.ActiveAccountNotFound,
                 result,
             )
+        }
+
+    @Test
+    fun `needsKdfUpdateToMinimums should check the requested user rather than the active user`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = PROFILE_1.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 600000,
+                        ),
+                    ),
+                    USER_ID_2 to ACCOUNT_2.copy(
+                        profile = ACCOUNT_2.profile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 5000,
+                        ),
+                    ),
+                ),
+            )
+
+            assertFalse(manager.needsKdfUpdateToMinimums(userId = USER_ID_1))
+            assertTrue(manager.needsKdfUpdateToMinimums(userId = USER_ID_2))
+        }
+
+    @Test
+    fun `updateKdfToMinimumsIfNeeded for a non-active user should return ActiveAccountNotFound`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = PROFILE_1.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 5000,
+                        ),
+                    ),
+                    USER_ID_2 to ACCOUNT_2.copy(
+                        profile = ACCOUNT_2.profile.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 5000,
+                        ),
+                    ),
+                ),
+            )
+
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_2,
+                password = PASSWORD,
+            )
+
+            assertEquals(UpdateKdfMinimumsResult.ActiveAccountNotFound, result)
+            coVerify(exactly = 0) {
+                vaultSdkSource.makeUpdateKdf(userId = any(), password = any(), kdf = any())
+                accountsService.updateKdf(body = any())
+            }
         }
 
     @Test
@@ -196,7 +255,10 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_1,
+                password = PASSWORD,
+            )
 
             assertEquals(
                 UpdateKdfMinimumsResult.Success,
@@ -223,7 +285,10 @@ class KdfManagerTest {
                 ),
             )
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_1,
+                password = PASSWORD,
+            )
 
             assertEquals(
                 UpdateKdfMinimumsResult.Success,
@@ -244,7 +309,7 @@ class KdfManagerTest {
 
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-        val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+        val result = manager.updateKdfToMinimumsIfNeeded(userId = USER_ID_2, password = PASSWORD)
 
         assertEquals(
             UpdateKdfMinimumsResult.Error(error = error),
@@ -271,7 +336,10 @@ class KdfManagerTest {
 
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_2,
+                password = PASSWORD,
+            )
 
             assertEquals(UpdateKdfMinimumsResult.Error(error = error), result)
             coVerify(exactly = 1) {
@@ -296,7 +364,10 @@ class KdfManagerTest {
 
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_2,
+                password = PASSWORD,
+            )
 
             assertEquals(UpdateKdfMinimumsResult.Success, result)
             coVerify(exactly = 1) {
@@ -323,7 +394,10 @@ class KdfManagerTest {
 
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_2,
+                password = PASSWORD,
+            )
 
             assertEquals(UpdateKdfMinimumsResult.Success, result)
             assertEquals(CONTAINED_KEY_ID, requestSlot.captured.unlockData.containedKeyId)
@@ -347,7 +421,10 @@ class KdfManagerTest {
 
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-            val result = manager.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = manager.updateKdfToMinimumsIfNeeded(
+                userId = USER_ID_2,
+                password = PASSWORD,
+            )
 
             assertEquals(UpdateKdfMinimumsResult.Success, result)
 

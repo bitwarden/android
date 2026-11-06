@@ -2495,7 +2495,7 @@ class UserStateJsonExtensionsTest {
             accounts = mapOf("activeUserId" to originalAccount),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
@@ -2555,7 +2555,7 @@ class UserStateJsonExtensionsTest {
             accounts = mapOf("activeUserId" to originalAccount),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
@@ -2576,7 +2576,7 @@ class UserStateJsonExtensionsTest {
     }
 
     @Test
-    fun `toUserStateJsonKdfUpdatedMinimums should only update active user account`() {
+    fun `toUserStateJsonKdfUpdatedMinimums should only update the given user account`() {
         val activeProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "active@example.com",
@@ -2633,7 +2633,7 @@ class UserStateJsonExtensionsTest {
             ),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
