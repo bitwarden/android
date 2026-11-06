@@ -41,7 +41,7 @@ permissions:
 jobs:
   version:
     name: Calculate Version Name and Number
-    uses: bitwarden/android/.github/workflows/_version.yml@main
+    uses: ./.github/workflows/_version.yml
     with:
       app_codename: "bwa"
       base_version_number: 0
