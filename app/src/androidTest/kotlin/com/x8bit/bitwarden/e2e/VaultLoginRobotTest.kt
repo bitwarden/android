@@ -64,7 +64,7 @@ class VaultLoginRobotTest : BaseE2eTest() {
                 tapLogInWithMasterPassword()
 
                 alertDialog {
-                    assertAlertIsDisplayed()
+                    assertErrorAlertIsDisplayed()
                 }
             }
         }
