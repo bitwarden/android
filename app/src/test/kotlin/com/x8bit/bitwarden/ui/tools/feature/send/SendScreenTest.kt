@@ -1041,7 +1041,11 @@ class SendScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -1060,7 +1064,11 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `FileTypeRequiresPremium dialog Cancel click should send DismissDialog`() {
         mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -1073,7 +1081,11 @@ class SendScreenTest : BitwardenComposeTest() {
     @Test
     fun `FileTypeRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
         mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule

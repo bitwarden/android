@@ -62,7 +62,9 @@ class AttachmentsViewModel @Inject constructor(
             AttachmentsState(
                 cipherId = savedStateHandle.toAttachmentsArgs().cipherId,
                 viewState = AttachmentsState.ViewState.Loading,
-                dialogState = AttachmentsState.DialogState.RequiresPremium
+                dialogState = AttachmentsState.DialogState.RequiresPremium(
+                    isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                )
                     .takeUnless { isPremiumUser },
                 isPremiumUser = isPremiumUser,
                 isAttachmentUpdatesEnabled = featureFlagManager.getFeatureFlag(
@@ -114,7 +116,11 @@ class AttachmentsViewModel @Inject constructor(
         onContent { content ->
             if (!state.isPremiumUser) {
                 mutableStateFlow.update {
-                    it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.RequiresPremium(
+                            isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                        ),
+                    )
                 }
                 return@onContent
             }
@@ -241,7 +247,11 @@ class AttachmentsViewModel @Inject constructor(
     private fun handleItemClick(action: AttachmentsAction.ItemClick) {
         if (!state.isPremiumUser) {
             mutableStateFlow.update {
-                it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+                it.copy(
+                    dialogState = AttachmentsState.DialogState.RequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -490,7 +500,9 @@ data class AttachmentsState(
          * Represents a dismissible dialog indicating that you must have premium.
          */
         @Parcelize
-        data object RequiresPremium : DialogState()
+        data class RequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Represents a dismissible dialog with the given error [message].

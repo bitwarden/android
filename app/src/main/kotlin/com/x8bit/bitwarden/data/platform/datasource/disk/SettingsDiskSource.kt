@@ -253,6 +253,22 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored value of whether the plan badge should be shown for the given
+     * [userId].
+     */
+    fun getShouldShowPlanBadge(userId: String): Boolean?
+
+    /**
+     * Stores whether the plan badge should be shown for the given [userId].
+     */
+    fun storeShouldShowPlanBadge(userId: String, shouldShow: Boolean?)
+
+    /**
+     * Emits updates that track [getShouldShowPlanBadge] for the given [userId].
+     */
+    fun getShouldShowPlanBadgeFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

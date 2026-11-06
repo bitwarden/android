@@ -42,12 +42,14 @@ class SettingsViewModelTest : BaseViewModelTest() {
     private val mutablePlanRowEligibleFlow = MutableStateFlow(false)
     private val mutableUpgradedToPremiumCardEligibleFlow = MutableStateFlow(false)
     private val mutableIsSelfHostedFlow = MutableStateFlow(false)
+    private val mutableShouldShowPlanBadgeFlow = MutableStateFlow(false)
     private val premiumStateManager: PremiumStateManager = mockk(relaxed = true) {
         every { isPlanRowEligibleFlow } returns mutablePlanRowEligibleFlow
         every {
             isUpgradedToPremiumCardEligibleFlow
         } returns mutableUpgradedToPremiumCardEligibleFlow
         every { isSelfHostedFlow } returns mutableIsSelfHostedFlow
+        every { shouldShowPlanBadgeFlow } returns mutableShouldShowPlanBadgeFlow
     }
 
     @BeforeEach
@@ -140,12 +142,14 @@ class SettingsViewModelTest : BaseViewModelTest() {
         mutableAutofillBadgeCountFlow.update { 1 }
         mutableSecurityBadgeCountFlow.update { 2 }
         mutableVaultBadgeCountFlow.update { 3 }
+        mutableShouldShowPlanBadgeFlow.update { true }
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE.copy(
                 autoFillCount = 1,
                 securityCount = 2,
                 vaultCount = 3,
+                showPlanBadge = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -193,7 +197,38 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
+
+            mutableShouldShowPlanBadgeFlow.update { true }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    autoFillCount = 1,
+                    securityCount = 2,
+                    vaultCount = 3,
+                    showPlanBadge = true,
+                ),
+                awaitItem(),
+            )
         }
+    }
+
+    @Test
+    fun `notificationBadgeCountMap should show a PLAN count of 1 when the plan badge is shown`() {
+        mutableShouldShowPlanBadgeFlow.value = true
+        val viewModel = createViewModel()
+        assertEquals(
+            1,
+            viewModel.stateFlow.value.notificationBadgeCountMap[Settings.PLAN],
+        )
+    }
+
+    @Test
+    fun `notificationBadgeCountMap should show a PLAN count of 0 when the plan badge is hidden`() {
+        mutableShouldShowPlanBadgeFlow.value = false
+        val viewModel = createViewModel()
+        assertEquals(
+            0,
+            viewModel.stateFlow.value.notificationBadgeCountMap[Settings.PLAN],
+        )
     }
 
     @Test
@@ -388,5 +423,6 @@ private val DEFAULT_STATE = SettingsState(
     autoFillCount = 0,
     securityCount = 0,
     vaultCount = 0,
+    showPlanBadge = false,
     isPlanRowEligible = false,
 )

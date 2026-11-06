@@ -334,7 +334,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                isInAppUpgradeAvailable = true,
+            ),
         )
 
         composeTestRule
@@ -348,7 +350,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                isInAppUpgradeAvailable = true,
+            ),
         )
 
         composeTestRule

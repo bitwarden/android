@@ -60,6 +60,7 @@ private const val VAULT_POLICY_BANNER_DISMISSED_DATE = "vaultPolicyBannerDismiss
 private const val UPGRADED_TO_PREMIUM_CARD_CONSUMED = "upgradedToPremiumCardConsumed"
 private const val UPGRADED_TO_PREMIUM_CARD_PENDING = "upgradedToPremiumCardPending"
 private const val PREMIUM_UPGRADE_PENDING = "premiumUpgradePending"
+private const val SHOULD_SHOW_PLAN_BADGE = "shouldShowPlanBadge"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -120,6 +121,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutablePremiumUpgradePendingFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShouldShowPlanBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
@@ -283,6 +287,7 @@ class SettingsDiskSourceImpl(
         storeAppResumeScreen(userId = userId, screenData = null)
         storeVaultPolicyBannerDismissedDate(userId = userId, dismissalRevisionDate = null)
         storeCollapsedVaultSections(userId = userId, collapsedVaultSections = null)
+        storeShouldShowPlanBadge(userId = userId, shouldShow = null)
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -446,6 +451,25 @@ class SettingsDiskSourceImpl(
     override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
         getMutablePremiumUpgradePendingFlow(userId = userId)
             .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
+
+    override fun getShouldShowPlanBadge(
+        userId: String,
+    ): Boolean? = getBoolean(key = SHOULD_SHOW_PLAN_BADGE.appendIdentifier(identifier = userId))
+
+    override fun storeShouldShowPlanBadge(
+        userId: String,
+        shouldShow: Boolean?,
+    ) {
+        putBoolean(
+            key = SHOULD_SHOW_PLAN_BADGE.appendIdentifier(identifier = userId),
+            value = shouldShow,
+        )
+        getMutableShouldShowPlanBadgeFlow(userId = userId).tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowPlanBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShouldShowPlanBadgeFlow(userId = userId)
+            .onSubscription { emit(getShouldShowPlanBadge(userId = userId)) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -845,6 +869,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradePendingFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShouldShowPlanBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShouldShowPlanBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

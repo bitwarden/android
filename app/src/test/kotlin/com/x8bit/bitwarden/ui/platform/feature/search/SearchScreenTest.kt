@@ -1075,7 +1075,11 @@ class SearchScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialogState = SearchState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialogState = SearchState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule

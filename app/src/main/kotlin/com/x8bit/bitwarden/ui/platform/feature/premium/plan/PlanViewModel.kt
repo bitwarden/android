@@ -169,6 +169,8 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
+
+        premiumStateManager.dismissPlanBadge()
     }
 
     override fun handleAction(action: PlanAction) {

@@ -1111,7 +1111,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 isPremium = false,
-                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium,
+                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -1866,7 +1868,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-                    dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium,
+                    dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                        isInAppUpgradeAvailable = true,
+                    ),
                     isPremium = false,
                 ),
                 viewModel.stateFlow.value,

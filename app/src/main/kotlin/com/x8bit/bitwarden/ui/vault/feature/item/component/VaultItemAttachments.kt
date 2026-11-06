@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @param vaultCommonItemTypeHandlers Provides the handlers required for each attachment.
  */
 fun LazyListScope.vaultItemAttachments(
+    isInAppUpgradeAvailable: Boolean,
     attachments: ImmutableList<VaultItemState.ViewState.Content.Common.AttachmentItem>,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
 ) {
@@ -46,6 +47,7 @@ fun LazyListScope.vaultItemAttachments(
         key = { index, _ -> "attachment_$index" },
     ) { index, attachmentItem ->
         VaultItemAttachment(
+            isInAppUpgradeAvailable = isInAppUpgradeAvailable,
             attachmentItem = attachmentItem,
             onAttachmentDownloadClick = vaultCommonItemTypeHandlers.onAttachmentDownloadClick,
             onAttachmentPreviewClick = vaultCommonItemTypeHandlers.onAttachmentPreviewClick,

@@ -1149,7 +1149,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 isPremium = false,
-                dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -2637,7 +2639,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     isPremium = false,
-                    dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = false,
+                    ),
                     viewState = VaultState.ViewState.Content(
                         loginItemsCount = 1,
                         cardItemsCount = 0,
