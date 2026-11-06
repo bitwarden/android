@@ -101,8 +101,10 @@ coil-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+detekt-detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+detekt-detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 google-billing = { module = "com.android.billingclient:billing", version.ref = "googleBilling" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }

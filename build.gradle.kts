@@ -35,6 +35,8 @@ configurations.configureEach {
 dependencies {
     detektPlugins(libs.detekt.detekt.formatting)
     detektPlugins(libs.detekt.detekt.rules)
+    // Bitwarden custom rules. Not transitive, so Detekt keeps its own Kotlin standard library.
+    detektPlugins(project(":detekt-rules")) { isTransitive = false }
 
     kover(project(":annotation"))
     kover(project(":app"))
@@ -59,6 +61,7 @@ detekt {
         "core/src",
         "cxf/src",
         "data/src",
+        "detekt-rules/src",
         "network/src",
         "testharness/src",
         "ui/src",

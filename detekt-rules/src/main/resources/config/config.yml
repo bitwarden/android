@@ -1,0 +1,4 @@
+bitwarden:
+  active: true
+  NamedFontWeight:
+    active: true

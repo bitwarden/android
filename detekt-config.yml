@@ -667,3 +667,8 @@ style:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     excludeImports: [ 'java.util.*', 'kotlinx.android.synthetic.*' ]
+
+bitwarden:
+  active: true
+  NamedFontWeight:
+    active: true
