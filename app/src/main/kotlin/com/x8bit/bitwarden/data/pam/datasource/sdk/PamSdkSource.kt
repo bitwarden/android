@@ -1,8 +1,12 @@
 package com.x8bit.bitwarden.data.pam.datasource.sdk
 
+import com.bitwarden.pam.AccessLeaseExtensionRequest
+import com.bitwarden.pam.AccessLeaseRevokeRequest
+import com.bitwarden.pam.AccessLeaseView
 import com.bitwarden.pam.AccessPreCheckView
 import com.bitwarden.pam.AccessRequestCreateRequest
 import com.bitwarden.pam.AccessRequestResultView
+import com.bitwarden.pam.AccessRequestView
 import com.bitwarden.pam.CipherAccessStateView
 import com.bitwarden.vault.CipherView
 
@@ -11,6 +15,7 @@ import com.bitwarden.vault.CipherView
  *
  * PAM must only ever be reached through the SDK, never through REST endpoints.
  */
+@Suppress("TooManyFunctions")
 interface PamSdkSource {
 
     /**
@@ -49,4 +54,48 @@ interface PamSdkSource {
         userId: String,
         cipherId: String,
     ): Result<CipherView?>
+
+    /**
+     * Lists the access requests made by the user, including finished ones.
+     */
+    suspend fun listMyAccessRequests(userId: String): Result<List<AccessRequestView>>
+
+    /**
+     * Lists the leases held by the user, including finished ones.
+     */
+    suspend fun listMyLeases(userId: String): Result<List<AccessLeaseView>>
+
+    /**
+     * Starts access for the approved request with the given [requestId], minting a lease.
+     */
+    suspend fun activateAccessRequest(
+        userId: String,
+        requestId: String,
+    ): Result<AccessLeaseView>
+
+    /**
+     * Cancels the pending or approved-but-unstarted request with the given [requestId].
+     */
+    suspend fun cancelAccessRequest(
+        userId: String,
+        requestId: String,
+    ): Result<Unit>
+
+    /**
+     * Ends the active lease with the given [leaseId].
+     */
+    suspend fun endLease(
+        userId: String,
+        leaseId: String,
+        request: AccessLeaseRevokeRequest,
+    ): Result<Unit>
+
+    /**
+     * Requests an extension of the active lease with the given [leaseId].
+     */
+    suspend fun extendLease(
+        userId: String,
+        leaseId: String,
+        request: AccessLeaseExtensionRequest,
+    ): Result<AccessRequestView>
 }

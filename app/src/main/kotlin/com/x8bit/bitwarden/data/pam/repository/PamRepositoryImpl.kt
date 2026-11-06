@@ -3,18 +3,34 @@ package com.x8bit.bitwarden.data.pam.repository
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.pam.AccessApprovalMode
 import com.bitwarden.pam.AccessBadgeState
+import com.bitwarden.pam.AccessLeaseExtensionRequest
+import com.bitwarden.pam.AccessLeaseRevokeRequest
+import com.bitwarden.pam.AccessLeaseStatus
+import com.bitwarden.pam.AccessLeaseView
 import com.bitwarden.pam.AccessRequestCreateRequest
 import com.bitwarden.pam.AccessRequestException
+import com.bitwarden.pam.AccessRequestStatus
+import com.bitwarden.pam.AccessRequestView
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.pam.datasource.sdk.PamSdkSource
+import com.x8bit.bitwarden.data.pam.manager.PamLeaseReminderManager
 import com.x8bit.bitwarden.data.pam.repository.model.PamAccessRequest
 import com.x8bit.bitwarden.data.pam.repository.model.PamAccessStatus
 import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalMode
+import com.x8bit.bitwarden.data.pam.repository.model.PamExtensionPolicy
 import com.x8bit.bitwarden.data.pam.repository.model.PamItemAccess
+import com.x8bit.bitwarden.data.pam.repository.model.PamLease
+import com.x8bit.bitwarden.data.pam.repository.model.PamLeaseStatus
+import com.x8bit.bitwarden.data.pam.repository.model.PamMyAccessRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamRequestStatus
 import com.x8bit.bitwarden.data.pam.repository.model.RequestPamAccessResult
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import java.time.Clock
 
 private const val HTTP_BAD_REQUEST = 400
 private const val HTTP_CONFLICT = 409
@@ -40,10 +56,17 @@ private fun String?.toHttpStatus(): Int? = this
 /**
  * Default implementation of [PamRepository].
  */
+@Suppress("TooManyFunctions")
 class PamRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val pamSdkSource: PamSdkSource,
+    private val pamLeaseReminderManager: PamLeaseReminderManager,
+    private val clock: Clock,
 ) : PamRepository {
+
+    private val mutableAccessChangedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+    override val accessChangedFlow: SharedFlow<Unit> = mutableAccessChangedFlow.asSharedFlow()
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -114,6 +137,147 @@ class PamRepositoryImpl(
         val userId = activeUserId ?: return NoActiveUserException().asFailure()
         return pamSdkSource.getLeasedCipher(userId = userId, cipherId = cipherId)
     }
+
+    override suspend fun getMyAccessRequests(): Result<List<PamMyAccessRequest>> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .listMyAccessRequests(userId = userId)
+            .mapCatching { requests ->
+                val leases = pamSdkSource
+                    .listMyLeases(userId = userId)
+                    .getOrNull()
+                    .orEmpty()
+                val now = clock.instant()
+                val items = requests
+                    .map { request ->
+                        val lease = request.toPamLease(
+                            leases = leases,
+                        )
+                        val extensionPolicy = lease
+                            ?.takeIf { it.isActiveAt(now) }
+                            ?.let { getExtensionPolicy(userId, request.cipherId) }
+                        request.toPamMyAccessRequest(lease, extensionPolicy)
+                    }
+                    .sortedByDescending { it.submittedAt }
+                syncReminders(userId = userId, leases = leases, requests = items)
+                items
+            }
+    }
+
+    override suspend fun getCurrentAccessRequestCount(): Result<Int> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .listMyAccessRequests(userId = userId)
+            .mapCatching { requests ->
+                val leases = pamSdkSource
+                    .listMyLeases(userId = userId)
+                    .getOrNull()
+                    .orEmpty()
+                val now = clock.instant()
+                requests.count { request ->
+                    request
+                        .toPamMyAccessRequest(
+                            lease = request.toPamLease(leases = leases),
+                            extensionPolicy = null,
+                        )
+                        .isCurrentAt(now)
+                }
+            }
+    }
+
+    override suspend fun startAccess(requestId: String): Result<Unit> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .activateAccessRequest(userId = userId, requestId = requestId)
+            .onSuccess { lease ->
+                if (lease.status == AccessLeaseStatus.ACTIVE) {
+                    pamLeaseReminderManager.scheduleReminder(
+                        userId = userId,
+                        leaseId = lease.id,
+                        leaseEndsAt = lease.notAfter,
+                    )
+                }
+                mutableAccessChangedFlow.tryEmit(Unit)
+            }
+            .map { }
+    }
+
+    override suspend fun cancelAccessRequest(requestId: String): Result<Unit> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .cancelAccessRequest(userId = userId, requestId = requestId)
+            .onSuccess { mutableAccessChangedFlow.tryEmit(Unit) }
+    }
+
+    override suspend fun endAccess(leaseId: String): Result<Unit> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .endLease(
+                userId = userId,
+                leaseId = leaseId,
+                request = AccessLeaseRevokeRequest(reason = null),
+            )
+            .onSuccess {
+                pamLeaseReminderManager.cancelReminder(leaseId = leaseId)
+                mutableAccessChangedFlow.tryEmit(Unit)
+            }
+    }
+
+    override suspend fun extendAccess(
+        leaseId: String,
+        durationSeconds: Long,
+        reason: String,
+    ): Result<Unit> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .extendLease(
+                userId = userId,
+                leaseId = leaseId,
+                request = AccessLeaseExtensionRequest(
+                    durationSeconds = durationSeconds.toUInt(),
+                    reason = reason,
+                ),
+            )
+            .onSuccess {
+                getMyAccessRequests()
+                mutableAccessChangedFlow.tryEmit(Unit)
+            }
+            .map { }
+    }
+
+    private suspend fun getExtensionPolicy(
+        userId: String,
+        cipherId: String,
+    ): PamExtensionPolicy? = pamSdkSource
+        .getCipherAccessState(userId = userId, cipherId = cipherId)
+        .getOrNull()
+        ?.takeIf { it.extensionsAllowed }
+        ?.let { PamExtensionPolicy(maxDurationSeconds = it.maxExtensionDurationSeconds?.toLong()) }
+
+    /**
+     * Schedules reminders for active leases and cancels them for every lease that is no longer
+     * active (ended, expired or revoked).
+     */
+    private fun syncReminders(
+        userId: String,
+        leases: List<AccessLeaseView>,
+        requests: List<PamMyAccessRequest>,
+    ) {
+        val now = clock.instant()
+        val allLeases = (leases.map { it.toPamLease() } + requests.mapNotNull { it.lease })
+            .distinctBy { it.id }
+        allLeases.forEach { lease ->
+            if (lease.isActiveAt(now)) {
+                pamLeaseReminderManager.scheduleReminder(
+                    userId = userId,
+                    leaseId = lease.id,
+                    leaseEndsAt = lease.notAfter,
+                )
+            } else {
+                pamLeaseReminderManager.cancelReminder(leaseId = lease.id)
+            }
+        }
+    }
 }
 
 private fun Throwable.toRequestPamAccessResult(): RequestPamAccessResult {
@@ -136,3 +300,60 @@ private fun Throwable.toRequestPamAccessResult(): RequestPamAccessResult {
         else -> RequestPamAccessResult.Error(error = this)
     }
 }
+
+private fun AccessRequestStatus.toPamRequestStatus(): PamRequestStatus = when (this) {
+    AccessRequestStatus.PENDING -> PamRequestStatus.PENDING
+    AccessRequestStatus.APPROVED -> PamRequestStatus.APPROVED
+    AccessRequestStatus.DENIED -> PamRequestStatus.DENIED
+    AccessRequestStatus.CANCELED -> PamRequestStatus.CANCELLED
+    AccessRequestStatus.EXPIRED -> PamRequestStatus.EXPIRED
+    AccessRequestStatus.UNKNOWN -> PamRequestStatus.UNKNOWN
+}
+
+private fun AccessLeaseView.toPamLease(): PamLease = PamLease(
+    id = id,
+    status = status.toPamLeaseStatus(),
+    notBefore = notBefore,
+    notAfter = notAfter,
+)
+
+private fun AccessLeaseStatus.toPamLeaseStatus(): PamLeaseStatus = when (this) {
+    AccessLeaseStatus.ACTIVE -> PamLeaseStatus.ACTIVE
+    AccessLeaseStatus.EXPIRED -> PamLeaseStatus.EXPIRED
+    AccessLeaseStatus.REVOKED -> PamLeaseStatus.REVOKED
+    AccessLeaseStatus.CANCELED -> PamLeaseStatus.CANCELLED
+    AccessLeaseStatus.UNKNOWN -> PamLeaseStatus.UNKNOWN
+}
+
+/**
+ * Finds the lease produced by this request, preferring the full lease record and falling back to
+ * the summary the request carries.
+ */
+private fun AccessRequestView.toPamLease(leases: List<AccessLeaseView>): PamLease? =
+    leases.firstOrNull { it.requestId == id }?.toPamLease()
+        ?: producedLeaseId?.let { leaseId ->
+            PamLease(
+                id = leaseId,
+                status = producedLeaseStatus?.toPamLeaseStatus() ?: PamLeaseStatus.UNKNOWN,
+                notBefore = leaseNotBefore,
+                notAfter = producedLeaseNotAfter ?: leaseNotAfter,
+            )
+        }
+
+private fun AccessRequestView.toPamMyAccessRequest(
+    lease: PamLease?,
+    extensionPolicy: PamExtensionPolicy?,
+): PamMyAccessRequest = PamMyAccessRequest(
+    id = id,
+    cipherId = cipherId,
+    status = status.toPamRequestStatus(),
+    reason = reason,
+    submittedAt = submittedAt,
+    resolvedAt = resolvedAt,
+    windowStart = leaseNotBefore,
+    windowEnd = leaseNotAfter,
+    isExtension = extensionOfLeaseId != null,
+    awaitingActivation = awaitingActivation,
+    lease = lease,
+    extensionPolicy = extensionPolicy,
+)
