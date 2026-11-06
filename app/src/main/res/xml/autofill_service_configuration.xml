@@ -155,6 +155,9 @@
         android:name="com.stoutner.privacybrowser.standard"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="com.tencent.mtt"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="com.vivaldi.browser"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
