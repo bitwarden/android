@@ -17,12 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.R
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.hexToColor
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
@@ -32,6 +29,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.type.bitwardenFontFamily
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 
 /**
@@ -84,8 +82,8 @@ fun AccountSummaryListItem(
                 style = TextStyle(
                     fontSize = 11.dp.toUnscaledTextUnit(),
                     lineHeight = 13.dp.toUnscaledTextUnit(),
-                    fontFamily = FontFamily(Font(R.font.dm_sans_bold)),
-                    fontWeight = FontWeight.W600,
+                    fontFamily = bitwardenFontFamily,
+                    fontWeight = FontWeight.SemiBold,
                 ),
                 color = item.avatarColorHex.hexToColor().toSafeOverlayColor(),
             )
