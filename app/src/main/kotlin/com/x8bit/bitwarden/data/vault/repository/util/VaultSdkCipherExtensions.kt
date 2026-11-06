@@ -122,6 +122,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         encryptedFor = encryptedFor,
         archivedDate = archivedDate,
         data = data,
+        partialData = partialData,
     )
 
 /**
@@ -170,6 +171,7 @@ fun CipherMiniResponseJson.CipherMiniResponse.toEncryptedNetworkCipher(
     revisionDate = revisionDate,
     archivedDate = archivedDate,
     data = data,
+    partialData = partialData,
 )
 
 /**
@@ -519,7 +521,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         revisionDate = revisionDate,
         archivedDate = archivedDate,
         data = data,
-        partialData = null,
+        partialData = partialData,
     )
 
 /**

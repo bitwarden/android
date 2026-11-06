@@ -87,6 +87,7 @@ class CipherManagerImpl(
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
             ?: return CreateCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return CreateCipherResult.Error(error = it) }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -123,6 +124,7 @@ class CipherManagerImpl(
     ): CreateCipherResult {
         val userId = activeUserId
             ?: return CreateCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return CreateCipherResult.Error(error = it) }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -169,6 +171,7 @@ class CipherManagerImpl(
     ): ArchiveCipherResult {
         val userId = activeUserId
             ?: return ArchiveCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return ArchiveCipherResult.Error(error = it) }
         return ciphersService
             .archiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -205,6 +208,7 @@ class CipherManagerImpl(
     ): UnarchiveCipherResult {
         val userId = activeUserId
             ?: return UnarchiveCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return UnarchiveCipherResult.Error(error = it) }
         return ciphersService
             .unarchiveCipher(cipherId = cipherId)
             .flatMap { response ->
@@ -249,6 +253,7 @@ class CipherManagerImpl(
     ): DeleteCipherResult {
         val userId = activeUserId
             ?: return DeleteCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return DeleteCipherResult.Error(error = it) }
         // Unlike archive/unarchive, soft delete requires edit permissions, so the
         // migration check is intentional here to ensure the cipher is up-to-date
         // before deletion.
@@ -303,6 +308,7 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): Result<EncryptionContext> {
         val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        cipherView.partialWriteFailure()?.let { return it.asFailure() }
         return ciphersService
             .deleteCipherAttachment(
                 cipherId = cipherId,
@@ -349,6 +355,7 @@ class CipherManagerImpl(
     ): RestoreCipherResult {
         val userId = activeUserId
             ?: return RestoreCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return RestoreCipherResult.Error(error = it) }
         return ciphersService
             .restoreCipher(cipherId = cipherId)
             .onSuccess {
@@ -369,6 +376,7 @@ class CipherManagerImpl(
     ): UpdateCipherResult {
         val userId = activeUserId
             ?: return UpdateCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return UpdateCipherResult.Error(error = it) }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -411,6 +419,7 @@ class CipherManagerImpl(
         collectionIds: List<String>,
     ): ShareCipherResult {
         val userId = activeUserId ?: return ShareCipherResult.Error(error = NoActiveUserException())
+        cipherView.partialWriteFailure()?.let { return ShareCipherResult.Error(error = it) }
         return migrateAttachments(userId = userId, cipherView = cipherView)
             .flatMap {
                 vaultSdkSource.moveToOrganization(
@@ -506,6 +515,7 @@ class CipherManagerImpl(
         fileUri: Uri,
     ): Result<CipherView> {
         val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        cipherView.partialWriteFailure()?.let { return it.asFailure() }
         val attachmentView = AttachmentView(
             id = null,
             url = null,
@@ -645,6 +655,17 @@ class CipherManagerImpl(
     }
 
     /**
+     * Returns a failure when this [CipherView] is a partial (gated) cipher. A partial cipher only
+     * holds a name and URIs, so writing it back would destroy the real item.
+     */
+    private fun CipherView.partialWriteFailure(): IllegalStateException? =
+        if (partial) {
+            IllegalStateException("A partial (gated) cipher cannot be written to the server.")
+        } else {
+            null
+        }
+
+    /**
      * A helper method to check if the [CipherView] needs to be migrated when you encrypt it.
      */
     private suspend fun CipherView.encryptCipherAndCheckForMigration(
@@ -689,6 +710,7 @@ class CipherManagerImpl(
         userId: String,
         cipherView: CipherView,
     ): Result<CipherView> {
+        cipherView.partialWriteFailure()?.let { return it.asFailure() }
         // Only run the migrations if we have attachments that do not have their own 'key'
         val attachmentViewsToMigrate = cipherView.attachments.orEmpty().filter { it.key == null }
         if (attachmentViewsToMigrate.none()) return cipherView.asSuccess()

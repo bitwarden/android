@@ -80,6 +80,10 @@ class FlagKeyTest {
             FlagKey.SdkPreLogin.keyName,
             "pm-27060-password-prelogin-from-sdk",
         )
+        assertEquals(
+            FlagKey.PamMobilePrivilegedControls.keyName,
+            "pam-262-mobile-privileged-controls",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.PamMobilePrivilegedControls,
             ).all {
                 !it.defaultValue
             },
