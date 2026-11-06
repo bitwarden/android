@@ -11,6 +11,11 @@ on:
         description: "Release Ticket ID - e.g. RELEASE-1762"
         required: true
         type: string
+      fdroid-only:
+        description: "Optional. Create a Password Manager release containing only the F-Droid artifacts."
+        required: false
+        default: false
+        type: boolean
 
 env:
   ARTIFACTS_PATH: artifacts
@@ -75,6 +80,16 @@ jobs:
           echo "app_name=$app_name" >> "$GITHUB_OUTPUT"
           echo "app_name_suffix=$app_name_suffix" >> "$GITHUB_OUTPUT"
 
+      - name: Validate F-Droid only release
+        if: ${{ inputs.fdroid-only }}
+        env:
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
+        run: |
+          if [[ "$_APP_NAME_SUFFIX" != "bwpm" ]]; then
+            echo "::error::F-Droid only releases are only supported for Password Manager."
+            exit 1
+          fi
+
       - name: Get version info from run logs and set release tag name
         id: get_release_info
         env:
@@ -119,6 +134,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
+          _FDROID_ONLY: ${{ inputs.fdroid-only }}
         run: |
           gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH"
           file_count=$(find "$ARTIFACTS_PATH" -type f | wc -l)
@@ -128,30 +145,59 @@ jobs:
             find "$ARTIFACTS_PATH" -type f
           fi
 
-          # Files that won't be included in any release
-          files_to_remove=(
-            "com.x8bit.bitwarden.aab"
-            "com.x8bit.bitwarden.aab-sha256.txt"
-
-            "com.x8bit.bitwarden.beta.apk"
-            "com.x8bit.bitwarden.beta.apk-sha256.txt"
-            "com.x8bit.bitwarden.beta.aab"
-            "com.x8bit.bitwarden.beta.aab-sha256.txt"
-
-            "com.x8bit.bitwarden.beta-fdroid.apk"
-            "com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt"
-
-            "com.x8bit.bitwarden.dev.apk"
-            "com.x8bit.bitwarden.dev.apk-sha256.txt"
-
-            "com.bitwarden.authenticator.aab"
-            "authenticator-android-aab-sha256.txt"
+          # Artifacts that will be included in the release. Everything else is removed.
+          # gh extracts each artifact into a subdirectory named after the artifact.
+          artifacts_to_keep=(
+            "version-info"
           )
 
-          for file in "${files_to_remove[@]}"; do
-            find "$ARTIFACTS_PATH" -name "$file" -type f -delete
+          if [[ "$_APP_NAME_SUFFIX" == "bwpm" ]]; then
+            artifacts_to_keep+=(
+              "com.x8bit.bitwarden-fdroid.apk"
+              "com.x8bit.bitwarden-fdroid.apk-sha256.txt"
+            )
+            if [[ "$_FDROID_ONLY" != "true" ]]; then
+              artifacts_to_keep+=(
+                "com.x8bit.bitwarden.apk"
+                "com.x8bit.bitwarden.apk-sha256.txt"
+              )
+            fi
+          elif [[ "$_APP_NAME_SUFFIX" == "bwa" ]]; then
+            artifacts_to_keep+=(
+              "com.bitwarden.authenticator.apk"
+              "authenticator-android-apk-sha256.txt"
+            )
+          else
+            echo "::error::Unknown app name suffix: $_APP_NAME_SUFFIX"
+            exit 1
+          fi
+
+          for artifact_dir in "$ARTIFACTS_PATH"/*/; do
+            artifact=$(basename "$artifact_dir")
+            keep=false
+            for k in "${artifacts_to_keep[@]}"; do
+              if [[ "$artifact" == "$k" ]]; then
+                keep=true
+                break
+              fi
+            done
+            if [[ "$keep" == false ]]; then
+              rm -rf -- "$artifact_dir"
+            fi
           done
-          echo "🔖 Removed internal artifacts."
+          echo "🔖 Removed artifacts not in the keep list."
+
+          missing=0
+          for artifact in "${artifacts_to_keep[@]}"; do
+            if [[ -z "$(find "$ARTIFACTS_PATH/$artifact" -type f 2>/dev/null)" ]]; then
+              echo "::error::Artifact '$artifact' not found in run $ARTIFACT_RUN_ID."
+              missing=1
+            fi
+          done
+          if [[ "$missing" -ne 0 ]]; then
+            exit 1
+          fi
+
           echo ""
           echo "🔖 Files to be included in the release:"
           find "$ARTIFACTS_PATH" -type f
@@ -211,15 +257,24 @@ jobs:
           _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
           _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
           _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
+          _FDROID_ONLY: ${{ inputs.fdroid-only }}
         run: |
           is_latest_release=false
           if [[ "$_APP_NAME" == "Password Manager" ]]; then
             is_latest_release=true
           fi
 
-          echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
+          release_title="$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)"
+
+          # F-Droid only releases must not be marked latest, since they lack the standard Play Store APK.
+          if [[ "$_FDROID_ONLY" == "true" ]]; then
+            is_latest_release=false
+            release_title="$release_title (F-Droid)"
+          fi
+
+          echo "⌛️ Creating release $release_title on $_TARGET_COMMIT"
           release_url=$(gh release create "$_TAG_NAME" \
-            --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
+            --title "$release_title" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
             --notes-start-tag "$_LAST_RELEASE_TAG" \
