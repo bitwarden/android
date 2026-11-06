@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.UnknownHostException
 
@@ -101,6 +102,54 @@ class PermissionInterceptorTest {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `intercept should acquire permission and throw when request targets local IPv6 address without permission`() {
+        val errorMessage = "Local network access required"
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        every { permissionProvider.errorMessageString } returns errorMessage
+        every { permissionProvider.acquireLocalNetworkAccessPermission() } just runs
+        listOf(
+            "fd00::1" to ipv6Address(first = 0xFD, second = 0x00),
+            "fc12::1" to ipv6Address(first = 0xFC, second = 0x12),
+            "fe80::1" to ipv6Address(first = 0xFE, second = 0x80),
+        ).forEach { (host, address) ->
+            every { InetAddress.getByName(host) } returns address
+            val chain = FakeInterceptorChain(
+                request = Request.Builder().url("http://[$host]/api").build(),
+            )
+
+            val exception = assertThrows(LocalNetworkAccessException::class.java) {
+                interceptor.intercept(chain)
+            }
+
+            assertEquals(errorMessage, exception.message)
+        }
+        verify(exactly = 3) {
+            permissionProvider.hasLocalNetworkAccessPermission
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
+    @Test
+    fun `intercept should proceed when request targets a public IPv6 address`() {
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        val host = "2001:db8::1"
+        every { InetAddress.getByName(host) } returns ipv6Address(first = 0x20, second = 0x01)
+        val chain = FakeInterceptorChain(
+            request = Request.Builder().url("http://[$host]/api").build(),
+        )
+
+        val response = interceptor.intercept(chain)
+
+        assertEquals(200, response.code)
+        verify(exactly = 0) {
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
     @Test
     fun `intercept should rethrow UnknownHostException when DNS resolution fails`() {
         every { permissionProvider.hasLocalNetworkAccessPermission } returns false
@@ -144,4 +193,19 @@ class PermissionInterceptorTest {
             permissionProvider.errorMessageString
         }
     }
+
+    /**
+     * Creates an [Inet6Address] whose first two bytes are [first] and [second] and whose last
+     * byte is 1.
+     */
+    private fun ipv6Address(first: Int, second: Int): Inet6Address =
+        Inet6Address.getByAddress(
+            null,
+            ByteArray(size = 16).apply {
+                this[0] = first.toByte()
+                this[1] = second.toByte()
+                this[15] = 1
+            },
+            null,
+        )
 }
