@@ -3,7 +3,11 @@ package com.x8bit.bitwarden.data.pam.repository
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.pam.AccessApprovalMode
 import com.bitwarden.pam.AccessBadgeState
+import com.bitwarden.pam.AccessDecider
+import com.bitwarden.pam.AccessDecisionRequest
+import com.bitwarden.pam.AccessDecisionVerdict
 import com.bitwarden.pam.AccessLeaseExtensionRequest
+import com.bitwarden.pam.AccessLeaseException
 import com.bitwarden.pam.AccessLeaseRevokeRequest
 import com.bitwarden.pam.AccessLeaseStatus
 import com.bitwarden.pam.AccessLeaseView
@@ -11,14 +15,19 @@ import com.bitwarden.pam.AccessRequestCreateRequest
 import com.bitwarden.pam.AccessRequestException
 import com.bitwarden.pam.AccessRequestStatus
 import com.bitwarden.pam.AccessRequestView
+import com.bitwarden.pam.ApprovalException
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.pam.datasource.sdk.PamSdkSource
 import com.x8bit.bitwarden.data.pam.manager.PamLeaseReminderManager
+import com.x8bit.bitwarden.data.pam.repository.model.DecidePamAccessResult
 import com.x8bit.bitwarden.data.pam.repository.model.PamAccessRequest
 import com.x8bit.bitwarden.data.pam.repository.model.PamAccessStatus
+import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalDecision
 import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalMode
+import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamDecisionVerdict
 import com.x8bit.bitwarden.data.pam.repository.model.PamExtensionPolicy
 import com.x8bit.bitwarden.data.pam.repository.model.PamItemAccess
 import com.x8bit.bitwarden.data.pam.repository.model.PamLease
@@ -26,6 +35,7 @@ import com.x8bit.bitwarden.data.pam.repository.model.PamLeaseStatus
 import com.x8bit.bitwarden.data.pam.repository.model.PamMyAccessRequest
 import com.x8bit.bitwarden.data.pam.repository.model.PamRequestStatus
 import com.x8bit.bitwarden.data.pam.repository.model.RequestPamAccessResult
+import com.x8bit.bitwarden.data.pam.repository.model.RevokePamAccessResult
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -245,6 +255,81 @@ class PamRepositoryImpl(
             .map { }
     }
 
+    override suspend fun getApprovalInbox(): Result<List<PamApprovalRequest>> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .listApprovalInbox(userId = userId)
+            .map { requests ->
+                val now = clock.instant()
+                requests
+                    .map { it.toPamApprovalRequest(activeUserId = userId) }
+                    .filter { it.isActionableAt(now) }
+                    .sortedBy { it.submittedAt }
+            }
+    }
+
+    override suspend fun getApprovalHistory(): Result<List<PamApprovalRequest>> {
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
+        return pamSdkSource
+            .listApprovalHistory(userId = userId)
+            .map { requests ->
+                requests
+                    .map { it.toPamApprovalRequest(activeUserId = userId) }
+                    .sortedByDescending { it.resolvedAt ?: it.submittedAt }
+            }
+    }
+
+    override suspend fun decideAccessRequest(
+        request: PamApprovalRequest,
+        verdict: PamDecisionVerdict,
+        comment: String?,
+    ): DecidePamAccessResult {
+        val userId = activeUserId
+            ?: return DecidePamAccessResult.Error(error = NoActiveUserException())
+        val sdkVerdict = when (verdict) {
+            PamDecisionVerdict.APPROVE -> AccessDecisionVerdict.APPROVE
+            PamDecisionVerdict.DENY -> AccessDecisionVerdict.DENY
+            PamDecisionVerdict.UNKNOWN -> return DecidePamAccessResult.NotAllowed
+        }
+        if (request.requesterId == userId) return DecidePamAccessResult.NotAllowed
+        return pamSdkSource
+            .decideAccessRequest(
+                userId = userId,
+                requestId = request.id,
+                request = AccessDecisionRequest(
+                    verdict = sdkVerdict,
+                    comment = comment?.trim()?.takeUnless { it.isEmpty() },
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    mutableAccessChangedFlow.tryEmit(Unit)
+                    DecidePamAccessResult.Success
+                },
+                onFailure = { it.toDecidePamAccessResult() },
+            )
+    }
+
+    override suspend fun revokeAccess(request: PamApprovalRequest): RevokePamAccessResult {
+        val userId = activeUserId
+            ?: return RevokePamAccessResult.Error(error = NoActiveUserException())
+        val lease = request.lease
+        if (request.requesterId == userId || lease == null) return RevokePamAccessResult.NotAllowed
+        return pamSdkSource
+            .endLease(
+                userId = userId,
+                leaseId = lease.id,
+                request = AccessLeaseRevokeRequest(reason = null),
+            )
+            .fold(
+                onSuccess = {
+                    mutableAccessChangedFlow.tryEmit(Unit)
+                    RevokePamAccessResult.Success
+                },
+                onFailure = { it.toRevokePamAccessResult() },
+            )
+    }
+
     private suspend fun getExtensionPolicy(
         userId: String,
         cipherId: String,
@@ -300,6 +385,69 @@ private fun Throwable.toRequestPamAccessResult(): RequestPamAccessResult {
         else -> RequestPamAccessResult.Error(error = this)
     }
 }
+
+/**
+ * A request that someone else already decided is reported by the server as a 409 conflict.
+ */
+private fun Throwable.toDecidePamAccessResult(): DecidePamAccessResult {
+    val pamError = (this as? BitwardenException.Approval)?.v1
+    return if (pamError is ApprovalException.Api &&
+        (pamError.message ?: message).toHttpStatus() == HTTP_CONFLICT
+    ) {
+        DecidePamAccessResult.AlreadyDecided
+    } else {
+        DecidePamAccessResult.Error(error = this)
+    }
+}
+
+/**
+ * A lease that already ended is reported by the server as a 409 conflict.
+ */
+private fun Throwable.toRevokePamAccessResult(): RevokePamAccessResult {
+    val pamError = (this as? BitwardenException.AccessLease)?.v1
+    return if (pamError is AccessLeaseException.Api &&
+        (pamError.message ?: message).toHttpStatus() == HTTP_CONFLICT
+    ) {
+        RevokePamAccessResult.AlreadyEnded
+    } else {
+        RevokePamAccessResult.Error(error = this)
+    }
+}
+
+private fun AccessRequestView.toPamApprovalRequest(
+    activeUserId: String,
+): PamApprovalRequest = PamApprovalRequest(
+    id = id,
+    cipherId = cipherId,
+    collectionId = collectionId,
+    organizationId = organizationId,
+    requesterId = requesterId,
+    requesterName = requesterName,
+    requesterEmail = requesterEmail,
+    status = status.toPamRequestStatus(),
+    reason = reason,
+    submittedAt = submittedAt,
+    resolvedAt = resolvedAt,
+    windowStart = leaseNotBefore,
+    windowEnd = leaseNotAfter,
+    isExtension = extensionOfLeaseId != null,
+    isOwnRequest = requesterId == activeUserId,
+    lease = toPamLease(leases = emptyList()),
+    decision = humanDecision?.let { decision ->
+        PamApprovalDecision(
+            verdict = when (decision.verdict) {
+                AccessDecisionVerdict.APPROVE -> PamDecisionVerdict.APPROVE
+                AccessDecisionVerdict.DENY -> PamDecisionVerdict.DENY
+                AccessDecisionVerdict.UNKNOWN -> PamDecisionVerdict.UNKNOWN
+            },
+            comment = decision.comment,
+            deciderName = (decision.decider as? AccessDecider.Human)
+                ?.v1
+                ?.let { it.name?.takeUnless(String::isBlank) ?: it.email },
+            decidedAt = decision.decidedAt,
+        )
+    },
+)
 
 private fun AccessRequestStatus.toPamRequestStatus(): PamRequestStatus = when (this) {
     AccessRequestStatus.PENDING -> PamRequestStatus.PENDING
