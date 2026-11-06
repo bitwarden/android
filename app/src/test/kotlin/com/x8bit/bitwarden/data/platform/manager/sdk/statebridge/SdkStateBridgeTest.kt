@@ -181,6 +181,31 @@ class SdkStateBridgeTest {
     }
 
     @Test
+    fun `setPinLength should store the pin length`() = runTest {
+        stateBridge.setPinLength(value = 4u)
+
+        authDiskSource.assertPinLength(userId = USER_ID, pinLength = 4)
+    }
+
+    @Test
+    fun `getPinLength should return the stored pin length`() = runTest {
+        assertNull(stateBridge.getPinLength())
+
+        authDiskSource.storePinLength(userId = USER_ID, pinLength = 4)
+
+        assertEquals(4u, stateBridge.getPinLength())
+    }
+
+    @Test
+    fun `clearPinLength should clear the pin length`() = runTest {
+        authDiskSource.storePinLength(userId = USER_ID, pinLength = 4)
+
+        stateBridge.clearPinLength()
+
+        authDiskSource.assertPinLength(userId = USER_ID, pinLength = null)
+    }
+
+    @Test
     fun `setV2UpgradeToken should store the token as a V2UpgradeTokenJson`() = runTest {
         stateBridge.setV2UpgradeToken(value = V2_UPGRADE_TOKEN)
 

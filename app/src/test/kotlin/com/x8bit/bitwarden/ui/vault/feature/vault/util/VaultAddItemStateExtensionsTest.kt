@@ -229,6 +229,43 @@ class VaultAddItemStateExtensionsTest {
     }
 
     @Test
+    fun `toCipherView should preserve httpAuthenticationEnabled from the original cipher`() {
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW.copy(
+            login = requireNotNull(DEFAULT_LOGIN_CIPHER_VIEW.login).copy(
+                httpAuthenticationEnabled = true,
+            ),
+        )
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+            ),
+        )
+
+        val result = viewState.toCipherView(clock = FIXED_CLOCK, isPremiumUser = true)
+
+        assertEquals(
+            LoginView(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+                passwordRevisionDate = FIXED_CLOCK.instant(),
+                uris = null,
+                totp = null,
+                autofillOnPageLoad = false,
+                httpAuthenticationEnabled = true,
+                fido2Credentials = null,
+            ),
+            result.login,
+        )
+    }
+
+    @Test
     fun `toCipherView should transform SecureNotes ItemType to CipherView`() {
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(

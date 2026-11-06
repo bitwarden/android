@@ -153,6 +153,7 @@ class UserLogoutManagerTest {
         val pinProtectedUserKey = "pinProtectedUserKey"
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
+        val pinLength = 4
 
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -189,6 +190,8 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         } just runs
+        every { authDiskSource.getPinLength(userId = userId) } returns pinLength
+        every { authDiskSource.storePinLength(userId = userId, pinLength = pinLength) } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
@@ -224,6 +227,7 @@ class UserLogoutManagerTest {
                 pinProtectedUserKey = pinProtectedUserKey,
             )
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            authDiskSource.storePinLength(userId = userId, pinLength = pinLength)
         }
     }
 
@@ -235,6 +239,7 @@ class UserLogoutManagerTest {
         val pinProtectedUserKey = "pinProtectedUserKey"
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
+        val pinLength = 4
 
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -271,6 +276,8 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         } just runs
+        every { authDiskSource.getPinLength(userId = userId) } returns pinLength
+        every { authDiskSource.storePinLength(userId = userId, pinLength = pinLength) } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
@@ -296,6 +303,7 @@ class UserLogoutManagerTest {
                 pinProtectedUserKey = pinProtectedUserKey,
             )
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            authDiskSource.storePinLength(userId = userId, pinLength = pinLength)
         }
     }
 
@@ -400,7 +408,9 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId)
         } returns "pinProtectedUserKeyEnvelope"
+        every { authDiskSource.getPinLength(userId = userId) } returns 4
         every { authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = any()) } just runs
+        every { authDiskSource.storePinLength(userId = userId, pinLength = any()) } just runs
         every {
             authDiskSource.storePinProtectedUserKey(userId = userId, pinProtectedUserKey = any())
         } just runs

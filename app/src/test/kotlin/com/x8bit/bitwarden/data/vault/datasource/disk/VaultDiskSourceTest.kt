@@ -514,6 +514,7 @@ private const val CIPHER_JSON = """
     "password": "mockPassword-1",
     "passwordRevisionDate": "2023-10-27T12:00:00.000Z",
     "autofillOnPageLoad": false,
+    "httpAuthenticationEnabled": false,
     "uri": "mockUri-1",
     "username": "mockUsername-1",
     "fido2Credentials": [
