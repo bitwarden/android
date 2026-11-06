@@ -28,10 +28,10 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * axis instead of a synthesized one.
  */
 val bitwardenFontFamily: FontFamily = FontFamily(
-    interVariableFont(weight = FontWeight.W400),
-    interVariableFont(weight = FontWeight.W500),
-    interVariableFont(weight = FontWeight.W600),
-    interVariableFont(weight = FontWeight.W700),
+    interVariableFont(weight = FontWeight.Normal),
+    interVariableFont(weight = FontWeight.Medium),
+    interVariableFont(weight = FontWeight.SemiBold),
+    interVariableFont(weight = FontWeight.Bold),
 )
 
 /**
