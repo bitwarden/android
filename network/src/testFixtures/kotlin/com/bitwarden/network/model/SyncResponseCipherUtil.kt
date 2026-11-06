@@ -240,6 +240,7 @@ fun createMockLogin(
     fido2Credentials: List<SyncResponseJson.Cipher.Fido2Credential> = listOf(
         createMockFido2Credential(number = number),
     ),
+    httpAuthenticationEnabled: Boolean? = false,
 ): SyncResponseJson.Cipher.Login =
     SyncResponseJson.Cipher.Login(
         username = username,
@@ -250,6 +251,7 @@ fun createMockLogin(
         uris = uris,
         totp = totp,
         fido2Credentials = fido2Credentials,
+        httpAuthenticationEnabled = httpAuthenticationEnabled,
     )
 
 /**

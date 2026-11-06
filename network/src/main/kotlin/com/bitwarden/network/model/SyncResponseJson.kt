@@ -973,6 +973,8 @@ data class SyncResponseJson(
          * @property uri The URI (nullable).
          * @property username The username (nullable).
          * @property fido2Credentials A list of FIDO 2 credentials (nullable).
+         * @property httpAuthenticationEnabled If HTTP authentication is used for the login
+         * (nullable).
          */
         @Serializable
         data class Login(
@@ -1000,6 +1002,9 @@ data class SyncResponseJson(
 
             @SerialName("fido2Credentials")
             val fido2Credentials: List<Fido2Credential>?,
+
+            @SerialName("httpAuthenticationEnabled")
+            val httpAuthenticationEnabled: Boolean?,
         ) {
             /**
              * Represents a URI in the vault response.

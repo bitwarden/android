@@ -397,6 +397,7 @@ private fun Login.toEncryptedNetworkLogin(): SyncResponseJson.Cipher.Login =
         uri = null,
         username = username,
         fido2Credentials = fido2Credentials?.toNetworkFido2Credentials(),
+        httpAuthenticationEnabled = httpAuthenticationEnabled,
     )
 
 private fun List<Fido2Credential>.toNetworkFido2Credentials() =
@@ -534,6 +535,7 @@ fun SyncResponseJson.Cipher.Login.toSdkLogin(): Login =
         totp = totp,
         autofillOnPageLoad = shouldAutofillOnPageLoad,
         fido2Credentials = fido2Credentials?.toSdkFido2Credentials(),
+        httpAuthenticationEnabled = httpAuthenticationEnabled,
     )
 
 private fun List<SyncResponseJson.Cipher.Fido2Credential>.toSdkFido2Credentials() =

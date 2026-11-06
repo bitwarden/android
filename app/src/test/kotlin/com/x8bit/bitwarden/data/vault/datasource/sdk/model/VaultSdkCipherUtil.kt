@@ -246,6 +246,7 @@ fun createMockSdkLogin(number: Int, clock: Clock): Login =
             number = number,
             clock = clock,
         ),
+        httpAuthenticationEnabled = false,
     )
 
 /**
