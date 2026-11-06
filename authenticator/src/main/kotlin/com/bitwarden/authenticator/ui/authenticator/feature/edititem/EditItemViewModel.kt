@@ -136,7 +136,7 @@ class EditItemViewModel @Inject constructor(
                     accountName = content.itemData.username?.trim(),
                     type = content.itemData.type,
                     algorithm = content.itemData.algorithm,
-                    period = content.itemData.refreshPeriod.seconds,
+                    period = content.itemData.refreshPeriod,
                     digits = content.itemData.digits,
                     issuer = content.itemData.issuer.trim(),
                     favorite = content.itemData.favorite,
@@ -354,8 +354,8 @@ class EditItemViewModel @Inject constructor(
         minDigitsAllowed = MIN_ALLOWED_CODE_DIGITS,
         maxDigitsAllowed = MAX_ALLOWED_CODE_DIGITS,
         itemData = EditItemData(
-            refreshPeriod = AuthenticatorRefreshPeriodOption.fromSeconds(period)
-                ?: AuthenticatorRefreshPeriodOption.THIRTY,
+            refreshPeriod = period,
+            originalRefreshPeriod = period,
             totpCode = key.toUpperCase(Locale.current),
             type = type,
             username = accountName,
@@ -504,7 +504,7 @@ sealed class EditItemAction {
      * The user has selected a refresh period option.
      */
     data class RefreshPeriodOptionClick(
-        val period: AuthenticatorRefreshPeriodOption,
+        val period: Int,
     ) : EditItemAction()
 
     /**
@@ -552,13 +552,4 @@ enum class AuthenticatorRefreshPeriodOption(val seconds: Int) {
     THIRTY(seconds = 30),
     SIXTY(seconds = 60),
     NINETY(seconds = 90),
-    ;
-
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        /**
-         * Returns a [AuthenticatorRefreshPeriodOption] with the provided [seconds], or null.
-         */
-        fun fromSeconds(seconds: Int) = entries.find { it.seconds == seconds }
-    }
 }
