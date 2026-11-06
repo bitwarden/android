@@ -37,6 +37,7 @@ private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricInteg
 private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
+private const val HAS_SHOWN_PAM_NOTIFICATION_PROMPT_KEY = "hasShownPamNotificationPrompt"
 private const val HAS_SHOWN_ACCESSIBILITY_DISCLAIMER_KEY = "hasShownAccessibilityDisclaimer"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
@@ -169,6 +170,12 @@ class SettingsDiskSourceImpl(
 
     override val screenCaptureAllowedFlow: Flow<Boolean?>
         get() = mutableScreenCaptureAllowedFlow.onSubscription { emit(screenCaptureAllowed) }
+
+    override var hasShownPamNotificationPrompt: Boolean?
+        get() = getBoolean(key = HAS_SHOWN_PAM_NOTIFICATION_PROMPT_KEY)
+        set(value) {
+            putBoolean(key = HAS_SHOWN_PAM_NOTIFICATION_PROMPT_KEY, value = value)
+        }
 
     override var initialAutofillDialogShown: Boolean?
         get() = getBoolean(key = INITIAL_AUTOFILL_DIALOG_SHOWN)

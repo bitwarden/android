@@ -32,12 +32,14 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.billing.util.getPremiumCheckoutCallbackResult
 import com.x8bit.bitwarden.data.credentials.manager.CredentialProviderRequestManager
 import com.x8bit.bitwarden.data.credentials.manager.model.CredentialProviderRequest
+import com.x8bit.bitwarden.data.pam.util.getPamAlertDataIntentOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -323,6 +325,21 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Routes a PAM alert notification tap. The account the alert belongs to is made active first
+     * (an account with a locked vault goes through unlock and then reaches the request, because the
+     * special circumstance is kept until it is handled).
+     */
+    private fun handlePamAlertData(data: PamAlertData) {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)) return
+        val userState = authRepository.userStateFlow.value ?: return
+        if (userState.accounts.none { it.userId == data.userId }) return
+        if (userState.activeUserId != data.userId) {
+            authRepository.switchAccount(data.userId)
+        }
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.PamAlert(data)
+    }
+
     private fun handleNewIntentReceived(action: MainAction.ReceiveNewIntent) {
         handleIntent(
             intent = action.intent,
@@ -336,6 +353,7 @@ class MainViewModel @Inject constructor(
         isFirstIntent: Boolean,
     ) {
         val passwordlessRequestData = intent.getPasswordlessRequestDataIntentOrNull()
+        val pamAlertData = intent.getPamAlertDataIntentOrNull()
         val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
         val shareData = shareManager.getShareDataOrNull(intent = intent)
@@ -381,6 +399,8 @@ class MainViewModel @Inject constructor(
                         shouldFinishWhenComplete = isFirstIntent,
                     )
             }
+
+            pamAlertData != null -> handlePamAlertData(pamAlertData)
 
             completeRegistrationData != null -> {
                 handleCompleteRegistrationData(completeRegistrationData)

@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -268,6 +270,106 @@ class PushManagerTest {
             pushManager.pamRefreshFlow.test {
                 pushManager.onMessageReceived(PAM_REFRESH_ACCESS_REQUEST_NOTIFICATION_MAP)
                 assertEquals(Unit, awaitItem())
+            }
+        }
+
+        @Test
+        fun `onMessageReceived with PAM access requested emits generic alert and refresh`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+                } returns true
+                pushManager.pamAlertFlow.test {
+                    pushManager.pamRefreshFlow.test {
+                        pushManager.onMessageReceived(pamAlertMap(type = "30"))
+                        assertEquals(Unit, awaitItem())
+                    }
+                    assertEquals(
+                        PamAlertData(
+                            userId = userId,
+                            requestId = PAM_REQUEST_ID,
+                            type = PamAlertType.ACCESS_REQUESTED,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with PAM access decided maps every outcome`() = runTest {
+            every {
+                mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+            } returns true
+            pushManager.pamAlertFlow.test {
+                listOf(
+                    1 to PamAlertType.ACCESS_APPROVED,
+                    2 to PamAlertType.ACCESS_DENIED,
+                    3 to PamAlertType.ACCESS_REVOKED,
+                ).forEach { (outcome, expected) ->
+                    pushManager.onMessageReceived(pamAlertMap(type = "31", outcome = outcome))
+                    assertEquals(
+                        PamAlertData(
+                            userId = userId,
+                            requestId = PAM_REQUEST_ID,
+                            type = expected,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun `onMessageReceived with PAM access decided and unknown outcome is dropped`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+                } returns true
+                pushManager.pamAlertFlow.test {
+                    pushManager.onMessageReceived(pamAlertMap(type = "31", outcome = 9))
+                    pushManager.onMessageReceived(pamAlertMap(type = "31", outcome = null))
+                    expectNoEvents()
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with PAM alert and the flag off is dropped`() = runTest {
+            every {
+                mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+            } returns false
+            pushManager.pamAlertFlow.test {
+                pushManager.onMessageReceived(pamAlertMap(type = "30"))
+                expectNoEvents()
+            }
+        }
+
+        @Test
+        fun `onMessageReceived with PAM alert for a user not on this device is dropped`() =
+            runTest {
+                every {
+                    mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+                } returns true
+                pushManager.pamAlertFlow.test {
+                    pushManager.onMessageReceived(
+                        pamAlertMap(type = "30", payloadUserId = "unknown user"),
+                    )
+                    expectNoEvents()
+                }
+            }
+
+        @Test
+        fun `onMessageReceived with PAM alert missing the request id is dropped`() = runTest {
+            every {
+                mockFeatureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+            } returns true
+            pushManager.pamAlertFlow.test {
+                pushManager.onMessageReceived(
+                    mapOf(
+                        "type" to "30",
+                        "payload" to """{"UserId": "$userId"}""",
+                    ),
+                )
+                expectNoEvents()
             }
         }
 
@@ -1292,4 +1394,20 @@ private val PAM_REFRESH_ACCESS_REQUEST_NOTIFICATION_MAP = mapOf(
     "payload" to """{
       "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
     }""",
+)
+
+private const val PAM_REQUEST_ID = "5b2c3b3e-7d4c-4a58-9f55-0a6a6a1e0c11"
+
+private fun pamAlertMap(
+    type: String,
+    outcome: Int? = null,
+    payloadUserId: String = "any user ID",
+): Map<String, String> = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to type,
+    "payload" to buildString {
+        append("""{"UserId": "$payloadUserId", "RequestId": "$PAM_REQUEST_ID"""")
+        outcome?.let { append(""", "Outcome": $it""") }
+        append("}")
+    },
 )

@@ -99,6 +99,18 @@ sealed class NotificationPayload {
     ) : NotificationPayload()
 
     /**
+     * A notification payload for the PAM alert pushes (access requested and access decided).
+     *
+     * The [outcome] is only present for decided requests: 1 = approved, 2 = denied, 3 = revoked.
+     */
+    @Serializable
+    data class PamAccessNotification(
+        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("RequestId", "requestId") val requestId: String?,
+        @JsonNames("Outcome", "outcome") val outcome: Int? = null,
+    ) : NotificationPayload()
+
+    /**
      * A notification payload for Premium status changes.
      */
     @Serializable

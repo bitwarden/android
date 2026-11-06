@@ -11,8 +11,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.CookieAcquisitionRequestManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.log.SettingsLogManager
 import com.x8bit.bitwarden.data.platform.manager.model.CookieAcquisitionRequest
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +29,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -41,6 +47,7 @@ class DebugMenuViewModel @Inject constructor(
     private val settingsLogManager: SettingsLogManager,
     private val cookieAcquisitionRequestManager: CookieAcquisitionRequestManager,
     private val environmentRepository: EnvironmentRepository,
+    private val pushManager: PushManager,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(
         featureFlags = persistentMapOf(),
@@ -77,8 +84,32 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ShowUpgradedToPremiumCard -> handleShowUpgradedToPremiumCard()
             DebugMenuAction.ResetAccessibilityDisclaimer -> handleResetAccessibilityDisclaimer()
             DebugMenuAction.ShareSettingsClick -> onShareSettingsClick()
+            is DebugMenuAction.SendPamAlertClick -> handleSendPamAlertClick(action)
             is DebugMenuAction.MainTypeOptionClick -> handleMainTypeOptionClick(action)
         }
+    }
+
+    private fun handleSendPamAlertClick(action: DebugMenuAction.SendPamAlertClick) {
+        val userId = authRepository.userStateFlow.value?.activeUserId ?: return
+        val isRequested = action.type == PamAlertType.ACCESS_REQUESTED
+        val outcome = when (action.type) {
+            PamAlertType.ACCESS_REQUESTED -> null
+            PamAlertType.ACCESS_APPROVED -> PAM_OUTCOME_APPROVED
+            PamAlertType.ACCESS_DENIED -> PAM_OUTCOME_DENIED
+            PamAlertType.ACCESS_REVOKED -> PAM_OUTCOME_REVOKED
+        }
+        pushManager.onMessageReceived(
+            data = mapOf(
+                "type" to if (isRequested) PAM_ACCESS_REQUESTED_TYPE else PAM_ACCESS_DECIDED_TYPE,
+                "payload" to Json.encodeToString(
+                    NotificationPayload.PamAccessNotification(
+                        userId = userId,
+                        requestId = UUID.randomUUID().toString(),
+                        outcome = outcome,
+                    ),
+                ),
+            ),
+        )
     }
 
     private fun handleMainTypeOptionClick(action: DebugMenuAction.MainTypeOptionClick) {
@@ -160,6 +191,12 @@ class DebugMenuViewModel @Inject constructor(
         debugMenuRepository.updateFeatureFlag(action.flagKey, action.newValue)
     }
 }
+
+private const val PAM_ACCESS_REQUESTED_TYPE: String = "30"
+private const val PAM_ACCESS_DECIDED_TYPE: String = "31"
+private const val PAM_OUTCOME_APPROVED: Int = 1
+private const val PAM_OUTCOME_DENIED: Int = 2
+private const val PAM_OUTCOME_REVOKED: Int = 3
 
 /**
  * State for the [DebugMenuViewModel]
@@ -279,6 +316,11 @@ sealed class DebugMenuAction {
      * User has clicked the share settings button.
      */
     data object ShareSettingsClick : DebugMenuAction()
+
+    /**
+     * The user has clicked a button that raises a sample PAM alert of the given [type].
+     */
+    data class SendPamAlertClick(val type: PamAlertType) : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

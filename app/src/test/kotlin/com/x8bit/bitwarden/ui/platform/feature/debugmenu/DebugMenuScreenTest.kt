@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
@@ -154,6 +155,26 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+    }
+
+    @Test
+    fun `PAM alert buttons should send the matching action when clicked`() {
+        mutableStateFlow.update { it.copy(mainTypeOption = DebugMenuState.MainTypeOption.OPTIONS) }
+        mapOf(
+            "Access requested (approver)" to PamAlertType.ACCESS_REQUESTED,
+            "Access approved" to PamAlertType.ACCESS_APPROVED,
+            "Access denied" to PamAlertType.ACCESS_DENIED,
+            "Access revoked" to PamAlertType.ACCESS_REVOKED,
+        ).forEach { (label, type) ->
+            composeTestRule
+                .onNodeWithText(label)
+                .performScrollTo()
+                .performClick()
+
+            verify(exactly = 1) {
+                viewModel.trySendAction(DebugMenuAction.SendPamAlertClick(type = type))
+            }
+        }
     }
 
     @Test

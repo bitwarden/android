@@ -56,6 +56,11 @@ interface SettingsRepository : FlightRecorderManager {
     var initialAutofillDialogShown: Boolean
 
     /**
+     * Has the PAM approver notification prompt been shown to the user.
+     */
+    var hasShownPamNotificationPrompt: Boolean
+
+    /**
      * Whether the user has enabled syncing with the Bitwarden Authenticator app.
      */
     var isAuthenticatorSyncEnabled: Boolean

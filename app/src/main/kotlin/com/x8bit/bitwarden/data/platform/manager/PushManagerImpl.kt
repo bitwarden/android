@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.platform.manager.model.BitwardenNotification
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationType
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertData
+import com.x8bit.bitwarden.data.platform.manager.model.PamAlertType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.PremiumStatusChangedData
 import com.x8bit.bitwarden.data.platform.manager.model.PushNotificationLogOutReason
@@ -44,6 +46,10 @@ import kotlin.time.toJavaDuration
  */
 private val PUSH_TOKEN_UPDATE_DELAY: Duration = 7.days
 
+private const val PAM_OUTCOME_APPROVED: Int = 1
+private const val PAM_OUTCOME_DENIED: Int = 2
+private const val PAM_OUTCOME_REVOKED: Int = 3
+
 /**
  * Primary implementation of [PushManager].
  */
@@ -65,6 +71,7 @@ internal class PushManagerImpl @Inject constructor(
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
     private val mutablePamRefreshSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutablePamAlertSharedFlow = bufferedMutableSharedFlow<PamAlertData>()
     private val mutablePremiumStatusChangedSharedFlow =
         bufferedMutableSharedFlow<PremiumStatusChangedData>()
     private val mutableSyncCipherDeleteSharedFlow =
@@ -92,6 +99,9 @@ internal class PushManagerImpl @Inject constructor(
 
     override val pamRefreshFlow: SharedFlow<Unit>
         get() = mutablePamRefreshSharedFlow.asSharedFlow()
+
+    override val pamAlertFlow: SharedFlow<PamAlertData>
+        get() = mutablePamAlertSharedFlow.asSharedFlow()
 
     override val premiumStatusChangedFlow: SharedFlow<PremiumStatusChangedData>
         get() = mutablePremiumStatusChangedSharedFlow.asSharedFlow()
@@ -316,6 +326,15 @@ internal class PushManagerImpl @Inject constructor(
                 mutablePamRefreshSharedFlow.tryEmit(Unit)
             }
 
+            NotificationType.PAM_ACCESS_REQUESTED,
+            NotificationType.PAM_ACCESS_DECIDED,
+                -> handlePamAlertPayload(
+                type = type,
+                payload = json.decodeFromString<NotificationPayload.PamAccessNotification>(
+                    string = notification.payload,
+                ),
+            )
+
             NotificationType.PREMIUM_STATUS_CHANGED -> {
                 json
                     .decodeFromString<NotificationPayload.PremiumStatusChangedNotification>(
@@ -335,6 +354,28 @@ internal class PushManagerImpl @Inject constructor(
                     }
             }
         }
+    }
+
+    private fun handlePamAlertPayload(
+        type: NotificationType,
+        payload: NotificationPayload.PamAccessNotification,
+    ) {
+        if (!featureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)) return
+        val userId = payload.userId?.takeIf { isLoggedIn(it) } ?: return
+        val requestId = payload.requestId?.takeIf { it.isNotBlank() } ?: return
+        val alertType = when (type) {
+            NotificationType.PAM_ACCESS_REQUESTED -> PamAlertType.ACCESS_REQUESTED
+            else -> when (payload.outcome) {
+                PAM_OUTCOME_APPROVED -> PamAlertType.ACCESS_APPROVED
+                PAM_OUTCOME_DENIED -> PamAlertType.ACCESS_DENIED
+                PAM_OUTCOME_REVOKED -> PamAlertType.ACCESS_REVOKED
+                else -> return
+            }
+        }
+        mutablePamRefreshSharedFlow.tryEmit(Unit)
+        mutablePamAlertSharedFlow.tryEmit(
+            PamAlertData(userId = userId, requestId = requestId, type = alertType),
+        )
     }
 
     private fun handleLogoutPayload(payload: NotificationPayload.UserNotification) {
