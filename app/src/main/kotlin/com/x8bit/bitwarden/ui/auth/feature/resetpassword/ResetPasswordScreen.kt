@@ -33,7 +33,10 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.model.BitwardenButtonData
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -42,8 +45,10 @@ import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.bitwarden.ui.platform.components.util.throttledClick
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -113,11 +118,13 @@ fun ResetPasswordScreen(
                 navigationIcon = null,
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BitwardenTextButton(
-                        label = stringResource(id = BitwardenString.save),
-                        onClick = { viewModel.trySendAction(ResetPasswordAction.SaveClick) },
-                        modifier = Modifier.testTag("SaveButton"),
-                    )
+                    if (state.viewState.shouldShowSaveButton) {
+                        BitwardenTextButton(
+                            label = stringResource(id = BitwardenString.save),
+                            onClick = { viewModel.trySendAction(ResetPasswordAction.SaveClick) },
+                            modifier = Modifier.testTag("SaveButton"),
+                        )
+                    }
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
@@ -130,32 +137,56 @@ fun ResetPasswordScreen(
             )
         },
     ) {
-        ResetPasswordScreenContent(
-            state = state,
-            onCurrentPasswordInputChanged = {
-                viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(it))
-            },
-            onPasswordInputChanged = {
-                viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(it))
-            },
-            onRetypePasswordInputChanged = {
-                viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(it))
-            },
-            onPasswordHintInputChanged = {
-                viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged(it))
-            },
-            onLearnToPreventLockout = {
-                viewModel.trySendAction(ResetPasswordAction.LearnHowPreventLockoutClick)
-            },
-            modifier = Modifier.fillMaxSize(),
-        )
+        when (val viewState = state.viewState) {
+            is ResetPasswordState.ViewState.Content -> {
+                ResetPasswordScreenContent(
+                    state = viewState,
+                    onCurrentPasswordInputChanged = {
+                        viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(it))
+                    },
+                    onPasswordInputChanged = {
+                        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(it))
+                    },
+                    onRetypePasswordInputChanged = {
+                        viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(it))
+                    },
+                    onPasswordHintInputChanged = {
+                        viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged(it))
+                    },
+                    onLearnToPreventLockout = {
+                        viewModel.trySendAction(ResetPasswordAction.LearnHowPreventLockoutClick)
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            is ResetPasswordState.ViewState.Error -> {
+                BitwardenErrorContent(
+                    message = viewState.message(),
+                    buttonData = BitwardenButtonData(
+                        label = BitwardenString.try_again.asText(),
+                        onClick = throttledClick {
+                            viewModel.trySendAction(ResetPasswordAction.RetryClick)
+                        },
+                    ),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            ResetPasswordState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    text = stringResource(id = BitwardenString.syncing),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
     }
 }
 
 @Composable
 @Suppress("LongMethod")
 private fun ResetPasswordScreenContent(
-    state: ResetPasswordState,
+    state: ResetPasswordState.ViewState.Content,
     onCurrentPasswordInputChanged: (String) -> Unit,
     onPasswordInputChanged: (String) -> Unit,
     onRetypePasswordInputChanged: (String) -> Unit,
@@ -258,7 +289,7 @@ private fun ResetPasswordScreenContent(
                 Column {
                     Text(
                         text = stringResource(
-                            BitwardenString
+                            id = BitwardenString
                                 .bitwarden_cannot_reset_a_lost_or_forgotten_master_password,
                         ),
                         style = BitwardenTheme.typography.bodySmall,
@@ -292,16 +323,15 @@ private fun ResetPasswordScreenContent(
 private fun ResetPasswordScreenContent_preview() {
     BitwardenTheme {
         ResetPasswordScreenContent(
-            state = ResetPasswordState(
-                policies = listOf(),
+            state = ResetPasswordState.ViewState.Content(
                 resetReason = null,
-                dialogState = null,
+                policies = persistentListOf(),
+                minimumPasswordLength = 12,
                 currentPasswordInput = "",
                 passwordInput = "",
                 retypePasswordInput = "",
                 passwordHintInput = "",
                 passwordStrengthState = PasswordStrengthState.GOOD,
-                minimumPasswordLength = 12,
             ),
             onCurrentPasswordInputChanged = {},
             onPasswordInputChanged = {},

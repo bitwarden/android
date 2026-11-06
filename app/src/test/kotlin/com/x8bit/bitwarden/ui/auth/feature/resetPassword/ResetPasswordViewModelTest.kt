@@ -12,13 +12,17 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordViewModel
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -26,6 +30,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -36,7 +42,129 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         every { passwordResetReason } returns ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
     }
 
-    private val savedStateHandle = SavedStateHandle()
+    private val vaultRepository: VaultRepository = mockk {
+        coEvery { syncForResult() } returns SyncVaultDataResult.Success(itemsAvailable = true)
+    }
+
+    @Test
+    fun `initial state should be Loading and transition to Content on sync success`() = runTest {
+        val syncResult = CompletableDeferred<SyncVaultDataResult>()
+        coEvery { vaultRepository.syncForResult() } coAnswers { syncResult.await() }
+
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = ResetPasswordState.ViewState.Loading),
+                awaitItem(),
+            )
+            syncResult.complete(SyncVaultDataResult.Success(itemsAvailable = true))
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+        coVerify(exactly = 1) { vaultRepository.syncForResult() }
+    }
+
+    @Test
+    fun `sync success should populate the content from the latest policies and reset reason`() {
+        val policy = PolicyInformation.MasterPassword(
+            minLength = 20,
+            minComplexity = null,
+            requireUpper = null,
+            requireLower = null,
+            requireNumbers = null,
+            requireSpecial = null,
+            enforceOnLogin = true,
+        )
+        every { authRepository.passwordPolicies } returns listOf(policy)
+        every {
+            authRepository.passwordResetReason
+        } returns ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                    policies = listOf(policy).toDisplayLabels(),
+                    minimumPasswordLength = 20,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `sync error should display the error view state`() {
+        coEvery {
+            vaultRepository.syncForResult()
+        } returns SyncVaultDataResult.Error(throwable = Throwable("Fail!"))
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = ResetPasswordState.ViewState.Error(
+                    message = BitwardenString.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `RetryClick should display Loading and sync again`() = runTest {
+        coEvery {
+            vaultRepository.syncForResult()
+        } returns SyncVaultDataResult.Error(throwable = Throwable("Fail!"))
+        val viewModel = createViewModel()
+        val syncResult = CompletableDeferred<SyncVaultDataResult>()
+        coEvery { vaultRepository.syncForResult() } coAnswers { syncResult.await() }
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = ResetPasswordState.ViewState.Error(
+                        message = BitwardenString.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(ResetPasswordAction.RetryClick)
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = ResetPasswordState.ViewState.Loading),
+                awaitItem(),
+            )
+
+            syncResult.complete(SyncVaultDataResult.Success(itemsAvailable = true))
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+        coVerify(exactly = 2) { vaultRepository.syncForResult() }
+    }
+
+    @Test
+    fun `input and save actions should be ignored when not in the Content state`() {
+        coEvery {
+            vaultRepository.syncForResult()
+        } returns SyncVaultDataResult.Error(throwable = Throwable("Fail!"))
+        every {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
+        val viewModel = createViewModel()
+        val errorState = DEFAULT_STATE.copy(
+            viewState = ResetPasswordState.ViewState.Error(
+                message = BitwardenString.generic_error_message.asText(),
+            ),
+        )
+
+        viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
+
+        assertEquals(errorState, viewModel.stateFlow.value)
+    }
 
     @Test
     fun `ConfirmLogoutClick logs out`() = runTest {
@@ -59,7 +187,9 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                currentPasswordInput = "Test123",
+                viewState = DEFAULT_CONTENT.copy(
+                    currentPasswordInput = "Test123",
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -92,10 +222,10 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     @Test
     fun `SubmitClicked with invalid password shows error alert for weak password reason`() {
         val password = "Test123"
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
+        every {
+            authRepository.validatePasswordAgainstPolicies(password = password)
         } returns false
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -105,12 +235,14 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    passwordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.master_password_policy_validation_title.asText(),
                     message = BitwardenString.master_password_policy_validation_message.asText(),
                 ),
-                passwordInput = password,
-                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -122,7 +254,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         every {
             authRepository.passwordResetReason
         } returns ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -132,7 +264,11 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                viewState = DEFAULT_CONTENT.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                    passwordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenPlurals.master_password_length_val_message_x.asPluralsText(
@@ -140,8 +276,6 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                         args = arrayOf(MIN_PASSWORD_LENGTH),
                     ),
                 ),
-                passwordInput = password,
-                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -150,10 +284,10 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     @Test
     fun `SubmitClicked with non-matching retyped password shows error alert`() {
         val password = "Test123"
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
+        every {
+            authRepository.validatePasswordAgainstPolicies(password = password)
         } returns true
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -164,12 +298,14 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    passwordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
-                passwordInput = password,
-                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -180,13 +316,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
         val error = Throwable("Fail!")
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
+        every {
+            authRepository.validatePasswordAgainstPolicies(password = password)
         } returns true
         coEvery {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Error(error = error)
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -199,15 +335,17 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    currentPasswordInput = currentPassword,
+                    passwordInput = password,
+                    retypePasswordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
-                currentPasswordInput = currentPassword,
-                passwordInput = password,
-                retypePasswordInput = password,
-                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -217,13 +355,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     fun `SubmitClicked with invalid current password shows alert`() {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
+        every {
+            authRepository.validatePasswordAgainstPolicies(password = password)
         } returns true
         coEvery {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Success(isValid = false)
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -236,14 +374,16 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    currentPasswordInput = currentPassword,
+                    passwordInput = password,
+                    retypePasswordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenString.invalid_master_password.asText(),
                 ),
-                currentPasswordInput = currentPassword,
-                passwordInput = password,
-                retypePasswordInput = password,
-                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -253,8 +393,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     fun `SubmitClicked with all valid inputs resets password`() = runTest {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
+        every {
+            authRepository.validatePasswordAgainstPolicies(password = password)
         } returns true
         coEvery {
             authRepository.validatePassword(currentPassword)
@@ -262,7 +402,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.resetPassword(any(), any(), any())
         } returns ResetPasswordResult.Success
-        coEvery {
+        every {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
@@ -274,11 +414,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT.copy(
+                        currentPasswordInput = currentPassword,
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        passwordStrengthState = PasswordStrengthState.WEAK_1,
+                    ),
                     dialogState = null,
-                    currentPasswordInput = currentPassword,
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
@@ -287,24 +429,28 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT.copy(
+                        currentPasswordInput = currentPassword,
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        passwordStrengthState = PasswordStrengthState.WEAK_1,
+                    ),
                     dialogState = ResetPasswordState.DialogState.Loading(
                         message = BitwardenString.updating_password.asText(),
                     ),
-                    currentPasswordInput = currentPassword,
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
 
             assertEquals(
                 DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT.copy(
+                        currentPasswordInput = currentPassword,
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        passwordStrengthState = PasswordStrengthState.WEAK_1,
+                    ),
                     dialogState = null,
-                    currentPasswordInput = currentPassword,
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
@@ -315,38 +461,55 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PasswordInputChanged should update the password input in the state along with the password strength state`() =
-        runTest {
-            val passwordInput = "Test123"
-            val viewModel = createViewModel()
-            coEvery {
-                authRepository.getPasswordStrength(password = any())
-            } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
+    fun `PasswordInputChanged should update the password input in the state along with the password strength state`() {
+        val passwordInput = "Test123"
+        every {
+            authRepository.getPasswordStrength(password = passwordInput)
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
+        val viewModel = createViewModel()
 
-            viewModel.stateFlow.test {
-                assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = passwordInput))
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        passwordInput = passwordInput,
-                    ),
-                    awaitItem(),
-                )
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = passwordInput))
 
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        passwordInput = passwordInput,
-                        passwordStrengthState = PasswordStrengthState.STRONG,
-                    ),
-                    awaitItem(),
-                )
-            }
-            coVerify {
-                authRepository.getPasswordStrength(
-                    password = passwordInput,
-                )
-            }
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    passwordInput = passwordInput,
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) { authRepository.getPasswordStrength(password = passwordInput) }
+    }
+
+    @Test
+    fun `PasswordInputChanged with empty input should reset the password strength state`() {
+        every {
+            authRepository.getPasswordStrength(password = "a")
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = "a"))
+
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = ""))
+
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        verify(exactly = 0) { authRepository.getPasswordStrength(password = "") }
+    }
+
+    @Test
+    fun `PasswordInputChanged with password strength error should not update the strength`() {
+        every {
+            authRepository.getPasswordStrength(password = "Test123")
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = "Test123"))
+
+        assertEquals(
+            DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT.copy(passwordInput = "Test123")),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `RetypePasswordInputChanged should update the retype password input in the state`() {
@@ -355,7 +518,9 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                retypePasswordInput = "Test123",
+                viewState = DEFAULT_CONTENT.copy(
+                    retypePasswordInput = "Test123",
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -368,7 +533,9 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                passwordHintInput = "Test123",
+                viewState = DEFAULT_CONTENT.copy(
+                    passwordHintInput = "Test123",
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -387,22 +554,28 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             }
         }
 
-    private fun createViewModel(): ResetPasswordViewModel =
+    private fun createViewModel(
+        initialState: ResetPasswordState? = null,
+    ): ResetPasswordViewModel =
         ResetPasswordViewModel(
             authRepository = authRepository,
-            savedStateHandle = savedStateHandle,
+            vaultRepository = vaultRepository,
+            savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
         )
 }
 
 private const val MIN_PASSWORD_LENGTH = 12
-private val DEFAULT_STATE = ResetPasswordState(
-    policies = emptyList(),
+private val DEFAULT_CONTENT = ResetPasswordState.ViewState.Content(
     resetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-    dialogState = null,
+    policies = persistentListOf(),
+    minimumPasswordLength = MIN_PASSWORD_LENGTH,
     currentPasswordInput = "",
     passwordInput = "",
     retypePasswordInput = "",
     passwordHintInput = "",
     passwordStrengthState = PasswordStrengthState.NONE,
-    minimumPasswordLength = 12,
+)
+private val DEFAULT_STATE = ResetPasswordState(
+    viewState = DEFAULT_CONTENT,
+    dialogState = null,
 )
