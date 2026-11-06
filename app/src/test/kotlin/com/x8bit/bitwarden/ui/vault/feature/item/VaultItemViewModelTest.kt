@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.model.FlagKey
@@ -30,6 +31,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
+import com.x8bit.bitwarden.data.pam.repository.PamRepository
+import com.x8bit.bitwarden.data.pam.repository.model.PamAccessRequest
+import com.x8bit.bitwarden.data.pam.repository.model.PamAccessStatus
+import com.x8bit.bitwarden.data.pam.repository.model.PamApprovalMode
+import com.x8bit.bitwarden.data.pam.repository.model.PamItemAccess
+import com.x8bit.bitwarden.data.pam.repository.model.RequestPamAccessResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
@@ -52,6 +59,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamRequestForm
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemPamState
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
@@ -70,17 +79,28 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.time.Clock
+import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultItemViewModelTest : BaseViewModelTest() {
@@ -119,6 +139,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         every { organizationId } returns null
         every { permissions } returns null
         every { deletedDate } returns null
+        every { partial } returns false
     }
     private val mockEnvironmentRepository = FakeEnvironmentRepository()
     private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
@@ -140,6 +161,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
+    }
+    private val mutablePamAccessChangedFlow = bufferedMutableSharedFlow<Unit>()
+    private val pamRepository: PamRepository = mockk {
+        every { accessChangedFlow } returns mutablePamAccessChangedFlow
     }
 
     @BeforeEach
@@ -249,6 +274,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 snackbarRelayManager = snackbarRelayManager,
                 premiumStateManager = premiumStateManager,
                 featureFlagManager = featureFlagManager,
+                pamRepository = pamRepository,
+                clock = FIXED_CLOCK,
             )
 
             val firstViewModel = createViewModelWithHandle()
@@ -3953,6 +3980,589 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Nested
+    inner class PamActions {
+
+        private val gatedCipher = createMockCipherView(number = 1).copy(partial = true)
+        private val leasedCipher = createMockCipherView(number = 1).copy(partial = false)
+        private val expiresAt = FIXED_CLOCK.instant().plusSeconds(90 * 60)
+
+        @BeforeEach
+        fun setUp() {
+            stubViewState(cipher = gatedCipher)
+            stubViewState(cipher = leasedCipher)
+            every { featureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls) } returns
+                true
+            every { vaultRepo.sync(forced = true) } just runs
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+        }
+
+        private fun stubViewState(cipher: CipherView) {
+            every {
+                cipher.toViewState(
+                    previousState = any(),
+                    isPremiumUser = any(),
+                    totpCodeItemData = any(),
+                    canDelete = any(),
+                    canRestore = any(),
+                    canAssignToCollections = any(),
+                    canEdit = any(),
+                    baseIconUrl = any(),
+                    isIconLoadingDisabled = any(),
+                    relatedLocations = any(),
+                    hasOrganizations = any(),
+                )
+            } returns DEFAULT_VIEW_STATE
+        }
+
+        private fun access(
+            status: PamAccessStatus = PamAccessStatus.Privileged,
+            mode: PamApprovalMode = PamApprovalMode.AUTOMATIC,
+            canStartLease: Boolean = true,
+        ) = PamItemAccess(
+            approvalMode = mode,
+            status = status,
+            defaultDurationSeconds = 3_600L,
+            maxDurationSeconds = 28_800L,
+            canStartLease = canStartLease,
+            slotFreesAt = null,
+        )
+
+        private fun createGatedViewModel(
+            access: PamItemAccess = access(),
+            cipher: CipherView = gatedCipher,
+            clock: Clock = FIXED_CLOCK,
+        ): VaultItemViewModel {
+            coEvery { pamRepository.getItemAccess(VAULT_ITEM_ID) } returns access.asSuccess()
+            mutableVaultItemFlow.value = DataState.Loaded(data = cipher)
+            return createViewModel(state = null, clock = clock)
+        }
+
+        @Test
+        fun `gated item with the flag off should not load or show any PAM state`() {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.PamMobilePrivilegedControls)
+            } returns false
+            val viewModel = createGatedViewModel()
+
+            assertNull(viewModel.stateFlow.value.pamAccess)
+            coVerify(exactly = 0) { pamRepository.getItemAccess(any()) }
+        }
+
+        @Test
+        fun `item that is not gated should not load any PAM state`() {
+            val viewModel = createGatedViewModel(cipher = leasedCipher)
+
+            assertNull(viewModel.stateFlow.value.pamAccess)
+            coVerify(exactly = 0) { pamRepository.getItemAccess(any()) }
+        }
+
+        @Test
+        fun `gated item with automatic approval should show the can request banner`() {
+            val viewModel = createGatedViewModel()
+
+            assertEquals(
+                VaultItemPamState.CanRequest(
+                    isHumanApproval = false,
+                    defaultDurationMinutes = 60L,
+                    maxDurationMinutes = 480L,
+                    isSlotHeldByAnotherMember = false,
+                ),
+                viewModel.stateFlow.value.pamAccess,
+            )
+            assertFalse(viewModel.stateFlow.value.isFabVisible)
+        }
+
+        @Test
+        fun `gated item with human approval should show the human can request banner`() {
+            val viewModel = createGatedViewModel(access = access(mode = PamApprovalMode.HUMAN))
+
+            assertEquals(
+                VaultItemPamState.CanRequest(
+                    isHumanApproval = true,
+                    defaultDurationMinutes = 60L,
+                    maxDurationMinutes = 480L,
+                    isSlotHeldByAnotherMember = false,
+                ),
+                viewModel.stateFlow.value.pamAccess,
+            )
+        }
+
+        @Test
+        fun `gated item whose lease slot is held by another member should show the warning`() {
+            val viewModel = createGatedViewModel(access = access(canStartLease = false))
+
+            assertEquals(
+                true,
+                (viewModel.stateFlow.value.pamAccess as VaultItemPamState.CanRequest)
+                    .isSlotHeldByAnotherMember,
+            )
+        }
+
+        @Test
+        fun `pending access should show the pending banner`() {
+            val viewModel = createGatedViewModel(access = access(status = PamAccessStatus.Pending))
+
+            assertEquals(VaultItemPamState.Pending, viewModel.stateFlow.value.pamAccess)
+        }
+
+        @Test
+        fun `approved access should show the approved banner`() {
+            val viewModel = createGatedViewModel(
+                access = access(status = PamAccessStatus.Approved(requestId = REQUEST_ID)),
+            )
+
+            assertEquals(
+                VaultItemPamState.Approved(requestId = REQUEST_ID),
+                viewModel.stateFlow.value.pamAccess,
+            )
+        }
+
+        @Test
+        fun `StartAccessClick should start the approved request and refresh the item`() =
+            runTest {
+                coEvery { pamRepository.startAccess(REQUEST_ID) } returns Result.success(Unit)
+                val viewModel = createApprovedViewModel()
+
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(VaultItemAction.Pam.StartAccessClick)
+                    assertEquals(
+                        VaultItemEvent.ShowSnackbar(
+                            message = BitwardenString.pam_access_started.asText(),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                assertNull(viewModel.stateFlow.value.dialog)
+                coVerify(exactly = 1) { pamRepository.startAccess(REQUEST_ID) }
+                verify(exactly = 1) { vaultRepo.sync(forced = true) }
+                coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+            }
+
+        @Test
+        fun `StartAccessClick failure should show an error and still refresh the item`() {
+            val error = IllegalStateException("error")
+            coEvery { pamRepository.startAccess(REQUEST_ID) } returns Result.failure(error)
+            val viewModel = createApprovedViewModel()
+
+            viewModel.trySendAction(VaultItemAction.Pam.StartAccessClick)
+
+            assertEquals(
+                VaultItemState.DialogState.Generic(
+                    message = BitwardenString.pam_action_failed.asText(),
+                    error = error,
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            verify(exactly = 1) { vaultRepo.sync(forced = true) }
+            coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+        }
+
+        @Test
+        fun `StartAccessClick without a request id should do nothing`() {
+            val viewModel = createApprovedViewModel(requestId = null)
+
+            viewModel.trySendAction(VaultItemAction.Pam.StartAccessClick)
+
+            assertNull(viewModel.stateFlow.value.dialog)
+            coVerify(exactly = 0) { pamRepository.startAccess(any()) }
+        }
+
+        @Test
+        fun `CancelRequestClick should ask for confirmation before cancelling`() {
+            val viewModel = createApprovedViewModel()
+
+            viewModel.trySendAction(VaultItemAction.Pam.CancelRequestClick)
+
+            assertEquals(
+                VaultItemState.DialogState.PamConfirmCancelRequest,
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify(exactly = 0) { pamRepository.cancelAccessRequest(any()) }
+        }
+
+        @Test
+        fun `ConfirmCancelRequestClick should cancel the request and refresh the item`() =
+            runTest {
+                coEvery {
+                    pamRepository.cancelAccessRequest(REQUEST_ID)
+                } returns Result.success(Unit)
+                val viewModel = createApprovedViewModel()
+                viewModel.trySendAction(VaultItemAction.Pam.CancelRequestClick)
+
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(VaultItemAction.Pam.ConfirmCancelRequestClick)
+                    assertEquals(
+                        VaultItemEvent.ShowSnackbar(
+                            message = BitwardenString.pam_request_cancelled.asText(),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                assertNull(viewModel.stateFlow.value.dialog)
+                coVerify(exactly = 1) { pamRepository.cancelAccessRequest(REQUEST_ID) }
+                verify(exactly = 1) { vaultRepo.sync(forced = true) }
+                coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+            }
+
+        @Test
+        fun `ConfirmCancelRequestClick failure should show an error and still refresh`() {
+            val error = IllegalStateException("error")
+            coEvery { pamRepository.cancelAccessRequest(REQUEST_ID) } returns Result.failure(error)
+            val viewModel = createApprovedViewModel()
+
+            viewModel.trySendAction(VaultItemAction.Pam.ConfirmCancelRequestClick)
+
+            assertEquals(
+                VaultItemState.DialogState.Generic(
+                    message = BitwardenString.pam_action_failed.asText(),
+                    error = error,
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+        }
+
+        private fun createApprovedViewModel(requestId: String? = REQUEST_ID) =
+            createGatedViewModel(
+                access = access(status = PamAccessStatus.Approved(requestId = requestId)),
+            )
+
+        @Test
+        fun `access ending elsewhere should reload the access state and mask the item`() {
+            coEvery {
+                pamRepository.getLeasedCipher(VAULT_ITEM_ID)
+            } returns leasedCipher.asSuccess()
+            coEvery { pamRepository.getItemAccess(VAULT_ITEM_ID) } returnsMany listOf(
+                access(status = PamAccessStatus.Active(expiresAt = expiresAt)).asSuccess(),
+                access().asSuccess(),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = gatedCipher)
+            val viewModel = createViewModel(state = null)
+            assertTrue(viewModel.stateFlow.value.pamAccess is VaultItemPamState.Active)
+
+            mutablePamAccessChangedFlow.tryEmit(Unit)
+
+            assertTrue(viewModel.stateFlow.value.pamAccess is VaultItemPamState.CanRequest)
+            coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+        }
+
+        @Test
+        fun `failing to load the access state should keep the item masked with no banner`() {
+            coEvery {
+                pamRepository.getItemAccess(VAULT_ITEM_ID)
+            } returns IllegalStateException("error").asFailure()
+            mutableVaultItemFlow.value = DataState.Loaded(data = gatedCipher)
+            val viewModel = createViewModel(state = null)
+
+            assertNull(viewModel.stateFlow.value.pamAccess)
+            coVerify(exactly = 0) { pamRepository.getLeasedCipher(any()) }
+        }
+
+        @Test
+        fun `active access should show remaining time and display the leased cipher`() {
+            coEvery {
+                pamRepository.getLeasedCipher(VAULT_ITEM_ID)
+            } returns leasedCipher.asSuccess()
+            coEvery { pamRepository.getItemAccess(VAULT_ITEM_ID) } returnsMany listOf(
+                access(status = PamAccessStatus.Active(expiresAt = expiresAt)).asSuccess(),
+                access().asSuccess(),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = gatedCipher)
+            val viewModel = createViewModel(state = null)
+
+            assertEquals(
+                VaultItemPamState.Active(remainingMinutes = 90L),
+                viewModel.stateFlow.value.pamAccess,
+            )
+            coVerify(exactly = 1) { pamRepository.getLeasedCipher(VAULT_ITEM_ID) }
+            verify {
+                leasedCipher.toViewState(
+                    previousState = any(),
+                    isPremiumUser = any(),
+                    totpCodeItemData = any(),
+                    canDelete = any(),
+                    canRestore = any(),
+                    canAssignToCollections = any(),
+                    canEdit = any(),
+                    baseIconUrl = any(),
+                    isIconLoadingDisabled = any(),
+                    relatedLocations = any(),
+                    hasOrganizations = any(),
+                )
+            }
+        }
+
+        @Test
+        fun `active access remaining time should tick only while the screen is active`() =
+            runTest {
+                val clock = MutableClock(instant = FIXED_CLOCK.instant())
+                coEvery {
+                    pamRepository.getLeasedCipher(VAULT_ITEM_ID)
+                } returns leasedCipher.asSuccess()
+                val viewModel = createGatedViewModel(
+                    access = access(status = PamAccessStatus.Active(expiresAt = expiresAt)),
+                    clock = clock,
+                )
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                clock.advance(Duration.ofMinutes(5))
+                advanceTimeBy(5 * 60_000L)
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Pam.Resume)
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 85L, totalMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                clock.advance(Duration.ofMinutes(1))
+                advanceTimeBy(60_000L)
+                runCurrent()
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 84L, totalMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Pam.Pause)
+                clock.advance(Duration.ofMinutes(10))
+                advanceTimeBy(10 * 60_000L)
+                runCurrent()
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 84L, totalMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                viewModel.trySendAction(VaultItemAction.Pam.Resume)
+                assertEquals(
+                    VaultItemPamState.Active(remainingMinutes = 74L, totalMinutes = 90L),
+                    viewModel.stateFlow.value.pamAccess,
+                )
+
+                viewModel.viewModelScope.cancel()
+            }
+
+        @Test
+        fun `active access whose lease already ended should not display the leased cipher`() {
+            coEvery {
+                pamRepository.getLeasedCipher(VAULT_ITEM_ID)
+            } returns leasedCipher.asSuccess()
+            coEvery { pamRepository.getItemAccess(VAULT_ITEM_ID) } returns access(
+                status = PamAccessStatus.Active(
+                    expiresAt = FIXED_CLOCK.instant().minusSeconds(1),
+                ),
+            ).asSuccess()
+            mutableVaultItemFlow.value = DataState.Loaded(data = gatedCipher)
+
+            createViewModel(state = null)
+
+            verify(exactly = 0) {
+                leasedCipher.toViewState(
+                    previousState = any(),
+                    isPremiumUser = any(),
+                    totpCodeItemData = any(),
+                    canDelete = any(),
+                    canRestore = any(),
+                    canAssignToCollections = any(),
+                    canEdit = any(),
+                    baseIconUrl = any(),
+                    isIconLoadingDisabled = any(),
+                    relatedLocations = any(),
+                    hasOrganizations = any(),
+                )
+            }
+        }
+
+        @Test
+        fun `RequestAccessClick with automatic approval should show the duration form`() {
+            val viewModel = createGatedViewModel()
+
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+
+            assertEquals(
+                VaultItemState.DialogState.PamRequestAccess(
+                    form = VaultItemPamRequestForm(
+                        isHumanApproval = false,
+                        durationMinutes = "60",
+                        maxDurationMinutes = 480L,
+                        startDate = LocalDate.of(2026, 1, 1),
+                        startMinutes = 12 * 60,
+                        endDate = LocalDate.of(2026, 1, 1),
+                        endMinutes = 13 * 60,
+                        reason = "",
+                    ),
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Test
+        fun `RequestAccessClick with human approval should show the window and reason form`() {
+            val viewModel = createGatedViewModel(access = access(mode = PamApprovalMode.HUMAN))
+
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+
+            val dialog = viewModel.stateFlow.value.dialog
+            val form = (dialog as VaultItemState.DialogState.PamRequestAccess).form
+            assertEquals(true, form.isHumanApproval)
+            assertFalse(form.isSubmittable)
+        }
+
+        @Test
+        fun `SubmitRequestClick with automatic approval should request the chosen duration`() =
+            runTest {
+                coEvery {
+                    pamRepository.requestAccess(
+                        cipherId = VAULT_ITEM_ID,
+                        request = PamAccessRequest.Automatic(durationSeconds = 1_800L),
+                    )
+                } returns RequestPamAccessResult.Success
+                val viewModel = createGatedViewModel()
+                viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+                viewModel.trySendAction(VaultItemAction.Pam.DurationChange(durationMinutes = "30"))
+
+                viewModel.eventFlow.test {
+                    viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+                    assertEquals(
+                        VaultItemEvent.ShowSnackbar(
+                            message = BitwardenString.pam_request_submitted.asText(),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                assertNull(viewModel.stateFlow.value.dialog)
+                verify(exactly = 1) { vaultRepo.sync(forced = true) }
+                coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+            }
+
+        @Test
+        fun `SubmitRequestClick with human approval should request the window and reason`() {
+            coEvery {
+                pamRepository.requestAccess(
+                    cipherId = VAULT_ITEM_ID,
+                    request = PamAccessRequest.Human(
+                        start = Instant.parse("2026-01-01T12:00:00Z"),
+                        end = Instant.parse("2026-01-01T18:30:00Z"),
+                        reason = "Fix the outage",
+                    ),
+                )
+            } returns RequestPamAccessResult.Success
+            val viewModel = createGatedViewModel(access = access(mode = PamApprovalMode.HUMAN))
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+            viewModel.trySendAction(VaultItemAction.Pam.EndTimeChange(18 * 60 + 30))
+            viewModel.trySendAction(VaultItemAction.Pam.ReasonChange(" Fix the outage "))
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            coVerify(exactly = 1) { pamRepository.requestAccess(any(), any()) }
+            assertNull(viewModel.stateFlow.value.dialog)
+        }
+
+        @Test
+        fun `SubmitRequestClick with human approval and a blank reason should not submit`() {
+            val viewModel = createGatedViewModel(access = access(mode = PamApprovalMode.HUMAN))
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+            val dialog = viewModel.stateFlow.value.dialog
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            assertEquals(dialog, viewModel.stateFlow.value.dialog)
+            coVerify(exactly = 0) { pamRepository.requestAccess(any(), any()) }
+        }
+
+        @Test
+        fun `SubmitRequestClick with an end before the start should not submit`() {
+            val viewModel = createGatedViewModel(access = access(mode = PamApprovalMode.HUMAN))
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+            viewModel.trySendAction(VaultItemAction.Pam.EndTimeChange(11 * 60))
+            viewModel.trySendAction(VaultItemAction.Pam.EndDateChange(LocalDate.of(2026, 1, 1)))
+            viewModel.trySendAction(VaultItemAction.Pam.ReasonChange("Reason"))
+            val dialog = viewModel.stateFlow.value.dialog
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            assertEquals(dialog, viewModel.stateFlow.value.dialog)
+            coVerify(exactly = 0) { pamRepository.requestAccess(any(), any()) }
+        }
+
+        @Test
+        fun `request ValidationError should show a message and refresh the item state`() {
+            coEvery {
+                pamRepository.requestAccess(any(), any())
+            } returns RequestPamAccessResult.ValidationError(message = "bad")
+            val viewModel = createGatedViewModel()
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            assertEquals(
+                VaultItemState.DialogState.Generic(
+                    message = BitwardenString.pam_request_invalid.asText(),
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            verify(exactly = 1) { vaultRepo.sync(forced = true) }
+            coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+        }
+
+        @Test
+        fun `request Conflict should show a message and refresh the item state`() {
+            coEvery {
+                pamRepository.requestAccess(any(), any())
+            } returns RequestPamAccessResult.Conflict(message = "conflict")
+            val viewModel = createGatedViewModel()
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            assertEquals(
+                VaultItemState.DialogState.Generic(
+                    message = BitwardenString.pam_request_conflict.asText(),
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            verify(exactly = 1) { vaultRepo.sync(forced = true) }
+            coVerify(exactly = 2) { pamRepository.getItemAccess(VAULT_ITEM_ID) }
+        }
+
+        @Test
+        fun `request Error should show a generic error without refreshing`() {
+            val error = IllegalStateException("error")
+            coEvery {
+                pamRepository.requestAccess(any(), any())
+            } returns RequestPamAccessResult.Error(error = error)
+            val viewModel = createGatedViewModel()
+            viewModel.trySendAction(VaultItemAction.Pam.RequestAccessClick)
+
+            viewModel.trySendAction(VaultItemAction.Pam.SubmitRequestClick)
+
+            assertEquals(
+                VaultItemState.DialogState.Generic(
+                    message = BitwardenString.generic_error_message.asText(),
+                    error = error,
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            verify(exactly = 0) { vaultRepo.sync(forced = true) }
+        }
+
+        private fun <T> T.asSuccess(): Result<T> = Result.success(this)
+
+        private fun IllegalStateException.asFailure(): Result<PamItemAccess> =
+            Result.failure(this)
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         state: VaultItemState?,
@@ -3967,6 +4577,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         tempAttachmentFile: File? = null,
         environmentRepository: EnvironmentRepository = mockEnvironmentRepository,
         settingsRepository: SettingsRepository = mockSettingsRepository,
+        clock: Clock = FIXED_CLOCK,
     ): VaultItemViewModel = VaultItemViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
@@ -3989,6 +4600,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         snackbarRelayManager = snackbarRelayManager,
         premiumStateManager = premiumStateManager,
         featureFlagManager = featureFlagManager,
+        pamRepository = pamRepository,
+        clock = clock,
     )
 
     private fun createViewState(
@@ -4014,8 +4627,22 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         every { uriMock.host } returns "www.mockuri.com"
     }
 
+    private class MutableClock(private var instant: Instant) : Clock() {
+        override fun getZone(): ZoneOffset = ZoneOffset.UTC
+        override fun withZone(zone: ZoneId?): Clock = this
+        override fun instant(): Instant = instant
+        fun advance(duration: Duration) {
+            instant = instant.plus(duration)
+        }
+    }
+
     companion object {
         private const val VAULT_ITEM_ID = "vault_item_id"
+        private const val REQUEST_ID = "request_id"
+        private val FIXED_CLOCK: Clock = Clock.fixed(
+            Instant.parse("2026-01-01T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
         private const val DEFAULT_LOGIN_PASSWORD = "password"
         private const val DEFAULT_LOGIN_USERNAME = "username"
 
