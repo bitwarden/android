@@ -9,14 +9,21 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import okhttp3.Interceptor
 import okhttp3.Request
+import okhttp3.Response
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.io.InterruptedIOException
 import java.net.InetAddress
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.net.ssl.SSLHandshakeException
 
 class PermissionInterceptorTest {
     private val permissionProvider = mockk<PermissionProvider>()
@@ -59,16 +66,119 @@ class PermissionInterceptorTest {
         every { InetAddress.getByName("8.8.8.8") } returns mockk {
             every { isSiteLocalAddress } returns false
         }
+        val expectedResponse = mockk<Response>()
         val chain = FakeInterceptorChain(
             request = Request.Builder().url("http://8.8.8.8/api").build(),
+            responseProvider = { expectedResponse },
         )
 
         val response = interceptor.intercept(chain)
 
-        assertEquals(200, response.code)
+        assertSame(expectedResponse, response)
         verify(exactly = 1) {
             permissionProvider.hasLocalNetworkAccessPermission
         }
+        verify(exactly = 0) {
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
+    @Test
+    fun `intercept should offer timeout recovery for IPv6 and public endpoints`() {
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        every { permissionProvider.acquireLocalNetworkAccessPermission() } just runs
+        // Routing determines local reachability, so even public timeouts offer recovery.
+        listOf(
+            "ula.example" to "fd00::1",
+            "global.example" to "2001:db8::1",
+            "vault.bitwarden.com" to "8.8.8.8",
+        ).forEachIndexed { index, (host, address) ->
+            every { InetAddress.getByName(host) } returns mockk(
+                name = address,
+            ) {
+                every { isSiteLocalAddress } returns false
+            }
+            val request = Request.Builder().url("https://$host/api").build()
+            val timeout = SocketTimeoutException(address)
+            val chain = mockk<Interceptor.Chain> {
+                every { request() } returns request
+                every { proceed(request) } throws timeout
+            }
+
+            val exception = assertThrows(SocketTimeoutException::class.java) {
+                interceptor.intercept(chain)
+            }
+
+            assertSame(timeout, exception)
+            verify(exactly = 1) { chain.proceed(request) }
+            verify(exactly = index + 1) {
+                permissionProvider.acquireLocalNetworkAccessPermission()
+            }
+        }
+        verify(exactly = 6) { permissionProvider.hasLocalNetworkAccessPermission }
+        verify(exactly = 0) { permissionProvider.errorMessageString }
+    }
+
+    @Test
+    fun `intercept should recheck permission after a timeout`() {
+        listOf(true, false).forEach { initiallyGranted ->
+            every {
+                permissionProvider.hasLocalNetworkAccessPermission
+            } returnsMany listOf(initiallyGranted, true)
+            every { InetAddress.getByName("self-hosted.example") } returns mockk {
+                every { isSiteLocalAddress } returns false
+            }
+            val request = Request.Builder().url("https://self-hosted.example/api").build()
+            val timeout = SocketTimeoutException("timeout")
+            val chain = mockk<Interceptor.Chain> {
+                every { request() } returns request
+                every { proceed(request) } throws timeout
+            }
+
+            val exception = assertThrows(SocketTimeoutException::class.java) {
+                interceptor.intercept(chain)
+            }
+
+            assertSame(timeout, exception)
+            verify(exactly = 1) { chain.proceed(request) }
+            verify(exactly = if (initiallyGranted) 0 else 1) {
+                InetAddress.getByName("self-hosted.example")
+            }
+        }
+        verify(exactly = 4) { permissionProvider.hasLocalNetworkAccessPermission }
+        verify(exactly = 0) {
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
+    @Test
+    fun `intercept should propagate other IO failures without offering permission recovery`() {
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        every { InetAddress.getByName("self-hosted.example") } returns mockk {
+            every { isSiteLocalAddress } returns false
+        }
+        listOf(
+            UnknownHostException("unknown host"),
+            SSLHandshakeException("TLS failure"),
+            IOException("canceled"),
+            InterruptedIOException("interrupted"),
+        ).forEach { failure ->
+            val request = Request.Builder().url("https://self-hosted.example/api").build()
+            val chain = mockk<Interceptor.Chain> {
+                every { request() } returns request
+                every { proceed(request) } throws failure
+            }
+
+            val exception = assertThrows(IOException::class.java) {
+                interceptor.intercept(chain)
+            }
+
+            assertSame(failure, exception)
+            verify(exactly = 1) { chain.proceed(request) }
+        }
+        verify(exactly = 4) { permissionProvider.hasLocalNetworkAccessPermission }
         verify(exactly = 0) {
             permissionProvider.acquireLocalNetworkAccessPermission()
             permissionProvider.errorMessageString

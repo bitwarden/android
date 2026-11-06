@@ -7,11 +7,13 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 import java.net.InetAddress
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
  * Interceptor responsible for determining if the destination of the network request is on the
- * local network or not.
+ * local network or not, and signaling permission recovery after a timeout when local network
+ * access permission is missing.
  */
 internal class PermissionInterceptor(
     private val permissionProvider: PermissionProvider,
@@ -19,7 +21,14 @@ internal class PermissionInterceptor(
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         if (permissionProvider.hasLocalNetworkAccessPermission || !chain.isLocalRequest()) {
-            return chain.proceed(request = chain.request())
+            return try {
+                chain.proceed(request = chain.request())
+            } catch (exception: SocketTimeoutException) {
+                if (!permissionProvider.hasLocalNetworkAccessPermission) {
+                    permissionProvider.acquireLocalNetworkAccessPermission()
+                }
+                throw exception
+            }
         }
         permissionProvider.acquireLocalNetworkAccessPermission()
         throw LocalNetworkAccessException(message = permissionProvider.errorMessageString)
