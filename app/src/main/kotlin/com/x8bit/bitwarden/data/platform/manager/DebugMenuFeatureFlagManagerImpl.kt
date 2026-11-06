@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.map
 /**
  * The [FeatureFlagManager] implementation for the debug menu. This manager uses the
  * values returned from the [debugMenuRepository] if they are available. otherwise it will use
- * the default [FeatureFlagManager].
+ * the default [FeatureFlagManager]. [FlagKey.Vfo1Foundation] defaults to `true` when no override
+ * is stored.
  */
 class DebugMenuFeatureFlagManagerImpl(
     private val defaultFeatureFlagManager: FeatureFlagManager,
@@ -17,21 +18,23 @@ class DebugMenuFeatureFlagManagerImpl(
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> {
         return debugMenuRepository.featureFlagOverridesUpdatedFlow.map { _ ->
-            debugMenuRepository
-                .getFeatureFlag(key)
+            getOverrideOrDebugDefault(key)
                 ?: defaultFeatureFlagManager.getFeatureFlag(key = key)
         }
     }
 
     override suspend fun <T : Any> getFeatureFlag(key: FlagKey<T>, forceRefresh: Boolean): T {
-        return debugMenuRepository
-            .getFeatureFlag(key)
+        return getOverrideOrDebugDefault(key)
             ?: defaultFeatureFlagManager.getFeatureFlag(key = key, forceRefresh = forceRefresh)
     }
 
     override fun <T : Any> getFeatureFlag(key: FlagKey<T>): T {
-        return debugMenuRepository
-            .getFeatureFlag(key)
+        return getOverrideOrDebugDefault(key)
             ?: defaultFeatureFlagManager.getFeatureFlag(key = key)
     }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Any> getOverrideOrDebugDefault(key: FlagKey<T>): T? =
+        debugMenuRepository.getFeatureFlag(key)
+            ?: (true as T).takeIf { key == FlagKey.Vfo1Foundation }
 }
