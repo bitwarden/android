@@ -1,25 +1,18 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
 
 /**
- * The type-safe route for the manual code entry screen.
+ * Add the manual code entry screen to the navigation entries.
  */
-@Serializable
-data object ManualCodeEntryRoute
-
-/**
- * Add the manual code entry screen to the nav graph.
- */
-fun NavGraphBuilder.manualCodeEntryDestination(
+fun EntryProviderScope<AuthenticatorGraph>.manualCodeEntryDestination(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScreen: () -> Unit,
 ) {
-    composableWithSlideTransitions<ManualCodeEntryRoute> {
+    slideUpEntry<AuthenticatorGraph.ManualCodeEntryRoute> {
         ManualCodeEntryScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToQrCodeScreen = onNavigateToQrCodeScreen,
@@ -30,8 +23,6 @@ fun NavGraphBuilder.manualCodeEntryDestination(
 /**
  * Navigate to the manual code entry screen.
  */
-fun NavController.navigateToManualCodeEntryScreen(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = ManualCodeEntryRoute, navOptions = navOptions)
+fun NavigationController<AuthenticatorGraph>.navigateToManualCodeEntryScreen() {
+    this.navigate(route = AuthenticatorGraph.ManualCodeEntryRoute)
 }
