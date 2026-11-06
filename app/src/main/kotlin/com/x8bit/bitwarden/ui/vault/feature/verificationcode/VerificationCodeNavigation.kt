@@ -1,27 +1,20 @@
 package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraph
 
 /**
- * The type-safe route for the verification code screen.
+ * Add the verification code screen to the navigation entries.
  */
-@Serializable
-data object VerificationCodeRoute
-
-/**
- * Add the verification code screen to the nav graph.
- */
-fun NavGraphBuilder.vaultVerificationCodeDestination(
+fun EntryProviderScope<VaultGraph>.vaultVerificationCodeDestination(
     onNavigateBack: () -> Unit,
     onNavigateToSearchVault: () -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultItemScreen: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
 ) {
-    composableWithPushTransitions<VerificationCodeRoute> {
+    pushEntry<VaultGraph.VerificationCodeRoute> {
         VerificationCodeScreen(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToSearch = onNavigateToSearchVault,
@@ -33,8 +26,6 @@ fun NavGraphBuilder.vaultVerificationCodeDestination(
 /**
  * Navigate to the verification code screen.
  */
-fun NavController.navigateToVerificationCodeScreen(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = VerificationCodeRoute, navOptions = navOptions)
+fun NavigationController<VaultGraph>.navigateToVerificationCodeScreen() {
+    this.navigate(route = VaultGraph.VerificationCodeRoute)
 }

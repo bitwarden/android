@@ -1,28 +1,21 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * The type-safe route for the vault settings screen.
+ * Add the Vault Settings screen to the navigation entries.
  */
-@Serializable
-data object VaultSettingsRoute
-
-/**
- * Add Vault Settings destinations to the nav graph.
- */
-fun NavGraphBuilder.vaultSettingsDestination(
+fun EntryProviderScope<SettingsGraph>.vaultSettingsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
 ) {
-    composableWithPushTransitions<VaultSettingsRoute> {
+    pushEntry<SettingsGraph.VaultSettingsRoute> {
         VaultSettingsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToExportVault = onNavigateToExportVault,
@@ -36,6 +29,6 @@ fun NavGraphBuilder.vaultSettingsDestination(
 /**
  * Navigate to the Vault Settings screen.
  */
-fun NavController.navigateToVaultSettings(navOptions: NavOptions? = null) {
-    this.navigate(route = VaultSettingsRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToVaultSettings() {
+    this.navigate(route = SettingsGraph.VaultSettingsRoute)
 }

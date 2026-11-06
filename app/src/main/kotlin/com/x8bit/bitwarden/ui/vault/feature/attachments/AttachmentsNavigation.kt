@@ -1,45 +1,24 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
-import kotlinx.serialization.Serializable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the attachments screen.
+ * Add the attachments screen to the navigation entries.
  */
-@Serializable
-data class AttachmentsRoute(
-    val cipherId: String,
-)
-
-/**
- * Class to retrieve arguments from the [SavedStateHandle].
- */
-data class AttachmentsArgs(val cipherId: String)
-
-/**
- * Constructs a [AttachmentsArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toAttachmentsArgs(): AttachmentsArgs {
-    val route = this.toRoute<AttachmentsRoute>()
-    return AttachmentsArgs(cipherId = route.cipherId)
-}
-
-/**
- * Add the attachments screen to the nav graph.
- */
-fun NavGraphBuilder.attachmentDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.attachmentDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToPreviewAttachment: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPreviewAttachment: (route: VaultUnlockedGraph.PreviewAttachmentRoute) -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
-    composableWithSlideTransitions<AttachmentsRoute> {
+    slideUpEntry<VaultUnlockedGraph.AttachmentsRoute> { route ->
         AttachmentsScreen(
+            viewModel = hiltViewModel<AttachmentsViewModel, AttachmentsViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
             onNavigateToPreview = onNavigateToPreviewAttachment,
             onNavigateToPlan = onNavigateToPlan,
@@ -50,12 +29,8 @@ fun NavGraphBuilder.attachmentDestination(
 /**
  * Navigate to the attachments screen.
  */
-fun NavController.navigateToAttachment(
+fun NavigationController<VaultUnlockedGraph>.navigateToAttachment(
     cipherId: String,
-    navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = AttachmentsRoute(cipherId = cipherId),
-        navOptions = navOptions,
-    )
+    this.navigate(route = VaultUnlockedGraph.AttachmentsRoute(cipherId = cipherId))
 }

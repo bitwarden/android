@@ -1,115 +1,34 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
-import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
+import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the vault unlock screen.
+ * Add the Vault Unlock screen to the navigation entries.
  */
-@Parcelize
-@Serializable(with = VaultUnlockRoute.Serializer::class)
-sealed class VaultUnlockRoute : Parcelable {
-    /**
-     * The underlying [UnlockType] used in the vault unlock screen.
-     */
-    abstract val unlockType: UnlockType
-
-    /**
-     * Custom serializer to support polymorphic routes.
-     */
-    class Serializer : ParcelableRouteSerializer<VaultUnlockRoute>(VaultUnlockRoute::class)
-
-    /**
-     * The type-safe route for the standard vault unlock screen.
-     */
-    @Parcelize
-    @Serializable(with = Standard.Serializer::class)
-    data object Standard : VaultUnlockRoute() {
-        override val unlockType: UnlockType get() = UnlockType.STANDARD
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
-    }
-
-    /**
-     * The type-safe route for the TDE vault unlock screen.
-     */
-    @Parcelize
-    @Serializable(with = Tde.Serializer::class)
-    data object Tde : VaultUnlockRoute() {
-        override val unlockType: UnlockType get() = UnlockType.TDE
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Tde>(Tde::class)
+fun EntryProviderScope<AuthGraph>.vaultUnlockDestination() {
+    entry<AuthGraph.VaultUnlockRoute> { route ->
+        VaultUnlockScreen(viewModel = vaultUnlockViewModel(route = route))
     }
 }
 
 /**
- * Class to retrieve vault unlock arguments from the [SavedStateHandle].
+ * Navigate to the Vault Unlock screen for a given [unlockType].
  */
-data class VaultUnlockArgs(
-    val unlockType: UnlockType,
+fun NavigationController<AuthGraph>.navigateToVaultUnlock(unlockType: UnlockType) {
+    this.navigate(route = AuthGraph.VaultUnlockRoute(unlockType = unlockType))
+}
+
+/**
+ * Creates the [VaultUnlockViewModel] for the given [route].
+ */
+@Composable
+private fun vaultUnlockViewModel(
+    route: AuthGraph.VaultUnlockRoute,
+): VaultUnlockViewModel = hiltViewModel<VaultUnlockViewModel, VaultUnlockViewModel.Factory>(
+    creationCallback = { factory -> factory.create(route = route) },
 )
-
-/**
- * Constructs a [VaultUnlockArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toVaultUnlockArgs(): VaultUnlockArgs {
-    val route = this.toRoute<VaultUnlockRoute>()
-    return VaultUnlockArgs(unlockType = route.unlockType)
-}
-
-/**
- * Navigate to the Vault Unlock screen.
- */
-fun NavController.navigateToVaultUnlock(
-    navOptions: NavOptions? = null,
-) {
-    navigate(
-        route = VaultUnlockRoute.Standard,
-        navOptions = navOptions,
-    )
-}
-
-/**
- * Add the Vault Unlock screen to the nav graph.
- */
-fun NavGraphBuilder.vaultUnlockDestination() {
-    composable<VaultUnlockRoute.Standard> {
-        VaultUnlockScreen()
-    }
-}
-
-/**
- * Navigate to the Vault Unlock screen for TDE.
- */
-fun NavController.navigateToTdeVaultUnlock(
-    navOptions: NavOptions? = null,
-) {
-    navigate(
-        route = VaultUnlockRoute.Tde,
-        navOptions = navOptions,
-    )
-}
-
-/**
- * Add the Vault Unlock screen to the TDE nav graph.
- */
-fun NavGraphBuilder.tdeVaultUnlockDestination() {
-    composable<VaultUnlockRoute.Tde> {
-        VaultUnlockScreen()
-    }
-}

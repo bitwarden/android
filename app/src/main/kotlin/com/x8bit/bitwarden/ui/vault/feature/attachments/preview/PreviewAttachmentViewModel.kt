@@ -20,6 +20,10 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,7 +37,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.io.File
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
@@ -43,29 +46,29 @@ private const val GET_CIPHER_DURATION = 5_000L
  * ViewModel responsible for handling user interactions in the attachments screen.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class PreviewAttachmentViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = PreviewAttachmentViewModel.Factory::class)
+class PreviewAttachmentViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.PreviewAttachmentRoute,
     private val fileManager: FileManager,
     private val vaultRepository: VaultRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PreviewAttachmentState, PreviewAttachmentEvent, PreviewAttachmentAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toPreviewAttachmentArgs()
-        val isPreviewable = args.fileName.isPreviewable
-        val isLargeFile = args.isLargeFile
+        val isPreviewable = route.fileName.isPreviewable
+        val isLargeFile = route.isLargeFile
         PreviewAttachmentState(
-            cipherId = args.cipherId,
-            attachmentId = args.attachmentId,
-            fileName = args.fileName,
-            displaySize = args.displaySize,
+            cipherId = route.cipherId,
+            attachmentId = route.attachmentId,
+            fileName = route.fileName,
+            displaySize = route.displaySize,
             isLargeFile = isLargeFile,
             isPreviewable = isPreviewable,
             viewState = if (!isPreviewable) {
                 PreviewAttachmentState.ViewState.Error(
                     message = BitwardenString
                         .preview_not_available_for_files
-                        .asText(args.fileName.fileExtension),
+                        .asText(route.fileName.fileExtension),
                 )
             } else if (isLargeFile) {
                 PreviewAttachmentState.ViewState.Error(
@@ -79,6 +82,18 @@ class PreviewAttachmentViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [PreviewAttachmentViewModel] for a specific
+     * [VaultUnlockedGraph.PreviewAttachmentRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [PreviewAttachmentViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.PreviewAttachmentRoute): PreviewAttachmentViewModel
+    }
+
     /**
      * Reference to a temporary attachment saved in cache.
      */

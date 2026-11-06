@@ -17,7 +17,11 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +29,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -33,29 +36,38 @@ private const val KEY_STATE = "state"
  * Handles [FolderAddEditAction],
  * and launches [FolderAddEditEvent] for the [FolderAddEditScreen].
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = FolderAddEditViewModel.Factory::class)
 @Suppress("TooManyFunctions", "LargeClass")
-class FolderAddEditViewModel @Inject constructor(
+class FolderAddEditViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.FolderAddEditRoute,
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val vaultRepository: VaultRepository,
     private val relayManager: SnackbarRelayManager<SnackbarRelay>,
 ) : BaseViewModel<FolderAddEditState, FolderAddEditEvent, FolderAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val folderAddEditArgs = savedStateHandle.toFolderAddEditArgs()
-            FolderAddEditState(
-                folderAddEditType = folderAddEditArgs.folderAddEditType,
-                viewState = when (folderAddEditArgs.folderAddEditType) {
-                    is FolderAddEditType.AddItem -> FolderAddEditState.ViewState.Content("")
-                    is FolderAddEditType.EditItem -> FolderAddEditState.ViewState.Loading
-                },
-                dialog = null,
-                parentFolderName = folderAddEditArgs.parentFolderName?.takeUnless { it.isEmpty() },
-            )
+    initialState = savedStateHandle[KEY_STATE] ?: FolderAddEditState(
+        folderAddEditType = route.folderAddEditType,
+        viewState = when (route.folderAddEditType) {
+            is FolderAddEditType.AddItem -> FolderAddEditState.ViewState.Content("")
+            is FolderAddEditType.EditItem -> FolderAddEditState.ViewState.Loading
         },
+        dialog = null,
+        parentFolderName = route.parentFolderName?.takeUnless { it.isEmpty() },
+    ),
 ) {
+    /**
+     * Factory for creating a [FolderAddEditViewModel] for a specific
+     * [VaultUnlockedGraph.FolderAddEditRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [FolderAddEditViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.FolderAddEditRoute): FolderAddEditViewModel
+    }
+
     init {
         state
             .folderAddEditType

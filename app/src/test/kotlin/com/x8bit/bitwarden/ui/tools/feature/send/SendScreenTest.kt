@@ -31,10 +31,9 @@ import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import io.mockk.every
 import io.mockk.just
@@ -53,11 +52,11 @@ import org.junit.Test
 @Suppress("LargeClass")
 class SendScreenTest : BitwardenComposeTest() {
 
-    private var onNavigateToAddEditSendRoute: AddEditSendRoute? = null
+    private var onNavigateToAddEditSendRoute: VaultUnlockedGraph.AddEditSendRoute? = null
     private var onNavigateToSendFilesListCalled = false
     private var onNavigateToSendTextListCalled = false
     private var onNavigateToSendSearchCalled = false
-    private var onNavigateToViewSendRoute: ViewSendRoute? = null
+    private var onNavigateToViewSendRoute: VaultUnlockedGraph.ViewSendRoute? = null
     private var onNavigateToPlanCalled = false
 
     private val intentManager = mockk<IntentManager> {
@@ -95,7 +94,11 @@ class SendScreenTest : BitwardenComposeTest() {
         val sendType = SendItemType.TEXT
         mutableEventFlow.tryEmit(SendEvent.NavigateNewSend(sendType = sendType))
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD, sendId = null),
+            VaultUnlockedGraph.AddEditSendRoute(
+                sendType = sendType,
+                modeType = ModeType.ADD,
+                sendId = null,
+            ),
             onNavigateToAddEditSendRoute,
         )
     }
@@ -106,7 +109,11 @@ class SendScreenTest : BitwardenComposeTest() {
         val sendType = SendItemType.FILE
         mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId = sendId, sendType = sendType))
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            VaultUnlockedGraph.AddEditSendRoute(
+                sendType = sendType,
+                modeType = ModeType.EDIT,
+                sendId = sendId,
+            ),
             onNavigateToAddEditSendRoute,
         )
     }
@@ -116,7 +123,10 @@ class SendScreenTest : BitwardenComposeTest() {
         val sendId = "sendId1234"
         val sendType = SendItemType.TEXT
         mutableEventFlow.tryEmit(SendEvent.NavigateToViewSend(sendId = sendId, sendType = sendType))
-        assertEquals(ViewSendRoute(sendId = sendId, sendType = sendType), onNavigateToViewSendRoute)
+        assertEquals(
+            VaultUnlockedGraph.ViewSendRoute(sendId = sendId, sendType = sendType),
+            onNavigateToViewSendRoute,
+        )
     }
 
     @Test

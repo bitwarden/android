@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -63,24 +64,20 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlag(FlagKey.AttachmentUpdates)
         } answers { mutableAttachmentUpdatesFlow.value }
-        every { getFeatureFlagFlow(FlagKey.AttachmentUpdates) } returns mutableAttachmentUpdatesFlow
+        every {
+            getFeatureFlagFlow(key = FlagKey.AttachmentUpdates)
+        } returns mutableAttachmentUpdatesFlow
     }
 
     @BeforeEach
     fun setup() {
-        mockkStatic(
-            SavedStateHandle::toAttachmentsArgs,
-            CipherView::toViewState,
-        )
+        mockkStatic(CipherView::toViewState)
         mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toAttachmentsArgs,
-            CipherView::toViewState,
-        )
+        unmockkStatic(CipherView::toViewState)
         unmockkStatic(Uri::class)
     }
 
@@ -816,17 +813,15 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: AttachmentsState? = null,
     ): AttachmentsViewModel = AttachmentsViewModel(
+        route = VaultUnlockedGraph.AttachmentsRoute(
+            cipherId = initialState?.cipherId ?: "mockId-1",
+        ),
         authRepo = authRepository,
         environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
         premiumStateManager = premiumStateManager,
         featureFlagManager = featureFlagManager,
-        savedStateHandle = SavedStateHandle().apply {
-            set("state", initialState)
-            every {
-                toAttachmentsArgs()
-            } returns AttachmentsArgs(cipherId = initialState?.cipherId ?: "mockId-1")
-        },
+        savedStateHandle = SavedStateHandle().apply { set("state", initialState) },
     )
 }
 

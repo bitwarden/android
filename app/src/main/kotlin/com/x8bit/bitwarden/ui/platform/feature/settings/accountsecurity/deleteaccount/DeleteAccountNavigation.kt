@@ -1,25 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the delete account screen.
+ * Add the delete account screen to the navigation entries.
  */
-@Serializable
-data object DeleteAccountRoute
-
-/**
- * Add delete account destinations to the nav graph.
- */
-fun NavGraphBuilder.deleteAccountDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.deleteAccountDestination(
     onNavigateBack: () -> Unit,
     onNavigateToDeleteAccountConfirmation: () -> Unit,
 ) {
-    composableWithSlideTransitions<DeleteAccountRoute> {
+    slideUpEntry<VaultUnlockedGraph.DeleteAccountRoute> {
         DeleteAccountScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToDeleteAccountConfirmation = onNavigateToDeleteAccountConfirmation,
@@ -30,6 +23,6 @@ fun NavGraphBuilder.deleteAccountDestination(
 /**
  * Navigate to the delete account screen.
  */
-fun NavController.navigateToDeleteAccount(navOptions: NavOptions? = null) {
-    this.navigate(route = DeleteAccountRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToDeleteAccount() {
+    this.navigate(route = VaultUnlockedGraph.DeleteAccountRoute)
 }

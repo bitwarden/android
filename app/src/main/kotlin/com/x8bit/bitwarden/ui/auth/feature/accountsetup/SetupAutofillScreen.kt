@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -61,7 +60,7 @@ fun SetupAutoFillScreen(
     onNavigateBack: () -> Unit,
     onNavigateToBrowserAutofill: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
-    viewModel: SetupAutoFillViewModel = hiltViewModel(),
+    viewModel: SetupAutoFillViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberSetupAutoFillHandler(viewModel = viewModel)

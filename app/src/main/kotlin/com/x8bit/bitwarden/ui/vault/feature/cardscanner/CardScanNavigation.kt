@@ -2,27 +2,19 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.cardscanner
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the card scan screen.
+ * Add the card scan screen to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object CardScanRoute
-
-/**
- * Add the card scan screen to the nav graph.
- */
-fun NavGraphBuilder.cardScanDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.cardScanDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<CardScanRoute> {
+    slideUpEntry<VaultUnlockedGraph.CardScanRoute> {
         CardScanScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -32,8 +24,6 @@ fun NavGraphBuilder.cardScanDestination(
 /**
  * Navigate to the card scan screen.
  */
-fun NavController.navigateToCardScanScreen(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = CardScanRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToCardScanScreen() {
+    this.navigate(route = VaultUnlockedGraph.CardScanRoute)
 }
