@@ -9,21 +9,15 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import okhttp3.Interceptor
 import okhttp3.Request
-import okhttp3.Response
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.IOException
-import java.io.InterruptedIOException
+import java.net.Inet6Address
 import java.net.InetAddress
-import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import javax.net.ssl.SSLHandshakeException
 
 class PermissionInterceptorTest {
     private val permissionProvider = mockk<PermissionProvider>()
@@ -66,119 +60,16 @@ class PermissionInterceptorTest {
         every { InetAddress.getByName("8.8.8.8") } returns mockk {
             every { isSiteLocalAddress } returns false
         }
-        val expectedResponse = mockk<Response>()
         val chain = FakeInterceptorChain(
             request = Request.Builder().url("http://8.8.8.8/api").build(),
-            responseProvider = { expectedResponse },
         )
 
         val response = interceptor.intercept(chain)
 
-        assertSame(expectedResponse, response)
+        assertEquals(200, response.code)
         verify(exactly = 1) {
             permissionProvider.hasLocalNetworkAccessPermission
         }
-        verify(exactly = 0) {
-            permissionProvider.acquireLocalNetworkAccessPermission()
-            permissionProvider.errorMessageString
-        }
-    }
-
-    @Test
-    fun `intercept should offer timeout recovery for IPv6 and public endpoints`() {
-        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
-        every { permissionProvider.acquireLocalNetworkAccessPermission() } just runs
-        // Routing determines local reachability, so even public timeouts offer recovery.
-        listOf(
-            "ula.example" to "fd00::1",
-            "global.example" to "2001:db8::1",
-            "vault.bitwarden.com" to "8.8.8.8",
-        ).forEachIndexed { index, (host, address) ->
-            every { InetAddress.getByName(host) } returns mockk(
-                name = address,
-            ) {
-                every { isSiteLocalAddress } returns false
-            }
-            val request = Request.Builder().url("https://$host/api").build()
-            val timeout = SocketTimeoutException(address)
-            val chain = mockk<Interceptor.Chain> {
-                every { request() } returns request
-                every { proceed(request) } throws timeout
-            }
-
-            val exception = assertThrows(SocketTimeoutException::class.java) {
-                interceptor.intercept(chain)
-            }
-
-            assertSame(timeout, exception)
-            verify(exactly = 1) { chain.proceed(request) }
-            verify(exactly = index + 1) {
-                permissionProvider.acquireLocalNetworkAccessPermission()
-            }
-        }
-        verify(exactly = 6) { permissionProvider.hasLocalNetworkAccessPermission }
-        verify(exactly = 0) { permissionProvider.errorMessageString }
-    }
-
-    @Test
-    fun `intercept should recheck permission after a timeout`() {
-        listOf(true, false).forEach { initiallyGranted ->
-            every {
-                permissionProvider.hasLocalNetworkAccessPermission
-            } returnsMany listOf(initiallyGranted, true)
-            every { InetAddress.getByName("self-hosted.example") } returns mockk {
-                every { isSiteLocalAddress } returns false
-            }
-            val request = Request.Builder().url("https://self-hosted.example/api").build()
-            val timeout = SocketTimeoutException("timeout")
-            val chain = mockk<Interceptor.Chain> {
-                every { request() } returns request
-                every { proceed(request) } throws timeout
-            }
-
-            val exception = assertThrows(SocketTimeoutException::class.java) {
-                interceptor.intercept(chain)
-            }
-
-            assertSame(timeout, exception)
-            verify(exactly = 1) { chain.proceed(request) }
-            verify(exactly = if (initiallyGranted) 0 else 1) {
-                InetAddress.getByName("self-hosted.example")
-            }
-        }
-        verify(exactly = 4) { permissionProvider.hasLocalNetworkAccessPermission }
-        verify(exactly = 0) {
-            permissionProvider.acquireLocalNetworkAccessPermission()
-            permissionProvider.errorMessageString
-        }
-    }
-
-    @Test
-    fun `intercept should propagate other IO failures without offering permission recovery`() {
-        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
-        every { InetAddress.getByName("self-hosted.example") } returns mockk {
-            every { isSiteLocalAddress } returns false
-        }
-        listOf(
-            UnknownHostException("unknown host"),
-            SSLHandshakeException("TLS failure"),
-            IOException("canceled"),
-            InterruptedIOException("interrupted"),
-        ).forEach { failure ->
-            val request = Request.Builder().url("https://self-hosted.example/api").build()
-            val chain = mockk<Interceptor.Chain> {
-                every { request() } returns request
-                every { proceed(request) } throws failure
-            }
-
-            val exception = assertThrows(IOException::class.java) {
-                interceptor.intercept(chain)
-            }
-
-            assertSame(failure, exception)
-            verify(exactly = 1) { chain.proceed(request) }
-        }
-        verify(exactly = 4) { permissionProvider.hasLocalNetworkAccessPermission }
         verify(exactly = 0) {
             permissionProvider.acquireLocalNetworkAccessPermission()
             permissionProvider.errorMessageString
@@ -206,6 +97,54 @@ class PermissionInterceptorTest {
         assertEquals(errorMessage, exception.message)
         verify(exactly = 1) {
             permissionProvider.hasLocalNetworkAccessPermission
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `intercept should acquire permission and throw when request targets local IPv6 address without permission`() {
+        val errorMessage = "Local network access required"
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        every { permissionProvider.errorMessageString } returns errorMessage
+        every { permissionProvider.acquireLocalNetworkAccessPermission() } just runs
+        listOf(
+            "fd00::1" to ipv6Address(first = 0xFD, second = 0x00),
+            "fc12::1" to ipv6Address(first = 0xFC, second = 0x12),
+            "fe80::1" to ipv6Address(first = 0xFE, second = 0x80),
+        ).forEach { (host, address) ->
+            every { InetAddress.getByName(host) } returns address
+            val chain = FakeInterceptorChain(
+                request = Request.Builder().url("http://[$host]/api").build(),
+            )
+
+            val exception = assertThrows(LocalNetworkAccessException::class.java) {
+                interceptor.intercept(chain)
+            }
+
+            assertEquals(errorMessage, exception.message)
+        }
+        verify(exactly = 3) {
+            permissionProvider.hasLocalNetworkAccessPermission
+            permissionProvider.acquireLocalNetworkAccessPermission()
+            permissionProvider.errorMessageString
+        }
+    }
+
+    @Test
+    fun `intercept should proceed when request targets a public IPv6 address`() {
+        every { permissionProvider.hasLocalNetworkAccessPermission } returns false
+        val host = "2001:db8::1"
+        every { InetAddress.getByName(host) } returns ipv6Address(first = 0x20, second = 0x01)
+        val chain = FakeInterceptorChain(
+            request = Request.Builder().url("http://[$host]/api").build(),
+        )
+
+        val response = interceptor.intercept(chain)
+
+        assertEquals(200, response.code)
+        verify(exactly = 0) {
             permissionProvider.acquireLocalNetworkAccessPermission()
             permissionProvider.errorMessageString
         }
@@ -254,4 +193,19 @@ class PermissionInterceptorTest {
             permissionProvider.errorMessageString
         }
     }
+
+    /**
+     * Creates an [Inet6Address] whose first two bytes are [first] and [second] and whose last
+     * byte is 1.
+     */
+    private fun ipv6Address(first: Int, second: Int): Inet6Address =
+        Inet6Address.getByAddress(
+            null,
+            ByteArray(size = 16).apply {
+                this[0] = first.toByte()
+                this[1] = second.toByte()
+                this[15] = 1
+            },
+            null,
+        )
 }
