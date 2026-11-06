@@ -83,7 +83,7 @@ fun AccountSummaryListItem(
                     fontSize = 11.dp.toUnscaledTextUnit(),
                     lineHeight = 13.dp.toUnscaledTextUnit(),
                     fontFamily = bitwardenFontFamily,
-                    fontWeight = FontWeight.W600,
+                    fontWeight = FontWeight.SemiBold,
                 ),
                 color = item.avatarColorHex.hexToColor().toSafeOverlayColor(),
             )
