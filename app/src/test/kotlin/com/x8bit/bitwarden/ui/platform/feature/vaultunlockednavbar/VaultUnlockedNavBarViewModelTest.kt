@@ -5,6 +5,7 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.pam.manager.PamApprovalManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -38,6 +39,13 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getEffectiveSendPolicyFlow() } returns mutableEffectiveSendPolicyFlow
         every { getEffectiveSendPolicy() } answers { mutableEffectiveSendPolicyFlow.value }
+    }
+
+    private val mutableCanApproveFlow = MutableStateFlow(false)
+    private val mutablePendingApprovalCountFlow = MutableStateFlow(0)
+    private val pamApprovalManager: PamApprovalManager = mockk {
+        every { canApproveFlow } returns mutableCanApproveFlow
+        every { pendingCountFlow } returns mutablePendingApprovalCountFlow
     }
 
     @Suppress("MaxLineLength")
@@ -337,12 +345,43 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `vault tab notification count should be zero when the user cannot approve`() = runTest {
+        mutablePendingApprovalCountFlow.value = 5
+        val viewModel = createViewModel()
+
+        assertEquals(0, viewModel.stateFlow.value.notificationState.vaultTabNotificationCount)
+    }
+
+    @Test
+    fun `vault tab notification count should follow the pending count for approvers`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableCanApproveFlow.value = true
+            mutablePendingApprovalCountFlow.value = 2
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    notificationState = DEFAULT_NOTIFICATION_STATE.copy(
+                        vaultTabNotificationCount = 2,
+                    ),
+                ),
+                expectMostRecentItem(),
+            )
+
+            mutableCanApproveFlow.value = false
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
     private fun createViewModel() =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,
             specialCircumstancesManager = specialCircumstancesManager,
             firstTimeActionManager = firstTimeActionManager,
             policyManager = policyManager,
+            pamApprovalManager = pamApprovalManager,
         )
 }
 
