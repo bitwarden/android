@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.billing.repository.util
 
-import com.bitwarden.network.model.BitwardenDiscountJson
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CadenceTypeJson
-import com.bitwarden.network.model.CartItemJson
-import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.DiscountTypeJson
-import com.bitwarden.network.model.PasswordManagerCartItemsJson
+import com.bitwarden.network.model.InvoicePreviewDiscountJson
+import com.bitwarden.network.model.InvoicePreviewItemJson
+import com.bitwarden.network.model.InvoicePreviewJson
+import com.bitwarden.network.model.PasswordManagerInvoicePreviewJson
 import com.bitwarden.network.model.StorageJson
 import com.bitwarden.network.model.SubscriptionStatusJson
 import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
@@ -62,14 +62,6 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo maps PAUSED to PAUSED`() {
-        val info = buildResponse(
-            status = SubscriptionStatusJson.PAUSED,
-        ).toSubscriptionInfo()
-        assertEquals(PremiumSubscriptionStatus.PAUSED, info.status)
-    }
-
-    @Test
     fun `toSubscriptionInfo maps ACTIVE with cancelAt to PENDING_CANCELLATION`() {
         val info = buildResponse(
             status = SubscriptionStatusJson.ACTIVE,
@@ -120,6 +112,12 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
+    fun `toSubscriptionInfo seatsCost is zero when seats are not present`() {
+        val info = buildResponse(seatsCost = null).toSubscriptionInfo()
+        assertEquals(BigDecimal.ZERO, info.seatsCost)
+    }
+
+    @Test
     fun `toSubscriptionInfo maps storageCost from additionalStorage when present`() {
         val info = buildResponse(
             seatsCost = BigDecimal("19.80"),
@@ -147,105 +145,57 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo discountAmount is null when no discount`() {
-        val info = buildResponse(discount = null).toSubscriptionInfo()
+    fun `toSubscriptionInfo discountAmount is null when no discounts`() {
+        val info = buildResponse(discounts = null).toSubscriptionInfo()
         assertNull(info.discountAmount)
     }
 
     @Test
-    fun `toSubscriptionInfo discountAmount for AMOUNT_OFF passes value through`() {
+    fun `toSubscriptionInfo discountAmount uses the applied amount rather than the value`() {
         val info = buildResponse(
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("2.10"),
-            ),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("2.10"), info.discountAmount)
-    }
-
-    @Test
-    fun `toSubscriptionInfo discountAmount for PERCENT_OFF applies to PM subtotal`() {
-        // seats 20 + storage 10 = 30 subtotal, 15% = 4.50
-        val info = buildResponse(
-            seatsCost = BigDecimal("20.00"),
-            storageCost = BigDecimal("10.00"),
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.PERCENT_OFF,
-                value = BigDecimal("15.00"),
+            discounts = listOf(
+                buildDiscount(
+                    type = DiscountTypeJson.PERCENT_OFF,
+                    value = BigDecimal("15"),
+                    amount = BigDecimal("4.50"),
+                ),
             ),
         ).toSubscriptionInfo()
         assertEquals(BigDecimal("4.50"), info.discountAmount)
     }
 
     @Test
-    fun `toSubscriptionInfo PERCENT_OFF discount treats value below one as a decimal fraction`() {
+    fun `toSubscriptionInfo discountAmount sums the amounts of all invoice discounts`() {
         val info = buildResponse(
-            seatsCost = BigDecimal("20.00"),
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.PERCENT_OFF,
-                value = BigDecimal("0.5"),
+            discounts = listOf(
+                buildDiscount(
+                    type = DiscountTypeJson.AMOUNT_OFF,
+                    value = BigDecimal("2.00"),
+                    amount = BigDecimal("2.00"),
+                ),
+                buildDiscount(
+                    type = DiscountTypeJson.PERCENT_OFF,
+                    value = BigDecimal("10"),
+                    amount = BigDecimal("1.98"),
+                ),
             ),
         ).toSubscriptionInfo()
-        assertEquals(BigDecimal("10.00"), info.discountAmount)
+        assertEquals(BigDecimal("3.98"), info.discountAmount)
     }
 
     @Test
-    fun `toSubscriptionInfo applies PM seats item-level discount`() {
+    fun `toSubscriptionInfo discountAmount ignores item-level discounts`() {
         val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            seatsDiscount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("5.00"),
+            seatsDiscounts = listOf(
+                buildDiscount(
+                    type = DiscountTypeJson.AMOUNT_OFF,
+                    value = BigDecimal("5.00"),
+                    amount = BigDecimal("5.00"),
+                ),
             ),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("5.00"), info.discountAmount)
-        assertEquals(BigDecimal("14.80"), info.nextChargeTotal)
-    }
-
-    @Test
-    fun `toSubscriptionInfo PERCENT_OFF seats item discount applies to seats line total`() {
-        val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            seatsQuantity = 2,
-            seatsDiscount = BitwardenDiscountJson(
-                type = DiscountTypeJson.PERCENT_OFF,
-                value = BigDecimal("10.00"),
-            ),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("3.96"), info.discountAmount)
-    }
-
-    @Test
-    fun `toSubscriptionInfo combines cart-level and PM seats item discounts`() {
-        val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            seatsDiscount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("3.00"),
-            ),
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("2.00"),
-            ),
-            estimatedTax = BigDecimal("1.00"),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("5.00"), info.discountAmount)
-        assertEquals(BigDecimal("15.80"), info.nextChargeTotal)
-    }
-
-    @Test
-    fun `toSubscriptionInfo ignores additionalStorage item-level discount`() {
-        val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            storageCost = BigDecimal("4"),
-            storageQuantity = 3,
-            storageDiscount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("5.00"),
-            ),
+            discounts = null,
         ).toSubscriptionInfo()
         assertNull(info.discountAmount)
-        assertEquals(BigDecimal("31.80"), info.nextChargeTotal)
     }
 
     @Test
@@ -255,50 +205,21 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
     }
 
     @Test
-    fun `toSubscriptionInfo nextChargeTotal sums line items, subtracts discount, adds tax`() {
-        // Matches the design example: 19.80 + 24.00 - 2.10 + 3.85 = 45.55
+    fun `toSubscriptionInfo nextChargeTotal passes the invoice total through`() {
         val info = buildResponse(
             seatsCost = BigDecimal("19.80"),
             storageCost = BigDecimal("24.00"),
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.AMOUNT_OFF,
-                value = BigDecimal("2.10"),
+            discounts = listOf(
+                buildDiscount(
+                    type = DiscountTypeJson.AMOUNT_OFF,
+                    value = BigDecimal("2.10"),
+                    amount = BigDecimal("2.10"),
+                ),
             ),
             estimatedTax = BigDecimal("3.85"),
+            total = BigDecimal("45.55"),
         ).toSubscriptionInfo()
         assertEquals(BigDecimal("45.55"), info.nextChargeTotal)
-    }
-
-    @Test
-    fun `toSubscriptionInfo nextChargeTotal multiplies storage line by quantity`() {
-        val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            storageCost = BigDecimal("4"),
-            storageQuantity = 3,
-            estimatedTax = BigDecimal("2.04"),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("33.84"), info.nextChargeTotal)
-    }
-
-    @Test
-    fun `toSubscriptionInfo PERCENT_OFF discount applies to quantity-multiplied subtotal`() {
-        val info = buildResponse(
-            seatsCost = BigDecimal("19.80"),
-            storageCost = BigDecimal("4"),
-            storageQuantity = 3,
-            discount = BitwardenDiscountJson(
-                type = DiscountTypeJson.PERCENT_OFF,
-                value = BigDecimal("10.00"),
-            ),
-        ).toSubscriptionInfo()
-        assertEquals(BigDecimal("3.18"), info.discountAmount)
-    }
-
-    @Test
-    fun `toSubscriptionInfo nextChargeTotal with minimal cart equals seatsCost`() {
-        // User-provided JSON: 19.80 + 0 - 0 + 0 = 19.80
-        val info = buildResponse(seatsCost = BigDecimal("19.80")).toSubscriptionInfo()
-        assertEquals(BigDecimal("19.80"), info.nextChargeTotal)
     }
 
     @Test
@@ -308,7 +229,7 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
         val suspension = Instant.parse("2026-05-02T00:00:00Z")
         val info = buildResponse(
             canceled = canceled,
-            nextCharge = next,
+            nextPaymentAttempt = next,
             suspension = suspension,
             gracePeriod = 14,
         ).toSubscriptionInfo()
@@ -328,52 +249,66 @@ class BitwardenSubscriptionResponseJsonExtensionsTest {
         assertNull(info.gracePeriodDays)
     }
 
+    private fun buildDiscount(
+        type: DiscountTypeJson,
+        value: BigDecimal,
+        amount: BigDecimal,
+    ): InvoicePreviewDiscountJson = InvoicePreviewDiscountJson(
+        type = type,
+        value = value,
+        amount = amount,
+        label = null,
+        durationInMonths = null,
+    )
+
     @Suppress("LongParameterList")
     private fun buildResponse(
         status: SubscriptionStatusJson = SubscriptionStatusJson.ACTIVE,
         cadence: CadenceTypeJson = CadenceTypeJson.ANNUALLY,
-        seatsCost: BigDecimal = BigDecimal("19.80"),
+        seatsCost: BigDecimal? = BigDecimal("19.80"),
         seatsQuantity: Long = 1,
-        seatsDiscount: BitwardenDiscountJson? = null,
+        seatsDiscounts: List<InvoicePreviewDiscountJson>? = null,
         storageCost: BigDecimal? = null,
         storageQuantity: Long = 1,
-        storageDiscount: BitwardenDiscountJson? = null,
-        discount: BitwardenDiscountJson? = null,
+        discounts: List<InvoicePreviewDiscountJson>? = null,
         estimatedTax: BigDecimal = BigDecimal.ZERO,
+        total: BigDecimal = BigDecimal("19.80"),
         storage: StorageJson? = null,
         cancelAt: Instant? = null,
         canceled: Instant? = null,
-        nextCharge: Instant? = null,
+        nextPaymentAttempt: Instant? = null,
         suspension: Instant? = null,
         gracePeriod: Int? = null,
     ): BitwardenSubscriptionResponseJson = BitwardenSubscriptionResponseJson(
         status = status,
-        cart = CartJson(
-            passwordManager = PasswordManagerCartItemsJson(
-                seats = CartItemJson(
-                    translationKey = "premiumMembership",
-                    quantity = seatsQuantity,
-                    cost = seatsCost,
-                    discount = seatsDiscount,
-                ),
+        invoicePreview = InvoicePreviewJson(
+            passwordManager = PasswordManagerInvoicePreviewJson(
+                seats = seatsCost?.let {
+                    InvoicePreviewItemJson(
+                        quantity = seatsQuantity,
+                        cost = it,
+                        discounts = seatsDiscounts,
+                    )
+                },
                 additionalStorage = storageCost?.let {
-                    CartItemJson(
-                        translationKey = "additionalStorage",
+                    InvoicePreviewItemJson(
                         quantity = storageQuantity,
                         cost = it,
-                        discount = storageDiscount,
+                        discounts = null,
                     )
                 },
             ),
-            secretsManager = null,
             cadence = cadence,
-            discount = discount,
+            discounts = discounts,
+            startingBalance = null,
             estimatedTax = estimatedTax,
+            total = total,
+            amountDue = total,
+            nextPaymentAttempt = nextPaymentAttempt,
         ),
         storage = storage,
         cancelAt = cancelAt,
         canceled = canceled,
-        nextCharge = nextCharge,
         suspension = suspension,
         gracePeriod = gracePeriod,
     )

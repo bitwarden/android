@@ -10,11 +10,10 @@ import java.time.Instant
  * Response object returned when retrieving the user's premium subscription details.
  *
  * @property status The current status of the subscription.
- * @property cart The cart details of the subscription.
+ * @property invoicePreview The invoice preview details of the subscription.
  * @property storage The storage usage details, if available.
  * @property cancelAt The date the subscription is scheduled to cancel, if applicable.
  * @property canceled The date the subscription was canceled, if applicable.
- * @property nextCharge The date of the next charge, if applicable.
  * @property suspension The date the subscription was suspended, if applicable.
  * @property gracePeriod The grace period in days, if applicable.
  */
@@ -23,8 +22,8 @@ data class BitwardenSubscriptionResponseJson(
     @SerialName("status")
     val status: SubscriptionStatusJson,
 
-    @SerialName("cart")
-    val cart: CartJson,
+    @SerialName("invoicePreview")
+    val invoicePreview: InvoicePreviewJson,
 
     @SerialName("storage")
     val storage: StorageJson?,
@@ -36,10 +35,6 @@ data class BitwardenSubscriptionResponseJson(
     @Contextual
     @SerialName("canceled")
     val canceled: Instant?,
-
-    @Contextual
-    @SerialName("nextCharge")
-    val nextCharge: Instant?,
 
     @Contextual
     @SerialName("suspension")
@@ -74,83 +69,76 @@ enum class SubscriptionStatusJson {
 
     @SerialName("trialing")
     TRIALING,
-
-    @SerialName("paused")
-    PAUSED,
 }
 
 /**
- * Represents the cart details of a subscription.
+ * Represents the invoice preview details of a subscription.
  *
- * @property passwordManager The password manager cart items.
- * @property secretsManager The secrets manager cart items, if applicable.
+ * @property passwordManager The password manager invoice preview items.
  * @property cadence The billing cadence of the subscription.
- * @property discount The discount applied to the cart, if applicable.
+ * @property discounts The discounts applied to the invoice, if applicable.
+ * @property startingBalance The starting balance of the invoice, if applicable.
  * @property estimatedTax The estimated tax amount.
+ * @property total The total amount of the invoice.
+ * @property amountDue The amount due on the invoice.
+ * @property nextPaymentAttempt The billing-period boundary of the subscription, if applicable.
  */
 @Serializable
-data class CartJson(
+data class InvoicePreviewJson(
     @SerialName("passwordManager")
-    val passwordManager: PasswordManagerCartItemsJson,
-
-    @SerialName("secretsManager")
-    val secretsManager: SecretsManagerCartItemsJson?,
+    val passwordManager: PasswordManagerInvoicePreviewJson,
 
     @SerialName("cadence")
     val cadence: CadenceTypeJson,
 
-    @SerialName("discount")
-    val discount: BitwardenDiscountJson?,
+    @SerialName("discounts")
+    val discounts: List<InvoicePreviewDiscountJson>?,
+
+    @Contextual
+    @SerialName("startingBalance")
+    val startingBalance: BigDecimal?,
 
     @Contextual
     @SerialName("estimatedTax")
     val estimatedTax: BigDecimal,
+
+    @Contextual
+    @SerialName("total")
+    val total: BigDecimal,
+
+    @Contextual
+    @SerialName("amountDue")
+    val amountDue: BigDecimal,
+
+    @Contextual
+    @SerialName("nextPaymentAttempt")
+    val nextPaymentAttempt: Instant?,
 )
 
 /**
- * Represents the password manager cart items within a subscription.
+ * Represents the password manager invoice preview items within a subscription.
  *
- * @property seats The seat pricing details.
+ * @property seats The seat pricing details, if applicable.
  * @property additionalStorage The additional storage pricing details, if applicable.
  */
 @Serializable
-data class PasswordManagerCartItemsJson(
+data class PasswordManagerInvoicePreviewJson(
     @SerialName("seats")
-    val seats: CartItemJson,
+    val seats: InvoicePreviewItemJson?,
 
     @SerialName("additionalStorage")
-    val additionalStorage: CartItemJson?,
+    val additionalStorage: InvoicePreviewItemJson?,
 )
 
 /**
- * Represents the secrets manager cart items within a subscription.
+ * Represents a single invoice preview item within a subscription.
  *
- * @property seats The seat pricing details.
- * @property additionalServiceAccounts The additional service accounts pricing details,
- * if applicable.
- */
-@Serializable
-data class SecretsManagerCartItemsJson(
-    @SerialName("seats")
-    val seats: CartItemJson,
-
-    @SerialName("additionalServiceAccounts")
-    val additionalServiceAccounts: CartItemJson?,
-)
-
-/**
- * Represents a single cart item within a subscription.
- *
- * @property translationKey The translation key for display purposes.
  * @property quantity The quantity of this item.
  * @property cost The cost of this item.
- * @property discount The discount applied to this item, if applicable.
+ * @property discounts The discounts applied to this item, if applicable.
  */
 @Serializable
-data class CartItemJson(
-    @SerialName("translationKey")
-    val translationKey: String,
-
+data class InvoicePreviewItemJson(
     @SerialName("quantity")
     val quantity: Long,
 
@@ -158,24 +146,37 @@ data class CartItemJson(
     @SerialName("cost")
     val cost: BigDecimal,
 
-    @SerialName("discount")
-    val discount: BitwardenDiscountJson?,
+    @SerialName("discounts")
+    val discounts: List<InvoicePreviewDiscountJson>?,
 )
 
 /**
- * Represents a discount applied to a subscription or cart item.
+ * Represents a discount applied to an invoice preview or invoice preview item.
  *
  * @property type The type of discount.
- * @property value The discount value.
+ * @property value The discount value, either a whole-number percentage or dollars off.
+ * @property amount The applied discount amount in dollars.
+ * @property label The coupon name, if applicable.
+ * @property durationInMonths The number of months the coupon repeats for, if applicable.
  */
 @Serializable
-data class BitwardenDiscountJson(
+data class InvoicePreviewDiscountJson(
     @SerialName("type")
     val type: DiscountTypeJson,
 
     @Contextual
     @SerialName("value")
     val value: BigDecimal,
+
+    @Contextual
+    @SerialName("amount")
+    val amount: BigDecimal,
+
+    @SerialName("label")
+    val label: String?,
+
+    @SerialName("durationInMonths")
+    val durationInMonths: Int?,
 )
 
 /**

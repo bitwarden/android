@@ -1,18 +1,13 @@
 package com.x8bit.bitwarden.data.billing.repository.util
 
-import com.bitwarden.network.model.BitwardenDiscountJson
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CadenceTypeJson
-import com.bitwarden.network.model.CartItemJson
-import com.bitwarden.network.model.DiscountTypeJson
+import com.bitwarden.network.model.InvoicePreviewItemJson
 import com.bitwarden.network.model.SubscriptionStatusJson
 import com.x8bit.bitwarden.data.billing.repository.model.PlanCadence
 import com.x8bit.bitwarden.data.billing.repository.model.PremiumSubscriptionStatus
 import com.x8bit.bitwarden.data.billing.repository.model.SubscriptionInfo
 import java.math.BigDecimal
-import java.math.RoundingMode
-
-private const val MONEY_SCALE: Int = 2
 
 /**
  * Maps a [BitwardenSubscriptionResponseJson] into a [SubscriptionInfo] domain
@@ -30,29 +25,22 @@ private const val MONEY_SCALE: Int = 2
  * does not expose a precomputed total.
  */
 fun BitwardenSubscriptionResponseJson.toSubscriptionInfo(): SubscriptionInfo {
-    val seatsCost = cart.passwordManager.seats.lineTotal()
-    val storageCost = cart.passwordManager.additionalStorage?.lineTotal()
-    val subtotal = seatsCost + (storageCost ?: BigDecimal.ZERO)
-    val cartDiscount = cart.discount?.toDiscountAmount(baseAmount = subtotal)
-    val seatsDiscount = cart.passwordManager.seats.discount
-        ?.toDiscountAmount(baseAmount = seatsCost)
-    val discountAmount = listOfNotNull(cartDiscount, seatsDiscount)
-        .takeIf { it.isNotEmpty() }
-        ?.reduce(BigDecimal::add)
-    val estimatedTax = cart.estimatedTax
-    val nextChargeTotal = subtotal -
-        (discountAmount ?: BigDecimal.ZERO) +
-        estimatedTax
+    val seatsCost = invoicePreview.passwordManager.seats?.lineTotal() ?: BigDecimal.ZERO
+    val storageCost = invoicePreview.passwordManager.additionalStorage?.lineTotal()
+    val discountAmount = invoicePreview
+        .discounts
+        ?.map { it.amount }
+        ?.reduce(operation = BigDecimal::add)
 
     return SubscriptionInfo(
         status = toPremiumSubscriptionStatus(),
-        cadence = cart.cadence.toPlanCadence(),
+        cadence = invoicePreview.cadence.toPlanCadence(),
         seatsCost = seatsCost,
         storageCost = storageCost,
         discountAmount = discountAmount,
-        estimatedTax = estimatedTax,
-        nextChargeTotal = nextChargeTotal,
-        nextCharge = nextCharge,
+        estimatedTax = invoicePreview.estimatedTax,
+        nextChargeTotal = invoicePreview.total,
+        nextCharge = invoicePreview.nextPaymentAttempt,
         cancelAt = cancelAt,
         canceledDate = canceled,
         suspensionDate = suspension,
@@ -77,21 +65,11 @@ private fun BitwardenSubscriptionResponseJson.toPremiumSubscriptionStatus():
     SubscriptionStatusJson.INCOMPLETE -> PremiumSubscriptionStatus.UPDATE_PAYMENT
     SubscriptionStatusJson.UNPAID -> PremiumSubscriptionStatus.UNPAID
     SubscriptionStatusJson.PAST_DUE -> PremiumSubscriptionStatus.PAST_DUE
-    SubscriptionStatusJson.PAUSED -> PremiumSubscriptionStatus.PAUSED
 }
 
-private fun CartItemJson.lineTotal(): BigDecimal = cost.multiply(quantity.toBigDecimal())
+private fun InvoicePreviewItemJson.lineTotal(): BigDecimal = cost.multiply(quantity.toBigDecimal())
 
 private fun CadenceTypeJson.toPlanCadence(): PlanCadence = when (this) {
     CadenceTypeJson.ANNUALLY -> PlanCadence.ANNUALLY
     CadenceTypeJson.MONTHLY -> PlanCadence.MONTHLY
 }
-
-private fun BitwardenDiscountJson.toDiscountAmount(baseAmount: BigDecimal): BigDecimal =
-    when (type) {
-        DiscountTypeJson.AMOUNT_OFF -> value
-        DiscountTypeJson.PERCENT_OFF -> {
-            val percentage = if (value < BigDecimal.ONE) value else value.movePointLeft(2)
-            baseAmount.multiply(percentage).setScale(MONEY_SCALE, RoundingMode.HALF_UP)
-        }
-    }
