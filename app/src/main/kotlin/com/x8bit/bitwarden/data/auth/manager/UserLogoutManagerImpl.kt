@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -37,6 +38,7 @@ internal class UserLogoutManagerImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    private val biometricEncryptionManager: BiometricsEncryptionManager,
     private val userNotificationPolicyManager: UserNotificationPolicyManager,
     dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
@@ -69,6 +71,12 @@ internal class UserLogoutManagerImpl(
         }
 
         clearData(userId = userId)
+
+        // biometric data is handled independently of blanket clearData() call
+        if (reason.shouldClearBiometrics()) {
+            biometricEncryptionManager.clearBiometrics(userId = userId)
+        }
+
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
@@ -94,6 +102,11 @@ internal class UserLogoutManagerImpl(
             .getVaultPolicyBannerDismissedDate(userId = userId)
 
         clearData(userId = userId)
+
+        // biometric data is handled independently of blanket clearData() call
+        if (reason.shouldClearBiometrics()) {
+            biometricEncryptionManager.clearBiometrics(userId = userId)
+        }
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
 
         // Restore data that is still required
@@ -178,5 +191,33 @@ internal class UserLogoutManagerImpl(
         } else {
             false
         }
+    }
+}
+
+/**
+ * Whether biometric unlock data should be wiped for this logout reason.
+ * Reasons that reflect an intentional or recoverable logout keep it so biometrics is
+ * available again after next login
+ */
+private fun LogoutReason.shouldClearBiometrics(): Boolean {
+    // TODO confirm cases for each logout reason with Product
+    return when (this) {
+        LogoutReason.AccountDelete,
+        LogoutReason.PasswordReset,
+        LogoutReason.SecurityStamp,
+        LogoutReason.TooManyUnlockAttempts,
+        LogoutReason.LeftOrganization,
+        is LogoutReason.InvalidState,
+        LogoutReason.Biometrics.Lockout,
+        LogoutReason.Biometrics.NoLongerSupported,
+            -> true
+
+        is LogoutReason.Click,
+        LogoutReason.Timeout,
+        LogoutReason.InvalidGrant,
+        LogoutReason.RefreshForbidden,
+        LogoutReason.RefreshUnauthorized,
+        LogoutReason.Notification,
+            -> false
     }
 }
