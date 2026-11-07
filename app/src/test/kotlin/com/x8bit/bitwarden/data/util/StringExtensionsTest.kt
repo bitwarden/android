@@ -238,6 +238,13 @@ class StringExtensionsTest {
         assertEquals("192.168.1.1:8080", uriString.getHostWithPortOrNull())
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getHostWithPortOrNull should return host with port when URI is IPv6 address with port and no scheme`() {
+        val uriString = "[2001:db8::1]:8443"
+        assertEquals("[2001:db8::1]:8443", uriString.getHostWithPortOrNull())
+    }
+
     @Test
     fun `isIpAddress should return correct value for various IP addresses`() {
         testIpAddresses.forEach { (ipAddress, expected) ->
