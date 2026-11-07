@@ -672,5 +672,5 @@ val AssistStructure.ViewNode.website: String?
             buildUri(
                 domain = webDomain,
                 scheme = webScheme,
-            )
+            ) + "/"
         }
