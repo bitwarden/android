@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.content.Context
+import app.cash.turbine.test
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
 import io.mockk.every
 import io.mockk.mockk
@@ -31,20 +32,68 @@ class AccessibilityEnabledManagerTest {
     }
 
     @Test
-    fun `isAccessibilityEnabled returns false when setting does not contain our service`() =
+    fun `isAccessibilityEnabled is seeded from the platform when it does not report the service`() =
         runTest {
-            every { context.isAccessibilityServiceEnabled } returns false
-            accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
             val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
+
             assertFalse(result)
         }
 
     @Test
-    fun `isAccessibilityEnabled returns true when setting contains the defined service`() =
+    fun `isAccessibilityEnabled is seeded from the platform when it reports the service`() =
         runTest {
             every { context.isAccessibilityServiceEnabled } returns true
-            accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
-            val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
+
+            val result = AccessibilityEnabledManagerImpl(context)
+                .isAccessibilityEnabledStateFlow
+                .value
+
             assertTrue(result)
         }
+
+    @Test
+    fun `isAccessibilityEnabled is true when the service reports it has connected`() = runTest {
+        accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
+
+        assertTrue(accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value)
+    }
+
+    @Test
+    fun `isAccessibilityEnabled is false when the service reports it has disconnected`() =
+        runTest {
+            accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
+            accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = false)
+
+            assertFalse(accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value)
+        }
+
+    @Test
+    fun `isAccessibilityEnabledStateFlow emits when the service connection state changes`() =
+        runTest {
+            accessibilityEnabledManager.isAccessibilityEnabledStateFlow.test {
+                assertFalse(awaitItem())
+
+                accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
+                assertTrue(awaitItem())
+
+                accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = false)
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `service connection updates override the platform reported enabled state`() = runTest {
+        every { context.isAccessibilityServiceEnabled } returns true
+        val manager = AccessibilityEnabledManagerImpl(context)
+
+        manager.isAccessibilityEnabledStateFlow.test {
+            assertTrue(awaitItem())
+
+            manager.setAccessibilityServiceConnected(isConnected = false)
+            assertFalse(awaitItem())
+
+            manager.setAccessibilityServiceConnected(isConnected = true)
+            assertTrue(awaitItem())
+        }
+    }
 }
