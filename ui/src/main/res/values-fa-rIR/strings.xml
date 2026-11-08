@@ -603,20 +603,22 @@
     <string name="generic_error_message">ما نتوانستیم درخواست شما را پردازش کنیم. لطفاً دوباره امتحان کنید یا با ما تماس بگیرید.</string>
     <string name="allow_screen_capture">اجازه ضبط صفحه نمایش</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">آیا مطمئنید که می‌خواهید ضبط از صفحه نمایش را فعال کنید؟</string>
-    <string name="log_in_requested">ورود الزامیست</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">آیا در تلاش برای ورود به سیستم هستید؟</string>
-    <string name="log_in_attempt_by_x_on_y">تلاش برای ورود به سیستم توسط %1$s در %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">نوع دستگاه</string>
     <string name="ip_address">نشانی IP</string>
     <string name="time">زمان</string>
     <string name="select_time">انتخاب زمان</string>
     <string name="switch_input_mode">تغییر حالت ورودی</string>
-    <string name="confirm_log_in">تأیید ورود</string>
-    <string name="deny_log_in">رد ورود</string>
-    <string name="log_in_denied">ورود رد شد</string>
-    <string name="approve_login_requests">درخواست‌های ورود را تأیید کنید</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">نه ممنون</string>
-    <string name="confim_log_in_attemp_for_x">تأیید تلاش برای ورود به سیستم برای %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">نوع نام کاربری</string>
     <string name="plus_addressed_email">به علاوه نشانی ایمیل داده شده</string>
     <string name="catch_all_email">دریافت همه ایمیل‌ها</string>
@@ -643,21 +645,22 @@
     <string name="i_understand">فهمیدم</string>
     <string name="accept">پذیرفتن</string>
     <string name="decline">رد کردن</string>
-    <string name="login_request_has_already_expired">درخواست ورود قبلاً منقضی شده است.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">تلاش برای ورود از:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-آیا می‌خواهید به این حساب کاربری تغییر دهید؟</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">در Bitwarden تازه وارد هستید؟</string>
     <string name="get_master_passwordword_hint">دریافت یادآور کلمه عبور اصلی</string>
     <string name="logging_in_as_x_on_y">درحال وارد شدن به عنوان %1$s در %2$s</string>
     <string name="not_you">شما نیستید؟</string>
     <string name="log_in_with_master_password">با کلمه عبور اصلی وارد شوید</string>
     <string name="log_in_initiated">ورود به سیستم آغاز شد</string>
-    <string name="a_notification_has_been_sent_to_your_device">یک اعلان به دستگاه شما ارسال شده است.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">لطفاً مطمئن شوید که قفل گاوصندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">ارسال مجدد اعلان</string>
     <string name="view_all_login_options">مشاهده همه گزینه‌های ورود به سیستم</string>
-    <string name="pending_log_in_requests">در حال انتظار برای ورود به سیستم</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">رد کردن همه درخواست‌ها</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">آیا مطمئنید که می‌خواهید همه درخواست‌های ورود در انتظار را رد کنید؟</string>
     <string name="no_pending_requests">بدون درخواست معلق</string>
@@ -690,9 +693,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">کلید عبور در مورد شبیه‌سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه‌سازی این مورد ادامه دهید؟</string>
     <string name="master_password_re_prompt_help">راهنمای درخواست مجدد کلمه عبور اصلی</string>
     <string name="admin_approval_requested">تأیید مدیر درخواست شد</string>
-    <string name="your_request_has_been_sent_to_your_admin">درخواست شما به مدیرتان فرستاده شد.</string>
-    <string name="you_will_be_notified_once_approved">به محض تأیید مطلع خواهید شد.</string>
-    <string name="trouble_logging_in">در ورود مشکلی دارید؟</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">پر کردن خودکار را مسدود کنید</string>
     <string name="no_uris_blocked">هیچ آدرس اینترنتی مسدود نشده است</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</string>
@@ -703,8 +705,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">قالب: %1$s. چندین نشانی اینترنتی را با کاما جدا کنید.</string>
     <string name="invalid_uri">نشانی اینترنتی نامعتبر</string>
     <string name="the_urix_is_already_blocked">%1$s نشانی اینترنتی قبلاً مسدود شده است</string>
-    <string name="login_approved">ورود تأیید شد</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">ورود با دستگاه باید در تنظیمات برنامه Bitwarden تنظیم شود.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">به گزینه دیگری نیاز دارید؟ <annotation link="viewAll">مشاهده همه گزینه‌های ورود</annotation></string>
     <string name="log_in_with_device">ورود با دستگاه</string>
     <string name="logging_in_on">ورود در</string>

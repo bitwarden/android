@@ -611,20 +611,22 @@ izberite Dodaj TOTP, da varno shranite ključ</string>
     <string name="generic_error_message">Vaše zahteve ni bilo mogoče obdelati. Poskusite znova ali nas kontaktirajte.</string>
     <string name="allow_screen_capture">Dovoli posnetke zaslona</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ste prepričani, da želite dovoliti zajemanje zaslona?</string>
-    <string name="log_in_requested">Zahtevana prijava</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Ali se poskušate prijaviti?</string>
-    <string name="log_in_attempt_by_x_on_y">Poskus prijave s strani %1$s na %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Vrsta naprave</string>
     <string name="ip_address">IP-naslov</string>
     <string name="time">Čas</string>
     <string name="select_time">Izberite čas</string>
     <string name="switch_input_mode">Preklopi način vnosa</string>
-    <string name="confirm_log_in">Potrdi prijavo</string>
-    <string name="deny_log_in">Zavrni prijavo</string>
-    <string name="log_in_denied">Prijava zavrnjena</string>
-    <string name="approve_login_requests">Odobri zahtevke za prijavo</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Ne, hvala</string>
-    <string name="confim_log_in_attemp_for_x">Potrdi poskus prijave za %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Vrsta uporabniškega imena</string>
     <string name="plus_addressed_email">E-naslov s plusom</string>
     <string name="catch_all_email">E-naslov za vse</string>
@@ -651,21 +653,22 @@ izberite Dodaj TOTP, da varno shranite ključ</string>
     <string name="i_understand">Razumem</string>
     <string name="accept">Sprejmi</string>
     <string name="decline">Zavrni</string>
-    <string name="login_request_has_already_expired">Zahtevek za prijavo je že potekel.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Poskus prijave iz:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Ali želite preklopiti na ta račun?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Ste novi v Bitwarden?</string>
     <string name="get_master_passwordword_hint">Pridobi namig za glavno geslo</string>
     <string name="logging_in_as_x_on_y">Prijava kot %1$s na %2$s</string>
     <string name="not_you">To niste vi?</string>
     <string name="log_in_with_master_password">Prijava z glavnim geslom</string>
     <string name="log_in_initiated">Prijava sprožena</string>
-    <string name="a_notification_has_been_sent_to_your_device">Na vašo napravo smo poslali obvestilo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Prosimo, preverite, da je vaš trezor odklenjem in da se identifikacijski gesli na tej in drugi napravi ujemata.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Ponovno pošlji obvestilo</string>
     <string name="view_all_login_options">Prikaži vse možnosti prijave</string>
-    <string name="pending_log_in_requests">Čakajoči zahtevki za prijavo</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Zavrni vse zahtevke</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Ste prepričani, da želite zavrniti vse čakajoče zahtevke za prijavo?</string>
     <string name="no_pending_requests">Ni zahtevkov</string>
@@ -698,9 +701,8 @@ Ali želite preklopiti na ta račun?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Varnostni ključ ne bo kopiran v klonirani predmet. Ali želite nadaljevati s kloniranjem tega predmeta?</string>
     <string name="master_password_re_prompt_help">Pomoč o ponovnem zahtevku za glavno geslo</string>
     <string name="admin_approval_requested">Zahtevana odobritev skrbnika</string>
-    <string name="your_request_has_been_sent_to_your_admin">Vaša zahteva je bila poslana skrbniku.</string>
-    <string name="you_will_be_notified_once_approved">Ko bo odobreno, boste prejeli obvestilo.</string>
-    <string name="trouble_logging_in">Težave s prijavo?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokiraj samodejno izpolnjevanje</string>
     <string name="no_uris_blocked">Ni blokiranih URI-jev</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Za te URI-je samodejno izpolnjevanje ne bo ponujeno.</string>
@@ -711,8 +713,7 @@ Ali želite preklopiti na ta račun?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Več URI-jev ločite z vejico.</string>
     <string name="invalid_uri">Neveljaven URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je že blokiran</string>
-    <string name="login_approved">Prijava odobrena</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prijavo z napravo je treba nastaviti v nastavitvah aplikacije Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Potrebujete drugo možnost? <annotation link="viewAll">Ogled vseh možnosti prijave</annotation></string>
     <string name="log_in_with_device">Prijava z napravo</string>
     <string name="logging_in_on">Prijava na</string>

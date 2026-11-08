@@ -106,7 +106,7 @@
     <string name="four_hours">4 saat</string>
     <string name="immediately">Hemen</string>
     <string name="vault_timeout_log_out_confirmation_title">Oturum zaman aşımı “Çıkış yap” olarak ayarlansın mı?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden oturum açıp kasaya erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.zaman aşımı</string>
+    <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden giriş yapıp kasanıza erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.</string>
     <string name="logging_in">Giriş yapılıyor…</string>
     <string name="login_to_bitwarden">Bitwarden\'a giriş yap</string>
     <string name="master_password_confirmation_val_message">Parola onayı doğru değil.</string>
@@ -132,7 +132,7 @@
     <string name="no_file_sends">Kasanızda hiç Send dosyası yok.</string>
     <string name="no_ssh_keys">Kasanızda hiç SSH anahtarı yok.</string>
     <string name="no_archives_title">Arşiv boş</string>
-    <string name="no_archives_message">Arşivini, arama sonuçlarında ve otomatik doldurma önerilerinde görmek istemediğin ancak bir gün ihtiyaç duyabileceğin öğelerle doldur.</string>
+    <string name="no_archives_message">Arşivinizi, arama sonuçlarında ve otomatik doldurma önerilerinde görmek istemediğiniz ama bir gün ihtiyaç duyabileceğiniz kayıtlarla doldurun.</string>
     <string name="new_text_send">Yeni Send metni</string>
     <string name="new_file_send">Yeni Send dosyası</string>
     <string name="no_username">Kullanıcı adı yok</string>
@@ -177,8 +177,8 @@
     <string name="search_for_a_login_or_add_a_new_login">Hesap ara veya yeni hesap ekle</string>
     <string name="disabled">Devre dışı</string>
     <string name="bitwarden_autofill_service_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden Otomatik Doldurma Hizmeti\'dir. Bu özellik hakkında daha fazla bilgi almak için “Ayarlar” ekranına gidin.</string>
-    <string name="autofill_noun">Otomatik doldur</string>
-    <string name="autofill_verb">Otomatik doldur</string>
+    <string name="autofill_noun">Otomatik doldurma</string>
+    <string name="autofill_verb">Otomatik doldurma</string>
     <string name="autofill_or_view">Bu kaydı otomatik doldurmak veya görüntülemek ister misiniz?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Ara: %1$s</string>
     <string name="learn_org">Kuruluşlar hakkında bilgi al</string>
@@ -198,7 +198,7 @@
     <string name="attachments">Dosyalar</string>
     <string name="unable_to_download_file">Dosya indirilemiyor.</string>
     <string name="downloading">İndiriliyor…</string>
-    <string name="attachment_large_warning">Bu dosyanın boyutu %1$s. Dosyayı cihazınıza indirmek istediğinizden emin misiniz?</string>
+    <string name="attachment_large_warning">Bu dosyanın boyutu <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. İndirmek ister misiniz?</string>
     <string name="authenticator_key">Kimlik doğrulama anahtarı</string>
     <string name="verification_code_totp">Doğrulama kodu (TOTP)</string>
     <string name="authenticator_key_added">Kimlik doğrulama anahtarı eklendi.</string>
@@ -294,7 +294,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="collections">Koleksiyonlar</string>
     <string name="shared_folders">Paylaşılan klasörler</string>
     <string name="no_items_collection">Bu koleksiyonda hiç kayıt yok.</string>
-    <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
+    <string name="there_are_no_items_in_this_shared_folder">Bu paylaşılan klasörde hiç kayıt yok.</string>
     <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
     <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
     <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
@@ -349,16 +349,16 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="move_up">Yukarı taşı</string>
     <string name="owner">Sahibi</string>
     <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
-    <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
+    <string name="there_are_no_shared_folders_to_list">Listelenecek paylaşılan klasör yok.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
-    <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
+    <string name="you_must_select_at_least_one_shared_folder">En az bir paylaşılan klasör seçmelisiniz.</string>
     <string name="share">Paylaş</string>
     <string name="move_to_organization">Kuruluşa taşı</string>
     <string name="no_orgs_to_list">Listelenecek kuruluş yok.</string>
     <string name="move_to_org_desc">Bu kaydı taşımak istediğiniz kuruluşu seçin. Taşıdığınız kaydın sahipliği seçtiğiniz kuruluşa aktarılacak. Artık bu kaydın doğrudan sahibi olmayacaksınız.</string>
-    <string name="no_vaults_to_list">No vaults to list.</string>
-    <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
+    <string name="no_vaults_to_list">Listelenecek kasa yok.</string>
+    <string name="move_to_vault_desc">Bu kaydı taşımak istediğiniz kasayı seçin. Başka bir kasaya taşımak, kaydın sahipliğini o kuruluşa devreder. Taşındıktan sonra bu kaydın doğrudan sahibi artık siz olmayacaksınız.</string>
     <string name="number_of_words">Kelime sayısı</string>
     <string name="passphrase">Parola cümlesi</string>
     <string name="word_separator">Kelime ayracı</string>
@@ -473,7 +473,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="deletion_date">Silinme tarihi</string>
     <string name="deletion_time">Silinme saati</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
-    <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
+    <string name="this_date_is_enforced_by_your_organization">Bu tarih kuruluşunuz tarafından zorunlu kılınıyor</string>
     <string name="who_can_view">Kim görebilir</string>
     <string name="anyone_with_the_link">Bağlantıya sahip olan herkes</string>
     <string name="anyone_with_link_can_view_send">Bu bağlantıya sahip olan herkes bu Send\'i görebilir</string>
@@ -520,13 +520,13 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="about_send">Send hakkında</string>
     <string name="hide_email">E-posta adresimi alıcılardan gizle</string>
     <string name="send_options_policy_in_effect">Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</string>
-    <string name="organization_policy_restriction">Organization policy restriction</string>
-    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">This Send is not compliant with your organization’s Send policy and will automatically expire at the set deletion date.</string>
-    <string name="text_sends_are_not_allowed_for_your_organization">Text Sends are not allowed for your organization and this Send will automatically expire at the set deletion date.</string>
-    <string name="to_edit_this_send_make_a_copy">To edit this Send, make a copy. If this Send can expire at the set deletion date, no action is needed.</string>
+    <string name="organization_policy_restriction">Kuruluş ilkesi kısıtlaması</string>
+    <string name="this_send_is_not_compliant_with_your_organizations_send_policy">Bu Send kuruluşunuzun Send ilkesine uygun değil ve belirlenen silinme tarihinde otomatik olarak sona erecek.</string>
+    <string name="text_sends_are_not_allowed_for_your_organization">Kuruluşunuzda metin Send\'lerine izin verilmiyor; bu Send belirlenen silinme tarihinde otomatik olarak sona erecek.</string>
+    <string name="to_edit_this_send_make_a_copy">Bu Send\'i düzenlemek için bir kopyasını oluşturun. Bu Send belirlenen silinme tarihinde sona erebiliyorsa herhangi bir işlem yapmanız gerekmez.</string>
     <string name="make_a_copy">Kopya oluştur</string>
     <string name="send_file_premium_required">Ücretsiz hesaplar yalnızca metin paylaşabilir. Send ile dosya paylaşmak için premium üyelik gerekir.</string>
-    <string name="sharing_with_specific_people_is_a_premium_feature">Seçili kişiler ile paylaşmak bir Premium özelliğidir.Şuanki planınız bu özelliği içermiyor.</string>
+    <string name="sharing_with_specific_people_is_a_premium_feature">Belirli kişilerle paylaşım bir Premium özelliğidir. Mevcut planınız bu özelliğe erişimi içermiyor.</string>
     <string name="password_prompt">Ana parolayı yeniden iste</string>
     <string name="password_confirmation">Ana parola onayı</string>
     <string name="password_confirmation_desc">Bu işlem korumalıdır. İşleme devam etmek için lütfen ana parolanızı yeniden girin.</string>
@@ -538,7 +538,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="leave_organization_name">%1$s kuruluşundan ayrılınsın mı?</string>
     <string name="are_you_sure_you_want_to_leave_organization">[%1$s] kuruluşundan ayrılmak istediğinizden emin misiniz?</string>
     <string name="leave_organization_button">%1$s kuruluşundan ayrıl</string>
-    <string name="leave_organization_warning">Reddederseniz kişisel kayıtlarınız hesabınızda kalır, ancak paylaşılan kayıtlara ve kuruluş özelliklerine erişiminizi kaybedersiniz.</string>
+    <string name="leave_organization_warning">Reddederseniz kişisel kayıtlarınız hesabınızda kalır, ancak paylaşılan kayıtlara ve kuruluş özelliklerine erişiminizi kaybedersiniz. <annotation link="learnMore">Daha fazla bilgi</annotation></string>
     <string name="contact_your_admin_to_regain_access">Erişiminizi yeniden kazanmak için yöneticinizle iletişime geçin.</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
@@ -602,20 +602,22 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="generic_error_message">İsteğinizi işleyemedik. Lütfen yeniden deneyin veya bizimle iletişime geçin.</string>
     <string name="allow_screen_capture">Ekran kaydına izin ver</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ekran kaydını açmak istediğinizden emin misiniz?</string>
-    <string name="log_in_requested">Giriş istendi</string>
+    <string name="access_requested">Erişim istendi</string>
+    <string name="account_access_requested">Hesap erişimi istendi</string>
     <string name="are_you_trying_to_log_in">Giriş yapmaya mı çalışıyorsunuz?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s - %2$s giriş denemesi</string>
+    <string name="are_you_trying_to_access_your_account">Hesabınıza erişmeye mi çalışıyorsunuz?</string>
+    <string name="access_attempt_by_x_on_y">%1$s - %2$s erişim denemesi</string>
     <string name="device_type">Cihaz türü</string>
     <string name="ip_address">IP adresi</string>
     <string name="time">Tarih</string>
     <string name="select_time">Zamanı seçin</string>
     <string name="switch_input_mode">Giriş modunu değiştir</string>
-    <string name="confirm_log_in">Girişi onayla</string>
-    <string name="deny_log_in">Girişi reddet</string>
-    <string name="log_in_denied">Giriş reddedildi</string>
-    <string name="approve_login_requests">GİRİŞ İSTEKLERİNİ ONAYLA</string>
+    <string name="confirm_access">Erişimi onayla</string>
+    <string name="deny_access">Erişimi reddet</string>
+    <string name="access_denied">Erişim reddedildi</string>
+    <string name="account_access_requests">Hesap erişimi istekleri</string>
     <string name="no_thanks">Gerek yok</string>
-    <string name="confim_log_in_attemp_for_x">%1$s girişini onayla</string>
+    <string name="confirm_access_attempt_for_x">%1$s erişim denemesini onayla</string>
     <string name="username_type">Kullanıcı adı türü</string>
     <string name="plus_addressed_email">Artı adresli e-posta</string>
     <string name="catch_all_email">Catch-all e-posta</string>
@@ -642,8 +644,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="i_understand">Anladım</string>
     <string name="accept">Kabul et</string>
     <string name="decline">Reddet</string>
-    <string name="login_request_has_already_expired">Giriş isteğinin süresi doldu.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Giriş denemesi yapan hesap:
+    <string name="access_request_has_already_expired">Erişim isteğinin süresi doldu.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Erişim denemesi yapan hesap:
 %1$s
 Bu hesaba geçmek ister misiniz?</string>
     <string name="new_to_bitwarden">Bitwarden\'da yeni misiniz?</string>
@@ -652,11 +654,12 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="not_you">Siz değil misiniz?</string>
     <string name="log_in_with_master_password">Ana parola ile giriş yap</string>
     <string name="log_in_initiated">Giriş başlatıldı</string>
-    <string name="a_notification_has_been_sent_to_your_device">Cihazınıza bir bildirim gönderildi.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Lütfen kasanızın kilidinin açık olduğundan ve parmak izi ifadesinin diğer cihazla eşleştiğinden emin olun.</string>
+    <string name="request_sent_to_your_device">Cihazınıza istek gönderildi</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Bu isteği başka bir kilidi açık cihazdaki veya web uygulamasındaki Bitwarden hesabınızda onaylayın. Hesap erişim istekleri Ayarlar\'dan açılmalıdır.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Onaylamadan önce parmak izi ifadesinin aşağıdakiyle eşleştiğinden emin olun.</string>
     <string name="resend_notification">Bildirimi yeniden gönder</string>
     <string name="view_all_login_options">Tüm giriş seçeneklerini gör</string>
-    <string name="pending_log_in_requests">Bekleyen giriş istekleri</string>
+    <string name="pending_access_requests">Bekleyen erişim istekleri</string>
     <string name="decline_all_requests">Tüm istekleri reddet</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Bekleyen tüm giriş isteklerini reddetmek istediğinizden emin misiniz?</string>
     <string name="no_pending_requests">Bekleyen istek yok</string>
@@ -689,9 +692,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Geçiş anahtarı klonlanan öğeye kopyalanmayacaktır. Bu öğeyi klonlamaya devam etmek istiyor musunuz?</string>
     <string name="master_password_re_prompt_help">Ana parola yeniden istemi yardımı</string>
     <string name="admin_approval_requested">Yönetici onayı istendi</string>
-    <string name="your_request_has_been_sent_to_your_admin">İsteğiniz yöneticinize gönderildi.</string>
-    <string name="you_will_be_notified_once_approved">Onaylandıktan sonra bilgilendirileceksiniz.</string>
-    <string name="trouble_logging_in">Giriş yaparken sorun mu yaşıyorsunuz?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">İsteğiniz yöneticinize gönderildi. Onaylandığında bir e-posta alacaksınız.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Yöneticiniz bu parmak izi ifadesini doğrulamanızı isteyebilir.</string>
     <string name="block_auto_fill">Otomatik doldurmayı engelle</string>
     <string name="no_uris_blocked">Hiç URI engellenmedi</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Aşağıdaki adresler için otomatik doldurma önerilmeyecektir.</string>
@@ -702,8 +704,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Biçim: %1$s. Birden fazla URl\'yi virgülle ayırabilirsiniz.</string>
     <string name="invalid_uri">Geçersiz URl</string>
     <string name="the_urix_is_already_blocked">%1$s URl\'si zaten engellenmiş</string>
-    <string name="login_approved">Giriş onaylandı</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Cihazla girişi Bitwarden mobil uygulamasının ayarlarından etkinleştirmelisiniz.</string>
+    <string name="access_approved">Erişim onaylandı</string>
     <string name="need_another_option_view_all_login_options">Başka bir seçeneğe mi ihtiyacınız var? <annotation link="viewAll">Tüm giriş seçeneklerini görün</annotation></string>
     <string name="log_in_with_device">Cihazla giriş yap</string>
     <string name="logging_in_on">Giriş yapılan konum</string>
@@ -802,7 +803,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Bu parolayı not alıp güvenli bir yerde saklayın.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Hesabınıza erişimi kaybetmemenin diğer yollarını öğrenin</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesabınıza erişimi kaybetmemenin yollarını öğrenin</annotation></string>
-    <string name="help_with_server_geolocations">Sunucu konumları hakkında yardım.</string>
+    <string name="help_with_server_geolocations">Sunucu konumları hakkında yardım</string>
     <string name="email_address_required">Eposta adresi (gerekli)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">E-posta adresinizi onaylayarak hesap açılışına devam etmek için e-postadaki bağlantıya tıklayın.</string>
     <string name="change_email_address">E-posta adresini değiştir</string>
@@ -862,7 +863,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Kayıtlı hesaplarınızı dışa aktarın</string>
     <string name="delete_this_file_after_import_is_complete">İçe aktarma tamamlandıktan sonra bu dosyayı silmelisiniz.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Bilgisayarınızda yeni bir tarayıcı sekmesi açın ve &lt;annotation emphasis="bold"&gt;%1$s&lt;/annotation&gt;&lt;/annotation&gt; adresine gidin</string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Bilgisayarınızda yeni bir tarayıcı sekmesi açın ve <annotation emphasis="bold"><annotation arg="0">%1$s</annotation> adresine gidin</annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Bitwarden web uygulamasına giriş yapın.</string>
     <string name="step_2_of_3">Adım 2/3</string>
     <string name="log_in_to_bitwarden">Bitwarden’a giriş yapın</string>
@@ -975,7 +976,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Seçilen öğede geçerli bir parola bulunmadığından parola işlemi başarısız oldu.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Seçilen kayıtta geçerli bir parola bulunmadığından parola işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
@@ -1067,7 +1068,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="scan_a_qr_code">QR kodu tara</string>
     <string name="cannot_add_authenticator_key">Kimlik doğrulayıcı anahtarını ekleyemediniz mi?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Tarayıcıyı kullanmak için kamera iznini etkinleştirin</string>
-    <string name="empty_item_list">Boş Öğe Listesi</string>
+    <string name="empty_item_list">Boş Kayıt Listesi</string>
     <string name="you_dont_have_items_to_display">Görüntülenecek hiç kayıt yok.</string>
     <string name="empty_item_list_instruction">Hesaplarınızı güvence altına almak için yeni bir kod ekleyin.</string>
     <string name="add_code">Kod ekle</string>
@@ -1219,24 +1220,24 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="resending">Yeniden gönderiliyor</string>
     <string name="you_left_the_organization">Kuruluştan ayrıldınız</string>
     <string name="transfer_items_to_org">Kayıtları %1$s kuruluşuna taşı</string>
-    <string name="transfer_items_description">%1$s, güvenlik ve mevzuata uyum amacıyla tüm kayıtların kuruluşa ait olmasını zorunlu kılıyor. Kayıtlarınızın sahipliğini devretmek için \"Kabul et\"e tıklayın.</string>
+    <string name="transfer_items_description"><annotation arg="0">%1$s</annotation>, güvenlik ve mevzuata uyum amacıyla tüm kayıtların kuruluşa ait olmasını zorunlu kılıyor. Kayıtlarınızın sahipliğini devretmek için \"Kabul et\"e tıklayın. <annotation link="learnMore">Daha fazla bilgi</annotation></string>
     <string name="decline_and_leave">Reddet ve ayrıl</string>
     <string name="why_am_i_seeing_this">Bunu neden görüyorum?</string>
-    <string name="migrating_items_to_x">Öğeler %s konumuna taşınıyor.</string>
-    <string name="failed_to_migrate_items_to_x">Öğeleri %s konumuna taşıma işlemi başarısız oldu.</string>
+    <string name="migrating_items_to_x">Kayıtlar %s konumuna taşınıyor</string>
+    <string name="failed_to_migrate_items_to_x">Kayıtlar %s konumuna taşınamadı</string>
     <string name="search_archive">Arşivde ara</string>
     <string name="archive_noun">Arşiv</string>
     <string name="archive_verb">Arşivle</string>
     <string name="unarchive">Arşivden çıkar</string>
     <string name="archived">Arşivlendi</string>
     <string name="hidden_items">Gizli öğeler</string>
-    <string name="unable_to_archive_selected_item">Seçilen öğe arşivlenemiyor.</string>
-    <string name="unable_to_unarchive_selected_item">Seçilen öğe arşivden çıkarılamıyor.</string>
+    <string name="unable_to_archive_selected_item">Seçilen kayıt arşivlenemiyor.</string>
+    <string name="unable_to_unarchive_selected_item">Seçilen kayıt arşivden çıkarılamıyor.</string>
     <string name="archiving">Arşivleniyor</string>
     <string name="unarchiving">Arşivden çıkarılıyor</string>
     <string name="item_moved_to_archived">Kayıt arşive taşındı</string>
     <string name="item_moved_to_vault">Kayıt kasaya taşındı</string>
-    <string name="archiving_items_is_a_premium_feature">Öğeleri arşivlemek bir Premium özelliğidir. Şuanki planınız bu özelliği içermiyor.</string>
+    <string name="archiving_items_is_a_premium_feature">Kayıtları arşivlemek bir Premium özelliğidir. Mevcut planınız bu özelliği içermiyor.</string>
     <string name="totp_is_a_premium_feature">Kimlik doğrulama anahtarı (TOTP) premium bir özelliktir. Mevcut paketiniz bu özelliği içermiyor.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
     <string name="plan">Paket</string>
@@ -1259,7 +1260,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="invalid_email_addresses">Geçersiz e-posta adresi</string>
     <string name="one_or_more_email_addresses_are_incorrect">Bir veya daha fazla e posta adresi geçersiz. Lütfen kontrol edip yeniden deneyin.</string>
     <string name="no_email_addresses_entered">E-posta adresi girilmedi</string>
-    <string name="only_include_the_following_domains_x_please_review_and_try_again">Only include the following domains: %1$s. Please review and try again.</string>
+    <string name="only_include_the_following_domains_x_please_review_and_try_again">Yalnızca şu etki alanlarını ekleyin: %1$s. Lütfen kontrol edip yeniden deneyin.</string>
     <string name="enter_at_least_one_valid_email_address_to_share_this_send">Bu Send\'i paylaşmak için en az bir geçerli e-posta adresi girin.</string>
     <string name="sync_with_browser">Tarayıcıyla eşitleyin</string>
     <string name="sync_with_browser_description">%1$s ile bağlantı kurmak için varsayılan tarayıcını Bitwarden mobil uygulamasıyla senkronize et. Tarayıcın açıldığında istenirse oturum açma işlemini tamamla.\nSenkronizasyon tamamlandığında bu uygulamaya geri döneceksin.</string>
@@ -1287,7 +1288,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="recently_active"><annotation emphasis="bold">Yakın zamanda aktif:</annotation> <annotation arg="0">%1$s</annotation></string>
     <string name="trusted">Güvenilen</string>
     <string name="preview_not_available_for_files">Önizleme %1$s dosyaları için kullanılamaz. Yine de indirebilir ve kendi cihazında görüntüleyebilirsin.</string>
-    <string name="this_file_is_too_large_to_preview">Bu dosya önizleme için çok büyük.Yine de indirebilir ve kendi cihazında görüntüleyebilirsin.</string>
+    <string name="this_file_is_too_large_to_preview">Bu dosya önizleme için çok büyük. Yine de indirip cihazınızda görüntüleyebilirsiniz.</string>
     <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu dosyanın şifresini çözemediği için önizleme görüntülenemiyor.</string>
     <string name="preview_unavailable_for_this_file">Bu dosya için önizleme kullanılamıyor. Görüntülemek için yine de cihazına indirebilirsin.</string>
     <string name="preview_unavailable">Ön izleme kullanılamıyor</string>
@@ -1299,18 +1300,18 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="upgrade_pending">Yükseltme beklemede</string>
     <string name="upgrade_pending_message">Yükseltme işlemin işleniyor. Tamamlanana kadar ücretsiz planı kullanmaya devam edeceksin. Kontrol etmek için şimdi senkronize edebilir veya devam edebilirsin; tamamlandığında otomatik olarak güncellenecektir.</string>
     <string name="unlock_premium_features">Premium plan ile daha fazla gelişmiş özellikleri aç.</string>
-    <string name="per_month_cancel_anytime">/ month · Cancel anytime</string>
+    <string name="per_month_cancel_anytime">/ ay · İstediğiniz zaman iptal edin</string>
     <string name="per_month_cancel_anytime_content_description">Aylık %1$s. İstediğiniz zaman iptal edebilirsiniz</string>
     <string name="built_in_authenticator">Dahili kimlik doğrulayıcı</string>
     <string name="emergency_access">Acil durum erişimi</string>
     <string name="secure_file_storage">Güvenli dosya depolama</string>
     <string name="breach_monitoring">İhlal izleme</string>
-    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">You’ll complete the purchase with Stripe secure checkout.</string>
-    <string name="opening_checkout">Ödeme açılıyor...</string>
-    <string name="secure_checkout_didnt_load">Güvenli ödeme sayfası yüklenemedi.</string>
+    <string name="youll_complete_the_purchase_with_stripe_secure_checkout">Satın alma işlemini Stripe güvenli ödeme sayfasında tamamlayacaksınız.</string>
+    <string name="opening_checkout">Ödeme sayfası açılıyor…</string>
+    <string name="secure_checkout_didnt_load">Güvenli ödeme sayfası yüklenemedi</string>
     <string name="trouble_opening_payment_page">Ödeme sayfasını açarken bir sorunla karşılaştık, tekrardan deneyin.</string>
     <string name="payment_not_received_yet">Ödeme henüz alınmadı</string>
-    <string name="return_to_stripe_to_finish">Ödemeyi bitirmek için tarayıcınızdan Stripe\'a dönün</string>
+    <string name="return_to_stripe_to_finish">Yükseltmeyi tamamlamak için tarayıcınızda Stripe\'a dönün.</string>
     <string name="go_back">Geri dönüp</string>
     <string name="allow_camera_access">Kamera erişimine izin verin</string>
     <string name="to_scan_your_card_we_need_access_to_your_camera">Kartınızı taramak için kameranıza erişmemiz gerekiyor. Bu izni istediğiniz zaman cihaz ayarlarınızdan değiştirebilirsiniz.</string>
@@ -1340,7 +1341,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="subscription_status_unpaid">Ödenmedi</string>
     <string name="subscription_status_update_payment">Ödemeyi güncelle</string>
     <string name="subscription_status_pending_cancellation">İptal bekleniyor</string>
-    <string name="subscription_pending_cancellation_description">Aboneliğinin <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.tarihinde iptal edilmesi planlanıyor. Bu tarihten önce istediğin zaman yeniden etkinleştirebilirsin.</string>
+    <string name="subscription_pending_cancellation_description">Aboneliğinizin <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarihinde iptal edilmesi planlanıyor. Bu tarihten önce istediğiniz zaman yeniden etkinleştirebilirsiniz.</string>
     <string name="premium_next_charge_summary">Bir sonraki ödemeniz, <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> USD tutarında olup <annotation emphasis="bold"><annotation arg="1">%2$s</annotation></annotation> tarihinde tahsil edilecektir.</string>
     <string name="subscription_canceled_description">Aboneliğiniz <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarihinde iptal edildi. Premium özellikleri kullanmaya devam etmek için yeniden abone olun.</string>
     <string name="subscription_unpaid_description">Aboneliğiniz <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> tarihinde askıya alındı. Yeniden etkinleştirmek için lütfen vadesi geçmiş faturalarınızı ödeyin.</string>
@@ -1420,23 +1421,23 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="access_your_local_network">Yerel ağınıza erişin</string>
     <string name="local_network_access_required">Yerel ağ izini gerekiyor</string>
     <string name="ask_again_later">Sonra yeniden sor</string>
-    <string name="enable_local_network_access">Yerel ağ erişimini etkinleştir.</string>
+    <string name="enable_local_network_access">Yerel ağ erişimini etkinleştir</string>
     <string name="bitwarden_needs_local_network_access_to_sync_with_your_server">Bitwarden\'ın sunucunuzla eşitlenebilmesi için yerel ağ erişimine ihtiyacı vardır. Bu izin verilmezse uygulama sunucunuza bağlanamaz.</string>
     <string name="without_this_permission_bitwarden_wont_be_able_to_sync_with_your_server">Without this permission, Bitwarden won’t be able to connect and sync with your server. You can enable this in your device settings.</string>
     <string name="your_request_was_interrupted_because_the_app_needs_local_network_access">İsteğiniz, uygulamanın yerel ağ erişimine ihtiyaç duyması nedeniyle kesintiye uğradı. Bu izni cihaz ayarlarınızdan etkinleştirebilirsiniz.</string>
     <string name="continue_to_stripe">Stripe\'a devam edilsin mi?</string>
-    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Abonelik iptalini yönetmek için Stripe\'a yönlendiriliceksin</string>
-    <string name="unlock_advanced_protection">Unlock advanced protection</string>
-    <string name="breeze_through_2fa_with_built_in_codes">Breeze through 2FA with built-in codes</string>
-    <string name="run_reports_to_find_risky_passwords">Run reports to find risky passwords</string>
-    <string name="add_a_trusted_emergency_contact">Add a trusted emergency contact</string>
-    <string name="identify_unsecure_websites">Identify unsecure websites</string>
-    <string name="flag_accounts_with_inactive_2fa">Flag accounts with inactive 2FA</string>
-    <string name="keep_documents_safe_and_encrypted">Keep documents safe and encrypted</string>
-    <string name="share_files_securely_with_anyone_using_send">Share files securely with anyone using Send</string>
-    <string name="receive_24_7_priority_support">Receive 24/7 priority support</string>
-    <string name="account_creation_restricted">Account creation restricted</string>
-    <string name="only_allows_invited_users_to_create_accounts">%1$s only allows invited users to create accounts.</string>
+    <string name="youll_be_taken_to_stripe_to_manage_your_subscription_cancellation">Abonelik iptalinizi yönetmek için Stripe\'a yönlendirileceksiniz.</string>
+    <string name="unlock_advanced_protection">Gelişmiş korumanın kilidini açın</string>
+    <string name="breeze_through_2fa_with_built_in_codes">Yerleşik kodlarla 2FA\'yı kolayca geçin</string>
+    <string name="run_reports_to_find_risky_passwords">Riskli parolaları bulmak için raporlar oluşturun</string>
+    <string name="add_a_trusted_emergency_contact">Güvenilir bir acil durum kişisi ekleyin</string>
+    <string name="identify_unsecure_websites">Güvenli olmayan web sitelerini belirleyin</string>
+    <string name="flag_accounts_with_inactive_2fa">2FA\'sı etkin olmayan hesapları işaretleyin</string>
+    <string name="keep_documents_safe_and_encrypted">Belgelerinizi güvende ve şifreli tutun</string>
+    <string name="share_files_securely_with_anyone_using_send">Send ile dosyaları herkesle güvenle paylaşın</string>
+    <string name="receive_24_7_priority_support">7/24 öncelikli destek alın</string>
+    <string name="account_creation_restricted">Hesap oluşturma kısıtlandı</string>
+    <string name="only_allows_invited_users_to_create_accounts">%1$s yalnızca davet edilen kullanıcıların hesap oluşturmasına izin veriyor.</string>
     <string name="stepper_decrement_format" comment="Used to announce the value that will be decremented when a button is pressed">%1$s azalt</string>
     <string name="stepper_increment_format" comment="Used to announce the value that will be incremented when a button is pressed">%1$s artır</string>
     <string name="use_this_passphrase">Bu parola cümlesini kullan</string>

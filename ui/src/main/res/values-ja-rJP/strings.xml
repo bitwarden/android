@@ -100,7 +100,7 @@
     <string name="last_sync">前回の同期：</string>
     <string name="length">長さ</string>
     <string name="lock">ロック</string>
-    <string name="fifteen_minutes">15分</string>
+    <string name="fifteen_minutes">15 分</string>
     <string name="one_hour">1時間</string>
     <string name="one_minute">1 分</string>
     <string name="four_hours">4 時間</string>
@@ -131,7 +131,7 @@
     <string name="no_file_sends">保管庫にファイルが添付された Send はありません。</string>
     <string name="no_ssh_keys">保管庫に SSH 鍵がありません。</string>
     <string name="no_archives_title">アーカイブは空です</string>
-    <string name="no_archives_message">検索結果やオートフィルの候補に表示したくないが、いつか必要になるかもしれないアイテムをアーカイブに保管します。</string>
+    <string name="no_archives_message">検索結果や自動入力の候補には表示させたくないが、いつか必要になるかもしれないアイテムをアーカイブに保存しておきましょう。</string>
     <string name="new_text_send">新しいテキスト入のSend</string>
     <string name="new_file_send">新しいファイル入のSend</string>
     <string name="no_username">ユーザー名なし</string>
@@ -370,7 +370,7 @@
     <string name="lock_now">今すぐロック</string>
     <string name="pin">PIN</string>
     <string name="unlock">ロック解除</string>
-    <string name="thirty_minutes">30分</string>
+    <string name="thirty_minutes">30 分</string>
     <string name="set_pin_description">Bitwarden のロックを解除するための PIN コードを設定します。アプリから完全にログアウトすると、PIN 設定はリセットされます。</string>
     <string name="logged_in_as_on">%1$s として %2$s にログインしました。</string>
     <string name="vault_locked_master_password">保管庫がロックされています。開くにはマスターパスワードを入力してください。</string>
@@ -385,7 +385,7 @@
     <string name="clear_clipboard">クリップボードの消去</string>
     <string name="clear_clipboard_description">コピー内容をクリップボードから自動的に消去します。</string>
     <string name="default_uri_match_detection">デフォルトの URI 一致検出方法</string>
-    <string name="default_uri_match_detection_description">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。</string>
+    <string name="default_uri_match_detection_description">URI 一致検出は、Bitwarden が自動入力の候補をどのように識別するかを制御します。</string>
     <string name="theme">テーマ</string>
     <string name="theme_description">アプリケーションのカラーテーマを変更</string>
     <string name="copy_notes">メモをコピー</string>
@@ -599,20 +599,22 @@
     <string name="generic_error_message">リクエストを処理できませんでした。もう一度やり直すか、お問い合わせください。</string>
     <string name="allow_screen_capture">スクリーンショットを許可</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">スクリーンショットを撮影できるようにしてもよろしいですか？</string>
-    <string name="log_in_requested">ログインリクエスト済み</string>
+    <string name="access_requested">アクセスが要求されました</string>
+    <string name="account_access_requested">アカウントへのアクセスが要求されました</string>
     <string name="are_you_trying_to_log_in">ログインしようとしていますか？</string>
-    <string name="log_in_attempt_by_x_on_y">%2$s への %1$s によるログインの試行</string>
+    <string name="are_you_trying_to_access_your_account">アカウントにアクセスしようとしていますか？</string>
+    <string name="access_attempt_by_x_on_y">%2$s の %1$s からアクセスを試みました</string>
     <string name="device_type">デバイス種別</string>
     <string name="ip_address">IP アドレス</string>
     <string name="time">時間</string>
     <string name="select_time">日時を選択</string>
     <string name="switch_input_mode">入力モード切り替え</string>
-    <string name="confirm_log_in">ログインを承認</string>
-    <string name="deny_log_in">ログインを拒否</string>
-    <string name="log_in_denied">ログインを拒否しました</string>
-    <string name="approve_login_requests">ログインリクエストを承認する</string>
+    <string name="confirm_access">アクセスを確認</string>
+    <string name="deny_access">アクセスを拒否</string>
+    <string name="access_denied">アクセスが拒否されました</string>
+    <string name="account_access_requests">アカウントへのアクセス要求</string>
     <string name="no_thanks">いいえ</string>
-    <string name="confim_log_in_attemp_for_x">%1$s のログイン試行を承認</string>
+    <string name="confirm_access_attempt_for_x">%1$s へのアクセス試行を確認する</string>
     <string name="username_type">ユーザー名の種類</string>
     <string name="plus_addressed_email">プラス付きのメールアドレス</string>
     <string name="catch_all_email">キャッチオールメール</string>
@@ -639,8 +641,8 @@
     <string name="i_understand">理解しました</string>
     <string name="accept">同意</string>
     <string name="decline">拒否</string>
-    <string name="login_request_has_already_expired">ログインリクエストの有効期限が切れています。</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">ログイン試行がありました:
+    <string name="access_request_has_already_expired">アクセス要求の有効期限が切れています。</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">ログイン試行がありました:
 %1$s
 このアカウントに切り替えますか？</string>
     <string name="new_to_bitwarden">初めてBitwardenをご利用ですか？</string>
@@ -649,11 +651,12 @@
     <string name="not_you">あなたではないですか？</string>
     <string name="log_in_with_master_password">マスターパスワードでログイン</string>
     <string name="log_in_initiated">ログイン開始</string>
-    <string name="a_notification_has_been_sent_to_your_device">デバイスに通知を送信しました。</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。</string>
+    <string name="request_sent_to_your_device">デバイスに要求を送信しました</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">別のデバイスまたはウェブアプリの Bitwarden アカウントでこの要求を承認してください。アカウントへのアクセス要求は設定でオンにする必要があります。</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">承認する前に、フィンガープリントフレーズが以下のフレーズと一致していることを確認してください。</string>
     <string name="resend_notification">通知を再送信する</string>
     <string name="view_all_login_options">すべてのログインオプションを表示</string>
-    <string name="pending_log_in_requests">保留中のログインリクエスト</string>
+    <string name="pending_access_requests">保留中のアクセスリクエスト</string>
     <string name="decline_all_requests">すべてのリクエストを拒否する</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">保留中のログインリクエストをすべて拒否してもよろしいですか？</string>
     <string name="no_pending_requests">保留中のリクエストはありません</string>
@@ -686,9 +689,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">パスキーは複製されたアイテムにコピーされません。このアイテムを複製しますか？</string>
     <string name="master_password_re_prompt_help">マスターパスワードの再プロンプトヘルプ</string>
     <string name="admin_approval_requested">管理者の承認を要求しました</string>
-    <string name="your_request_has_been_sent_to_your_admin">要求が管理者に送信されました。</string>
-    <string name="you_will_be_notified_once_approved">承認されると通知されます。</string>
-    <string name="trouble_logging_in">ログインできない場合</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">要求が管理者に送信されました。承認されるとメールが届きます。</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">管理者は、このフィンガープリントフレーズの確認を求めることがあります。</string>
     <string name="block_auto_fill">自動入力をブロック</string>
     <string name="no_uris_blocked">ブロック済みの URI なし</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">これらの URI に対しては自動入力しません。</string>
@@ -699,8 +701,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">形式は %1$s です。複数の URI をカンマで区切ってください。</string>
     <string name="invalid_uri">不正な URI です</string>
     <string name="the_urix_is_already_blocked">URI %1$s は既にブロックしています</string>
-    <string name="login_approved">ログインの承認</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">「デバイスでログイン」はBitwardenアプリの設定で設定する必要があります。</string>
+    <string name="access_approved">アクセスが承認されました</string>
     <string name="need_another_option_view_all_login_options">別のオプションが必要ですか？ <annotation link="viewAll">すべてのログインオプションを表示</annotation></string>
     <string name="log_in_with_device">デバイスでログイン</string>
     <string name="logging_in_on">ログイン先</string>
@@ -819,15 +820,15 @@
     <string name="there_was_an_issue_validating_the_registration_token">登録トークンの検証中に問題が発生しました。</string>
     <string name="turn_on_autofill">自動入力をオンにする</string>
     <string name="autofill_setup">自動入力のセットアップ</string>
-    <string name="turn_on_browser_autofill_integration">ブラウザオートフィル連携を有効にする</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwardenがパスワードをオートフィルするために特別な権限を必要とするブラウザを使用しています。</string>
-    <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwardenがパスワードをオートフィルするために特別な権限を必要とするブラウザを使用しています。</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwardenがパスワードをオートフィルするために特別な権限を必要とするブラウザを使用しています。以下で希望のオートフィル連携を有効にしてください。</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwardenがパスワードをオートフィルするために特別な権限を必要とするブラウザを使用しています。続行するには、インストールされているすべてのブラウザでオートフィルを有効にしてください。</string>
+    <string name="turn_on_browser_autofill_integration">ブラウザの自動入力機能との連携を有効にする</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。以下でお好みの自動入力連携機能を有効にしてください。</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。続行するには、インストールされているすべてのブラウザで自動入力を有効にしてください。</string>
     <string name="use_autofill_to_log_into_your_accounts">自動入力を使用するとワンタップでアカウントにログインできます。</string>
     <string name="turn_on_later">後でオンにする</string>
     <string name="turn_on_autofill_later">後で自動入力をオンにしますか？</string>
-    <string name="turn_on_browser_autofill_integration_later">後でブラウザオートフィル連携を有効にしますか？</string>
+    <string name="turn_on_browser_autofill_integration_later">後でブラウザの自動入力機能との連携を有効にしますか？</string>
     <string name="return_to_complete_this_step_anytime_in_settings">いつでも「設定」からこのステップに戻れます。</string>
     <string name="what_bitwarden_has_to_offer">自動入力を使用して、保存したパスワードを使ってアプリやウェブサイトにログインできるようになりました。これで、Bitwarden が提供しているすべての機能の確認が終わりました。</string>
     <string name="youre_all_set">準備完了です！</string>
@@ -913,7 +914,7 @@
     <string name="copy_phone">電話番号をコピー</string>
     <string name="copy_address">住所をコピー</string>
     <string name="biometrics_no_longer_supported_title">このデバイスでは生体認証はサポートされていません</string>
-    <string name="biometrics_no_longer_supported">デバイスの生体認証が最新のセキュリティ要件を満たしていないため、ログアウトされました。設定を更新するには、再度ログインするか、管理者にアクセスについて問い合わせてください。</string>
+    <string name="biometrics_no_longer_supported">お使いのデバイスの生体認証が最新のセキュリティ要件を満たしていないため、ログアウトされました。設定を更新するには、再度ログインするか、管理者に連絡してアクセス権を取得してください。</string>
     <string name="choose_three_or_four_random_words">3つまたは4つのランダムな単語を選択</string>
     <string name="pick_three_or_four_random_unrelated_words">覚えやすい、ランダムで無関係な単語を3つか4つ選びます。好きな<annotation emphasis="bold">物、場所、もの</annotation>を考えてみてください。</string>
     <string name="combine_those_words_together">それらの単語を組み合わせてください</string>
@@ -1155,8 +1156,8 @@
     <string name="keep_your_credential_secure">資格情報を安全に保つ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” を使用する際に認証情報を安全に保つ方法の詳細はこちら</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” を使用してもよろしいですか？</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「正規表現」は上級者向けオプションであり、誤って使用すると認証情報が漏洩するリスクが高まります。</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI 一致検出は、Bitwarden がオートフィルの候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「前方一致」は上級者向けオプションであり、認証情報が漏洩するリスクが高まります。</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 一致検出は、Bitwarden が自動入力の候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「正規表現」は上級者向けオプションであり、誤って使用すると認証情報が漏洩するリスクが高まります。</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI 一致検出は、Bitwarden が自動入力の候補をどのように識別するかを制御します。\n<annotation emphasis="bold">警告：</annotation> 「前方一致」は上級者向けオプションであり、認証情報が漏洩するリスクが高まります。</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">「前方一致」は上級者向けオプションであり、認証情報を露出させるリスクが高まります。</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">「正規表現」は上級者向けオプションであり、誤って使用すると認証情報を露出させるリスクが高まります。</string>
     <string name="later">後で</string>
@@ -1180,7 +1181,7 @@
         <item quantity="other">%1$d 個のアイテムが保管庫にインポートされました。</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">パスワード入力を続けるためにブラウザのオートフィルを有効にする</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">ブラウザが最近更新され、Bitwardenのオートフィルが無効になりました。Bitwardenでパスワード入力を続けるには、オートフィル設定でブラウザのオートフィルを有効にしてください。</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">お使いのブラウザが最近更新されたため、Bitwardenの自動入力機能が無効になっています。Bitwarden によるパスワードの自動入力を継続して使用するには、自動入力設定でブラウザの自動入力機能を有効にしてください。</string>
     <string name="not_now">後で</string>
     <string name="import_from_bitwarden">Bitwarden からインポート</string>
     <string name="select_account">アカウントを選択</string>

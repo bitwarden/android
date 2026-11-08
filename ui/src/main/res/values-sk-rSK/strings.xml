@@ -611,20 +611,22 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="generic_error_message">Vašu žiadosť sa nám nepodarilo spracovať. Skúste to, prosím, znova alebo nás kontaktujte.</string>
     <string name="allow_screen_capture">Povoliť snímanie obrazovky</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Naozaj chcete povoliť snímanie obrazovky?</string>
-    <string name="log_in_requested">Požadované prihlásenie</string>
+    <string name="access_requested">Požadovaný prístup</string>
+    <string name="account_access_requested">Žiadosť o prístup k účtu</string>
     <string name="are_you_trying_to_log_in">Snažíte sa prihlásiť?</string>
-    <string name="log_in_attempt_by_x_on_y">Pokus o prihlásenie do konta %1$s dňa %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Snažíte sa získať prístup k svojmu účtu?</string>
+    <string name="access_attempt_by_x_on_y">Pokus o prístup do účtu %1$s na %2$s</string>
     <string name="device_type">Typ zariadenia</string>
     <string name="ip_address">IP adresa</string>
     <string name="time">Čas</string>
     <string name="select_time">Vyberte čas</string>
     <string name="switch_input_mode">Prepnúť režim vstupu</string>
-    <string name="confirm_log_in">Potvrdiť prihlásenie</string>
-    <string name="deny_log_in">Odmietnuť prihlásenie</string>
-    <string name="log_in_denied">Prihlásenie zamietnuté</string>
-    <string name="approve_login_requests">Schvaľovanie žiadostí o prihlásenie</string>
+    <string name="confirm_access">Potvrdiť prístup</string>
+    <string name="deny_access">Zamietnuť prístup</string>
+    <string name="access_denied">Prístup zamietnutý</string>
+    <string name="account_access_requests">Žiadosti o prístup k účtu</string>
     <string name="no_thanks">Nie, ďakujem</string>
-    <string name="confim_log_in_attemp_for_x">Potvrdiť pokus o prihlásenie pre %1$s</string>
+    <string name="confirm_access_attempt_for_x">Potvrdiť pokus o prístup k %1$s</string>
     <string name="username_type">Typ používateľského mena</string>
     <string name="plus_addressed_email">E-mail s plusovým aliasom</string>
     <string name="catch_all_email">Catch-all e-mail</string>
@@ -651,8 +653,8 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="i_understand">Rozumiem</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
-    <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prihlásenie z:
+    <string name="access_request_has_already_expired">Platnosť žiadosti o prístup už vypršala.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prístup z:
 %1$s
 Chcete prepnúť na tento účet?</string>
     <string name="new_to_bitwarden">Ste noví na Bitwardene?</string>
@@ -661,11 +663,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="not_you">Nie ste to vy?</string>
     <string name="log_in_with_master_password">Prihlásenie pomocou hlavného hesla</string>
     <string name="log_in_initiated">Iniciované prihlásenie</string>
-    <string name="a_notification_has_been_sent_to_your_device">Do vášho zariadenia bolo odoslané upozornenie.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Skontrolujte, či je trezor odomknutý, a či sa fráza odtlačku prsta zhoduje na druhom zariadení.</string>
+    <string name="request_sent_to_your_device">Žiadosť bola odoslaná do vášho zariadenia</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Túto žiadosť potvrďte vo svojom účte Bitwarden na inom odomknutom zariadení alebo vo webovej aplikácii. Žiadosti o prístup k účtu musia byť povolené v nastaveniach.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Pred schválením sa uistite, že sa jedinečný identifikátor zhoduje s tým uvedeným nižšie.</string>
     <string name="resend_notification">Znova odoslať upozornenie</string>
     <string name="view_all_login_options">Zobraziť všetky možnosti prihlásenia</string>
-    <string name="pending_log_in_requests">Čakajúce požiadavky o prihlásenie</string>
+    <string name="pending_access_requests">Čakajúce žiadosti o prístup</string>
     <string name="decline_all_requests">Odmietnuť všetky žiadosti</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Naozaj chcete odmietnuť všetky čakajúce požiadavky o prihlásenie?</string>
     <string name="no_pending_requests">Žiadne čakajúce požiadavky</string>
@@ -698,9 +701,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Prístupový kľúč sa do klonovanej položky neskopíruje. Chcete pokračovať v klonovaní tejto položky?</string>
     <string name="master_password_re_prompt_help">Pomoc s opätovnou výzvou na zadanie hlavného hesla</string>
     <string name="admin_approval_requested">Vyžaduje sa schválenie správcom</string>
-    <string name="your_request_has_been_sent_to_your_admin">Vaša žiadosť bola odoslaná správcovi.</string>
-    <string name="you_will_be_notified_once_approved">Po schválení budete informovaný.</string>
-    <string name="trouble_logging_in">Máte problémy s prihlásením?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Vaša žiadosť bola odoslaná správcovi. Po jej schválení dostanete e-mail.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Váš správca vás môže požiadať o potvrdenie tohto jedinečného identifikátora.</string>
     <string name="block_auto_fill">Blokovať automatické vypĺňanie</string>
     <string name="no_uris_blocked">Žiadne URI nie sú blokované</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pre tieto URI nebude automatické vypĺňanie ponukané.</string>
@@ -711,8 +713,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formát: %1$s. Viaceré URI oddeľte čiarkou.</string>
     <string name="invalid_uri">Neplatný URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je už blokovaný</string>
-    <string name="login_approved">Schválené prihlásenie</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden.</string>
+    <string name="access_approved">Prístup schválený</string>
     <string name="need_another_option_view_all_login_options">Potrebujete inú možnosť? <annotation link="viewAll">Zobraziť všetky možnosti prihlásenia</annotation></string>
     <string name="log_in_with_device">Prihlásiť pomocou zariadenia</string>
     <string name="logging_in_on">Prihlásenie na</string>
