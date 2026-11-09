@@ -266,7 +266,7 @@ internal class VaultLockManagerImpl(
         processMasterPassword(initUserCryptoMethod = initUserCryptoMethod, userId = userId)
         clearInvalidUnlockCount(userId = userId)
         trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
-        updateKdfIfNeeded(initUserCryptoMethod)
+        updateKdfIfNeeded(userId = userId, initUserCryptoMethod = initUserCryptoMethod)
         pinProtectedUserKeyManager.migratePinProtectedUserKeyIfNeeded(userId = userId)
         setVaultToUnlocked(userId = userId)
         keyRotationManager.rotateAutoUnlockKey(userId = userId)
@@ -729,15 +729,22 @@ internal class VaultLockManagerImpl(
         return (accounts.find { it.userId == userId }?.isLoggedIn) == false
     }
 
-    private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
+    private suspend fun updateKdfIfNeeded(
+        userId: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ) {
         val password = initUserCryptoMethod.password ?: return
         kdfManager
             .updateKdfToMinimumsIfNeeded(
+                userId = userId,
                 password = password,
             )
             .also { result ->
                 if (result is UpdateKdfMinimumsResult.Error) {
-                    Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                    Timber.e(
+                        t = result.error,
+                        message = "Failed to silent update KDF settings on vault unlock.",
+                    )
                 }
             }
     }

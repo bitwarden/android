@@ -8,12 +8,19 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 interface KdfManager {
 
     /**
-     * Checks if user's current KDF settings are below the minimums and needs update
+     * Checks if the KDF settings of the user with the given [userId] are below the minimums and
+     * need an update.
      */
-    fun needsKdfUpdateToMinimums(): Boolean
+    fun needsKdfUpdateToMinimums(userId: String): Boolean
 
     /**
-     * Updates the user's KDF settings if below the minimums
+     * Updates the KDF settings of the user with the given [userId] if below the minimums.
+     *
+     * The update is only performed when [userId] is the active user, otherwise
+     * [UpdateKdfMinimumsResult.ActiveAccountNotFound] is returned.
      */
-    suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult
+    suspend fun updateKdfToMinimumsIfNeeded(
+        userId: String,
+        password: String,
+    ): UpdateKdfMinimumsResult
 }
