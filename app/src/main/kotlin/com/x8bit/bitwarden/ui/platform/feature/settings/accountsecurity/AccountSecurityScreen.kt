@@ -200,7 +200,7 @@ fun AccountSecurityScreen(
 
             if (!state.isManageDevicesEnabled) {
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.approve_login_requests),
+                    label = stringResource(id = BitwardenString.account_access_requests),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -208,7 +208,7 @@ fun AccountSecurityScreen(
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 BitwardenTextRow(
-                    text = stringResource(id = BitwardenString.pending_log_in_requests),
+                    text = stringResource(id = BitwardenString.pending_access_requests),
                     onClick = {
                         viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
                     },

@@ -1,60 +1,43 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.PreAuthSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the recorded logs screen.
+ * Add the recorded logs screen to the vault unlocked navigation entries.
  */
-@Serializable
-sealed class RecordedLogsRoute {
-    /**
-     * The type-safe route for the recorded logs screen.
-     */
-    @Serializable
-    data object Standard : RecordedLogsRoute()
-
-    /**
-     * The type-safe route for the pre-auth recorded logs screen.
-     */
-    @Serializable
-    data object PreAuth : RecordedLogsRoute()
-}
-
-/**
- * Add recorded logs destination to the nav graph.
- */
-fun NavGraphBuilder.recordedLogsDestination(
-    isPreAuth: Boolean,
+fun EntryProviderScope<VaultUnlockedGraph>.recordedLogsDestination(
     onNavigateBack: () -> Unit,
 ) {
-    if (isPreAuth) {
-        composableWithSlideTransitions<RecordedLogsRoute.PreAuth> {
-            RecordedLogsScreen(
-                onNavigateBack = onNavigateBack,
-            )
-        }
-    } else {
-        composableWithSlideTransitions<RecordedLogsRoute.Standard> {
-            RecordedLogsScreen(
-                onNavigateBack = onNavigateBack,
-            )
-        }
+    slideUpEntry<VaultUnlockedGraph.RecordedLogsRoute> {
+        RecordedLogsScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
- * Navigate to the flight recorder recorded logs screen.
+ * Add the recorded logs screen to the pre-authentication settings navigation entries.
  */
-fun NavController.navigateToRecordedLogs(
-    isPreAuth: Boolean,
-    navOptions: NavOptions? = null,
+fun EntryProviderScope<PreAuthSettingsGraph>.preAuthRecordedLogsDestination(
+    onNavigateBack: () -> Unit,
 ) {
-    navigate(
-        route = if (isPreAuth) RecordedLogsRoute.PreAuth else RecordedLogsRoute.Standard,
-        navOptions = navOptions,
-    )
+    slideUpEntry<PreAuthSettingsGraph.RecordedLogsRoute> {
+        RecordedLogsScreen(onNavigateBack = onNavigateBack)
+    }
+}
+
+/**
+ * Navigate to the recorded logs screen.
+ */
+fun NavigationController<VaultUnlockedGraph>.navigateToRecordedLogs() {
+    this.navigate(route = VaultUnlockedGraph.RecordedLogsRoute)
+}
+
+/**
+ * Navigate to the pre-authentication recorded logs screen.
+ */
+fun NavigationController<PreAuthSettingsGraph>.navigateToPreAuthRecordedLogs() {
+    this.navigate(route = PreAuthSettingsGraph.RecordedLogsRoute)
 }

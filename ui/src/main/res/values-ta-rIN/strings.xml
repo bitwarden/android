@@ -603,20 +603,22 @@
     <string name="generic_error_message">உங்கள் கோரிக்கையை எங்களால் செயல்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது எங்களைத் தொடர்பு கொள்ளவும்.</string>
     <string name="allow_screen_capture">திரைப்பிடிப்பை அனுமதி</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">திரைப்பிடிப்பை நிச்சயமாக இயக்கவா?</string>
-    <string name="log_in_requested">உள்நுழைவு கோரப்பட்டது</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">உள்நுழைய முயல்கிறீரா?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s ஆல் %2$s இல் உள்நுழைவு முயற்சி</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">சாதன வகை</string>
     <string name="ip_address">IP முகவரி</string>
     <string name="time">நேரம்</string>
     <string name="select_time">நேரத்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="switch_input_mode">உள்ளீட்டு பயன்முறையை மாற்றவும்</string>
-    <string name="confirm_log_in">உள்நுழைவை உறுதிபடுத்து</string>
-    <string name="deny_log_in">உள்நுழைவை மறு</string>
-    <string name="log_in_denied">உள்நுழைவு மறுக்கப்பட்டது</string>
-    <string name="approve_login_requests">உள்நுழைவு கோரிக்கைகளை ஒப்புக்கொள்</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">பரவாயில்லை வேண்டாம்</string>
-    <string name="confim_log_in_attemp_for_x">%1$s-க்கான உள்நுழைவு முயற்சியை உறுதுபடுத்து</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">பயனர்பெயர் வகை</string>
     <string name="plus_addressed_email">பிளஸ் முகவரியிடப்பட்ட மின்னஞ்சல்</string>
     <string name="catch_all_email">அனைத்தையும் பிடிக்கும் மின்னஞ்சல்</string>
@@ -643,21 +645,22 @@
     <string name="i_understand">நான் புரிந்துகொள்கிறேன்</string>
     <string name="accept">ஏற்றுக்கொள்</string>
     <string name="decline">மறு</string>
-    <string name="login_request_has_already_expired">உள்நுழைவு கோரிக்கை ஏற்கனவே காலாவதியானது.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">இதிலிருந்து உள்நுழைவு முயற்சி:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-இக்கணக்கிற்கு மாற வேண்டுமா?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden-க்கு புதியவரா?</string>
     <string name="get_master_passwordword_hint">பிரதான கடவுச்சொல் குறிப்பைப் பெறு</string>
     <string name="logging_in_as_x_on_y">%2$s இல் %1$s ஆக உள்நுழைகிறது</string>
     <string name="not_you">நீங்கள் இல்லையா?</string>
     <string name="log_in_with_master_password">பிரதான கடவுச்சொலுடன் உள்நுழை</string>
     <string name="log_in_initiated">உள்நுழைவு துவங்கியது</string>
-    <string name="a_notification_has_been_sent_to_your_device">உமது சாதனத்திற்கு ஓரறிவிப்பு அனுப்பப்பட்டது.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">உங்கள் பெட்டகம் திறக்கப்பட்டுள்ளதா என்பதையும், கைரேகை சொற்றொடர் மற்ற சாதனத்தில் பொருந்துகிறதா என்பதையும் உறுதிசெய்யவும்.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">அறிவிப்பை மீண்டுமனுப்பு</string>
     <string name="view_all_login_options">எல்லா உள்நுழைவு விருப்பத்தையும் காண்க</string>
-    <string name="pending_log_in_requests">நிலுவையிலுள்ள உள்நுழைவு கோரிக்கைகள்</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">எல்லா கோரிக்கைகளையும் மறு</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">நிலுவையிலுள்ள எல்லா உள்நுழைவு கோரிக்கைகளையும் மறுக்க வேண்டுமா?</string>
     <string name="no_pending_requests">நிலுவையிலுள்ள கோரிக்கைகள் இல்லை</string>
@@ -690,9 +693,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">கிடைச்சொல் குளோன் செய்யப்பட்ட உருப்படிக்கு நகலெடுக்கப்படாது. இந்த உருப்படியை குளோன் செய்வதைத் தொடர விரும்புகிறீர்களா?</string>
     <string name="master_password_re_prompt_help">முதன்மை கடவுச்சொல் மீண்டும் தூண்டுதல் உதவி</string>
     <string name="admin_approval_requested">நிர்வாகி ஒப்புதல் கோரப்பட்டது</string>
-    <string name="your_request_has_been_sent_to_your_admin">உமது கோரிக்கை உமது நிர்வாகிக்கு அனுப்பப்பட்டது.</string>
-    <string name="you_will_be_notified_once_approved">ஏற்கப்பட்ட பின் அறிவிக்கப்படுவீர்.</string>
-    <string name="trouble_logging_in">உள்நுழைவதில் சிக்கலா?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">தன்னிரப்பலைத் தடு</string>
     <string name="no_uris_blocked">URIs எதுவும் தடுக்கப்படவில்லை</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">இந்த உரலிகளுக்கு தன்னிரப்பல் அளிக்கப்படா.</string>
@@ -703,8 +705,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">வடிவம்: %1$s. பல URIs-களை ஒரு காற்புள்ளியால் பிரிக்கவும்.</string>
     <string name="invalid_uri">செல்லாத உரலி</string>
     <string name="the_urix_is_already_blocked">உரலி %1$s ஏற்கனவே தடுக்கப்பட்டது</string>
-    <string name="login_approved">உள்நுழைவு ஏற்கப்பட்டது</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">சாதனத்துடன் உள்நுழைவு Bitwarden பயன்பாட்டின் அமைப்புகளில் அமைக்கப்பட வேண்டும்.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">வேறு விருப்பம் தேவையா? <annotation link="viewAll">அனைத்து உள்நுழைவு விருப்பங்களையும் காண்க</annotation></string>
     <string name="log_in_with_device">சாதனத்துடன் உள்நுழை</string>
     <string name="logging_in_on">இதில் உள்நுழைகிறது</string>
@@ -1143,6 +1144,7 @@
     <string name="save_option_as_default">விருப்பத்தை இயல்புநிலையாக சேமி</string>
     <string name="account_synced_from_bitwarden_app">கணக்கு Bitwarden செயலியிலிருந்து ஒத்திசைக்கப்பட்டது</string>
     <string name="local_codes">உள்ளூர் குறியீடுகள் (%1$d)</string>
+    <string name="local_codes_header">உள்ளூர் குறியீடுகள்</string>
     <string name="required_information_missing">தேவையான தகவல் இல்லை</string>
     <string name="required_information_missing_message">தேவையான தகவல் இல்லை (எ.கா., ‘services’ அல்லது ‘secret’). உங்கள் கோப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். ஆதரவிற்கு bitwarden.com/help-ஐப் பார்வையிடவும்</string>
     <string name="file_could_not_be_processed">கோப்பைச் செயல்படுத்த முடியவில்லை</string>

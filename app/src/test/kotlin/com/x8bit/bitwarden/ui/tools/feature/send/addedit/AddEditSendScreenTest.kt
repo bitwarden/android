@@ -213,6 +213,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         sendAuth = SendAuth.Password,
                         passwordInput = "somePass",
                     ),
@@ -237,6 +238,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         sendAuth = SendAuth.Password,
                         passwordInput = "",
                     ),
@@ -259,6 +261,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         sendAuth = SendAuth.Password,
                     ),
                 ),
@@ -282,6 +285,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         sendAuth = SendAuth.Password,
                         passwordInput = "somePass",
                     ),
@@ -295,6 +299,97 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Are you sure you want to overwrite the current password?")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `password field should be disabled when the send already has a password`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = true,
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(testTag = "SendPasswordEntry")
+            .performScrollTo()
+            .assertTextEquals("Password", "••••••••")
+            .assertIsNotEnabled()
+            .assert(!hasSetTextAction())
+    }
+
+    @Test
+    fun `password field should be editable when the send has no password`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(testTag = "SendPasswordEntry")
+            .performScrollTo()
+            .assert(hasSetTextAction())
+    }
+
+    @Test
+    fun `password action buttons should be hidden when the send already has a password`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = true,
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(testTag = "RegeneratePasswordButton")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithTag(testTag = "CopyPasswordButton")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `password action buttons should be displayed when the send has no password`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
+                        sendAuth = SendAuth.Password,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(testTag = "RegeneratePasswordButton")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag(testTag = "CopyPasswordButton")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -803,6 +898,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `password input should change according to the state`() {
         val commonState = DEFAULT_COMMON_STATE.copy(
+            hasPassword = false,
             sendAuth = SendAuth.Password,
             passwordInput = "",
         )
@@ -1281,6 +1377,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1550,6 +1647,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1574,6 +1672,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1605,6 +1704,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1636,6 +1736,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "existing-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1667,6 +1768,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "test-password",
                         sendAuth = SendAuth.Password,
                     ),
@@ -1691,6 +1793,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON_STATE.copy(
+                        hasPassword = false,
                         passwordInput = "",
                         sendAuth = SendAuth.Password,
                     ),

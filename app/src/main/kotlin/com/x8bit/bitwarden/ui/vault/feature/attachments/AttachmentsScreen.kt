@@ -12,7 +12,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -31,8 +30,8 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 
 /**
  * Displays the attachments screen.
@@ -41,10 +40,10 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentsScreen(
-    viewModel: AttachmentsViewModel = hiltViewModel(),
+    viewModel: AttachmentsViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToPreview: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPreview: (route: VaultUnlockedGraph.PreviewAttachmentRoute) -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -69,7 +68,7 @@ fun AttachmentsScreen(
             is AttachmentsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is AttachmentsEvent.NavigateToPreview -> {
                 onNavigateToPreview(
-                    PreviewAttachmentRoute(
+                    VaultUnlockedGraph.PreviewAttachmentRoute(
                         cipherId = event.cipherId,
                         attachmentId = event.attachmentId,
                         fileName = event.fileName,

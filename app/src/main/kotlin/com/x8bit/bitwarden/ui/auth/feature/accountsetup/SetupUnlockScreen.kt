@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -64,7 +63,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 @Suppress("LongMethod")
 @Composable
 fun SetupUnlockScreen(
-    viewModel: SetupUnlockViewModel = hiltViewModel(),
+    viewModel: SetupUnlockViewModel,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onNavigateBack: () -> Unit,
 ) {

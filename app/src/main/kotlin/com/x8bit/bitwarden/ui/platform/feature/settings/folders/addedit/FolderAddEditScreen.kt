@@ -19,7 +19,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -49,7 +48,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun FolderAddEditScreen(
     onNavigateBack: () -> Unit,
-    viewModel: FolderAddEditViewModel = hiltViewModel(),
+    viewModel: FolderAddEditViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var shouldShowConfirmationDialog by rememberSaveable { mutableStateOf(false) }

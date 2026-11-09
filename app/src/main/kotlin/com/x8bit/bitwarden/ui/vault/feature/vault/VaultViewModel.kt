@@ -193,7 +193,7 @@ class VaultViewModel @Inject constructor(
         // Force a sync if a KDF update is detected as necessary to ensure we have the latest KDF
         // settings from the server. This handles the case where the user updated their KDF
         // settings on another device. Otherwise, attempt a sync based on the normal criteria.
-        if (authRepository.needsKdfUpdateToMinimums()) {
+        if (needsKdfUpdateToMinimums()) {
             mutableStateFlow.update { it.copy(isAwaitingKdfSync = true) }
             viewModelScope.launch {
                 vaultRepository.syncForResult(forced = true)
@@ -1269,7 +1269,7 @@ class VaultViewModel @Inject constructor(
 
     private fun handleKdfSyncCompletedReceive() {
         mutableStateFlow.update { it.copy(isAwaitingKdfSync = false) }
-        if (authRepository.needsKdfUpdateToMinimums()) {
+        if (needsKdfUpdateToMinimums()) {
             mutableStateFlow.update {
                 @Suppress("MaxLineLength")
                 it.copy(
@@ -1669,7 +1669,7 @@ class VaultViewModel @Inject constructor(
         shouldShowDecryptionAlert: Boolean,
         vaultData: DataState.Loaded<VaultData>,
     ): VaultState.DialogState? =
-        if (!state.isAwaitingKdfSync && authRepository.needsKdfUpdateToMinimums()) {
+        if (!state.isAwaitingKdfSync && needsKdfUpdateToMinimums()) {
             VaultState.DialogState.VaultLoadKdfUpdateRequired(
                 title = BitwardenString.update_your_encryption_settings.asText(),
                 message = BitwardenString
@@ -1873,10 +1873,24 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.KdfUpdatePasswordRepromptSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.updateKdfToMinimumsIfNeeded(password = action.password)
+            val result = authRepository
+                .activeUserId
+                ?.let { userId ->
+                    authRepository.updateKdfToMinimumsIfNeeded(
+                        userId = userId,
+                        password = action.password,
+                    )
+                }
+                ?: UpdateKdfMinimumsResult.ActiveAccountNotFound
             sendAction(action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(result))
         }
     }
+
+    private fun needsKdfUpdateToMinimums(): Boolean =
+        authRepository
+            .activeUserId
+            ?.let { authRepository.needsKdfUpdateToMinimums(userId = it) }
+            ?: false
 
     private fun showGenericError(
         message: Text = BitwardenString.generic_error_message.asText(),

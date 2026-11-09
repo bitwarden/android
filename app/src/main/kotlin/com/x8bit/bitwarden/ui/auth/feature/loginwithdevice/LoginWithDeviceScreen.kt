@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -47,7 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun LoginWithDeviceScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
-    viewModel: LoginWithDeviceViewModel = hiltViewModel(),
+    viewModel: LoginWithDeviceViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
@@ -130,7 +129,7 @@ private fun LoginWithDeviceScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = state.subtitle(),
+            text = state.subTitle(),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -182,18 +181,6 @@ private fun LoginWithDeviceScreenContent(
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
-
-        Text(
-            text = state.otherOptions(),
-            textAlign = TextAlign.Center,
-            style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.secondary,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(height = 12.dp))
 
         BitwardenHyperTextLink(
             annotatedResId = BitwardenString.need_another_option_view_all_login_options,

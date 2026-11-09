@@ -607,20 +607,22 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
     <string name="generic_error_message">Nebija iespējams apstrādāt pieprasījumu. Lūgums mēģināt vēlreiz vai sazināties ar mums.</string>
     <string name="allow_screen_capture">Atļaut ekrāna tveršanu</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Vai tiešām iespējot ekrāna tveršanu?</string>
-    <string name="log_in_requested">Pieprasīta pieteikšanās</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Vai mēģini pieteikties?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s pieteikšanās mēģinājums %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Ierīces veids</string>
     <string name="ip_address">IP adrese</string>
     <string name="time">Laiks</string>
     <string name="select_time">Atlasīt laiku</string>
     <string name="switch_input_mode">Pārslēgt ievades veidu</string>
-    <string name="confirm_log_in">Apstiprināt pieteikšanos</string>
-    <string name="deny_log_in">Atteikt pieteikšanos</string>
-    <string name="log_in_denied">Pieteikšanās ir atteikta</string>
-    <string name="approve_login_requests">Apstiprināt pieteikšanās pieprasījumus</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nē, paldies!</string>
-    <string name="confim_log_in_attemp_for_x">Apstiprināt %1$s pieteikšanās mēģinājumu</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Lietotājvārda veids</string>
     <string name="plus_addressed_email">E-pasta adrese ar plusu</string>
     <string name="catch_all_email">Visu tverošā e-pasta adrese</string>
@@ -647,21 +649,22 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
     <string name="i_understand">Es saprotu</string>
     <string name="accept">Pieņemt</string>
     <string name="decline">Noraidīt</string>
-    <string name="login_request_has_already_expired">Pieteikšanās pieprasījuma derīgums jau ir beidzies.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pieteikšanās mēģinājums no:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Vai pārslēgties uz šo kontu?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden iepriekš nav izmantots?</string>
     <string name="get_master_passwordword_hint">Saņemt galvenās paroles norādi</string>
     <string name="logging_in_as_x_on_y">Piesakās %2$s kā %1$s</string>
     <string name="not_you">Tas neesi Tu?</string>
     <string name="log_in_with_master_password">Pieteikties ar galveno paroli</string>
     <string name="log_in_initiated">Uzsākta pieteikšanās</string>
-    <string name="a_notification_has_been_sent_to_your_device">Uz ierīci ir nosūtīts paziņojums.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Lūgums pārliecināties, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Atkārtoti nosūtīt paziņojumu</string>
     <string name="view_all_login_options">Apskatīt visas pieteikšanās iespējas</string>
-    <string name="pending_log_in_requests">Neapstiprinātie pieteikšanās pieprasījumi</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Noraidīt visus pieprasījumus</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Vai tiešām noraidīt visus neapstiprinātos pieteikšanās pieprasījumus?</string>
     <string name="no_pending_requests">Nav neapstiprinātu pieprasījumu</string>
@@ -694,9 +697,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Piekļuves atslēga netiks ievietota klonētajā vienumā. Vai turpināt šī vienuma klonēšanu?</string>
     <string name="master_password_re_prompt_help">Galvenās paroles pārvaicāšanas palīdzība</string>
     <string name="admin_approval_requested">Pieprasīts pārvaldītāja apstiprinājums</string>
-    <string name="your_request_has_been_sent_to_your_admin">Pieprasījums tika nosūtīts pārvaldītājam.</string>
-    <string name="you_will_be_notified_once_approved">Tiks saņemts paziņojums, tiklīdz būs apstiprināts.</string>
-    <string name="trouble_logging_in">Neizdodas pieteikties?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Neļaut automātisko aizpildīšanu</string>
     <string name="no_uris_blocked">Nav liegtu URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Šiem URI automātiskā aizpildīšana netiks piedāvāta.</string>
@@ -707,8 +709,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Pieraksts: %1$s. Vairāki URI ir atdalāmi ar komatu.</string>
     <string name="invalid_uri">Nederīgs URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s jau ir neatļauts</string>
-    <string name="login_approved">Pieteikšanās apstiprināta</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Nepieciešama cita iespēja? <annotation link="viewAll">Apskatīt visas pieteikšanās iespējas</annotation></string>
     <string name="log_in_with_device">Pieteikties ar ierīci</string>
     <string name="logging_in_on">Piesakās</string>
@@ -1150,6 +1151,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="save_option_as_default">Saglabāt iespēju kā noklusējuma</string>
     <string name="account_synced_from_bitwarden_app">Konts vienādots no Bitwarden lietotnes</string>
     <string name="local_codes">Vietējie kodi (%1$d)</string>
+    <string name="local_codes_header">Vietējie kodi</string>
     <string name="required_information_missing">Trūkst nepieciešamās informācijas</string>
     <string name="required_information_missing_message">Trūkst nepieciešamās informācijas (piemēram, ‘services’ vai ‘secret’). Jāpārbauda datne un jāmēģina vēlreiz. Atbalsts ir pieejams bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Datni nevarēja apstrādāt</string>

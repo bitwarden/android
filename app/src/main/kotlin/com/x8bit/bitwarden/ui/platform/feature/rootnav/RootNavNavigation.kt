@@ -2,24 +2,17 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import kotlinx.serialization.Serializable
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavGraph
 
 /**
- * The type-safe route for the root navigation screen.
+ * Add the root navigation screen to the navigation entries.
  */
-@Serializable
-data object RootNavigationRoute
-
-/**
- * Add the root navigation screen to the nav graph.
- */
-fun NavGraphBuilder.rootNavDestination(
+fun EntryProviderScope<OverlayNavGraph>.rootNavDestination(
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composable<RootNavigationRoute> {
+    entry<OverlayNavGraph.RootNavigationRoute> {
         RootNavScreen(onSplashScreenRemoved = onSplashScreenRemoved)
     }
 }

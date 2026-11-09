@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import io.mockk.coEvery
@@ -20,14 +21,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -43,16 +40,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toLoginWithDeviceArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toLoginWithDeviceArgs)
     }
 
     @Test
@@ -214,7 +201,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.access_approved.asText(),
+                    ),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -284,7 +273,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.access_approved.asText(),
+                    ),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -663,7 +654,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = null,
-                    message = BitwardenString.login_request_has_already_expired.asText(),
+                    message = BitwardenString.access_request_has_already_expired.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -674,14 +665,14 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         state: LoginWithDeviceState? = DEFAULT_STATE,
     ): LoginWithDeviceViewModel =
         LoginWithDeviceViewModel(
+            route = AuthGraph.LoginWithDeviceRoute(
+                emailAddress = state?.emailAddress ?: EMAIL,
+                loginType = state?.loginWithDeviceType ?: LoginWithDeviceType.OTHER_DEVICE,
+            ),
             authRepository = authRepository,
             snackbarRelayManager = snackbarRelayManager,
             savedStateHandle = SavedStateHandle().apply {
                 set("state", state)
-                every { toLoginWithDeviceArgs() } returns LoginWithDeviceArgs(
-                    emailAddress = state?.emailAddress ?: EMAIL,
-                    loginType = state?.loginWithDeviceType ?: LoginWithDeviceType.OTHER_DEVICE,
-                )
             },
         )
 }

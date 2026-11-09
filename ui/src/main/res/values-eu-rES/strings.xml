@@ -601,20 +601,22 @@
     <string name="generic_error_message">Ezin izan dugu zure eskaera bideratu. Mesedez, saiatu berriro edo jarri gurekin harremanetan.</string>
     <string name="allow_screen_capture">Baimendu pantaila-argazkia</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ziur al zaude pantaila-argazkia gaitu nahi duzula?</string>
-    <string name="log_in_requested">Saio hasiera eskatu da</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Saioa hasten saiatzen ari zara?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s saioa hasten saiatu da %2$s-n</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Gailu mota</string>
     <string name="ip_address">IP helbidea</string>
     <string name="time">Ordua</string>
     <string name="select_time">Hautatu ordua</string>
     <string name="switch_input_mode">Aldatu sarrera-modua</string>
-    <string name="confirm_log_in">Berretsi saio hasiera</string>
-    <string name="deny_log_in">Sarrera ukatu</string>
-    <string name="log_in_denied">Saio hasiera ukatua</string>
-    <string name="approve_login_requests">Saio hasiera eskaerak onartu</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Ez, eskerrik asko</string>
-    <string name="confim_log_in_attemp_for_x">Onartu %1$s-ren saio hasiera eskaera</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Erabiltzaile izen mota</string>
     <string name="plus_addressed_email">Atzizkidun emaila</string>
     <string name="catch_all_email">Harrapatu email guztiak</string>
@@ -641,21 +643,22 @@
     <string name="i_understand">Ulertzen dut</string>
     <string name="accept">Onartu</string>
     <string name="decline">Baztertu</string>
-    <string name="login_request_has_already_expired">Sarbide eskaera iraungi da.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Saio hasiera saiakera hemendik:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Kontu honetara aldatu nahi duzu?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden-en berria zara?</string>
     <string name="get_master_passwordword_hint">Jaso pasahitz nagusiaren pista</string>
     <string name="logging_in_as_x_on_y">%1$s bezala saioa hasten %2$s(e)n</string>
     <string name="not_you">Ez zara zu?</string>
     <string name="log_in_with_master_password">Hasi saioa pasahitz nagusiarekin</string>
     <string name="log_in_initiated">Saioa hastea martxan da</string>
-    <string name="a_notification_has_been_sent_to_your_device">Jakinarazpen bat bidali da zure gailura.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Mesedez, ziurtatu kutxa gotorra desblokeatuta dagoela eta hatz-marka digitalaren esaldia bat datorrela beste gailuarekin.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Berbidali jakinarazpena</string>
     <string name="view_all_login_options">Ikusi erregistro guztiak ezarpenetan</string>
-    <string name="pending_log_in_requests">Saio-eskaera zain daudenak</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Ukatu eskaera guztiak</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Ziur al zaude zain dauden saioa hasteko eskaera guztiak ukatu nahi dituzula?</string>
     <string name="no_pending_requests">Ez dago eskaerarik zain</string>
@@ -688,9 +691,8 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Pasagiltza ez da klonatutako elementura kopiatuko. Elementu hau klonatzen jarraitu nahi duzu?</string>
     <string name="master_password_re_prompt_help">Pasahitz nagusiaren berriz eskatzearen laguntza</string>
     <string name="admin_approval_requested">Administratzailearen onarpena eskatuta</string>
-    <string name="your_request_has_been_sent_to_your_admin">Zure eskaera zure administratzaileari bidali zaio.</string>
-    <string name="you_will_be_notified_once_approved">Jakinaraziko zaizu onartzen denean.</string>
-    <string name="trouble_logging_in">Arazoak saioa hastean?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokeatu automatikoki betetzea</string>
     <string name="no_uris_blocked">Ez dago blokeatutako URItik</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatikoki betetzea ez da URL hauetan erabilgarri egongo.</string>
@@ -701,8 +703,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formatua: %1$s. Bereizi URI anitzak komaz.</string>
     <string name="invalid_uri">URI baliogabea</string>
     <string name="the_urix_is_already_blocked">%1$s URIa dagoeneko blokeatuta dago</string>
-    <string name="login_approved">Saioa onartuta</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Gailuarekin saioa hasteko, Bitwarden aplikazioaren ezarpenetan konfiguratu behar da.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Beste aukera bat behar duzu? <annotation link="viewAll">Ikusi saio-aukerak guztiak</annotation></string>
     <string name="log_in_with_device">Hasi saioa beste gailu batekin</string>
     <string name="logging_in_on">Saioa hasten</string>
@@ -1141,6 +1142,7 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="save_option_as_default">Ezarri aukera lehenetsi gisa</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden aplikaziotik sinkronizatutako kontua</string>
     <string name="local_codes">Kode lokalak (%1$d)</string>
+    <string name="local_codes_header">Kode lokalak</string>
     <string name="required_information_missing">Beharrezko informazioa falta da</string>
     <string name="required_information_missing_message">Beharrezko informazioa falta da (adibidez, \'zerbitzuak\' edo \'sekretua\'). Egiaztatu zure fitxategia eta saiatu berriro. Bisitatu bitwarden.com/help laguntza jasotzeko</string>
     <string name="file_could_not_be_processed">Fitxategia ezin izan da prozesatu</string>

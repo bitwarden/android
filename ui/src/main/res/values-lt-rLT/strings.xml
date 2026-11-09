@@ -611,20 +611,22 @@ pasirinkite Pridėti TOTP, kad raktas būtų saugiai išsaugotas</string>
     <string name="generic_error_message">Nepavyko apdoroti jūsų užklausos. Bandykite dar kartą arba susisiekite su mumis.</string>
     <string name="allow_screen_capture">Leisti ekrano fotografavimą</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ar tikrai norite įjungti ekrano fotografavimą?</string>
-    <string name="log_in_requested">Prašoma prisijungti</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Ar bandote prisijungti?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s bandė prisijungti %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Įrenginio tipas</string>
     <string name="ip_address">IP adresas</string>
     <string name="time">Laikas</string>
     <string name="select_time">Pasirinkti laiką</string>
     <string name="switch_input_mode">Perjungti įvesties režimą</string>
-    <string name="confirm_log_in">Patvirtinkite prisijungimą</string>
-    <string name="deny_log_in">Neleisti prisijungti</string>
-    <string name="log_in_denied">Prisijungimas atmestas</string>
-    <string name="approve_login_requests">Patvirtinti prisijungimo užklausas</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Ne, ačiū</string>
-    <string name="confim_log_in_attemp_for_x">Patvirtinti bandymą prisijungti prie %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Vartotojo vardo tipas</string>
     <string name="plus_addressed_email">Plius adresuotas el paštas</string>
     <string name="catch_all_email">Viską palaikantis el. paštas</string>
@@ -651,21 +653,22 @@ pasirinkite Pridėti TOTP, kad raktas būtų saugiai išsaugotas</string>
     <string name="i_understand">Suprantu</string>
     <string name="accept">Priimti</string>
     <string name="decline">Atmesti</string>
-    <string name="login_request_has_already_expired">Prisijungimo prašymas jau pasibaigęs.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Bandymas prisijungti iš:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Ar norite pereiti prie šios paskyros?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Naujas „Bitwarden“?</string>
     <string name="get_master_passwordword_hint">Gauti pagrindinio slaptažodžio užuominą</string>
     <string name="logging_in_as_x_on_y">Prisijungiama kaip %1$s įrenginyje %2$s</string>
     <string name="not_you">Ne jūs?</string>
     <string name="log_in_with_master_password">Prisijunkite naudodami pagrindinį slaptažodį</string>
     <string name="log_in_initiated">Pradėtas prisijungimas</string>
-    <string name="a_notification_has_been_sent_to_your_device">Į jūsų įrenginį išsiųstas pranešimas.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Įsitikinkite, kad jūsų saugykla yra atrakinta ir piršto atspaudo frazė sutampa su kitais įrenginiais.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Iš naujo siųsti pranešimą</string>
     <string name="view_all_login_options">Peržiūrėkite visas prisijungimo parinktis</string>
-    <string name="pending_log_in_requests">Laukia prisijungimo užklausos</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Atmesti visas užklausas</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Ar tikrai norite atmesti visas laukiančias prisijungimo užklausas?</string>
     <string name="no_pending_requests">Nėra laukiančių užklausų</string>
@@ -698,9 +701,8 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Prieigos raktas nebus nukopijuotas į klonuotą elementą. Ar norite tęsti šio elemento klonavimą?</string>
     <string name="master_password_re_prompt_help">Pagrindinio slaptažodžio pakartotinio prašymo pagalba</string>
     <string name="admin_approval_requested">Prašoma administratoriaus patvirtinimo</string>
-    <string name="your_request_has_been_sent_to_your_admin">Jūsų prašymas išsiųstas administratoriui.</string>
-    <string name="you_will_be_notified_once_approved">Jums bus pranešta, kai bus patvirtinta.</string>
-    <string name="trouble_logging_in">Kyla problemų prisijungiant?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokuoti automatinį pildymą</string>
     <string name="no_uris_blocked">Nėra užblokuotų URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatinis pildymas nebus siūlomas šiems URI.</string>
@@ -711,8 +713,7 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formatas: %1$s. Kelis URI atskirkite kableliu.</string>
     <string name="invalid_uri">Netinkamas URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s jau yra užblokuotas</string>
-    <string name="login_approved">Prisijungimas patvirtintas</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prisijungimas naudojant įrenginį turi būti nustatytas „Bitwarden“ programos nustatymuose.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Reikia kitos parinkties? <annotation link="viewAll">Peržiūrėti visas prisijungimo parinktis</annotation></string>
     <string name="log_in_with_device">Prisijunkite naudodami įrenginį</string>
     <string name="logging_in_on">Prisijungiama prie</string>
@@ -1157,6 +1158,7 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="save_option_as_default">Nustatyti išsaugojimo parinktį kaip numatytąją</string>
     <string name="account_synced_from_bitwarden_app">Paskyra sinchronizuota iš „Bitwarden“ programos</string>
     <string name="local_codes">Vietiniai kodai (%1$d)</string>
+    <string name="local_codes_header">Vietiniai kodai</string>
     <string name="required_information_missing">Trūksta reikalingos informacijos</string>
     <string name="required_information_missing_message">Trūksta reikalingos informacijos (pvz., „services“ arba „secret“). Patikrinkite savo failą ir bandykite dar kartą. Dėl pagalbos apsilankykite bitwarden.com/help</string>
     <string name="file_could_not_be_processed">Failo nepavyko apdoroti</string>

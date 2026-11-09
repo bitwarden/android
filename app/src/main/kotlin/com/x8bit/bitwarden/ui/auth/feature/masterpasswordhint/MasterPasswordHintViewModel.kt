@@ -10,30 +10,46 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the master password hint screen.
  */
-@HiltViewModel
-class MasterPasswordHintViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = MasterPasswordHintViewModel.Factory::class)
+class MasterPasswordHintViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.MasterPasswordHintRoute,
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
     private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<MasterPasswordHintState, MasterPasswordHintEvent, MasterPasswordHintAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: MasterPasswordHintState(
-            emailInput = savedStateHandle.toMasterPasswordHintArgs().emailAddress,
+            emailInput = route.emailAddress,
         ),
 ) {
+    /**
+     * Factory for creating a [MasterPasswordHintViewModel] for a specific
+     * [AuthGraph.MasterPasswordHintRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [MasterPasswordHintViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.MasterPasswordHintRoute): MasterPasswordHintViewModel
+    }
+
     init {
         stateFlow
             .onEach {

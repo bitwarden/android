@@ -76,7 +76,7 @@
     <string name="account">Kont</string>
     <string name="account_created_success">Your new account has been created!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
-    <string name="avoid_ambiguous_characters">Avoid ambiguous characters</string>
+    <string name="avoid_ambiguous_characters">Zweedeiteg Zeechen evitéieren</string>
     <string name="bitwarden_autofill_service">Bitwarden Auto-Ausfëllen Funktioun</string>
     <string name="change_master_password">Master-Passwuert änneren</string>
     <string name="close">Zoumaachen</string>
@@ -90,7 +90,7 @@
     <string name="edit_identity">Edit identity</string>
     <string name="edit_note">Edit note</string>
     <string name="edit_ssh_key">Edit SSH key</string>
-    <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
+    <string name="enter_email_for_hint">Gëff deng E-Mail-Adress vun dengem Kont an, fir den Hiweis fir däi Master-Passwuert ze kréien.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Aus Favoritten ewechhuelen</string>
     <string name="fingerprint">Fangerofdrock</string>
@@ -136,19 +136,19 @@
     <string name="new_text_send">New text Send</string>
     <string name="new_file_send">New file Send</string>
     <string name="no_username">Kee Benotzernumm</string>
-    <string name="options">Options</string>
-    <string name="other">Other</string>
+    <string name="options">Optiounen</string>
+    <string name="other">Aner</string>
     <string name="password_generator">Passwuertgenerator</string>
-    <string name="password_hint">Password hint</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
-    <string name="password_override_alert">Are you sure you want to overwrite the current password?</string>
+    <string name="password_hint">Passwuert-Hiweis</string>
+    <string name="password_hint_alert">Mir hunn der eng E-Mail mat dengem Master-Passwuert-Hiweis geschéckt.</string>
+    <string name="password_override_alert">Bass du sécher, datt s du d\'aktuellt Passwuert iwwerschreiwe wëlls?</string>
     <string name="retype_master_password">Master-Passwuert widderhuelen</string>
     <string name="retype_new_master_password_required">Re-type new master password (required)</string>
     <string name="retype_master_password_required">Re-type master password (required)</string>
     <string name="search_vault">Tresor duerchsichen</string>
     <string name="select">Auswielen</string>
     <string name="item_details">Item details</string>
-    <string name="item_updated">Item saved</string>
+    <string name="item_updated">Element gespäichert</string>
     <string name="bank_account_saved">Bankkont gespäichert</string>
     <string name="card_saved">Kaart gespäichert</string>
     <string name="identity_saved">Identitéit gespäichert</string>
@@ -157,10 +157,10 @@
     <string name="passport_saved">Pass gespäichert</string>
     <string name="secure_note_saved">Sécher Notiz gespäichert</string>
     <string name="ssh_key_saved">SSH-Schlëssel gespäichert</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Gëtt iwwermëttelt…</string>
+    <string name="syncing">Synchronisatioun…</string>
     <string name="syncing_complete">Syncing complete</string>
-    <string name="two_step_login">Two-step login</string>
+    <string name="two_step_login">Zwee-Faktor-Authentifizéierung</string>
     <string name="unlock_with_biometrics">Biometresch entspären</string>
     <string name="unlock_with_pin">Unlock with PIN code</string>
     <string name="verification_code">Verification code</string>
@@ -603,20 +603,22 @@ select Add TOTP to store the key safely</string>
     <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
     <string name="allow_screen_capture">Allow screen capture</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Are you sure you want to turn on screen capture?</string>
-    <string name="log_in_requested">Login requested</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Are you trying to log in?</string>
-    <string name="log_in_attempt_by_x_on_y">Login attempt by %1$s on %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Device type</string>
     <string name="ip_address">IP address</string>
     <string name="time">Time</string>
     <string name="select_time">Select time</string>
     <string name="switch_input_mode">Switch input mode</string>
-    <string name="confirm_log_in">Confirm login</string>
-    <string name="deny_log_in">Deny login</string>
-    <string name="log_in_denied">Login denied</string>
-    <string name="approve_login_requests">Approve login requests</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">No thanks</string>
-    <string name="confim_log_in_attemp_for_x">Confirm login attempt for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Username type</string>
     <string name="plus_addressed_email">Plus addressed email</string>
     <string name="catch_all_email">Catch-all email</string>
@@ -643,8 +645,8 @@ select Add TOTP to store the key safely</string>
     <string name="i_understand">I understand</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="login_request_has_already_expired">Login request has already expired.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login attempt from:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
 Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">New to Bitwarden?</string>
@@ -653,11 +655,12 @@ Do you want to switch to this account?</string>
     <string name="not_you">Not you?</string>
     <string name="log_in_with_master_password">Log in with master password</string>
     <string name="log_in_initiated">Login initiated</string>
-    <string name="a_notification_has_been_sent_to_your_device">A notification has been sent to your device.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Resend notification</string>
     <string name="view_all_login_options">View all log in options</string>
-    <string name="pending_log_in_requests">Pending login requests</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Decline all requests</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Are you sure you want to decline all pending login requests?</string>
     <string name="no_pending_requests">No pending requests</string>
@@ -690,9 +693,8 @@ Do you want to switch to this account?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</string>
     <string name="master_password_re_prompt_help">Master password re-prompt help</string>
     <string name="admin_approval_requested">Admin approval requested</string>
-    <string name="your_request_has_been_sent_to_your_admin">Your request has been sent to your admin.</string>
-    <string name="you_will_be_notified_once_approved">You will be notified once approved.</string>
-    <string name="trouble_logging_in">Trouble logging in?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Block autofill</string>
     <string name="no_uris_blocked">No URIs blocked</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofill will not be offered for these URIs.</string>
@@ -703,8 +705,7 @@ Do you want to switch to this account?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Separate multiple URIs with a comma.</string>
     <string name="invalid_uri">Invalid URI</string>
     <string name="the_urix_is_already_blocked">The URI %1$s is already blocked</string>
-    <string name="login_approved">Login approved</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Log in with device</string>
     <string name="logging_in_on">Logging in on</string>
@@ -806,7 +807,7 @@ Do you want to switch to this account?</string>
     <string name="help_with_server_geolocations">Help with server geolocations</string>
     <string name="email_address_required">Email address (required)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
-    <string name="change_email_address">Change email address</string>
+    <string name="change_email_address">E-Mail-Adress änneren</string>
     <string name="next">Next</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
@@ -837,7 +838,7 @@ Do you want to switch to this account?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">Master-Passwuert-Hiweis</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
@@ -937,7 +938,7 @@ Do you want to switch to this account?</string>
     <string name="coachmark_2_of_3">2 OF 3</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du muss den Authentifizéierungsschlëssel nëmme fir Zougangsdaten ariichten, déi eng zwee-Faktor-Authentifizéierung mat engem Code erfuerderen. De Schlëssel generéiert kontinuéierlech sechsstelleg Coden, mat deenen s du dech umelle kanns.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
-    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du muss eng Websäiten-Adress bäisetzen, fir automatescht Ausfëlle fir den Zougrëff op dëse Kont benotzen ze kënnen.</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -947,15 +948,15 @@ Do you want to switch to this account?</string>
     <string name="alias">Alias</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Benotz de Generator, fir sécher Passwierder, Passphrasen a Benotzernimm z\'erstellen.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
-    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Eenzegaarteg Benotzernimm setzen en zousätzleche Sécherheetsniveau bäi a kënnen Hacker dorunner hënneren, deng Konten ze fannen.</string>
     <string name="coachmark_1_of_6">1 OF 6</string>
     <string name="coachmark_2_of_6">2 OF 6</string>
     <string name="coachmark_3_of_6">3 OF 6</string>
     <string name="coachmark_4_of_6">4 OF 6</string>
     <string name="coachmark_5_of_6">5 OF 6</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Benotz dës Optiounen, fir däi Passwuert un d\'Ufuerderunge vun denger Kont-Websäit unzepassen.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Nodeems du däin neit Passwuert a Bitwarden gespäichert hues, vergiess net, et op denger Konto-Websäit z\'aktualiséieren.</string>
     <string name="verify_your_identity">Verify your identity</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
@@ -1082,7 +1083,7 @@ Do you want to switch to this account?</string>
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
-    <string name="item_saved">Item saved</string>
+    <string name="item_saved">Element gespäichert</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
     <string name="search_codes">Search codes</string>
@@ -1103,7 +1104,7 @@ Do you want to switch to this account?</string>
     <string name="export_success">Data exported successfully</string>
     <string name="included_in_this_export">Included in this export</string>
     <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
-    <string name="security">Security</string>
+    <string name="security">Sécherheet</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Versioun</string>
     <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
@@ -1143,6 +1144,7 @@ Do you want to switch to this account?</string>
     <string name="save_option_as_default">Save option as default</string>
     <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
     <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes_header">Local codes</string>
     <string name="required_information_missing">Required Information Missing</string>
     <string name="required_information_missing_message">Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support</string>
     <string name="file_could_not_be_processed">File Could Not Be Processed</string>

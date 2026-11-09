@@ -183,12 +183,10 @@ object AuthManagerModule {
         authDiskSource: AuthDiskSource,
         vaultSdkSource: VaultSdkSource,
         accountsService: AccountsService,
-        featureFlagManager: FeatureFlagManager,
     ): KdfManager = KdfManagerImpl(
         authDiskSource = authDiskSource,
         vaultSdkSource = vaultSdkSource,
         accountsService = accountsService,
-        featureFlagManager = featureFlagManager,
     )
 
     @Provides

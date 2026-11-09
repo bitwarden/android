@@ -65,8 +65,7 @@ fun BitwardenNavigationRail(
             navigationItems.forEach { navigationItem ->
                 BitwardenNavigationRailItem(
                     labelRes = navigationItem.labelRes,
-                    selectedIconRes = navigationItem.iconResSelected,
-                    unselectedIconRes = navigationItem.iconRes,
+                    iconRes = navigationItem.iconRes,
                     notificationCount = navigationItem.notificationCount,
                     isSelected = navigationItem == selectedItem,
                     onClick = { onClick(navigationItem) },

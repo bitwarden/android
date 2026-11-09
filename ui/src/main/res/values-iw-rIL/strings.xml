@@ -607,20 +607,22 @@
     <string name="generic_error_message">לא הצלחנו לעבד את הבקשה שלך. נא לנסות שוב או ליצור איתנו קשר.</string>
     <string name="allow_screen_capture">אפשר לכידת מסך</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">האם אתה בטוח שברצונך להפעיל לכידת מסך?</string>
-    <string name="log_in_requested">התבקשה כניסה</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">האם את/ה מנסה להיכנס?</string>
-    <string name="log_in_attempt_by_x_on_y">ניסיון כניסה על ידי %1$s ב־%2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">סוג מכשיר</string>
     <string name="ip_address">כתובת IP</string>
     <string name="time">זמן</string>
     <string name="select_time">בחר זמן</string>
     <string name="switch_input_mode">החלף מצב קלט</string>
-    <string name="confirm_log_in">אשר כניסה</string>
-    <string name="deny_log_in">דחה כניסה</string>
-    <string name="log_in_denied">הכניסה נדחתה</string>
-    <string name="approve_login_requests">אשר בקשות כניסה</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">לא תודה</string>
-    <string name="confim_log_in_attemp_for_x">אשר ניסיון כניסה עבור %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">סוג שם משתמש</string>
     <string name="plus_addressed_email">דוא\"ל ממוען בפלוס</string>
     <string name="catch_all_email">דוא\"ל תופס־כל</string>
@@ -647,21 +649,22 @@
     <string name="i_understand">אני מבין</string>
     <string name="accept">קבל</string>
     <string name="decline">סרב</string>
-    <string name="login_request_has_already_expired">כבר פג תוקפה של בקשת הכניסה.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">ניסיון כניסה מ:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-האם ברצונך לעבור לחשבון זה?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">חדש ב־Bitwarden?</string>
     <string name="get_master_passwordword_hint">קבל רמז לסיסמה הראשית</string>
     <string name="logging_in_as_x_on_y">נכנס כ־%1$s ב־%2$s</string>
     <string name="not_you">לא את/ה?</string>
     <string name="log_in_with_master_password">כניסה עם סיסמה ראשית</string>
     <string name="log_in_initiated">הכניסה החלה</string>
-    <string name="a_notification_has_been_sent_to_your_device">התראה נשלחה למכשיר שלך.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">נא לוודא שהכספת שלך פתוחה ושביטוי טביעת האצבע תואם את המכשיר האחר.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">שלח מחדש התראה</string>
     <string name="view_all_login_options">הצג את כל אפשרויות הכניסה</string>
-    <string name="pending_log_in_requests">בקשות כניסה ממתינות</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">סרב לכל הבקשות</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">האם אתה בטוח שברצונך לדחות את כל בקשות הכניסה הממתינות?</string>
     <string name="no_pending_requests">אין בקשות ממתינות</string>
@@ -694,9 +697,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">מפתח הגישה לא יועתק לפריט המשוכפל. האם ברצונך להמשיך לשכפל פריט זה?</string>
     <string name="master_password_re_prompt_help">עזרה עם בקשה חוזרת של סיסמה ראשית</string>
     <string name="admin_approval_requested">התבקש אישור מנהל</string>
-    <string name="your_request_has_been_sent_to_your_admin">הבקשה שלך נשלחה למנהל שלך.</string>
-    <string name="you_will_be_notified_once_approved">תקבל התראה כשתאושר.</string>
-    <string name="trouble_logging_in">בעיות בכניסה?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">חסום מילוי אוטומטי</string>
     <string name="no_uris_blocked">אין URIs חסומים</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">מילוי אוטומטי לא יוצע עבור כתובות ה־URI האלה.</string>
@@ -707,8 +709,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">פורמט: %1$s. הפרד כתובות URI מרובות עם פסיק.</string>
     <string name="invalid_uri">כתובת URI לא חוקית</string>
     <string name="the_urix_is_already_blocked">כתובת URI זו %1$s כבר חסומה</string>
-    <string name="login_approved">כניסה אושרה</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">כניסה עם מכשיר צריכה להיות מוגדרת בהגדרות של היישום Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">זקוקים לאפשרות אחרת? <annotation link="viewAll">הצגת כל אפשרויות הכניסה</annotation></string>
     <string name="log_in_with_device">כניסה עם מכשיר</string>
     <string name="logging_in_on">נכנס ב־</string>
@@ -1150,6 +1151,7 @@
     <string name="save_option_as_default">שמור אפשרות כברירת מחדל</string>
     <string name="account_synced_from_bitwarden_app">חשבון המיובא מתוך יישום Bitwarden</string>
     <string name="local_codes">קודים מקומיים (%1$d)</string>
+    <string name="local_codes_header">קודים מקומיים</string>
     <string name="required_information_missing">חסר מידע נדרש</string>
     <string name="required_information_missing_message">חסר מידע נדרש (למשל \'שירותים\' או \'סוד\'). בדוק את הקובץ שלך ונסה שוב. בקר ב־bitwarden.com/help עבור תמיכה</string>
     <string name="file_could_not_be_processed">לא היה ניתן לעבד את הקובץ</string>

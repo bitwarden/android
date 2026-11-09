@@ -1,60 +1,43 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.PreAuthSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * The type-safe route for the settings appearance screen.
+ * Add the appearance screen to the settings navigation entries.
  */
-@Serializable
-sealed class SettingsAppearanceRoute {
-    /**
-     * The type-safe route for the settings appearance screen.
-     */
-    @Serializable
-    data object Standard : SettingsAppearanceRoute()
-
-    /**
-     * The type-safe route for the pre-auth settings appearance screen.
-     */
-    @Serializable
-    data object PreAuth : SettingsAppearanceRoute()
+fun EntryProviderScope<SettingsGraph>.appearanceDestination(
+    onNavigateBack: () -> Unit,
+) {
+    pushEntry<SettingsGraph.AppearanceRoute> {
+        AppearanceScreen(onNavigateBack = onNavigateBack)
+    }
 }
 
 /**
- * Add settings destinations to the nav graph.
+ * Add the appearance screen to the pre-authentication settings navigation entries.
  */
-fun NavGraphBuilder.appearanceDestination(
-    isPreAuth: Boolean,
+fun EntryProviderScope<PreAuthSettingsGraph>.preAuthAppearanceDestination(
     onNavigateBack: () -> Unit,
 ) {
-    if (isPreAuth) {
-        composableWithPushTransitions<SettingsAppearanceRoute.PreAuth> {
-            AppearanceScreen(onNavigateBack = onNavigateBack)
-        }
-    } else {
-        composableWithPushTransitions<SettingsAppearanceRoute.Standard> {
-            AppearanceScreen(onNavigateBack = onNavigateBack)
-        }
+    pushEntry<PreAuthSettingsGraph.AppearanceRoute> {
+        AppearanceScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
  * Navigate to the appearance screen.
  */
-fun NavController.navigateToAppearance(
-    isPreAuth: Boolean,
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(
-        route = if (isPreAuth) {
-            SettingsAppearanceRoute.PreAuth
-        } else {
-            SettingsAppearanceRoute.Standard
-        },
-        navOptions = navOptions,
-    )
+fun NavigationController<SettingsGraph>.navigateToAppearance() {
+    this.navigate(route = SettingsGraph.AppearanceRoute)
+}
+
+/**
+ * Navigate to the pre-authentication appearance screen.
+ */
+fun NavigationController<PreAuthSettingsGraph>.navigateToPreAuthAppearance() {
+    this.navigate(route = PreAuthSettingsGraph.AppearanceRoute)
 }

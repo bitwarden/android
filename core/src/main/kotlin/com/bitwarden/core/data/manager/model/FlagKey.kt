@@ -30,11 +30,9 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 CardScanner,
-                MobilePremiumUpgrade,
                 ManageDevices,
                 AttachmentUpdates,
                 V2EncryptionJitPassword,
@@ -64,14 +62,6 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
-     */
-    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
-        override val keyName: String = "pm-18021-force-update-kdf-settings"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      *  Data object holding the feature flag key for the No Logout On KDF Change feature.
      */
     data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
@@ -92,14 +82,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CardScanner : FlagKey<Boolean>() {
         override val keyName: String = "pm-34171-card-scanner"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the mobile Premium upgrade feature.
-     */
-    data object MobilePremiumUpgrade : FlagKey<Boolean>() {
-        override val keyName: String = "pm-31697-premium-upgrade-path"
         override val defaultValue: Boolean = false
     }
 

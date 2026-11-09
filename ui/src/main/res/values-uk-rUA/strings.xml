@@ -611,20 +611,22 @@
     <string name="generic_error_message">Нам не вдалося обробити ваш запит. Спробуйте ще раз або зв\'яжіться з нами.</string>
     <string name="allow_screen_capture">Дозволити знімки екрана</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ви дійсно хочете увімкнути знімки екрана?</string>
-    <string name="log_in_requested">Виконано запит входу</string>
+    <string name="access_requested">Запитано доступ</string>
+    <string name="account_access_requested">Запитано доступ до облікового запису</string>
     <string name="are_you_trying_to_log_in">Ви намагаєтесь увійти?</string>
-    <string name="log_in_attempt_by_x_on_y">Спроба входу в систему користувачем %1$s: %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Ви намагаєтесь отримати доступ до свого облікового запису?</string>
+    <string name="access_attempt_by_x_on_y">Спроба отримання доступу від %1$s на %2$s</string>
     <string name="device_type">Тип пристрою</string>
     <string name="ip_address">IP-адреса</string>
     <string name="time">Час</string>
     <string name="select_time">Вибрати час</string>
     <string name="switch_input_mode">Перемкнути режим введення</string>
-    <string name="confirm_log_in">Підтвердити вхід</string>
-    <string name="deny_log_in">Заборонити вхід</string>
-    <string name="log_in_denied">Вхід заборонено</string>
-    <string name="approve_login_requests">Схвалювати запити на вхід</string>
+    <string name="confirm_access">Підтвердити доступ</string>
+    <string name="deny_access">Заборонити доступ</string>
+    <string name="access_denied">Доступ заборонено</string>
+    <string name="account_access_requests">Запити на доступ до облікового запису</string>
     <string name="no_thanks">Ні, дякую</string>
-    <string name="confim_log_in_attemp_for_x">Підтвердити спробу входу для %1$s</string>
+    <string name="confirm_access_attempt_for_x">Підтвердити спробу доступу для %1$s</string>
     <string name="username_type">Тип імені користувача</string>
     <string name="plus_addressed_email">Адреса е-пошти з плюсом</string>
     <string name="catch_all_email">Адреса е-пошти Catch-all</string>
@@ -651,8 +653,8 @@
     <string name="i_understand">Я розумію</string>
     <string name="accept">Погодитись</string>
     <string name="decline">Відмовитись</string>
-    <string name="login_request_has_already_expired">Термін дії запиту на вхід завершився.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Спроба входу в систему з:
+    <string name="access_request_has_already_expired">Термін дії запиту на доступ завершився.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Спроба отримання доступу з:
 %1$s
 Хочете перемкнутися на цей обліковий запис?</string>
     <string name="new_to_bitwarden">Вперше у Bitwarden?</string>
@@ -661,11 +663,12 @@
     <string name="not_you">Не ви?</string>
     <string name="log_in_with_master_password">Увійти з головним паролем</string>
     <string name="log_in_initiated">Ініційовано вхід</string>
-    <string name="a_notification_has_been_sent_to_your_device">Сповіщення було надіслано на ваш пристрій.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Переконайтеся, що ваше сховище розблоковане, а фраза відбитка збігається з іншим пристроєм.</string>
+    <string name="request_sent_to_your_device">Запит надіслано на ваш пристрій</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Схваліть цей запит у своєму обліковому записі Bitwarden на іншому розблокованому пристрої або у вебпрограмі. У налаштуваннях має бути ввімкнено функцію запитів на доступ до облікового запису.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Перш ніж підтверджувати, обов\'язково перевірте відповідність зазначеної нижче фрази відбитка.</string>
     <string name="resend_notification">Надіслати сповіщення ще раз</string>
     <string name="view_all_login_options">Переглянути всі варіанти входу</string>
-    <string name="pending_log_in_requests">Необроблені запити входу</string>
+    <string name="pending_access_requests">Необроблені запити доступу</string>
     <string name="decline_all_requests">Відхилити всі запити</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Ви дійсно хочете відхилити всі необроблені запити входу?</string>
     <string name="no_pending_requests">Немає необроблених запитів</string>
@@ -698,9 +701,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Ключ доступу не буде скопійовано до клонованого запису. Хочете продовжити клонування цього запису?</string>
     <string name="master_password_re_prompt_help">Допомога щодо повторного запиту головного пароля</string>
     <string name="admin_approval_requested">Запитано затвердження адміністратором</string>
-    <string name="your_request_has_been_sent_to_your_admin">Ваш запит відправлено адміністратору.</string>
-    <string name="you_will_be_notified_once_approved">Ви отримаєте сповіщення після затвердження.</string>
-    <string name="trouble_logging_in">Проблема під час входу?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Ваш запит надіслано адміністратору. Після його затвердження ви отримаєте повідомлення електронною поштою.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Ваш адміністратор може попросити вас підтвердити цю фразу відбитка.</string>
     <string name="block_auto_fill">Блокувати автозаповнення</string>
     <string name="no_uris_blocked">Немає заблокованих URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Автозаповнення не пропонуватиметься для цих URI.</string>
@@ -711,8 +713,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Формат: %1$s. Можна ввести кілька URI, розділивши їх комами.</string>
     <string name="invalid_uri">Неприпустимий URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s вже заблоковано</string>
-    <string name="login_approved">Вхід затверджено</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Потрібно ввімкнути схвалення запитів на вхід у налаштуваннях програми Bitwarden.</string>
+    <string name="access_approved">Доступ затверджено</string>
     <string name="need_another_option_view_all_login_options">Потрібен інший варіант? <annotation link="viewAll">Переглянути всі варіанти входу</annotation></string>
     <string name="log_in_with_device">Увійти з пристроєм</string>
     <string name="logging_in_on">Увійти на</string>
@@ -1159,6 +1160,7 @@
     <string name="save_option_as_default">Зробити цю дію типовою</string>
     <string name="account_synced_from_bitwarden_app">Обліковий запис синхронізовано з програми Bitwarden</string>
     <string name="local_codes">Локальні коди (%1$d)</string>
+    <string name="local_codes_header">Локальні коди</string>
     <string name="required_information_missing">Відсутня необхідна інформація</string>
     <string name="required_information_missing_message">Необхідна інформація відсутня (наприклад, \'services\' або \'secret\'). Перевірте свій файл і повторіть спробу. Відвідайте bitwarden.com/help для підтримки</string>
     <string name="file_could_not_be_processed">Неможливо обробити файл</string>

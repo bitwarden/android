@@ -23,7 +23,11 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -33,7 +37,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -45,9 +48,10 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 /**
  * ViewModel responsible for handling user interactions in the attachments screen.
  */
-@Suppress("TooManyFunctions")
-@HiltViewModel
-class AttachmentsViewModel @Inject constructor(
+@Suppress("TooManyFunctions", "LongParameterList")
+@HiltViewModel(assistedFactory = AttachmentsViewModel.Factory::class)
+class AttachmentsViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.AttachmentsRoute,
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
@@ -60,7 +64,7 @@ class AttachmentsViewModel @Inject constructor(
         ?: run {
             val isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true
             AttachmentsState(
-                cipherId = savedStateHandle.toAttachmentsArgs().cipherId,
+                cipherId = route.cipherId,
                 viewState = AttachmentsState.ViewState.Loading,
                 dialogState = AttachmentsState.DialogState.RequiresPremium
                     .takeUnless { isPremiumUser },
@@ -71,6 +75,18 @@ class AttachmentsViewModel @Inject constructor(
             )
         },
 ) {
+    /**
+     * Factory for creating an [AttachmentsViewModel] for a specific
+     * [VaultUnlockedGraph.AttachmentsRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [AttachmentsViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.AttachmentsRoute): AttachmentsViewModel
+    }
+
     init {
         vaultRepo
             .getVaultItemStateFlow(state.cipherId)

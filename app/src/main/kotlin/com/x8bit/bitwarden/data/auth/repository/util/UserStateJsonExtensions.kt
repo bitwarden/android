@@ -188,11 +188,12 @@ fun UserStateJson.updateKdf(
 }
 
 /**
- * Updates the [UserStateJson] KDF settings to minimum requirements.
+ * Updates the KDF settings of the user with the given [userId] to minimum requirements. If the
+ * user is not present in the [UserStateJson], nothing is updated.
  */
-fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(): UserStateJson =
+fun UserStateJson.toUserStateJsonKdfUpdatedMinimums(userId: String): UserStateJson =
     this.updateKdf(
-        userId = this.activeUserId,
+        userId = userId,
         kdf = KdfJson(
             kdfType = KdfTypeJson.PBKDF2_SHA256,
             iterations = DEFAULT_PBKDF2_ITERATIONS,

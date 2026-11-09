@@ -20,9 +20,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -32,36 +36,41 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * ViewModel responsible for handling user interactions in the [VaultMoveToOrganizationScreen].
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = VaultMoveToOrganizationViewModel.Factory::class)
 @Suppress("MaxLineLength", "TooManyFunctions")
-class VaultMoveToOrganizationViewModel @Inject constructor(
+class VaultMoveToOrganizationViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.VaultMoveToOrganizationRoute,
     savedStateHandle: SavedStateHandle,
     authRepository: AuthRepository,
     featureFlagManager: FeatureFlagManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultMoveToOrganizationState, VaultMoveToOrganizationEvent, VaultMoveToOrganizationAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = savedStateHandle.toVaultMoveToOrganizationArgs()
-            VaultMoveToOrganizationState(
-                vaultItemId = args.vaultItemId,
-                onlyShowCollections = args.showOnlyCollections,
-                viewState = VaultMoveToOrganizationState.ViewState.Loading,
-                dialogState = null,
-                isVfo1FoundationEnabled = featureFlagManager.getFeatureFlag(
-                    FlagKey.Vfo1Foundation,
-                ),
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: VaultMoveToOrganizationState(
+        vaultItemId = route.vaultItemId,
+        onlyShowCollections = route.showOnlyCollections,
+        viewState = VaultMoveToOrganizationState.ViewState.Loading,
+        dialogState = null,
+        isVfo1FoundationEnabled = featureFlagManager.getFeatureFlag(key = FlagKey.Vfo1Foundation),
+    ),
 ) {
+    /**
+     * Factory for creating a [VaultMoveToOrganizationViewModel] for a specific
+     * [VaultUnlockedGraph.VaultMoveToOrganizationRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultMoveToOrganizationViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.VaultMoveToOrganizationRoute): VaultMoveToOrganizationViewModel
+    }
 
     init {
         featureFlagManager

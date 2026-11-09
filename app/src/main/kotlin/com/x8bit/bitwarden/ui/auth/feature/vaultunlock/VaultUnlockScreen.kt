@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -62,6 +61,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
+import com.x8bit.bitwarden.MainViewModel
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
@@ -71,7 +71,7 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Time slice to delay auto-focusing on the password/pin field. Because of the refresh that
  * takes place when switching accounts or changing the lock status we want to delay this
- * longer than the delay in place for sending those actions in [com.x8bit.bitwarden.MainViewModel]
+ * longer than the delay in place for sending those actions in [MainViewModel]
  * defined by `ANIMATION_REFRESH_DELAY`. We need to  ensure this value is
  * always greater.
  */
@@ -84,7 +84,7 @@ private const val AUTO_FOCUS_DELAY = 575L
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun VaultUnlockScreen(
-    viewModel: VaultUnlockViewModel = hiltViewModel(),
+    viewModel: VaultUnlockViewModel,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     focusManager: FocusManager = LocalFocusManager.current,
     credentialProviderCompletionManager: CredentialProviderCompletionManager =

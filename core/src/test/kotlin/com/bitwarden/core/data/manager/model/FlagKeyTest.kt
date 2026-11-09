@@ -13,16 +13,8 @@ class FlagKeyTest {
             "bitwarden-authentication-enabled",
         )
         assertEquals(
-            FlagKey.ForceUpdateKdfSettings.keyName,
-            "pm-18021-force-update-kdf-settings",
-        )
-        assertEquals(
             FlagKey.MigrateMyVaultToMyItems.keyName,
             "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
-            FlagKey.MobilePremiumUpgrade.keyName,
-            "pm-31697-premium-upgrade-path",
         )
         assertEquals(
             FlagKey.AttachmentUpdates.keyName,
@@ -91,9 +83,7 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.ForceUpdateKdfSettings,
                 FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,

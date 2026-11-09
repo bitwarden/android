@@ -603,20 +603,22 @@
     <string name="generic_error_message">Не може да обработим заявката ви. Моля опитайте отново или се свържете с нас.</string>
     <string name="allow_screen_capture">Позволяване на заснемане на екрана</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Наистина ли искате да разрешите заснемането на екрана?</string>
-    <string name="log_in_requested">Направена е заявка за вписване</string>
+    <string name="access_requested">Заявен е достъп</string>
+    <string name="account_access_requested">Има заявка за достъп до акаунта</string>
     <string name="are_you_trying_to_log_in">Опитвате се да се впишете ли?</string>
-    <string name="log_in_attempt_by_x_on_y">Опит за вписване от %1$s в %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Опитвате ли се да получите достъп до акаунта си?</string>
+    <string name="access_attempt_by_x_on_y">Опит за достъп от %1$s в %2$s</string>
     <string name="device_type">Вид устройство</string>
     <string name="ip_address">IP адрес</string>
     <string name="time">Време</string>
     <string name="select_time">Изберете време</string>
     <string name="switch_input_mode">Превключване на режима на въвеждане</string>
-    <string name="confirm_log_in">Потвърждаване на вписването</string>
-    <string name="deny_log_in">Отказване на вписването</string>
-    <string name="log_in_denied">Вписването е отказано</string>
-    <string name="approve_login_requests">Одобряване на заявки за вписване</string>
+    <string name="confirm_access">Разрешаване на достъпа</string>
+    <string name="deny_access">Отказване на достъпа</string>
+    <string name="access_denied">Достъпът е отказан</string>
+    <string name="account_access_requests">Заявки за достъп до акаунти</string>
     <string name="no_thanks">Не, благодаря</string>
-    <string name="confim_log_in_attemp_for_x">Потвърждаване на заявката за вписване за %1$s</string>
+    <string name="confirm_access_attempt_for_x">Потвърждаване на заявката за достъп за %1$s</string>
     <string name="username_type">Тип потребителско име</string>
     <string name="plus_addressed_email">Адрес на е-поща с плюс</string>
     <string name="catch_all_email">Хващаща всичко е-поща</string>
@@ -643,8 +645,8 @@
     <string name="i_understand">Разбирам</string>
     <string name="accept">Приемане</string>
     <string name="decline">Отказване</string>
-    <string name="login_request_has_already_expired">Заявката за вписване вече е изтекла.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Опит за вписване от:
+    <string name="access_request_has_already_expired">Заявката за достъп вече е изтекла.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Опит за достъп от:
 %1$s
 Искате ли да превключите към тази регистрация?</string>
     <string name="new_to_bitwarden">За пръв път ли ползвате Битуорден?</string>
@@ -653,11 +655,12 @@
     <string name="not_you">Това не сте Вие?</string>
     <string name="log_in_with_master_password">Вписване с главната парола</string>
     <string name="log_in_initiated">Вписването е стартирано</string>
-    <string name="a_notification_has_been_sent_to_your_device">Към устройството Ви е изпратено известие.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Уверете се, че трезорът Ви е отключен и че Уникалната фраза съвпада с другото устройство.</string>
+    <string name="request_sent_to_your_device">Заявката е изпратена до устройството Ви</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Одобрете тази заявка чрез акаунта си в Битуорден на друго отключено устройство или в приложението по уеб. Заявките за достъп до акаунти трябва да са включени в Настройките.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Уверете се, че уникалната фраза съвпада с тази по-долу, преди да одобрите.</string>
     <string name="resend_notification">Повторно изпращане на известието</string>
     <string name="view_all_login_options">Вижте всички възможности за вписване</string>
-    <string name="pending_log_in_requests">Чакащи заявки за вписване</string>
+    <string name="pending_access_requests">Чакащи заявки за достъп</string>
     <string name="decline_all_requests">Отказване на всички заявки</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Наистина ли искате да откажете всички чакащи заявки за вписване?</string>
     <string name="no_pending_requests">Няма чакащи заявки</string>
@@ -690,9 +693,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Секретният ключ няма да бъде копиран в клонирания елемент. Искате ли да продължите с клонирането на елемента?</string>
     <string name="master_password_re_prompt_help">Помощ за повторното запитване за главната парола</string>
     <string name="admin_approval_requested">Заявено е одобрение от администратор</string>
-    <string name="your_request_has_been_sent_to_your_admin">Вашата заявка беше изпратена до администратора Ви.</string>
-    <string name="you_will_be_notified_once_approved">Ще получите известие, когато тя бъде одобрена.</string>
-    <string name="trouble_logging_in">Имате проблем с вписването?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Вашата заявка беше изпратена до администратора Ви. Ще получите е-писмо, когато тя бъде одобрена.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Вашият администратор може да Ви помоли да потвърдите тази уникална фраза.</string>
     <string name="block_auto_fill">Блокиране на авт. попълване</string>
     <string name="no_uris_blocked">Няма блокирани адреси</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Автоматичното попълване няма да бъде предлагано за тези адреси.</string>
@@ -703,8 +705,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Формат: %1$s. Ако въвеждате повече адреси, разделяйте ги със запетая.</string>
     <string name="invalid_uri">Неправилен адрес</string>
     <string name="the_urix_is_already_blocked">Адресът %1$s вече е блокиран</string>
-    <string name="login_approved">Вписването е одобрено</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Вписването с устройство трябва да е включено в настройките на приложението на Битуорден.</string>
+    <string name="access_approved">Достъпът е одобрен</string>
     <string name="need_another_option_view_all_login_options">Друг вариант ли търсите? <annotation link="viewAll">Вижте всички възможности за вписване</annotation></string>
     <string name="log_in_with_device">Вписване с устройство</string>
     <string name="logging_in_on">Вписване в</string>
@@ -1145,6 +1146,7 @@
     <string name="save_option_as_default">Запазване на настройката като стандартна</string>
     <string name="account_synced_from_bitwarden_app">Акаунтът е синхронизиран от приложението на Битуорден</string>
     <string name="local_codes">Достъпни на това устройство кодове (%1$d)</string>
+    <string name="local_codes_header">Кодове, налични на това устройство</string>
     <string name="required_information_missing">Липсва задължителна информация</string>
     <string name="required_information_missing_message">Липсва задължителна информация (като „services“ или „secret“). Проверете файла си и опитайте отново. Отворете bitwarden.com/help за помощ</string>
     <string name="file_could_not_be_processed">Файлът не може да бъде обработен</string>
