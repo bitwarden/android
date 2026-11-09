@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
@@ -170,6 +171,31 @@ class CipherViewExtensionsTest {
                 ),
             ),
             result,
+        )
+    }
+
+    @Test
+    fun `toViewState should select the identity title when the stored value differs in case`() {
+        val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW.copy(
+            identity = DEFAULT_IDENTITY_CIPHER_VIEW.identity?.copy(title = "mr"),
+        )
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = false,
+            isIndividualVaultDisabled = true,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultIdentityTitle.MR,
+            ((result as VaultAddEditState.ViewState.Content)
+                .type as VaultAddEditState.ViewState.Content.ItemType.Identity)
+                .selectedTitle,
         )
     }
 
