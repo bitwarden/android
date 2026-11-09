@@ -603,20 +603,22 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="generic_error_message">No hemos podido procesar su solicitud. Por favor, inténtelo de nuevo o contáctenos.</string>
     <string name="allow_screen_capture">Permitir captura de pantalla</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">¿Estás seguro de que quieres activar captura de pantalla?</string>
-    <string name="log_in_requested">Inicio de sesión solicitado</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">¿Estás tratando de iniciar sesión?</string>
-    <string name="log_in_attempt_by_x_on_y">Intento de inicio de sesión por %1$s en %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Dirección IP</string>
     <string name="time">Hora</string>
     <string name="select_time">Seleccionar hora</string>
     <string name="switch_input_mode">Cambiar modo de entrada</string>
-    <string name="confirm_log_in">Confirmar inicio de sesión</string>
-    <string name="deny_log_in">Denegar inicio de sesión</string>
-    <string name="log_in_denied">Inicio de sesión denegado</string>
-    <string name="approve_login_requests">Aprobar solicitudes de inicio de sesión</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">No, gracias</string>
-    <string name="confim_log_in_attemp_for_x">Confirmar intento de inicio de sesión para %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Tipo de nombre de usuario</string>
     <string name="plus_addressed_email">Dirección adicional de correo electrónico</string>
     <string name="catch_all_email">Captura todos los correos</string>
@@ -643,21 +645,22 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="i_understand">Entiendo</string>
     <string name="accept">Aceptar</string>
     <string name="decline">Rechazar</string>
-    <string name="login_request_has_already_expired">La solicitud de acceso ya ha caducado.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Intento de inicio de sesión desde:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-¿Desea cambiar a esta cuenta?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">¿Nuevo en Bitwarden?</string>
     <string name="get_master_passwordword_hint">Obtener pista de contraseña maestra</string>
     <string name="logging_in_as_x_on_y">Iniciando sesión como %1$s en %2$s</string>
     <string name="not_you">¿No eres tú?</string>
     <string name="log_in_with_master_password">Iniciar sesión con contraseña maestra</string>
     <string name="log_in_initiated">Inicio de sesión en proceso</string>
-    <string name="a_notification_has_been_sent_to_your_device">Se ha enviado una notificación a tu dispositivo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Enviar nueva notificación</string>
     <string name="view_all_login_options">Ver todas las opciones de inicio de sesión</string>
-    <string name="pending_log_in_requests">Solicitudes de acceso pendientes</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Rechazar todas las solicitudes</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">¿Está seguro de que desea rechazar todas las solicitudes de inicio de sesión pendientes?</string>
     <string name="no_pending_requests">No hay solicitudes pendientes</string>
@@ -691,9 +694,8 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
 ¿Deseas continuar clonando este elemento?</string>
     <string name="master_password_re_prompt_help">Ayuda de volver a pedir contraseña maestra</string>
     <string name="admin_approval_requested">Aprobación del administrador solicitada</string>
-    <string name="your_request_has_been_sent_to_your_admin">Tu solicitud ha sido enviada a tu administrador.</string>
-    <string name="you_will_be_notified_once_approved">Se te notificará una vez aprobada.</string>
-    <string name="trouble_logging_in">¿Problema para iniciar sesión?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Bloquear autocompletado</string>
     <string name="no_uris_blocked">No hay URIs bloqueadas</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autocompletar no se ofrecerá para estas URIs.</string>
@@ -704,8 +706,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formato: %1$s. Separar múltiples URIs con una coma.</string>
     <string name="invalid_uri">URI no válida</string>
     <string name="the_urix_is_already_blocked">El URI %1$s ya está bloqueada</string>
-    <string name="login_approved">Inicio de sesión aprobado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">El inicio de sesión con el dispositivo debe configurarse en los ajustes de la aplicación Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">¿Necesitas otra opción? <annotation link="viewAll">Ver todas las opciones de inicio de sesión</annotation></string>
     <string name="log_in_with_device">Iniciar sesión con el dispositivo</string>
     <string name="logging_in_on">Iniciando sesión en</string>

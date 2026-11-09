@@ -603,20 +603,22 @@ Skaneerimine toimub automaatselt.</string>
     <string name="generic_error_message">Päringu töötlemine ebaõnnestus. Palun proovi uuesti või võta meiega ühendust.</string>
     <string name="allow_screen_capture">Luba ekraanikuva salvestamine</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Oled kindel, et soovid lubada ekraanikuva salvestamist?</string>
-    <string name="log_in_requested">Sisselogimise päring</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Oled sisse logimas?</string>
-    <string name="log_in_attempt_by_x_on_y">Sisselogimise päring kontolt %1$s kuupäeval %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Seadme tüüp</string>
     <string name="ip_address">IP aadress</string>
     <string name="time">Aeg</string>
     <string name="select_time">Valige aeg</string>
     <string name="switch_input_mode">Vaheta sisestusrežiimi</string>
-    <string name="confirm_log_in">Kinnita sisselogimine</string>
-    <string name="deny_log_in">Tühista sisselogimine</string>
-    <string name="log_in_denied">Sisselogimine on tühistatud</string>
-    <string name="approve_login_requests">Sisselogimise päringute kinnitamine</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Ei soovi</string>
-    <string name="confim_log_in_attemp_for_x">Kinnita sisselogimise katse kontole %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Kasutajanime tüüp</string>
     <string name="plus_addressed_email">Plussiga e-posti aadress</string>
     <string name="catch_all_email">Kogumisaadress</string>
@@ -643,21 +645,22 @@ Skaneerimine toimub automaatselt.</string>
     <string name="i_understand">Ma saan aru</string>
     <string name="accept">Nõustu</string>
     <string name="decline">Keeldu</string>
-    <string name="login_request_has_already_expired">Sisselogimise päring on juba aegunud.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Sisselogimise päring:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Soovid selle konto peale lülituda?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Kas olete Bitwardenis uus?</string>
     <string name="get_master_passwordword_hint">Tuleta ülemparooli vihjega meelde</string>
     <string name="logging_in_as_x_on_y">Sisselogimas kui %1$s lehel %2$s</string>
     <string name="not_you">Pole sina?</string>
     <string name="log_in_with_master_password">Logi sisse ülemparooliga</string>
     <string name="log_in_initiated">Sisselogimine on käivitatud</string>
-    <string name="a_notification_has_been_sent_to_your_device">Sinu seadmesse saadeti teavitus.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Saada märguanne uuesti</string>
     <string name="view_all_login_options">Vaata kõiki valikuid</string>
-    <string name="pending_log_in_requests">Ootel sisselogimise taotlused</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Tühista kõik taotlused</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Oled kindel, et soovid tühistada kõik pooleliolevad sisselogimise taotlused?</string>
     <string name="no_pending_requests">Ootel taotlused puuduvad</string>
@@ -690,9 +693,8 @@ Soovid selle konto peale lülituda?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Pääsukoodi ei kopeerita kloonitud kirjele. Oled kindel, et soovid jätkata?</string>
     <string name="master_password_re_prompt_help">Abi ülemparooli uuesti küsimisega</string>
     <string name="admin_approval_requested">Taotlus administraatorile saadetud</string>
-    <string name="your_request_has_been_sent_to_your_admin">Sinu taotlus saadeti administraatorile.</string>
-    <string name="you_will_be_notified_once_approved">Kinnitamise järel saad selle kohta teavituse.</string>
-    <string name="trouble_logging_in">Ei õnnestu sisse logida?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Automaatse täitmise keelamine</string>
     <string name="no_uris_blocked">Ühtegi URI-d pole blokeeritud</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automaattäitmist ei pakuta nende URId-e puhul.</string>
@@ -703,8 +705,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Vorming: %1$s. Eralda mitu URI-t komadega.</string>
     <string name="invalid_uri">Vale URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s on juba keelatud</string>
-    <string name="login_approved">Sisselogimine kinnitatud</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Sisselogimine seadmega tuleb seadistada Bitwardeni rakenduse seadetes.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Kas vajate teist võimalust? <annotation link="viewAll">Vaata kõiki sisselogimisvõimalusi</annotation></string>
     <string name="log_in_with_device">Logi sisse teise seadmega</string>
     <string name="logging_in_on">Sisselogimas kui</string>

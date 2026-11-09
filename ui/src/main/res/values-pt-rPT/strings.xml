@@ -602,20 +602,22 @@ A leitura será efetuada automaticamente.</string>
     <string name="generic_error_message">Não foi possível processar o seu pedido. Tente novamente ou contacte-nos.</string>
     <string name="allow_screen_capture">Permitir a captura de ecrã</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Tem a certeza de que pretende ativar a captura de ecrã?</string>
-    <string name="log_in_requested">Pedido de início de sessão</string>
+    <string name="access_requested">Acesso pedido</string>
+    <string name="account_access_requested">Acesso à conta solicitado</string>
     <string name="are_you_trying_to_log_in">Está a tentar iniciar sessão?</string>
-    <string name="log_in_attempt_by_x_on_y">Tentativa de início de sessão por %1$s em %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Está a tentar aceder à sua conta?</string>
+    <string name="access_attempt_by_x_on_y">Tentativa de acesso por %1$s em %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Endereço IP</string>
     <string name="time">Hora</string>
     <string name="select_time">Selecionar hora</string>
     <string name="switch_input_mode">Alterar o modo de entrada</string>
-    <string name="confirm_log_in">Confirmar início de sessão</string>
-    <string name="deny_log_in">Negar início de sessão</string>
-    <string name="log_in_denied">Início de sessão recusado</string>
-    <string name="approve_login_requests">Aprovar pedidos de início de sessão</string>
+    <string name="confirm_access">Confirmar acesso</string>
+    <string name="deny_access">Negar acesso</string>
+    <string name="access_denied">Acesso negado</string>
+    <string name="account_access_requests">Pedidos de acesso à conta</string>
     <string name="no_thanks">Não, obrigado</string>
-    <string name="confim_log_in_attemp_for_x">Confirmar tentativa de início de sessão de %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirmar tentativa de acesso de %1$s</string>
     <string name="username_type">Tipo de nome de utilizador</string>
     <string name="plus_addressed_email">E-mail com subendereço</string>
     <string name="catch_all_email">E-mail de captura geral</string>
@@ -642,8 +644,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="i_understand">Compreendo</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
-    <string name="login_request_has_already_expired">O pedido de início de sessão já expirou.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de início de sessão a partir de:
+    <string name="access_request_has_already_expired">O pedido de acesso já expirou.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de acesso a partir de:
 %1$s
 Pretende mudar para esta conta?</string>
     <string name="new_to_bitwarden">Novo no Bitwarden?</string>
@@ -652,11 +654,12 @@ Pretende mudar para esta conta?</string>
     <string name="not_you">Utilizador incorreto?</string>
     <string name="log_in_with_master_password">Iniciar sessão com a palavra-passe mestra</string>
     <string name="log_in_initiated">A preparar o início de sessão</string>
-    <string name="a_notification_has_been_sent_to_your_device">Foi enviada uma notificação para o seu dispositivo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Certifique-se de que o seu cofre está desbloqueado e de que a frase de impressão digital corresponde à do outro dispositivo.</string>
+    <string name="request_sent_to_your_device">Pedido enviado para o seu dispositivo</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Aprove este pedido na sua conta Bitwarden, noutro dispositivo desbloqueado ou na aplicação web. Os pedidos de acesso à conta têm de estar ativados nas definições.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Certifique-se de que a frase da impressão digital corresponde à apresentada abaixo antes de a aprovar.</string>
     <string name="resend_notification">Reenviar notificação</string>
     <string name="view_all_login_options">Ver todas as opções de início de sessão</string>
-    <string name="pending_log_in_requests">Pedidos de início de sessão pendentes</string>
+    <string name="pending_access_requests">Pedidos de acesso pendentes</string>
     <string name="decline_all_requests">Recusar todos os pedidos</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Tem a certeza de que pretende recusar todos os pedidos de início de sessão pendentes?</string>
     <string name="no_pending_requests">Sem pedidos pendentes</string>
@@ -689,9 +692,8 @@ Pretende mudar para esta conta?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">A chave de acesso não será copiada para o item duplicado. Pretende ainda assim duplicar este item?</string>
     <string name="master_password_re_prompt_help">Ajuda para pedir novamente a palavra-passe mestra</string>
     <string name="admin_approval_requested">Aprovação do administrador pedida</string>
-    <string name="your_request_has_been_sent_to_your_admin">O seu pedido foi enviado ao seu administrador.</string>
-    <string name="you_will_be_notified_once_approved">Será notificado quando for aprovado.</string>
-    <string name="trouble_logging_in">Problemas a iniciar sessão?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">O seu pedido foi enviado ao administrador. Receberá um e-mail quando for aprovado.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">O seu administrador poderá pedir-lhe que confirme esta frase da impressão digital.</string>
     <string name="block_auto_fill">Bloquear o preenchimento automático</string>
     <string name="no_uris_blocked">Nenhum URI bloqueado</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">O preenchimento automático não será oferecido para estes URIs.</string>
@@ -702,8 +704,7 @@ Pretende mudar para esta conta?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formato: %1$s. Separe vários URIs com uma vírgula.</string>
     <string name="invalid_uri">URI inválido</string>
     <string name="the_urix_is_already_blocked">O URI %1$s já está bloqueado</string>
-    <string name="login_approved">Início de sessão aprovado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">O início de sessão com o dispositivo deve ser ativado nas definições da app Bitwarden.</string>
+    <string name="access_approved">Acesso aprovado</string>
     <string name="need_another_option_view_all_login_options">Precisa de outra opção? <annotation link="viewAll">Veja todas as opções de início de sessão</annotation></string>
     <string name="log_in_with_device">Iniciar sessão com o dispositivo</string>
     <string name="logging_in_on">A iniciar sessão em</string>

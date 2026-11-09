@@ -178,7 +178,7 @@
     <string name="disabled">Deaktiviert</string>
     <string name="bitwarden_autofill_service_alert2">Die einfachste Möglichkeit, neue Zugangsdaten zu deinem Tresor hinzuzufügen, ist der Bitwarden Auto-Ausfüllen Dienst. Erfahre mehr über den Bitwarden Auto-Ausfüllen Dienst, indem du zu den \"Einstellungen\" wechselst.</string>
     <string name="autofill_noun">Automatisches Ausfüllen</string>
-    <string name="autofill_verb">Automatisches Ausfüllen</string>
+    <string name="autofill_verb">Automatisch ausfüllen</string>
     <string name="autofill_or_view">Möchtest du diese Zugangsdaten automatisch ausfüllen oder ansehen?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">%1$s durchsuchen</string>
     <string name="learn_org">Mehr über Organisationen erfahren</string>
@@ -602,20 +602,22 @@ Das Scannen erfolgt automatisch.</string>
     <string name="generic_error_message">Wir konnten deine Anfrage nicht bearbeiten. Bitte versuche es erneut oder kontaktiere uns.</string>
     <string name="allow_screen_capture">Bildschirmaufnahme erlauben</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</string>
-    <string name="log_in_requested">Anmeldung angefordert</string>
+    <string name="access_requested">Zugriff angefragt</string>
+    <string name="account_access_requested">Kontozugriff angefragt</string>
     <string name="are_you_trying_to_log_in">Versuchst du dich anzumelden?</string>
-    <string name="log_in_attempt_by_x_on_y">Anmeldeversuch von %1$s auf %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Versuchst du, auf dein Konto zuzugreifen?</string>
+    <string name="access_attempt_by_x_on_y">Zugriffsversuch durch %1$s auf %2$s</string>
     <string name="device_type">Gerätetyp</string>
     <string name="ip_address">IP-Adresse</string>
     <string name="time">Zeit</string>
     <string name="select_time">Zeit auswählen</string>
     <string name="switch_input_mode">Eingabemodus wechseln</string>
-    <string name="confirm_log_in">Anmeldung genehmigen</string>
-    <string name="deny_log_in">Anmeldung ablehnen</string>
-    <string name="log_in_denied">Anmeldung abgelehnt</string>
-    <string name="approve_login_requests">Anmeldeanfragen genehmigen</string>
+    <string name="confirm_access">Zugriff bestätigen</string>
+    <string name="deny_access">Zugriff ablehnen</string>
+    <string name="access_denied">Zugriff abgelehnt</string>
+    <string name="account_access_requests">Kontozugriffsanfragen</string>
     <string name="no_thanks">Nein danke</string>
-    <string name="confim_log_in_attemp_for_x">Anmeldeversuch für %1$s bestätigen</string>
+    <string name="confirm_access_attempt_for_x">Zugriffsversuch für %1$s bestätigen</string>
     <string name="username_type">Benutzernamenstyp</string>
     <string name="plus_addressed_email">Plus-adressierte E-Mail-Adresse</string>
     <string name="catch_all_email">Catch-All E-Mail-Adresse</string>
@@ -642,8 +644,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="i_understand">Verstanden</string>
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
-    <string name="login_request_has_already_expired">Anmeldeanfrage ist bereits abgelaufen.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Anmeldeversuch von:
+    <string name="access_request_has_already_expired">Die Zugriffsanfrage ist bereits abgelaufen.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Zugriffsversuch von:
 %1$s
 Möchtest du zu diesem Konto wechseln?</string>
     <string name="new_to_bitwarden">Neu bei Bitwarden?</string>
@@ -652,11 +654,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="not_you">Nicht du?</string>
     <string name="log_in_with_master_password">Mit Master-Passwort anmelden</string>
     <string name="log_in_initiated">Anmeldung eingeleitet</string>
-    <string name="a_notification_has_been_sent_to_your_device">Eine Benachrichtigung wurde an dein Gerät gesendet.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Bitte stelle sicher, dass dein Tresor entsperrt ist und die Fingerabdruck-Phrase mit dem anderen Gerät übereinstimmt.</string>
+    <string name="request_sent_to_your_device">Anfrage an dein Gerät gesendet</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Genehmige diese Anfrage in deinem Bitwarden-Konto auf einem anderen entsperrten Gerät oder in der Web-App. Kontozugriffsanfragen müssen in den Einstellungen aktiviert sein.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Stelle vor der Genehmigung sicher, dass die Fingerabdruck-Phrase mit der unten angezeigten übereinstimmt.</string>
     <string name="resend_notification">Benachrichtigung erneut senden</string>
     <string name="view_all_login_options">Alle Anmeldeoptionen anzeigen</string>
-    <string name="pending_log_in_requests">Ausstehende Anmeldeanfragen</string>
+    <string name="pending_access_requests">Ausstehende Zugriffsanfragen</string>
     <string name="decline_all_requests">Alle Anfragen ablehnen</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Bist du sicher, dass du alle ausstehenden Anmeldeanfragen ablehnen möchtest?</string>
     <string name="no_pending_requests">Keine ausstehenden Anfragen</string>
@@ -689,9 +692,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Der Passkey wird nicht in den duplizierten Eintrag kopiert. Möchtest du mit dem Duplizieren dieses Eintrags fortfahren?</string>
     <string name="master_password_re_prompt_help">Hilfe zum erneuten Abfragen des Master-Passworts</string>
     <string name="admin_approval_requested">Admin-Genehmigung angefordert</string>
-    <string name="your_request_has_been_sent_to_your_admin">Deine Anfrage wurde an deinen Administrator gesendet.</string>
-    <string name="you_will_be_notified_once_approved">Du wirst benachrichtigt, sobald sie genehmigt wurde.</string>
-    <string name="trouble_logging_in">Probleme beim Einloggen?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Deine Anfrage wurde an deinen Administrator gesendet. Du erhältst eine E-Mail, sobald sie genehmigt wurde.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Dein Administrator bittet dich möglicherweise, diese Fingerabdruck-Phrase zu bestätigen.</string>
     <string name="block_auto_fill">Automatisches Ausfüllen blockieren</string>
     <string name="no_uris_blocked">Keine URIs blockiert</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automatisches Ausfüllen wird für diese URIs nicht angeboten.</string>
@@ -702,8 +704,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Trenne mehrere URIs mit einem Komma.</string>
     <string name="invalid_uri">Ungültige URI</string>
     <string name="the_urix_is_already_blocked">Die URI %1$s ist bereits gesperrt</string>
-    <string name="login_approved">Anmeldung genehmigt</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Die Anmeldung über ein Gerät muss in den Einstellungen der Bitwarden-App eingerichtet werden.</string>
+    <string name="access_approved">Zugriff genehmigt</string>
     <string name="need_another_option_view_all_login_options">Benötigst du eine andere Option? <annotation link="viewAll">Alle Anmeldeoptionen anzeigen</annotation></string>
     <string name="log_in_with_device">Mit Gerät anmelden</string>
     <string name="logging_in_on">Anmelden bei</string>
