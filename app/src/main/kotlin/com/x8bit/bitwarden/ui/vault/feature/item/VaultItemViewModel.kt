@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -79,8 +77,7 @@ private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 private const val KEY_HAS_SHOWN_CREATED_SNACKBAR = "hasShownCreatedSnackbar"
 
 /**
- * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block, used to free
- * up a slot for combining in the `vfo1-foundation` feature flag flow.
+ * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block.
  */
 private data class VaultItemCombinedFlowData(
     val cipherViewState: DataState<CipherView?>,
@@ -107,7 +104,6 @@ class VaultItemViewModel @AssistedInject constructor(
     private val settingsRepository: SettingsRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val premiumStateManager: PremiumStateManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
@@ -174,9 +170,7 @@ class VaultItemViewModel @AssistedInject constructor(
                 folderState = folderState,
             )
         }
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.Vfo1Foundation),
-            ) { combinedFlowData, isVfo1FoundationEnabled ->
+            .map { combinedFlowData ->
                 val cipherViewState = combinedFlowData.cipherViewState
                 val userState = combinedFlowData.userState
                 val authCodeState = combinedFlowData.authCodeState
@@ -255,18 +249,13 @@ class VaultItemViewModel @AssistedInject constructor(
                                     }
                                 }
                                 ?.name
-                            val collectionIcon = if (isVfo1FoundationEnabled) {
-                                BitwardenDrawable.ic_shared_folder
-                            } else {
-                                BitwardenDrawable.ic_collections
-                            }
                             val relatedLocations = persistentListOfNotNull(
                                 organizationName?.let { VaultItemLocation.Organization(it) },
                                 *collections
                                     .map {
                                         VaultItemLocation.Collection(
                                             name = it,
-                                            icon = collectionIcon,
+                                            icon = BitwardenDrawable.ic_shared_folder,
                                         )
                                     }
                                     .toTypedArray(),

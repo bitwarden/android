@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -105,7 +103,6 @@ class SearchViewModel @AssistedInject constructor(
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
     private val premiumStateManager: PremiumStateManager,
-    private val featureFlagManager: FeatureFlagManager,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
@@ -175,12 +172,6 @@ class SearchViewModel @AssistedInject constructor(
             .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
-            .map { SearchAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -739,10 +730,6 @@ class SearchViewModel @AssistedInject constructor(
                 handleRestrictItemTypesPolicyUpdateReceive(action)
             }
 
-            is SearchAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
-                handleVfo1FoundationFlagUpdateReceive(action)
-            }
-
             is SearchAction.Internal.DecryptCipherErrorReceive -> {
                 handleDecryptCipherErrorReceive(action)
             }
@@ -1010,13 +997,6 @@ class SearchViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleVfo1FoundationFlagUpdateReceive(
-        action: SearchAction.Internal.Vfo1FoundationFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
-        recalculateViewState()
-    }
-
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         vaultData
             .data
@@ -1121,7 +1101,6 @@ class SearchViewModel @AssistedInject constructor(
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
                                 isPremiumUser = state.isPremium,
-                                isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                             )
                     }
 
@@ -1188,7 +1167,6 @@ data class SearchState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
-    val isVfo1FoundationEnabled: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1610,13 +1588,6 @@ sealed class SearchAction {
          */
         data class RestrictItemTypesPolicyUpdateReceive(
             val restrictItemTypesPolicyOrdIds: List<String>,
-        ) : Internal()
-
-        /**
-         * Indicates that an update for the `vfo1-foundation` feature flag has been received.
-         */
-        data class Vfo1FoundationFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

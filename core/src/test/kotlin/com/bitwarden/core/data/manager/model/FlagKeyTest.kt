@@ -53,10 +53,6 @@ class FlagKeyTest {
             "fedramp-gov-region",
         )
         assertEquals(
-            FlagKey.Vfo1Foundation.keyName,
-            "vfo1-foundation",
-        )
-        assertEquals(
             FlagKey.SendControls.keyName,
             "pm-31885-send-controls",
         )
@@ -93,7 +89,6 @@ class FlagKeyTest {
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
                 FlagKey.FedRamp,
-                FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,

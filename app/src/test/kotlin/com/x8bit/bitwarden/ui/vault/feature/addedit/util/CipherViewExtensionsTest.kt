@@ -622,7 +622,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -667,7 +666,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -702,7 +700,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -736,7 +733,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
