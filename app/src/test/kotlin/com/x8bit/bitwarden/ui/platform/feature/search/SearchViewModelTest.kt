@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -33,7 +32,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -169,10 +167,6 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
-    }
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
@@ -1758,7 +1752,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1787,76 +1780,6 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
-        runTest {
-            setupMockUri()
-            val ciphers = listOf(createMockCipherListView(number = 1))
-            val expectedViewStateOn = SearchState.ViewState.Content(
-                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
-            )
-            val expectedViewStateOff = SearchState.ViewState.Content(
-                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 2)),
-            )
-            every {
-                ciphers.filterAndOrganize(
-                    searchTypeData = SearchTypeData.Vault.All,
-                    searchTerm = "",
-                )
-            } returns ciphers
-            every {
-                ciphers.toFilteredList(vaultFilterType = VaultFilterType.AllVaults)
-            } returns ciphers
-            every {
-                ciphers.toViewState(
-                    searchTerm = "",
-                    baseIconUrl = "https://icons.bitwarden.net",
-                    isIconLoadingDisabled = false,
-                    isAutofill = false,
-                    hasMasterPassword = true,
-                    isPremiumUser = true,
-                    isVfo1FoundationEnabled = true,
-                )
-            } returns expectedViewStateOn
-            every {
-                ciphers.toViewState(
-                    searchTerm = "",
-                    baseIconUrl = "https://icons.bitwarden.net",
-                    isIconLoadingDisabled = false,
-                    isAutofill = false,
-                    hasMasterPassword = true,
-                    isPremiumUser = true,
-                    isVfo1FoundationEnabled = false,
-                )
-            } returns expectedViewStateOff
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = ciphers,
-                    ),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-
-            val viewModel = createViewModel()
-
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-
-            mutableVfo1FoundationFlagFlow.value = false
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    isVfo1FoundationEnabled = false,
-                    viewState = expectedViewStateOff,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
 
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to Empty`() = runTest {
@@ -1940,7 +1863,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -2059,7 +1981,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -2181,7 +2102,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -2379,7 +2299,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
         premiumStateManager = premiumStateManager,
-        featureFlagManager = featureFlagManager,
         snackbarRelayManager = snackbarRelayManager,
     )
 
@@ -2416,7 +2335,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -2461,7 +2379,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isVfo1FoundationEnabled = true,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(

@@ -37,7 +37,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
     FlagKey.FedRamp,
-    FlagKey.Vfo1Foundation,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
     FlagKey.IdentityAutofill,
@@ -104,7 +103,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
-    FlagKey.Vfo1Foundation -> stringResource(BitwardenString.vfo1_foundation)
     FlagKey.SendControls -> stringResource(BitwardenString.send_controls)
     FlagKey.SendControlsExistingSends -> {
         stringResource(BitwardenString.send_controls_existing_sends)

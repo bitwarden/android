@@ -42,7 +42,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 
 /**
  * Displays the vault settings screen.
@@ -124,9 +123,7 @@ fun VaultSettingsScreen(
                 )
             }
             BitwardenTextRow(
-                text = stringResource(
-                    id = vfo1Foundation(BitwardenString.my_folders, BitwardenString.folders),
-                ),
+                text = stringResource(id = BitwardenString.my_folders),
                 onClick = { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) },
                 withDivider = false,
                 cardStyle = CardStyle.Top(),
