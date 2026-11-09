@@ -13,7 +13,6 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -110,23 +109,4 @@ class DebugMenuFeatureFlagManagerTest {
             }
             verify(exactly = 1) { mockFeatureFlagManager.getFeatureFlag(flagKey) }
         }
-
-    @Test
-    fun `Vfo1Foundation defaults to true when no override exists`() {
-        val flagKey = FlagKey.Vfo1Foundation
-        every { mockDebugMenuRepository.getFeatureFlag(flagKey) } returns null
-        every { mockFeatureFlagManager.getFeatureFlag(flagKey) } returns false
-
-        assertTrue(debugMenuFeatureFlagManager.getFeatureFlag(flagKey))
-
-        verify(exactly = 0) { mockFeatureFlagManager.getFeatureFlag(flagKey) }
-    }
-
-    @Test
-    fun `Vfo1Foundation returns the repository override when one exists`() {
-        val flagKey = FlagKey.Vfo1Foundation
-        every { mockDebugMenuRepository.getFeatureFlag(flagKey) } returns false
-
-        assertFalse(debugMenuFeatureFlagManager.getFeatureFlag(flagKey))
-    }
 }

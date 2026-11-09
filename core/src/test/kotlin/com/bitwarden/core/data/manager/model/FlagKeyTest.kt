@@ -98,7 +98,6 @@ class FlagKeyTest {
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
                 FlagKey.FedRamp,
-                FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,
@@ -108,5 +107,6 @@ class FlagKeyTest {
                 !it.defaultValue
             },
         )
+        assertTrue(FlagKey.Vfo1Foundation.defaultValue)
     }
 }
