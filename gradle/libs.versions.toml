@@ -87,7 +87,6 @@ androidx-credentials = { module = "androidx.credentials:credentials", version.re
 androidx-credentials-providerevents = { module = "androidx.credentials.providerevents:providerevents", version.ref = "androidxCredentialsProviderEvents" }
 androidx-credentials-providerevents-play-services = { module = "androidx.credentials.providerevents:providerevents-play-services", version.ref = "androidxCredentialsProviderEvents" }
 androidx-hilt-lifecycle-viewmodel-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "androidxHilt" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
