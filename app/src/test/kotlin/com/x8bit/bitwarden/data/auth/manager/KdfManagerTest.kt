@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.auth.manager
 import com.bitwarden.core.MasterPasswordAuthenticationData
 import com.bitwarden.core.MasterPasswordUnlockData
 import com.bitwarden.core.UpdateKdfResponse
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
@@ -16,11 +15,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
@@ -36,15 +33,11 @@ class KdfManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val accountsService: AccountsService = mockk()
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.ForceUpdateKdfSettings) } returns true
-    }
 
     private val manager: KdfManager = KdfManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         vaultSdkSource = vaultSdkSource,
         accountsService = accountsService,
-        featureFlagManager = featureFlagManager,
     )
 
     @Test
@@ -250,36 +243,6 @@ class KdfManagerTest {
                         profile = PROFILE_1.copy(
                             kdfType = KdfTypeJson.PBKDF2_SHA256,
                             kdfIterations = 600000,
-                        ),
-                    ),
-                ),
-            )
-
-            val result = manager.updateKdfToMinimumsIfNeeded(
-                userId = USER_ID_1,
-                password = PASSWORD,
-            )
-
-            assertEquals(
-                UpdateKdfMinimumsResult.Success,
-                result,
-            )
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `updateKdfToMinimumsIfNeeded with feature flag ForceUpdateKdfSettings to false return Success`() =
-        runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)
-            } returns false
-
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
-                accounts = mapOf(
-                    USER_ID_1 to ACCOUNT_1.copy(
-                        profile = PROFILE_1.copy(
-                            kdfType = KdfTypeJson.PBKDF2_SHA256,
-                            kdfIterations = 1000,
                         ),
                     ),
                 ),

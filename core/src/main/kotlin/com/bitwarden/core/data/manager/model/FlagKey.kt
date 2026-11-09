@@ -30,7 +30,6 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
                 MigrateMyVaultToMyItems,
                 CardScanner,
@@ -59,14 +58,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
         override val keyName: String = "bitwarden-authentication-enabled"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
-     */
-    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
-        override val keyName: String = "pm-18021-force-update-kdf-settings"
         override val defaultValue: Boolean = false
     }
 

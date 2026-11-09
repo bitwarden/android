@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.UpdateKdfResponse
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfTypeJson
@@ -14,7 +13,6 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonKdfUpdatedMinimums
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import timber.log.Timber
 
@@ -25,16 +23,11 @@ class KdfManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val accountsService: AccountsService,
-    private val featureFlagManager: FeatureFlagManager,
 ) : KdfManager {
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     override fun needsKdfUpdateToMinimums(userId: String): Boolean {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)) {
-            return false
-        }
-
         val account = authDiskSource
             .userState
             ?.accounts
