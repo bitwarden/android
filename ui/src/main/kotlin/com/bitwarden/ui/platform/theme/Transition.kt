@@ -6,7 +6,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.navigation.NavBackStackEntry
 
 typealias EnterTransitionProvider =
     @JvmSuppressWildcards AnimatedContentTransitionScope<*>.() -> EnterTransition
@@ -214,53 +213,5 @@ object TransitionProviders {
                 targetAlpha = 0.99f,
             )
         }
-    }
-}
-
-/**
- * Legacy non-null "enter" transition provider used by Navigation Compose `NavHost`s.
- *
- * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
- */
-typealias NonNullEnterTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)
-
-/**
- * Legacy non-null "exit" transition provider used by Navigation Compose `NavHost`s.
- *
- * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
- */
-typealias NonNullExitTransitionProvider =
-    (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)
-
-/**
- * Legacy transition providers used by root Navigation Compose `NavHost`s, which delegate to the
- * standard [TransitionProviders].
- *
- * TODO: Remove once all modules have been migrated to Navigation3 (PM-45372).
- */
-object RootTransitionProviders {
-    /**
-     * The standard set of "enter" transition providers.
-     */
-    object Enter {
-        val fadeIn: EnterTransitionProvider = TransitionProviders.Enter.fadeIn
-        val none: EnterTransitionProvider = TransitionProviders.Enter.none
-        val pushToEnd: EnterTransitionProvider = TransitionProviders.Enter.pushToEnd
-        val pushToStart: EnterTransitionProvider = TransitionProviders.Enter.pushToStart
-        val slideUp: EnterTransitionProvider = TransitionProviders.Enter.slideUp
-        val stay: EnterTransitionProvider = TransitionProviders.Enter.stay
-    }
-
-    /**
-     * The standard set of "exit" transition providers.
-     */
-    object Exit {
-        val fadeOut: ExitTransitionProvider = TransitionProviders.Exit.fadeOut
-        val none: ExitTransitionProvider = TransitionProviders.Exit.none
-        val pushToEnd: ExitTransitionProvider = TransitionProviders.Exit.pushToEnd
-        val pushToStart: ExitTransitionProvider = TransitionProviders.Exit.pushToStart
-        val slideDown: ExitTransitionProvider = TransitionProviders.Exit.slideDown
-        val stay: ExitTransitionProvider = TransitionProviders.Exit.stay
     }
 }
