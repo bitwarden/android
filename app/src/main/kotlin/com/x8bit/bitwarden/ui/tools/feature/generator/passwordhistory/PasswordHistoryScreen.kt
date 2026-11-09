@@ -22,7 +22,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -46,7 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun PasswordHistoryScreen(
     onNavigateBack: () -> Unit,
-    viewModel: PasswordHistoryViewModel = hiltViewModel(),
+    viewModel: PasswordHistoryViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

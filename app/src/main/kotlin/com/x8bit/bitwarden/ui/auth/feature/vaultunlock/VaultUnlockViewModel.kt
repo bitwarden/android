@@ -29,12 +29,16 @@ import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrN
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -45,7 +49,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.crypto.Cipher
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR = 2
@@ -54,8 +57,9 @@ private const val KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR = 2
  * Manages application state for the initial vault unlock screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList")
-@HiltViewModel
-class VaultUnlockViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = VaultUnlockViewModel.Factory::class)
+class VaultUnlockViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.VaultUnlockRoute,
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -87,7 +91,7 @@ class VaultUnlockViewModel @Inject constructor(
 
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val showAccountMenu =
-            savedStateHandle.toVaultUnlockArgs().unlockType == UnlockType.STANDARD &&
+            route.unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.ProviderGetCredentials &&
                     specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(
@@ -113,6 +117,17 @@ class VaultUnlockViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [VaultUnlockViewModel] for a specific [AuthGraph.VaultUnlockRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultUnlockViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.VaultUnlockRoute): VaultUnlockViewModel
+    }
+
     init {
         authRepository
             .userStateFlow

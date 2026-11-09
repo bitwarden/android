@@ -1,31 +1,24 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * The type-safe route for the block autofill settings screen.
+ * Add the block autofill screen to the navigation entries.
  */
-@Serializable
-data object BlockAutofillSettingsRoute
-
-/**
- * Add block auto-fill destination to the nav graph.
- */
-fun NavGraphBuilder.blockAutoFillDestination(
+fun EntryProviderScope<SettingsGraph>.blockAutoFillDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<BlockAutofillSettingsRoute> {
+    pushEntry<SettingsGraph.BlockAutofillRoute> {
         BlockAutoFillScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
- * Navigate to the block auto-fill screen.
+ * Navigate to the block autofill screen.
  */
-fun NavController.navigateToBlockAutoFillScreen(navOptions: NavOptions? = null) {
-    this.navigate(route = BlockAutofillSettingsRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToBlockAutoFillScreen() {
+    this.navigate(route = SettingsGraph.BlockAutofillRoute)
 }

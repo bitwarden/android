@@ -1,39 +1,22 @@
 package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
- * The type-safe route for the trusted device screen.
+ * Add the Trusted Device Screen to the navigation entries.
  */
-@Serializable
-data object TrustedDeviceRoute
-
-/**
- * Add the Trusted Device Screen to the nav graph.
- */
-fun NavGraphBuilder.trustedDeviceDestination(
+fun EntryProviderScope<AuthGraph>.trustedDeviceDestination(
     onNavigateToAdminApproval: (emailAddress: String) -> Unit,
     onNavigateToLoginWithOtherDevice: (emailAddress: String) -> Unit,
     onNavigateToLock: (emailAddress: String) -> Unit,
 ) {
-    composableWithSlideTransitions<TrustedDeviceRoute> {
+    slideUpEntry<AuthGraph.TrustedDeviceRoute> {
         TrustedDeviceScreen(
             onNavigateToAdminApproval = onNavigateToAdminApproval,
             onNavigateToLoginWithOtherDevice = onNavigateToLoginWithOtherDevice,
             onNavigateToLock = onNavigateToLock,
         )
     }
-}
-
-/**
- * Navigate to the Trusted Device Screen.
- */
-fun NavController.navigateToTrustedDevice(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = TrustedDeviceRoute, navOptions = navOptions)
 }

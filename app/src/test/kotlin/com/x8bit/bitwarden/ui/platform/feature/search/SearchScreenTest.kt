@@ -30,12 +30,9 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -69,10 +66,10 @@ class SearchScreenTest : BitwardenComposeTest() {
     private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     private var onNavigateBackCalled = false
-    private var onNavigateToAddEditSendRoute: AddEditSendRoute? = null
-    private var onNavigateToViewSendRoute: ViewSendRoute? = null
-    private var onNavigateToEditCipherArgs: VaultAddEditArgs? = null
-    private var onNavigateToViewCipherArgs: VaultItemArgs? = null
+    private var onNavigateToAddEditSendRoute: VaultUnlockedGraph.AddEditSendRoute? = null
+    private var onNavigateToViewSendRoute: VaultUnlockedGraph.ViewSendRoute? = null
+    private var onNavigateToEditCipherRoute: VaultUnlockedGraph.VaultAddEditRoute? = null
+    private var onNavigateToViewCipherRoute: VaultUnlockedGraph.VaultItemRoute? = null
     private var onNavigateToPlanCalled = false
 
     @Before
@@ -86,8 +83,8 @@ class SearchScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToAddEditSend = { onNavigateToAddEditSendRoute = it },
                 onNavigateToViewSend = { onNavigateToViewSendRoute = it },
-                onNavigateToEditCipher = { onNavigateToEditCipherArgs = it },
-                onNavigateToViewCipher = { onNavigateToViewCipherArgs = it },
+                onNavigateToEditCipher = { onNavigateToEditCipherRoute = it },
+                onNavigateToViewCipher = { onNavigateToViewCipherRoute = it },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
@@ -107,7 +104,11 @@ class SearchScreenTest : BitwardenComposeTest() {
             SearchEvent.NavigateToEditSend(sendId = sendId, sendType = sendType),
         )
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            VaultUnlockedGraph.AddEditSendRoute(
+                sendType = sendType,
+                modeType = ModeType.EDIT,
+                sendId = sendId,
+            ),
             onNavigateToAddEditSendRoute,
         )
     }
@@ -120,7 +121,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             SearchEvent.NavigateToViewSend(sendId = sendId, sendType = sendType),
         )
         assertEquals(
-            ViewSendRoute(sendId = sendId, sendType = sendType),
+            VaultUnlockedGraph.ViewSendRoute(sendId = sendId, sendType = sendType),
             onNavigateToViewSendRoute,
         )
     }
@@ -129,21 +130,24 @@ class SearchScreenTest : BitwardenComposeTest() {
     fun `NavigateToEditCipher should call onNavigateToEditCipher`() {
         val cipherId = "cipherId"
         val cipherType = VaultItemCipherType.LOGIN
-        val args = VaultAddEditArgs(
+        val route = VaultUnlockedGraph.VaultAddEditRoute(
             vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = cipherId),
             vaultItemCipherType = cipherType,
         )
         mutableEventFlow.tryEmit(SearchEvent.NavigateToEditCipher(cipherId, cipherType))
-        assertEquals(args, onNavigateToEditCipherArgs)
+        assertEquals(route, onNavigateToEditCipherRoute)
     }
 
     @Test
     fun `NavigateToViewCipher should call onNavigateToViewCipher`() {
         val cipherId = "cipherId"
         val cipherType = VaultItemCipherType.LOGIN
-        val args = VaultItemArgs(vaultItemId = cipherId, cipherType = cipherType)
+        val route = VaultUnlockedGraph.VaultItemRoute(
+            vaultItemId = cipherId,
+            cipherType = cipherType,
+        )
         mutableEventFlow.tryEmit(SearchEvent.NavigateToViewCipher(cipherId, cipherType))
-        assertEquals(args, onNavigateToViewCipherArgs)
+        assertEquals(route, onNavigateToViewCipherRoute)
     }
 
     @Test

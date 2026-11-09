@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -58,18 +59,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(
-            SavedStateHandle::toEnterpriseSignOnArgs,
-            ::generateUriForSso,
-        )
+        mockkStatic(::generateUriForSso)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toEnterpriseSignOnArgs,
-            ::generateUriForSso,
-        )
+        unmockkStatic(::generateUriForSso)
     }
 
     @Test
@@ -1253,13 +1248,11 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             set(key = "state", value = initialState)
             set(key = "ssoData", value = ssoData)
             set(key = "ssoCallbackResult", value = ssoCallbackResult)
-            every {
-                toEnterpriseSignOnArgs()
-            } returns EnterpriseSignOnArgs(emailAddress = DEFAULT_EMAIL)
         },
         isNetworkConnected: Boolean = true,
         dismissInitialDialog: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
+        route = AuthGraph.EnterpriseSignOnRoute(emailAddress = DEFAULT_EMAIL),
         authRepository = authRepository,
         environmentRepository = environmentRepository,
         generatorRepository = generatorRepository,

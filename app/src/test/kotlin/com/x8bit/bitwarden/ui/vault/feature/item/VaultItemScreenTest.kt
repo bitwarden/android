@@ -43,9 +43,8 @@ import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -71,11 +70,11 @@ import java.time.Instant
 class VaultItemScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
+    private var onNavigateToVaultEditItemArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
-    private var onNavigateToPreviewAttachment: PreviewAttachmentRoute? = null
+    private var onNavigateToPreviewAttachment: VaultUnlockedGraph.PreviewAttachmentRoute? = null
     private var onNavigateToPlanCalled = false
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
@@ -120,7 +119,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             ),
         )
         assertEquals(
-            VaultAddEditArgs(
+            VaultUnlockedGraph.VaultAddEditRoute(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
@@ -151,7 +150,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToPreviewAttachment event should invoke onNavigateToPreviewAttachment`() {
-        val route = PreviewAttachmentRoute(
+        val route = VaultUnlockedGraph.PreviewAttachmentRoute(
             cipherId = "cipherId1234",
             attachmentId = "attachmentId4321",
             fileName = "fileName",
