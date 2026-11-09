@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby File.read(".ruby-version").strip
 
-gem 'fastlane', '2.241.1'
+gem 'fastlane', '2.241.2'
 gem 'time', '0.5.0'
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
