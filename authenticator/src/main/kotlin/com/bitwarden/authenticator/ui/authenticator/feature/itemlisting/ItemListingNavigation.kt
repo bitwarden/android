@@ -1,26 +1,19 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
-import androidx.navigation.NavGraphBuilder
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
 
 /**
- * The type-safe route for the item listing screen.
+ * Add the item listing screen to the navigation entries.
  */
-@Serializable
-data object ItemListingRoute
-
-/**
- * Add the item listing screen to the nav graph.
- */
-fun NavGraphBuilder.itemListingDestination(
+fun EntryProviderScope<ItemListingGraph>.itemListingDestination(
     onNavigateBack: () -> Unit = { },
     onNavigateToSearch: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit = { },
     onNavigateToManualKeyEntry: () -> Unit = { },
     onNavigateToEditItemScreen: (id: String) -> Unit = { },
 ) {
-    composableWithRootPushTransitions<ItemListingRoute> {
+    rootPushEntry<ItemListingGraph.ItemListingRoute> {
         ItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToSearch = onNavigateToSearch,

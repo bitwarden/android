@@ -1,25 +1,18 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
 
 /**
- * The type-safe route for the QR code scan screen.
+ * Add the QR code scan screen to the navigation entries.
  */
-@Serializable
-data object QrCodeScanRoute
-
-/**
- * Add the QR code scan screen to the nav graph.
- */
-fun NavGraphBuilder.qrCodeScanDestination(
+fun EntryProviderScope<AuthenticatorGraph>.qrCodeScanDestination(
     onNavigateBack: () -> Unit,
     onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
-    composableWithSlideTransitions<QrCodeScanRoute> {
+    slideUpEntry<AuthenticatorGraph.QrCodeScanRoute> {
         QrCodeScanScreen(
             onNavigateToManualCodeEntryScreen = onNavigateToManualCodeEntryScreen,
             onNavigateBack = onNavigateBack,
@@ -30,8 +23,6 @@ fun NavGraphBuilder.qrCodeScanDestination(
 /**
  * Navigate to the QR code scan screen.
  */
-fun NavController.navigateToQrCodeScanScreen(
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = QrCodeScanRoute, navOptions = navOptions)
+fun NavigationController<AuthenticatorGraph>.navigateToQrCodeScanScreen() {
+    this.navigate(route = AuthenticatorGraph.QrCodeScanRoute)
 }

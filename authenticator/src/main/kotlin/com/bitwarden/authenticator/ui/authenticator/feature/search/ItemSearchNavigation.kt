@@ -1,24 +1,18 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
 
 /**
- * The type-safe route for the item search screen.
+ * Add item search destination to the navigation entries.
  */
-@Serializable
-data object ItemSearchRoute
-
-/**
- * Add item search destination to the nav graph.
- */
-fun NavGraphBuilder.itemSearchDestination(
+fun EntryProviderScope<AuthenticatorGraph>.itemSearchDestination(
     onNavigateBack: () -> Unit,
     onNavigateToEdit: (String) -> Unit,
 ) {
-    composableWithSlideTransitions<ItemSearchRoute> {
+    slideUpEntry<AuthenticatorGraph.ItemSearchRoute> {
         ItemSearchScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToEdit = onNavigateToEdit,
@@ -29,6 +23,6 @@ fun NavGraphBuilder.itemSearchDestination(
 /**
  * Navigate to the item search screen.
  */
-fun NavController.navigateToSearch() {
-    navigate(route = ItemSearchRoute)
+fun NavigationController<AuthenticatorGraph>.navigateToSearch() {
+    this.navigate(route = AuthenticatorGraph.ItemSearchRoute)
 }
