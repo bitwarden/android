@@ -534,6 +534,5 @@ private val DEFAULT_STATE = LandingState(
     isSelectedEnvironmentFedRamp = false,
     dialog = null,
     accountSummaries = persistentListOf(),
-    isFedRampEnabled = true,
     disableCreateAccount = false,
 )
