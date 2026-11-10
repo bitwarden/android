@@ -2504,7 +2504,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             createVaultAddItemState(
                 hasPremium = false,
                 vaultAddEditType = vaultAddEditType,
-                dialogState = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+                dialogState = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
                     originalCipher = createMockCipherView(number = 1),

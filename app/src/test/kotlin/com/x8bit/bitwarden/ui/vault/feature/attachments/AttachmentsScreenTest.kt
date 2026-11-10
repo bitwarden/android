@@ -267,7 +267,11 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+            it.copy(
+                dialogState = AttachmentsState.DialogState.RequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule

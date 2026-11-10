@@ -1223,6 +1223,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.PremiumRequired(
                     message = BitwardenString.send_file_premium_required.asText(),
+                    isInAppUpgradeAvailable = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2121,6 +2122,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                         message = BitwardenString
                             .sharing_with_specific_people_is_a_premium_feature
                             .asText(),
+                        isInAppUpgradeAvailable = false,
                     ),
                 ),
                 newState,

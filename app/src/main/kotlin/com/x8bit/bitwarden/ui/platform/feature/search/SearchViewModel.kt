@@ -464,7 +464,11 @@ class SearchViewModel @AssistedInject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialogState = SearchState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialogState = SearchState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -1254,7 +1258,9 @@ data class SearchState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
     }
 
     /**

@@ -40,6 +40,7 @@ class SettingsViewModel @AssistedInject constructor(
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
+        showPlanBadge = premiumStateManager.shouldShowPlanBadgeFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
         isSelfHosted = premiumStateManager.isSelfHostedFlow.value,
         isUpgradedToPremiumCardEligible = premiumStateManager
@@ -63,11 +64,13 @@ class SettingsViewModel @AssistedInject constructor(
             firstTimeActionManager.allSecuritySettingsBadgeCountFlow,
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow,
             firstTimeActionManager.allVaultSettingsBadgeCountFlow,
-        ) { securityCount, autofillCount, vaultCount ->
+            premiumStateManager.shouldShowPlanBadgeFlow,
+        ) { securityCount, autofillCount, vaultCount, showPlanBadge ->
             SettingsAction.Internal.SettingsNotificationCountUpdate(
                 securityCount = securityCount,
                 autoFillCount = autofillCount,
                 vaultCount = vaultCount,
+                showPlanBadge = showPlanBadge,
             )
         }
             .onEach(::sendAction)
@@ -162,6 +165,7 @@ class SettingsViewModel @AssistedInject constructor(
                 autoFillCount = action.autoFillCount,
                 securityCount = action.securityCount,
                 vaultCount = action.vaultCount,
+                showPlanBadge = action.showPlanBadge,
             )
         }
     }
@@ -213,6 +217,7 @@ data class SettingsState(
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
+    private val showPlanBadge: Boolean,
     private val isPlanRowEligible: Boolean,
     private val isSelfHosted: Boolean = false,
     private val isUpgradedToPremiumCardEligible: Boolean = false,
@@ -253,6 +258,7 @@ data class SettingsState(
         Settings.ACCOUNT_SECURITY to securityCount,
         Settings.AUTO_FILL to autoFillCount,
         Settings.VAULT to vaultCount,
+        Settings.PLAN to if (showPlanBadge) 1 else 0,
     )
 }
 
@@ -350,6 +356,7 @@ sealed class SettingsAction {
             val autoFillCount: Int,
             val securityCount: Int,
             val vaultCount: Int,
+            val showPlanBadge: Boolean,
         ) : Internal()
 
         /**

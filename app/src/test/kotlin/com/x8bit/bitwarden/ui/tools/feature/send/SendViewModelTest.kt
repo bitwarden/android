@@ -173,7 +173,9 @@ class SendViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                dialogState = SendState.DialogState.FileTypeRequiresPremium,
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
                 singleAllowedSendType = SendItemType.FILE,
             ),
             viewModel.stateFlow.value,
@@ -268,13 +270,17 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendSelected file without Premium and upgrade unavailable shows Error dialog`() {
+    fun `AddSendSelected file without Premium and upgrade unavailable shows premium dialog`() {
         every { premiumStateManager.isInAppUpgradeAvailable() } returns false
         val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
         assertEquals(
-            state.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium),
+            state.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -286,7 +292,11 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = state)
         viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
         assertEquals(
-            state.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium),
+            state.copy(
+                dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -294,7 +304,9 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `UpgradeToPremiumClick clears dialog and emits NavigateToPlanModal`() = runTest {
         val state = DEFAULT_STATE.copy(
-            dialogState = SendState.DialogState.FileTypeRequiresPremium,
+            dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                isInAppUpgradeAvailable = true,
+            ),
         )
         val viewModel = createViewModel(state = state)
         viewModel.eventFlow.test {

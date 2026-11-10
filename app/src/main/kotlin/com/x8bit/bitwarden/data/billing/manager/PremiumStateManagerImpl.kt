@@ -212,13 +212,7 @@ class PremiumStateManagerImpl(
             val isPremiumFromOrg = profile.hasPremiumFromOrganization == true
             val hasPremium = isPremiumFromSelf || isPremiumFromOrg
             val isOrgOnlyPremium = isPremiumFromOrg && !isPremiumFromSelf
-            val hasSubscription = when (subscriptionStatus) {
-                is SubscriptionStatusState.Available -> true
-                is SubscriptionStatusState.Error,
-                SubscriptionStatusState.Loading,
-                SubscriptionStatusState.NoSubscription,
-                    -> false
-            }
+            val hasSubscription = subscriptionStatus.hasSubscription
             val hasIneligiblePremium = hasPremium && !hasSubscription
             // The Plan Row is hidden if the user has premium but does not have
             // a subscription or the premium status was granted by an organization.
@@ -228,6 +222,47 @@ class PremiumStateManagerImpl(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
                 initialValue = false,
+            )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val shouldShowPlanBadgeFlow: StateFlow<Boolean> =
+        combine(
+            authDiskSource
+                .activeUserIdChangesFlow
+                .flatMapLatest { activeUserId ->
+                    activeUserId
+                        ?.let { userId ->
+                            settingsDiskSource
+                                .getShouldShowPlanBadgeFlow(userId = userId)
+                                .map { it ?: true }
+                        }
+                        ?: flowOf(true)
+                },
+            authDiskSource.userStateFlow,
+            subscriptionStatusStateFlow,
+        ) { shouldShowPlanBadge, userState, subscriptionStatus ->
+            val profile = userState?.activeAccount?.profile
+            if (!shouldShowPlanBadge || profile == null) {
+                // The user has dismissed the badge or there is no user, so we hide the badge.
+                false
+            } else {
+                val isPremiumFromSelf = profile.hasPremiumPersonally == true
+                val isPremiumFromOrg = profile.hasPremiumFromOrganization == true
+                val hasPremium = isPremiumFromSelf || isPremiumFromOrg
+                val hasSubscription = subscriptionStatus.hasSubscription
+                // Only free users see the badge, so they should not have premium
+                // and not have a subscription.
+                !hasPremium && !hasSubscription
+            }
+        }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = authDiskSource.userState
+                    ?.activeUserId
+                    ?.let { settingsDiskSource.getShouldShowPlanBadge(userId = it) }
+                    ?: true,
             )
 
     /**
@@ -333,6 +368,12 @@ class PremiumStateManagerImpl(
             userId = activeUserId,
             isPending = false,
         )
+    }
+
+    override fun dismissPlanBadge() {
+        authDiskSource.userState?.activeUserId?.let {
+            settingsDiskSource.storeShouldShowPlanBadge(userId = it, shouldShow = false)
+        }
     }
 
     override fun markPremiumUpgradePending(userId: String) {
@@ -457,6 +498,18 @@ private fun DataState<VaultData>.activeVaultItemCount(): Int =
         ?.successes
         ?.count { it.isActive }
         ?: 0
+
+/**
+ * Returns `true` if the user has a subscription, `false` otherwise.
+ */
+private val SubscriptionStatusState.hasSubscription: Boolean
+    get() = when (this) {
+        is SubscriptionStatusState.Available -> true
+        is SubscriptionStatusState.Error,
+        SubscriptionStatusState.Loading,
+        SubscriptionStatusState.NoSubscription,
+            -> false
+    }
 
 private const val PREMIUM_UPGRADE_MINIMUM_VAULT_ITEMS: Int = 5
 private const val PREMIUM_UPGRADE_MINIMUM_ACCOUNT_AGE_DAYS: Long = 7L

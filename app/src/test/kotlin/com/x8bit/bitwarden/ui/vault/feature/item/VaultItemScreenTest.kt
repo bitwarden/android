@@ -273,6 +273,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = "You need Premium".asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
@@ -294,6 +295,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = "You need Premium".asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
@@ -803,6 +805,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                                 title = "test.mp4",
                             ),
                         ),
+                        isInAppUpgradeAvailable = true,
                     ),
                 ),
             )
@@ -823,6 +826,45 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(text = "Upgrade to Premium")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `attachment download click for non-Premium users without in-app upgrade should show Explore Premium dialog`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = persistentListOf(
+                            VaultItemState.ViewState.Content.Common.AttachmentItem(
+                                id = "attachment-id",
+                                displaySize = "11 MB",
+                                isLargeFile = true,
+                                isDownloadAllowed = false,
+                                url = "https://example.com",
+                                title = "test.mp4",
+                            ),
+                        ),
+                        isInAppUpgradeAvailable = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Explore Premium")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -4259,6 +4301,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
         hasOrganizations = true,
+        isInAppUpgradeAvailable = false,
     )
 
 private val DEFAULT_PASSKEY = BitwardenString.created_x.asText("Mar 13, 2024, 3:56 PM")
@@ -4360,6 +4403,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
         hasOrganizations = true,
+        isInAppUpgradeAvailable = false,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
