@@ -69,7 +69,7 @@ class SeederClient(private val config: E2eConfig) {
     private fun requestFor(url: String): Request.Builder =
         Request.Builder()
             .url(url)
-            .header("Authorization", "Basic ${config.seederToken}")
+            .header("Authorization", "Basic ${config.seederToken.value}")
             .header("x-play-id", playId)
 }
 

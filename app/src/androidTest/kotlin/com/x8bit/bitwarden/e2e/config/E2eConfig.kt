@@ -5,19 +5,17 @@ import androidx.test.platform.app.InstrumentationRegistry
 
 /**
  * Environment settings for end-to-end tests, read from instrumentation arguments
- * (`-e BW_TEST_SERVER_URL <url>`). Nothing is hard-coded, and [toString] never exposes the token.
+ * (`-e BW_TEST_SERVER_URL <url>`). Nothing is hard-coded.
  *
  * @property serverUrl Base URL of the self-hosted server under test.
  * @property seederUrl Base URL of the SeederApi that writes test data to that server's database.
- * @property seederToken SeederApi Basic credential (base64 of `username:password`).
+ * @property seederToken SeederApi Basic credential.
  */
-class E2eConfig(
+data class E2eConfig(
     val serverUrl: String,
     val seederUrl: String,
-    val seederToken: String,
+    val seederToken: SeederToken,
 ) {
-    override fun toString(): String = "E2eConfig(serverUrl=$serverUrl, seederUrl=$seederUrl)"
-
     companion object {
         /**
          * Reads the configuration from instrumentation arguments, failing fast when one is missing
@@ -32,7 +30,7 @@ class E2eConfig(
             return E2eConfig(
                 serverUrl = requireTestServer(required("BW_TEST_SERVER_URL")),
                 seederUrl = requireHttps(required("BW_SEEDER_URL")).trimEnd('/'),
-                seederToken = required("BW_SEEDER_TOKEN"),
+                seederToken = SeederToken(required("BW_SEEDER_TOKEN")),
             )
         }
 
@@ -50,6 +48,17 @@ class E2eConfig(
             return url
         }
     }
+}
+
+/**
+ * SeederApi Basic credential (base64 of `username:password`). It's shared across the test suite
+ * and can create and delete data on the server, so [toString] redacts it from logs.
+ *
+ * @property value The encoded credential.
+ */
+@JvmInline
+value class SeederToken(val value: String) {
+    override fun toString(): String = "SeederToken(***)"
 }
 
 private val PRODUCTION_DOMAINS = listOf("bitwarden.com", "bitwarden.eu")

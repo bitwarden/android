@@ -10,7 +10,7 @@ import java.util.UUID
  * @property userId The user's ID.
  * @property userKeyB64 The user's symmetric key, used to seed their vault items.
  */
-class SeededAccount(
+data class SeededAccount(
     val email: String,
     val password: String,
     val userId: String,
