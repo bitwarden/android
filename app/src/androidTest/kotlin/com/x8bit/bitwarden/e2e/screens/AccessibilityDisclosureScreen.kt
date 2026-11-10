@@ -17,9 +17,12 @@ class AccessibilityDisclosureScreen(private val rule: ComposeTestRule) {
      */
     fun acknowledge(): WelcomeScreen {
         // The button has no testTag yet, so it is matched by its localized label.
-        rule.waitForNode(
-            hasClickAction() and hasAnyDescendant(hasText(appString(BitwardenString.i_understand))),
-        ).performClick()
+        rule
+            .waitForNode(
+                hasClickAction() and
+                    hasAnyDescendant(hasText(appString(BitwardenString.i_understand))),
+            )
+            .performClick()
         return WelcomeScreen(rule)
     }
 }

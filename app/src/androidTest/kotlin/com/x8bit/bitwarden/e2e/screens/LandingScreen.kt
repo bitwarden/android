@@ -18,10 +18,12 @@ class LandingScreen(private val rule: ComposeTestRule) {
      */
     fun selectSelfHosted(): EnvironmentScreen {
         rule.waitForTag("RegionSelectorDropdown").performClick()
-        rule.waitForNode(
-            hasTestTag("AlertRadioButtonOption") and
-                hasAnyDescendant(hasText(appString(BitwardenString.self_hosted))),
-        ).performClick()
+        rule
+            .waitForNode(
+                hasTestTag("AlertRadioButtonOption") and
+                    hasAnyDescendant(hasText(appString(BitwardenString.self_hosted))),
+            )
+            .performClick()
         return EnvironmentScreen(rule)
     }
 
