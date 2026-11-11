@@ -280,7 +280,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Upgrade to Premium")
+            .onNodeWithText("Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

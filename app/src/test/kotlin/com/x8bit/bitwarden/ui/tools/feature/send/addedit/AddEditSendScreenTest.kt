@@ -1232,7 +1232,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Upgrade to Premium")
+            .onNodeWithText("Explore Premium")
             .performClick()
 
         verify { viewModel.trySendAction(AddEditSendAction.UpgradeToPremiumClick) }
