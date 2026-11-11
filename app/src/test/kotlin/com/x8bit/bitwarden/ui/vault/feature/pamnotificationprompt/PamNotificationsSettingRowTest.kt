@@ -14,10 +14,8 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.robolectric.annotation.Config
 
 class PamNotificationsSettingRowTest : BitwardenComposeTest() {
 
@@ -27,7 +25,6 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
         every { startActivity(any()) } returns true
     }
 
-    @Config(sdk = [33])
     @Test
     fun `state should be Off when the permission is not granted`() {
         permissionsManager.checkPermissionResult = false
@@ -37,7 +34,6 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Off").assertIsDisplayed()
     }
 
-    @Config(sdk = [33])
     @Test
     fun `state should be On when the permission is granted`() {
         permissionsManager.checkPermissionResult = true
@@ -46,16 +42,6 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("On").assertIsDisplayed()
     }
 
-    @Config(sdk = [32])
-    @Test
-    fun `state should be On before Android 13 without checking the permission`() {
-        permissionsManager.checkPermissionResult = false
-        setRow()
-
-        composeTestRule.onNodeWithText("On").assertIsDisplayed()
-    }
-
-    @Config(sdk = [33])
     @Test
     fun `click should request the permission when it is not granted and a prompt can be shown`() {
         permissionsManager.checkPermissionResult = false
@@ -67,9 +53,21 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
 
         assertTrue(permissionsManager.hasGetLauncherBeenCalled)
         verify(exactly = 0) { intentManager.startActivity(any()) }
+        composeTestRule.onNodeWithText("Off").assertIsDisplayed()
     }
 
-    @Config(sdk = [33])
+    @Test
+    fun `state should be On once the permission request is granted`() {
+        permissionsManager.checkPermissionResult = false
+        permissionsManager.getPermissionsResult = true
+        setRow()
+
+        composeTestRule.onNodeWithText("Access request notifications").performClick()
+
+        composeTestRule.onNodeWithText("On").assertIsDisplayed()
+        verify(exactly = 0) { intentManager.startActivity(any()) }
+    }
+
     @Test
     fun `click should open the notification settings when the OS will not ask again`() {
         permissionsManager.checkPermissionResult = false
@@ -88,7 +86,6 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
         )
     }
 
-    @Config(sdk = [33])
     @Test
     fun `click should open the notification settings when the permission is already granted`() {
         permissionsManager.checkPermissionResult = true
@@ -99,15 +96,6 @@ class PamNotificationsSettingRowTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Access request notifications").performClick()
 
         assertEquals(Settings.ACTION_APP_NOTIFICATION_SETTINGS, intent.captured.action)
-    }
-
-    @Test
-    fun `isPamNotificationsEnabled should require the permission only when it is a runtime one`() {
-        assertTrue(isPamNotificationsEnabled(true, true, true))
-        assertFalse(isPamNotificationsEnabled(true, false, true))
-        assertFalse(isPamNotificationsEnabled(true, true, false))
-        assertTrue(isPamNotificationsEnabled(false, false, true))
-        assertFalse(isPamNotificationsEnabled(false, false, false))
     }
 
     private fun setRow() {

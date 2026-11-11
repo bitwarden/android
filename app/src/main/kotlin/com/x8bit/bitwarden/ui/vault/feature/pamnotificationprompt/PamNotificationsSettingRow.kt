@@ -2,19 +2,15 @@ package com.x8bit.bitwarden.ui.vault.feature.pamnotificationprompt
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
-import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -28,19 +24,12 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 private const val NOTIFICATION_PERMISSION: String = Manifest.permission.POST_NOTIFICATIONS
 
 /**
- * Whether the PAM alert notifications can reach the user. From Android 13 the runtime permission
- * must be granted as well as the app level notification switch being on.
- */
-fun isPamNotificationsEnabled(
-    isRuntimePermissionRequired: Boolean,
-    isPermissionGranted: Boolean,
-    areAppNotificationsEnabled: Boolean,
-): Boolean = areAppNotificationsEnabled && (!isRuntimePermissionRequired || isPermissionGranted)
-
-/**
  * A settings row showing whether the PAM alert notifications are on. Tapping it asks for the
- * runtime permission when the OS can still show the prompt, and otherwise opens the system
+ * notification permission when the OS can still show the prompt, and otherwise opens the system
  * notification settings for the app.
+ *
+ * The On/Off state comes from the notification permission alone: before Android 13 the
+ * [PermissionsManager] reports it as granted whenever the app's notifications are enabled.
  */
 @Composable
 fun PamNotificationsSettingRow(
@@ -49,20 +38,11 @@ fun PamNotificationsSettingRow(
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
-    val context = LocalContext.current
-    val isRuntimePermissionRequired = isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)
-    val readState = {
-        isPamNotificationsEnabled(
-            isRuntimePermissionRequired = isRuntimePermissionRequired,
-            isPermissionGranted = !isRuntimePermissionRequired ||
-                permissionsManager.checkPermission(NOTIFICATION_PERMISSION),
-            areAppNotificationsEnabled = NotificationManagerCompat.from(context)
-                .areNotificationsEnabled(),
-        )
+    var isEnabled by remember {
+        mutableStateOf(permissionsManager.checkPermission(NOTIFICATION_PERMISSION))
     }
-    var isEnabled by remember { mutableStateOf(readState()) }
     val launcher = permissionsManager.getLauncher { isGranted ->
-        isEnabled = readState()
+        isEnabled = isGranted
         if (!isGranted &&
             !permissionsManager.shouldShowRequestPermissionRationale(NOTIFICATION_PERMISSION)
         ) {
@@ -71,7 +51,7 @@ fun PamNotificationsSettingRow(
     }
     LifecycleEventEffect { _, event ->
         if (event == Lifecycle.Event.ON_RESUME) {
-            isEnabled = readState()
+            isEnabled = permissionsManager.checkPermission(NOTIFICATION_PERMISSION)
         }
     }
     BitwardenTextRow(
@@ -86,16 +66,13 @@ fun PamNotificationsSettingRow(
             ),
         ),
         onClick = {
-            if (isRuntimePermissionRequired &&
-                !permissionsManager.checkPermission(NOTIFICATION_PERMISSION)
-            ) {
+            if (permissionsManager.checkPermission(NOTIFICATION_PERMISSION)) {
+                intentManager.startAppNotificationSettingsActivity()
+            } else {
                 @SuppressLint("InlinedApi")
                 launcher.launch(NOTIFICATION_PERMISSION)
-            } else {
-                intentManager.startAppNotificationSettingsActivity()
             }
         },
-        withDivider = false,
         cardStyle = cardStyle,
         modifier = modifier,
     )
