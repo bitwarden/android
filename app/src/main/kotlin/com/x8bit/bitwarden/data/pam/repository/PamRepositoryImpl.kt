@@ -143,24 +143,7 @@ class PamRepositoryImpl(
         return pamSdkSource
             .listMyAccessRequests(userId = userId)
             .mapCatching { requests ->
-                val leases = pamSdkSource
-                    .listMyLeases(userId = userId)
-                    .getOrNull()
-                    .orEmpty()
-                val now = clock.instant()
-                val items = requests
-                    .map { request ->
-                        val lease = request.toPamLease(
-                            leases = leases,
-                        )
-                        val extensionPolicy = lease
-                            ?.takeIf { it.isActiveAt(now) }
-                            ?.let { getExtensionPolicy(userId, request.cipherId) }
-                        request.toPamMyAccessRequest(lease, extensionPolicy)
-                    }
-                    .sortedByDescending { it.submittedAt }
-                syncReminders(userId = userId, leases = leases, requests = items)
-                items
+                processAccessRequestsWithLeases(userId = userId, requests = requests)
             }
     }
 
@@ -243,6 +226,34 @@ class PamRepositoryImpl(
                 mutableAccessChangedFlow.tryEmit(Unit)
             }
             .map { }
+    }
+
+    /**
+     * Pairs each request with its lease, attaches the extension policy for active leases, sorts
+     * the results newest first and syncs lease reminders to match.
+     */
+    private suspend fun processAccessRequestsWithLeases(
+        userId: String,
+        requests: List<AccessRequestView>,
+    ): List<PamMyAccessRequest> {
+        val leases = pamSdkSource
+            .listMyLeases(userId = userId)
+            .getOrNull()
+            .orEmpty()
+        val now = clock.instant()
+        val items = requests
+            .map { request ->
+                val lease = request.toPamLease(
+                    leases = leases,
+                )
+                val extensionPolicy = lease
+                    ?.takeIf { it.isActiveAt(now) }
+                    ?.let { getExtensionPolicy(userId, request.cipherId) }
+                request.toPamMyAccessRequest(lease, extensionPolicy)
+            }
+            .sortedByDescending { it.submittedAt }
+        syncReminders(userId = userId, leases = leases, requests = items)
+        return items
     }
 
     private suspend fun getExtensionPolicy(
