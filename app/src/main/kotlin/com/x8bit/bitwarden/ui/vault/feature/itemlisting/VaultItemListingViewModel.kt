@@ -2999,6 +2999,7 @@ data class VaultItemListingState(
             is ItemListingType.Vault.Folder,
             ItemListingType.Vault.Identity,
             ItemListingType.Vault.Login,
+            ItemListingType.Vault.Passkey,
             ItemListingType.Vault.SecureNote,
             ItemListingType.Vault.SshKey,
             ItemListingType.Vault.BankAccount,
@@ -3438,6 +3439,14 @@ data class VaultItemListingState(
             data object Card : Vault() {
                 override val titleText: Text get() = BitwardenString.cards.asText()
                 override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Passkey item listing.
+             */
+            data object Passkey : Vault() {
+                override val titleText: Text get() = BitwardenString.passkeys.asText()
+                override val hasFab: Boolean get() = false
             }
 
             /**

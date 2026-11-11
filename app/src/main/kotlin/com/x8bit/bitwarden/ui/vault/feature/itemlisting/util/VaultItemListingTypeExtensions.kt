@@ -15,6 +15,7 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
 
         is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Vault.Identity
         is VaultItemListingType.Login -> VaultItemListingState.ItemListingType.Vault.Login
+        is VaultItemListingType.Passkey -> VaultItemListingState.ItemListingType.Vault.Passkey
         is VaultItemListingType.SecureNote -> VaultItemListingState.ItemListingType.Vault.SecureNote
         is VaultItemListingType.SshKey -> VaultItemListingState.ItemListingType.Vault.SshKey
         is VaultItemListingType.BankAccount -> {

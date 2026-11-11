@@ -162,6 +162,38 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return true for Passkey listing type only when the Login cipherView has a FIDO2 credential`() {
+        val loginWithPasskey = createMockCipherListView(
+            number = 1,
+            isDeleted = false,
+            type = CipherListViewType.Login(
+                v1 = createMockLoginListView(number = 1, hasFido2 = true),
+            ),
+        )
+        val loginWithoutPasskey = createMockCipherListView(
+            number = 1,
+            isDeleted = false,
+            type = CipherListViewType.Login(
+                v1 = createMockLoginListView(number = 1, hasFido2 = false),
+            ),
+        )
+
+        assertEquals(
+            true,
+            loginWithPasskey.determineListingPredicate(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Passkey,
+            ),
+        )
+        assertEquals(
+            false,
+            loginWithoutPasskey.determineListingPredicate(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Passkey,
+            ),
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash Login cipherView`() {
         val cipherView = createMockCipherListView(
             number = 1,
