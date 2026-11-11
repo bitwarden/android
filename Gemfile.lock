@@ -37,7 +37,7 @@ GEM
     colored2 (3.1.2)
     commander (4.6.0)
       highline (~> 2.0.0)
-    csv (3.3.6)
+    csv (3.3.7)
     date (3.6.0)
     declarative (0.0.20)
     digest-crc (0.7.0)
@@ -264,7 +264,7 @@ PLATFORMS
 
 DEPENDENCIES
   abbrev (= 0.1.2)
-  csv (= 3.3.6)
+  csv (= 3.3.7)
   fastlane (= 2.241.2)
   fastlane-plugin-firebase_app_distribution
   logger (= 1.7.0)
