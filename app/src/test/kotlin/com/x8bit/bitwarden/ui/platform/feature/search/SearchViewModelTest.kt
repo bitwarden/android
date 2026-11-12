@@ -195,6 +195,33 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `initial state should be correct when UserState is not present`() {
+        mutableUserStateFlow.value = null
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(isPremium = false, hasMasterPassword = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `initial state should be correct for Sends when UserState is not present`() {
+        mutableUserStateFlow.value = null
+        val viewModel = createViewModel(
+            initialState = DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All),
+            useInitialState = false,
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                searchType = SearchTypeData.Sends.All,
+                isPremium = false,
+                hasMasterPassword = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `initial state should be correct when user has PERSONAL_OWNERSHIP policy`() {
         every {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
@@ -2256,6 +2283,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Suppress("CyclomaticComplexMethod")
     private fun createViewModel(
         initialState: SearchState? = null,
+        useInitialState: Boolean = true,
     ): SearchViewModel = SearchViewModel(
         route = VaultUnlockedGraph.SearchRoute(
             searchType = when (val searchType = initialState?.searchType) {
@@ -2287,7 +2315,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             },
         ),
         savedStateHandle = SavedStateHandle().apply {
-            set("state", initialState)
+            set("state", initialState.takeIf { useInitialState })
         },
         clock = clock,
         vaultRepo = vaultRepository,
