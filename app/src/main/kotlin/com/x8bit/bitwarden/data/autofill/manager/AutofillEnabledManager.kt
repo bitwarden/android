@@ -19,4 +19,14 @@ interface AutofillEnabledManager {
      * Emits updates that track [isAutofillEnabled] values.
      */
     val isAutofillEnabledStateFlow: StateFlow<Boolean>
+
+    /**
+     * Emits `true` once [isAutofillEnabled] has been set at least once. Until then,
+     * [isAutofillEnabled] holds a placeholder `false` that does not reflect the device.
+     *
+     * Callers that prompt the user based on [isAutofillEnabled] (such as the autofill banner)
+     * should wait for this to be `true`. Otherwise the placeholder reads as "disabled" and the
+     * prompt can briefly appear on launch for users whose autofill is already on.
+     */
+    val isAutofillEnabledCheckedFlow: StateFlow<Boolean>
 }

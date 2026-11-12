@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
@@ -66,6 +68,18 @@ object AutofillModule {
     @Provides
     fun providesBrowserAutofillEnabledManager(): BrowserThirdPartyAutofillEnabledManager =
         BrowserThirdPartyAutofillEnabledManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesAutofillPromptManager(
+        autofillEnabledManager: AutofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        dispatcherManager: DispatcherManager,
+    ): AutofillPromptManager = AutofillPromptManagerImpl(
+        autofillEnabledManager = autofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Singleton
     @Provides

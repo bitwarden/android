@@ -19,4 +19,15 @@ interface BrowserThirdPartyAutofillEnabledManager {
      * browser versions.
      */
     val browserThirdPartyAutofillStatusFlow: Flow<BrowserThirdPartyAutofillStatus>
+
+    /**
+     * Emits `true` once [browserThirdPartyAutofillStatus] has been set from a device check at
+     * least once. Until then, [browserThirdPartyAutofillStatus] holds a placeholder value that
+     * does not reflect the device.
+     *
+     * Callers that prompt the user based on the status (such as the autofill banner) should wait
+     * for this to be `true`. Otherwise the placeholder reads as "disabled" and the prompt can
+     * briefly appear on launch for users whose browser autofill is already on.
+     */
+    val isBrowserThirdPartyAutofillStatusCheckedFlow: StateFlow<Boolean>
 }

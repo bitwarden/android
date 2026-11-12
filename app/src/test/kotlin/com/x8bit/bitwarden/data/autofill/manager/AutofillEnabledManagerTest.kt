@@ -26,4 +26,19 @@ class AutofillEnabledManagerTest {
                 assertFalse(awaitItem())
             }
         }
+
+    @Test
+    fun `isAutofillEnabledCheckedFlow should emit true once isAutofillEnabled is set`() =
+        runTest {
+            autofillEnabledManager.isAutofillEnabledCheckedFlow.test {
+                assertFalse(awaitItem())
+
+                // Setting the placeholder value still counts as checked.
+                autofillEnabledManager.isAutofillEnabled = false
+                assertTrue(awaitItem())
+
+                autofillEnabledManager.isAutofillEnabled = true
+                expectNoEvents()
+            }
+        }
 }
