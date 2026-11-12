@@ -95,10 +95,14 @@ private fun SyncResponseJson.Profile.getForcePasswordResetReason(
             it.type == OrganizationType.ADMIN ||
             it.permissions.shouldManageResetPassword
     }
+    // This reason only applies to TDE users. Key Connector users who are promoted to an
+    // owner or admin role must not be forced to set a master password.
+    val isTdeUser = userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
     return ForcePasswordResetReason
         .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION
         .takeIf {
-            userDecryptionOptions?.hasMasterPassword == false &&
+            isTdeUser &&
+                userDecryptionOptions?.hasMasterPassword == false &&
                 hasManageResetPasswordPermission
         }
         ?: previousForcePasswordResetReason
@@ -250,12 +254,15 @@ fun UserStateJson.toUserState(
                     )
                 }
                 // If a user does not have a Master Password we want to check if they have another
-                // method for unlocking the vault. In the case of a TDE or KeyConnector user we
-                // check if they have the reset password permission via their organization(S). If
-                // the user does not belong to a TDE or KeyConnector org, then they need a password.
-                val userNeedsMasterPassword = hasManageResetPasswordPermission
-                    .takeIf { trustedDevice != null || keyConnectorOptions != null }
-                    ?: true
+                // method for unlocking the vault. A TDE user needs a password only if they have
+                // the reset password permission via their organization(s). A Key Connector user
+                // never needs one, even after being promoted to owner or admin. Any other user
+                // without a password needs to set one.
+                val userNeedsMasterPassword = when {
+                    trustedDevice != null -> hasManageResetPasswordPermission
+                    keyConnectorOptions != null -> false
+                    else -> true
+                }
                 val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
                     userNeedsMasterPassword
 
