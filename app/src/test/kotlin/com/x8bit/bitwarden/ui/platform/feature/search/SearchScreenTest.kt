@@ -1091,7 +1091,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

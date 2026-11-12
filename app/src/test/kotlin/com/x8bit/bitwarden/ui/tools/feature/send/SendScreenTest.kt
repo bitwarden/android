@@ -1099,7 +1099,7 @@ class SendScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Upgrade to Premium")
+            .onNodeWithText("Explore Premium")
             .performClick()
 
         verify { viewModel.trySendAction(SendAction.UpgradeToPremiumClick) }
