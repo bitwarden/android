@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.detekt) apply true
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlinx.kover) apply true
     alias(libs.plugins.ksp) apply false
@@ -35,6 +36,7 @@ configurations.configureEach {
 dependencies {
     detektPlugins(libs.detekt.detekt.formatting)
     detektPlugins(libs.detekt.detekt.rules)
+    detektPlugins(project(":detekt-rules"))
 
     kover(project(":annotation"))
     kover(project(":app"))
@@ -59,6 +61,7 @@ detekt {
         "core/src",
         "cxf/src",
         "data/src",
+        "detekt-rules/src",
         "network/src",
         "testharness/src",
         "ui/src",

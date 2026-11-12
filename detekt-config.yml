@@ -25,6 +25,12 @@ output-reports:
   active: true
   exclude:
 
+bitwarden:
+  active: true
+  NoSharingInPropertyGetter:
+    # Disabled until the existing violations are fixed or baselined.
+    active: false
+
 comments:
   active: true
   excludes: [ '**/test/**', '**/testStandard/**', '**/testFdroid/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**ServiceImpl.kt', '**/testFixtures/**' ]
