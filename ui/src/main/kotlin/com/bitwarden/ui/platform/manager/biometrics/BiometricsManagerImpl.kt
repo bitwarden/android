@@ -1,46 +1,51 @@
-package com.x8bit.bitwarden.ui.platform.manager.biometrics
+package com.bitwarden.ui.platform.manager.biometrics
 
 import android.app.Activity
-import androidx.biometric.BiometricManager
+import androidx.annotation.StringRes
 import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.biometrics.BiometricsSupportManager
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
+import com.bitwarden.ui.platform.manager.biometrics.model.BiometricsConfig
 import com.bitwarden.ui.platform.resource.BitwardenString
 import javax.crypto.Cipher
 
 /**
  * Default implementation of the [BiometricsManager] to manage biometrics within the app.
+ *
+ * @param activity The activity used to display the biometric prompts.
+ * @param config The app-specific configuration for the prompts and supported authenticators.
+ * @param biometricsSupportManager Handles the biometric capability checks.
  */
 @OmitFromCoverage
-class BiometricsManagerImpl(
+internal class BiometricsManagerImpl(
     private val activity: Activity,
+    private val config: BiometricsConfig,
+    private val biometricsSupportManager: BiometricsSupportManager,
 ) : BiometricsManager {
-    private val biometricManager: BiometricManager = BiometricManager.from(activity)
-
     private val fragmentActivity: FragmentActivity get() = activity as FragmentActivity
 
-    override val isBiometricsSupported: Boolean
-        get() = biometricSupportStatus == BiometricSupportStatus.CLASS_3_SUPPORTED
-
-    override val isUserVerificationSupported: Boolean
-        get() = canAuthenticate(
-            authenticators = Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
+    /**
+     * The authenticators allowed when prompting for biometrics.
+     */
+    private val biometricsAuthenticators: Int
+        get() = biometricsSupportManager.getBiometricsAuthenticators(
+            isDeviceCredentialAllowed = config.isDeviceCredentialAllowedForBiometrics,
         )
 
+    override val isBiometricsSupported: Boolean
+        get() = biometricsSupportManager.isBiometricsSupported(
+            isDeviceCredentialAllowed = config.isDeviceCredentialAllowedForBiometrics,
+        )
+
+    override val isUserVerificationSupported: Boolean
+        get() = biometricsSupportManager.isUserVerificationSupported
+
     override val biometricSupportStatus: BiometricSupportStatus
-        get() = when {
-            canAuthenticate(Authenticators.BIOMETRIC_STRONG) -> {
-                BiometricSupportStatus.CLASS_3_SUPPORTED
-            }
-
-            canAuthenticate(Authenticators.BIOMETRIC_WEAK) -> {
-                BiometricSupportStatus.CLASS_2_SUPPORTED
-            }
-
-            else -> BiometricSupportStatus.NOT_SUPPORTED
-        }
+        get() = biometricsSupportManager.biometricSupportStatus
 
     override fun promptBiometrics(
         onSuccess: (cipher: Cipher) -> Unit,
@@ -78,20 +83,6 @@ class BiometricsManagerImpl(
         }
     }
 
-    private fun canAuthenticate(authenticators: Int): Boolean =
-        when (biometricManager.canAuthenticate(authenticators)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> true
-            BiometricManager.BIOMETRIC_STATUS_UNKNOWN,
-            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED,
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE,
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
-            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED,
-                -> false
-
-            else -> false
-        }
-
     private fun configureAndDisplayPrompt(
         onSuccess: (Cipher?) -> Unit,
         onCancel: () -> Unit,
@@ -105,7 +96,7 @@ class BiometricsManagerImpl(
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult,
-                ) = onSuccess(result.cryptoObject?.cipher)
+                ): Unit = onSuccess(result.cryptoObject?.cipher)
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     when (errorCode) {
@@ -137,16 +128,20 @@ class BiometricsManagerImpl(
         )
 
         val promptInfoBuilder = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(activity.getString(BitwardenString.bitwarden))
-            .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
+            .setTitle(getString(resId = config.promptTitleRes))
+            .setConfirmationRequired(false)
 
         cipher
             ?.let {
                 promptInfoBuilder
-                    .setDescription(activity.getString(BitwardenString.biometrics_direction))
-                    .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
-                    .setNegativeButtonText(activity.getString(BitwardenString.cancel))
-                    .setConfirmationRequired(false)
+                    .setDescription(getString(resId = config.biometricsPromptDescriptionRes))
+                    .setAllowedAuthenticators(biometricsAuthenticators)
+                    .apply {
+                        if (!config.isDeviceCredentialAllowedForBiometrics) {
+                            // Negative text is not allowed for device credential authentication.
+                            setNegativeButtonText(getString(resId = BitwardenString.cancel))
+                        }
+                    }
                 biometricPrompt.authenticate(
                     promptInfoBuilder.build(),
                     BiometricPrompt.CryptoObject(it),
@@ -154,12 +149,13 @@ class BiometricsManagerImpl(
             }
             ?: run {
                 promptInfoBuilder
-                    .setDescription(activity.getString(BitwardenString.user_verification_direction))
+                    .setDescription(getString(resId = BitwardenString.user_verification_direction))
                     .setAllowedAuthenticators(
                         Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
                     )
-                    .setConfirmationRequired(false)
                 biometricPrompt.authenticate(promptInfoBuilder.build())
             }
     }
+
+    private fun getString(@StringRes resId: Int): String = activity.getString(resId)
 }
