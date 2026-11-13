@@ -57,7 +57,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
@@ -71,6 +70,7 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
@@ -170,6 +170,7 @@ internal class AuthRepositoryImpl(
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
     authStateManager: AuthStateManager,
+    onboardingManager: OnboardingManager,
     organizationManager: OrganizationManager,
     passwordPolicyManager: PasswordPolicyManager,
     logsManager: LogsManager,
@@ -180,6 +181,7 @@ internal class AuthRepositoryImpl(
     AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    OnboardingManager by onboardingManager,
     OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
@@ -522,7 +524,8 @@ internal class AuthRepositoryImpl(
                 ),
             )
         }
-        settingsRepository.storeUserHasLoggedInValue(userId)
+        settingsRepository.storeUserHasLoggedInValue(userId = userId)
+        initializeOnboardingFlow(userId = userId)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
@@ -1501,15 +1504,6 @@ internal class AuthRepositoryImpl(
             )
     }
 
-    override fun setOnboardingStatus(status: OnboardingStatus) {
-        activeUserId?.let { userId ->
-            authDiskSource.storeOnboardingStatus(
-                userId = userId,
-                onboardingStatus = status,
-            )
-        }
-    }
-
     /**
      * Enrolls the active user in password reset if their organization requires it.
      */
@@ -1645,9 +1639,10 @@ internal class AuthRepositoryImpl(
         orgIdentifier: String?,
         userConfirmedKeyConnector: Boolean,
     ): LoginResult = userStateManager.userStateTransaction {
+        val previousUserState = authDiskSource.userState
         val passwordPolicyInfo = loginResponse.masterPasswordPolicyOptions?.toPolicyInformation()
         val userStateJson = loginResponse.toUserState(
-            previousUserState = authDiskSource.userState,
+            previousUserState = previousUserState,
             environmentUrlData = environmentRepository.environment.environmentUrlData,
             passwordPassesPolicy = if (password != null && passwordPolicyInfo != null) {
                 passwordPassesPolicy(password = password, policyInfo = passwordPolicyInfo)
@@ -1754,6 +1749,8 @@ internal class AuthRepositoryImpl(
         if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
             organizationIdentifier = orgIdentifier
         }
+
+        initializeOnboardingFlow(userId = userId)
 
         // Remove any cached data after successfully logging in.
         identityTokenAuthModel = null
@@ -2069,7 +2066,6 @@ internal class AuthRepositoryImpl(
     ) {
         (block() as? VaultUnlockError)?.also(onVaultUnlockError)
     }
-
     //endregion LoginCommon
 }
 

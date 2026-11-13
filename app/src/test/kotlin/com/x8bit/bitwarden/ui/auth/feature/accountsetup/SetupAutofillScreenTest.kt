@@ -273,7 +273,6 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
 }
 
 private val DEFAULT_STATE = SetupAutoFillState(
-    userId = "userId",
     dialogState = null,
     autofillEnabled = false,
     isInitialSetup = true,

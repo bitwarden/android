@@ -458,6 +458,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [onboardingStatus] was stored successfully using the [userId].
+     */
+    fun assertOnboardingStatus(userId: String, onboardingStatus: OnboardingStatus?) {
+        assertEquals(onboardingStatus, this.storedOnboardingStatus[userId])
+    }
+
+    /**
      * Assert that the [invalidUnlockAttempts] was stored successfully using the [userId].
      */
     fun assertInvalidUnlockAttempts(userId: String, invalidUnlockAttempts: Int?) {

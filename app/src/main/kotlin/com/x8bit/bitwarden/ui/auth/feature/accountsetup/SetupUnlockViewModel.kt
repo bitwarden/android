@@ -7,9 +7,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -36,7 +34,6 @@ class SetupUnlockViewModel @AssistedInject constructor(
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -99,7 +96,7 @@ class SetupUnlockViewModel @AssistedInject constructor(
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            updateOnboardingStatusToNextStep()
+            authRepository.goToNextStep()
         } else {
             sendEvent(SetupUnlockEvent.NavigateBack)
         }
@@ -130,7 +127,7 @@ class SetupUnlockViewModel @AssistedInject constructor(
 
     private fun handleSetUpLaterClick() {
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
-        updateOnboardingStatusToNextStep()
+        authRepository.goToNextStep()
     }
 
     private fun handleDismissDialog() {
@@ -208,19 +205,6 @@ class SetupUnlockViewModel @AssistedInject constructor(
                 }
             }
         }
-    }
-
-    private fun updateOnboardingStatusToNextStep() {
-        val isAutofillEnabled = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isAnyIsAvailableAndDisabled
-        val nextStep = when {
-            !isAutofillEnabled -> OnboardingStatus.AUTOFILL_SETUP
-            isBrowserAutofillUnconfigured -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
-            else -> OnboardingStatus.FINAL_STEP
-        }
-        authRepository.setOnboardingStatus(nextStep)
     }
 }
 

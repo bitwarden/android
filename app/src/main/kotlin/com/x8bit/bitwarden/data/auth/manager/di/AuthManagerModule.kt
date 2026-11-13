@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.biometrics.BiometricsSupportManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.network.service.AccountsService
@@ -32,6 +33,9 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
@@ -40,6 +44,7 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -59,6 +64,22 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideOnboardingManager(
+        authDiskSource: AuthDiskSource,
+        biometricsSupportManager: BiometricsSupportManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        settingsRepository: SettingsRepository,
+        featureFlagManager: FeatureFlagManager,
+    ): OnboardingManager = OnboardingManagerImpl(
+        authDiskSource = authDiskSource,
+        biometricsSupportManager = biometricsSupportManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        settingsRepository = settingsRepository,
+        featureFlagManager = featureFlagManager,
+    )
 
     @Provides
     @Singleton

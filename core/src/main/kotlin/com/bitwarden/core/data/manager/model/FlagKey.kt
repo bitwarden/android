@@ -47,6 +47,7 @@ sealed class FlagKey<out T : Any> {
                 IdentityAutofill,
                 SdkPinUnlock,
                 SdkPreLogin,
+                UpdatedOnboardingFlow,
             )
         }
     }
@@ -197,6 +198,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SdkPreLogin : FlagKey<Boolean>() {
         override val keyName: String = "pm-27060-password-prelogin-from-sdk"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Update onboarding flow.
+     */
+    data object UpdatedOnboardingFlow : FlagKey<Boolean>() {
+        override val keyName: String = "updated-onboarding-flow"
         override val defaultValue: Boolean = false
     }
 

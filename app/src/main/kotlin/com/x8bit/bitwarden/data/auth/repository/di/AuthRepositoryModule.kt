@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -75,6 +76,7 @@ object AuthRepositoryModule {
         toastManager: ToastManager,
         featureFlagManager: FeatureFlagManager,
         organizationManager: OrganizationManager,
+        onboardingManager: OnboardingManager,
         authStateManager: AuthStateManager,
     ): AuthRepository = AuthRepositoryImpl(
         clock = clock,
@@ -105,6 +107,7 @@ object AuthRepositoryModule {
         toastManager = toastManager,
         featureFlagManager = featureFlagManager,
         organizationManager = organizationManager,
+        onboardingManager = onboardingManager,
         authStateManager = authStateManager,
     )
 }
