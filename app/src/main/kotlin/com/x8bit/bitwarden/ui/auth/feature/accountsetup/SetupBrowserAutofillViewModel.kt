@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -115,7 +114,7 @@ class SetupBrowserAutofillViewModel @AssistedInject constructor(
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         } else {
             sendEvent(SetupBrowserAutofillEvent.NavigateBack)
         }
@@ -130,7 +129,7 @@ class SetupBrowserAutofillViewModel @AssistedInject constructor(
     private fun handleTurnOnLaterConfirmClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
         mutableStateFlow.update { it.copy(dialogState = null) }
-        authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+        authRepository.goToNextStep()
     }
 
     private fun handleBrowserAutofillStatusReceive(

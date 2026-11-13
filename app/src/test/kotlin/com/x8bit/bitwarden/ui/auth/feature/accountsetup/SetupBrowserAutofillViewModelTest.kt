@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -23,7 +22,7 @@ import org.junit.jupiter.api.Test
 
 class SetupBrowserAutofillViewModelTest {
     private val authRepository: AuthRepository = mockk {
-        every { setOnboardingStatus(status = any()) } just runs
+        every { goToNextStep() } just runs
     }
     private val mutableBrowserThirdPartyAutofillStatusFlow =
         MutableStateFlow(DEFAULT_BROWSER_AUTOFILL_STATUS)
@@ -134,12 +133,12 @@ class SetupBrowserAutofillViewModelTest {
     }
 
     @Test
-    fun `ContinueClick should set the onboarding state to FINAL_STEP`() {
+    fun `ContinueClick should call goToNextStep when initial setup`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupBrowserAutofillAction.ContinueClick)
         verify(exactly = 1) {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
@@ -154,12 +153,12 @@ class SetupBrowserAutofillViewModelTest {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         }
         verify(exactly = 0) {
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
     @Test
-    fun `TurnOnLaterClick should set the onboarding state to FINAL_STEP`() = runTest {
+    fun `TurnOnLaterClick should show the TurnOnLaterDialog`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
@@ -174,7 +173,7 @@ class SetupBrowserAutofillViewModelTest {
     }
 
     @Test
-    fun `TurnOnLaterConfirmClick should set the onboarding state to FINAL_STEP`() = runTest {
+    fun `TurnOnLaterConfirmClick should dismiss the dialog and call goToNextStep`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             dialogState = SetupBrowserAutofillState.DialogState.TurnOnLaterDialog,
         )
@@ -189,7 +188,7 @@ class SetupBrowserAutofillViewModelTest {
         }
         verify(exactly = 1) {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
