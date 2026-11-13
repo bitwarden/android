@@ -2483,6 +2483,18 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `PasskeyGroupClick should emit NavigateToItemListing event with Passkey type`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.PasskeyGroupClick)
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Passkey),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `SearchIconClick should emit NavigateToVaultSearchScreen`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

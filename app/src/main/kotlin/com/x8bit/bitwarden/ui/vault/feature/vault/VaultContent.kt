@@ -306,6 +306,26 @@ private fun LazyListScope.typesSection(
         )
     }
 
+    if (state.showPasskeyGroup) {
+        item(key = "passkeys_group") {
+            BitwardenGroupItem(
+                startIcon = IconData.Local(
+                    iconRes = BitwardenDrawable.ic_bw_passkey,
+                    testTag = "PasskeyCipherIcon",
+                ),
+                label = stringResource(id = BitwardenString.type_passkey),
+                supportingLabel = state.passkeyItemsCount.toString(),
+                onClick = vaultHandlers.passkeyGroupClick,
+                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                modifier = Modifier
+                    .animateItem()
+                    .fillMaxWidth()
+                    .testTag("PasskeyFilter")
+                    .standardHorizontalMargin(),
+            )
+        }
+    }
+
     if (state.showCardGroup) {
         item(key = "cards_group") {
             BitwardenGroupItem(

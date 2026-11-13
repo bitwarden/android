@@ -130,6 +130,8 @@ fun VaultData.toViewState(
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
         val cardCount = activeCipherViews.count { it.type is CipherListViewType.Card }
+        val passkeyCount = activeCipherViews
+            .count { it.type is CipherListViewType.Login && it.login?.hasFido2 == true }
         val archiveCount = allCipherViews.count {
             it.archivedDate != null && it.deletedDate == null
         }
@@ -138,6 +140,7 @@ fun VaultData.toViewState(
             itemTypesCount = itemTypesCount,
             totpItemsCount = activeCipherViews.count { it.id in validTotpIds },
             loginItemsCount = activeCipherViews.count { it.type is CipherListViewType.Login },
+            passkeyItemsCount = passkeyCount,
             cardItemsCount = cardCount,
             identityItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.Identity },
@@ -224,6 +227,7 @@ fun VaultData.toViewState(
                 .asText()
                 .takeIf { !isPremium && archiveCount == 0 },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
+            showPasskeyGroup = passkeyCount != 0,
             showBankAccountGroup = isNewItemTypesEnabled,
             showLicenseGroup = isNewItemTypesEnabled,
             showPassportGroup = isNewItemTypesEnabled,
