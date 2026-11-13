@@ -44,6 +44,7 @@ configure<LibraryExtension> {
 dependencies {
     implementation(project(":annotation"))
 
+    implementation(libs.androidx.biometrics)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)
