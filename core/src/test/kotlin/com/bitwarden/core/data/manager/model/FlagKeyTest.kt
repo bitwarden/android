@@ -17,10 +17,6 @@ class FlagKeyTest {
             "pm-18021-force-update-kdf-settings",
         )
         assertEquals(
-            FlagKey.MigrateMyVaultToMyItems.keyName,
-            "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -88,7 +84,6 @@ class FlagKeyTest {
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
                 FlagKey.ForceUpdateKdfSettings,
-                FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
