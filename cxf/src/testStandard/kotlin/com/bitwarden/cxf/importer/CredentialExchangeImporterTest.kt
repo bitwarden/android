@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
+import androidx.credentials.providerevents.exception.ImportCredentialsNoExportOptionException
 import androidx.credentials.providerevents.exception.ImportCredentialsUnknownErrorException
 import androidx.credentials.providerevents.transfer.ImportCredentialsResponse
 import androidx.credentials.providerevents.transfer.ProviderImportCredentialsResponse
@@ -98,6 +99,24 @@ class CredentialExchangeImporterTest {
             val result = importer.importCredentials(listOf("basic-auth"))
 
             assertEquals(ImportCredentialsSelectionResult.Cancelled, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `importCredentials should return NoExportOptions when ImportCredentialsNoExportOptionException is thrown`() =
+        runTest {
+            coEvery {
+                mockProviderEventsManager.importCredentials(
+                    context = any(),
+                    request = any(),
+                )
+            } throws ImportCredentialsNoExportOptionException(
+                "No export provider option found.",
+            )
+
+            val result = importer.importCredentials(listOf("basic-auth"))
+
+            assertEquals(ImportCredentialsSelectionResult.NoExportOptions, result)
         }
 
     @Suppress("MaxLineLength")

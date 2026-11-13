@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.credentials.providerevents.exception.ImportCredentialsException
+import androidx.credentials.providerevents.exception.ImportCredentialsNoExportOptionException
 import androidx.credentials.providerevents.exception.ImportCredentialsUnknownErrorException
 import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
 import androidx.credentials.providerevents.transfer.KnownExtensions
@@ -41,6 +42,9 @@ internal class CredentialExchangeImporterImpl(
     } catch (e: ImportCredentialsCancellationException) {
         Timber.e(e, "User cancelled import from selected credential manager.")
         ImportCredentialsSelectionResult.Cancelled
+    } catch (e: ImportCredentialsNoExportOptionException) {
+        Timber.e(e, "No credential provider available to import from.")
+        ImportCredentialsSelectionResult.NoExportOptions
     } catch (e: ImportCredentialsException) {
         Timber.e(e, "Failed to import items from selected credential manager.")
         ImportCredentialsSelectionResult.Failure(error = e)
