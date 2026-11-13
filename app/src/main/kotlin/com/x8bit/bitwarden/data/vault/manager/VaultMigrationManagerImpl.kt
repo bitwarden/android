@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
@@ -16,7 +15,6 @@ import com.bitwarden.policies.PolicyType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
@@ -57,7 +55,6 @@ class VaultMigrationManagerImpl(
     private val ciphersService: CiphersService,
     private val settingsDiskSource: SettingsDiskSource,
     private val policyManager: PolicyManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val connectionManager: NetworkConnectionManager,
     vaultLockManager: VaultLockManager,
     dispatcherManager: DispatcherManager,
@@ -169,7 +166,6 @@ class VaultMigrationManagerImpl(
         isNetworkConnected: Boolean,
     ): Boolean =
         policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any() &&
-            featureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) &&
             isNetworkConnected &&
             hasPersonalCiphers
 

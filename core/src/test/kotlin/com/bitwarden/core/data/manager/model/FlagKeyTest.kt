@@ -13,10 +13,6 @@ class FlagKeyTest {
             "bitwarden-authentication-enabled",
         )
         assertEquals(
-            FlagKey.MigrateMyVaultToMyItems.keyName,
-            "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -79,7 +75,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
