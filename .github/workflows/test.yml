@@ -47,7 +47,7 @@ jobs:
           # Library shards
           - group: lib-core-network-bridge
             fastlane_method: testLibraries
-            fastlane_options: ":core :network :cxf :authenticatorbridge :testharness"
+            fastlane_options: ":core :network :cxf :authenticatorbridge :testharness :detekt-rules"
           - group: lib-data-ui
             fastlane_method: testLibraries
             fastlane_options: ":data :ui"
