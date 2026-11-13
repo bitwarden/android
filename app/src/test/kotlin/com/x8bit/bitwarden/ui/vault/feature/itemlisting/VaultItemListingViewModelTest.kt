@@ -119,6 +119,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -348,6 +349,26 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `initial state should not crash and use an empty account when user state is null`() =
+        runTest {
+            mutableUserStateFlow.value = null
+
+            val viewModel = createVaultItemListingViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(
+                        activeAccountSummary = UserState.EMPTY_ACCOUNT
+                            .toAccountSummary(isActive = true),
+                        accountSummaries = persistentListOf(),
+                        isPremium = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `initial dialog state should be correct when CreateCredentialRequest is present`() =
