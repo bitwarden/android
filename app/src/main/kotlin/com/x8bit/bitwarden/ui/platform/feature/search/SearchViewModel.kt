@@ -24,6 +24,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -111,7 +112,14 @@ class SearchViewModel @AssistedInject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val searchType = route.searchType
-            val userState = requireNotNull(authRepo.userStateFlow.value)
+            val userState = authRepo.userStateFlow.value
+            val activeAccount = userState?.activeAccount ?: run {
+                // We use this empty account to avoid a crash that can occur during a race
+                // condition. The state-based navigation brought us here but the UserState has now
+                // been set to null, we just need to wait here a short while longer and
+                // state-based navigation will get us out of here.
+                UserState.EMPTY_ACCOUNT
+            }
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
             val searchTerm = (specialCircumstance as? SpecialCircumstance.SearchShortcut)
                 ?.searchTerm
@@ -127,7 +135,7 @@ class SearchViewModel @AssistedInject constructor(
                 dialogState = null,
                 vaultFilterData = when (searchType) {
                     is SearchType.Sends -> null
-                    is SearchType.Vault -> userState.activeAccount.toVaultFilterData(
+                    is SearchType.Vault -> activeAccount.toVaultFilterData(
                         isIndividualVaultDisabled = policyManager
                             .getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
                             .any(),
@@ -138,8 +146,8 @@ class SearchViewModel @AssistedInject constructor(
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
                 autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
                 totpData = specialCircumstance?.toTotpDataOrNull(),
-                hasMasterPassword = userState.activeAccount.hasMasterPassword,
-                isPremium = userState.activeAccount.isPremium,
+                hasMasterPassword = activeAccount.hasMasterPassword,
+                isPremium = activeAccount.isPremium,
                 restrictItemTypesPolicyOrgIds = persistentListOf(),
             )
         },
