@@ -25,9 +25,9 @@ fun PremiumRequiredDialog(
         message = message,
         confirmButtonText = stringResource(
             id = if (isInAppUpgradeAvailable) {
-                BitwardenString.upgrade_to_premium
-            } else {
                 BitwardenString.explore_premium
+            } else {
+                BitwardenString.upgrade_to_premium
             },
         ),
         dismissButtonText = stringResource(id = BitwardenString.cancel),

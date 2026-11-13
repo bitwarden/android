@@ -301,7 +301,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -825,7 +825,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = "Upgrade to Premium")
+            .onAllNodesWithText(text = "Explore Premium")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -864,7 +864,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Explore Premium")
+            .onAllNodesWithText(text = "Upgrade to Premium")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 

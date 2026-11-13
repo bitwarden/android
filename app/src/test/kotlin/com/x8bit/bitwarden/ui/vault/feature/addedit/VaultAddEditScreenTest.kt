@@ -354,7 +354,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
