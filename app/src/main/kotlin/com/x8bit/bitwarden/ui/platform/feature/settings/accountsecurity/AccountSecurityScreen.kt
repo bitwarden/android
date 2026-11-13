@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
@@ -53,8 +54,10 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.support.BitwardenSupportingText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -66,9 +69,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
-import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
 import kotlinx.collections.immutable.ImmutableList

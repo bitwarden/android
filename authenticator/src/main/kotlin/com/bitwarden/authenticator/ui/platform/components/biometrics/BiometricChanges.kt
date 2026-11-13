@@ -3,8 +3,8 @@ package com.bitwarden.authenticator.ui.platform.components.biometrics
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.Lifecycle
-import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 
 /**
  * Tracks changes in biometric support and notifies when the app resumes.

@@ -203,7 +203,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)
     implementation(libs.androidx.browser)
-    implementation(libs.androidx.biometrics)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.compose)
     implementation(platform(libs.androidx.compose.bom))

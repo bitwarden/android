@@ -4,7 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation3.runtime.NavEntry
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
-import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.navigation.util.navigationControllerOf
 import io.mockk.every
 import io.mockk.just
