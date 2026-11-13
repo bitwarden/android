@@ -701,6 +701,76 @@ class VaultDataExtensionsTest {
     }
 
     @Test
+    fun `toLoginIconData should prefer a website URI when an Android URI is listed first`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri1.com"
+
+        val actual = listOf(
+            LoginUriView(
+                uri = "androidapp://test.com",
+                match = UriMatchType.HOST,
+                uriChecksum = null,
+            ),
+            LoginUriView(
+                uri = "https://www.mockuri1.com",
+                match = UriMatchType.HOST,
+                uriChecksum = null,
+            ),
+        )
+            .toLoginIconData(
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
+                usePasskeyDefaultIcon = false,
+            )
+
+        val expected = IconData.Network(
+            uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
+            fallbackIconRes = BitwardenDrawable.ic_globe,
+        )
+
+        assertEquals(expected, actual)
+
+        unmockkStatic(Uri::class)
+    }
+
+    @Test
+    fun `toLoginIconData should prefer a website URI when an iOS URI is listed first`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri1.com"
+
+        val actual = listOf(
+            LoginUriView(
+                uri = "iosapp://test.com",
+                match = UriMatchType.HOST,
+                uriChecksum = null,
+            ),
+            LoginUriView(
+                uri = "https://www.mockuri1.com",
+                match = UriMatchType.HOST,
+                uriChecksum = null,
+            ),
+        )
+            .toLoginIconData(
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Prod.Us.baseIconUrl,
+                usePasskeyDefaultIcon = false,
+            )
+
+        val expected = IconData.Network(
+            uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
+            fallbackIconRes = BitwardenDrawable.ic_globe,
+        )
+
+        assertEquals(expected, actual)
+
+        unmockkStatic(Uri::class)
+    }
+
+    @Test
     fun `toLoginIconData should return IconData Network type if isIconLoadingDisabled is false`() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
