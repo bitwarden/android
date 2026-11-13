@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.e2e.screens
 
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import com.bitwarden.ui.platform.resource.BitwardenString
 
@@ -31,10 +33,13 @@ class LandingScreen(private val rule: ComposeTestRule) {
      * Enters [email] and continues to the master password screen.
      */
     fun continueWithEmail(email: String): LoginScreen {
-        // The "environment saved" snackbar can sit over Continue and take the tap.
-        rule.waitForNodeToDisappear(hasText(appString(BitwardenString.environment_saved)))
         rule.waitForTag("EmailAddressEntry").performTextReplacement(email)
-        rule.waitForTag("ContinueButton").performScrollTo().performClick()
+        // Under test the "environment saved" snackbar covers Continue for ~25s, so click via the
+        // semantics action instead of waiting for it to clear.
+        rule
+            .waitForTag("ContinueButton")
+            .performScrollTo()
+            .performSemanticsAction(SemanticsActions.OnClick)
         return LoginScreen(rule)
     }
 }

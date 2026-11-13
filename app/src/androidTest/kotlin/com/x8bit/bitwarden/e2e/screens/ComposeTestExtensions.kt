@@ -56,18 +56,6 @@ fun ComposeTestRule.scrollToAndClick(matcher: SemanticsMatcher) {
 }
 
 /**
- * Waits until no node matches [matcher], e.g. for a transient message to be dismissed.
- */
-fun ComposeTestRule.waitForNodeToDisappear(matcher: SemanticsMatcher) {
-    waitUntil(
-        conditionDescription = "no node ${matcher.description}",
-        timeoutMillis = NETWORK_TIMEOUT_MS,
-    ) {
-        onAllNodes(matcher, useUnmergedTree = true).fetchSemanticsNodes().isEmpty()
-    }
-}
-
-/**
  * The field's raw value, before any visual transformation.
  */
 fun SemanticsNodeInteraction.rawText(): String {
