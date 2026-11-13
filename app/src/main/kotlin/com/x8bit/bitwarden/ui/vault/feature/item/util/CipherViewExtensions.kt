@@ -380,6 +380,8 @@ private val CardView.paymentCardBrandIconRes: Int?
         VaultCardBrand.UNIONPAY -> BitwardenDrawable.ic_payment_card_brand_union_pay
         VaultCardBrand.RUPAY -> BitwardenDrawable.ic_payment_card_brand_ru_pay
         VaultCardBrand.SELECT,
+        VaultCardBrand.DINA_CARD,
+        VaultCardBrand.MIR,
         VaultCardBrand.OTHER,
         null,
             -> null

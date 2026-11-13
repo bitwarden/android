@@ -12,6 +12,10 @@ class VaultCardBrandTest {
             "AMEx",
             "diNERs  cLub",
             "rupay",
+            "DinaCard",
+            "diNA_card",
+            "Mir",
+            "m i r",
             "nothing card",
         )
 
@@ -23,6 +27,10 @@ class VaultCardBrandTest {
                 VaultCardBrand.AMEX,
                 VaultCardBrand.DINERS_CLUB,
                 VaultCardBrand.RUPAY,
+                VaultCardBrand.DINA_CARD,
+                VaultCardBrand.DINA_CARD,
+                VaultCardBrand.MIR,
+                VaultCardBrand.MIR,
                 null,
             ),
             result,
