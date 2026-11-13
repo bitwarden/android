@@ -58,24 +58,13 @@ jobs:
         if: steps.gate.outputs.skip == 'false'
         uses: bitwarden/gh-actions/azure-logout@main
 
-      - name: Generate GH App token
-        if: steps.gate.outputs.skip == 'false'
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: app-token
-        with:
-          client-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
-          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
-          permission-contents: write
-          permission-pull-requests: write
-
       - name: Check out repo
         if: steps.gate.outputs.skip == 'false'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Clone sdk-internal
         if: steps.gate.outputs.skip == 'false'
@@ -163,10 +152,23 @@ jobs:
             --model opus
             --allowedTools "Agent,Bash(gh pr diff:*),Bash(git -C * log *),Bash(git -C * show *),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(grep:*),Bash(./gradlew *),Read,Grep,Glob,Edit,Write,Skill,mcp__github_comment__update_claude_comment"
 
+      - name: Generate GH App token for push
+        if: steps.gate.outputs.skip == 'false'
+        # A push with GITHUB_TOKEN would not trigger CI on the fix commit, so it uses the app's
+        # token. claude-code-action points origin at its own token and revokes it when the step
+        # ends, so the push authenticates with a token minted after Claude finishes.
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: push-token
+        with:
+          client-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-contents: write
+
       - name: Push any resolved fix
         if: steps.gate.outputs.skip == 'false'
         env:
           _BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+          GH_TOKEN: ${{ steps.push-token.outputs.token }}
         run: |
           # claude-code-action treats the PR head as untrusted and restores these exact paths from
           # origin/main before running Claude, regardless of whether this branch's copy is stale.
@@ -185,5 +187,8 @@ jobs:
           if git diff --quiet "origin/$_BRANCH_NAME" HEAD; then
             echo "No new commits to push."
           else
-            git push origin "HEAD:$_BRANCH_NAME"
+            # origin's URL still embeds claude-code-action's revoked token, which git would use
+            # over the credential helper, so push to the bare URL instead.
+            gh auth setup-git
+            git push "https://github.com/${{ github.repository }}.git" "HEAD:$_BRANCH_NAME"
           fi
