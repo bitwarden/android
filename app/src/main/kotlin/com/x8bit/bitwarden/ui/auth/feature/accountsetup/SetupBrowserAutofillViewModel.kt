@@ -4,7 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -115,7 +117,7 @@ class SetupBrowserAutofillViewModel @AssistedInject constructor(
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         } else {
             sendEvent(SetupBrowserAutofillEvent.NavigateBack)
         }
@@ -130,7 +132,7 @@ class SetupBrowserAutofillViewModel @AssistedInject constructor(
     private fun handleTurnOnLaterConfirmClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
         mutableStateFlow.update { it.copy(dialogState = null) }
-        authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+        authRepository.goToNextStep()
     }
 
     private fun handleBrowserAutofillStatusReceive(
@@ -154,6 +156,28 @@ data class SetupBrowserAutofillState(
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
     /**
+     * The heading to be displayed to the user.
+     */
+    val heading: Text
+        get() = if (browserCount > 1) {
+            BitwardenString.choose_autofill_using_another_service_in_your_browsers.asText()
+        } else {
+            BitwardenString.choose_autofill_using_another_service_in_your_browser.asText()
+        }
+
+    /**
+     * The description to be displayed to the user.
+     */
+    val description: Text
+        get() = if (browserCount > 1) {
+            BitwardenString.youre_using_browsers_that_require_special_permissions_plural.asText()
+        } else {
+            BitwardenString
+                .youre_using_a_browser_that_requires_special_permissions_singular
+                .asText()
+        }
+
+    /**
      * The number of browsers that can be configured.
      */
     val browserCount: Int get() = browserAutofillSettingsOptions.size
@@ -161,7 +185,9 @@ data class SetupBrowserAutofillState(
     /**
      * Indicates if the Continue button should be enabled or not.
      */
-    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.all { it.isEnabled }
+    val isContinueEnabled: Boolean
+        get() = browserAutofillSettingsOptions.any { it.isDefault && it.isEnabled } ||
+            browserAutofillSettingsOptions.none { it.isDefault }
 
     /**
      * Models dialogs that can be shown on the Setup Browser Autofill screen.

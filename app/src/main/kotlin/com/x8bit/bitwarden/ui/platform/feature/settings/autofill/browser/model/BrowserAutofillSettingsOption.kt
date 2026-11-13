@@ -13,7 +13,9 @@ import kotlinx.parcelize.Parcelize
  * to display in any UI component, and whether the third party autofill [isEnabled].
  */
 @Parcelize
-sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable {
+sealed class BrowserAutofillSettingsOption : Parcelable {
+    abstract val isEnabled: Boolean
+    abstract val isDefault: Boolean
     abstract val browserPackage: BrowserPackage
     abstract val optionText: Text
 
@@ -22,8 +24,9 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
      */
     @Parcelize
     data class BraveStable(
-        val enabled: Boolean,
-    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val isEnabled: Boolean,
+        override val isDefault: Boolean,
+    ) : BrowserAutofillSettingsOption() {
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.BRAVE_RELEASE
         override val optionText: Text
@@ -35,8 +38,9 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
      */
     @Parcelize
     data class ChromeStable(
-        val enabled: Boolean,
-    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val isEnabled: Boolean,
+        override val isDefault: Boolean,
+    ) : BrowserAutofillSettingsOption() {
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.CHROME_STABLE
         override val optionText: Text
@@ -48,8 +52,9 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
      */
     @Parcelize
     data class ChromeBeta(
-        val enabled: Boolean,
-    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val isEnabled: Boolean,
+        override val isDefault: Boolean,
+    ) : BrowserAutofillSettingsOption() {
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.CHROME_BETA
         override val optionText: Text
@@ -61,8 +66,9 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
      */
     @Parcelize
     data class VivaldiStable(
-        val enabled: Boolean,
-    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val isEnabled: Boolean,
+        override val isDefault: Boolean,
+    ) : BrowserAutofillSettingsOption() {
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.VIVALDI_STABLE
         override val optionText: Text
