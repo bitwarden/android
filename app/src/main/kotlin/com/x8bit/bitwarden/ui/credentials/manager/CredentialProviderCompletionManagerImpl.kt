@@ -156,14 +156,12 @@ class CredentialProviderCompletionManagerImpl(
         val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
             is GetCredentialsResult.Success -> {
+                // The picker retains other accounts' actions when appending this response.
                 PendingIntentHandler
                     .setBeginGetCredentialResponse(
                         resultIntent,
                         responseBuilder
                             .setCredentialEntries(result.credentialEntries)
-                            // Explicitly clear any pending authentication actions since we only
-                            // display results from the active account.
-                            .setAuthenticationActions(emptyList())
                             .build(),
                     )
             }

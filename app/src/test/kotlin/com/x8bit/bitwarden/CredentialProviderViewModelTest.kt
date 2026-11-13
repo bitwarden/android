@@ -28,6 +28,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -151,6 +152,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with FIDO2 assertion request should set pending request to Fido2Assertion`() {
         val viewModel = createViewModel()
         val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
+            .copy(isUserPreVerified = true)
         val mockIntent = createMockIntent(
             mockFido2CredentialAssertionRequest = mockAssertionRequest,
         )
@@ -159,6 +161,14 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
 
         verify { mockCredentialProviderRequestManager.setPendingCredentialRequest(any()) }
         assertTrue(credentialRequestSlot.captured is CredentialProviderRequest.Fido2Assertion)
+        verifyOrder {
+            bitwardenCredentialManager.isUserVerified = true
+            bitwardenCredentialManager.isUserVerified = false
+            mockAuthRepository.switchAccount(mockAssertionRequest.userId)
+            mockCredentialProviderRequestManager.setPendingCredentialRequest(
+                CredentialProviderRequest.Fido2Assertion(mockAssertionRequest),
+            )
+        }
         assertEquals(
             mockAssertionRequest,
             (credentialRequestSlot.captured as CredentialProviderRequest.Fido2Assertion).request,
@@ -170,7 +180,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with FIDO2 assertion request should set user verification based on request`() {
         val viewModel = createViewModel()
         val mockAssertionRequest = Fido2CredentialAssertionRequest(
-            userId = "mockUserId",
+            userId = ACTIVE_USER_ID,
             cipherId = "mockCipherId",
             credentialId = "mockCredentialId",
             isUserPreVerified = true,
@@ -183,6 +193,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(CredentialProviderAction.ReceiveFirstIntent(intent = mockIntent))
 
         verify { bitwardenCredentialManager.isUserVerified = true }
+        verify(exactly = 0) { mockAuthRepository.switchAccount(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -190,6 +201,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with password get request should set pending request to GetPassword`() {
         val viewModel = createViewModel()
         val mockPasswordGetRequest = createMockProviderGetPasswordCredentialRequest(number = 1)
+            .copy(isUserPreVerified = true)
         val mockIntent = createMockIntent(
             mockProviderGetPasswordRequest = mockPasswordGetRequest,
         )
@@ -198,6 +210,14 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
 
         verify { mockCredentialProviderRequestManager.setPendingCredentialRequest(any()) }
         assertTrue(credentialRequestSlot.captured is CredentialProviderRequest.GetPassword)
+        verifyOrder {
+            bitwardenCredentialManager.isUserVerified = true
+            bitwardenCredentialManager.isUserVerified = false
+            mockAuthRepository.switchAccount(mockPasswordGetRequest.userId)
+            mockCredentialProviderRequestManager.setPendingCredentialRequest(
+                CredentialProviderRequest.GetPassword(mockPasswordGetRequest),
+            )
+        }
         assertEquals(
             mockPasswordGetRequest,
             (credentialRequestSlot.captured as CredentialProviderRequest.GetPassword).request,
@@ -209,7 +229,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with password get request should set user verification based on request`() {
         val viewModel = createViewModel()
         val mockPasswordGetRequest = ProviderGetPasswordCredentialRequest(
-            userId = "mockUserId",
+            userId = ACTIVE_USER_ID,
             cipherId = "mockCipherId",
             isUserPreVerified = true,
             requestData = bundleOf(),
@@ -221,6 +241,7 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(CredentialProviderAction.ReceiveFirstIntent(intent = mockIntent))
 
         verify { bitwardenCredentialManager.isUserVerified = true }
+        verify(exactly = 0) { mockAuthRepository.switchAccount(any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -236,6 +257,13 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
 
         verify { mockCredentialProviderRequestManager.setPendingCredentialRequest(any()) }
         assertTrue(credentialRequestSlot.captured is CredentialProviderRequest.GetCredentials)
+        verifyOrder {
+            bitwardenCredentialManager.isUserVerified = false
+            mockAuthRepository.switchAccount(mockGetCredentialsRequest.userId)
+            mockCredentialProviderRequestManager.setPendingCredentialRequest(
+                CredentialProviderRequest.GetCredentials(mockGetCredentialsRequest),
+            )
+        }
         assertEquals(
             mockGetCredentialsRequest,
             (credentialRequestSlot.captured as CredentialProviderRequest.GetCredentials).request,
@@ -303,6 +331,13 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveNewIntent with get credentials request should set pending request to GetCredentials`() {
         val viewModel = createViewModel()
+        val firstRequest = createMockGetCredentialsRequest(number = 1, userId = ACTIVE_USER_ID)
+        viewModel.trySendAction(
+            CredentialProviderAction.ReceiveFirstIntent(
+                createMockIntent(mockGetCredentialsRequest = firstRequest),
+            ),
+        )
+        verify(exactly = 0) { mockAuthRepository.switchAccount(any()) }
         val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         val mockIntent = createMockIntent(
             mockGetCredentialsRequest = mockGetCredentialsRequest,
@@ -310,6 +345,17 @@ class CredentialProviderViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(CredentialProviderAction.ReceiveNewIntent(intent = mockIntent))
 
+        verifyOrder {
+            mockCredentialProviderRequestManager.setPendingCredentialRequest(
+                CredentialProviderRequest.GetCredentials(firstRequest),
+            )
+            bitwardenCredentialManager.isUserVerified = false
+            mockAuthRepository.switchAccount(mockGetCredentialsRequest.userId)
+            mockCredentialProviderRequestManager.setPendingCredentialRequest(
+                CredentialProviderRequest.GetCredentials(mockGetCredentialsRequest),
+            )
+        }
+        verify(exactly = 1) { mockAuthRepository.switchAccount(any()) }
         verify { mockCredentialProviderRequestManager.setPendingCredentialRequest(any()) }
         assertTrue(credentialRequestSlot.captured is CredentialProviderRequest.GetCredentials)
         assertEquals(

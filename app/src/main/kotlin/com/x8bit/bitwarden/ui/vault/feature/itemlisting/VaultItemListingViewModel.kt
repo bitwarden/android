@@ -209,6 +209,8 @@ class VaultItemListingViewModel @AssistedInject constructor(
         fun create(vaultItemListingType: VaultItemListingType): VaultItemListingViewModel
     }
 
+    private var hasStartedGetCredentialsRequest = false
+
     init {
         settingsRepository
             .getPullToRefreshEnabledFlow()
@@ -2210,15 +2212,24 @@ class VaultItemListingViewModel @AssistedInject constructor(
 
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         val data = vaultData.data
+        // Discovery does not restart after this latch is set, so a pending credential
+        // prompt must survive a background sync failure.
         if (data != null) {
-            updateStateWithVaultData(vaultData = data, clearDialogState = true)
+            updateStateWithVaultData(
+                vaultData = data,
+                clearDialogState = !hasStartedGetCredentialsRequest,
+            )
         } else {
             mutableStateFlow.update {
                 it.copy(
                     viewState = VaultItemListingState.ViewState.Error(
                         message = BitwardenString.generic_error_message.asText(),
                     ),
-                    dialogState = null,
+                    dialogState = if (hasStartedGetCredentialsRequest) {
+                        it.dialogState
+                    } else {
+                        null
+                    },
                 )
             }
         }
@@ -2226,7 +2237,10 @@ class VaultItemListingViewModel @AssistedInject constructor(
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
-        updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+        updateStateWithVaultData(
+            vaultData = vaultData.data,
+            clearDialogState = !hasStartedGetCredentialsRequest,
+        )
 
         state.getCredentialsRequest
             ?.let { handleProviderGetCredentialsRequest(it) }
@@ -2257,8 +2271,13 @@ class VaultItemListingViewModel @AssistedInject constructor(
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
         val data = vaultData.data
+        // Discovery does not restart after this latch is set, so a pending credential
+        // prompt must survive a background sync failure.
         if (data != null) {
-            updateStateWithVaultData(vaultData = data, clearDialogState = true)
+            updateStateWithVaultData(
+                vaultData = data,
+                clearDialogState = !hasStartedGetCredentialsRequest,
+            )
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(
@@ -2270,7 +2289,11 @@ class VaultItemListingViewModel @AssistedInject constructor(
                                 BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
-                    dialogState = null,
+                    dialogState = if (hasStartedGetCredentialsRequest) {
+                        currentState.dialogState
+                    } else {
+                        null
+                    },
                 )
             }
         }
@@ -2400,6 +2423,9 @@ class VaultItemListingViewModel @AssistedInject constructor(
     private fun handleProviderGetCredentialsRequest(
         request: GetCredentialsRequest,
     ) {
+        if (request.userId != authRepository.activeUserId || hasStartedGetCredentialsRequest) return
+        hasStartedGetCredentialsRequest = true
+
         if (request.beginGetPublicKeyCredentialOptions.isNotEmpty()) {
             handleProviderGetPublicKeyCredentialsRequestOriginValidation(request)
         } else {
@@ -2709,22 +2735,33 @@ class VaultItemListingViewModel @AssistedInject constructor(
     private fun handleGetCredentialEntriesResultReceive(
         action: VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive,
     ) {
-        action.result
-            .onFailure {
+        if (action.userId != authRepository.activeUserId) return
+
+        val accounts = authRepository.userStateFlow.value?.accounts.orEmpty()
+            .takeIf {
+                state.getCredentialsRequest
+                    ?.beginGetPublicKeyCredentialOptions
+                    ?.isNotEmpty() == true
+            }
+            .orEmpty()
+        val credentialEntries = action.result.getOrElse {
+            if (accounts.none { it.isLoggedIn && it.userId != action.userId }) {
                 showCredentialManagerErrorDialog(
                     message = BitwardenString.generic_error_message.asText(),
                 )
+                return
             }
-            .onSuccess { credentialEntries ->
-                sendEvent(
-                    VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
-                        GetCredentialsResult.Success(
-                            credentialEntries = credentialEntries,
-                            userId = action.userId,
-                        ),
-                    ),
-                )
-            }
+            emptyList()
+        }
+        sendEvent(
+            VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
+                GetCredentialsResult.Success(
+                    credentialEntries = credentialEntries,
+                    userId = action.userId,
+                    accounts = accounts,
+                ),
+            ),
+        )
     }
 
     private fun handleSnackbarDataReceived(
