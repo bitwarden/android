@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.di
 import android.content.Context
 import android.view.autofill.AutofillManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
@@ -74,10 +75,16 @@ object AutofillModule {
     fun providesAutofillPromptManager(
         autofillEnabledManager: AutofillEnabledManager,
         browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        appStateManager: AppStateManager,
+        settingsDiskSource: SettingsDiskSource,
+        clock: Clock,
         dispatcherManager: DispatcherManager,
     ): AutofillPromptManager = AutofillPromptManagerImpl(
         autofillEnabledManager = autofillEnabledManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        appStateManager = appStateManager,
+        settingsDiskSource = settingsDiskSource,
+        clock = clock,
         dispatcherManager = dispatcherManager,
     )
 
