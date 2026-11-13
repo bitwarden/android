@@ -354,7 +354,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         login = ExportJsonData.ExportItem.ItemLoginData(
             totp = toOtpAuthUriString(),
         ),
-        favorite = false,
+        favorite = favorite,
     )
 
     private fun emitFirstTimeSyncIfNeeded(state: AccountSyncState) {
