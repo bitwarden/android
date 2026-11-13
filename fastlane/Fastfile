@@ -145,11 +145,13 @@ platform :android do
   lane :testLibraries do |options|
     # Modules with product flavors expose per-flavor test tasks instead of `testDebugUnitTest`.
     # For those, run every flavor so both the standard and F-Droid sources are covered.
-    flavored_module_tasks = {
+    # Pure JVM modules (no Android variants) only have a plain `test` task.
+    module_test_tasks = {
       ":cxf" => ["testStandardDebugUnitTest", "testFdroidDebugUnitTest"],
+      ":detekt-rules" => ["test"],
     }
     tasks = options[:target].split(" ").flat_map { |mod|
-      (flavored_module_tasks[mod] || ["testDebugUnitTest"]).map { |task| "#{mod}:#{task}" }
+      (module_test_tasks[mod] || ["testDebugUnitTest"]).map { |task| "#{mod}:#{task}" }
     }
     gradle(tasks: tasks)
   end
