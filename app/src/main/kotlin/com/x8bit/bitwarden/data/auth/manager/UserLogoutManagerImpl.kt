@@ -83,6 +83,7 @@ internal class UserLogoutManagerImpl(
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId)
+        val pinLength = authDiskSource.getPinLength(userId = userId)
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
         val ephemeralPinProtectedUserKeyEnvelope = authDiskSource
             .getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
@@ -115,6 +116,7 @@ internal class UserLogoutManagerImpl(
         }
         authDiskSource.apply {
             storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            storePinLength(userId = userId, pinLength = pinLength)
             storePinProtectedUserKey(userId = userId, pinProtectedUserKey = pinProtectedUserKey)
             storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
