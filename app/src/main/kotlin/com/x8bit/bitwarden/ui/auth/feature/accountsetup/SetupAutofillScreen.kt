@@ -270,7 +270,6 @@ private fun SetupAutoFillContentDisabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = false,
                 isInitialSetup = true,
@@ -288,7 +287,6 @@ private fun SetupAutoFillContentEnabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = true,
                 isInitialSetup = true,

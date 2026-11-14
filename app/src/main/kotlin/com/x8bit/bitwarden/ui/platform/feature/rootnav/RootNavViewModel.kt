@@ -241,10 +241,7 @@ class RootNavViewModel @Inject constructor(
     private fun getOnboardingNavState(
         onboardingStatus: OnboardingStatus,
     ): RootNavState = when (onboardingStatus) {
-        OnboardingStatus.NOT_STARTED,
-        OnboardingStatus.ACCOUNT_LOCK_SETUP,
-            -> RootNavState.OnboardingAccountLockSetup
-
+        OnboardingStatus.ACCOUNT_LOCK_SETUP -> RootNavState.OnboardingAccountLockSetup
         OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
         OnboardingStatus.BROWSER_AUTOFILL_SETUP -> RootNavState.OnboardingBrowserAutofillSetup
         OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete

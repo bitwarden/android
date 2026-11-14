@@ -9,7 +9,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -23,7 +22,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -34,26 +32,19 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { setOnboardingStatus(status = any()) } just runs
+        every { goToNextStep() } just runs
         every { isBiometricIntegrityValid(userId = DEFAULT_USER_ID) } returns false
         every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
-    private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
         every { isUnlockWithPinEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
-        every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledStateFlow
     }
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
-    }
-    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
-        every {
-            browserThirdPartyAutofillStatus
-        } returns mockk { every { isAnyIsAvailableAndDisabled } returns false }
     }
 
     @Test
@@ -73,12 +64,12 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
+    fun `ContinueClick should call goToNextStep if this is the initial setup and set first time value to false`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.AUTOFILL_SETUP)
+            authRepository.goToNextStep()
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -95,65 +86,19 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
             }
             verify(exactly = 0) {
-                authRepository.setOnboardingStatus(
-                    status = OnboardingStatus.AUTOFILL_SETUP,
-                )
+                authRepository.goToNextStep()
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
+    fun `SetUpLaterClick should call goToNextStep and set first time value to true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-        verify {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.AUTOFILL_SETUP,
-            )
+        verify(exactly = 1) {
+            authRepository.goToNextStep()
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled, browsers are setup, and set first time value to false`() {
-        mutableAutofillEnabledStateFlow.update { true }
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
-            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ContinueClick should call setOnboardingStatus and set to BROWSER_AUTOFILL_SETUP if AutoFill is already enabled and browsers are not setup`() {
-        mutableAutofillEnabledStateFlow.update { true }
-        every {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.BROWSER_AUTOFILL_SETUP)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and browsers are setup`() =
-        runTest {
-            mutableAutofillEnabledStateFlow.update { true }
-            val viewModel = createViewModel()
-            viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-            verify(exactly = 1) {
-                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -388,7 +333,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             firstTimeActionManager = firstTimeActionManager,
-            browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
         )
 }
 

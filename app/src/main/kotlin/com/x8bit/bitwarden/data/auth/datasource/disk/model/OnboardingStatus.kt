@@ -8,13 +8,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class OnboardingStatus {
-
-    /**
-     * Onboarding has not yet started.
-     */
-    @SerialName("notStarted")
-    NOT_STARTED,
-
     /**
      * The user is completing the account lock setup.
      */
@@ -22,7 +15,7 @@ enum class OnboardingStatus {
     ACCOUNT_LOCK_SETUP,
 
     /**
-     * The user is completing the auto fill service setup.
+     * The user is completing the autofill service setup.
      */
     @SerialName("autofillSetup")
     AUTOFILL_SETUP,

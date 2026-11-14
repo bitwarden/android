@@ -5,7 +5,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -53,10 +52,7 @@ class DebugMenuRepositoryImpl(
 
     override fun resetOnboardingStatusForCurrentUser() {
         val currentUserId = authDiskSource.userState?.activeUserId ?: return
-        authDiskSource.storeOnboardingStatus(
-            userId = currentUserId,
-            onboardingStatus = OnboardingStatus.NOT_STARTED,
-        )
+        authDiskSource.storeOnboardingStatus(userId = currentUserId, onboardingStatus = null)
     }
 
     override fun resetCoachMarkTourStatuses() {
