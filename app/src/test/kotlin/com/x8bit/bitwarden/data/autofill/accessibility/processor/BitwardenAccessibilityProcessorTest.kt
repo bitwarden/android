@@ -259,7 +259,7 @@ class BitwardenAccessibilityProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processAccessibilityEvent with AttemptParseUri and a valid uri but no fields to fill display toast`() {
+    fun `processAccessibilityEvent with AttemptParseUri and a valid uri but no fields should show a toast`() {
         val testPackageName = "com.android.chrome"
         val rootNode = mockk<AccessibilityNodeInfo> {
             every { packageName } returns testPackageName
@@ -313,7 +313,7 @@ class BitwardenAccessibilityProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processAccessibilityEvent with AttemptParseUri and a valid uri should start the main activity`() {
+    fun `processAccessibilityEvent with AttemptParseUri and a valid uri and TOTP field should start the main activity`() {
         val testPackageName = "com.android.chrome"
         val rootNode = mockk<AccessibilityNodeInfo> {
             every { packageName } returns testPackageName
@@ -345,7 +345,11 @@ class BitwardenAccessibilityProcessorTest {
         every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns uri
         every {
             accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
-        } returns mockk { every { hasFields } returns true }
+        } returns FillableFields(
+            usernameField = null,
+            passwordFields = emptyList(),
+            totpFields = listOf(mockk()),
+        )
 
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
 
@@ -427,6 +431,7 @@ class BitwardenAccessibilityProcessorTest {
         val fillableFields = FillableFields(
             usernameField = mockUsernameField,
             passwordFields = listOf(mockPasswordField),
+            totpFields = emptyList(),
         )
         val uri = mockk<Uri>()
         val attemptFill = AccessibilityAction.AttemptFill(cipherView = cipherView, uri = uri)
