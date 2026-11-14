@@ -365,7 +365,9 @@ private fun FieldView.toCustomField() =
 private fun String?.toTitleOrDefault(): VaultIdentityTitle =
     VaultIdentityTitle
         .entries
-        .find { it.name == this }
+        // Other clients may store the title with different casing (e.g. "Mr" instead of "MR"),
+        // so the lookup ignores case to keep the title selected when the item is opened.
+        .find { it.name.equals(this, ignoreCase = true) }
         ?: VaultIdentityTitle.SELECT
 
 private fun String?.toBrandOrDefault(): VaultCardBrand =
