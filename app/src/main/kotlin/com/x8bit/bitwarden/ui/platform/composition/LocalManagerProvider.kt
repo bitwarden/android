@@ -134,7 +134,9 @@ private fun createCredentialProviderCompletionManager(
     if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         CredentialProviderCompletionManagerUnsupportedApiImpl
     } else {
-        CredentialProviderCompletionManagerImpl(activity)
+        CredentialProviderCompletionManagerImpl(
+            activity = activity,
+        )
     }
 
 /**

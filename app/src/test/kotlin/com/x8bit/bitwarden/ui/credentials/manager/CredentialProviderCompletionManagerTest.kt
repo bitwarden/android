@@ -11,9 +11,10 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
@@ -40,6 +41,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class CredentialProviderCompletionManagerTest {
 
@@ -284,30 +287,35 @@ class CredentialProviderCompletionManagerTest {
         }
 
         @Suppress("MaxLineLength")
-        @Test
-        fun `completeProviderGetCredentials for FIDO 2 clear authentication actions when result is Success`() {
-            mockkConstructor(PublicKeyCredentialEntry.Builder::class)
-            mockkStatic(PendingIntent::class)
-
-            val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
-            val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
-
-            every {
-                mockPendingIntentManager.createFido2GetCredentialPendingIntent(
-                    userId = "mockUserId",
-                    credentialId = mockFido2AutofillView.credentialId.toString(),
-                    cipherId = mockFido2AutofillView.cipherId,
-                    isUserVerified = false,
-                )
-            } returns mockk()
-            every { mockActivity.getString(any()) } returns "No username"
-            every { Icon.createWithResource(mockActivity, any()) } returns mockk<Icon>()
+        @ParameterizedTest
+        @ValueSource(booleans = [true, false])
+        fun `passkey completion should return entries without readding account actions`(
+            hasMatches: Boolean,
+        ) {
+            val accountA = UserState.EMPTY_ACCOUNT.copy(
+                userId = "accountA",
+                email = "user@example.com",
+                isLoggedIn = true,
+            )
+            val accountB = accountA.copy(userId = "accountB", isVaultUnlocked = true)
+            val accountC = accountA.copy(
+                userId = "accountC",
+                environment = Environment.Prod.Eu,
+                isVaultUnlocked = true,
+            )
+            val loggedOutAccount = accountA.copy(userId = "loggedOut", isLoggedIn = false)
+            val entries = if (hasMatches) {
+                listOf(mockk<PublicKeyCredentialEntry>(), mockk<PasswordCredentialEntry>())
+            } else {
+                emptyList()
+            }
 
             credentialProviderCompletionManager
                 .completeProviderGetCredentialsRequest(
                     GetCredentialsResult.Success(
-                        credentialEntries = listOf(mockCredentialEntry),
-                        userId = "mockUserId",
+                        credentialEntries = entries,
+                        userId = accountB.userId,
+                        accounts = listOf(accountA, accountB, accountC, loggedOutAccount),
                     ),
                 )
 
@@ -320,11 +328,14 @@ class CredentialProviderCompletionManagerTest {
             }
 
             assertEquals(
-                listOf(mockCredentialEntry),
+                entries,
                 responseSlot.captured.credentialEntries,
             )
 
             assertTrue(responseSlot.captured.authenticationActions.isEmpty())
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setBeginGetCredentialResponse(any(), any())
+            }
         }
 
         @Suppress("MaxLineLength")
