@@ -603,20 +603,22 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
     <string name="generic_error_message">Ons kon nie u versoek verwerk nie. Probeer asb. weer of kontak ons.</string>
     <string name="allow_screen_capture">Laat skermopname toe</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Is u seker u wil skermopname aktiveer?</string>
-    <string name="log_in_requested">Aantekening versoek</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Probeer u aanteken?</string>
-    <string name="log_in_attempt_by_x_on_y">Aantekenversoek deir %1$s op %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Toesteltipe</string>
     <string name="ip_address">IP-adres</string>
     <string name="time">Tyd</string>
     <string name="select_time">Kies tyd</string>
     <string name="switch_input_mode">Wissel invoermodus</string>
-    <string name="confirm_log_in">Bevestig aantekening</string>
-    <string name="deny_log_in">Weier aantekening</string>
-    <string name="log_in_denied">Aantekening geweier</string>
-    <string name="approve_login_requests">Keur aantekenversoeke goed</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nee dankie</string>
-    <string name="confim_log_in_attemp_for_x">Bevestig aantekenpoging vir %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Gebruikersnaamtipe</string>
     <string name="plus_addressed_email">E-posadres met plus</string>
     <string name="catch_all_email">Allesomvattende e-pos</string>
@@ -643,21 +645,22 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
     <string name="i_understand">Ek verstaan</string>
     <string name="accept">Aanvaar</string>
     <string name="decline">Wys af</string>
-    <string name="login_request_has_already_expired">Aantekenversoek het reeds verstryk.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Aantekenpoging van:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Wil u na die rekening omskakel?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Nuut by Bitwarden?</string>
     <string name="get_master_passwordword_hint">Kry hoofwagwoord wenk</string>
     <string name="logging_in_as_x_on_y">Teken aan as %1$s op %2$s</string>
     <string name="not_you">Nie jy nie?</string>
     <string name="log_in_with_master_password">Teken aan met hoofwagwoord</string>
     <string name="log_in_initiated">Aanmelding begin</string>
-    <string name="a_notification_has_been_sent_to_your_device">\'n Kennisgewing was gestuur na u toestel.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Asseblief maak seker jou kluis is oopgesluit en die vingerafdruk frase stem ooreen op die ander toestel.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Stuur kennisgewing weer</string>
     <string name="view_all_login_options">Wys alle aanmeldings opsies</string>
-    <string name="pending_log_in_requests">In afwagting vir aantekeningsversoeke</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Weier alle versoeke</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Is jy seker dat jy alle hangende aantekeningsversoeke wil weier?</string>
     <string name="no_pending_requests">Geen hangende versoeke</string>
@@ -690,9 +693,8 @@ Wil u na die rekening omskakel?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Die sleutelpas sal nie na die gekloonde item gekopieer word nie. Wil u voortgaan om hierdie item te kloon?</string>
     <string name="master_password_re_prompt_help">Hulpteks vir vra weer vir hoofwagwoord</string>
     <string name="admin_approval_requested">Administrateurgoedkeuring versoek</string>
-    <string name="your_request_has_been_sent_to_your_admin">U versoek is aan u administrateur gestuur.</string>
-    <string name="you_will_be_notified_once_approved">U sal in kennis gestel word sodra dit goedgekeur is.</string>
-    <string name="trouble_logging_in">Probleme om aan te teken?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokkeer outovul</string>
     <string name="no_uris_blocked">Geen URI’s geblokkeer nie</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Outovul sal nie vir hierdie URI’s aangebied word nie.</string>
@@ -703,8 +705,7 @@ Wil u na die rekening omskakel?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formaat: %1$s. Skei veelvuldige URI’s met ’n komma.</string>
     <string name="invalid_uri">Ongeldige URI</string>
     <string name="the_urix_is_already_blocked">Die URI %1$s is reeds geblokkeer</string>
-    <string name="login_approved">Aanmelding goedgekeur</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Aantekening met toestel moet in die instellings van die Bitwarden-toep opgestel word.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Het u ’n ander opsie nodig? <annotation link="viewAll">Wys alle aanmeldopsies</annotation></string>
     <string name="log_in_with_device">Teken Aan met \'n ander toestel</string>
     <string name="logging_in_on">Teken aan op</string>

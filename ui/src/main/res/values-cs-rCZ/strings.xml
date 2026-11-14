@@ -610,20 +610,22 @@ Načtení proběhne automaticky.</string>
     <string name="generic_error_message">Nepodařilo se nám zpracovat Váš požadavek. Zkuste to znovu nebo nás kontaktujte.</string>
     <string name="allow_screen_capture">Zapnout záznam obrazovky</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Opravdu chcete zapnout záznam obrazovky?</string>
-    <string name="log_in_requested">Bylo vyžádáno přihlášení</string>
+    <string name="access_requested">Vyžádán přístup</string>
+    <string name="account_access_requested">Požadován přístup k účtu</string>
     <string name="are_you_trying_to_log_in">Pokoušíte se přihlásit?</string>
-    <string name="log_in_attempt_by_x_on_y">Pokus o přihlášení od %1$s na %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Pokoušíte se získat přístup k Vašemu účtu?</string>
+    <string name="access_attempt_by_x_on_y">Pokus o přístup od %1$s na %2$s</string>
     <string name="device_type">Typ zařízení</string>
     <string name="ip_address">IP adresa</string>
     <string name="time">Čas</string>
     <string name="select_time">Vybrat čas</string>
     <string name="switch_input_mode">Přepnout režim vstupu</string>
-    <string name="confirm_log_in">Potvrdit přihlášení</string>
-    <string name="deny_log_in">Zamítnout přihlášení</string>
-    <string name="log_in_denied">Přihlášení zamítnuto</string>
-    <string name="approve_login_requests">Schválit žádosti o přihlášení</string>
+    <string name="confirm_access">Potvrdit přístup</string>
+    <string name="deny_access">Zamítnout přístup</string>
+    <string name="access_denied">Přístup byl zamítnut</string>
+    <string name="account_access_requests">Žádosti o přístup k účtu</string>
     <string name="no_thanks">Ne, děkuji</string>
-    <string name="confim_log_in_attemp_for_x">Potvrdit pokus o přihlášení pro %1$s</string>
+    <string name="confirm_access_attempt_for_x">Potvrdit pokus o přístup pro %1$s</string>
     <string name="username_type">Typ uživatelského jména</string>
     <string name="plus_addressed_email">E-mailová adresa s plusem</string>
     <string name="catch_all_email">E-mail pro doménový koš</string>
@@ -650,8 +652,8 @@ Načtení proběhne automaticky.</string>
     <string name="i_understand">Rozumím</string>
     <string name="accept">Potvrdit</string>
     <string name="decline">Zamítnout</string>
-    <string name="login_request_has_already_expired">Požadavek na přihlášení již vypršel.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o přihlášení z:
+    <string name="access_request_has_already_expired">Požadavek na přístup již vypršel.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o přístup z:
 %1$s
 Chcete se přepnout na tento účet?</string>
     <string name="new_to_bitwarden">Jste noví na Bitwardenu?</string>
@@ -660,11 +662,12 @@ Chcete se přepnout na tento účet?</string>
     <string name="not_you">Nejste to Vy?</string>
     <string name="log_in_with_master_password">Přihlásit se pomocí hlavního hesla</string>
     <string name="log_in_initiated">Bylo zahájeno přihlášení</string>
-    <string name="a_notification_has_been_sent_to_your_device">Na Vaše zařízení bylo odesláno oznámení.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Ujistěte se, že je Váš trezor odemčen a fráze otisku prstu se shodují s druhým zařízením.</string>
+    <string name="request_sent_to_your_device">Žádost byla odeslána na Vaše zařízení</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Tuto žádost potvrďte ve svém účtu Bitwarden na jiném odemčeném zařízení nebo ve webové aplikaci. Žádosti o přístup k účtu musí být povoleny v Nastavení.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Před schválením se ujistěte, že fráze otisku prstu odpovídá frázi níže.</string>
     <string name="resend_notification">Znovu odeslat oznámení</string>
     <string name="view_all_login_options">Zobrazit všechny volby přihlášení</string>
-    <string name="pending_log_in_requests">Čekající žádosti na přihlášení</string>
+    <string name="pending_access_requests">Čekající žádosti o přístup k účtu</string>
     <string name="decline_all_requests">Zamítnout všechny žádosti</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Opravdu chcete zamítnout všechny žádosti na přihlášení?</string>
     <string name="no_pending_requests">Žádné čekající žádosti</string>
@@ -697,9 +700,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Přístupový klíč nebude zkopírován do duplikované položky. Chete pokračovat v duplikování této položky?</string>
     <string name="master_password_re_prompt_help">Nápověda pro znovuzeptání se na hlavní heslo</string>
     <string name="admin_approval_requested">Bylo vyžádáno schválení správcem</string>
-    <string name="your_request_has_been_sent_to_your_admin">Váš požadavek byl odeslán Vašemu správci.</string>
-    <string name="you_will_be_notified_once_approved">Po schválení budete upozorněni.</string>
-    <string name="trouble_logging_in">Potíže s přihlášením?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Vaše žádost byla odeslána správci. Jakmile bude schválena, obdržíte e-mail.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Váš správce Vás může požádat o potvrzení této fráze pro otisk prstu.</string>
     <string name="block_auto_fill">Blokovat automatické vyplňování</string>
     <string name="no_uris_blocked">Nejsou blokovány žádné URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pro tento URI nebude nabízeno automatické vyplňování.</string>
@@ -710,8 +712,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formát: %1$s. Oddělte více URI čárkou.</string>
     <string name="invalid_uri">Neplatný URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je již blokován</string>
-    <string name="login_approved">Přihlášení bylo schváleno</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden.</string>
+    <string name="access_approved">Přístup byl schválen</string>
     <string name="need_another_option_view_all_login_options">Potřebujete další volby? <annotation link="viewAll">Zobrazit všechny volby přihlášení</annotation></string>
     <string name="log_in_with_device">Přihlásit se zařízením</string>
     <string name="logging_in_on">Přihlašování na</string>

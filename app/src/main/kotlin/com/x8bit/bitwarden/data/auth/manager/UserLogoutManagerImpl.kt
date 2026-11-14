@@ -92,6 +92,7 @@ internal class UserLogoutManagerImpl(
             .shouldClearOnSoftLogout(userId = userId)
         val vaultPolicyBannerDismissedDate = settingsDiskSource
             .getVaultPolicyBannerDismissedDate(userId = userId)
+        val shouldShowPlanBadge = settingsDiskSource.getShouldShowPlanBadge(userId = userId)
 
         clearData(userId = userId)
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
@@ -102,10 +103,8 @@ internal class UserLogoutManagerImpl(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
             )
-            storeVaultTimeoutAction(
-                userId = userId,
-                vaultTimeoutAction = vaultTimeoutAction,
-            )
+            storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+            storeShouldShowPlanBadge(userId = userId, shouldShow = shouldShowPlanBadge)
             if (!shouldClearOnSoftLogout) {
                 // We make sure the data is preserved if it should not be cleared.
                 storeVaultPolicyBannerDismissedDate(

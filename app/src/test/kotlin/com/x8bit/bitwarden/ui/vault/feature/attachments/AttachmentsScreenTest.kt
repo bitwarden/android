@@ -267,7 +267,11 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(requiresPremiumMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialogState = AttachmentsState.DialogState.RequiresPremium)
+            it.copy(
+                dialogState = AttachmentsState.DialogState.RequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -276,7 +280,7 @@ class AttachmentsScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Upgrade to Premium")
+            .onNodeWithText("Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

@@ -30,7 +30,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -49,13 +49,12 @@ import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.UpgradedToPremiumCardData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.selectionText
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -65,8 +64,8 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
-    onNavigateToAddEditSend: (AddEditSendRoute) -> Unit,
-    onNavigateToViewSend: (ViewSendRoute) -> Unit,
+    onNavigateToAddEditSend: (VaultUnlockedGraph.AddEditSendRoute) -> Unit,
+    onNavigateToViewSend: (VaultUnlockedGraph.ViewSendRoute) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -95,13 +94,16 @@ fun SendScreen(
 
             is SendEvent.NavigateNewSend -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(modeType = ModeType.ADD, sendType = event.sendType),
+                    VaultUnlockedGraph.AddEditSendRoute(
+                        modeType = ModeType.ADD,
+                        sendType = event.sendType,
+                    ),
                 )
             }
 
             is SendEvent.NavigateToEditSend -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         modeType = ModeType.EDIT,
                         sendType = event.sendType,
                         sendId = event.sendId,
@@ -111,7 +113,10 @@ fun SendScreen(
 
             is SendEvent.NavigateToViewSend -> {
                 onNavigateToViewSend(
-                    ViewSendRoute(sendId = event.sendId, sendType = event.sendType),
+                    VaultUnlockedGraph.ViewSendRoute(
+                        sendId = event.sendId,
+                        sendType = event.sendType,
+                    ),
                 )
             }
 
@@ -263,14 +268,11 @@ private fun SendDialogs(
             }
         }
 
-        SendState.DialogState.FileTypeRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+        is SendState.DialogState.FileTypeRequiresPremium -> {
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.send_file_premium_required),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
-                onDismissClick = onDismissRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = onUpgradeToPremiumClick,
                 onDismissRequest = onDismissRequest,
             )
         }

@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -59,6 +58,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.radio.BitwardenRadioButton
@@ -67,9 +67,11 @@ import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.ui.platform.composition.LocalExitManager
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.manager.util.startAppSettingsActivity
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -80,12 +82,9 @@ import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionMa
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwriteCredentialConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
-import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
@@ -112,7 +111,7 @@ fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateToCardScanScreen: () -> Unit,
-    viewModel: VaultAddEditViewModel = hiltViewModel(),
+    viewModel: VaultAddEditViewModel,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     exitManager: ExitManager = LocalExitManager.current,
@@ -383,12 +382,7 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { state.isAddItemMode },
                                 OverflowMenuItemData(
-                                    text = stringResource(
-                                        id = vfo1Foundation(
-                                            new = BitwardenString.move,
-                                            old = BitwardenString.move_to_organization,
-                                        ),
-                                    ),
+                                    text = stringResource(id = BitwardenString.move),
                                     onClick = {
                                         viewModel.trySendAction(
                                             VaultAddEditAction.Common.MoveToOrganizationClick,
@@ -397,12 +391,7 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
-                                    text = stringResource(
-                                        id = vfo1Foundation(
-                                            new = BitwardenString.shared_folders,
-                                            old = BitwardenString.collections,
-                                        ),
-                                    ),
+                                    text = stringResource(id = BitwardenString.shared_folders),
                                     onClick = {
                                         viewModel.trySendAction(
                                             VaultAddEditAction.Common.CollectionsClick,
@@ -519,13 +508,10 @@ private fun VaultAddEditItemDialogs(
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.ArchiveRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
-                onDismissClick = onDismissRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = onUpgradeToPremiumClick,
                 onDismissRequest = onDismissRequest,
             )
         }
@@ -678,9 +664,7 @@ private fun FolderSelectionBottomSheet(
         mutableStateOf(state.selectedFolder?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(
-            vfo1Foundation(BitwardenString.my_folders, BitwardenString.folders),
-        ),
+        sheetTitle = stringResource(id = BitwardenString.my_folders),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
@@ -833,9 +817,7 @@ private fun OwnerSelectionBottomSheet(
         mutableStateOf(state.selectedOwner)
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(
-            vfo1Foundation(BitwardenString.select_vault, BitwardenString.owner),
-        ),
+        sheetTitle = stringResource(id = BitwardenString.select_vault),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(

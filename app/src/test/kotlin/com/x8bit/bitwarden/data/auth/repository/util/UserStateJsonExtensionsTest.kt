@@ -1419,6 +1419,101 @@ class UserStateJsonExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState should set false for needsMasterPassword for key connector user promoted to admin`() {
+        val organization = createMockOrganization(
+            number = 1,
+            id = "organizationId",
+            name = "organizationName",
+            shouldUseKeyConnector = true,
+            role = OrganizationType.ADMIN,
+            keyConnectorUrl = "keyConnectorUrl",
+        )
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Prod.Eu,
+                        isPremium = false,
+                        isPremiumFromSelf = false,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = listOf(organization),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = false,
+                        isUsingKeyConnector = true,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                        isExportable = true,
+                        creationDate = null,
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremiumPersonally } returns false
+                            every { hasPremiumFromOrganization } returns null
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns KEY_CONNECTOR_USER_DECRYPTION_OPTIONS
+                            every { creationDate } returns null
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(organization),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = listOf(
+                        UserKeyConnectorState(
+                            userId = "activeUserId",
+                            isUsingKeyConnector = true,
+                        ),
+                    ),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { true },
+                    onboardingStatus = null,
+                    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+                    getUserPolicies = { _, _ -> emptyList() },
+                ),
+        )
+    }
+
     @Test
     fun `toUserState should set false for needsMasterPassword for SSO user with key connector`() {
         assertEquals(
@@ -2427,6 +2522,36 @@ class UserStateJsonExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `toUpdatedUserStateJson should not set forcePasswordResetReason when key connector user is promoted to admin`() {
+        val originalUserState = createUserStateWithDecryptionOptions(
+            userDecryptionOptions = KEY_CONNECTOR_USER_DECRYPTION_OPTIONS,
+        )
+
+        val result = originalUserState.toUpdatedUserStateJson(
+            syncResponse = createMockSyncResponse(
+                number = 1,
+                profile = createMockProfile(
+                    number = 1,
+                    id = "activeUserId",
+                    organizations = listOf(
+                        createMockOrganizationNetwork(
+                            number = 1,
+                            type = OrganizationType.ADMIN,
+                        ),
+                    ),
+                ),
+                userDecryption = null,
+            ),
+        )
+
+        assertEquals(
+            null,
+            result.accounts.getValue("activeUserId").profile.forcePasswordResetReason,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `toUpdatedUserStateJson should preserve previous forcePasswordResetReason when user has a master password`() {
         val originalUserState = createUserStateWithDecryptionOptions(
             userDecryptionOptions = UserDecryptionOptionsJson(
@@ -2495,7 +2620,7 @@ class UserStateJsonExtensionsTest {
             accounts = mapOf("activeUserId" to originalAccount),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
@@ -2555,7 +2680,7 @@ class UserStateJsonExtensionsTest {
             accounts = mapOf("activeUserId" to originalAccount),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
@@ -2576,7 +2701,7 @@ class UserStateJsonExtensionsTest {
     }
 
     @Test
-    fun `toUserStateJsonKdfUpdatedMinimums should only update active user account`() {
+    fun `toUserStateJsonKdfUpdatedMinimums should only update the given user account`() {
         val activeProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "active@example.com",
@@ -2633,7 +2758,7 @@ class UserStateJsonExtensionsTest {
             ),
         )
 
-        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums()
+        val result = originalUserState.toUserStateJsonKdfUpdatedMinimums(userId = "activeUserId")
 
         assertEquals(
             UserStateJson(
@@ -2676,6 +2801,15 @@ private val TDE_USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
         hasManageResetPasswordPermission = false,
     ),
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
+)
+
+private val KEY_CONNECTOR_USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
+    hasMasterPassword = false,
+    trustedDeviceUserDecryptionOptions = null,
+    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+        keyConnectorUrl = "keyConnectorUrl",
+    ),
     masterPasswordUnlock = null,
 )
 

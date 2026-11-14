@@ -4,7 +4,6 @@
     <string name="add_folder">Add folder</string>
     <string name="add_item">Add item</string>
     <string name="an_error_has_occurred">An error has occurred</string>
-    <string name="apply">Apply</string>
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
     <string name="copy">Copy</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Folder deleted.</string>
     <string name="folder_none">No Folder</string>
     <string name="folder_updated">Folder saved</string>
-    <string name="folders">Folders</string>
     <string name="hide">Hide</string>
     <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
     <string name="internet_connection_required_title">Internet connection required</string>
@@ -208,7 +206,6 @@ Scanning will happen automatically.</string>
     <string name="copy_totp">Copy TOTP</string>
     <string name="copy_totp_automatically_description">If a login has an authenticator key, copy the TOTP verification code to your clipboard when you autofill the login.</string>
     <string name="copy_totp_automatically">Copy TOTP automatically</string>
-    <string name="premium_required">A Premium membership is required to use this feature.</string>
     <string name="attachment_deleted">Attachment deleted</string>
     <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Choose file</string>
@@ -291,9 +288,7 @@ Scanning will happen automatically.</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
     <string name="go_to_my_vault">Go to my vault</string>
-    <string name="collections">Collections</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">There are no items in this folder.</string>
     <string name="no_items_trash">There are no items in the trash.</string>
@@ -347,16 +342,11 @@ Scanning will happen automatically.</string>
     <string name="type">Type</string>
     <string name="move_down">Move down</string>
     <string name="move_up">Move Up</string>
-    <string name="owner">Owner</string>
-    <string name="no_collections_to_list">There are no collections to list.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s moved to %2$s.</string>
     <string name="select_one_collection">You must select at least one collection.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Share</string>
-    <string name="move_to_organization">Move to Organization</string>
-    <string name="no_orgs_to_list">No organizations to list.</string>
-    <string name="move_to_org_desc">Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Number of words</string>
@@ -471,7 +461,6 @@ Scanning will happen automatically.</string>
     <string name="hide_text_by_default">When accessing the Send, hide the text by default</string>
     <string name="type_file">File</string>
     <string name="deletion_date">Deletion date</string>
-    <string name="deletion_time">Deletion time</string>
     <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Who can view</string>
@@ -605,7 +594,6 @@ select Add TOTP to store the key safely</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Are you sure you want to turn on screen capture?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Are you trying to log in?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Device type</string>
@@ -666,7 +654,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">No pending requests</string>
     <string name="enable_camer_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
     <string name="language">Language</string>
-    <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
     <string name="default_system">Default (System)</string>
     <string name="weak_master_password">Weak Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</string>
@@ -978,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
@@ -1059,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
     <string name="all_trusted_apps">All trusted apps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
@@ -1076,8 +1061,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Verification code added</string>
     <string name="refresh_period">Refresh period</string>
     <string name="algorithm">Algorithm</string>
-    <string name="advanced">Advanced</string>
-    <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d second</item>
@@ -1160,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
     <string name="keep_your_credential_secure">Keep your credentials secure</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
@@ -1203,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
@@ -1223,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
     <string name="search_archive">Search archive</string>
@@ -1241,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
@@ -1322,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Archive item</string>
     <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
     <string name="pricing_unavailable">Pricing unavailable</string>
-    <string name="current_plan">Current plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Billing amount</string>
     <string name="storage_cost">Storage cost</string>
@@ -1398,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Issuing country</string>
     <string name="issuing_state">Issuing state / province</string>
     <string name="license_class">License class</string>
-    <string name="surname">Surname</string>
-    <string name="given_name">Given name</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="nationality">Nationality</string>
     <string name="passport_type">Passport type</string>

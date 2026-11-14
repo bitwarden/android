@@ -29,11 +29,11 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.time.Clock
 import java.time.format.FormatStyle
 import java.util.UUID
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -185,7 +185,6 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
     activeAccount: UserState.Account,
     isIndividualVaultDisabled: Boolean,
     resourceManager: ResourceManager,
-    isVfo1FoundationEnabled: Boolean,
 ): VaultAddEditState.ViewState {
     return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
         currentContentState.copy(
@@ -211,7 +210,6 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
-                    isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                     selectedCollectionId = currentContentState.common.selectedCollectionId
                         ?: collectionViewList
                             .getDefaultCollectionViewOrNull(
@@ -299,17 +297,12 @@ private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
     cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
-    isVfo1FoundationEnabled: Boolean,
     selectedCollectionId: String? = null,
 ): ImmutableList<VaultAddEditState.Owner> =
     persistentListOfNotNull(
         VaultAddEditState
             .Owner(
-                name = if (isVfo1FoundationEnabled) {
-                    BitwardenString.my_vault.asText()
-                } else {
-                    email.asText()
-                },
+                name = BitwardenString.my_vault.asText(),
                 id = null,
                 collections = emptyList(),
             )

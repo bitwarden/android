@@ -23,14 +23,15 @@ internal class ServerConfigRepositoryImpl(
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    override val serverConfigStateFlow: StateFlow<ServerConfig?>
-        get() = configDiskSource
-            .serverConfigFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = configDiskSource.serverConfig,
-            )
+    // This must be a single, shared instance. It is kept hot (Eagerly) so the synchronous `value`
+    // is always current, which relies on every write going through `configDiskSource.serverConfig`.
+    override val serverConfigStateFlow: StateFlow<ServerConfig?> = configDiskSource
+        .serverConfigFlow
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = configDiskSource.serverConfig,
+        )
 
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         val localConfig = configDiskSource.serverConfig

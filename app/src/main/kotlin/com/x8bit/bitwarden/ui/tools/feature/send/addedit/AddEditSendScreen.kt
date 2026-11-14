@@ -13,7 +13,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -27,7 +26,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -50,7 +49,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHan
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditSendScreen(
-    viewModel: AddEditSendViewModel = hiltViewModel(),
+    viewModel: AddEditSendViewModel,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -205,13 +204,10 @@ private fun AddEditSendDialogs(
 ) {
     when (dialogState) {
         is AddEditSendState.DialogState.PremiumRequired -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+            PremiumRequiredDialog(
                 message = dialogState.message(),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
-                onDismissClick = onDismissRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = onUpgradeToPremiumClick,
                 onDismissRequest = onDismissRequest,
             )
         }

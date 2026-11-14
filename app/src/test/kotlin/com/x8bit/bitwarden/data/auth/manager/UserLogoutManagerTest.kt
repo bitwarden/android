@@ -46,6 +46,8 @@ class UserLogoutManagerTest {
         every { storeVaultTimeoutAction(any(), any()) } just runs
         every { storeAppRegisteredForExport(any()) } just runs
         every { getVaultPolicyBannerDismissedDate(userId = any()) } returns null
+        every { getShouldShowPlanBadge(userId = any()) } returns null
+        every { storeShouldShowPlanBadge(userId = any(), shouldShow = any()) } just runs
         every {
             storeVaultPolicyBannerDismissedDate(userId = any(), dismissalRevisionDate = any())
         } just runs
@@ -160,6 +162,7 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every { settingsDiskSource.getShouldShowPlanBadge(userId = userId) } returns true
         every {
             authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
@@ -211,6 +214,7 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            settingsDiskSource.storeShouldShowPlanBadge(userId = userId, shouldShow = true)
             authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
@@ -242,6 +246,7 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every { settingsDiskSource.getShouldShowPlanBadge(userId = userId) } returns true
         every {
             authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
@@ -283,6 +288,7 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            settingsDiskSource.storeShouldShowPlanBadge(userId = userId, shouldShow = true)
             authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
@@ -382,6 +388,20 @@ class UserLogoutManagerTest {
                 userId = any(),
                 dismissalRevisionDate = any(),
             )
+        }
+    }
+
+    @Test
+    fun `logout should not restore the should show plan badge value`() {
+        val userId = USER_ID_1
+        every { authDiskSource.userState } returns SINGLE_USER_STATE_1
+
+        userLogoutManager.logout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 0) {
+            settingsDiskSource.getShouldShowPlanBadge(userId = any())
+            settingsDiskSource.storeShouldShowPlanBadge(userId = any(), shouldShow = any())
         }
     }
 

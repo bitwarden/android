@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.manager.file.FileManager
@@ -30,7 +29,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -49,6 +47,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -137,25 +136,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
     }
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
-    }
 
     @BeforeEach
     fun setup() {
-        mockkStatic(
-            SavedStateHandle::toVaultItemArgs,
-            CipherView::toViewState,
-        )
+        mockkStatic(CipherView::toViewState)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toVaultItemArgs,
-            CipherView::toViewState,
-        )
+        unmockkStatic(CipherView::toViewState)
         unmockkStatic(Uri::class)
     }
 
@@ -227,17 +216,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `init should not resend ShowSnackbar when recreated with the same SavedStateHandle`() =
         runTest {
-            val savedStateHandle = SavedStateHandle().apply {
-                every {
-                    toVaultItemArgs()
-                } returns VaultItemArgs(
+            val savedStateHandle = SavedStateHandle()
+
+            fun createViewModelWithHandle(): VaultItemViewModel = VaultItemViewModel(
+                route = VaultUnlockedGraph.VaultItemRoute(
                     vaultItemId = VAULT_ITEM_ID,
                     cipherType = VaultItemCipherType.LOGIN,
                     showCreatedSnackbar = true,
-                )
-            }
-
-            fun createViewModelWithHandle(): VaultItemViewModel = VaultItemViewModel(
+                ),
                 savedStateHandle = savedStateHandle,
                 clipboardManager = clipboardManager,
                 authRepository = authRepo,
@@ -248,7 +234,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 settingsRepository = mockSettingsRepository,
                 snackbarRelayManager = snackbarRelayManager,
                 premiumStateManager = premiumStateManager,
-                featureFlagManager = featureFlagManager,
             )
 
             val firstViewModel = createViewModelWithHandle()
@@ -349,6 +334,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasPremium = false,
                     dialog = VaultItemState.DialogState.RequiresPremium(
                         message = BitwardenString.archiving_items_is_a_premium_feature.asText(),
+                        isInAppUpgradeAvailable = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -365,6 +351,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     dialog = VaultItemState.DialogState.RequiresPremium(
                         message = BitwardenString.totp_is_a_premium_feature.asText(),
+                        isInAppUpgradeAvailable = false,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -389,6 +376,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
@@ -433,6 +421,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
@@ -479,6 +468,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
@@ -532,6 +522,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON.copy(
@@ -578,6 +569,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON.copy(
@@ -634,6 +626,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE.copy(
                     common = DEFAULT_COMMON.copy(
@@ -695,6 +688,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
 
@@ -738,6 +732,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns loginState
 
@@ -774,6 +769,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -823,6 +819,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -870,6 +867,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -928,6 +926,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -980,6 +979,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns viewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1024,6 +1024,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1073,6 +1074,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1119,6 +1121,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1170,6 +1173,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1194,6 +1198,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 }
                 assertEquals(
@@ -1235,6 +1240,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState()
             every { clipboardManager.setText(text = field) } just runs
@@ -1260,6 +1266,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedHiddenField(
@@ -1314,6 +1321,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1352,6 +1360,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1377,6 +1386,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1416,6 +1426,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1450,6 +1461,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -1470,6 +1482,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1508,6 +1521,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1556,6 +1570,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1627,6 +1642,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1800,6 +1816,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
 
@@ -1847,6 +1864,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1897,6 +1915,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
             coVerify(exactly = 1) {
@@ -1919,6 +1938,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState()
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -1946,6 +1966,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2003,6 +2024,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState()
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2030,6 +2052,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2073,6 +2096,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState()
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2101,6 +2125,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2122,6 +2147,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2159,6 +2185,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientToggledPasswordVisible(
@@ -2208,6 +2235,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState(type = cardTypeWithFormattedNumber)
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2236,6 +2264,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2257,6 +2286,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 } returns createViewState(type = DEFAULT_CARD_TYPE)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2286,6 +2316,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isIconLoadingDisabled = false,
                         relatedLocations = persistentListOf(),
                         hasOrganizations = true,
+                        isInAppUpgradeAvailable = false,
                     )
                 }
             }
@@ -2305,6 +2336,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState(type = DEFAULT_CARD_TYPE)
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2331,6 +2363,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2351,6 +2384,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState(type = DEFAULT_CARD_TYPE)
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2380,6 +2414,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2413,6 +2448,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2447,6 +2483,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns sshKeyViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2481,6 +2518,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             }
         }
@@ -2500,6 +2538,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns createViewState(type = DEFAULT_SSH_KEY_TYPE)
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2532,6 +2571,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2574,6 +2614,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns IDENTITY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2713,6 +2754,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns BANK_ACCOUNT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -2993,6 +3035,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val newViewModel = createViewModel(
@@ -3028,6 +3071,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns DRIVERS_LICENSE_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -3206,6 +3250,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val newViewModel = createViewModel(
@@ -3241,6 +3286,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns PASSPORT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -3475,6 +3521,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val newViewModel = createViewModel(
@@ -3534,6 +3581,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
@@ -3571,100 +3619,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         @Suppress("MaxLineLength")
-        fun `Vfo1FoundationFlagUpdateReceive should re-derive the ViewState using the latest vault data`() {
-            val viewStateOn = mockk<VaultItemState.ViewState> {
-                every { asContentOrNull() } returns null
-            }
-            val viewStateOff = mockk<VaultItemState.ViewState>()
-            every { mockCipherView.organizationId } returns "mockOrganizationId"
-            every { mockCipherView.collectionIds } returns listOf("mockId-1")
-            every { mockCipherView.folderId } returns "mockId-1"
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canRestore = false,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                    baseIconUrl = Environment.Prod.Us.baseIconUrl,
-                    isIconLoadingDisabled = false,
-                    relatedLocations = persistentListOf(
-                        VaultItemLocation.Organization("mockOrganizationName"),
-                        VaultItemLocation.Collection(
-                            name = "mockName-1",
-                            icon = BitwardenDrawable.ic_shared_folder,
-                        ),
-                        VaultItemLocation.Folder("mockName-1"),
-                    ),
-                    hasOrganizations = true,
-                )
-            } returns viewStateOn
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canRestore = false,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                    baseIconUrl = Environment.Prod.Us.baseIconUrl,
-                    isIconLoadingDisabled = false,
-                    relatedLocations = persistentListOf(
-                        VaultItemLocation.Organization("mockOrganizationName"),
-                        VaultItemLocation.Collection(
-                            name = "mockName-1",
-                            icon = BitwardenDrawable.ic_collections,
-                        ),
-                        VaultItemLocation.Folder("mockName-1"),
-                    ),
-                    hasOrganizations = true,
-                )
-            } returns viewStateOff
-            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                accounts = listOf(
-                    DEFAULT_USER_ACCOUNT.copy(
-                        organizations = listOf(
-                            createMockOrganization(
-                                number = 1,
-                                id = "mockOrganizationId",
-                                name = "mockOrganizationName",
-                                role = OrganizationType.OWNER,
-                                keyConnectorUrl = null,
-                                userIsClaimedByOrganization = true,
-                            ),
-                        ),
-                    ),
-                ),
-            )
-
-            val viewModel = createViewModel(state = null)
-
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableCollectionsStateFlow.value = DataState.Loaded(
-                listOf(createMockCollectionView(number = 1)),
-            )
-            mutableFoldersStateFlow.value = DataState.Loaded(
-                listOf(createMockFolderView(number = 1)),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(viewState = viewStateOn),
-                viewModel.stateFlow.value,
-            )
-
-            mutableVfo1FoundationFlagFlow.value = false
-
-            assertEquals(
-                DEFAULT_STATE.copy(viewState = viewStateOff),
-                viewModel.stateFlow.value,
-            )
-        }
-
-        @Test
-        @Suppress("MaxLineLength")
         fun `on VaultDataReceive with Loaded and nonnull false permission data should update the ViewState with cipher permissions`() {
             val viewState = mockk<VaultItemState.ViewState>()
             every { mockCipherView.organizationId } returns "mockOrganizationId"
@@ -3693,6 +3647,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
@@ -3757,6 +3712,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemLocation.Folder("mockName-1"),
                     ),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
@@ -3825,6 +3781,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3871,6 +3828,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3912,6 +3870,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = false,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3968,16 +3927,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         environmentRepository: EnvironmentRepository = mockEnvironmentRepository,
         settingsRepository: SettingsRepository = mockSettingsRepository,
     ): VaultItemViewModel = VaultItemViewModel(
+        route = VaultUnlockedGraph.VaultItemRoute(
+            vaultItemId = vaultItemId,
+            cipherType = vaultItemCipherType,
+            showCreatedSnackbar = showCreatedSnackbar,
+        ),
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             set("tempAttachmentFile", tempAttachmentFile)
-            every {
-                toVaultItemArgs()
-            } returns VaultItemArgs(
-                vaultItemId = vaultItemId,
-                cipherType = vaultItemCipherType,
-                showCreatedSnackbar = showCreatedSnackbar,
-            )
         },
         clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,
@@ -3988,7 +3945,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         snackbarRelayManager = snackbarRelayManager,
         premiumStateManager = premiumStateManager,
-        featureFlagManager = featureFlagManager,
     )
 
     private fun createViewState(
@@ -4191,6 +4147,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 iconData = IconData.Local(BitwardenDrawable.ic_globe),
                 relatedLocations = persistentListOf(),
                 hasOrganizations = true,
+                isInAppUpgradeAvailable = false,
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

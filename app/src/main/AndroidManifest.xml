@@ -345,7 +345,7 @@
         <service
             android:name="com.x8bit.bitwarden.MyVaultTileService"
             android:exported="true"
-            android:icon="@drawable/ic_notification"
+            android:icon="@drawable/ic_vault"
             android:label="@string/my_vault"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">

@@ -27,6 +27,7 @@ import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -57,15 +58,10 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -93,10 +89,10 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToAddEditSendScreenRoute: AddEditSendRoute? = null
-    private var onNavigateToViewSendScreenRoute: ViewSendRoute? = null
-    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
-    private var onNavigateToVaultEditItemScreenArgs: VaultAddEditArgs? = null
+    private var onNavigateToAddEditSendScreenRoute: VaultUnlockedGraph.AddEditSendRoute? = null
+    private var onNavigateToViewSendScreenRoute: VaultUnlockedGraph.ViewSendRoute? = null
+    private var onNavigateToVaultItemRoute: VaultUnlockedGraph.VaultItemRoute? = null
+    private var onNavigateToVaultEditItemScreenArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
     private var onNavigateToSearchType: SearchType? = null
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
     private var onNavigateToAddFolderCalled = false
@@ -133,12 +129,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
-            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultItemListingScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemRoute = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
                 onNavigateToAddEditSendItem = { onNavigateToAddEditSendScreenRoute = it },
                 onNavigateToViewSendItem = { onNavigateToViewSendScreenRoute = it },
@@ -558,7 +553,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val sendType = SendItemType.TEXT
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem(sendType = sendType))
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD),
+            VaultUnlockedGraph.AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD),
             onNavigateToAddEditSendScreenRoute,
         )
     }
@@ -571,7 +566,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToViewSendItem(id = sendId, sendType = sendType),
         )
         assertEquals(
-            ViewSendRoute(sendId = sendId, sendType = sendType),
+            VaultUnlockedGraph.ViewSendRoute(sendId = sendId, sendType = sendType),
             onNavigateToViewSendScreenRoute,
         )
     }
@@ -591,7 +586,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToEditCipher(cipherId = cipherId, cipherType = type),
         )
         assertEquals(
-            VaultAddEditArgs(
+            VaultUnlockedGraph.VaultAddEditRoute(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = cipherId),
                 vaultItemCipherType = type,
             ),
@@ -607,7 +602,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             VaultItemListingEvent.NavigateToEditSendItem(id = sendId, sendType = sendType),
         )
         assertEquals(
-            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            VaultUnlockedGraph.AddEditSendRoute(
+                sendType = sendType,
+                modeType = ModeType.EDIT,
+                sendId = sendId,
+            ),
             onNavigateToAddEditSendScreenRoute,
         )
     }
@@ -618,8 +617,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         val type = VaultItemCipherType.LOGIN
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToVaultItem(id = id, type = type))
         assertEquals(
-            VaultItemArgs(vaultItemId = id, cipherType = type),
-            onNavigateToVaultItemArgs,
+            VaultUnlockedGraph.VaultItemRoute(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemRoute,
         )
     }
 
@@ -2604,7 +2603,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -2612,7 +2615,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2625,7 +2628,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `FileTypeRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -2644,11 +2651,15 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Test
     fun `FileTypeRequiresPremium dialog Upgrade click should send UpgradeToPremiumClick`() {
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                    isInAppUpgradeAvailable = true,
+                ),
+            )
         }
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

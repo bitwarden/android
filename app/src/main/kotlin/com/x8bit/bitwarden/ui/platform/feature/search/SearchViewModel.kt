@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -57,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
@@ -68,11 +67,13 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -81,17 +82,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the search screen.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LongParameterList", "TooManyFunctions", "LargeClass")
-@HiltViewModel
-class SearchViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SearchViewModel.Factory::class)
+class SearchViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.SearchRoute,
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
@@ -103,7 +103,6 @@ class SearchViewModel @Inject constructor(
     private val authRepo: AuthRepository,
     private val environmentRepo: EnvironmentRepository,
     private val premiumStateManager: PremiumStateManager,
-    private val featureFlagManager: FeatureFlagManager,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     specialCircumstanceManager: SpecialCircumstanceManager,
@@ -111,7 +110,7 @@ class SearchViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val searchType = savedStateHandle.toSearchArgs().type
+            val searchType = route.searchType
             val userState = requireNotNull(authRepo.userStateFlow.value)
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
             val searchTerm = (specialCircumstance as? SpecialCircumstance.SearchShortcut)
@@ -145,6 +144,17 @@ class SearchViewModel @Inject constructor(
             )
         },
 ) {
+    /**
+     * Factory for creating a [SearchViewModel] for a specific [VaultUnlockedGraph.SearchRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SearchViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.SearchRoute): SearchViewModel
+    }
+
     init {
         settingsRepo
             .isIconLoadingDisabledFlow
@@ -162,12 +172,6 @@ class SearchViewModel @Inject constructor(
             .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
-            .map { SearchAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -460,7 +464,11 @@ class SearchViewModel @Inject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialogState = SearchState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialogState = SearchState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -724,10 +732,6 @@ class SearchViewModel @Inject constructor(
 
             is SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive -> {
                 handleRestrictItemTypesPolicyUpdateReceive(action)
-            }
-
-            is SearchAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
-                handleVfo1FoundationFlagUpdateReceive(action)
             }
 
             is SearchAction.Internal.DecryptCipherErrorReceive -> {
@@ -997,13 +1001,6 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun handleVfo1FoundationFlagUpdateReceive(
-        action: SearchAction.Internal.Vfo1FoundationFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
-        recalculateViewState()
-    }
-
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         vaultData
             .data
@@ -1108,7 +1105,6 @@ class SearchViewModel @Inject constructor(
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
                                 isPremiumUser = state.isPremium,
-                                isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                             )
                     }
 
@@ -1175,7 +1171,6 @@ data class SearchState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
-    val isVfo1FoundationEnabled: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1263,7 +1258,9 @@ data class SearchState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
     }
 
     /**
@@ -1597,13 +1594,6 @@ sealed class SearchAction {
          */
         data class RestrictItemTypesPolicyUpdateReceive(
             val restrictItemTypesPolicyOrdIds: List<String>,
-        ) : Internal()
-
-        /**
-         * Indicates that an update for the `vfo1-foundation` feature flag has been received.
-         */
-        data class Vfo1FoundationFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

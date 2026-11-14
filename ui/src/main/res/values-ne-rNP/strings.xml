@@ -603,20 +603,22 @@
     <string name="generic_error_message">हामी तपाईंको अनुरोध प्रशोधन गर्न सक्षम भएनौं। कृपया फेरि प्रयास गर्नुहोस् वा हामीलाई सम्पर्क गर्नुहोस्।</string>
     <string name="allow_screen_capture">स्क्रिन क्याप्चर अनुमति दिनुहोस्</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">के तपाईं स्क्रिन क्याप्चर सक्रिय गर्न निश्चित हुनुहुन्छ?</string>
-    <string name="log_in_requested">लगइन अनुरोध गरियो</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">के तपाईं लग इन गर्न खोज्दै हुनुहुन्छ?</string>
-    <string name="log_in_attempt_by_x_on_y">%2$s मा %1$s द्वारा लगइन प्रयास</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">यन्त्र प्रकार</string>
     <string name="ip_address">IP ठेगाना</string>
     <string name="time">समय</string>
     <string name="select_time">समय चयन गर्नुहोस्</string>
     <string name="switch_input_mode">इनपुट मोड स्विच गर्नुहोस्</string>
-    <string name="confirm_log_in">लगइन पुष्टि गर्नुहोस्</string>
-    <string name="deny_log_in">लगइन अस्वीकार गर्नुहोस्</string>
-    <string name="log_in_denied">लगइन अस्वीकार गरियो</string>
-    <string name="approve_login_requests">लगइन अनुरोधहरू स्वीकृत गर्नुहोस्</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">धन्यवाद छैन</string>
-    <string name="confim_log_in_attemp_for_x">%1$s को लागि लगइन प्रयास पुष्टि गर्नुहोस्</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">प्रयोगकर्ता नाम प्रकार</string>
     <string name="plus_addressed_email">प्लस ठेगाना भएको इमेल</string>
     <string name="catch_all_email">सबै समात्ने इमेल</string>
@@ -643,21 +645,22 @@
     <string name="i_understand">म बुझ्छु</string>
     <string name="accept">स्वीकार गर्नुहोस्</string>
     <string name="decline">अस्वीकार गर्नुहोस्</string>
-    <string name="login_request_has_already_expired">लगइन अनुरोध पहिले नै म्याद सकिएको छ।</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">बाट लगइन प्रयास:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-के तपाईं यस खातामा स्विच गर्न चाहनुहुन्छ?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden मा नयाँ हुनुहुन्छ?</string>
     <string name="get_master_passwordword_hint">मास्टर पासवर्ड संकेत प्राप्त गर्नुहोस्</string>
     <string name="logging_in_as_x_on_y">%2$s मा %1$s को रूपमा लग इन गर्दै</string>
     <string name="not_you">तपाईं होइन?</string>
     <string name="log_in_with_master_password">मास्टर पासवर्डद्वारा लग इन गर्नुहोस्</string>
     <string name="log_in_initiated">लगइन सुरु गरियो</string>
-    <string name="a_notification_has_been_sent_to_your_device">एउटा सूचना तपाईंको यन्त्रमा पठाइयो।</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">कृपया सुनिश्चित गर्नुहोस् कि तपाईंको भल्ट अनलक छ र अर्को यन्त्रमा औंठाछाप वाक्यांश मिल्छ।</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">सूचना पुन: पठाउनुहोस्</string>
     <string name="view_all_login_options">सबै लग इन विकल्पहरू हेर्नुहोस्</string>
-    <string name="pending_log_in_requests">पेन्डिङ लगइन अनुरोधहरू</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">सबै अनुरोधहरू अस्वीकार गर्नुहोस्</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">के तपाईं सबै पेन्डिङ लगइन अनुरोधहरू अस्वीकार गर्न निश्चित हुनुहुन्छ?</string>
     <string name="no_pending_requests">कुनै पेन्डिङ अनुरोधहरू छैनन्</string>
@@ -690,9 +693,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">पासकी क्लोन गरिएको वस्तुमा प्रतिलिपि गरिने छैन। के तपाईं यो वस्तु क्लोन गर्न जारी राख्न चाहनुहुन्छ?</string>
     <string name="master_password_re_prompt_help">मास्टर पासवर्ड पुन: सोध्ने सहायता</string>
     <string name="admin_approval_requested">प्रशासक स्वीकृति अनुरोध गरियो</string>
-    <string name="your_request_has_been_sent_to_your_admin">तपाईंको अनुरोध तपाईंको प्रशासकलाई पठाइयो।</string>
-    <string name="you_will_be_notified_once_approved">स्वीकृत भएपछि तपाईंलाई सूचित गरिनेछ।</string>
-    <string name="trouble_logging_in">लग इन गर्न समस्या?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">स्वत: भरण रोक्नुहोस्</string>
     <string name="no_uris_blocked">कुनै URI रोकिएको छैन</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">यी URI हरूको लागि स्वत: भरण प्रस्ताव गरिने छैन।</string>
@@ -703,8 +705,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">ढाँचा: %1$s। धेरै URI हरूलाई अल्पविरामले छुट्याउनुहोस्।</string>
     <string name="invalid_uri">अमान्य URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s पहिले नै रोकिएको छ</string>
-    <string name="login_approved">लगइन स्वीकृत गरियो</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">यन्त्रद्वारा लग इन गर्नु Bitwarden एपको सेटिङ्समा सेट अप गरिएको हुनुपर्छ।</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">अर्को विकल्प चाहिन्छ? <annotation link="viewAll">सबै लगइन विकल्पहरू हेर्नुहोस्</annotation></string>
     <string name="log_in_with_device">यन्त्रद्वारा लग इन गर्नुहोस्</string>
     <string name="logging_in_on">मा लग इन गर्दै</string>

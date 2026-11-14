@@ -2,26 +2,19 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * Type-safe route object for navigating to the privileged apps list screen.
+ * Add the privileged apps list screen to the navigation entries.
  */
-@Serializable
-data object PrivilegedAppListRoute
-
-/**
- * Add privileged apps list destination to the nav graph.
- */
-fun NavGraphBuilder.privilegedAppsListDestination(
+fun EntryProviderScope<SettingsGraph>.privilegedAppsListDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<PrivilegedAppListRoute> {
+    pushEntry<SettingsGraph.PrivilegedAppListRoute> {
         PrivilegedAppsListScreen(onNavigateBack = onNavigateBack)
     }
 }
@@ -29,6 +22,6 @@ fun NavGraphBuilder.privilegedAppsListDestination(
 /**
  * Navigate to the privileged apps list screen.
  */
-fun NavController.navigateToPrivilegedAppsList(navOptions: NavOptions? = null) {
-    navigate(route = PrivilegedAppListRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToPrivilegedAppsList() {
+    this.navigate(route = SettingsGraph.PrivilegedAppListRoute)
 }

@@ -4,6 +4,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.model.createMockMasterPasswordPolicy
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -16,7 +17,7 @@ class PolicyInformationMasterPasswordExtensionsTest {
             createMockMasterPasswordPolicy(minLength = 2),
         )
         assertEquals(
-            listOf(BitwardenString.policy_in_effect_min_length.asText(10)),
+            persistentListOf(BitwardenString.policy_in_effect_min_length.asText(10)),
             policyList.toDisplayLabels(),
         )
     }
@@ -29,7 +30,7 @@ class PolicyInformationMasterPasswordExtensionsTest {
             createMockMasterPasswordPolicy(minComplexity = 2),
         )
         assertEquals(
-            listOf(BitwardenString.policy_in_effect_min_complexity.asText(2)),
+            persistentListOf(BitwardenString.policy_in_effect_min_complexity.asText(2)),
             policyList.toDisplayLabels(),
         )
     }
@@ -43,7 +44,7 @@ class PolicyInformationMasterPasswordExtensionsTest {
             createMockMasterPasswordPolicy(requireSpecial = true),
         )
         assertEquals(
-            listOf(
+            persistentListOf(
                 BitwardenString.policy_in_effect_uppercase.asText(),
                 BitwardenString.policy_in_effect_lowercase.asText(),
                 BitwardenString.policy_in_effect_numbers.asText(),

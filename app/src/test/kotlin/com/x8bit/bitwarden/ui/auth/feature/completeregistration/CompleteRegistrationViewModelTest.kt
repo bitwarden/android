@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.Regis
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
@@ -38,13 +39,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
@@ -95,16 +93,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
-        mockkStatic(
-            SavedStateHandle::toCompleteRegistrationArgs,
-        )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toCompleteRegistrationArgs,
-        )
     }
 
     @Test
@@ -644,13 +632,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
     ): CompleteRegistrationViewModel = CompleteRegistrationViewModel(
+        route = AuthGraph.CompleteRegistrationRoute(
+            emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
+            verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
+            fromEmail = completeRegistrationState?.fromEmail == true,
+        ),
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = completeRegistrationState)
-            every { toCompleteRegistrationArgs() } returns CompleteRegistrationArgs(
-                emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
-                verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
-                fromEmail = completeRegistrationState?.fromEmail == true,
-            )
         },
         authRepository = mockAuthRepository,
         environmentRepository = fakeEnvironmentRepository,

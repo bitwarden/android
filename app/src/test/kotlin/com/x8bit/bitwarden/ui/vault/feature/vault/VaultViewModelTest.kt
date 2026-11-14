@@ -170,9 +170,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
-            every { needsKdfUpdateToMinimums() } returns false
+            every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
+            every { needsKdfUpdateToMinimums(userId = any()) } returns false
             coEvery {
-                updateKdfToMinimumsIfNeeded(password = any())
+                updateKdfToMinimumsIfNeeded(userId = any(), password = any())
             } returns UpdateKdfMinimumsResult.Success
         }
     private val environmentRepository = FakeEnvironmentRepository()
@@ -249,10 +250,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { dismissBanner() } just runs
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow =
@@ -303,7 +302,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should trigger a forced sync when KDF update is required`() = runTest {
-        every { authRepository.needsKdfUpdateToMinimums() } returns true
+        every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
         createViewModel()
         coVerify { vaultRepository.syncForResult(forced = true) }
         verify(exactly = 0) { vaultRepository.syncIfNecessary() }
@@ -311,7 +310,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `KDF dialog is suppressed while sync is pending even when vault data loads`() = runTest {
-        every { authRepository.needsKdfUpdateToMinimums() } returns true
+        every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
         coEvery { vaultRepository.syncForResult(forced = any()) } just awaits
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -339,7 +338,9 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `KDF dialog is not shown after sync completes when KDF update is no longer needed`() =
         runTest {
-            every { authRepository.needsKdfUpdateToMinimums() } returns true andThen false
+            every {
+                authRepository.needsKdfUpdateToMinimums(userId = "activeUserId")
+            } returns true andThen false
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE.copy(dialog = null),
@@ -350,7 +351,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `KDF dialog is shown after sync completes when KDF update is still needed`() =
         runTest {
-            every { authRepository.needsKdfUpdateToMinimums() } returns true
+            every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
             val viewModel = createViewModel()
             @Suppress("MaxLineLength")
             assertEquals(
@@ -1149,7 +1150,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 isPremium = false,
-                dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -2637,7 +2640,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     isPremium = false,
-                    dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = false,
+                    ),
                     viewState = VaultState.ViewState.Content(
                         loginItemsCount = 1,
                         cardItemsCount = 0,
@@ -4613,7 +4618,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            coEvery { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -4682,7 +4687,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            coEvery { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns false
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -4746,7 +4751,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
         val password = "mock_password"
         coEvery {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            authRepository.updateKdfToMinimumsIfNeeded(
+                userId = "activeUserId",
+                password = password,
+            )
         } returns UpdateKdfMinimumsResult.Success
 
         val viewModel = createViewModel()
@@ -4756,9 +4764,35 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
 
         coVerify(exactly = 1) {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            authRepository.updateKdfToMinimumsIfNeeded(
+                userId = "activeUserId",
+                password = password,
+            )
         }
     }
+
+    @Test
+    fun `on KdfUpdatePasswordRepromptSubmit with no active user should show an error`() =
+        runTest {
+            val viewModel = createViewModel()
+            mutableUserStateFlow.value = null
+
+            viewModel.trySendAction(
+                action = VaultAction.KdfUpdatePasswordRepromptSubmit(password = "mock_password"),
+            )
+
+            assertEquals(
+                VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.kdf_update_failed_active_account_not_found.asText(),
+                    error = null,
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify(exactly = 0) {
+                authRepository.updateKdfToMinimumsIfNeeded(userId = any(), password = any())
+            }
+        }
 
     @Test
     fun `credentialExchangeRegistryManager should register when not fdroid`() = runTest {

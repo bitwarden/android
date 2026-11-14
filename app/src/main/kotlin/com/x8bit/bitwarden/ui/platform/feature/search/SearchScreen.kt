@@ -14,7 +14,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
@@ -23,7 +22,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -37,11 +36,8 @@ import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
-import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultFilter
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import kotlinx.collections.immutable.toImmutableList
@@ -54,13 +50,13 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun SearchScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
-    onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
-    onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
-    onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
+    onNavigateToAddEditSend: (route: VaultUnlockedGraph.AddEditSendRoute) -> Unit,
+    onNavigateToViewSend: (route: VaultUnlockedGraph.ViewSendRoute) -> Unit,
+    onNavigateToEditCipher: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
+    onNavigateToViewCipher: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
     onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
-    viewModel: SearchViewModel = hiltViewModel(),
+    viewModel: SearchViewModel,
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -79,7 +75,7 @@ fun SearchScreen(
             SearchEvent.NavigateBack -> onNavigateBack()
             is SearchEvent.NavigateToEditSend -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         sendType = event.sendType,
                         modeType = ModeType.EDIT,
                         sendId = event.sendId,
@@ -89,13 +85,16 @@ fun SearchScreen(
 
             is SearchEvent.NavigateToViewSend -> {
                 onNavigateToViewSend(
-                    ViewSendRoute(sendId = event.sendId, sendType = event.sendType),
+                    VaultUnlockedGraph.ViewSendRoute(
+                        sendId = event.sendId,
+                        sendType = event.sendType,
+                    ),
                 )
             }
 
             is SearchEvent.NavigateToEditCipher -> {
                 onNavigateToEditCipher(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.cipherId),
                         vaultItemCipherType = event.cipherType,
                     ),
@@ -104,7 +103,7 @@ fun SearchScreen(
 
             is SearchEvent.NavigateToViewCipher -> {
                 onNavigateToViewCipher(
-                    VaultItemArgs(
+                    VaultUnlockedGraph.VaultItemRoute(
                         vaultItemId = event.cipherId,
                         cipherType = event.cipherType,
                     ),
@@ -199,14 +198,11 @@ private fun SearchDialogs(
     onUpgradeToPremiumClick: () -> Unit,
 ) {
     when (dialogState) {
-        SearchState.DialogState.ArchiveRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+        is SearchState.DialogState.ArchiveRequiresPremium -> {
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = onUpgradeToPremiumClick,
-                onDismissClick = onDismissRequest,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = onUpgradeToPremiumClick,
                 onDismissRequest = onDismissRequest,
             )
         }

@@ -45,6 +45,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.BitwardenPullToRefreshState
@@ -63,11 +64,10 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -86,9 +86,9 @@ private const val APP_REVIEW_DELAY = 3000L
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
-    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
-    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultAddItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
+    onNavigateToVaultItemScreen: (route: VaultUnlockedGraph.VaultItemRoute) -> Unit,
+    onNavigateToVaultEditItemScreen: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
@@ -130,7 +130,7 @@ fun VaultScreen(
         when (event) {
             is VaultEvent.NavigateToAddItemScreen -> {
                 onNavigateToVaultAddItemScreen(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.AddItem(),
                         vaultItemCipherType = event.type,
                     ),
@@ -144,12 +144,17 @@ fun VaultScreen(
             }
 
             is VaultEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItemScreen(VaultItemArgs(event.itemId, event.type))
+                onNavigateToVaultItemScreen(
+                    VaultUnlockedGraph.VaultItemRoute(
+                        vaultItemId = event.itemId,
+                        cipherType = event.type,
+                    ),
+                )
             }
 
             is VaultEvent.NavigateToEditVaultItem -> {
                 onNavigateToVaultEditItemScreen(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.itemId),
                         vaultItemCipherType = event.type,
                     ),
@@ -391,14 +396,11 @@ private fun VaultDialogs(
     vaultHandlers: VaultHandlers,
 ) {
     when (dialogState) {
-        VaultState.DialogState.ArchiveRequiresPremium -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = BitwardenString.premium_subscription_required),
+        is VaultState.DialogState.ArchiveRequiresPremium -> {
+            PremiumRequiredDialog(
                 message = stringResource(id = BitwardenString.archiving_items_is_a_premium_feature),
-                confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-                dismissButtonText = stringResource(id = BitwardenString.cancel),
-                onConfirmClick = vaultHandlers.upgradeToPremiumClick,
-                onDismissClick = vaultHandlers.dialogDismiss,
+                isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+                onUpgradeToPremiumClick = vaultHandlers.upgradeToPremiumClick,
                 onDismissRequest = vaultHandlers.dialogDismiss,
             )
         }

@@ -619,20 +619,22 @@ dewiswch Ychwanegu TOTP i storio\'r allwedd yn ddiogel</string>
     <string name="generic_error_message">Ni allwn brosesu\'ch cais. Ceisiwch eto neu cysylltwch â ni.</string>
     <string name="allow_screen_capture">Caniatáu sgrinluniau</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ydych chi\'n siŵr eich bod am ganiatáu sgrinluniau?</string>
-    <string name="log_in_requested">Mewngofnodi wedi\'i ofyn</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
     <string name="are_you_trying_to_log_in">Ydych chi\'n ceisio mewngofnodi?</string>
-    <string name="log_in_attempt_by_x_on_y">Cais mewngofnodi gan %1$s ar %2$s</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Math o ddyfais</string>
     <string name="ip_address">Cyfeiriad IP</string>
     <string name="time">Amser</string>
     <string name="select_time">Dewis amser</string>
     <string name="switch_input_mode">Newid modd mewnbynnu</string>
-    <string name="confirm_log_in">Cadarnhau\'r mewngofnodi</string>
-    <string name="deny_log_in">Gwrthod y mewngofnodi</string>
-    <string name="log_in_denied">Gwrthodwyd y mewngofnodi</string>
-    <string name="approve_login_requests">Cymeradwyo ceisiadau mewngofnodi</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Dim diolch</string>
-    <string name="confim_log_in_attemp_for_x">Cadarnhau ymgais mewngofnodi ar gyfer %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Math o enw defnyddiwr</string>
     <string name="plus_addressed_email">Is-gyfeiriad ebost</string>
     <string name="catch_all_email">E-bost dal-pob</string>
@@ -659,21 +661,22 @@ dewiswch Ychwanegu TOTP i storio\'r allwedd yn ddiogel</string>
     <string name="i_understand">Rwy\'n deall</string>
     <string name="accept">Derbyn</string>
     <string name="decline">Gwrthod</string>
-    <string name="login_request_has_already_expired">Mae\'r cais mewngofnodi eisoes wedi dod i ben.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Ymgais mewngofnodi o:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Ydych chi am newid i\'r cyfrif hwn?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Newydd i Bitwarden?</string>
     <string name="get_master_passwordword_hint">Anfon awgrym o\'ch prif gyfrinair</string>
     <string name="logging_in_as_x_on_y">Yn mewngofnodi fel %1$s ar %2$s</string>
     <string name="not_you">Nid chi?</string>
     <string name="log_in_with_master_password">Mewngofnodi â\'ch prif gyfrinair</string>
     <string name="log_in_initiated">Mewngofnodi wedi\'i gychwyn</string>
-    <string name="a_notification_has_been_sent_to_your_device">Mae hysbysiad wedi\'i anfon i\'ch dyfais.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Gwnewch yn siŵr bod eich cwpwrdd wedi\'i ddatgloi a bod yr ymadrodd Ôl Bys yn cyfateb ar y ddyfais arall.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Ailanfon hysbysiad</string>
     <string name="view_all_login_options">Gweld yr holl opsiynau mewngofnodi</string>
-    <string name="pending_log_in_requests">Ceisiadau mewngofnodi sy\'n aros</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Gwrthod pob cais</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Ydych chi\'n siŵr eich bod am wrthod pob cais mewngofnodi sy\'n aros?</string>
     <string name="no_pending_requests">Dim ceisiadau sy\'n aros</string>
@@ -706,9 +709,8 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Ni fydd y passkey yn cael ei gopïo i\'r eitem glôn. Ydych chi am barhau i glonio\'r eitem hon?</string>
     <string name="master_password_re_prompt_help">Cymorth ail-gymell cyfrinair meistr</string>
     <string name="admin_approval_requested">Cymeradwyaeth gweinyddwr wedi\'i gofyn</string>
-    <string name="your_request_has_been_sent_to_your_admin">Mae\'ch cais wedi\'i anfon at eich gweinyddwr.</string>
-    <string name="you_will_be_notified_once_approved">Cewch hysbysiad unwaith y bydd wedi\'i gymeradwyo.</string>
-    <string name="trouble_logging_in">Problem mewngofnodi?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Rhwystro llenwi awtomatig</string>
     <string name="no_uris_blocked">Dim URIs wedi\'u blocio</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Ni fydd llenwi awtomatig yn cael ei gynnig ar gyfer yr URIs hyn.</string>
@@ -719,8 +721,7 @@ Ydych chi am newid i\'r cyfrif hwn?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Fformat: %1$s. Gwahanwch URIs gydag atalnod.</string>
     <string name="invalid_uri">URI annilys</string>
     <string name="the_urix_is_already_blocked">Mae\'r URI %1$s eisoes wedi\'i rwystro</string>
-    <string name="login_approved">Mewngofnodi wedi\'i gymeradwyo</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Rhaid sefydlu mewngofnodi gyda dyfais yng ngosodiadau ap Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Angen opsiwn arall? <annotation link="viewAll">Gweld yr holl opsiynau mewngofnodi</annotation></string>
     <string name="log_in_with_device">Mewngofnodi â dyfais</string>
     <string name="logging_in_on">Mewngofnodi ar</string>

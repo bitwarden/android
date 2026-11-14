@@ -13,7 +13,6 @@ import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.manager.model.FlagKey
@@ -120,6 +119,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -153,6 +153,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("LargeClass")
 class VaultItemListingViewModelTest : BaseViewModelTest() {
@@ -260,10 +261,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     private val initialState = createVaultItemListingState()
-    private val initialSavedStateHandle
-        get() = createSavedStateHandleWithVaultItemListingType(
-            vaultItemListingType = VaultItemListingType.Login,
-        )
+
     private val mockCallingAppInfo = mockk<CallingAppInfo> {
         every { packageName } returns "mockPackageName"
         every { isOriginPopulated() } returns false
@@ -307,17 +305,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isInAppUpgradeAvailable() } returns false
     }
     private val mutableNewItemTypesFlow = MutableStateFlow(false)
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.NewItemTypes) } answers { mutableNewItemTypesFlow.value }
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(
-            SavedStateHandle::toVaultItemListingArgs,
-        )
         mockkObject(
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
@@ -338,7 +331,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            SavedStateHandle::toVaultItemListingArgs,
             CallingAppInfo::getSignatureFingerprintAsHexString,
         )
         unmockkObject(
@@ -357,6 +349,26 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `initial state should not crash and use an empty account when user state is null`() =
+        runTest {
+            mutableUserStateFlow.value = null
+
+            val viewModel = createVaultItemListingViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(
+                        activeAccountSummary = UserState.EMPTY_ACCOUNT
+                            .toAccountSummary(isActive = true),
+                        accountSummaries = persistentListOf(),
+                        isPremium = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `initial dialog state should be correct when CreateCredentialRequest is present`() =
@@ -1007,7 +1019,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `ItemClick for send item should emit NavigateToViewSendItem`() = runTest {
         val viewModel = createVaultItemListingViewModel(
-            createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+            vaultItemListingType = VaultItemListingType.SendFile,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -1111,7 +1123,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 isPremium = false,
-                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium,
+                dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -1621,9 +1635,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddVaultItemClick inside a folder should show item selection dialog state`() {
         val viewModel = createVaultItemListingViewModel(
-            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
-            ),
+            vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
         )
         viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
         assertEquals(
@@ -1648,9 +1660,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddVaultItemClick inside a collection should show item selection dialog state`() {
         val viewModel = createVaultItemListingViewModel(
-            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
-            ),
+            vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
         )
         viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
         assertEquals(
@@ -1677,9 +1687,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `AddVaultItemClick inside a folder should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
         runTest {
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
-                ),
+                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
@@ -1717,9 +1725,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `AddVaultItemClick inside a collection should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
         runTest {
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
-                ),
+                vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
             )
             mutableActivePoliciesFlow.emit(
                 listOf(
@@ -1757,9 +1763,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `AddVaultItemClick should not exclude bank account, drivers license, or passport when NewItemTypes flag is enabled`() {
         mutableNewItemTypesFlow.value = true
         val viewModel = createVaultItemListingViewModel(
-            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
-            ),
+            vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
         )
 
         viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
@@ -1795,7 +1799,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddVaultItemClick for text send item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel(
-            createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendText),
+            vaultItemListingType = VaultItemListingType.SendText,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
@@ -1810,7 +1814,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `AddVaultItemClick for file send item with Premium should emit NavigateToAddVaultItem`() =
         runTest {
             val viewModel = createVaultItemListingViewModel(
-                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+                vaultItemListingType = VaultItemListingType.SendFile,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
@@ -1829,7 +1833,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
             )
             val viewModel = createVaultItemListingViewModel(
-                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+                vaultItemListingType = VaultItemListingType.SendFile,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
@@ -1857,7 +1861,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
             )
             val viewModel = createVaultItemListingViewModel(
-                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+                vaultItemListingType = VaultItemListingType.SendFile,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
@@ -1866,7 +1870,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-                    dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium,
+                    dialogState = VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                        isInAppUpgradeAvailable = true,
+                    ),
                     isPremium = false,
                 ),
                 viewModel.stateFlow.value,
@@ -1876,9 +1882,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `ItemTypeToAddSelected sends NavigateToAddFolder for folder selection`() = runTest {
         val viewModel = createVaultItemListingViewModel(
-            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Folder(""),
-            ),
+            vaultItemListingType = VaultItemListingType.Folder(""),
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -1898,9 +1902,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `ItemTypeToAddSelected sends NavigateToAddFolder for any other selection`() = runTest {
         val viewModel = createVaultItemListingViewModel(
-            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Folder("id"),
-            ),
+            vaultItemListingType = VaultItemListingType.Folder("id"),
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -1923,11 +1925,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemTypeToAddSelected sends NavigateToAddVaultItem with the collection ID when viewing a collection`() =
         runTest {
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Collection(
+                vaultItemListingType = VaultItemListingType.Collection(
                         collectionId = "mockId-1",
                     ),
-                ),
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
@@ -2756,67 +2756,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Test
-    @Suppress("MaxLineLength")
-    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
-        runTest {
-            setupMockUri()
-
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = listOf(createMockCipherListView(number = 1, isDeleted = false)),
-                    ),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-
-            val viewModel = createVaultItemListingViewModel()
-
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-
-            mutableVfo1FoundationFlagFlow.value = false
-
-            assertEquals(
-                createVaultItemListingState(
-                    isVfo1FoundationEnabled = false,
-                    viewState = VaultItemListingState.ViewState.Content(
-                        displayCollectionList = emptyList(),
-                        displayItemList = listOf(
-                            createMockDisplayItemForCipher(
-                                number = 1,
-                                secondSubtitleTestTag = "PasskeySite",
-                                subtitle = "mockSubtitle-1",
-                            )
-                                .copy(
-                                    extraIconList = persistentListOf(
-                                        IconData.Local(
-                                            iconRes = BitwardenDrawable.ic_collections,
-                                            contentDescription = BitwardenString
-                                                .collections
-                                                .asText(),
-                                            testTag = "CipherInCollectionIcon",
-                                        ),
-                                        IconData.Local(
-                                            iconRes = BitwardenDrawable.ic_paperclip,
-                                            contentDescription = BitwardenString
-                                                .attachments
-                                                .asText(),
-                                            testTag = "CipherWithAttachmentsIcon",
-                                        ),
-                                    ),
-                                ),
-                        ),
-                        displayFolderList = emptyList(),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with items and autofill filtering should update ViewState to Content with filtered data`() =
@@ -2946,9 +2885,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Identity,
-                ),
+                vaultItemListingType = VaultItemListingType.Identity,
             )
 
             mutableVaultDataStateFlow.value = dataState
@@ -3170,9 +3107,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Card,
-                ),
+                vaultItemListingType = VaultItemListingType.Card,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3207,9 +3142,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Identity,
-                ),
+                vaultItemListingType = VaultItemListingType.Identity,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3244,9 +3177,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.SecureNote,
-                ),
+                vaultItemListingType = VaultItemListingType.SecureNote,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3281,9 +3212,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.BankAccount,
-                ),
+                vaultItemListingType = VaultItemListingType.BankAccount,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3318,9 +3247,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.License,
-                ),
+                vaultItemListingType = VaultItemListingType.License,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3356,9 +3283,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Passport,
-                ),
+                vaultItemListingType = VaultItemListingType.Passport,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3394,9 +3319,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.SendFile,
-                ),
+                vaultItemListingType = VaultItemListingType.SendFile,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3431,9 +3354,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.SendText,
-                ),
+                vaultItemListingType = VaultItemListingType.SendText,
             )
 
             mutableVaultDataStateFlow.tryEmit(value = dataState)
@@ -3893,7 +3814,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
 
         viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         verify(exactly = 1) {
             vaultRepository.sync(forced = false)
         }
@@ -3908,7 +3829,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         } returns false
 
         viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
-        advanceTimeBy(300)
+        advanceTimeBy(300.milliseconds)
         assertEquals(
             initialState.copy(
                 isRefreshing = false,
@@ -6787,14 +6708,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         } returns mockProviderCreateCredentialRequest
     }
 
-    private fun createSavedStateHandleWithVaultItemListingType(
-        vaultItemListingType: VaultItemListingType,
-    ): SavedStateHandle = SavedStateHandle().apply {
-        every {
-            toVaultItemListingArgs()
-        } returns VaultItemListingArgs(vaultItemListingType = vaultItemListingType)
-    }
-
     private fun setupMockUri() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -6803,10 +6716,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     private fun createVaultItemListingViewModel(
-        savedStateHandle: SavedStateHandle = initialSavedStateHandle,
+        vaultItemListingType: VaultItemListingType = VaultItemListingType.Login,
     ): VaultItemListingViewModel =
         VaultItemListingViewModel(
-            savedStateHandle = savedStateHandle,
+            vaultItemListingType = vaultItemListingType,
             clock = clock,
             clipboardManager = clipboardManager,
             authRepository = authRepository,
@@ -6836,7 +6749,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
         dialogState: VaultItemListingState.DialogState? = null,
         isPremium: Boolean = true,
-        isVfo1FoundationEnabled: Boolean = true,
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
@@ -6857,7 +6769,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isPremium = isPremium,
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
-            isVfo1FoundationEnabled = isVfo1FoundationEnabled,
         )
 }
 

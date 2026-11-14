@@ -44,9 +44,13 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toV2UpgradeToken
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -63,6 +67,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 
@@ -95,7 +101,20 @@ internal class VaultSyncManagerImpl(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
     private val ioScope = CoroutineScope(dispatcherManager.io)
 
-    private var syncJob: Job = Job().apply { complete() }
+    /**
+     * A scope used specifically to make sync requests, it uses a [SupervisorJob] to ensure a
+     * single failure does not mean prevent other operations from occurring.
+     */
+    private val syncScope = CoroutineScope(dispatcherManager.io + SupervisorJob())
+
+    /**
+     * Guards reading and replacing [syncDeferred] so that only one sync can be started at a time.
+     */
+    private val syncMutex: Mutex = Mutex()
+
+    private var syncDeferred: Deferred<SyncVaultDataResult> = CompletableDeferred(
+        value = SyncVaultDataResult.Error(throwable = NoActiveUserException()),
+    )
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -174,7 +193,7 @@ internal class VaultSyncManagerImpl(
                 },
         )
             .onEach {
-                syncJob.cancel()
+                syncMutex.withLock { syncDeferred.cancel() }
                 clearUnlockedData()
             }
             .launchIn(unconfinedScope)
@@ -233,14 +252,18 @@ internal class VaultSyncManagerImpl(
     }
 
     override fun sync(forced: Boolean) {
-        val userId = activeUserId ?: return
-        if (!syncJob.isCompleted) return
-        mutableDecryptCipherListResultFlow.updateToPendingOrLoading()
-        mutableDomainsStateFlow.updateToPendingOrLoading()
-        mutableFoldersStateFlow.updateToPendingOrLoading()
-        mutableCollectionsStateFlow.updateToPendingOrLoading()
-        mutableSendDataStateFlow.updateToPendingOrLoading()
-        syncJob = ioScope.launch { syncInternal(userId = userId, forced = forced) }
+        ioScope.launch {
+            syncMutex.withLock {
+                if (!syncDeferred.isCompleted) return@withLock
+                val userId = activeUserId ?: return@withLock
+                mutableDecryptCipherListResultFlow.updateToPendingOrLoading()
+                mutableDomainsStateFlow.updateToPendingOrLoading()
+                mutableFoldersStateFlow.updateToPendingOrLoading()
+                mutableCollectionsStateFlow.updateToPendingOrLoading()
+                mutableSendDataStateFlow.updateToPendingOrLoading()
+                syncDeferred = syncScope.async { syncInternal(userId = userId, forced = forced) }
+            }
+        }
     }
 
     override fun syncIfNecessary() {
@@ -258,16 +281,28 @@ internal class VaultSyncManagerImpl(
     }
 
     override suspend fun syncForResult(forced: Boolean): SyncVaultDataResult {
-        val userId = activeUserId ?: return SyncVaultDataResult.Error(NoActiveUserException())
-        syncJob = ioScope
-            .async { syncInternal(userId = userId, forced = forced) }
-            .also {
-                return try {
-                    it.await()
-                } catch (e: CancellationException) {
-                    SyncVaultDataResult.Error(throwable = e)
-                }
+        val deferred = syncMutex.withLock {
+            if (syncDeferred.isCompleted) {
+                activeUserId
+                    ?.let { userId ->
+                        syncScope
+                            .async { syncInternal(userId = userId, forced = forced) }
+                            .also { syncDeferred = it }
+                    }
+                    ?: CompletableDeferred(
+                        value = SyncVaultDataResult.Error(throwable = NoActiveUserException()),
+                    )
+            } else {
+                syncDeferred
             }
+        }
+        return try {
+            deferred.await()
+        } catch (e: CancellationException) {
+            // Rethrow if the caller was canceled, otherwise the sync itself was canceled.
+            currentCoroutineContext().ensureActive()
+            SyncVaultDataResult.Error(throwable = e)
+        }
     }
 
     @Suppress("LongMethod")
