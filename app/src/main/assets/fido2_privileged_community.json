@@ -115,6 +115,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.dev.fido.bridge",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "86:44:E2:17:76:07:C7:5C:BC:B7:E3:DE:0E:AB:3E:BB:E6:3B:0B:59:56:BC:1C:A0:DB:EC:53:3E:49:31:1F:E1"
+          }
+        ]
+      }
     }
   ]
 }
