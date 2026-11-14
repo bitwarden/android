@@ -129,6 +129,7 @@ fun createMockOrganizationNetwork(
     ssoMemberDecryptionType: MemberDecryptionType? = null,
     usePhishingBlocker: Boolean = false,
     useMyItems: Boolean = false,
+    usePam: Boolean = false,
 ): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
@@ -194,6 +195,7 @@ fun createMockOrganizationNetwork(
         ssoMemberDecryptionType = ssoMemberDecryptionType,
         usePhishingBlocker = usePhishingBlocker,
         useMyItems = useMyItems,
+        usePam = usePam,
     )
 
 /**

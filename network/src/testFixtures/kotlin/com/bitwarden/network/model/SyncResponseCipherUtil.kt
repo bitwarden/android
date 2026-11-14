@@ -51,6 +51,7 @@ fun createMockCipher(
     key: String? = "mockKey-$number",
     encryptedFor: String? = "mockEncryptedFor-$number",
     data: String? = "mockData-$number",
+    partialData: String? = null,
 ): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         id = id,
@@ -84,6 +85,7 @@ fun createMockCipher(
         key = key,
         encryptedFor = encryptedFor,
         data = data,
+        partialData = partialData,
     )
 
 /**
