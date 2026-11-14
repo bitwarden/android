@@ -166,16 +166,20 @@ class CredentialProviderProcessorImpl(
     private fun getAuthenticationActions(
         request: BeginGetCredentialRequest,
         userState: UserState,
-    ): List<AuthenticationAction> =
-        if (request.beginGetCredentialOptions.any { it is BeginGetPublicKeyCredentialOption }) {
-            userState.accounts.toAuthenticationActions(
+    ): List<AuthenticationAction> {
+        val isPasskeyRequest = request
+            .beginGetCredentialOptions
+            .any { it is BeginGetPublicKeyCredentialOption }
+        val isActiveVaultUnlocked = userState.activeAccount.isVaultUnlocked
+        return when {
+            // Passkey requests offer every account so the user can pick another one.
+            isPasskeyRequest -> userState.accounts.toAuthenticationActions(
                 context = context,
                 pendingIntentManager = pendingIntentManager,
-                userIdWithEntries = userState.activeUserId
-                    .takeIf { userState.activeAccount.isVaultUnlocked },
+                userIdWithEntries = userState.activeUserId.takeIf { isActiveVaultUnlocked },
             )
-        } else if (!userState.activeAccount.isVaultUnlocked) {
-            listOf(
+
+            !isActiveVaultUnlocked -> listOf(
                 AuthenticationAction(
                     title = context.getString(BitwardenString.unlock),
                     pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
@@ -183,9 +187,10 @@ class CredentialProviderProcessorImpl(
                     ),
                 ),
             )
-        } else {
-            emptyList()
+
+            else -> emptyList()
         }
+    }
 
     private fun handleCreatePasskeyQuery(
         request: BeginCreateCredentialRequest,
