@@ -4,7 +4,6 @@
     <string name="add_folder">添加文件夹</string>
     <string name="add_item">添加项目</string>
     <string name="an_error_has_occurred">发生错误</string>
-    <string name="apply">应用</string>
     <string name="back">返回</string>
     <string name="cancel">取消</string>
     <string name="copy">复制</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">文件夹已删除。</string>
     <string name="folder_none">无文件夹</string>
     <string name="folder_updated">文件夹已保存</string>
-    <string name="folders">文件夹</string>
     <string name="hide">隐藏</string>
     <string name="internet_connection_required_message">请连接因特网后再继续。</string>
     <string name="internet_connection_required_title">需要互联网连接</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">复制 TOTP</string>
     <string name="copy_totp_automatically_description">如果登录项目包含验证器密钥，当自动填充此登录时，TOTP 验证码将复制到剪贴板。</string>
     <string name="copy_totp_automatically">自动复制 TOTP</string>
-    <string name="premium_required">需要高级版成员资格才能使用此功能。</string>
     <string name="attachment_deleted">附件已删除</string>
     <string name="attachments_are_a_premium_feature">附件是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="choose_file">选择文件</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">图标服务器 URL</string>
     <string name="vault_is_locked">密码库已锁定</string>
     <string name="go_to_my_vault">前往我的密码库</string>
-    <string name="collections">集合</string>
     <string name="shared_folders">共享文件夹</string>
-    <string name="no_items_collection">此集合中没有项目。</string>
     <string name="there_are_no_items_in_this_shared_folder">此共享文件夹中没有项目。</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
     <string name="no_items_trash">回收站中没有项目。</string>
@@ -345,16 +340,11 @@
     <string name="type">类型</string>
     <string name="move_down">下移</string>
     <string name="move_up">上移</string>
-    <string name="owner">所有者</string>
-    <string name="no_collections_to_list">没有可列出的集合。</string>
     <string name="there_are_no_shared_folders_to_list">没有可列出的共享文件夹。</string>
     <string name="moved_item_to_org">%1$s 已移动到 %2$s。</string>
     <string name="select_one_collection">您必须至少选择一个集合。</string>
     <string name="you_must_select_at_least_one_shared_folder">您必须至少选择一个共享文件夹。</string>
     <string name="share">共享</string>
-    <string name="move_to_organization">移动到组织</string>
-    <string name="no_orgs_to_list">没有可列出的组织。</string>
-    <string name="move_to_org_desc">选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="no_vaults_to_list">没有可列出的密码库。</string>
     <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给对应组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="number_of_words">单词个数</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">访问此 Send 时，默认隐藏文本内容</string>
     <string name="type_file">文件 Send</string>
     <string name="deletion_date">删除日期</string>
-    <string name="deletion_time">删除时间</string>
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
     <string name="this_date_is_enforced_by_your_organization">此日期由您的组织强制执行</string>
     <string name="who_can_view">谁可以查看</string>
@@ -599,22 +588,21 @@
     <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
     <string name="allow_screen_capture">允许屏幕截图</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">确定要开启屏幕截图吗？</string>
-    <string name="access_requested">Access requested</string>
-    <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">您正在尝试登录吗？</string>
-    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
-    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
+    <string name="access_requested">已请求访问权限</string>
+    <string name="account_access_requested">已请求账户访问权限</string>
+    <string name="are_you_trying_to_access_your_account">您正在尝试访问您的账户吗？</string>
+    <string name="access_attempt_by_x_on_y">%1$s 在 %2$s 上的访问尝试</string>
     <string name="device_type">设备类型</string>
     <string name="ip_address">IP 地址</string>
     <string name="time">时间</string>
     <string name="select_time">选择时间</string>
     <string name="switch_input_mode">切换输入模式</string>
-    <string name="confirm_access">Confirm access</string>
-    <string name="deny_access">Deny access</string>
-    <string name="access_denied">Access denied</string>
-    <string name="account_access_requests">Account access requests</string>
+    <string name="confirm_access">确认访问</string>
+    <string name="deny_access">拒绝访问</string>
+    <string name="access_denied">访问被拒绝</string>
+    <string name="account_access_requests">账户访问请求</string>
     <string name="no_thanks">不了，谢谢</string>
-    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
+    <string name="confirm_access_attempt_for_x">确认对 %1$s 的访问尝试</string>
     <string name="username_type">用户名类型</string>
     <string name="plus_addressed_email">附加地址电子邮箱</string>
     <string name="catch_all_email">Catch-all 电子邮箱</string>
@@ -641,28 +629,27 @@
     <string name="i_understand">我明白</string>
     <string name="accept">接受</string>
     <string name="decline">拒绝</string>
-    <string name="access_request_has_already_expired">Access request has already expired.</string>
-    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
+    <string name="access_request_has_already_expired">访问请求已过期。</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">访问尝试来自：
 %1$s
-Do you want to switch to this account?</string>
+您想要切换到此账户吗？</string>
     <string name="new_to_bitwarden">Bitwarden 新手吗？</string>
     <string name="get_master_passwordword_hint">获取主密码提示</string>
     <string name="logging_in_as_x_on_y">正在 %2$s 上以 %1$s 身份登录</string>
     <string name="not_you">不是您吗？</string>
     <string name="log_in_with_master_password">使用主密码登录</string>
     <string name="log_in_initiated">登录已发起</string>
-    <string name="request_sent_to_your_device">Request sent to your device</string>
-    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
-    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
+    <string name="request_sent_to_your_device">请求已发送到您的设备</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">在您的其他已解锁的设备或网页 App 上的 Bitwarden 账户中批准此请求。必须已在设置中开启账户访问请求。</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">批准前，请确保指纹短语与下面的相匹配。</string>
     <string name="resend_notification">重新发送通知</string>
     <string name="view_all_login_options">查看所有登录选项</string>
-    <string name="pending_access_requests">Pending access requests</string>
+    <string name="pending_access_requests">待处理的访问请求</string>
     <string name="decline_all_requests">拒绝所有请求</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">确定要拒绝所有待处理的登录请求吗？</string>
     <string name="no_pending_requests">没有待处理的请求</string>
     <string name="enable_camer_permission_to_use_the_scanner">启用相机权限以使用扫描器</string>
     <string name="language">语言</string>
-    <string name="language_change_x_description">语言已更改为 %1$s。请重新启动 App 以查看更改</string>
     <string name="default_system">默认（系统）</string>
     <string name="weak_master_password">脆弱的主密码</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">识别到弱密码。请使用一个强密码以保护您的账户。确定要使用弱密码吗？</string>
@@ -689,8 +676,8 @@ Do you want to switch to this account?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">通行密钥将不会被复制到克隆的项目。要继续克隆这个项目吗？</string>
     <string name="master_password_re_prompt_help">主密码二次验证帮助</string>
     <string name="admin_approval_requested">已请求管理员批准</string>
-    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
-    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">您的请求已发送给管理员。批准后，您将收到一封电子邮件。</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">您的管理员可能会要求您确认此指纹短语。</string>
     <string name="block_auto_fill">屏蔽自动填充</string>
     <string name="no_uris_blocked">没有屏蔽的 URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">不会为这些 URI 提供自动填充。</string>
@@ -701,7 +688,7 @@ Do you want to switch to this account?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">格式：%1$s。使用逗号分隔多个 URI。</string>
     <string name="invalid_uri">无效的 URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s 已被屏蔽</string>
-    <string name="access_approved">Access approved</string>
+    <string name="access_approved">访问已批准</string>
     <string name="need_another_option_view_all_login_options">需要其他选项吗？<annotation link="viewAll">查看所有登录选项</annotation></string>
     <string name="log_in_with_device">使用设备登录</string>
     <string name="logging_in_on">正登录到</string>
@@ -972,7 +959,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">由于所选项目没有有效的密码，密码操作失败。</string>
-    <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">由于请求无效，凭据操作失败。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">由于请求不受支持，凭据操作失败。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，凭据操作失败。</string>
@@ -1054,7 +1040,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
     <string name="privileged_apps">特权 App</string>
     <string name="unrecognized_browser">无法识别的浏览器</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">进一步了解 Bitwarden 通行密钥的使用。</string>
     <string name="all_trusted_apps">所有信任的 App</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">确定要停止信任 %s 吗？</string>
     <string name="installed_apps">已安装的 App</string>
@@ -1071,8 +1056,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">验证码已添加</string>
     <string name="refresh_period">刷新周期</string>
     <string name="algorithm">算法</string>
-    <string name="advanced">高级</string>
-    <string name="collapse_advanced_options">折叠高级选项</string>
     <string name="number_of_digits">位数</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d 秒</item>
@@ -1153,7 +1136,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">为 %s 选择一个支付卡</string>
     <string name="choose_an_identity">选择身份</string>
     <string name="advanced_options">高级选项</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">更多关于匹配检测</annotation></string>
     <string name="keep_your_credential_secure">保持您的凭据安全</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">进一步了解在使用「%1$s」时如何保持凭据安全。</string>
     <string name="are_you_sure_you_want_to_use">确定要使用「%1$s」吗？</string>
@@ -1195,7 +1177,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">从您的 Bitwarden 密码库导入密码、通行密钥和其他项目类型。</string>
     <string name="items_to_import">要导入的项目</string>
     <string name="exporting_items">正在导出项目…</string>
-    <string name="export_failed">导出失败</string>
     <string name="passwords">密码</string>
     <string name="passkeys">通行密钥</string>
     <string name="why_is_this_step_required">为什么需要这个步骤？</string>
@@ -1215,7 +1196,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">转移项目到 %1$s</string>
     <string name="transfer_items_description">为确保安全性和合规性，<annotation arg="0">%1$s</annotation> 要求所有项目由组织拥有。点击「接受」以转移您的项目的所有权。<annotation link="learnMore">进一步了解</annotation></string>
     <string name="decline_and_leave">拒绝并退出</string>
-    <string name="why_am_i_seeing_this">为什么我会看到这个？</string>
     <string name="migrating_items_to_x">正在迁移项目到 %s</string>
     <string name="failed_to_migrate_items_to_x">迁移项目到 %s 失败</string>
     <string name="search_archive">搜索归档</string>
@@ -1233,6 +1213,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">归档项目是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="totp_is_a_premium_feature">验证器密钥 (TOTP) 是高级版功能。您的当前方案不包含对此功能的访问权限。</string>
     <string name="upgrade_to_premium">升级到高级版</string>
+    <string name="explore_premium">探索高级版</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">要管理您的高级版订阅，您需要在计算机上登录到您的网页密码库。</string>
     <string name="unlock_advanced_security_features">解锁高级安全功能</string>
@@ -1314,7 +1295,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">归档项目</string>
     <string name="once_archived_this_item_will_be_excluded">归档后，此项目将被排除在搜索结果和自动填充建议之外。</string>
     <string name="pricing_unavailable">定价不可用</string>
-    <string name="current_plan">当前方案</string>
     <string name="premium_plan_name">高级版</string>
     <string name="billing_amount">计费金额</string>
     <string name="storage_cost">存储空间费用</string>
@@ -1389,8 +1369,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">签发国家 / 地区</string>
     <string name="issuing_state">签发州 / 省</string>
     <string name="license_class">驾驶证类别</string>
-    <string name="surname">姓氏</string>
-    <string name="given_name">名字</string>
     <string name="date_of_birth">出生日期</string>
     <string name="nationality">国籍</string>
     <string name="passport_type">护照类型</string>

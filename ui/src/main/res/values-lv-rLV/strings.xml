@@ -4,7 +4,6 @@
     <string name="add_folder">Pievienot mapi</string>
     <string name="add_item">Pievienot vienumu</string>
     <string name="an_error_has_occurred">Atgadījās kļūda.</string>
-    <string name="apply">Pielietot</string>
     <string name="back">Atpakaļ</string>
     <string name="cancel">Atcelt</string>
     <string name="copy">Ievietot starpliktuvē</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Mape izdzēsta.</string>
     <string name="folder_none">Nav mapes</string>
     <string name="folder_updated">Mape atjaunota.</string>
-    <string name="folders">Mapes</string>
     <string name="hide">Paslēpt</string>
     <string name="internet_connection_required_message">Lūgums izveidot savienojumu ar internetu, lai varētu turpināt.</string>
     <string name="internet_connection_required_title">Nepieciešams interneta savienojums</string>
@@ -209,7 +207,6 @@ Nolasīšana notiks automātiski.</string>
     <string name="copy_totp">Ievietot TOTP starpliktuvē</string>
     <string name="copy_totp_automatically_description">Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apliecinājuma kods tiks automātiski ievietots starpliktuvē, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</string>
     <string name="copy_totp_automatically">Automātiski ievietot TOTP starpliktuvē</string>
-    <string name="premium_required">Ir nepieciešama Premium dalība, lai izmantotu šo iespēju.</string>
     <string name="attachment_deleted">Pielikums izdzēsts</string>
     <string name="attachments_are_a_premium_feature">Pielikumi ir Premium iespēja. Pašreizējais plāns neiekļauj piekļuvi šai iespējai.</string>
     <string name="choose_file">Izvēlies datni</string>
@@ -292,9 +289,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="icons_url">Ikonu servera URL</string>
     <string name="vault_is_locked">Glabātava ir aizslēgta</string>
     <string name="go_to_my_vault">Doties uz manu glabātavu</string>
-    <string name="collections">Krājumi</string>
     <string name="shared_folders">Kopīgotās mapes</string>
-    <string name="no_items_collection">Šajā krājumā nav vienumu.</string>
     <string name="there_are_no_items_in_this_shared_folder">Šajā kopīgotajā mapē nav vienumu.</string>
     <string name="no_items_folder">Šajā mapē nav vienumu.</string>
     <string name="no_items_trash">Atkritnē nav vienumu.</string>
@@ -349,16 +344,11 @@ Nolasīšana notiks automātiski.</string>
     <string name="type">Veids</string>
     <string name="move_down">Pārvietot uz leju</string>
     <string name="move_up">Pārvietot uz augšu</string>
-    <string name="owner">Īpašnieks</string>
-    <string name="no_collections_to_list">Nav krājumu, ko parādīt.</string>
     <string name="there_are_no_shared_folders_to_list">Nav kopīgotu mapju, ko uzskaitīt.</string>
     <string name="moved_item_to_org">%1$s pārvietots uz %2$s.</string>
     <string name="select_one_collection">Ir jāizvēlas vismaz viens krājums.</string>
     <string name="you_must_select_at_least_one_shared_folder">Jāizvēlas vismaz viena kopīgotā mape.</string>
     <string name="share">Kopīgot</string>
-    <string name="move_to_organization">Pārvietot uz apvienību</string>
-    <string name="no_orgs_to_list">Nav apvienību, ko parādīt</string>
-    <string name="move_to_org_desc">Izvēlies apvienību, uz kuru pārvietot šo vienumu. Pārvietošana nodod šī vienuma piederību apvienībai. Tu vairs nebūsi šī vienuma tiešais īpašnieks pēc tā pārvietošanas.</string>
     <string name="no_vaults_to_list">Nav glabātavu, ko uzskaitīt.</string>
     <string name="move_to_vault_desc">Jāizvēlas glabātava, uz kuru ir vēlēšanās pārvietot šo vienumu. Pārvietošana uz citu glabātavu nodod vienuma īpašumtiesības tai apvienībai. Tiklīdz vienums būs pārvietots, Tu vairs nebūsi šī vienuma tiešais īpašnieks.</string>
     <string name="number_of_words">Vārdu skaits</string>
@@ -473,7 +463,6 @@ Nolasīšana notiks automātiski.</string>
     <string name="hide_text_by_default">Piekļūstot Sūtījumam, pēc noklusējuma paslēpiet tekstu</string>
     <string name="type_file">Datne</string>
     <string name="deletion_date">Dzēšanas datums</string>
-    <string name="deletion_time">Dzēšanas laiks</string>
     <string name="deletion_date_info">Send tiks neatgriezeniski izdzēsts norādītajā datumā un laikā.</string>
     <string name="this_date_is_enforced_by_your_organization">Šis datums ir apvienības uzspiests</string>
     <string name="who_can_view">Kurš var apskatīt</string>
@@ -609,7 +598,6 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Vai tiešām iespējot ekrāna tveršanu?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Vai mēģini pieteikties?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Ierīces veids</string>
@@ -670,7 +658,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Nav neapstiprinātu pieprasījumu</string>
     <string name="enable_camer_permission_to_use_the_scanner">Nodrošināt atļauju izmantot kameru, lai lietotu nolasītāju</string>
     <string name="language">Valoda</string>
-    <string name="language_change_x_description">Valoda tika nomainīta uz %1$s. Lūgums pārsāknēt lietotni, lai redzētu izmaiņas</string>
     <string name="default_system">Noklusējuma (sistēmas)</string>
     <string name="weak_master_password">Vāja galvenā parole</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Noteikta vāja parole. Jāizmanto spēcīga parole, lai aizsargātu savu kontu. Vai tiešām izmantot vāju paroli?</string>
@@ -984,7 +971,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Darbība ar paroli neizdevās, jo atlasītais vienums nepastāv.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Darbība ar paroli neizdevās, jo atlasītajam vienumam nav derīgas paroles.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Darbība ar paroli neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Darbība ar piekļuves datiem neizdevās, jo pieprasījums ir nederīgs.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves datiem neizdevās, jo tika izmantots neatbalstīts pieprasījums.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Darbība ar paroli neizdevās, jo tika pārsniegts lietotāja apliecināšanas mēģinājumu skaits.</string>
@@ -1065,7 +1051,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Uzzināt vairāk par priviliģētajām lietotnēm</string>
     <string name="privileged_apps">Priviliģētās lietotnes</string>
     <string name="unrecognized_browser">Neatpazīts pārlūks</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Uzzināt vairāk par paroles vārdkopu izmantošanu ar Bitwarden.</string>
     <string name="all_trusted_apps">Visas uzticamās lietotnes</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Vai tiešām pārtraukt uzticēties %s?</string>
     <string name="installed_apps">Uzstādītās lietotnes</string>
@@ -1082,8 +1067,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Apliecināšanas kods pievienots</string>
     <string name="refresh_period">Atsvaidzināšanas laika posms</string>
     <string name="algorithm">Algoritms</string>
-    <string name="advanced">Papildu</string>
-    <string name="collapse_advanced_options">Sakļaut papildu iespējas</string>
     <string name="number_of_digits">Ciparu skaits</string>
     <plurals name="refresh_period_seconds">
         <item quantity="zero">%d sekunžu</item>
@@ -1168,7 +1151,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Atlasīt karti %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Papildu iespējas</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Vairāk par atbilstības noteikšanu</annotation></string>
     <string name="keep_your_credential_secure">Turi savus pieteikšanās datus drošībā</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Uzzini vairāk par to, kā turēt pieteikšanās datus drošībā, kad izmanto “%1$s”!</string>
     <string name="are_you_sure_you_want_to_use">Vai tiešām izmantot “%1$s”?</string>
@@ -1212,7 +1194,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Ievieto paroles, piekļuves atslēgas un citus vienumu veidus no savas Bitwarden glabātavas!</string>
     <string name="items_to_import">Ievietojamie vienumi</string>
     <string name="exporting_items">Izgūst vienumus…</string>
-    <string name="export_failed">Izgūšana neizdevās</string>
     <string name="passwords">Paroles</string>
     <string name="passkeys">Piekļuves atslēgas</string>
     <string name="why_is_this_step_required">Kādēļ šis solis ir nepieciešams?</string>
@@ -1232,7 +1213,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Pārcelt vienumus uz %1$s</string>
     <string name="transfer_items_description">%1$s ir nepieciešams, lai visi vienumi piederētu apvienībai drošības un atbilstības nolūkos. Jāklikšķina “Pieņemt”, lai pārceltu savu vienumu īpašumtiesības.</string>
     <string name="decline_and_leave">Noraidīt un pamest</string>
-    <string name="why_am_i_seeing_this">Kāpēc šis ir redzams?</string>
     <string name="migrating_items_to_x">Pārceļ vienumus uz %s</string>
     <string name="failed_to_migrate_items_to_x">Neizdevās pārcelt vienumus uz %s</string>
     <string name="search_archive">Meklēt arhīvā</string>
@@ -1250,6 +1230,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Vienumu ievietošana arhīvā ir Premium iespēja. Pašreizējais plāns neiekļauj piekļuvi tai.</string>
     <string name="totp_is_a_premium_feature">Autentificētāja atslēga (TOTP) ir Premium iespēja. Pašreizējais plāns neiekļauj piekļuvi šai iespējai.</string>
     <string name="upgrade_to_premium">Uzlabot uz Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plāns</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Ir nepieciešams datorā pieteikties savā tīmekļa glabātavā, lai pārvaldītu savu Premium abonementu.</string>
     <string name="unlock_advanced_security_features">Atslēgt uzlabotās drošības iespējas</string>
@@ -1331,7 +1312,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arhivēt vienumu</string>
     <string name="once_archived_this_item_will_be_excluded">Pēc ievietošanas arhīvā šis vienums netiks iekļauts meklēšanas iznākumā un automātiskās aizpildes ieteikumos.</string>
     <string name="pricing_unavailable">Cenu saraksts nav pieejams</string>
-    <string name="current_plan">Pašreizējais plāns</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Norēķinu summa</string>
     <string name="storage_cost">Uzglabāšanas izmaksas</string>
@@ -1408,8 +1388,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Izdevējvalsts</string>
     <string name="issuing_state">Izdevēja štats / province</string>
     <string name="license_class">Licences klase</string>
-    <string name="surname">Uzvārds</string>
-    <string name="given_name">Vārds</string>
     <string name="date_of_birth">Dzimšanas datums</string>
     <string name="nationality">Tautība</string>
     <string name="passport_type">Pases veids</string>

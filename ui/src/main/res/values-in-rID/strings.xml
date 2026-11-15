@@ -4,7 +4,6 @@
     <string name="add_folder">Tambah folder</string>
     <string name="add_item">Tambahkan item</string>
     <string name="an_error_has_occurred">Terjadi kesalahan</string>
-    <string name="apply">Terapkan</string>
     <string name="back">Kembali</string>
     <string name="cancel">Batal</string>
     <string name="copy">Salin</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Folder dihapus.</string>
     <string name="folder_none">Tidak Ada Folder</string>
     <string name="folder_updated">Folder diperbarui.</string>
-    <string name="folders">Folder</string>
     <string name="hide">Sembunyikan</string>
     <string name="internet_connection_required_message">Pastikan Anda tersambung ke internet sebelum melanjutkan.</string>
     <string name="internet_connection_required_title">Sambungan Internet Dibutuhkan</string>
@@ -207,7 +205,6 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="copy_totp">Salin TOTP</string>
     <string name="copy_totp_automatically_description">Jika login memiliki kunci autentikator, salin kode verifikasi TOTP ke clip-board anda, saat anda mengisi login secara otomatis.</string>
     <string name="copy_totp_automatically">Salin TOTP secara otomatis</string>
-    <string name="premium_required">Keanggotaan premium diperlukan untuk menggunakan fitur ini.</string>
     <string name="attachment_deleted">Lampiran dihapus</string>
     <string name="attachments_are_a_premium_feature">Lampiran adalah fitur Premium. Paket Anda saat ini tidak mencakup akses ke fitur ini.</string>
     <string name="choose_file">Pilih Berkas</string>
@@ -290,9 +287,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="icons_url">URL Server Ikon</string>
     <string name="vault_is_locked">Brankas terkunci</string>
     <string name="go_to_my_vault">Buka brankas saya</string>
-    <string name="collections">Koleksi</string>
     <string name="shared_folders">Folder bersama</string>
-    <string name="no_items_collection">Tidak ada item di koleksi ini.</string>
     <string name="there_are_no_items_in_this_shared_folder">Tidak ada item di folder bersama ini.</string>
     <string name="no_items_folder">Tidak ada item di folder ini.</string>
     <string name="no_items_trash">Tidak ada item di sampah.</string>
@@ -345,16 +340,11 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="type">Jenis</string>
     <string name="move_down">Pindah ke bawah</string>
     <string name="move_up">Naik ke Atas</string>
-    <string name="owner">Pemilik</string>
-    <string name="no_collections_to_list">Tidak ada koleksi yang akan ditampilkan.</string>
     <string name="there_are_no_shared_folders_to_list">Tidak ada folder bersama untuk ditampilkan.</string>
     <string name="moved_item_to_org">%1$s dipindahkan ke %2$s.</string>
     <string name="select_one_collection">Anda harus memilih setidaknya satu koleksi.</string>
     <string name="you_must_select_at_least_one_shared_folder">Anda harus memilih setidaknya satu folder bersama.</string>
     <string name="share">Bagikan</string>
-    <string name="move_to_organization">Pindah ke Organisasi</string>
-    <string name="no_orgs_to_list">Tidak ada organisasi untuk dicantumkan.</string>
-    <string name="move_to_org_desc">Pilih sebuah organisasi yang Anda inginkan untuk memindahkan item ini. Memindahkan berarti menyerahkan kepemilikan item kepada organisasi tersebut. Anda tidak akan lagi menjadi pemilik item ini.</string>
     <string name="no_vaults_to_list">Tidak ada brankas untuk ditampilkan.</string>
     <string name="move_to_vault_desc">Pilih brankas yang ingin Anda pindahkan item ini. Memindahkan ke brankas lain akan mentransfer kepemilikan item ke organisasi tersebut. Anda tidak akan lagi menjadi pemilik langsung item ini setelah dipindahkan.</string>
     <string name="number_of_words">Jumlah kata</string>
@@ -469,7 +459,6 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="hide_text_by_default">Saat mengakses Kirim, sembunyikan teks secara bawaan</string>
     <string name="type_file">Berkas</string>
     <string name="deletion_date">Tanggal Penghapusan</string>
-    <string name="deletion_time">Waktu Penghapusan</string>
     <string name="deletion_date_info">Kirim akan terhapus permanen pada waktu dan tanggal yang ditetapkan.</string>
     <string name="this_date_is_enforced_by_your_organization">Tanggal ini diberlakukan oleh organisasi Anda</string>
     <string name="who_can_view">Siapa yang dapat melihat</string>
@@ -601,7 +590,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Apakah Anda yakin ingin mengaktifkan tangkapan layar?</string>
     <string name="access_requested">Akses diminta</string>
     <string name="account_access_requested">Akses akun diminta</string>
-    <string name="are_you_trying_to_log_in">Apakah Anda sedang mencoba masuk?</string>
     <string name="are_you_trying_to_access_your_account">Apakah Anda mencoba mengakses akun Anda?</string>
     <string name="access_attempt_by_x_on_y">Percobaan akses oleh %1$s di %2$s</string>
     <string name="device_type">Jenis perangkat</string>
@@ -660,7 +648,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="no_pending_requests">Tidak ada permintaan tertunda</string>
     <string name="enable_camer_permission_to_use_the_scanner">Aktifkan izin kamera untuk menggunakan pemindai</string>
     <string name="language">Bahasa</string>
-    <string name="language_change_x_description">Bahasa telah diubah ke %1$s. Harap mulai ulang apl untuk melihat perubahan</string>
     <string name="default_system">Bawaan (Sistem)</string>
     <string name="weak_master_password">Sandi Utama Lemah</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Sandi lemah ditemukan. Gunakan sandi yang kuat untuk melindungi akun Anda. Apakah Anda yakin ingin menggunakan sandi yang lemah?</string>
@@ -970,7 +957,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operasi kunci sandi gagal karena permintaan tidak didukung.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operasi sandi gagal karena item yang dipilih tidak ada.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operasi kata sandi gagal karena item yang dipilih tidak memiliki kata sandi yang valid.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operasi sandi gagal karena tidak ada item yang dipilih.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operasi kredensial gagal karena permintaan tidak valid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operasi kredensial gagal karena permintaan tidak didukung.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operasi kredensial gagal karena percobaan verifikasi pengguna sudah melebihi batas.</string>
@@ -1051,7 +1037,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="learn_more_about_privileged_apps">Pelajari lebih lanjut tentang apl dengan hak khusus</string>
     <string name="privileged_apps">Aplikasi dengan hak khusus</string>
     <string name="unrecognized_browser">Browser tidak dikenali</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Pelajari lebih lanjut tentang penggunaan kunci sandi dengan Bitwarden.</string>
     <string name="all_trusted_apps">Semua aplikasi terpercaya</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Anda yakin ingin berhenti mempercayai %s?</string>
     <string name="installed_apps">Aplikasi terpasang</string>
@@ -1068,8 +1053,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="verification_code_added">Kode verifikasi ditambahkan</string>
     <string name="refresh_period">Interval muat ulang</string>
     <string name="algorithm">Algoritma</string>
-    <string name="advanced">Tingkat lanjut</string>
-    <string name="collapse_advanced_options">Tutup opsi lanjutan</string>
     <string name="number_of_digits">Jumlah angka</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d detik</item>
@@ -1150,7 +1133,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="select_a_card_for_x">Pilih kartu untuk %s</string>
     <string name="choose_an_identity">Pilih identitas</string>
     <string name="advanced_options">Opsi lanjutan</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Detail deteksi kecocokan</annotation></string>
     <string name="keep_your_credential_secure">Jaga kredensial Anda tetap aman</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Pelajari lebih lanjut cara menjaga kredensial tetap aman saat menggunakan “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Anda yakin ingin menggunakan “%1$s”?</string>
@@ -1192,7 +1174,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Impor sandi, kunci sandi, dan jenis item lainnya dari brankas Bitwarden Anda.</string>
     <string name="items_to_import">Item untuk diimpor</string>
     <string name="exporting_items">Mengekspor item…</string>
-    <string name="export_failed">Ekspor gagal</string>
     <string name="passwords">Sandi</string>
     <string name="passkeys">Kunci sandi</string>
     <string name="why_is_this_step_required">Kenapa langkah ini harus dilakukan?</string>
@@ -1212,7 +1193,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="transfer_items_to_org">Memindahkan item ke %1$s</string>
     <string name="transfer_items_description">%1$s mewajibkan semua item dimiliki oleh organisasi demi keamanan dan kepatuhan. Klik Terima untuk mengalihkan kepemilikan item Anda.</string>
     <string name="decline_and_leave">Tolak dan keluar</string>
-    <string name="why_am_i_seeing_this">Mengapa saya melihat ini?</string>
     <string name="migrating_items_to_x">Migrasi item ke %s</string>
     <string name="failed_to_migrate_items_to_x">Gagal migrasi item ke %s</string>
     <string name="search_archive">Cari arsip</string>
@@ -1230,6 +1210,7 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="archiving_items_is_a_premium_feature">Mengarsipkan item adalah fitur Premium. Paket Anda saat ini tidak termasuk akses ke fitur ini.</string>
     <string name="totp_is_a_premium_feature">Kunci Authenticator (TOTP) adalah fitur Premium. Paket Anda saat ini tidak mencakup akses ke fitur ini.</string>
     <string name="upgrade_to_premium">Tingkatkan ke premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Paket</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Untuk mengelola langganan Premium Anda, Anda perlu masuk ke brankas web Anda di komputer.</string>
     <string name="unlock_advanced_security_features">Buka fitur keamanan lanjutan</string>
@@ -1312,7 +1293,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="archive_item">Arsipkan item</string>
     <string name="once_archived_this_item_will_be_excluded">Setelah diarsipkan, item ini akan dikeluarkan dari hasil pencarian dan saran pengisian otomatis.</string>
     <string name="pricing_unavailable">Harga tidak tersedia</string>
-    <string name="current_plan">Paket saat ini</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Jumlah tagihan</string>
     <string name="storage_cost">Biaya penyimpanan</string>
@@ -1387,8 +1367,6 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="issuing_country">Negara penerbit</string>
     <string name="issuing_state">Negara bagian / provinsi penerbit</string>
     <string name="license_class">Kelas lisensi</string>
-    <string name="surname">Nama keluarga</string>
-    <string name="given_name">Nama depan</string>
     <string name="date_of_birth">Tanggal lahir</string>
     <string name="nationality">Kewarganegaraan</string>
     <string name="passport_type">Jenis paspor</string>

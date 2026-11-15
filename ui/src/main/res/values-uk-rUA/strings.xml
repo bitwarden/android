@@ -4,7 +4,6 @@
     <string name="add_folder">Додати теку</string>
     <string name="add_item">Додати запис</string>
     <string name="an_error_has_occurred">Сталася помилка</string>
-    <string name="apply">Застосувати</string>
     <string name="back">Назад</string>
     <string name="cancel">Скасувати</string>
     <string name="copy">Копіювати</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Теку видалено.</string>
     <string name="folder_none">Без теки</string>
     <string name="folder_updated">Теку збережено</string>
-    <string name="folders">Теки</string>
     <string name="hide">Приховати</string>
     <string name="internet_connection_required_message">Щоб продовжити, під\'єднайтеся до інтернету.</string>
     <string name="internet_connection_required_title">Необхідно під\'єднатися до інтернету</string>
@@ -210,7 +208,6 @@
     <string name="copy_totp">Копіювати TOTP</string>
     <string name="copy_totp_automatically_description">Якщо запис має ключ автентифікації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</string>
     <string name="copy_totp_automatically">Автоматично копіювати коди TOTP</string>
-    <string name="premium_required">Для використання цієї функції необхідна передплата Premium.</string>
     <string name="attachment_deleted">Вкладення видалено</string>
     <string name="attachments_are_a_premium_feature">Вкладення – це функція Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
     <string name="choose_file">Обрати файл</string>
@@ -293,9 +290,7 @@
     <string name="icons_url">URL-адреса сервера піктограм</string>
     <string name="vault_is_locked">Сховище заблоковано</string>
     <string name="go_to_my_vault">Перейти в моє сховище</string>
-    <string name="collections">Збірки</string>
     <string name="shared_folders">Спільні теки</string>
-    <string name="no_items_collection">У цій збірці немає записів.</string>
     <string name="there_are_no_items_in_this_shared_folder">У цій спільній теці немає записів.</string>
     <string name="no_items_folder">У цій теці немає записів.</string>
     <string name="no_items_trash">У смітнику немає записів.</string>
@@ -351,16 +346,11 @@
     <string name="type">Тип</string>
     <string name="move_down">Перемістити вниз</string>
     <string name="move_up">Перемістити вгору</string>
-    <string name="owner">Власник</string>
-    <string name="no_collections_to_list">Немає збірок.</string>
     <string name="there_are_no_shared_folders_to_list">Немає спільних тек для показу.</string>
     <string name="moved_item_to_org">%1$s переміщено до %2$s.</string>
     <string name="select_one_collection">Необхідно вибрати принаймні одну збірку.</string>
     <string name="you_must_select_at_least_one_shared_folder">Необхідно вибрати принаймні одну спільну теку.</string>
     <string name="share">Поділитися</string>
-    <string name="move_to_organization">Перемістити до організації</string>
-    <string name="no_orgs_to_list">Немає організацій.</string>
-    <string name="move_to_org_desc">Виберіть організацію, до якої ви бажаєте перемістити цей запис. Власність запису передається організації, до якої він переміщується. Ви більше не володітимете безпосередньо цим записом після переміщення.</string>
     <string name="no_vaults_to_list">Немає сховищ для показу.</string>
     <string name="move_to_vault_desc">Виберіть сховище, до якого ви бажаєте перемістити цей запис. Власність запису передається організації, до сховища якої він переміщується. Ви більше не володітимете безпосередньо цим записом після переміщення.</string>
     <string name="number_of_words">Кількість слів</string>
@@ -475,7 +465,6 @@
     <string name="hide_text_by_default">При доступі до відправлення типово приховувати текст</string>
     <string name="type_file">Файл</string>
     <string name="deletion_date">Термін дії</string>
-    <string name="deletion_time">Час видалення</string>
     <string name="deletion_date_info">Відправлення буде остаточно видалено у вказаний час.</string>
     <string name="this_date_is_enforced_by_your_organization">Цією датою керує ваша організація</string>
     <string name="who_can_view">Хто може переглядати</string>
@@ -613,7 +602,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ви дійсно хочете увімкнути знімки екрана?</string>
     <string name="access_requested">Запитано доступ</string>
     <string name="account_access_requested">Запитано доступ до облікового запису</string>
-    <string name="are_you_trying_to_log_in">Ви намагаєтесь увійти?</string>
     <string name="are_you_trying_to_access_your_account">Ви намагаєтесь отримати доступ до свого облікового запису?</string>
     <string name="access_attempt_by_x_on_y">Спроба отримання доступу від %1$s на %2$s</string>
     <string name="device_type">Тип пристрою</string>
@@ -674,7 +662,6 @@
     <string name="no_pending_requests">Немає необроблених запитів</string>
     <string name="enable_camer_permission_to_use_the_scanner">Увімкніть доступ до камери для використання сканера</string>
     <string name="language">Мова</string>
-    <string name="language_change_x_description">Мову змінено на %1$s. Для застосування змін перезапустіть програму</string>
     <string name="default_system">Типова (Система)</string>
     <string name="weak_master_password">Ненадійний головний пароль</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Виявлено ненадійний пароль. Використовуйте надійний пароль для захисту свого облікового запису. Ви дійсно хочете використати ненадійний пароль?</string>
@@ -990,7 +977,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з паролем, тому що вибраного елемента не існує.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Не вдалося виконати операцію з паролем, тому що вибраний запис не має дійсного пароля.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з паролем, тому що не вибрано жодного елемента.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Не вдалося виконати операцію з обліковими даними, оскільки запит недійсний.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з обліковими даними, оскільки запит не підтримується.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з обліковими даними через перевищення спроб перевірки користувача.</string>
@@ -1073,7 +1059,6 @@
     <string name="learn_more_about_privileged_apps">Докладніше про привілейовані програми</string>
     <string name="privileged_apps">Привілейовані програми</string>
     <string name="unrecognized_browser">Нерозпізнаний браузер</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Докладніше про ключі доступу в Bitwarden.</string>
     <string name="all_trusted_apps">Усі довірені програми</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ви дійсно хочете скасувати довіру для %s?</string>
     <string name="installed_apps">Встановлені програми</string>
@@ -1090,8 +1075,6 @@
     <string name="verification_code_added">Код підтвердження додано</string>
     <string name="refresh_period">Період оновлення</string>
     <string name="algorithm">Алгоритм</string>
-    <string name="advanced">Додатково</string>
-    <string name="collapse_advanced_options">Згорнути додаткові параметри</string>
     <string name="number_of_digits">Кількість цифр</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d секунда</item>
@@ -1178,7 +1161,6 @@
     <string name="select_a_card_for_x">Вибрати картку для %s</string>
     <string name="choose_an_identity">Виберіть посвідчення</string>
     <string name="advanced_options">Додаткові налаштування</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Докладніше про виявлення збігів</annotation></string>
     <string name="keep_your_credential_secure">Захистіть свої облікові дані</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Докладніше про захист облікових даних під час використання “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Ви дійсно хочете використовувати “%1$s”?</string>
@@ -1223,7 +1205,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Імпортуйте паролі, ключі доступу та інші типи записів зі свого сховища Bitwarden.</string>
     <string name="items_to_import">Записи для імпорту</string>
     <string name="exporting_items">Експортування записів…</string>
-    <string name="export_failed">Не вдалося експортувати</string>
     <string name="passwords">Паролі</string>
     <string name="passkeys">Ключі доступу</string>
     <string name="why_is_this_step_required">Навіщо потрібен цей крок?</string>
@@ -1243,7 +1224,6 @@
     <string name="transfer_items_to_org">Перемістити записи до %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> вимагає, щоб усіма записами володіла організація з міркувань безпеки та відповідності. Натисніть \"Погодитись\", щоб передати права власності на ваші записи. <annotation link="learnMore">Докладніше</annotation></string>
     <string name="decline_and_leave">Відхилити і покинути</string>
-    <string name="why_am_i_seeing_this">Чому я це бачу?</string>
     <string name="migrating_items_to_x">Перенесення записів до %s</string>
     <string name="failed_to_migrate_items_to_x">Не вдалося перенести записи до %s</string>
     <string name="search_archive">Пошук в архіві</string>
@@ -1261,6 +1241,7 @@
     <string name="archiving_items_is_a_premium_feature">Архівування записів є функцією Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
     <string name="totp_is_a_premium_feature">Ключ автентифікації (TOTP) – це функція Premium. Ваш поточний тарифний план не передбачає доступ до цієї функції.</string>
     <string name="upgrade_to_premium">Покращити до Premium</string>
+    <string name="explore_premium">Ознайомитися з Premium</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Щоб керувати передплатою Premium, вам необхідно ввійти до свого вебсховища на комп\'ютері.</string>
     <string name="unlock_advanced_security_features">Розблокуйте розширені функції безпеки</string>
@@ -1342,7 +1323,6 @@
     <string name="archive_item">Архівувати запис</string>
     <string name="once_archived_this_item_will_be_excluded">Після архівації цей запис буде виключено з результатів пошуку і пропозицій автозаповнення.</string>
     <string name="pricing_unavailable">Ціни недоступні</string>
-    <string name="current_plan">Поточний тарифний план</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Сума до сплати</string>
     <string name="storage_cost">Вартість сховища</string>
@@ -1420,8 +1400,6 @@
     <string name="issuing_country">Країна випуску</string>
     <string name="issuing_state">Штат / область видачі</string>
     <string name="license_class">Клас ліцензії</string>
-    <string name="surname">Прізвище</string>
-    <string name="given_name">Ім\'я</string>
     <string name="date_of_birth">Дата народження</string>
     <string name="nationality">Національність</string>
     <string name="passport_type">Тип паспорта</string>

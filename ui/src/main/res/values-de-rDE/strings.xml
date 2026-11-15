@@ -4,7 +4,6 @@
     <string name="add_folder">Ordner hinzufügen</string>
     <string name="add_item">Eintrag hinzufügen</string>
     <string name="an_error_has_occurred">Es ist ein Fehler aufgetreten</string>
-    <string name="apply">Anwenden</string>
     <string name="back">Zurück</string>
     <string name="cancel">Abbrechen</string>
     <string name="copy">Kopieren</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Ordner wurde gelöscht.</string>
     <string name="folder_none">Kein Ordner</string>
     <string name="folder_updated">Ordner gespeichert</string>
-    <string name="folders">Ordner</string>
     <string name="hide">Verstecken</string>
     <string name="internet_connection_required_message">Bitte verbinde dich mit dem Internet um fortzufahren.</string>
     <string name="internet_connection_required_title">Internetverbindung erforderlich</string>
@@ -208,7 +206,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="copy_totp">TOTP kopieren</string>
     <string name="copy_totp_automatically_description">Ist ein Authentifizierungsschlüssel mit deinen Zugangsdaten verknüpft, wird der TOTP-Verifizierungscode in die Zwischenablage kopiert, wenn du die Zugangsdaten automatisch ausfüllen lässt.</string>
     <string name="copy_totp_automatically">TOTP automatisch kopieren</string>
-    <string name="premium_required">Für diese Funktion benötigst du eine Premiummitgliedschaft.</string>
     <string name="attachment_deleted">Anhang entfernt</string>
     <string name="attachments_are_a_premium_feature">Anhänge sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="choose_file">Datei auswählen</string>
@@ -291,9 +288,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="icons_url">URL des Icons-Servers</string>
     <string name="vault_is_locked">Tresor ist gesperrt</string>
     <string name="go_to_my_vault">Zum Tresor gehen</string>
-    <string name="collections">Sammlungen</string>
     <string name="shared_folders">Geteilte Ordner</string>
-    <string name="no_items_collection">Diese Sammlung enthält keine Einträge.</string>
     <string name="there_are_no_items_in_this_shared_folder">Es gibt keine Einträge in diesem geteiltem Ordner.</string>
     <string name="no_items_folder">Es sind keine Objekte in diesem Ordner.</string>
     <string name="no_items_trash">Es sind keine Einträge im Papierkorb.</string>
@@ -347,16 +342,11 @@ Das Scannen erfolgt automatisch.</string>
     <string name="type">Typ</string>
     <string name="move_down">Nach unten bewegen</string>
     <string name="move_up">Nach oben bewegen</string>
-    <string name="owner">Besitzer</string>
-    <string name="no_collections_to_list">Keine Sammlungen vorhanden.</string>
     <string name="there_are_no_shared_folders_to_list">Es gibt keine geteilten Ordner zum Anzeigen.</string>
     <string name="moved_item_to_org">%1$s verschoben nach %2$s.</string>
     <string name="select_one_collection">Es muss mindestens eine Sammlung ausgewählt sein.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du musst mindestens einen geteilten Ordner auswählen.</string>
     <string name="share">Teilen</string>
-    <string name="move_to_organization">In Organisation verschieben</string>
-    <string name="no_orgs_to_list">Keine Organisationen vorhanden.</string>
-    <string name="move_to_org_desc">Wähle eine Organisation aus, in die du diesen Eintrag verschieben möchtest. Das Verschieben in eine Organisation überträgt das Eigentum an diese Organisation. Du bist nicht mehr der direkte Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="no_vaults_to_list">Keine Tresore zum Anzeigen.</string>
     <string name="move_to_vault_desc">Wähle einen Tresor aus, in den du diesen Eintrag verschieben möchtest. Das Verschieben in einen anderen Tresor übertragt das Eigentum an diese Organisation. Du bist nicht länger der Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="number_of_words">Anzahl der Wörter</string>
@@ -471,7 +461,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="hide_text_by_default">Beim Zugriff auf diesen Send den Text standardmäßig ausblenden</string>
     <string name="type_file">Datei</string>
     <string name="deletion_date">Löschdatum</string>
-    <string name="deletion_time">Löschzeitpunkt</string>
     <string name="deletion_date_info">Das Send wird am angegebenen Datum zur angegebenen Uhrzeit dauerhaft gelöscht.</string>
     <string name="this_date_is_enforced_by_your_organization">Dieses Datum wird von deiner Organisation vorgeschrieben</string>
     <string name="who_can_view">Wer kann das sehen</string>
@@ -604,7 +593,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</string>
     <string name="access_requested">Zugriff angefragt</string>
     <string name="account_access_requested">Kontozugriff angefragt</string>
-    <string name="are_you_trying_to_log_in">Versuchst du dich anzumelden?</string>
     <string name="are_you_trying_to_access_your_account">Versuchst du, auf dein Konto zuzugreifen?</string>
     <string name="access_attempt_by_x_on_y">Zugriffsversuch durch %1$s auf %2$s</string>
     <string name="device_type">Gerätetyp</string>
@@ -665,7 +653,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="no_pending_requests">Keine ausstehenden Anfragen</string>
     <string name="enable_camer_permission_to_use_the_scanner">Kamerazugriff gewähren, um den Scanner zu verwenden</string>
     <string name="language">Sprache</string>
-    <string name="language_change_x_description">Die Sprache wurde auf %1$s geändert. Bitte starte die App neu, um die Änderung zu sehen</string>
     <string name="default_system">Standard (System)</string>
     <string name="weak_master_password">Schwaches Master-Passwort</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Schwaches Passwort erkannt. Verwende ein starkes Passwort, um dein Konto zu schützen. Bist du sicher, dass du ein schwaches Passwort verwenden möchtest?</string>
@@ -977,7 +964,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht existiert.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag kein gültiges Password hat.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Der Passwort-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage ungültig ist.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Der Anmeldevorgang ist fehlgeschlagen, da die Anfrage nicht unterstützt wird.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Der Anmeldevorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
@@ -1058,7 +1044,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="learn_more_about_privileged_apps">Erfahre mehr über autorisierte Apps</string>
     <string name="privileged_apps">Autorisierte Apps</string>
     <string name="unrecognized_browser">Unbekannter Browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Erfahre mehr über die Verwendung von Passkeys mit Bitwarden.</string>
     <string name="all_trusted_apps">Alle vertrauenswürdigen Apps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Bist du sicher, dass du aufhören willst, %s zu vertrauen?</string>
     <string name="installed_apps">Installierte Apps</string>
@@ -1075,8 +1060,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="verification_code_added">Verifizierungscode hinzugefügt</string>
     <string name="refresh_period">Aktualisierungszeitraum</string>
     <string name="algorithm">Algorithmus</string>
-    <string name="advanced">Erweitert</string>
-    <string name="collapse_advanced_options">Erweiterte Optionen einklappen</string>
     <string name="number_of_digits">Anzahl der Ziffern</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d Sekunde</item>
@@ -1159,7 +1142,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="select_a_card_for_x">Wähle eine Karte für %s aus</string>
     <string name="choose_an_identity">Wähle eine Identität</string>
     <string name="advanced_options">Erweiterte Optionen</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mehr über die Übereinstimmungserkennung</annotation></string>
     <string name="keep_your_credential_secure">Schütze deine Zugangsdaten</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Erfahre mehr darüber, wie du Zugangsdaten bei der Verwendung von \"%1$s\" schützen kannst.</string>
     <string name="are_you_sure_you_want_to_use">Bist du sicher, dass du \"%1$s\" verwenden möchtest?</string>
@@ -1202,7 +1184,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importiere Passwörter, Passkeys und andere Eintragstypen aus deinem Bitwarden-Tresor.</string>
     <string name="items_to_import">Zu importierende Einträge</string>
     <string name="exporting_items">Einträge werden exportiert…</string>
-    <string name="export_failed">Export fehlgeschlagen</string>
     <string name="passwords">Passwörter</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">Warum ist dieser Schritt erforderlich?</string>
@@ -1222,7 +1203,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="transfer_items_to_org">Eintrag an %1$s übertragen</string>
     <string name="transfer_items_description">%1$s erfordert zur Sicherheit und Compliance, dass alle Einträge der Organisation gehören. Klicke auf Akzeptieren, um den Besitz deiner Einträge zu übertragen.</string>
     <string name="decline_and_leave">Ablehnen und verlassen</string>
-    <string name="why_am_i_seeing_this">Warum wird mir das angezeigt?</string>
     <string name="migrating_items_to_x">Einträge werden nach %s migriert</string>
     <string name="failed_to_migrate_items_to_x">Fehler beim Migrieren der Einträge zu %s</string>
     <string name="search_archive">Archiv durchsuchen</string>
@@ -1240,6 +1220,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="archiving_items_is_a_premium_feature">Das Archivieren von Einträgen ist eine Premium-Funktion. Dein aktueller Tarif umfasst keinen Zugriff auf diese Funktion.</string>
     <string name="totp_is_a_premium_feature">Authentifizierungsschlüssel (TOTP) sind eine Premium-Funktion. Dein aktueller Tarif enthält keinen Zugriff auf diese Funktion.</string>
     <string name="upgrade_to_premium">Auf Premium upgraden</string>
+    <string name="explore_premium">Premium erkunden</string>
     <string name="plan">Tarif</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Um dein Premium-Abonnement zu verwalten, musst du dich bei deinem Web-Tresor auf einem Computer anmelden.</string>
     <string name="unlock_advanced_security_features">Erweiterte Sicherheitsfunktionen freischalten</string>
@@ -1321,7 +1302,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="archive_item">Eintrag archivieren</string>
     <string name="once_archived_this_item_will_be_excluded">Nach der Archivierung wird dieser Eintrag aus den Suchergebnissen und Auto-Ausfüllen-Vorschlägen ausgeschlossen.</string>
     <string name="pricing_unavailable">Preise nicht verfügbar</string>
-    <string name="current_plan">Aktueller Tarif</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Rechnungsbetrag</string>
     <string name="storage_cost">Speicherkosten</string>
@@ -1397,8 +1377,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="issuing_country">Ausstellendes Land</string>
     <string name="issuing_state">Ausstellendes Bundesland/Stadt/Landkreis</string>
     <string name="license_class">Führerscheinklasse</string>
-    <string name="surname">Nachname</string>
-    <string name="given_name">Vorname</string>
     <string name="date_of_birth">Geburtsdatum</string>
     <string name="nationality">Nationalität</string>
     <string name="passport_type">Reisepasstyp</string>

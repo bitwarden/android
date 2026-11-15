@@ -4,7 +4,6 @@
     <string name="add_folder">फोल्डर बनाएं</string>
     <string name="add_item">आइटम बनाएं</string>
     <string name="an_error_has_occurred">एक गड़बड़ हुई।</string>
-    <string name="apply">लागू करें</string>
     <string name="back">पीछे जाएं</string>
     <string name="cancel">कैंसिल करें</string>
     <string name="copy">कॉपी करें</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">फोल्डर हटाया गया।</string>
     <string name="folder_none">कोई फोल्डर नहीं है</string>
     <string name="folder_updated">फोल्डर सेव हुआ</string>
-    <string name="folders">फोल्डर</string>
     <string name="hide">छुपाएं</string>
     <string name="internet_connection_required_message">आगे बढ़ने से पहले इंटरनेट से कनेक्ट करें।</string>
     <string name="internet_connection_required_title">इंटरनेट कनेक्शन चाहिए</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">टीओटीपी कॉपी करें</string>
     <string name="copy_totp_automatically_description">अगर किसी लॉगइन में ऑथेंटिकेशन चाबी है, तो लॉगइन ऑटो-फिल करते टाइम टीओटीपी वेरिफिकेशन कोड अपने क्लिपबोर्ड पर कॉपी करें।</string>
     <string name="copy_totp_automatically">टीओटीपी अपनेआप कॉपी करें</string>
-    <string name="premium_required">इस फीचर को इस्तेमाल करने के लिए प्रीमियम मेम्बरशिप चाहिए।</string>
     <string name="attachment_deleted">अटैचमेंट हटाया गया</string>
     <string name="attachments_are_a_premium_feature">अटैचमेंट एक प्रीमियम सुविधा है। आपकी वर्तमान योजना में इस सुविधा तक पहुँच शामिल नहीं है।</string>
     <string name="choose_file">फाइल चुनें</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">आइकन सर्वर यूआरएल</string>
     <string name="vault_is_locked">तिजोरी पर लॉक है</string>
     <string name="go_to_my_vault">मेरे तिजोरी में जाएं</string>
-    <string name="collections">कलेक्शन</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">इस संग्रह में कोई आइटम नहीं हैं।</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">इस फोल्डर में कोई आइटम नहीं है।</string>
     <string name="no_items_trash">कचरे में कोई आइटम नहीं है।</string>
@@ -346,16 +341,11 @@
     <string name="type">टाइप</string>
     <string name="move_down">नीचे ले जाएं</string>
     <string name="move_up">ऊपर ले जाएं</string>
-    <string name="owner">स्वामी</string>
-    <string name="no_collections_to_list">सूचीबद्ध करने के लिए कोई संग्रह नहीं हैं।</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s पर ट्रांस्फर किया गया।</string>
     <string name="select_one_collection">आपको कम से कम एक संग्रह का चयन करना होगा।</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">शेयर करें</string>
-    <string name="move_to_organization">संगठन में ले जाएँ</string>
-    <string name="no_orgs_to_list">सूचीबद्ध करने के लिए कोई संगठन नहीं।</string>
-    <string name="move_to_org_desc">उस संगठन का चयन करें जिसमें आप इस आइटम को ले जाना चाहते हैं। किसी संगठन में ले जाने पर आइटम का स्वामित्व उस संगठन को स्थानांतरित हो जाता है। एक बार स्थानांतरित होने के बाद आप इस आइटम के प्रत्यक्ष स्वामी नहीं रहेंगे।</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">टोटल शब्द</string>
@@ -470,7 +460,6 @@
     <string name="hide_text_by_default">Send तक पहुँचते समय, डिफ़ॉल्ट रूप से टेक्स्ट छुपाएँ</string>
     <string name="type_file">फाइल</string>
     <string name="deletion_date">हटाने की तारीख</string>
-    <string name="deletion_time">हटाने का टाइम</string>
     <string name="deletion_date_info">Send निर्दिष्ट तिथि और समय पर स्थायी रूप से हटा दिया जाएगा।</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">कौन देख सकता है</string>
@@ -604,7 +593,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">क्या आप वाकई स्क्रीन कैप्चर चालू करना चाहते हैं?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">क्या आप लॉग इन करने का प्रयास कर रहे हैं?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">डिवाइस टाइप</string>
@@ -665,7 +653,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">कोई लंबित मांग नहीं</string>
     <string name="enable_camer_permission_to_use_the_scanner">स्कैनर इस्तेमाल करने के लिए कैमरा अनुमति दें</string>
     <string name="language">भाषा</string>
-    <string name="language_change_x_description">भाषा %1$s में बदली गई। बदलाव देखने के लिए ऐप बंद करके वापस खोलें।</string>
     <string name="default_system">डिफॉल्ट (सिस्टम)</string>
     <string name="weak_master_password">कमज़ोर मुख्य पासवर्ड</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">पासवर्ड कमज़ोर है। अपना खाता महफूज़ रखने के लिए एक ताकतवर पासवर्ड इस्तेमाल करें। कमज़ोर पासवर्ड पक्का इस्तेमाल करें?</string>
@@ -977,7 +964,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">पासकी ऑपरेशन विफल क्योंकि अनुरोध असमर्थित है।</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">पासवर्ड ऑपरेशन विफल क्योंकि चयनित आइटम मौजूद नहीं है।</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">पासवर्ड ऑपरेशन विफल क्योंकि चयनित आइटम में मान्य पासवर्ड नहीं है।</string>
-    <string name="password_operation_failed_because_no_item_was_selected">पासवर्ड ऑपरेशन विफल क्योंकि कोई आइटम चयनित नहीं किया गया।</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">क्रेडेंशियल ऑपरेशन विफल क्योंकि अनुरोध अमान्य है।</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">क्रेडेंशियल ऑपरेशन विफल क्योंकि अनुरोध असमर्थित है।</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">क्रेडेंशियल ऑपरेशन विफल क्योंकि उपयोगकर्ता सत्यापन प्रयासों की सीमा पार हो गई।</string>
@@ -1058,7 +1044,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">विशेषाधिकार प्राप्त ऐप्स के बारे में अधिक जानें</string>
     <string name="privileged_apps">विशेषाधिकार प्राप्त ऐप्स</string>
     <string name="unrecognized_browser">अपरिचित ब्राउज़र</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden के साथ पासकी का उपयोग करने के बारे में अधिक जानें।</string>
     <string name="all_trusted_apps">सभी विश्वसनीय ऐप्स</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">क्या आप वाकई %s पर भरोसा करना बंद करना चाहते हैं?</string>
     <string name="installed_apps">स्थापित ऐप्स</string>
@@ -1075,8 +1060,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">सत्यापन कोड जोड़ा गया</string>
     <string name="refresh_period">ताज़ा अवधि</string>
     <string name="algorithm">एल्गोरिदम</string>
-    <string name="advanced">उन्नत</string>
-    <string name="collapse_advanced_options">उन्नत विकल्प संक्षिप्त करें</string>
     <string name="number_of_digits">अंकों की संख्या</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d सेकंड</item>
@@ -1159,7 +1142,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">%s के लिए एक कार्ड चुनें</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">उन्नत विकल्प</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">मिलान पहचान के बारे में अधिक</annotation></string>
     <string name="keep_your_credential_secure">अपने क्रेडेंशियल सुरक्षित रखें</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” का उपयोग करते समय क्रेडेंशियल को सुरक्षित रखने के तरीके के बारे में अधिक जानें।</string>
     <string name="are_you_sure_you_want_to_use">क्या आप वाकई “%1$s” का उपयोग करना चाहते हैं?</string>
@@ -1202,7 +1184,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">अपने Bitwarden वॉल्ट से पासवर्ड, पासकी और अन्य आइटम प्रकार आयात करें।</string>
     <string name="items_to_import">आयात करने के लिए आइटम</string>
     <string name="exporting_items">आइटम निर्यात किए जा रहे हैं…</string>
-    <string name="export_failed">निर्यात विफल</string>
     <string name="passwords">पासवर्ड</string>
     <string name="passkeys">पासकी</string>
     <string name="why_is_this_step_required">यह चरण क्यों आवश्यक है?</string>
@@ -1222,7 +1203,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">आइटम %1$s को स्थानांतरित करें</string>
     <string name="transfer_items_description">सुरक्षा और अनुपालन के लिए <annotation arg="0">%1$s</annotation> सभी आइटमों को संगठन के स्वामित्व में होना आवश्यक कर रहा है। अपने आइटमों का स्वामित्व स्थानांतरित करने के लिए स्वीकार करें पर क्लिक करें। <annotation link="learnMore">अधिक जानें</annotation></string>
     <string name="decline_and_leave">अस्वीकार करें और छोड़ें</string>
-    <string name="why_am_i_seeing_this">मुझे यह क्यों दिख रहा है?</string>
     <string name="migrating_items_to_x">आइटम %s को स्थानांतरित किए जा रहे हैं</string>
     <string name="failed_to_migrate_items_to_x">आइटम %s को स्थानांतरित करने में विफल</string>
     <string name="search_archive">आर्काइव खोजें</string>
@@ -1240,6 +1220,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">आइटम आर्काइव करना एक प्रीमियम सुविधा है। आपकी वर्तमान योजना में इस सुविधा तक पहुँच शामिल नहीं है।</string>
     <string name="totp_is_a_premium_feature">ऑथेंटिकेटर कुंजी (TOTP) एक प्रीमियम सुविधा है। आपकी वर्तमान योजना में इस सुविधा तक पहुँच शामिल नहीं है।</string>
     <string name="upgrade_to_premium">प्रीमियम पर अपग्रेड करें</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">योजना</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">अपनी प्रीमियम सदस्यता प्रबंधित करने के लिए, आपको कंप्यूटर पर अपने वेब वॉल्ट में लॉग इन करना होगा।</string>
     <string name="unlock_advanced_security_features">उन्नत सुरक्षा सुविधाएँ अनलॉक करें</string>
@@ -1321,7 +1302,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">आइटम आर्काइव करें</string>
     <string name="once_archived_this_item_will_be_excluded">एक बार आर्काइव होने पर, यह आइटम खोज परिणामों और ऑटोफिल सुझावों से बाहर कर दिया जाएगा।</string>
     <string name="pricing_unavailable">मूल्य निर्धारण अनुपलब्ध</string>
-    <string name="current_plan">वर्तमान योजना</string>
     <string name="premium_plan_name">प्रीमियम</string>
     <string name="billing_amount">बिलिंग राशि</string>
     <string name="storage_cost">संग्रहण लागत</string>
@@ -1397,8 +1377,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">जारी करने वाला देश</string>
     <string name="issuing_state">जारी करने वाला राज्य / प्रांत</string>
     <string name="license_class">लाइसेंस वर्ग</string>
-    <string name="surname">उपनाम</string>
-    <string name="given_name">प्रथम नाम</string>
     <string name="date_of_birth">जन्म तिथि</string>
     <string name="nationality">राष्ट्रीयता</string>
     <string name="passport_type">पासपोर्ट प्रकार</string>

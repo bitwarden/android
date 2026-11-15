@@ -4,7 +4,6 @@
     <string name="add_folder">Kausta lisamine</string>
     <string name="add_item">Kirje lisamine</string>
     <string name="an_error_has_occurred">Ilmnes tõrge.</string>
-    <string name="apply">Rakenda</string>
     <string name="back">Tagasi</string>
     <string name="cancel">Tühista</string>
     <string name="copy">Kopeeri</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Kaust on kustutatud.</string>
     <string name="folder_none">Kaust puudub</string>
     <string name="folder_updated">Kaust on uuendatud.</string>
-    <string name="folders">Kaustad</string>
     <string name="hide">Peida</string>
     <string name="internet_connection_required_message">Jätkamiseks on vajalik internetiühendus.</string>
     <string name="internet_connection_required_title">Vajalik on internetiühendus</string>
@@ -208,7 +206,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="copy_totp">Kopeeri TOTP</string>
     <string name="copy_totp_automatically_description">Kui sisselogimise andmetele on juurde lisatud autentimise võti, kopeeri TOTP kood automaattäite kasutamisel lõikepuhvrisse.</string>
     <string name="copy_totp_automatically">TOTP automaatne kopeerimine</string>
-    <string name="premium_required">Selle funktsiooni kasutamiseks on vajalik tasulist kontot omada.</string>
     <string name="attachment_deleted">Manus on kustutatud</string>
     <string name="attachments_are_a_premium_feature">Manused on Premium funktsioon. Teie praegune plaan ei hõlma sellele funktsioonile juurdepääsu.</string>
     <string name="choose_file">Vali fail</string>
@@ -291,9 +288,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="icons_url">Ikoonide serveri URL</string>
     <string name="vault_is_locked">Hoidla on lukus</string>
     <string name="go_to_my_vault">Ava hoidla</string>
-    <string name="collections">Kogumikud</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Selles kogus pole ühtegi üksust.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Selles kaustas ei ole kirjeid.</string>
     <string name="no_items_trash">Prügikast on tühi.</string>
@@ -347,16 +342,11 @@ Skaneerimine toimub automaatselt.</string>
     <string name="type">Tüüp</string>
     <string name="move_down">Nihuta alla</string>
     <string name="move_up">Nihuta üles</string>
-    <string name="owner">Omanik</string>
-    <string name="no_collections_to_list">Puuduvad kollektsioonid, mida kuvada.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s teisaldati %2$s\'sse.</string>
     <string name="select_one_collection">Pead valima vähemalt ühe kogumiku.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Jaga</string>
-    <string name="move_to_organization">Teisalda organisatsiooni</string>
-    <string name="no_orgs_to_list">Puuduvad organisatsioonid, mida kuvada.</string>
-    <string name="move_to_org_desc">Vali organisatsioon, kuhu soovid seda kirjet teisaldada. Teisaldamisega saab kirje omanikuks organisatsioon. Pärast kirje teisaldamist ei ole sa enam selle otsene omanik.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Sõnade arv</string>
@@ -471,7 +461,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="hide_text_by_default">Sendi avamisel peida tekst automaatselt</string>
     <string name="type_file">Fail</string>
     <string name="deletion_date">Kustutamise kuupäev</string>
-    <string name="deletion_time">Kustutamise aeg</string>
     <string name="deletion_date_info">Send kustutatakse määratud kuupäeval ja kellaajal jäädavalt.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kes saavad vaadata</string>
@@ -605,7 +594,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Oled kindel, et soovid lubada ekraanikuva salvestamist?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Oled sisse logimas?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Seadme tüüp</string>
@@ -666,7 +654,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Ootel taotlused puuduvad</string>
     <string name="enable_camer_permission_to_use_the_scanner">Kaamera kasutamiseks luba ligipääs kaamerale</string>
     <string name="language">Keel</string>
-    <string name="language_change_x_description">Rakenduse keel muudeti %1$s-ks. Muudatuste rakendamiseks taaskäivita Bitwarden</string>
     <string name="default_system">Vaikeväärtus (süsteem)</string>
     <string name="weak_master_password">Nõrk ülemparool</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Tuvastati nõrk ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</string>
@@ -978,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Pääsukoodi toiming ebaõnnestus, kuna päringut ei toetata.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Parooli toiming ebaõnnestus, kuna valitud üksust ei eksisteeri.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Parooli toiming ebaõnnestus, kuna valitud üksusel pole kehtivat parooli.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Parooli toiming ebaõnnestus, kuna ühtegi üksust ei valitud.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Mandaadi toiming ebaõnnestus, kuna päring on vigane.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Mandaadi toiming ebaõnnestus, kuna päringut ei toetata.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Mandaadi toiming ebaõnnestus, kuna kasutaja kinnitamise katsete arv ületati.</string>
@@ -1059,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Lisateave privilegeeritud rakenduste kohta</string>
     <string name="privileged_apps">Privilegeeritud rakendused</string>
     <string name="unrecognized_browser">Tundmatu brauser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Lisateave pääsukoodide kasutamise kohta Bitwardeniga.</string>
     <string name="all_trusted_apps">Kõik usaldatud rakendused</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Kas olete kindel, et soovite lõpetada %s usaldamise?</string>
     <string name="installed_apps">Installitud rakendused</string>
@@ -1076,8 +1061,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Kinnituskood lisatud</string>
     <string name="refresh_period">Värskendusperiood</string>
     <string name="algorithm">Algoritm</string>
-    <string name="advanced">Lisavalikud</string>
-    <string name="collapse_advanced_options">Peida seaded edasijõudnutele</string>
     <string name="number_of_digits">Numbrite arv</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekund</item>
@@ -1160,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Valige kaart %s jaoks</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Täpsemad seaded</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Rohkem vaste tuvastamise kohta</annotation></string>
     <string name="keep_your_credential_secure">Hoia oma andmed turvalisena</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Uuri lähemalt kuidas hoida oma isikuandmeid ohutuna kasutades vahendit \"%1$s\".</string>
     <string name="are_you_sure_you_want_to_use">Kas olete kindel, et soovite kasutada „%1$s”?</string>
@@ -1203,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importige paroolid, pääsukoodid ja muud üksuse tüübid oma Bitwardeni varast.</string>
     <string name="items_to_import">Importitavad üksused</string>
     <string name="exporting_items">Üksuste eksportimine…</string>
-    <string name="export_failed">Eksportimine ebaõnnestus</string>
     <string name="passwords">Paroolid</string>
     <string name="passkeys">Pääsukoodid</string>
     <string name="why_is_this_step_required">Miks see samm on vajalik?</string>
@@ -1223,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Teisalda üksused %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> nõuab turvalisuse ja vastavuse tagamiseks, et kõik üksused kuuluksid organisatsioonile. Oma üksuste omandiõiguse üleandmiseks klõpsake nuppu „Nõustu”. <annotation link="learnMore">Lisateave</annotation></string>
     <string name="decline_and_leave">Keeldu ja lahku</string>
-    <string name="why_am_i_seeing_this">Miks ma seda näen?</string>
     <string name="migrating_items_to_x">Üksuste migreerimine %s</string>
     <string name="failed_to_migrate_items_to_x">Üksuste migreerimine %s ebaõnnestus</string>
     <string name="search_archive">Otsi arhiivist</string>
@@ -1241,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Üksuste arhiveerimine on Premium funktsioon. Teie praegune plaan ei hõlma sellele funktsioonile juurdepääsu.</string>
     <string name="totp_is_a_premium_feature">Autentimisvõti (TOTP) on Premium funktsioon. Teie praegune plaan ei hõlma sellele funktsioonile juurdepääsu.</string>
     <string name="upgrade_to_premium">Uuenda versioonile Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plaan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium tellimuse haldamiseks peate logima sisse oma veebivaramusse arvutis.</string>
     <string name="unlock_advanced_security_features">Avage täpsemad turvafunktsioonid</string>
@@ -1322,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arhiveeri üksus</string>
     <string name="once_archived_this_item_will_be_excluded">Pärast arhiveerimist jäetakse see üksus otsingutulemustest ja automaattäite soovitustest välja.</string>
     <string name="pricing_unavailable">Hinnakiri pole saadaval</string>
-    <string name="current_plan">Praegune plaan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Arve summa</string>
     <string name="storage_cost">Salvestusruumi maksumus</string>
@@ -1398,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Väljaandnud riik</string>
     <string name="issuing_state">Väljaandnud osariik / provints</string>
     <string name="license_class">Litsentsi klass</string>
-    <string name="surname">Perekonnanimi</string>
-    <string name="given_name">Eesnimi</string>
     <string name="date_of_birth">Sünnikuupäev</string>
     <string name="nationality">Rahvus</string>
     <string name="passport_type">Passi tüüp</string>
