@@ -48,7 +48,9 @@ fun BitwardenCircularCountdownIndicator(
     ) {
         CircularProgressIndicator(
             progress = { progressAnimate },
-            modifier = Modifier.size(size = 30.dp),
+            modifier = Modifier
+                .size(size = 30.dp)
+                .graphicsLayer { scaleX = -1f },
             color = if (timeLeftSeconds > alertThresholdSeconds) {
                 BitwardenTheme.colorScheme.icon.secondary
             } else {
