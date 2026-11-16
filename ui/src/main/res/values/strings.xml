@@ -1432,4 +1432,5 @@ Do you want to switch to this account?</string>
     <string name="turn_on_autofill_in_x">Turn on autofill in %1$s</string>
     <string name="x_needs_one_more_setting_before_bitwarden_can_fill_your_passwords">%1$s needs one more setting before Bitwarden can fill your passwords.</string>
     <string name="turn_on_in_x">Turn on in %1$s</string>
+    <string name="having_trouble_get_help">Having trouble? Get help</string>
 </resources>

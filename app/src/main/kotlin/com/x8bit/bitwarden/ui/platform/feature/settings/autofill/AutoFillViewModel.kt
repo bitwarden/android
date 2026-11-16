@@ -11,13 +11,13 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
@@ -40,17 +40,16 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
+    autofillPromptManager: AutofillPromptManager,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     featureFlagManager: FeatureFlagManager,
     private val fillAssistManager: FillAssistManager,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
-    private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-            val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
             AutoFillState(
                 showFillAssistOption = featureFlagManager
                     .getFeatureFlag(FlagKey.FillAssistTargetingRules),
@@ -71,8 +70,7 @@ class AutoFillViewModel @Inject constructor(
                     Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
                 ),
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
-                showAutofillActionCard = firstTimeState.showSetupAutofillCard,
-                showBrowserAutofillActionCard = firstTimeState.showSetupBrowserAutofillCard,
+                autofillPromptStatus = autofillPromptManager.autofillPromptStatusFlow.value,
                 activeUserId = userId,
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
@@ -103,9 +101,9 @@ class AutoFillViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        firstTimeActionManager
-            .firstTimeStateFlow
-            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
+        autofillPromptManager
+            .autofillPromptStatusFlow
+            .map { AutoFillAction.Internal.AutofillPromptStatusReceive(autofillPromptStatus = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -144,13 +142,8 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.PasskeyManagementClick -> handlePasskeyManagementClick()
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
-        AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
         AutoFillAction.BrowserAutofillActionCardCtaClick -> {
             handleBrowserAutofillActionCardCtaClick()
-        }
-
-        AutoFillAction.DismissShowBrowserAutofillActionCard -> {
-            handleDismissShowBrowserAutofillActionCard()
         }
 
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
@@ -182,8 +175,8 @@ class AutoFillViewModel @Inject constructor(
                 handleAutofillEnabledUpdateReceive(action)
             }
 
-            is AutoFillAction.Internal.UpdateShowAutofillActionCard -> {
-                handleUpdateShowAutofillActionCard(action)
+            is AutoFillAction.Internal.AutofillPromptStatusReceive -> {
+                handleAutofillPromptStatusReceive(action)
             }
 
             is AutoFillAction.Internal.BrowserAutofillStatusReceive -> {
@@ -220,31 +213,18 @@ class AutoFillViewModel @Inject constructor(
         sendEvent(AutoFillEvent.NavigateToBrowserAutofillSettings(action.browserPackage))
     }
 
-    private fun handleDismissShowAutofillActionCard() {
-        dismissShowAutofillActionCard()
-    }
-
     private fun handleAutofillActionCardCtaClick() {
         sendEvent(AutoFillEvent.NavigateToSetupAutofill)
-    }
-
-    private fun handleDismissShowBrowserAutofillActionCard() {
-        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
     }
 
     private fun handleBrowserAutofillActionCardCtaClick() {
         sendEvent(AutoFillEvent.NavigateToSetupBrowserAutofill)
     }
 
-    private fun handleUpdateShowAutofillActionCard(
-        action: AutoFillAction.Internal.UpdateShowAutofillActionCard,
+    private fun handleAutofillPromptStatusReceive(
+        action: AutoFillAction.Internal.AutofillPromptStatusReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                showAutofillActionCard = action.firstTimeState.showSetupAutofillCard,
-                showBrowserAutofillActionCard = action.firstTimeState.showSetupBrowserAutofillCard,
-            )
-        }
+        mutableStateFlow.update { it.copy(autofillPromptStatus = action.autofillPromptStatus) }
     }
 
     private fun handleFillAssistTargetingRulesFlagUpdateReceive(
@@ -281,7 +261,6 @@ class AutoFillViewModel @Inject constructor(
         } else {
             settingsRepository.disableAutofill()
         }
-        dismissShowAutofillActionCard()
     }
 
     private fun handleBackClick() {
@@ -334,13 +313,6 @@ class AutoFillViewModel @Inject constructor(
     private fun handleBlockAutoFillClick() {
         sendEvent(AutoFillEvent.NavigateToBlockAutoFill)
     }
-
-    private fun dismissShowAutofillActionCard() {
-        if (!state.showAutofillActionCard) return
-        firstTimeActionManager.storeShowAutoFillSettingBadge(
-            showBadge = false,
-        )
-    }
 }
 
 /**
@@ -358,8 +330,7 @@ data class AutoFillState(
     val showInlineAutofillOption: Boolean,
     val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
-    val showAutofillActionCard: Boolean,
-    val showBrowserAutofillActionCard: Boolean,
+    val autofillPromptStatus: AutofillPromptStatus,
     val activeUserId: String,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
@@ -367,10 +338,15 @@ data class AutoFillState(
      * Indicates which call-to-action that should be displayed.
      */
     val ctaState: CtaState
-        get() = when {
-            showAutofillActionCard -> CtaState.AUTOFILL
-            showBrowserAutofillActionCard -> CtaState.BROWSER_AUTOFILL
-            else -> CtaState.DEFAULT
+        get() = when (val status = autofillPromptStatus) {
+            AutofillPromptStatus.AutofillOff -> CtaState.Autofill
+            is AutofillPromptStatus.BrowserOff -> {
+                CtaState.BrowserAutofill(browserPackage = status.browserPackage)
+            }
+
+            AutofillPromptStatus.On,
+            AutofillPromptStatus.Unknown,
+                -> CtaState.Default
         }
 
     /**
@@ -393,10 +369,25 @@ data class AutoFillState(
 /**
  * A representation of which call-to-action that should be displayed.
  */
-enum class CtaState {
-    AUTOFILL,
-    BROWSER_AUTOFILL,
-    DEFAULT,
+sealed class CtaState {
+    /**
+     * Prompt the user to set up autofill.
+     */
+    data object Autofill : CtaState()
+
+    /**
+     * Prompt the user to turn on third party autofill in their default browser.
+     *
+     * @property browserPackage The default browser that needs third party autofill turned on.
+     */
+    data class BrowserAutofill(
+        val browserPackage: BrowserPackage,
+    ) : CtaState()
+
+    /**
+     * Nothing needs attention, so show the autofill help card.
+     */
+    data object Default : CtaState()
 }
 
 /**
@@ -558,19 +549,9 @@ sealed class AutoFillAction {
     data object PasskeyManagementClick : AutoFillAction()
 
     /**
-     * User has clicked the "X" to dismiss the autofill action card.
-     */
-    data object DismissShowAutofillActionCard : AutoFillAction()
-
-    /**
      * User has clicked the CTA on the autofill action card.
      */
     data object AutofillActionCardCtaClick : AutoFillAction()
-
-    /**
-     * User has clicked the "X" to dismiss the browser autofill action card.
-     */
-    data object DismissShowBrowserAutofillActionCard : AutoFillAction()
 
     /**
      * User has clicked the CTA on the browser autofill action card.
@@ -621,9 +602,11 @@ sealed class AutoFillAction {
         ) : Internal()
 
         /**
-         * An update for changes in the [firstTimeState] value from the settings repository.
+         * An update for changes in the autofill prompt status.
          */
-        data class UpdateShowAutofillActionCard(val firstTimeState: FirstTimeState) : Internal()
+        data class AutofillPromptStatusReceive(
+            val autofillPromptStatus: AutofillPromptStatus,
+        ) : Internal()
 
         /**
          * Received updated [BrowserThirdPartyAutofillStatus] data.

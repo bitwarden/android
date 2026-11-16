@@ -70,6 +70,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.ui.platform.components.card.AutofillPromptActionCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
@@ -399,39 +400,29 @@ private fun AutofillCallToActionCard(
         modifier = modifier,
     ) {
         when (it) {
-            CtaState.AUTOFILL -> {
-                BitwardenActionCard(
-                    cardTitle = stringResource(id = BitwardenString.turn_on_autofill),
-                    actionButton = BitwardenButtonData(
-                        label = BitwardenString.get_started.asText(),
-                        onClick = autoFillHandlers.onAutofillActionCardClick,
+            CtaState.Autofill -> {
+                AutofillPromptActionCard(
+                    browserPackage = null,
+                    onTurnOnClick = autoFillHandlers.onAutofillActionCardClick,
+                    secondaryButton = BitwardenButtonData(
+                        label = BitwardenString.having_trouble_get_help.asText(),
+                        onClick = autoFillHandlers.onHelpCardClick,
                     ),
-                    onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
-                    leadingContent = { NotificationBadge(notificationCount = 1) },
                 )
             }
 
-            CtaState.BROWSER_AUTOFILL -> {
-                val subTitleRes = if (state.browserCount > 1) {
-                    BitwardenString.browser_requires_special_permissions_for_bitwarden_plural
-                } else {
-                    BitwardenString.browser_requires_special_permissions_for_bitwarden_singular
-                }
-                BitwardenActionCard(
-                    cardTitle = stringResource(
-                        id = BitwardenString.turn_on_browser_autofill_integration,
+            is CtaState.BrowserAutofill -> {
+                AutofillPromptActionCard(
+                    browserPackage = it.browserPackage,
+                    onTurnOnClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                    secondaryButton = BitwardenButtonData(
+                        label = BitwardenString.having_trouble_get_help.asText(),
+                        onClick = autoFillHandlers.onHelpCardClick,
                     ),
-                    cardSubtitle = stringResource(id = subTitleRes),
-                    actionButton = BitwardenButtonData(
-                        label = BitwardenString.get_started.asText(),
-                        onClick = autoFillHandlers.onBrowserAutofillActionCardClick,
-                    ),
-                    onDismissClick = autoFillHandlers.onBrowserAutofillActionCardDismissClick,
-                    leadingContent = { NotificationBadge(notificationCount = 1) },
                 )
             }
 
-            CtaState.DEFAULT -> {
+            CtaState.Default -> {
                 BitwardenActionCardSmall(
                     actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
                     actionText = stringResource(id = BitwardenString.having_trouble_with_autofill),
@@ -449,6 +440,54 @@ private fun AutofillCallToActionCard(
                 )
             }
         }
+    }
+}
+
+/**
+ * The previous flag-based autofill call-to-action cards for this screen.
+ *
+ * Replaced by [AutofillPromptActionCard] for PM-45496 and intentionally kept, unused, until the
+ * new banners are confirmed. Delete once it is no longer needed.
+ */
+@Suppress("unused")
+@Composable
+private fun LegacyAutofillCallToActionCard(
+    ctaState: CtaState,
+    state: AutoFillState,
+    autoFillHandlers: AutoFillHandlers,
+) {
+    when (ctaState) {
+        CtaState.Autofill -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.turn_on_autofill),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.get_started.asText(),
+                    onClick = autoFillHandlers.onAutofillActionCardClick,
+                ),
+                leadingContent = { NotificationBadge(notificationCount = 1) },
+            )
+        }
+
+        is CtaState.BrowserAutofill -> {
+            val subTitleRes = if (state.browserCount > 1) {
+                BitwardenString.browser_requires_special_permissions_for_bitwarden_plural
+            } else {
+                BitwardenString.browser_requires_special_permissions_for_bitwarden_singular
+            }
+            BitwardenActionCard(
+                cardTitle = stringResource(
+                    id = BitwardenString.turn_on_browser_autofill_integration,
+                ),
+                cardSubtitle = stringResource(id = subTitleRes),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.get_started.asText(),
+                    onClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                ),
+                leadingContent = { NotificationBadge(notificationCount = 1) },
+            )
+        }
+
+        CtaState.Default -> Unit
     }
 }
 
