@@ -48,6 +48,8 @@ import com.bitwarden.ui.util.performLogoutAccountClick
 import com.bitwarden.ui.util.performRemoveAccountClick
 import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -1740,6 +1742,111 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(
                 VaultAction.DismissActionCardClick(VaultState.ActionCardState.IntroducingArchive),
+            )
+        }
+    }
+
+    @Test
+    fun `SetUpAutofill action card should display when autofill is off`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        composeTestRule.onNodeWithText(text = "Set up autofill").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "Bitwarden can suggest your passwords and other credentials when you " +
+                    "sign in to apps and websites.",
+            )
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Turn on autofill").assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Don’t remind me again").assertIsDisplayed()
+    }
+
+    @Test
+    fun `SetUpAutofill action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        composeTestRule.onNodeWithText(text = "Turn on autofill").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+            )
+        }
+    }
+
+    @Test
+    fun `SetUpAutofill action card opt out click should send AutofillActionCardOptOutClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        composeTestRule.onNodeWithText(text = "Don’t remind me again").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.AutofillActionCardOptOutClick)
+        }
+    }
+
+    @Test
+    fun `SetUpAutofill action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+            )
+        }
+    }
+
+    @Test
+    fun `TurnOnBrowserAutofill action card should display the default browser name`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.BRAVE_RELEASE,
+            ),
+        )
+
+        composeTestRule.onNodeWithText(text = "Turn on autofill in Brave").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "Brave needs one more setting before Bitwarden can fill your passwords.",
+            )
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Turn on in Brave").assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Don’t remind me again").assertIsDisplayed()
+    }
+
+    @Test
+    fun `TurnOnBrowserAutofill action card CTA click should send ActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPrompt = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+        )
+
+        composeTestRule.onNodeWithText(text = "Turn on in Chrome").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(
+                    VaultState.ActionCardState.TurnOnBrowserAutofill(
+                        browserPackage = BrowserPackage.CHROME_STABLE,
+                    ),
+                ),
             )
         }
     }

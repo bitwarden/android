@@ -13,6 +13,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
 /**
@@ -136,10 +137,43 @@ fun VaultActionCard(
             )
         }
 
-        VaultState.ActionCardState.SetUpAutofill,
-        is VaultState.ActionCardState.TurnOnBrowserAutofill,
-            -> {
-            // TODO: PM-45496 Draw the autofill cards (placeholder until step 7).
+        VaultState.ActionCardState.SetUpAutofill -> {
+            BitwardenActionCard(
+                cardTitle = stringResource(id = BitwardenString.set_up_autofill),
+                cardSubtitle = stringResource(
+                    id = BitwardenString.bitwarden_can_suggest_your_passwords_and_other_credentials,
+                ),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.turn_on_autofill.asText(),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
+                secondaryButton = BitwardenButtonData(
+                    label = BitwardenString.dont_remind_me_again.asText(),
+                    onClick = vaultHandlers.autofillActionCardOptOutClick,
+                ),
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
+        }
+
+        is VaultState.ActionCardState.TurnOnBrowserAutofill -> {
+            val browserName = actionCardState.browserPackage.displayLabel
+            BitwardenActionCard(
+                cardTitle = BitwardenString.turn_on_autofill_in_x.asText(browserName)(),
+                cardSubtitle = BitwardenString
+                    .x_needs_one_more_setting_before_bitwarden_can_fill_your_passwords
+                    .asText(browserName)(),
+                actionButton = BitwardenButtonData(
+                    label = BitwardenString.turn_on_in_x.asText(browserName),
+                    onClick = { vaultHandlers.actionCardClick(actionCardState) },
+                ),
+                secondaryButton = BitwardenButtonData(
+                    label = BitwardenString.dont_remind_me_again.asText(),
+                    onClick = vaultHandlers.autofillActionCardOptOutClick,
+                ),
+                onDismissClick = { vaultHandlers.dismissActionCardClick(actionCardState) },
+                modifier = modifier,
+            )
         }
     }
 }

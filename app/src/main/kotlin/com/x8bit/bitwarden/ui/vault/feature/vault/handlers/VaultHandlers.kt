@@ -53,6 +53,7 @@ data class VaultHandlers(
     val upgradeToPremiumClick: () -> Unit,
     val dismissActionCardClick: (VaultState.ActionCardState) -> Unit,
     val actionCardClick: (VaultState.ActionCardState) -> Unit,
+    val autofillActionCardOptOutClick: () -> Unit,
     val sectionHeaderClick: (VaultSection) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -151,6 +152,9 @@ data class VaultHandlers(
                     viewModel.trySendAction(VaultAction.DismissActionCardClick(it))
                 },
                 actionCardClick = { viewModel.trySendAction(VaultAction.ActionCardClick(it)) },
+                autofillActionCardOptOutClick = {
+                    viewModel.trySendAction(VaultAction.AutofillActionCardOptOutClick)
+                },
                 sectionHeaderClick = {
                     viewModel.trySendAction(VaultAction.SectionHeaderClick(section = it))
                 },
