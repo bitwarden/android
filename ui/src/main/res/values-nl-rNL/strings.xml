@@ -4,7 +4,6 @@
     <string name="add_folder">Map toevoegen</string>
     <string name="add_item">Item toevoegen</string>
     <string name="an_error_has_occurred">Er is een fout opgetreden</string>
-    <string name="apply">Toepassen</string>
     <string name="back">Terug</string>
     <string name="cancel">Annuleren</string>
     <string name="copy">Kopiëren</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Map is verwijderd.</string>
     <string name="folder_none">Geen map</string>
     <string name="folder_updated">Map opgeslagen</string>
-    <string name="folders">Mappen</string>
     <string name="hide">Verbergen</string>
     <string name="internet_connection_required_message">Maak verbinding met internet voordat u doorgaat.</string>
     <string name="internet_connection_required_title">Internetverbinding is vereist</string>
@@ -208,7 +206,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="copy_totp">TOTP kopiëren</string>
     <string name="copy_totp_automatically_description">Als een login een authenticatiecode heeft, de TOTP-verificatiecode automatisch naar het klembord kopiëren bij het automatisch invullen van de inloggegevens.</string>
     <string name="copy_totp_automatically">TOTP automatisch kopiëren</string>
-    <string name="premium_required">Je hebt een Premium-abonnement nodig om deze functionaliteit te kunnen gebruiken.</string>
     <string name="attachment_deleted">Bijlage is verwijderd</string>
     <string name="attachments_are_a_premium_feature">Bijlagen zijn een Premium-functionaliteit. Toegang tot deze functionaliteit is niet inbegrepen in je huidige abonnement.</string>
     <string name="choose_file">Bestand kiezen</string>
@@ -291,9 +288,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="icons_url">Pictogrammenserver-URL</string>
     <string name="vault_is_locked">Kluis is vergrendeld</string>
     <string name="go_to_my_vault">Ga naar mijn kluis</string>
-    <string name="collections">Verzamelingen</string>
     <string name="shared_folders">Gedeelde mappen</string>
-    <string name="no_items_collection">Er zijn geen items in deze verzameling.</string>
     <string name="there_are_no_items_in_this_shared_folder">Er zijn geen items in deze gedeelde map.</string>
     <string name="no_items_folder">Er zijn geen items in deze map.</string>
     <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
@@ -347,16 +342,11 @@ Het scannen gebeurt automatisch.</string>
     <string name="type">Categorie</string>
     <string name="move_down">Omlaag</string>
     <string name="move_up">Omhoog</string>
-    <string name="owner">Eigenaar</string>
-    <string name="no_collections_to_list">Er zijn geen verzamelingen om weer te geven.</string>
     <string name="there_are_no_shared_folders_to_list">Er zijn geen gedeelde mappen om weer te geven.</string>
     <string name="moved_item_to_org">%1$s is verplaatst naar %2$s.</string>
     <string name="select_one_collection">Je moet tenminste één verzameling selecteren.</string>
     <string name="you_must_select_at_least_one_shared_folder">Je moet tenminste één gedeelde map selecteren.</string>
     <string name="share">Delen</string>
-    <string name="move_to_organization">Naar organisatie verplaatsen</string>
-    <string name="no_orgs_to_list">Geen organisaties om weer te geven.</string>
-    <string name="move_to_org_desc">Kies een organisatie waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="no_vaults_to_list">Geen kluizen om weer te geven.</string>
     <string name="move_to_vault_desc">Kies een kluis waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="number_of_words">Aantal woorden</string>
@@ -471,7 +461,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="hide_text_by_default">Verberg de tekst standaard bij het gebruiken van de Send</string>
     <string name="type_file">Bestand</string>
     <string name="deletion_date">Verwijderingsdatum</string>
-    <string name="deletion_time">Verwijderingstijd</string>
     <string name="deletion_date_info">Deze Send wordt op de aangegeven datum en tijd definitief verwijderd.</string>
     <string name="this_date_is_enforced_by_your_organization">Deze datum is opgelegd door je organisatie</string>
     <string name="who_can_view">Wie kan weergeven</string>
@@ -605,7 +594,6 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Weet je zeker dat je schermopname wilt inschakelen?</string>
     <string name="access_requested">Toegang aangevraagd</string>
     <string name="account_access_requested">Accounttoegang aangevraagd</string>
-    <string name="are_you_trying_to_log_in">Probeer je in te loggen?</string>
     <string name="are_you_trying_to_access_your_account">Probeer je toegang te krijgen tot je account?</string>
     <string name="access_attempt_by_x_on_y">Toegangspoging door %1$s op %2$s</string>
     <string name="device_type">Apparaattype</string>
@@ -666,7 +654,6 @@ Wil je naar dit account wisselen?</string>
     <string name="no_pending_requests">Geen verzoeken in behandeling</string>
     <string name="enable_camer_permission_to_use_the_scanner">Camera-toestemming inschakelen om de scanner te gebruiken</string>
     <string name="language">Taal</string>
-    <string name="language_change_x_description">De taal is veranderd in %1$s. Herstart de app om de verandering te zien</string>
     <string name="default_system">Standaard (Systeem)</string>
     <string name="weak_master_password">Zwak hoofdwachtwoord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zwakke wachtwoord geïdentificeerd. Gebruik een sterk wachtwoord om uw account te beschermen. Weet u zeker dat u een zwak wachtwoord wilt gebruiken?</string>
@@ -978,7 +965,6 @@ Wil je naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Wachtwoord-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Wachtwoord-bewerking mislukt omdat het geselecteerde item geen geldig wachtwoord heeft.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Wachtwoord-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Bewerking op inloggegeven mislukt omdat het verzoek ongeldig is.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Bewerking op inloggegeven mislukt omdat het verzoek niet ondersteund is.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
@@ -1059,7 +1045,6 @@ Wil je naar dit account wisselen?</string>
     <string name="learn_more_about_privileged_apps">Meer informatie over bevoegde apps</string>
     <string name="privileged_apps">Bevoegde apps</string>
     <string name="unrecognized_browser">Onbekende browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Meer informatie over het gebruik van passkeys met Bitwarden.</string>
     <string name="all_trusted_apps">Alle vertrouwde apps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Weet je zeker dat je wilt stoppen met %s vertrouwen?</string>
     <string name="installed_apps">Geïnstalleerde apps</string>
@@ -1076,8 +1061,6 @@ Wil je naar dit account wisselen?</string>
     <string name="verification_code_added">Verificatiecode toegevoegd</string>
     <string name="refresh_period">Periode verversen</string>
     <string name="algorithm">Algoritme</string>
-    <string name="advanced">Geavanceerd</string>
-    <string name="collapse_advanced_options">Geavanceerde opties samenvouwen</string>
     <string name="number_of_digits">Aantal cijfers</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d seconde</item>
@@ -1160,7 +1143,6 @@ Wil je naar dit account wisselen?</string>
     <string name="select_a_card_for_x">Kies een kaart voor %s</string>
     <string name="choose_an_identity">Kies een identiteit</string>
     <string name="advanced_options">Geavanceerde opties</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lees meer over overeenkomstdetectie</annotation></string>
     <string name="keep_your_credential_secure">Houd je inloggegevens veilig</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Leer meer over hoe je de inloggegevens veilig kunt houden bij het gebruik van “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Weet je zeker dat je “%1$s” wilt gebruiken?</string>
@@ -1203,7 +1185,6 @@ Wil je naar dit account wisselen?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Wachtwoorden, passkeys en andere itemtypes uit je Bitwarden-kluis importeren.</string>
     <string name="items_to_import">Te importeren items</string>
     <string name="exporting_items">Items exporteren…</string>
-    <string name="export_failed">Exporteren mislukt</string>
     <string name="passwords">Wachtwoorden</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">Waarom is deze stap nodig?</string>
@@ -1223,7 +1204,6 @@ Wil je naar dit account wisselen?</string>
     <string name="transfer_items_to_org">Items overdragen naar %1$s</string>
     <string name="transfer_items_description">%1$s vereist dat alle items eigendom zijn van de organisatie voor veiligheid en beleidsnaleving. Klik op accepteren voor het overdragen van eigendom van je items.</string>
     <string name="decline_and_leave">Weigeren en verlaten</string>
-    <string name="why_am_i_seeing_this">Waarom zie ik dit?</string>
     <string name="migrating_items_to_x">Items overdragen naar %s</string>
     <string name="failed_to_migrate_items_to_x">Overdracht naar %s mislukt</string>
     <string name="search_archive">Archief doorzoeken</string>
@@ -1241,6 +1221,7 @@ Wil je naar dit account wisselen?</string>
     <string name="archiving_items_is_a_premium_feature">Het archiveren van items is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="totp_is_a_premium_feature">Authenticatiesleutel (TOTP) is een Premium-functie. Toegang tot deze functie is niet inbegrepen in je huidige abonnement.</string>
     <string name="upgrade_to_premium">Naar Premium upgraden</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Abonnement</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Meld je aan bij je webkluis op een computer om je Premium-abonnement te beheren.</string>
     <string name="unlock_advanced_security_features">Geavanceerde beveiligingsfuncties ontgrendelen</string>
@@ -1322,7 +1303,6 @@ Wil je naar dit account wisselen?</string>
     <string name="archive_item">Item archiveren</string>
     <string name="once_archived_this_item_will_be_excluded">Eenmaal gearchiveerd wordt dit item uitgesloten van zoekresultaten en suggesties voor automatisch invullen.</string>
     <string name="pricing_unavailable">Prijzen niet beschikbaar</string>
-    <string name="current_plan">Huidig abonnement</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Factuurbedrag</string>
     <string name="storage_cost">Kosten voor opslag</string>
@@ -1398,8 +1378,6 @@ Wil je naar dit account wisselen?</string>
     <string name="issuing_country">Land van uitgifte</string>
     <string name="issuing_state">Provincie van uitgifte</string>
     <string name="license_class">Rijbewijsklasse</string>
-    <string name="surname">Achternaam</string>
-    <string name="given_name">Voornaam</string>
     <string name="date_of_birth">Geboortedatum</string>
     <string name="nationality">Nationaliteit</string>
     <string name="passport_type">Soort paspoort</string>

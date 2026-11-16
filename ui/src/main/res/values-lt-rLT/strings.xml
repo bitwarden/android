@@ -4,7 +4,6 @@
     <string name="add_folder">Pridėti aplanką</string>
     <string name="add_item">Pridėti elementą</string>
     <string name="an_error_has_occurred">Įvyko klaida</string>
-    <string name="apply">Taikyti</string>
     <string name="back">Atgal</string>
     <string name="cancel">Atšaukti</string>
     <string name="copy">Kopijuoti</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Aplankas ištrintas.</string>
     <string name="folder_none">Be aplanko</string>
     <string name="folder_updated">Aplankas išsaugotas</string>
-    <string name="folders">Aplankai</string>
     <string name="hide">Slėpti</string>
     <string name="internet_connection_required_message">Prieš tęsdami, prisijunkite prie interneto.</string>
     <string name="internet_connection_required_title">Reikia interneto ryšio</string>
@@ -210,7 +208,6 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="copy_totp">Kopijuoti TOTP</string>
     <string name="copy_totp_automatically_description">Jei prisijungimas turi autentifikavimo raktą, automatiškai užpildydami prisijungimo duomenis nukopijuokite TOTP patvirtinimo kodą į iškarpinę.</string>
     <string name="copy_totp_automatically">Kopijuoti vienkartinį kodą (TOTP) automatiškai</string>
-    <string name="premium_required">Premium narystė reikalinga šiai funkcijai naudoti.</string>
     <string name="attachment_deleted">Priedas ištrintas</string>
     <string name="attachments_are_a_premium_feature">Priedai yra „Premium“ funkcija. Jūsų dabartinis planas nesuteikia prieigos prie šios funkcijos.</string>
     <string name="choose_file">Pasirinkti failą</string>
@@ -293,9 +290,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="icons_url">Piktogramų serverio URL</string>
     <string name="vault_is_locked">Saugykla užrakinta</string>
     <string name="go_to_my_vault">Eik į mano saugyklą</string>
-    <string name="collections">Rinkinys</string>
     <string name="shared_folders">Bendrinami aplankai</string>
-    <string name="no_items_collection">Šioje kolekcijoje nėra elementų.</string>
     <string name="there_are_no_items_in_this_shared_folder">Šiame bendrinamame aplanke nėra elementų.</string>
     <string name="no_items_folder">Šiame aplanke elementų nėra.</string>
     <string name="no_items_trash">Šiukšliadėžėje elementų nėra.</string>
@@ -351,16 +346,11 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="type">Tipas</string>
     <string name="move_down">Perkelti žemyn</string>
     <string name="move_up">Perkelti aukštyn</string>
-    <string name="owner">Savininkas</string>
-    <string name="no_collections_to_list">Aplankų nėra.</string>
     <string name="there_are_no_shared_folders_to_list">Nėra bendrinamų aplankų, kuriuos būtų galima išvardyti.</string>
     <string name="moved_item_to_org">%1$s perkelta į %2$s.</string>
     <string name="select_one_collection">Turite pasirinkti bent vieną kolekciją.</string>
     <string name="you_must_select_at_least_one_shared_folder">Turite pasirinkti bent vieną bendrinamą aplanką.</string>
     <string name="share">Dalintis</string>
-    <string name="move_to_organization">Pereikite į organizaciją</string>
-    <string name="no_orgs_to_list">Organizacijų sąraše nėra.</string>
-    <string name="move_to_org_desc">Pasirinkite organizaciją, į kurią norite perkelti šį elementą. Perkėlus į organizaciją, nuosavybės teisė į elementą perduodama tai organizacijai. Kai jis bus perkeltas, nebebūsite tiesioginis šio elemento savininkas.</string>
     <string name="no_vaults_to_list">Nėra saugyklų, kurias būtų galima išvardyti.</string>
     <string name="move_to_vault_desc">Pasirinkite saugyklą, į kurią norite perkelti šį elementą. Perkėlus į kitą saugyklą, elemento nuosavybė perduodama tai organizacijai. Kai elementas bus perkeltas, nebegalėsite būti tiesioginis jo savininkas.</string>
     <string name="number_of_words">Žodžių skaičius</string>
@@ -475,7 +465,6 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="hide_text_by_default">Kai pasiekiate Siųsti, pagal numatytuosius nustatymus paslėpkite tekstą</string>
     <string name="type_file">Failas</string>
     <string name="deletion_date">Ištrynimo data</string>
-    <string name="deletion_time">Panaikinimo laikas</string>
     <string name="deletion_date_info">Nurodytą datą ir laiką siuntinys bus visam laikui ištrintas.</string>
     <string name="this_date_is_enforced_by_your_organization">Šią datą nustato jūsų organizacija</string>
     <string name="who_can_view">Kas gali peržiūrėti</string>
@@ -613,7 +602,6 @@ pasirinkite Pridėti TOTP, kad raktas būtų saugiai išsaugotas</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ar tikrai norite įjungti ekrano fotografavimą?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Ar bandote prisijungti?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Įrenginio tipas</string>
@@ -674,7 +662,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Nėra laukiančių užklausų</string>
     <string name="enable_camer_permission_to_use_the_scanner">Įgalinkite fotoaparato leidimą naudoti skaitytuvą</string>
     <string name="language">Kalba</string>
-    <string name="language_change_x_description">Kalba pakeista į %1$s. Iš naujo paleiskite programą, kad pamatytumėte pakeitimą</string>
     <string name="default_system">Numatyta (System)</string>
     <string name="weak_master_password">Silpnas pagrindinis slaptažodis</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Nustatytas silpnas slaptažodis. Norėdami apsaugoti paskyrą, naudokite stiprų slaptažodį. Ar tikrai norite naudoti silpną slaptažodį?</string>
@@ -990,7 +977,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Prieigos rakto operacija nepavyko, nes užklausa nepalaikoma.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Slaptažodžio operacija nepavyko, nes pasirinkto elemento nėra.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Slaptažodžio operacija nepavyko, nes pasirinktas elementas neturi tinkamo slaptažodžio.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Slaptažodžio operacija nepavyko, nes nebuvo pasirinktas joks elementas.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Prisijungimo duomenų operacija nepavyko, nes užklausa netinkama.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Prisijungimo duomenų operacija nepavyko, nes užklausa nepalaikoma.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Prisijungimo duomenų operacija nepavyko, nes viršytas naudotojo patikrinimo bandymų skaičius.</string>
@@ -1071,7 +1057,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Sužinoti daugiau apie privilegijuotąsias programas</string>
     <string name="privileged_apps">Privilegijuotosios programos</string>
     <string name="unrecognized_browser">Neatpažinta naršyklė</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Sužinokite daugiau apie prieigos raktų naudojimą su „Bitwarden“.</string>
     <string name="all_trusted_apps">Visos patikimos programos</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ar tikrai norite nebesitikėti %s?</string>
     <string name="installed_apps">Įdiegtos programos</string>
@@ -1088,8 +1073,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Patikrinimo kodas pridėtas</string>
     <string name="refresh_period">Atnaujinimo periodas</string>
     <string name="algorithm">Algoritmas</string>
-    <string name="advanced">Išplėstinis</string>
-    <string name="collapse_advanced_options">Sutraukti išplėstines parinktis</string>
     <string name="number_of_digits">Skaitmenų skaičius</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekundė</item>
@@ -1176,7 +1159,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Pasirinkite kortelę, skirtą %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Išplėstinės parinktys</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Daugiau apie atitikties nustatymą</annotation></string>
     <string name="keep_your_credential_secure">Laikykite savo prisijungimo duomenis saugius</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Sužinokite daugiau, kaip išlaikyti prisijungimo duomenis saugius naudojant „%1$s“.</string>
     <string name="are_you_sure_you_want_to_use">Ar tikrai norite naudoti „%1$s“?</string>
@@ -1221,7 +1203,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importuokite slaptažodžius, prieigos raktus ir kitus elementų tipus iš savo „Bitwarden“ saugyklos.</string>
     <string name="items_to_import">Importuotini elementai</string>
     <string name="exporting_items">Eksportuojami elementai…</string>
-    <string name="export_failed">Eksportas nepavyko</string>
     <string name="passwords">Slaptažodžiai</string>
     <string name="passkeys">Prieigos raktai</string>
     <string name="why_is_this_step_required">Kodėl šis veiksmas yra būtinas?</string>
@@ -1241,7 +1222,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Perkelti elementus į %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> reikalauja, kad visi elementai priklausytų organizacijai, siekiant saugumo ir atitikties. Spustelėkite „Priimti“, kad perduotumėte savo elementų nuosavybę. <annotation link="learnMore">Sužinoti daugiau</annotation></string>
     <string name="decline_and_leave">Atmesti ir išeiti</string>
-    <string name="why_am_i_seeing_this">Kodėl aš tai matau?</string>
     <string name="migrating_items_to_x">Elementai perkeliami į %s</string>
     <string name="failed_to_migrate_items_to_x">Nepavyko perkelti elementų į %s</string>
     <string name="search_archive">Ieškoti archyve</string>
@@ -1259,6 +1239,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Elementų archyvavimas yra „Premium“ funkcija. Jūsų dabartinis planas nesuteikia prieigos prie šios funkcijos.</string>
     <string name="totp_is_a_premium_feature">Autentifikavimo raktas (TOTP) yra „Premium“ funkcija. Jūsų dabartinis planas nesuteikia prieigos prie šios funkcijos.</string>
     <string name="upgrade_to_premium">Atnaujinti į „Premium“</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Planas</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Norėdami tvarkyti savo „Premium“ prenumeratą, turėsite prisijungti prie savo internetinės saugyklos kompiuteriu.</string>
     <string name="unlock_advanced_security_features">Atrakinti išplėstines saugos funkcijas</string>
@@ -1340,7 +1321,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Archyvuoti elementą</string>
     <string name="once_archived_this_item_will_be_excluded">Archyvavus šis elementas bus neįtrauktas į paieškos rezultatus ir automatinio pildymo pasiūlymus.</string>
     <string name="pricing_unavailable">Kainos nėra</string>
-    <string name="current_plan">Dabartinis planas</string>
     <string name="premium_plan_name">„Premium“</string>
     <string name="billing_amount">Apmokestinama suma</string>
     <string name="storage_cost">Saugyklos kaina</string>
@@ -1418,8 +1398,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Išdavimo šalis</string>
     <string name="issuing_state">Išdavimo valstija / provincija</string>
     <string name="license_class">Licencijos klasė</string>
-    <string name="surname">Pavardė</string>
-    <string name="given_name">Vardas</string>
     <string name="date_of_birth">Gimimo data</string>
     <string name="nationality">Pilietybė</string>
     <string name="passport_type">Paso tipas</string>

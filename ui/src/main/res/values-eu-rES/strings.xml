@@ -4,7 +4,6 @@
     <string name="add_folder">Gehitu karpeta</string>
     <string name="add_item">Gehitu elementua</string>
     <string name="an_error_has_occurred">Akats bat gertatu da.</string>
-    <string name="apply">Aplikatu</string>
     <string name="back">Itzuli</string>
     <string name="cancel">Ezeztatu</string>
     <string name="copy">Kopiatu</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Karpeta ezabatu da.</string>
     <string name="folder_none">Karpetarik ez</string>
     <string name="folder_updated">Karpeta eguneratua.</string>
-    <string name="folders">Karpetak</string>
     <string name="hide">Ezkutatu</string>
     <string name="internet_connection_required_message">Mesedez, konektatu internetera jarraitu aurretik.</string>
     <string name="internet_connection_required_title">Internet konexioa beharrezkoa da</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">Kopiatu TOTP-a</string>
     <string name="copy_totp_automatically_description">Saio hasiera batek autentifikazio-gakoa badu, TOTP egiaztatze-kodea arbelean automatikoki kopiatuko da saio hasiera bat automatikoki betetzean.</string>
     <string name="copy_totp_automatically">Kopiatu TOTP automatikoki</string>
-    <string name="premium_required">Premium bazkidetza beharrezkoa da ezaugarri hau erabiltzeko.</string>
     <string name="attachment_deleted">Eranskina ezabatu da</string>
     <string name="attachments_are_a_premium_feature">Eranskinak Premium ezaugarria dira. Zure uneko planak ez du ezaugarri honetarako sarbiderik.</string>
     <string name="choose_file">Hautatu fitxategia</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">Ikonoen zerbitzariaren URL-a</string>
     <string name="vault_is_locked">Kutxa gotorra blokeatuta dago</string>
     <string name="go_to_my_vault">Joan kutxa gotorrera</string>
-    <string name="collections">Bildumak</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Ez dago elementurik bilduma honetan.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Karpeta honetan ez dago elementurik.</string>
     <string name="no_items_trash">Zakarrontzian ez dago elementurik.</string>
@@ -346,16 +341,11 @@
     <string name="type">Mota</string>
     <string name="move_down">Mugitu behera</string>
     <string name="move_up">Mugitu gora</string>
-    <string name="owner">Jabea</string>
-    <string name="no_collections_to_list">Ez dago erakusteko bildumarik.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s-era mugitu da.</string>
     <string name="select_one_collection">Gutxienez bilduma bat aukeratu behar duzu.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partekatu</string>
-    <string name="move_to_organization">Mugitu erakundera</string>
-    <string name="no_orgs_to_list">Ez dago erakunderik erakusteko.</string>
-    <string name="move_to_org_desc">Aukeratu elementu hau zein erakundetara eraman nahi duzun. Erakunde batera pasatzeak elementuaren jabetza erakunde horretara transferitzen du. Zu ez zara elementu honen jabe zuzena izango mugitzen duzunean.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Hitz kopurua</string>
@@ -470,7 +460,6 @@
     <string name="hide_text_by_default">Send-era sartzean, ezkutatu testua modu lehenetsian</string>
     <string name="type_file">Fitxategia</string>
     <string name="deletion_date">Ezabatze data</string>
-    <string name="deletion_time">Ezabatutako unea</string>
     <string name="deletion_date_info">Send-a betiko ezabatuko da zehaztutako datan eta orduan.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Norak ikus dezakete</string>
@@ -603,7 +592,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ziur al zaude pantaila-argazkia gaitu nahi duzula?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Saioa hasten saiatzen ari zara?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Gailu mota</string>
@@ -664,7 +652,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Ez dago eskaerarik zain</string>
     <string name="enable_camer_permission_to_use_the_scanner">Gaitu kameraren baimena eskanerra erabiltzeko</string>
     <string name="language">Hizkuntza</string>
-    <string name="language_change_x_description">%1$s hizkuntza ezarri da. Berrabiarazi aplikazioa mesedez aldaketa ikusi ahal izateko</string>
     <string name="default_system">Lehenetsia (Sistema)</string>
     <string name="weak_master_password">Pasahitz nagusia ahula</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Pasahitz ahula atzeman da. Erabili pasahitz sendo bat zure kontua babesteko. Ziur zaude pasahitz ahul bat erabili nahi duzula?</string>
@@ -976,7 +963,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Pasagiltzaren eragiketak huts egin du eskaera ez delako onartzen.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Pasahitzaren eragiketak huts egin du hautatutako elementua ez delako existitzen.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Pasahitzaren eragiketak huts egin du hautatutako elementuak ez duelako pasahitz baliodunik.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Pasahitzaren eragiketak huts egin du ez delako elementurik hautatu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Kredentzialen eragiketak huts egin du eskaera baliogabea delako.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Kredentzialen eragiketak huts egin du eskaera ez delako onartzen.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Kredentzialen eragiketak huts egin du erabiltzailearen egiaztapen-saiakerak gainditu direlako.</string>
@@ -1057,7 +1043,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Ikasi gehiago aplikazio pribilegiatuei buruz</string>
     <string name="privileged_apps">Aplikazio pribilegiatuak</string>
     <string name="unrecognized_browser">Nabigatzaile ezezaguna</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Ikasi gehiago pasagiltzak Bitwarden-ekin erabiltzeari buruz.</string>
     <string name="all_trusted_apps">Aplikazio fidagarri guztiak</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ziur zaude %s-ri fidatzeari utzi nahi diozula?</string>
     <string name="installed_apps">Instalatutako aplikazioak</string>
@@ -1074,8 +1059,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Egiaztapen-kodea gehituta</string>
     <string name="refresh_period">Freskatze-epea</string>
     <string name="algorithm">Algoritmoa</string>
-    <string name="advanced">Aurreratua</string>
-    <string name="collapse_advanced_options">Tolestu aukera aurreratuak</string>
     <string name="number_of_digits">Digitu kopurua</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d segundo</item>
@@ -1158,7 +1141,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Hautatu txartel bat %s-rako</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Aukera aurreratuak</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Gehiago bat etortzearen detekzioari burus</annotation></string>
     <string name="keep_your_credential_secure">Mantendu zure kredentzialak seguru</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Ikasi gehiago kredentzialak nola mantendu seguru “%1$s” erabiltzean.</string>
     <string name="are_you_sure_you_want_to_use">Ziur zaude “%1$s” erabili nahi duzula?</string>
@@ -1201,7 +1183,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Inportatu pasahitzak, pasagiltzak eta beste elementu mota batzuk zure Bitwarden kutxatik.</string>
     <string name="items_to_import">Inportatzeko elementuak</string>
     <string name="exporting_items">Elementuak esportatzen…</string>
-    <string name="export_failed">Esportazioak huts egin du</string>
     <string name="passwords">Pasahitzak</string>
     <string name="passkeys">Pasagiltzak</string>
     <string name="why_is_this_step_required">Zergatik da beharrezkoa urrats hau?</string>
@@ -1221,7 +1202,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transferitu elementuak %1$s-(e)ra</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation>-ek elementu guztiak erakundearen jabetzakoak izatea eskatzen du segurtasun eta betetze arrazoiengatik. Egin klik onartu zure elementuen jabetza transferitzeko. <annotation link="learnMore">Ikasi gehiago</annotation></string>
     <string name="decline_and_leave">Baztertu eta utzi</string>
-    <string name="why_am_i_seeing_this">Zergatik ikusten dut hau?</string>
     <string name="migrating_items_to_x">Elementuak %s-(e)ra migratzen</string>
     <string name="failed_to_migrate_items_to_x">Elementuak %s-(e)ra migratzeak huts egin du</string>
     <string name="search_archive">Bilatu artxiboan</string>
@@ -1239,6 +1219,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Elementuak artxibatzea Premium ezaugarria da. Zure uneko planak ez du ezaugarri honetarako sarbiderik.</string>
     <string name="totp_is_a_premium_feature">Autentifikazio-giltza (TOTP) Premium ezaugarria da. Zure uneko planak ez du ezaugarri honetarako sarbiderik.</string>
     <string name="upgrade_to_premium">Bertsio-berritu Premium-era</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plana</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Zure Premium harpidetza kudeatzeko, saioa hasi beharko duzu zure web-kutxan ordenagailu batetik.</string>
     <string name="unlock_advanced_security_features">Desblokeatu segurtasun-ezaugarri aurreratuak</string>
@@ -1320,7 +1301,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Artxibatu elementua</string>
     <string name="once_archived_this_item_will_be_excluded">Behin artxibatuta, elementu hau baztertuko da bilaketa-emaitzetatik eta autobeteketaren iradokizunetatik.</string>
     <string name="pricing_unavailable">Prezioak ez dira eskuragarri</string>
-    <string name="current_plan">Uneko plana</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Fakturazio-zenbatekoa</string>
     <string name="storage_cost">Biltegiratze-kostua</string>
@@ -1396,8 +1376,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Herrialde emailea</string>
     <string name="issuing_state">Estatua / probintzia emailea</string>
     <string name="license_class">Lizentzia-klasea</string>
-    <string name="surname">Abizena</string>
-    <string name="given_name">Izena</string>
     <string name="date_of_birth">Jaiotze-data</string>
     <string name="nationality">Nazionalitatea</string>
     <string name="passport_type">Pasaporte mota</string>

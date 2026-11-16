@@ -4,7 +4,6 @@
     <string name="add_folder">Добавить папку</string>
     <string name="add_item">Добавить элемент</string>
     <string name="an_error_has_occurred">Произошла ошибка</string>
-    <string name="apply">Применить</string>
     <string name="back">Назад</string>
     <string name="cancel">Отмена</string>
     <string name="copy">Скопировать</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Папка удалена.</string>
     <string name="folder_none">Без папки</string>
     <string name="folder_updated">Папка сохранена</string>
-    <string name="folders">Папки</string>
     <string name="hide">Скрыть</string>
     <string name="internet_connection_required_message">Подключитесь к интернету чтобы продолжить.</string>
     <string name="internet_connection_required_title">Требуется подключение к интернету</string>
@@ -210,7 +208,6 @@
     <string name="copy_totp">Скопировать TOTP</string>
     <string name="copy_totp_automatically_description">Если к вашему логину прикреплен ключ аутентификации, то код подтверждения TOTP будет скопирован при автозаполнении логина.</string>
     <string name="copy_totp_automatically">Скопировать TOTP автоматически</string>
-    <string name="premium_required">Для использования этой функции требуется Премиум.</string>
     <string name="attachment_deleted">Вложение удалено</string>
     <string name="attachments_are_a_premium_feature">Вложения являются Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="choose_file">Выбрать файл</string>
@@ -293,9 +290,7 @@
     <string name="icons_url">URL сервера значков</string>
     <string name="vault_is_locked">Хранилище заблокировано</string>
     <string name="go_to_my_vault">Перейти в мое хранилище</string>
-    <string name="collections">Коллекции</string>
     <string name="shared_folders">Общие папки</string>
-    <string name="no_items_collection">В этой коллекции нет элементов.</string>
     <string name="there_are_no_items_in_this_shared_folder">В этой общей папке нет элементов.</string>
     <string name="no_items_folder">В этой папке нет элементов.</string>
     <string name="no_items_trash">В корзине нет элементов.</string>
@@ -351,16 +346,11 @@
     <string name="type">Тип</string>
     <string name="move_down">Переместить ниже</string>
     <string name="move_up">Переместить выше</string>
-    <string name="owner">Владелец</string>
-    <string name="no_collections_to_list">Нет коллекций для отображения.</string>
     <string name="there_are_no_shared_folders_to_list">Нет общих папок для отображения.</string>
     <string name="moved_item_to_org">%1$s перемещено в %2$s.</string>
     <string name="select_one_collection">Необходимо выбрать хотя бы одну коллекцию.</string>
     <string name="you_must_select_at_least_one_shared_folder">Необходимо выбрать хотя бы одну общую папку.</string>
     <string name="share">Поделиться</string>
-    <string name="move_to_organization">Переместить в организацию</string>
-    <string name="no_orgs_to_list">Нет организаций для отображения.</string>
-    <string name="move_to_org_desc">Выберите организацию, в которую вы хотите переместить этот элемент. При перемещении в организацию право собственности на элемент переходит к этой организации. Вы больше не будете прямым владельцем этого элемента после его перемещения.</string>
     <string name="no_vaults_to_list">Нет хранилища для отображения.</string>
     <string name="move_to_vault_desc">Выберите хранилище, в которое вы хотите переместить этот элемент. Перемещение в хранилище передает права на элемент этой организации. Вы больше не будете непосредственным владельцем этого элемента после его перемещения.</string>
     <string name="number_of_words">Количество слов</string>
@@ -475,7 +465,6 @@
     <string name="hide_text_by_default">При доступе к Send скрывать текст по умолчанию</string>
     <string name="type_file">Файл</string>
     <string name="deletion_date">Дата удаления</string>
-    <string name="deletion_time">Время удаления</string>
     <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
     <string name="this_date_is_enforced_by_your_organization">Эта дата устанавливается вашей организацией</string>
     <string name="who_can_view">Кто может просматривать</string>
@@ -613,7 +602,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">Вы уверены, что хотите разрешить скриншоты?</string>
     <string name="access_requested">Доступ запрошен</string>
     <string name="account_access_requested">Запрошен доступ к аккаунту</string>
-    <string name="are_you_trying_to_log_in">Вы пытаетесь войти?</string>
     <string name="are_you_trying_to_access_your_account">Вы пытаетесь получить доступ к своему аккаунту?</string>
     <string name="access_attempt_by_x_on_y">Попытка доступа %1$s на %2$s</string>
     <string name="device_type">Тип устройства</string>
@@ -674,7 +662,6 @@
     <string name="no_pending_requests">Нет ожидающих запросов</string>
     <string name="enable_camer_permission_to_use_the_scanner">Для использования сканера необходимо предоставить разрешение на доступ к камере</string>
     <string name="language">Язык</string>
-    <string name="language_change_x_description">Язык был изменен на %1$s. Перезапустите приложение, чтобы увидеть изменения</string>
     <string name="default_system">По умолчанию (системный)</string>
     <string name="weak_master_password">Слабый мастер-пароль</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Обнаружен слабый пароль. Для защиты аккаунта следует установить надежный пароль. Вы уверены, что хотите использовать слабый пароль?</string>
@@ -754,7 +741,7 @@
     <string name="launch_duo">Запустить Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш passkey будет сохранен в вашем хранилище Bitwarden для %1$s</string>
     <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Ваш пароль будет сохранен в вашем хранилище Bitwarden для %1$s</string>
-    <string name="passkeys_not_supported_for_this_app">Ваш ключ доступа будет сохранен в вашем хранилище Bitwarden</string>
+    <string name="passkeys_not_supported_for_this_app">Ключи доступа не поддерживаются для этого приложения</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операция с Passkey не удалась, поскольку браузер не имеет привилегий</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операция с Passkey не удалась, поскольку подпись браузера не совпадает</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Операция с Passkey не удалась из-за отсутствия ссылок на ресурсы</string>
@@ -990,7 +977,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операция с паролем не удалась, поскольку выбранный элемент не существует.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Операция с паролем не удалась, поскольку у выбранного элемента нет действительного пароля.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Операция с паролем не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Операция с учетными данными не удалась, поскольку запрос некорректен.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Операция с учетными данными не удалась, поскольку запрос не поддерживается.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операция с учетными данными не удалась, поскольку превышено количество попыток верификации пользователя.</string>
@@ -1071,7 +1057,6 @@
     <string name="learn_more_about_privileged_apps">Подробнее о привилегированных приложениях</string>
     <string name="privileged_apps">Привилегированные приложения</string>
     <string name="unrecognized_browser">Неизвестный браузер</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Узнайте больше об использовании passkey в Bitwarden.</string>
     <string name="all_trusted_apps">Все доверенные приложения</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Вы уверены, что хотите прекратить доверять %s?</string>
     <string name="installed_apps">Установленные приложения</string>
@@ -1088,8 +1073,6 @@
     <string name="verification_code_added">Код подтверждения добавлен</string>
     <string name="refresh_period">Период обновления</string>
     <string name="algorithm">Алгоритм</string>
-    <string name="advanced">Дополнительно</string>
-    <string name="collapse_advanced_options">Свернуть дополнительные параметры</string>
     <string name="number_of_digits">Количество цифр</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d сек.</item>
@@ -1176,7 +1159,6 @@
     <string name="select_a_card_for_x">Выберите карту для %s</string>
     <string name="choose_an_identity">Выберите личную информацию</string>
     <string name="advanced_options">Расширенные настройки</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Подробнее об обнаружении совпадений</annotation></string>
     <string name="keep_your_credential_secure">Храните свои учетные данные в безопасности</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Узнайте больше о том, как обеспечить безопасность учетных данных при использовании “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Вы уверены, что хотите использовать “%1$s”?</string>
@@ -1221,7 +1203,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Импортируйте пароли, passkeys и другие типы элементов из вашего хранилища Bitwarden.</string>
     <string name="items_to_import">Элементы для импорта</string>
     <string name="exporting_items">Экспорт элементов…</string>
-    <string name="export_failed">Не удалось экспортировать</string>
     <string name="passwords">Пароли</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">Почему необходим этот шаг?</string>
@@ -1241,7 +1222,6 @@
     <string name="transfer_items_to_org">Переместить элементы в %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> требует, чтобы все элементы принадлежали организации для обеспечения безопасности и соответствия требованиям. Нажмите Принять, чтобы передать собственность на ваши элементы. <annotation link="learnMore">Подробнее</annotation></string>
     <string name="decline_and_leave">Отклонить и покинуть</string>
-    <string name="why_am_i_seeing_this">Почему я это вижу?</string>
     <string name="migrating_items_to_x">Перенос элементов в %s</string>
     <string name="failed_to_migrate_items_to_x">Не удалось перенести элементы в %s</string>
     <string name="search_archive">Поиск в архиве</string>
@@ -1259,6 +1239,7 @@
     <string name="archiving_items_is_a_premium_feature">Архивирование элементов является Премиум функцией. Она не входит в ваш текущий тарифный план.</string>
     <string name="totp_is_a_premium_feature">Аутентификатор ключей (TOTP) - это функция, доступная только в плане Премиум. Она не входит в ваш текущий тарифный план.</string>
     <string name="upgrade_to_premium">Обновить до Премиум</string>
+    <string name="explore_premium">Познакомиться с Премиум</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Чтобы управлять подпиской Премиум, вам необходимо войти в свое веб-хранилище на компьютере.</string>
     <string name="unlock_advanced_security_features">Разблокировать дополнительные возможности безопасности</string>
@@ -1340,7 +1321,6 @@
     <string name="archive_item">Архивировать элемент</string>
     <string name="once_archived_this_item_will_be_excluded">После архивации этот элемент будет исключен из результатов поиска и предложений по автозаполнению.</string>
     <string name="pricing_unavailable">Цены недоступны</string>
-    <string name="current_plan">Текущий план</string>
     <string name="premium_plan_name">Премиум</string>
     <string name="billing_amount">Сумма счета</string>
     <string name="storage_cost">Стоимость хранилища</string>
@@ -1418,8 +1398,6 @@
     <string name="issuing_country">Страна выдачи</string>
     <string name="issuing_state">Республика / область выдачи</string>
     <string name="license_class">Категории водительского удостоверения</string>
-    <string name="surname">Фамилия</string>
-    <string name="given_name">Имя</string>
     <string name="date_of_birth">Дата рождения</string>
     <string name="nationality">Гражданство</string>
     <string name="passport_type">Тип паспорта</string>

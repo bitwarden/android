@@ -4,7 +4,6 @@
     <string name="add_folder">ဖိုလ်ဒါထည့်ပါ</string>
     <string name="add_item">ပစ္စည်းထည့်ပါ</string>
     <string name="an_error_has_occurred">အမှားတစ်ခု ဖြစ်ပွားခဲ့ပါသည်</string>
-    <string name="apply">အသုံးပြုပါ</string>
     <string name="back">နောက်သို့</string>
     <string name="cancel">ပယ်ဖျက်ပါ</string>
     <string name="copy">ကူးယူပါ</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ဖိုလ်ဒါ ဖျက်ပြီးပါပြီ။</string>
     <string name="folder_none">ဖိုလ်ဒါမရှိ</string>
     <string name="folder_updated">ဖိုလ်ဒါ သိမ်းဆည်းပြီးပါပြီ</string>
-    <string name="folders">ဖိုလ်ဒါများ</string>
     <string name="hide">ဝှက်ပါ</string>
     <string name="internet_connection_required_message">ဆက်လက်မလုပ်ဆောင်မီ အင်တာနက်သို့ ချိတ်ဆက်ပါ။</string>
     <string name="internet_connection_required_title">အင်တာနက်ချိတ်ဆက်မှု လိုအပ်သည်</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">TOTP ကူးယူပါ</string>
     <string name="copy_totp_automatically_description">ဝင်ရောက်မှုတစ်ခုတွင် အောက်တန်မီတာ သော့ရှိပါက၊ သင်ဝင်ရောက်မှုကို အလိုအလျောက်ဖြည့်သည့်အခါ TOTP အတည်ပြုကုဒ်ကို သင့်ကလစ်ဘုတ်သို့ ကူးယူပါ။</string>
     <string name="copy_totp_automatically">TOTP ကို အလိုအလျောက် ကူးယူပါ</string>
-    <string name="premium_required">ဤအင်္ဂါရပ်ကို သုံးရန် အဆင့်မြင့် အသင်းဝင်မှု လိုအပ်သည်။</string>
     <string name="attachment_deleted">ပူးတွဲပစ္စည်း ဖျက်ပြီးပါပြီ</string>
     <string name="attachments_are_a_premium_feature">ပူးတွဲပစ္စည်းများသည် အဆင့်မြင့် အင်္ဂါရပ်တစ်ခုဖြစ်သည်။ သင့်လက်ရှိအစီအစဉ်တွင် ဤအင်္ဂါရပ်သို့ ဝင်ရောက်ခွင့် မပါဝင်ပါ။</string>
     <string name="choose_file">ဖိုင် ရွေးပါ</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">အိုင်ကွန်ဆာဗာ URL</string>
     <string name="vault_is_locked">ဗော်လ်တ် သော့ခတ်ထားသည်</string>
     <string name="go_to_my_vault">ကျွန်ုပ်၏ ဗော်လ်တ်သို့ သွားပါ</string>
-    <string name="collections">စုစည်းမှုများ</string>
     <string name="shared_folders">မျှဝေထားသော ဖိုလ်ဒါများ</string>
-    <string name="no_items_collection">ဤစုစည်းမှုတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="there_are_no_items_in_this_shared_folder">ဤမျှဝေထားသော ဖိုလ်ဒါတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="no_items_folder">ဤဖိုလ်ဒါတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="no_items_trash">အမှိုက်ပုံးတွင် ပစ္စည်းများ မရှိပါ။</string>
@@ -345,16 +340,11 @@
     <string name="type">အမျိုးအစား</string>
     <string name="move_down">အောက်သို့ရွှေ့ပါ</string>
     <string name="move_up">အပေါ်သို့ရွှေ့ပါ</string>
-    <string name="owner">ပိုင်ရှင်</string>
-    <string name="no_collections_to_list">စာရင်းပြုရန် စုစည်းမှုများ မရှိပါ။</string>
     <string name="there_are_no_shared_folders_to_list">စာရင်းပြုရန် မျှဝေထားသော ဖိုလ်ဒါများ မရှိပါ။</string>
     <string name="moved_item_to_org">%1$s ကို %2$s သို့ ရွှေ့ပြီးပါပြီ။</string>
     <string name="select_one_collection">အနည်းဆုံး စုစည်းမှုတစ်ခု ရွေးရပါမည်။</string>
     <string name="you_must_select_at_least_one_shared_folder">အနည်းဆုံး မျှဝေထားသော ဖိုလ်ဒါတစ်ခု ရွေးရပါမည်။</string>
     <string name="share">မျှဝေပါ</string>
-    <string name="move_to_organization">အဖွဲ့အစည်းသို့ ရွှေ့ပါ</string>
-    <string name="no_orgs_to_list">စာရင်းပြုရန် အဖွဲ့အစည်းများ မရှိပါ။</string>
-    <string name="move_to_org_desc">ဤပစ္စည်းကို ရွှေ့လိုသော အဖွဲ့အစည်းတစ်ခုကို ရွေးပါ။ အဖွဲ့အစည်းသို့ ရွှေ့ခြင်းသည် ပစ္စည်း၏ပိုင်ဆိုင်မှုကို ထိုအဖွဲ့အစည်းသို့ လွှဲပြောင်းပေးသည်။ ပစ္စည်းကို ရွှေ့ပြီးသည်နှင့် သင်သည် ထိုပစ္စည်း၏ တိုက်ရိုက်ပိုင်ရှင် မဖြစ်တော့ပါ။</string>
     <string name="no_vaults_to_list">စာရင်းပြုရန် ဗော်လ်တ်များ မရှိပါ။</string>
     <string name="move_to_vault_desc">ဤပစ္စည်းကို ရွှေ့လိုသော ဗော်လ်တ်တစ်ခုကို ရွေးပါ။ အခြားဗော်လ်တ်သို့ ရွှေ့ခြင်းသည် ပစ္စည်း၏ပိုင်ဆိုင်မှုကို ထိုအဖွဲ့အစည်းသို့ လွှဲပြောင်းပေးသည်။ ပစ္စည်းကို ရွှေ့ပြီးသည်နှင့် သင်သည် ထိုပစ္စည်း၏ တိုက်ရိုက်ပိုင်ရှင် မဖြစ်တော့ပါ။</string>
     <string name="number_of_words">စကားလုံးအရေအတွက်</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">Send ကို ဝင်ရောက်သည့်အခါ စာသားကို မူရင်းအတိုင်း ဝှက်ထားပါ</string>
     <string name="type_file">ဖိုင်</string>
     <string name="deletion_date">ဖျက်မည့်ရက်စွဲ</string>
-    <string name="deletion_time">ဖျက်မည့်အချိန်</string>
     <string name="deletion_date_info">Send ကို သတ်မှတ်ထားသော ရက်စွဲနှင့် အချိန်တွင် အပြီးအပိုင် ဖျက်ပါမည်။</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">မည်သူ ကြည့်ရှုနိုင်သည်</string>
@@ -601,7 +590,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">မျက်နှာပြင် ဖမ်းယူခြင်းကို ဖွင့်ရန် သေချာပါသလား?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">သင်ဝင်ရောက်ရန် ကြိုးစားနေပါသလား?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">စက်ပစ္စည်းအမျိုးအစား</string>
@@ -662,7 +650,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">ဆိုင်းငံ့ထားသော တောင်းဆိုချက်များ မရှိပါ</string>
     <string name="enable_camer_permission_to_use_the_scanner">စကင်နာကို သုံးရန် ကင်မရာခွင့်ပြုချက် ဖွင့်ပါ</string>
     <string name="language">ဘာသာစကား</string>
-    <string name="language_change_x_description">ဘာသာစကားကို %1$s သို့ ပြောင်းထားပါသည်။ ပြောင်းလဲမှုကို မြင်ရရန် အက်ပ်ကို ပြန်လည်စတင်ပါ</string>
     <string name="default_system">မူရင်း (စနစ်)</string>
     <string name="weak_master_password">အားနည်းသော မာစတာစကားဝှက်</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">အားနည်းသော စကားဝှက်ကို တွေ့ရှိထားသည်။ သင့်အကောင့်ကို ကာကွယ်ရန် ခိုင်မာသော စကားဝှက်ကို သုံးပါ။ အားနည်းသော စကားဝှက်ကို သုံးရန် သေချာပါသလား?</string>
@@ -972,7 +959,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">တောင်းဆိုချက်ကို မပံ့ပိုးသောကြောင့် Passkey လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">ရွေးထားသော ပစ္စည်း မရှိသောကြောင့် စကားဝှက် လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">ရွေးထားသော ပစ္စည်းတွင် မှန်ကန်သော စကားဝှက် မရှိသောကြောင့် စကားဝှက် လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
-    <string name="password_operation_failed_because_no_item_was_selected">ပစ္စည်း မရွေးထားသောကြောင့် စကားဝှက် လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">တောင်းဆိုချက် မမှန်ကန်သောကြောင့် အထောက်အထား လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">တောင်းဆိုချက်ကို မပံ့ပိုးသောကြောင့် အထောက်အထား လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">အသုံးပြုသူ အတည်ပြုရန် ကြိုးစားမှုများ ကျော်လွန်သွားသောကြောင့် အထောက်အထား လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
@@ -1053,7 +1039,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">အထူးအခွင့်အရေးရှိသော အက်ပ်များအကြောင်း ပိုမိုလေ့လာပါ</string>
     <string name="privileged_apps">အထူးအခွင့်အရေးရှိသော အက်ပ်များ</string>
     <string name="unrecognized_browser">မမှတ်မိသော ဘရောက်ဆာ</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ဖြင့် passkeys သုံးခြင်းအကြောင်း ပိုမိုလေ့လာပါ။</string>
     <string name="all_trusted_apps">ယုံကြည်ရသော အက်ပ်အားလုံး</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s ကို ယုံကြည်ခြင်း ရပ်ရန် သေချာပါသလား?</string>
     <string name="installed_apps">တပ်ဆင်ထားသော အက်ပ်များ</string>
@@ -1070,8 +1055,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">အတည်ပြုကုဒ် ထည့်ပြီးပါပြီ</string>
     <string name="refresh_period">ပြန်လည်စတင်သည့်ကာလ</string>
     <string name="algorithm">Algorithm</string>
-    <string name="advanced">အဆင့်မြင့်</string>
-    <string name="collapse_advanced_options">အဆင့်မြင့် ရွေးချယ်မှုများကို ခေါက်ပါ</string>
     <string name="number_of_digits">ဂဏန်းအရေအတွက်</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d စက္ကန့်</item>
@@ -1152,7 +1135,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">%s အတွက် ကဒ်တစ်ခု ရွေးပါ</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">အဆင့်မြင့် ရွေးချယ်မှုများ</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ကိုက်ညီမှု ရှာဖွေခြင်းအကြောင်း ပိုမိုလေ့လာပါ</annotation></string>
     <string name="keep_your_credential_secure">သင့်အထောက်အထားများကို လုံခြုံအောင်ထားပါ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” ကို သုံးသည့်အခါ အထောက်အထားများကို လုံခြုံအောင်ထားနည်းအကြောင်း ပိုမိုလေ့လာပါ။</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” ကို သုံးရန် သေချာပါသလား?</string>
@@ -1194,7 +1176,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">သင့် Bitwarden ဗော်လ်တ်မှ စကားဝှက်များ၊ passkeys နှင့် အခြားပစ္စည်းအမျိုးအစားများကို တင်သွင်းပါ။</string>
     <string name="items_to_import">တင်သွင်းရန် ပစ္စည်းများ</string>
     <string name="exporting_items">ပစ္စည်းများ တင်ပို့နေသည်…</string>
-    <string name="export_failed">တင်ပို့ခြင်း မအောင်မြင်ပါ</string>
     <string name="passwords">စကားဝှက်များ</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">ဤအဆင့် အဘယ်ကြောင့် လိုအပ်သနည်း?</string>
@@ -1214,7 +1195,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">ပစ္စည်းများကို %1$s သို့ လွှဲပြောင်းပါ</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> သည် လုံခြုံရေးနှင့် လိုက်နာမှုအတွက် ပစ္စည်းအားလုံးကို အဖွဲ့အစည်းမှ ပိုင်ဆိုင်ရန် လိုအပ်သည်။ သင့်ပစ္စည်းများ၏ ပိုင်ဆိုင်မှုကို လွှဲပြောင်းရန် လက်ခံပါ။ <annotation link="learnMore">ပိုမိုလေ့လာပါ</annotation></string>
     <string name="decline_and_leave">ငြင်းပယ်ပြီး ထွက်ပါ</string>
-    <string name="why_am_i_seeing_this">ကျွန်ုပ် ဤအရာကို အဘယ်ကြောင့် မြင်ရသနည်း?</string>
     <string name="migrating_items_to_x">ပစ္စည်းများကို %s သို့ ပြောင်းရွှေ့နေသည်</string>
     <string name="failed_to_migrate_items_to_x">ပစ္စည်းများကို %s သို့ ပြောင်းရွှေ့ရန် မအောင်မြင်ပါ</string>
     <string name="search_archive">Archive ကို ရှာဖွေပါ</string>
@@ -1232,6 +1212,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">ပစ္စည်းများကို archive သို့ထည့်ခြင်းသည် အဆင့်မြင့် အင်္ဂါရပ်တစ်ခုဖြစ်သည်။ သင့်လက်ရှိအစီအစဉ်တွင် ဤအင်္ဂါရပ်သို့ ဝင်ရောက်ခွင့် မပါဝင်ပါ။</string>
     <string name="totp_is_a_premium_feature">အောက်တန်မီတာ သော့ (TOTP) သည် အဆင့်မြင့် အင်္ဂါရပ်တစ်ခုဖြစ်သည်။ သင့်လက်ရှိအစီအစဉ်တွင် ဤအင်္ဂါရပ်သို့ ဝင်ရောက်ခွင့် မပါဝင်ပါ။</string>
     <string name="upgrade_to_premium">အဆင့်မြင့်သို့ အဆင့်မြှင့်ပါ</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">အစီအစဉ်</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">သင့် အဆင့်မြင့် စာရင်းသွင်းမှုကို စီမံရန်၊ ကွန်ပျူတာပေါ်ရှိ သင့် ဝဘ်ဗော်လ်တ်သို့ ဝင်ရောက်ရန် လိုအပ်မည်။</string>
     <string name="unlock_advanced_security_features">အဆင့်မြင့် လုံခြုံရေးအင်္ဂါရပ်များ သော့ဖွင့်ပါ</string>
@@ -1313,7 +1294,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">ပစ္စည်းကို archive သို့ထည့်ပါ</string>
     <string name="once_archived_this_item_will_be_excluded">archive သို့ထည့်ပြီးသည်နှင့်၊ ဤပစ္စည်းကို ရှာဖွေမှုရလဒ်များနှင့် အလိုအလျောက်ဖြည့်ရန် အကြံပြုချက်များမှ ဖယ်ထုတ်မည်။</string>
     <string name="pricing_unavailable">စျေးနှုန်း မရရှိနိုင်ပါ</string>
-    <string name="current_plan">လက်ရှိအစီအစဉ်</string>
     <string name="premium_plan_name">အဆင့်မြင့်</string>
     <string name="billing_amount">ငွေတောင်းခံသည့်ပမာဏ</string>
     <string name="storage_cost">သိုလှောင်မှုကုန်ကျစရိတ်</string>
@@ -1388,8 +1368,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">ထုတ်ပေးသည့်နိုင်ငံ</string>
     <string name="issuing_state">ထုတ်ပေးသည့် ပြည်နယ် / စီရင်စု</string>
     <string name="license_class">လိုင်စင်အမျိုးအစား</string>
-    <string name="surname">မျိုးရိုးအမည်</string>
-    <string name="given_name">ပေးထားသောအမည်</string>
     <string name="date_of_birth">မွေးသက္ကရာဇ်</string>
     <string name="nationality">နိုင်ငံသားဖြစ်မှု</string>
     <string name="passport_type">ပတ်စ်ပို့အမျိုးအစား</string>

@@ -4,7 +4,6 @@
     <string name="add_folder">Dodaj folder</string>
     <string name="add_item">Dodaj element</string>
     <string name="an_error_has_occurred">Wystąpił błąd.</string>
-    <string name="apply">Zastosuj</string>
     <string name="back">Wstecz</string>
     <string name="cancel">Anuluj</string>
     <string name="copy">Kopiuj</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Folder został usunięty.</string>
     <string name="folder_none">Nieprzypisane</string>
     <string name="folder_updated">Folder został zapisany</string>
-    <string name="folders">Foldery</string>
     <string name="hide">Ukryj</string>
     <string name="internet_connection_required_message">Najpierw połącz się z Internetem.</string>
     <string name="internet_connection_required_title">Połączenie internetowe jest wymagane</string>
@@ -210,7 +208,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_totp">Kopiuj kod TOTP</string>
     <string name="copy_totp_automatically_description">Automatycznie kopiuje kod TOTP do schowka podczas autouzupełniania.</string>
     <string name="copy_totp_automatically">Kopiuj kod TOTP automatycznie</string>
-    <string name="premium_required">Konto Premium jest wymagane, aby skorzystać z tej funkcji.</string>
     <string name="attachment_deleted">Załącznik został usunięty</string>
     <string name="attachments_are_a_premium_feature">Załączniki są funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="choose_file">Wybierz plik</string>
@@ -293,9 +290,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="icons_url">Adres URL serwera ikon</string>
     <string name="vault_is_locked">Sejf jest zablokowany</string>
     <string name="go_to_my_vault">Przejdź do sejfu</string>
-    <string name="collections">Kolekcje</string>
     <string name="shared_folders">Udostępnione foldery</string>
-    <string name="no_items_collection">Brak elementów w kolekcji.</string>
     <string name="there_are_no_items_in_this_shared_folder">Brak elementów w udostępnionym folderze.</string>
     <string name="no_items_folder">Brak elementów w folderze.</string>
     <string name="no_items_trash">Brak elementów w koszu.</string>
@@ -351,16 +346,11 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="type">Rodzaj</string>
     <string name="move_down">Przenieś w dół</string>
     <string name="move_up">Przenieś w górę</string>
-    <string name="owner">Właściciel</string>
-    <string name="no_collections_to_list">Brak kolekcji do wyświetlenia.</string>
     <string name="there_are_no_shared_folders_to_list">Brak udostępnionych folderów do wyświetlenia.</string>
     <string name="moved_item_to_org">Przeniesiono %1$s do %2$s.</string>
     <string name="select_one_collection">Musisz wybrać co najmniej jedną kolekcję.</string>
     <string name="you_must_select_at_least_one_shared_folder">Musisz wybrać co najmniej jeden udostępniony folder.</string>
     <string name="share">Udostępnij</string>
-    <string name="move_to_organization">Przenieś do organizacji</string>
-    <string name="no_orgs_to_list">Brak organizacji do wyświetlenia.</string>
-    <string name="move_to_org_desc">Wybierz organizację, do której chcesz przenieść ten element. Ta czynność spowoduje utratę własności elementu i przenosi te uprawnienia do organizacji.</string>
     <string name="no_vaults_to_list">Brak sejfów do wyświetlenia.</string>
     <string name="move_to_vault_desc">Wybierz sejf, do którego chcesz przenieść element. Przeniesienie spowoduje zmianę własności elementu na organizację.</string>
     <string name="number_of_words">Liczba słów</string>
@@ -475,7 +465,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="hide_text_by_default">Ukryj domyślnie tekst wysyłki</string>
     <string name="type_file">Plik</string>
     <string name="deletion_date">Data usunięcia</string>
-    <string name="deletion_time">Czas usunięcia</string>
     <string name="deletion_date_info">Wysyłka zostanie trwale usunięta w określonym czasie.</string>
     <string name="this_date_is_enforced_by_your_organization">Data została narzucona przez organizację</string>
     <string name="who_can_view">Kto może odczytać</string>
@@ -612,7 +601,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Czy na pewno chcesz zezwolić na wykonywanie zrzutów ekranu?</string>
     <string name="access_requested">Poproszono o dostęp</string>
     <string name="account_access_requested">Poproszono o dostęp do konta</string>
-    <string name="are_you_trying_to_log_in">Próbujesz się zalogować?</string>
     <string name="are_you_trying_to_access_your_account">Czy próbujesz zalogować się do swojego konta?</string>
     <string name="access_attempt_by_x_on_y">Próba logowania przez %1$s na %2$s</string>
     <string name="device_type">Rodzaj urządzenia</string>
@@ -673,7 +661,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="no_pending_requests">Brak oczekujących próśb</string>
     <string name="enable_camer_permission_to_use_the_scanner">Włącz uprawnienia aparatu do korzystania ze skanera</string>
     <string name="language">Język</string>
-    <string name="language_change_x_description">Język został zmieniony na %1$s. Uruchom ponownie aplikację, aby zobaczyć zmiany</string>
     <string name="default_system">Domyślny (systemowy)</string>
     <string name="weak_master_password">Hasło główne jest słabe</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Hasło jest słabe. Użyj silnego hasła, aby chronić konto. Czy na pewno chcesz użyć słabego hasła?</string>
@@ -989,7 +976,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacja klucza dostępu nie powiodła się, ponieważ żądanie nie jest obsługiwane.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacja hasła nie powiodła się, ponieważ element nie istnieje.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operacja hasła nie powiodła się, ponieważ element nie ma prawidłowego hasła.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operacja hasła nie powiodła się, ponieważ nie wybrano elementu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operacja nie powiodła się, ponieważ żądanie jest nieprawidłowe.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operacja nie powiodła się, ponieważ żądanie jest nieobsługiwane.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacja danych logowania nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
@@ -1070,7 +1056,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="learn_more_about_privileged_apps">Dowiedz się więcej o dozwolonych aplikacjach</string>
     <string name="privileged_apps">Dozwolone aplikacje</string>
     <string name="unrecognized_browser">Nierozpoznana przeglądarka</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Dowiedz się więcej o używaniu kluczy dostępu w Bitwarden.</string>
     <string name="all_trusted_apps">Wszystkie zaufane aplikacje</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Czy na pewno chcesz przestać ufać aplikacji %s?</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
@@ -1087,8 +1072,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="verification_code_added">Kod weryfikacyjny został dodany</string>
     <string name="refresh_period">Okres odświeżenia</string>
     <string name="algorithm">Algorytm</string>
-    <string name="advanced">Zaawansowane</string>
-    <string name="collapse_advanced_options">Zwiń opcje zaawansowane</string>
     <string name="number_of_digits">Liczba cyfr</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekunda</item>
@@ -1175,7 +1158,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="select_a_card_for_x">Wybierz kartę dla %s</string>
     <string name="choose_an_identity">Wybierz tożsamość</string>
     <string name="advanced_options">Opcje zaawansowane</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Dowiedz się więcej o wykrywaniu dopasowania</annotation></string>
     <string name="keep_your_credential_secure">Zabezpiecz dane logowania</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Dowiedz się więcej o tym, jak zabezpieczyć dane logowania korzystając z wykrywania dopasowania w opcji „%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Czy na pewno chcesz użyć „%1$s”?</string>
@@ -1220,7 +1202,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importuj hasła, klucze dostępu i inne elementy z sejfu Bitwarden.</string>
     <string name="items_to_import">Elementy do zaimportowania</string>
     <string name="exporting_items">Eksportowanie elementów…</string>
-    <string name="export_failed">Eksportowanie nie powiodło się</string>
     <string name="passwords">Hasła</string>
     <string name="passkeys">Klucze dostępu</string>
     <string name="why_is_this_step_required">Dlaczego ten krok jest wymagany?</string>
@@ -1240,7 +1221,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="transfer_items_to_org">Przenieś elementy do organizacji %1$s</string>
     <string name="transfer_items_description">Organizacja <annotation arg="0">%1$s</annotation> wymaga, aby wszystkie elementy były ich własnością. Kliknij „Akceptuj”, aby przenieść własność swoich elementów. <annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="decline_and_leave">Odrzuć i wyjdź</string>
-    <string name="why_am_i_seeing_this">Dlaczego to widzę?</string>
     <string name="migrating_items_to_x">Przenoszenie elementów do organizacji %s</string>
     <string name="failed_to_migrate_items_to_x">Nie udało się przenieść elementów do organizacji %s</string>
     <string name="search_archive">Szukaj w archiwum</string>
@@ -1258,6 +1238,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="archiving_items_is_a_premium_feature">Archiwizowanie elementów jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="totp_is_a_premium_feature">Klucz uwierzytelniający (TOTP) jest funkcją Premium. Twój obecny plan nie zawiera tej funkcji.</string>
     <string name="upgrade_to_premium">Kup konto Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Aby zarządzać subskrypcją Premium, zaloguj się do sejfu internetowego na komputerze.</string>
     <string name="unlock_advanced_security_features">Odblokuj zaawansowane funkcje bezpieczeństwa</string>
@@ -1339,7 +1320,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="archive_item">Archiwizuj element</string>
     <string name="once_archived_this_item_will_be_excluded">Zarchiwizowany element zostanie wykluczony z wyników wyszukiwania i sugestii autouzupełniania.</string>
     <string name="pricing_unavailable">Cennik jest niedostępny</string>
-    <string name="current_plan">Obecny plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Kwota płatności</string>
     <string name="storage_cost">Koszt przestrzeni</string>
@@ -1417,8 +1397,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="issuing_country">Kraj wydający</string>
     <string name="issuing_state">Rejon wydający</string>
     <string name="license_class">Kategoria prawa jazdy</string>
-    <string name="surname">Nazwisko</string>
-    <string name="given_name">Imię</string>
     <string name="date_of_birth">Data urodzenia</string>
     <string name="nationality">Narodowość</string>
     <string name="passport_type">Rodzaj paszportu</string>
