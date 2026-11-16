@@ -171,7 +171,7 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
-            autofillPrompt = autofillPromptManager.vaultAutofillPromptFlow.value,
+            autofillPromptStatus = autofillPromptManager.vaultAutofillPromptFlow.value,
             validTotpIds = persistentSetOf(),
             collapsedSections = settingsRepository.collapsedVaultSections.toImmutableSet(),
             policyBanner = userNotificationPolicyManager.displayData?.let {
@@ -299,7 +299,7 @@ class VaultViewModel @Inject constructor(
 
         autofillPromptManager
             .vaultAutofillPromptFlow
-            .map { VaultAction.Internal.AutofillPromptReceive(autofillPrompt = it) }
+            .map { VaultAction.Internal.AutofillPromptStatusReceive(autofillPromptStatus = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1211,7 +1211,9 @@ class VaultViewModel @Inject constructor(
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
 
-            is VaultAction.Internal.AutofillPromptReceive -> handleAutofillPromptReceive(action)
+            is VaultAction.Internal.AutofillPromptStatusReceive -> {
+                handleAutofillPromptStatusReceive(action)
+            }
 
             is VaultAction.Internal.CollapsedSectionsReceive -> {
                 handleCollapsedSectionsReceive(action)
@@ -1388,8 +1390,10 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    private fun handleAutofillPromptReceive(action: VaultAction.Internal.AutofillPromptReceive) {
-        mutableStateFlow.update { it.copy(autofillPrompt = action.autofillPrompt) }
+    private fun handleAutofillPromptStatusReceive(
+        action: VaultAction.Internal.AutofillPromptStatusReceive,
+    ) {
+        mutableStateFlow.update { it.copy(autofillPromptStatus = action.autofillPromptStatus) }
     }
 
     private fun handleCollapsedSectionsReceive(
@@ -1924,7 +1928,7 @@ data class VaultState(
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
-    val autofillPrompt: AutofillPromptStatus? = null,
+    val autofillPromptStatus: AutofillPromptStatus? = null,
     val premiumCard: PremiumCard = PremiumCard.NONE,
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
@@ -1988,7 +1992,7 @@ data class VaultState(
      * The autofill action card to display, or null if autofill needs no attention on the vault.
      */
     private val autofillActionCard: ActionCardState?
-        get() = when (val prompt = autofillPrompt) {
+        get() = when (val prompt = autofillPromptStatus) {
             AutofillPromptStatus.AutofillOff -> ActionCardState.SetUpAutofill
             is AutofillPromptStatus.BrowserOff -> {
                 ActionCardState.TurnOnBrowserAutofill(browserPackage = prompt.browserPackage)
@@ -3046,8 +3050,8 @@ sealed class VaultAction {
         /**
          * Indicates that the autofill prompt to show on the vault has been updated.
          */
-        data class AutofillPromptReceive(
-            val autofillPrompt: AutofillPromptStatus?,
+        data class AutofillPromptStatusReceive(
+            val autofillPromptStatus: AutofillPromptStatus?,
         ) : Internal()
 
         /**

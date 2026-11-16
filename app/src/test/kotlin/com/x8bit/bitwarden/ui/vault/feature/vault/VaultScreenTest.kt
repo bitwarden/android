@@ -1750,7 +1750,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `SetUpAutofill action card should display when autofill is off`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
         )
 
         composeTestRule.onNodeWithText(text = "Set up autofill").assertIsDisplayed()
@@ -1768,7 +1768,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `SetUpAutofill action card CTA click should send ActionCardClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
         )
 
         composeTestRule.onNodeWithText(text = "Turn on autofill").performClick()
@@ -1784,7 +1784,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `SetUpAutofill action card opt out click should send AutofillActionCardOptOutClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
         )
 
         composeTestRule.onNodeWithText(text = "Don’t remind me again").performClick()
@@ -1798,7 +1798,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `SetUpAutofill action card dismiss click should send DismissActionCardClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
         )
 
         composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
@@ -1814,7 +1814,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `TurnOnBrowserAutofill action card should display the default browser name`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.BrowserOff(
+            autofillPromptStatus = AutofillPromptStatus.BrowserOff(
                 browserPackage = BrowserPackage.BRAVE_RELEASE,
             ),
         )
@@ -1833,7 +1833,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `TurnOnBrowserAutofill action card CTA click should send ActionCardClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_CONTENT_VIEW_STATE,
-            autofillPrompt = AutofillPromptStatus.BrowserOff(
+            autofillPromptStatus = AutofillPromptStatus.BrowserOff(
                 browserPackage = BrowserPackage.CHROME_STABLE,
             ),
         )
