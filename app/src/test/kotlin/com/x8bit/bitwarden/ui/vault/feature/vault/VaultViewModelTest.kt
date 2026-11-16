@@ -4420,6 +4420,40 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `ActionCardClick with SetUpAutofill should emit NavigateToSetupAutofill`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+            )
+            assertEquals(VaultEvent.NavigateToSetupAutofill, awaitItem())
+        }
+        // Opening the setup screen must not hide the banner (Scenario F).
+        verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `ActionCardClick with TurnOnBrowserAutofill should emit NavigateToSetupBrowserAutofill`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.TurnOnBrowserAutofill(
+                            browserPackage = BrowserPackage.CHROME_STABLE,
+                        ),
+                    ),
+                )
+                assertEquals(VaultEvent.NavigateToSetupBrowserAutofill, awaitItem())
+            }
+            verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+            verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `actionCard should return ImportItems when NoItems is showing and showImportActionCard is true`() {

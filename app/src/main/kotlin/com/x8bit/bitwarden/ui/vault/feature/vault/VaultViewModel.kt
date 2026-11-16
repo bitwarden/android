@@ -552,10 +552,12 @@ class VaultViewModel @Inject constructor(
                 userNotificationPolicyManager.dismissBanner()
             }
 
-            VaultState.ActionCardState.SetUpAutofill,
-            is VaultState.ActionCardState.TurnOnBrowserAutofill,
-                -> {
-                // TODO: PM-45496 Navigate to the setup screens (placeholder until step 6d).
+            VaultState.ActionCardState.SetUpAutofill -> {
+                sendEvent(VaultEvent.NavigateToSetupAutofill)
+            }
+
+            is VaultState.ActionCardState.TurnOnBrowserAutofill -> {
+                sendEvent(VaultEvent.NavigateToSetupBrowserAutofill)
             }
         }
     }
@@ -2632,6 +2634,16 @@ sealed class VaultEvent {
      * Navigate to the import logins screen.
      */
     data object NavigateToImportLogins : VaultEvent()
+
+    /**
+     * Navigate to the setup autofill screen.
+     */
+    data object NavigateToSetupAutofill : VaultEvent()
+
+    /**
+     * Navigate to the setup browser autofill screen.
+     */
+    data object NavigateToSetupBrowserAutofill : VaultEvent()
 
     /**
      * Indicates that we should prompt the user for app review.

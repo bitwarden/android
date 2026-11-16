@@ -84,6 +84,8 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAutofillCalled = false
     private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
+    private var onNavigateToSetupAutofillCalled = false
+    private var onNavigateToSetupBrowserAutofillCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemRoute: VaultUnlockedGraph.VaultItemRoute? = null
     private var onNavigateToVaultEditItemArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
@@ -120,6 +122,10 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToSetupAutofill = { onNavigateToSetupAutofillCalled = true },
+                onNavigateToSetupBrowserAutofill = {
+                    onNavigateToSetupBrowserAutofillCalled = true
+                },
                 onNavigateToAddFolderScreen = { folderName ->
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
@@ -2631,6 +2637,18 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `when NavigateToImportLogins is sent, it should call onNavigateToImportLogins`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToImportLogins)
         assertTrue(onNavigateToImportLoginsCalled)
+    }
+
+    @Test
+    fun `when NavigateToSetupAutofill is sent, it should call onNavigateToSetupAutofill`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToSetupAutofill)
+        assertTrue(onNavigateToSetupAutofillCalled)
+    }
+
+    @Test
+    fun `when NavigateToSetupBrowserAutofill is sent, it should call its callback`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToSetupBrowserAutofill)
+        assertTrue(onNavigateToSetupBrowserAutofillCalled)
     }
 
     @Test

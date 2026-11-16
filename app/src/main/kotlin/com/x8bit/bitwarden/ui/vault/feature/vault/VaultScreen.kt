@@ -94,6 +94,8 @@ fun VaultScreen(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
@@ -167,6 +169,8 @@ fun VaultScreen(
 
             is VaultEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
             VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
+            VaultEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
+            VaultEvent.NavigateToSetupBrowserAutofill -> onNavigateToSetupBrowserAutofill()
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             VaultEvent.PromptForAppReview -> {
                 launchPrompt.invoke()
