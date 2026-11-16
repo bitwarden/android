@@ -239,6 +239,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mutableVaultAutofillPromptFlow = MutableStateFlow<AutofillPromptStatus?>(null)
     private val autofillPromptManager: AutofillPromptManager = mockk {
         every { vaultAutofillPromptFlow } returns mutableVaultAutofillPromptFlow
+        every { snoozeVaultPrompt() } just runs
+        every { optOutOfVaultPrompt() } just runs
     }
 
     private val buildInfoManager = mockk<BuildInfoManager> {
@@ -489,6 +491,44 @@ class VaultViewModelTest : BaseViewModelTest() {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
         }
+
+    @Test
+    fun `DismissActionCardClick with SetUpAutofill should snooze the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+        )
+
+        verify(exactly = 1) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `DismissActionCardClick with TurnOnBrowserAutofill should snooze the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(
+                VaultState.ActionCardState.TurnOnBrowserAutofill(
+                    browserPackage = BrowserPackage.CHROME_STABLE,
+                ),
+            ),
+        )
+
+        verify(exactly = 1) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `AutofillActionCardOptOutClick should opt out of the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.AutofillActionCardOptOutClick)
+
+        verify(exactly = 1) { autofillPromptManager.optOutOfVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+    }
 
     @Test
     fun `PremiumUpgradeBannerEligibleFlow updates should update state`() =

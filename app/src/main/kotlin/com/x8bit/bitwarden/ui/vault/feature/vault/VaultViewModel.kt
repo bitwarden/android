@@ -419,6 +419,7 @@ class VaultViewModel @Inject constructor(
 
             VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
+            VaultAction.AutofillActionCardOptOutClick -> handleAutofillActionCardOptOutClick()
             is VaultAction.ActionCardClick -> handleActionCardClick(action)
             is VaultAction.SectionHeaderClick -> handleSectionHeaderClick(action)
         }
@@ -509,9 +510,13 @@ class VaultViewModel @Inject constructor(
             VaultState.ActionCardState.SetUpAutofill,
             is VaultState.ActionCardState.TurnOnBrowserAutofill,
                 -> {
-                // TODO: PM-45496 Snooze the autofill prompt (placeholder until step 6c).
+                autofillPromptManager.snoozeVaultPrompt()
             }
         }
+    }
+
+    private fun handleAutofillActionCardOptOutClick() {
+        autofillPromptManager.optOutOfVaultPrompt()
     }
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
@@ -2916,6 +2921,11 @@ sealed class VaultAction {
     data class DismissActionCardClick(
         val actionCard: VaultState.ActionCardState,
     ) : VaultAction()
+
+    /**
+     * User clicked "Don't remind me again" on an autofill action card.
+     */
+    data object AutofillActionCardOptOutClick : VaultAction()
 
     /**
      * User clicked the header of the given [section] to expand or collapse it.
