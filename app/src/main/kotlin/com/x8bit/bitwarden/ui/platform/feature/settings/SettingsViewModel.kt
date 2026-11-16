@@ -8,6 +8,8 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.update
 @HiltViewModel(assistedFactory = SettingsViewModel.Factory::class)
 class SettingsViewModel @AssistedInject constructor(
     @Assisted isPreAuth: Boolean,
+    autofillPromptManager: AutofillPromptManager,
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
     private val premiumStateManager: PremiumStateManager,
@@ -38,7 +41,10 @@ class SettingsViewModel @AssistedInject constructor(
     initialState = SettingsState(
         isPreAuth = isPreAuth,
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
-        autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
+        autoFillCount = autofillPromptManager
+            .autofillPromptStatusFlow
+            .value
+            .toAutofillBadgeCount(),
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
         showPlanBadge = premiumStateManager.shouldShowPlanBadgeFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
@@ -62,7 +68,7 @@ class SettingsViewModel @AssistedInject constructor(
     init {
         combine(
             firstTimeActionManager.allSecuritySettingsBadgeCountFlow,
-            firstTimeActionManager.allAutofillSettingsBadgeCountFlow,
+            autofillPromptManager.autofillPromptStatusFlow.map { it.toAutofillBadgeCount() },
             firstTimeActionManager.allVaultSettingsBadgeCountFlow,
             premiumStateManager.shouldShowPlanBadgeFlow,
         ) { securityCount, autofillCount, vaultCount, showPlanBadge ->
@@ -430,3 +436,17 @@ enum class Settings(
         testTag = "AboutSettingsButton",
     ),
 }
+
+/**
+ * The badge count for the Autofill row: 1 whenever Settings > Autofill shows a banner.
+ */
+private fun AutofillPromptStatus.toAutofillBadgeCount(): Int =
+    when (this) {
+        AutofillPromptStatus.AutofillOff,
+        is AutofillPromptStatus.BrowserOff,
+            -> 1
+
+        AutofillPromptStatus.On,
+        AutofillPromptStatus.Unknown,
+            -> 0
+    }

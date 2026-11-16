@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -21,13 +24,16 @@ import org.junit.jupiter.api.Test
 
 class SettingsViewModelTest : BaseViewModelTest() {
 
-    private val mutableAutofillBadgeCountFlow = MutableStateFlow(0)
+    private val mutableAutofillPromptStatusFlow =
+        MutableStateFlow<AutofillPromptStatus>(AutofillPromptStatus.On)
+    private val autofillPromptManager: AutofillPromptManager = mockk {
+        every { autofillPromptStatusFlow } returns mutableAutofillPromptStatusFlow
+    }
     private val mutableVaultBadgeCountFlow = MutableStateFlow(0)
     private val mutableSecurityBadgeCountFlow = MutableStateFlow(0)
 
     private val firstTimeManager = mockk<FirstTimeActionManager> {
         every { allSecuritySettingsBadgeCountFlow } returns mutableSecurityBadgeCountFlow
-        every { allAutofillSettingsBadgeCountFlow } returns mutableAutofillBadgeCountFlow
         every { allVaultSettingsBadgeCountFlow } returns mutableVaultBadgeCountFlow
     }
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
@@ -124,7 +130,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state reflects the current state of the repository`() {
-        mutableAutofillBadgeCountFlow.update { 1 }
+        mutableAutofillPromptStatusFlow.value = AutofillPromptStatus.AutofillOff
         mutableSecurityBadgeCountFlow.update { 2 }
         mutableVaultBadgeCountFlow.update { 3 }
         mutableShouldShowPlanBadgeFlow.update { true }
@@ -163,7 +169,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            mutableAutofillBadgeCountFlow.update { 1 }
+            mutableAutofillPromptStatusFlow.value = AutofillPromptStatus.AutofillOff
             assertEquals(
                 DEFAULT_STATE.copy(
                     autoFillCount = 1,
@@ -194,6 +200,24 @@ class SettingsViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `AUTO_FILL badge count should be 1 only when the Settings autofill banner would show`() {
+        mapOf(
+            AutofillPromptStatus.AutofillOff to 1,
+            AutofillPromptStatus.BrowserOff(browserPackage = BrowserPackage.CHROME_STABLE) to 1,
+            AutofillPromptStatus.On to 0,
+            AutofillPromptStatus.Unknown to 0,
+        )
+            .forEach { (status, expectedCount) ->
+                mutableAutofillPromptStatusFlow.value = status
+                val viewModel = createViewModel()
+                assertEquals(
+                    expectedCount,
+                    viewModel.stateFlow.value.notificationBadgeCountMap[Settings.AUTO_FILL],
+                )
+            }
     }
 
     @Test
@@ -395,6 +419,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(
         isPreAuth = isPreAuth,
+        autofillPromptManager = autofillPromptManager,
         firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
         premiumStateManager = premiumStateManager,
