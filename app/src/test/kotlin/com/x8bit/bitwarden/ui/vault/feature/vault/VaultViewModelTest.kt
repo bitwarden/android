@@ -798,6 +798,82 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `actionCard should return SetUpAutofill when autofill is off`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should return TurnOnBrowserAutofill when the browser is off`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPrompt = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.TurnOnBrowserAutofill(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should rank the autofill card above Premium and archive cards`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            isUpgradedToPremiumCardEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
+            isPremium = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should rank the autofill card above import on an empty vault`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should rank the policy banner above the autofill card`() {
+        val contentState = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            policyBanner = POLICY_BANNER,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+        val noItemsState = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            policyBanner = POLICY_BANNER,
+            autofillPrompt = AutofillPromptStatus.AutofillOff,
+        )
+
+        assertEquals(VAULT_POLICY_BANNER_ACTION_CARD, contentState.actionCard)
+        assertEquals(VAULT_POLICY_BANNER_ACTION_CARD, noItemsState.actionCard)
+    }
+
+    @Test
+    fun `actionCard should skip the autofill card when autofill is On or Unknown`() {
+        listOf(AutofillPromptStatus.On, AutofillPromptStatus.Unknown, null).forEach { prompt ->
+            val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+                autofillPrompt = prompt,
+                premiumCard = PremiumCard.UPGRADE,
+            )
+
+            assertEquals(VaultState.ActionCardState.UpgradePremium, state.actionCard)
+        }
+    }
+
+    @Test
     fun `UserState updates with a null value should do nothing`() {
         val viewModel = createViewModel()
         assertEquals(

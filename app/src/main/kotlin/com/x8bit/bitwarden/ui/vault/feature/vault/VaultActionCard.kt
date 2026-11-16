@@ -135,5 +135,11 @@ fun VaultActionCard(
                 modifier = modifier,
             )
         }
+
+        VaultState.ActionCardState.SetUpAutofill,
+        is VaultState.ActionCardState.TurnOnBrowserAutofill,
+            -> {
+            // TODO: PM-45496 Draw the autofill cards (placeholder until step 7).
+        }
     }
 }

@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
@@ -504,6 +505,12 @@ class VaultViewModel @Inject constructor(
             is VaultState.ActionCardState.VaultPolicyBanner -> {
                 userNotificationPolicyManager.dismissBanner()
             }
+
+            VaultState.ActionCardState.SetUpAutofill,
+            is VaultState.ActionCardState.TurnOnBrowserAutofill,
+                -> {
+                // TODO: PM-45496 Snooze the autofill prompt (placeholder until step 6c).
+            }
         }
     }
 
@@ -538,6 +545,12 @@ class VaultViewModel @Inject constructor(
                     ),
                 )
                 userNotificationPolicyManager.dismissBanner()
+            }
+
+            VaultState.ActionCardState.SetUpAutofill,
+            is VaultState.ActionCardState.TurnOnBrowserAutofill,
+                -> {
+                // TODO: PM-45496 Navigate to the setup screens (placeholder until step 6d).
             }
         }
     }
@@ -1964,6 +1977,7 @@ data class VaultState(
                             button = it.buttonText,
                         )
                     }
+                    ?: autofillActionCard
                     ?: ActionCardState.UpgradedToPremium
                         .takeIf { isUpgradedToPremiumCardEligible }
                     ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
@@ -1985,6 +1999,7 @@ data class VaultState(
                             button = it.buttonText,
                         )
                     }
+                    ?: autofillActionCard
                     ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
                     ?: ActionCardState.PremiumNeedsAttention.takeIf {
                         premiumCard == PremiumCard.NEEDS_ATTENTION
@@ -1994,6 +2009,22 @@ data class VaultState(
 
             is ViewState.Error,
             ViewState.Loading,
+                -> null
+        }
+
+    /**
+     * The autofill action card to display, or null if autofill needs no attention on the vault.
+     */
+    private val autofillActionCard: ActionCardState?
+        get() = when (val prompt = autofillPrompt) {
+            AutofillPromptStatus.AutofillOff -> ActionCardState.SetUpAutofill
+            is AutofillPromptStatus.BrowserOff -> {
+                ActionCardState.TurnOnBrowserAutofill(browserPackage = prompt.browserPackage)
+            }
+
+            AutofillPromptStatus.On,
+            AutofillPromptStatus.Unknown,
+            null,
                 -> null
         }
 
@@ -2422,6 +2453,22 @@ data class VaultState(
          * Indicates that the import items card should be displayed.
          */
         data object ImportItems : ActionCardState()
+
+        /**
+         * Indicates that Bitwarden is not the selected autofill service and the user should be
+         * prompted to set up autofill.
+         */
+        data object SetUpAutofill : ActionCardState()
+
+        /**
+         * Indicates that Bitwarden is the selected autofill service, but the default browser has
+         * third party autofill turned off.
+         *
+         * @property browserPackage The default browser that needs third party autofill turned on.
+         */
+        data class TurnOnBrowserAutofill(
+            val browserPackage: BrowserPackage,
+        ) : ActionCardState()
     }
 
     /**
