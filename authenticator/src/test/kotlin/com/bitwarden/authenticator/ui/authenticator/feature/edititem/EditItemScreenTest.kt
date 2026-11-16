@@ -197,6 +197,30 @@ class EditItemScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
+    fun `clear button on key field should send empty TotpCodeTextChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT.copy(
+                    itemData = DEFAULT_ITEM_DATA.copy(totpCode = "key"),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Clear")
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(EditItemAction.TotpCodeTextChange(""))
+        }
+    }
+
+    @Test
+    fun `clear button on key field should not exist when key is empty`() {
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT) }
+        composeTestRule.onNodeWithTextAfterScroll(text = "Key").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(label = "Clear").assertDoesNotExist()
+    }
+
+    @Test
     fun `favorite switch toggle should send FavoriteToggleClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT) }
         composeTestRule

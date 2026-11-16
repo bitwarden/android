@@ -32,6 +32,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditI
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
@@ -197,6 +198,15 @@ fun EditItemContent(
                 onValueChange = onTotpCodeTextChange,
                 singleLine = true,
                 cardStyle = CardStyle.Middle(),
+                actions = {
+                    if (viewState.itemData.totpCode.isNotEmpty()) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_clear,
+                            contentDescription = stringResource(id = BitwardenString.clear),
+                            onClick = { onTotpCodeTextChange("") },
+                        )
+                    }
+                },
             )
         }
 
