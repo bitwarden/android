@@ -701,6 +701,9 @@ class SettingsRepositoryImpl(
                 pinProtectedUserKeyEnvelope = null,
             )
             storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+            // The SDK only repopulates this on unlock when it is absent, so a stale value here
+            // would survive a later PIN change.
+            storePinLength(userId = userId, pinLength = null)
         }
     }
 
