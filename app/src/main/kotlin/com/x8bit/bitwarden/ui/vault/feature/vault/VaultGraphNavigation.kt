@@ -26,7 +26,6 @@ fun EntryProviderScope<VaultGraph>.vaultDestinations(
     onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
-    onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
     vaultDestination(
@@ -46,7 +45,6 @@ fun EntryProviderScope<VaultGraph>.vaultDestinations(
         onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToAboutScreen = onNavigateToAboutScreen,
-        onNavigateToAutofillScreen = onNavigateToAutofillScreen,
         onNavigateToPlan = onNavigateToPlan,
     )
     vaultItemListingDestination(

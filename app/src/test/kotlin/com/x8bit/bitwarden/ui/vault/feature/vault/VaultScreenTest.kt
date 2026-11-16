@@ -81,7 +81,6 @@ import org.junit.Test
 @Suppress("LargeClass")
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
-    private var onNavigateToAutofillCalled = false
     private var onNavigateToPlanCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToSetupAutofillCalled = false
@@ -131,7 +130,6 @@ class VaultScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderParentFolderName = folderName
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
-                onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
                 onNavigateToPlan = { onNavigateToPlanCalled = true },
             )
         }
@@ -598,56 +596,6 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) { viewModel.trySendAction(VaultAction.DialogDismiss) }
-    }
-
-    @Test
-    fun `ThirdPartyBrowserAutofill should be displayed according to state`() {
-        composeTestRule.assertNoDialogExists()
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1))
-        }
-
-        composeTestRule
-            .onNodeWithText(text = "Enable browser Autofill to keep filling passwords")
-            .assertIsDisplayed()
-            .assert(hasAnyAncestor(isDialog()))
-
-        mutableStateFlow.update { it.copy(dialog = null) }
-        composeTestRule.assertNoDialogExists()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ThirdPartyBrowserAutofill dialog Not now button should emit DismissThirdPartyAutofillDialogClick`() {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 2))
-        }
-
-        composeTestRule
-            .onNodeWithText(text = "Not now")
-            .assertIsDisplayed()
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ThirdPartyBrowserAutofill dialog Go to settings now button should emit EnableThirdPartyAutofillClick`() {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 3))
-        }
-
-        composeTestRule
-            .onNodeWithText(text = "Go to settings")
-            .assertIsDisplayed()
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify(exactly = 1) { viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick) }
     }
 
     @Suppress("MaxLineLength")
@@ -2655,12 +2603,6 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `when NavigateToAbout is sent, it should call onNavigateToAbout`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToAbout)
         assertTrue(onNavigateToAboutCalled)
-    }
-
-    @Test
-    fun `when NavigateToAutofillSettings is sent, it should call onNavigateToAutofillSettings`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToAutofillSettings)
-        assertTrue(onNavigateToAutofillCalled)
     }
 
     @Test

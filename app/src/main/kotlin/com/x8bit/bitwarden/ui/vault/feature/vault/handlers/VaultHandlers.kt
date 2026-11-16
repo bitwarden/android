@@ -50,8 +50,6 @@ data class VaultHandlers(
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
     val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
-    val onEnabledThirdPartyAutofillClick: () -> Unit,
-    val onDismissThirdPartyAutofillDialogClick: () -> Unit,
     val upgradeToPremiumClick: () -> Unit,
     val dismissActionCardClick: (VaultState.ActionCardState) -> Unit,
     val actionCardClick: (VaultState.ActionCardState) -> Unit,
@@ -142,12 +140,6 @@ data class VaultHandlers(
                 },
                 onShareAllCipherDecryptionErrorsClick = {
                     viewModel.trySendAction(VaultAction.ShareAllCipherDecryptionErrorsClick)
-                },
-                onEnabledThirdPartyAutofillClick = {
-                    viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
-                },
-                onDismissThirdPartyAutofillDialogClick = {
-                    viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
                 },
                 onKdfUpdatePasswordRepromptSubmit = {
                     viewModel.trySendAction(VaultAction.KdfUpdatePasswordRepromptSubmit(it))

@@ -19,8 +19,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
@@ -32,7 +30,6 @@ import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -86,22 +83,6 @@ object AutofillModule {
         settingsDiskSource = settingsDiskSource,
         clock = clock,
         dispatcherManager = dispatcherManager,
-    )
-
-    @Singleton
-    @Provides
-    fun providesBrowserAutofillDialogManager(
-        autofillEnabledManager: AutofillEnabledManager,
-        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
-        clock: Clock,
-        firstTimeActionManager: FirstTimeActionManager,
-        settingsDiskSource: SettingsDiskSource,
-    ): BrowserAutofillDialogManager = BrowserAutofillDialogManagerImpl(
-        autofillEnabledManager = autofillEnabledManager,
-        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
-        clock = clock,
-        firstTimeActionManager = firstTimeActionManager,
-        settingsDiskSource = settingsDiskSource,
     )
 
     @Singleton
