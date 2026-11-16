@@ -29,7 +29,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
@@ -233,6 +236,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { browserCount } returns 1
         every { delayDialog() } just runs
     }
+    private val mutableVaultAutofillPromptFlow = MutableStateFlow<AutofillPromptStatus?>(null)
+    private val autofillPromptManager: AutofillPromptManager = mockk {
+        every { vaultAutofillPromptFlow } returns mutableVaultAutofillPromptFlow
+    }
 
     private val buildInfoManager = mockk<BuildInfoManager> {
         every { isFdroid } returns false
@@ -383,6 +390,42 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE, awaitItem())
             }
         }
+
+    @Test
+    fun `vaultAutofillPromptFlow updates should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+            assertEquals(
+                DEFAULT_STATE.copy(autofillPrompt = AutofillPromptStatus.AutofillOff),
+                awaitItem(),
+            )
+
+            val browserOff = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            )
+            mutableVaultAutofillPromptFlow.value = browserOff
+            assertEquals(DEFAULT_STATE.copy(autofillPrompt = browserOff), awaitItem())
+
+            mutableVaultAutofillPromptFlow.value = null
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `initial state should use the current vaultAutofillPromptFlow value`() {
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(autofillPrompt = AutofillPromptStatus.AutofillOff),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `CollapsedVaultSectionsFlow updates should update the state accordingly`() = runTest {
@@ -4935,6 +4978,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
+            autofillPromptManager = autofillPromptManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
             userNotificationPolicyManager = userNotificationPolicyManager,
             buildInfoManager = buildInfoManager,

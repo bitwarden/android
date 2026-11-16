@@ -33,7 +33,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
@@ -125,6 +127,7 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
+    private val autofillPromptManager: AutofillPromptManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val userNotificationPolicyManager: UserNotificationPolicyManager,
     buildInfoManager: BuildInfoManager,
@@ -170,6 +173,7 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
+            autofillPrompt = autofillPromptManager.vaultAutofillPromptFlow.value,
             validTotpIds = persistentSetOf(),
             collapsedSections = settingsRepository.collapsedVaultSections.toImmutableSet(),
             policyBanner = userNotificationPolicyManager.displayData?.let {
@@ -276,6 +280,7 @@ class VaultViewModel @Inject constructor(
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
@@ -291,6 +296,12 @@ class VaultViewModel @Inject constructor(
         userNotificationPolicyManager
             .displayDataFlow
             .map { VaultAction.Internal.UserNotificationPolicyReceive(policyInfo = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        autofillPromptManager
+            .vaultAutofillPromptFlow
+            .map { VaultAction.Internal.AutofillPromptReceive(autofillPrompt = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1213,6 +1224,8 @@ class VaultViewModel @Inject constructor(
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
 
+            is VaultAction.Internal.AutofillPromptReceive -> handleAutofillPromptReceive(action)
+
             is VaultAction.Internal.CollapsedSectionsReceive -> {
                 handleCollapsedSectionsReceive(action)
             }
@@ -1386,6 +1399,10 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
         }
+    }
+
+    private fun handleAutofillPromptReceive(action: VaultAction.Internal.AutofillPromptReceive) {
+        mutableStateFlow.update { it.copy(autofillPrompt = action.autofillPrompt) }
     }
 
     private fun handleCollapsedSectionsReceive(
@@ -1922,6 +1939,7 @@ data class VaultState(
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
+    val autofillPrompt: AutofillPromptStatus? = null,
     val premiumCard: PremiumCard = PremiumCard.NONE,
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
@@ -3012,6 +3030,13 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the autofill prompt to show on the vault has been updated.
+         */
+        data class AutofillPromptReceive(
+            val autofillPrompt: AutofillPromptStatus?,
         ) : Internal()
 
         /**
