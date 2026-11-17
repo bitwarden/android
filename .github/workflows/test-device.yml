@@ -12,6 +12,8 @@ permissions:
 env:
   _API_LEVEL: "37.0"
   _EMULATOR_TARGET: google_apis_playstore
+  BW_TEST_SERVER_URL: https://qa-automation.sh.bitwarden.pw
+  BW_SEEDER_URL: https://qa-automation.sh.bitwarden.pw/seeder
 
 jobs:
   test:
@@ -42,32 +44,22 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-org-bitwarden
-          secrets: "seederapi-sh-ci-username,seederapi-sh-ci-password"
+          secrets: "seederapi-us-sh-ci-username,seederapi-us-sh-ci-password"
 
       - name: Log out from Azure
         uses: bitwarden/gh-actions/azure-logout@main
 
-      # The repository and its logs are public, so the server under test is kept in secrets. A
-      # secret masks only its exact value; this also masks the host names on their own. Secrets are
-      # checked before the build so a missing one fails in seconds, not after the build.
-      - name: Check secrets, mask the test server hosts and build the Seeder token
+      # Secrets are checked before the build so a missing one fails in seconds, not after the build.
+      - name: Check secrets and build the Seeder token
         env:
-          BW_SEEDER_PASSWORD: ${{ steps.get-kv-secrets.outputs.seederapi-sh-ci-password }}
-          BW_SEEDER_URL: ${{ secrets.E2E_SEEDER_URL }}
-          BW_SEEDER_USERNAME: ${{ steps.get-kv-secrets.outputs.seederapi-sh-ci-username }}
-          BW_TEST_SERVER_URL: ${{ secrets.E2E_TEST_SERVER_URL }}
+          BW_SEEDER_PASSWORD: ${{ steps.get-kv-secrets.outputs.seederapi-us-sh-ci-password }}
+          BW_SEEDER_USERNAME: ${{ steps.get-kv-secrets.outputs.seederapi-us-sh-ci-username }}
         run: |
-          for name in BW_TEST_SERVER_URL BW_SEEDER_URL BW_SEEDER_USERNAME BW_SEEDER_PASSWORD; do
+          for name in BW_SEEDER_USERNAME BW_SEEDER_PASSWORD; do
             if [ -z "${!name}" ]; then
-              echo "::error::$name is empty; check the E2E_* secrets and the Key Vault entries."
+              echo "::error::$name is empty; check the gh-org-bitwarden Key Vault entries."
               exit 1
             fi
-          done
-          for url in "$BW_TEST_SERVER_URL" "$BW_SEEDER_URL"; do
-            host="${url#*://}"
-            host="${host%%/*}"
-            host="${host##*@}"
-            echo "::add-mask::${host%%:*}"
           done
           token=$(printf '%s:%s' "$BW_SEEDER_USERNAME" "$BW_SEEDER_PASSWORD" | base64 -w0)
           echo "::add-mask::$token"
@@ -94,8 +86,6 @@ jobs:
       - name: Test
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         env:
-          BW_SEEDER_URL: ${{ secrets.E2E_SEEDER_URL }}
-          BW_TEST_SERVER_URL: ${{ secrets.E2E_TEST_SERVER_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           api-level: ${{ env._API_LEVEL }}

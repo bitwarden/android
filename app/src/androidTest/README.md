@@ -64,9 +64,9 @@ orchestrator, but use it only on ephemeral machines (CI) for the reason above. P
 
 `.github/workflows/test-device.yml` runs the tests with `connectedStandardDebugAndroidTest` on an
 emulator, on manual dispatch and on weekdays at 05:00 UTC. Scheduled runs are skipped until the
-repository variable `E2E_SCHEDULE_ENABLED` is `true`. The workflow needs the `E2E_TEST_SERVER_URL`
-and `E2E_SEEDER_URL` secrets and the `seederapi-sh-ci-username` / `seederapi-sh-ci-password`
-entries in the `gh-org-bitwarden` key vault (BRE-2399), so it can't pass until CI can read them.
+repository variable `E2E_SCHEDULE_ENABLED` is `true`. It reads the Seeder credential from the
+`seederapi-us-sh-ci-username` / `seederapi-us-sh-ci-password` entries in the `gh-org-bitwarden` key
+vault (BRE-2399).
 
 The debug app logs HTTP bodies, and saved test outputs
 (`app/build/outputs/androidTest-results/`) include logcat with the seeded account's tokens. Don't
