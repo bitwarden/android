@@ -192,10 +192,42 @@ class CipherViewExtensionsTest {
         )
 
         assertEquals(
-            VaultIdentityTitle.MR,
-            ((result as VaultAddEditState.ViewState.Content)
-                .type as VaultAddEditState.ViewState.Content.ItemType.Identity)
-                .selectedTitle,
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = persistentListOf(),
+                ),
+                isIndividualVaultDisabled = true,
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                    selectedTitle = VaultIdentityTitle.MR,
+                    firstName = "John",
+                    middleName = "Richard",
+                    lastName = "Smith",
+                    username = "Dr. JSR",
+                    company = "Bitwarden",
+                    email = "placeholde@email.com",
+                    phone = "555-555-5555",
+                    city = "Minneapolis",
+                    state = "MN",
+                    country = "USA",
+                ),
+            ),
+            result,
         )
     }
 
