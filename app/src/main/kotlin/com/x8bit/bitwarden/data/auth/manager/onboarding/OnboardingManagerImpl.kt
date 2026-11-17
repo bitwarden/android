@@ -21,34 +21,15 @@ internal class OnboardingManagerImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    /**
-     * The setup steps in the order they are shown, each with the live-state check that decides
-     * whether the step is still needed.
-     */
-    private val setupSteps: List<SetupStep> = listOf(
-        SetupStep(OnboardingStatus.ACCOUNT_LOCK_SETUP) { userId ->
-            biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false) &&
-                authDiskSource.getUserBiometricUnlockKey(userId = userId) == null
-        },
-        SetupStep(OnboardingStatus.AUTOFILL_SETUP) {
-            !settingsRepository.isAutofillEnabledStateFlow.value
-        },
-        SetupStep(OnboardingStatus.BROWSER_AUTOFILL_SETUP) {
-            settingsRepository.isAutofillEnabledStateFlow.value &&
-                browserThirdPartyAutofillEnabledManager
-                    .browserThirdPartyAutofillStatus
-                    .isDefaultBrowserAvailableAndDisabled
-        },
-    )
-
     override fun goToNextStep() {
         val userId = activeUserId ?: return
-        val nextStatus = when (val current = authDiskSource.getOnboardingStatus(userId = userId)) {
-            OnboardingStatus.COMPLETE -> return
-            OnboardingStatus.FINAL_STEP -> OnboardingStatus.COMPLETE
-            else -> getNextStatus(userId = userId, current = current)
-        }
-        authDiskSource.storeOnboardingStatus(userId = userId, onboardingStatus = nextStatus)
+        authDiskSource.storeOnboardingStatus(
+            userId = userId,
+            onboardingStatus = getNextStatus(
+                userId = userId,
+                current = authDiskSource.getOnboardingStatus(userId = userId),
+            ),
+        )
     }
 
     override fun initializeOnboardingFlow(userId: String) {
@@ -70,21 +51,45 @@ internal class OnboardingManagerImpl(
     }
 
     /**
-     * The first step after [current] that is still needed. Only later steps are considered, so
-     * skipping a step never sends the user back to it.
+     * The first step after [current] that is still needed, or [OnboardingStatus.COMPLETE] if there
+     * are none. The steps run in the declaration order of [OnboardingStatus], and only steps after
+     * [current] are considered so skipping a step never sends the user back to it.
      */
-    private fun getNextStatus(userId: String, current: OnboardingStatus?): OnboardingStatus {
-        // A null (or unlisted) current status gives -1 + 1, which starts at the first step.
-        val startIndex = setupSteps.indexOfFirst { it.status == current } + 1
-        return setupSteps
-            .drop(n = startIndex)
-            .firstOrNull { it.isNeeded(userId) }
-            ?.status
-            ?: if (current == null) OnboardingStatus.COMPLETE else OnboardingStatus.FINAL_STEP
-    }
+    private fun getNextStatus(userId: String, current: OnboardingStatus?): OnboardingStatus =
+        OnboardingStatus
+            .entries
+            // A null current status starts from the first step.
+            .filter { it.ordinal > (current?.ordinal ?: -1) }
+            .firstOrNull { isNeeded(status = it, userId = userId, current = current) }
+            ?: OnboardingStatus.COMPLETE
 
-    private class SetupStep(
-        val status: OnboardingStatus,
-        val isNeeded: (userId: String) -> Boolean,
-    )
+    /**
+     * Whether the given [status] step is still needed based on the live state of the app.
+     */
+    private fun isNeeded(
+        status: OnboardingStatus,
+        userId: String,
+        current: OnboardingStatus?,
+    ): Boolean = when (status) {
+        OnboardingStatus.ACCOUNT_LOCK_SETUP -> {
+            biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false) &&
+                authDiskSource.getUserBiometricUnlockKey(userId = userId) == null
+        }
+
+        OnboardingStatus.AUTOFILL_SETUP -> {
+            !settingsRepository.isAutofillEnabledStateFlow.value
+        }
+
+        OnboardingStatus.BROWSER_AUTOFILL_SETUP -> {
+            settingsRepository.isAutofillEnabledStateFlow.value &&
+                browserThirdPartyAutofillEnabledManager
+                    .browserThirdPartyAutofillStatus
+                    .isDefaultBrowserAvailableAndDisabled
+        }
+
+        // Only show the final step after a real step, not when nothing needed setup.
+        OnboardingStatus.FINAL_STEP -> current != null
+
+        OnboardingStatus.COMPLETE -> true
+    }
 }

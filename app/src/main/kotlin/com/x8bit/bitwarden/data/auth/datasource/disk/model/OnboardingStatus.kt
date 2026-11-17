@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 /**
  * Describes the current status of a user in the account onboarding steps.
+ *
+ * The declaration order is the order the steps run in.
  */
 @Serializable
 enum class OnboardingStatus {
