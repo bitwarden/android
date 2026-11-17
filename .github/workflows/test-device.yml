@@ -99,9 +99,28 @@ jobs:
             -gpu swiftshader_indirect -no-window -noaudio -no-boot-anim -no-snapshot
             -camera-back none
           disable-animations: true
-          script: >-
-            ./gradlew :app:connectedStandardDebugAndroidTest
-            -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e
-            -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL"
-            -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL"
-            -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"
+          # The runner splits the script on newlines and runs each line on its own. The first line
+          # waits for the package manager, which can come up after sys.boot_completed on API 37.
+          script: |
+            timeout 300 sh -c 'until adb shell pm path android > /dev/null 2>&1; do sleep 5; done'
+            ./gradlew :app:connectedStandardDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"
+
+      # The connected test task can report success after failing to install, with no tests run, so
+      # the result files are checked directly.
+      - name: Check that the tests ran and passed
+        run: |
+          python3 - << 'EOF'
+          import glob
+          import sys
+          import xml.etree.ElementTree as ET
+
+          files = glob.glob("app/build/outputs/androidTest-results/connected/**/TEST-*.xml", recursive=True)
+          tests = failures = 0
+          for path in files:
+              for suite in ET.parse(path).getroot().iter("testsuite"):
+                  tests += int(suite.get("tests", 0))
+                  failures += int(suite.get("failures", 0)) + int(suite.get("errors", 0))
+          print(f"{tests} test(s) ran, {failures} failed or errored ({len(files)} result file(s)).")
+          if tests == 0 or failures:
+              sys.exit(1)
+          EOF
