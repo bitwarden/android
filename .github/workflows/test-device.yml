@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 env:
-  _API_LEVEL: "37.0"
-  _EMULATOR_TARGET: google_apis_playstore_ps16k
+  _API_LEVEL: "36"
+  _EMULATOR_TARGET: google_apis_playstore
   BW_TEST_SERVER_URL: https://qa-automation.sh.bitwarden.pw
   BW_SEEDER_URL: https://qa-automation.sh.bitwarden.pw/seeder
 
@@ -96,7 +96,7 @@ jobs:
           ram-size: 4096M
           force-avd-creation: true
           emulator-options: >-
-            -gpu swangle_indirect -feature -ReadColorBufferDma -no-window -noaudio -no-boot-anim -no-snapshot
+            -gpu swiftshader_indirect -no-window -noaudio -no-boot-anim -no-snapshot
             -camera-back none
           disable-animations: true
           # The runner splits the script on newlines and runs each line on its own. The first line
