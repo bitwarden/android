@@ -122,13 +122,14 @@ platform :android do
     )
   end
 
-  desc "Run static analysis (detekt + lint)"
+  desc "Run static analysis (detekt + lint) and the tests for the custom detekt rules"
   lane :checkLint do
     gradle(
       tasks: [
         "detekt",
         "lintStandardDebug",
         "lintDebug",
+        ":detekt-rules:test",
       ]
     )
   end
@@ -145,13 +146,11 @@ platform :android do
   lane :testLibraries do |options|
     # Modules with product flavors expose per-flavor test tasks instead of `testDebugUnitTest`.
     # For those, run every flavor so both the standard and F-Droid sources are covered.
-    # Pure JVM modules (no Android variants) only have a plain `test` task.
-    module_test_tasks = {
+    flavored_module_tasks = {
       ":cxf" => ["testStandardDebugUnitTest", "testFdroidDebugUnitTest"],
-      ":detekt-rules" => ["test"],
     }
     tasks = options[:target].split(" ").flat_map { |mod|
-      (module_test_tasks[mod] || ["testDebugUnitTest"]).map { |task| "#{mod}:#{task}" }
+      (flavored_module_tasks[mod] || ["testDebugUnitTest"]).map { |task| "#{mod}:#{task}" }
     }
     gradle(tasks: tasks)
   end
