@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -51,6 +52,7 @@ internal fun BitwardenBaseButton(
     val containerColor = if (enabled) colors.containerColor else colors.disabledContainerColor
     val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
     CompositionLocalProvider(LocalRippleConfiguration provides NoFocusRippleConfig) {
         Surface(
             onClick = onClick,
@@ -58,7 +60,7 @@ internal fun BitwardenBaseButton(
             shape = shape,
             color = containerColor,
             contentColor = contentColor,
-            border = border?.toAnimatedBorder(isFocused = isFocused),
+            border = border?.toAnimatedBorder(isFocusedOrHovered = isFocused || isHovered),
             interactionSource = interactionSource,
             modifier = modifier.semantics { role = Role.Button },
         ) {
@@ -85,10 +87,10 @@ internal fun BitwardenBaseButton(
 
 @Composable
 private fun BorderStroke.toAnimatedBorder(
-    isFocused: Boolean,
+    isFocusedOrHovered: Boolean,
 ): BorderStroke {
     val borderWidth by animateDpAsState(
-        targetValue = if (isFocused) this.width * 2f else this.width,
+        targetValue = if (isFocusedOrHovered) this.width * 2f else this.width,
         animationSpec = focusAnimationSpec(),
     )
     return this.copy(width = borderWidth)

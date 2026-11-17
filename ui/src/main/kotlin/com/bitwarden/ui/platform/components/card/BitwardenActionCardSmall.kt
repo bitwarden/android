@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -57,8 +58,9 @@ fun BitwardenActionCardSmall(
     trailingContent: (@Composable BoxScope.() -> Unit)? = null,
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
     val borderWidth by animateDpAsState(
-        targetValue = if (isFocused) 2.dp else 1.dp,
+        targetValue = if (isFocused || isHovered) 2.dp else 1.dp,
         animationSpec = focusAnimationSpec(),
     )
     CompositionLocalProvider(LocalRippleConfiguration provides NoFocusRippleConfig) {
