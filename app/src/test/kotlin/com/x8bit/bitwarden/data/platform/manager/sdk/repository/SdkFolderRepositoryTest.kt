@@ -265,6 +265,23 @@ class SdkFolderRepositoryTest {
             vaultDiskSource.deleteAllFolders(userId = USER_ID)
         }
     }
+
+    @Test
+    fun `listIter should return every folder as one batch and then null`() = runTest {
+        val expectedFolder = mockk<Folder>()
+        val responseFolder = mockk<SyncResponseJson.Folder> {
+            every { toEncryptedSdkFolder() } returns expectedFolder
+        }
+        coEvery { vaultDiskSource.getFolders(userId = USER_ID) } returns listOf(responseFolder)
+
+        val iterator = sdkFolderRepository.listIter(batchSize = 1u)
+
+        assertEquals(listOf(expectedFolder), iterator.next())
+        assertNull(iterator.next())
+        coVerify(exactly = 1) {
+            vaultDiskSource.getFolders(userId = USER_ID)
+        }
+    }
 }
 
 private const val USER_ID: String = "userId"

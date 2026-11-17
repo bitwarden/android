@@ -39,6 +39,24 @@ interface CiphersDao {
     ): List<CipherEntity>
 
     /**
+     * Retrieves up to [limit] ciphers from the database for a given [userId], ordered by id,
+     * whose ids sort after [afterCipherId]. A `null` [afterCipherId] starts from the first cipher.
+     */
+    @Query(
+        """
+        SELECT * FROM ciphers
+        WHERE user_id = :userId AND (:afterCipherId IS NULL OR id > :afterCipherId)
+        ORDER BY id
+        LIMIT :limit
+        """,
+    )
+    suspend fun getCiphersPage(
+        userId: String,
+        afterCipherId: String?,
+        limit: Int,
+    ): List<CipherEntity>
+
+    /**
      * Retrieves all ciphers from the database with the given [cipherIds] for a given [userId].
      */
     @Query("SELECT * FROM ciphers WHERE user_id = :userId AND id IN (:cipherIds)")

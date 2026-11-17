@@ -97,6 +97,29 @@ class VaultDiskSourceImpl(
         }
     }
 
+    override suspend fun getCiphersPage(
+        userId: String,
+        afterCipherId: String?,
+        limit: Int,
+    ): List<SyncResponseJson.Cipher> {
+        val entities = ciphersDao.getCiphersPage(
+            userId = userId,
+            afterCipherId = afterCipherId,
+            limit = limit,
+        )
+        return withContext(context = dispatcherManager.default) {
+            entities
+                .map { entity ->
+                    async {
+                        json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
+                            string = entity.cipherJson,
+                        ) { Timber.e(it, "Failed to deserialize Cipher in Vault") }
+                    }
+                }
+                .awaitAll()
+        }
+    }
+
     override fun hasPersonalCiphersFlow(userId: String): Flow<Boolean> =
         ciphersDao.hasPersonalCiphersFlow(userId = userId)
 

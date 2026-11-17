@@ -141,6 +141,43 @@ class SdkCipherRepositoryTest {
     }
 
     @Test
+    fun `listIter should return an iterator that reads pages of the batch size`() = runTest {
+        val expectedCipher = mockk<Cipher>()
+        val responseCipher = mockk<SyncResponseJson.Cipher> {
+            every { id } returns "cipherId"
+            every { toEncryptedSdkCipher() } returns expectedCipher
+        }
+        coEvery {
+            vaultDiskSource.getCiphersPage(userId = USER_ID, afterCipherId = null, limit = 5)
+        } returns listOf(responseCipher)
+
+        val iterator = sdkCipherRepository.listIter(batchSize = 5u)
+
+        coVerify(exactly = 0) {
+            vaultDiskSource.getCiphersPage(userId = any(), afterCipherId = any(), limit = any())
+        }
+        assertEquals(listOf(expectedCipher), iterator.next())
+        assertNull(iterator.next())
+        coVerify(exactly = 1) {
+            vaultDiskSource.getCiphersPage(userId = USER_ID, afterCipherId = null, limit = 5)
+        }
+    }
+
+    @Test
+    fun `listIter should read pages of at least one cipher`() = runTest {
+        coEvery {
+            vaultDiskSource.getCiphersPage(userId = USER_ID, afterCipherId = null, limit = 1)
+        } returns emptyList()
+
+        val iterator = sdkCipherRepository.listIter(batchSize = 0u)
+
+        assertNull(iterator.next())
+        coVerify(exactly = 1) {
+            vaultDiskSource.getCiphersPage(userId = USER_ID, afterCipherId = null, limit = 1)
+        }
+    }
+
+    @Test
     fun `remove should call deleteCipher on the vaultDiskSource`() = runTest {
         val cipherId = "cipherId"
         coEvery { vaultDiskSource.deleteCipher(userId = USER_ID, cipherId = cipherId) } just runs

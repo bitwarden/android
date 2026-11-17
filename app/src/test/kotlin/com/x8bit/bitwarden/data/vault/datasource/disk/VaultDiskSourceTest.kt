@@ -107,6 +107,32 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getCiphersPage should return the user's ciphers after the given id in id order`() =
+        runTest {
+            ciphersDao.insertCiphers(
+                listOf(
+                    CIPHER_ENTITY.copy(id = "c"),
+                    CIPHER_ENTITY.copy(id = "a"),
+                    CIPHER_ENTITY.copy(id = "b", userId = "otherUserId"),
+                    CIPHER_ENTITY.copy(id = "d"),
+                ),
+            )
+
+            assertEquals(
+                listOf(CIPHER_1, CIPHER_1),
+                vaultDiskSource.getCiphersPage(USER_ID, afterCipherId = null, limit = 2),
+            )
+            assertEquals(
+                listOf(CIPHER_1),
+                vaultDiskSource.getCiphersPage(USER_ID, afterCipherId = "c", limit = 2),
+            )
+            assertEquals(
+                emptyList<SyncResponseJson.Cipher>(),
+                vaultDiskSource.getCiphersPage(USER_ID, afterCipherId = "d", limit = 2),
+            )
+        }
+
+    @Test
     fun `getSelectedCiphers should return selected CiphersDao ciphers`() = runTest {
         val cipherEntities = listOf(
             CIPHER_ENTITY,

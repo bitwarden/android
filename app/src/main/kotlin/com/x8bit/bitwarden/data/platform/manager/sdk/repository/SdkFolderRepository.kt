@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk.repository
 
+import com.bitwarden.sdk.FolderIterator
 import com.bitwarden.sdk.FolderRepository
 import com.bitwarden.vault.Folder
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolderResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A user-scoped implementation of a Bitwarden SDK [FolderRepository].
@@ -23,6 +25,18 @@ class SdkFolderRepository(
         vaultDiskSource
             .getFolders(userId = userId)
             .map { it.toEncryptedSdkFolder() }
+
+    /**
+     * Returns an iterator with every folder from [list] as one batch, since a user has few
+     * folders.
+     */
+    override fun listIter(batchSize: UInt): FolderIterator =
+        object : FolderIterator {
+            private val isDone = AtomicBoolean(false)
+
+            override suspend fun next(): List<Folder>? =
+                if (isDone.getAndSet(true)) null else list()
+        }
 
     override suspend fun set(id: String, value: Folder) {
         if (id != value.id) {

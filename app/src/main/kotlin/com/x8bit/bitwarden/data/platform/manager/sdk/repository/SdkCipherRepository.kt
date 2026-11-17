@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk.repository
 
+import com.bitwarden.sdk.CipherIterator
 import com.bitwarden.sdk.CipherRepository
 import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -25,6 +26,13 @@ class SdkCipherRepository(
         vaultDiskSource
             .getCiphers(userId = userId)
             .map { it.toEncryptedSdkCipher() }
+
+    override fun listIter(batchSize: UInt): CipherIterator =
+        SdkCipherIterator(
+            userId = userId,
+            vaultDiskSource = vaultDiskSource,
+            batchSize = batchSize.coerceIn(1u, Int.MAX_VALUE.toUInt()).toInt(),
+        )
 
     override suspend fun remove(id: String) {
         vaultDiskSource.deleteCipher(userId = userId, cipherId = id)

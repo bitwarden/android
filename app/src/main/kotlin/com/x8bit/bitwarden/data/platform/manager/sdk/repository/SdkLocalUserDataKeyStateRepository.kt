@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.sdk.repository
 
 import com.bitwarden.core.LocalUserDataKeyState
+import com.bitwarden.sdk.LocalUserDataKeyStateIterator
 import com.bitwarden.sdk.LocalUserDataKeyStateRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * An implementation of a Bitwarden SDK [LocalUserDataKeyStateRepository].
@@ -26,6 +28,18 @@ class SdkLocalUserDataKeyStateRepository(
             ?.accounts
             ?.mapNotNull { get(id = it.key) }
             .orEmpty()
+
+    /**
+     * Returns an iterator with every state from [list] as one batch, since there is at most one
+     * per account.
+     */
+    override fun listIter(batchSize: UInt): LocalUserDataKeyStateIterator =
+        object : LocalUserDataKeyStateIterator {
+            private val isDone = AtomicBoolean(false)
+
+            override suspend fun next(): List<LocalUserDataKeyState>? =
+                if (isDone.getAndSet(true)) null else list()
+        }
 
     override suspend fun remove(id: String) {
         authDiskSource.storeLocalUserDataKey(userId = id, wrappedKey = null)

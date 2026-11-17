@@ -25,6 +25,18 @@ interface VaultDiskSource {
     suspend fun getCiphers(userId: String): List<SyncResponseJson.Cipher>
 
     /**
+     * Retrieves up to [limit] ciphers from the data source for a given [userId], ordered by id,
+     * whose ids sort after [afterCipherId]. A `null` [afterCipherId] starts from the first cipher.
+     *
+     * Passing the id of the last cipher of a page as [afterCipherId] returns the next page.
+     */
+    suspend fun getCiphersPage(
+        userId: String,
+        afterCipherId: String?,
+        limit: Int,
+    ): List<SyncResponseJson.Cipher>
+
+    /**
      * Checks if the user has any personal ciphers (ciphers not belonging to an organization).
      *
      * This is an optimized query that checks only the indexed organizationId column

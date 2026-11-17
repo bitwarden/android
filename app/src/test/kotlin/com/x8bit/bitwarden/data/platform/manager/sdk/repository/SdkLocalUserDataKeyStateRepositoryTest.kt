@@ -163,6 +163,30 @@ class SdkLocalUserDataKeyStateRepositoryTest {
         assertEquals(WRAPPED_KEY, fakeAuthDiskSource.getLocalUserDataKey(userId = USER_ID))
         assertEquals(WRAPPED_KEY_2, fakeAuthDiskSource.getLocalUserDataKey(userId = USER_ID_2))
     }
+
+    @Test
+    fun `listIter should return every state as one batch and then null`() = runTest {
+        fakeAuthDiskSource.userState = UserStateJson(
+            activeUserId = USER_ID,
+            accounts = mapOf(
+                USER_ID to mockk(),
+                USER_ID_2 to mockk(),
+            ),
+        )
+        fakeAuthDiskSource.storeLocalUserDataKey(userId = USER_ID, wrappedKey = WRAPPED_KEY)
+        fakeAuthDiskSource.storeLocalUserDataKey(userId = USER_ID_2, wrappedKey = WRAPPED_KEY_2)
+
+        val iterator = repository.listIter(batchSize = 1u)
+
+        assertEquals(
+            listOf(
+                LocalUserDataKeyState(wrappedKey = WRAPPED_KEY),
+                LocalUserDataKeyState(wrappedKey = WRAPPED_KEY_2),
+            ),
+            iterator.next(),
+        )
+        assertNull(iterator.next())
+    }
 }
 
 private const val USER_ID: String = "userId"

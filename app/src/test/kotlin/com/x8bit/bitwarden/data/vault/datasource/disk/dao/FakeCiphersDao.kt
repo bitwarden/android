@@ -50,6 +50,16 @@ class FakeCiphersDao : CiphersDao {
     override suspend fun getAllCiphers(userId: String): List<CipherEntity> =
         storedCiphers.filter { it.userId == userId }
 
+    override suspend fun getCiphersPage(
+        userId: String,
+        afterCipherId: String?,
+        limit: Int,
+    ): List<CipherEntity> =
+        storedCiphers
+            .filter { it.userId == userId && (afterCipherId == null || it.id > afterCipherId) }
+            .sortedBy { it.id }
+            .take(limit)
+
     override suspend fun getSelectedCiphers(
         userId: String,
         cipherIds: List<String>,

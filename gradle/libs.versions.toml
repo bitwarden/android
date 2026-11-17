@@ -29,7 +29,7 @@ androidxRoom3 = "3.0.3"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.12.0"
-bitwardenSdk = "4.0.0-10292-62384724"
+bitwardenSdk = "4.0.0-10347-"
 coil = "3.6.3"
 crashlytics = "3.0.8"
 detekt = "1.23.8"
@@ -98,7 +98,7 @@ androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref 
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
-bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android.dev", version.ref = "bitwardenSdk" }
 coil-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
