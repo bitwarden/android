@@ -96,7 +96,7 @@ jobs:
           ram-size: 4096M
           force-avd-creation: true
           emulator-options: >-
-            -gpu swangle_indirect -no-window -noaudio -no-boot-anim -no-snapshot
+            -gpu swangle_indirect -feature -ReadColorBufferDma -no-window -noaudio -no-boot-anim -no-snapshot
             -camera-back none
           disable-animations: true
           # The runner splits the script on newlines and runs each line on its own. The first line
