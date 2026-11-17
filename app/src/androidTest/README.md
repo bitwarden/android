@@ -21,8 +21,8 @@ These are a proof of concept (QA-1407). Test method names carry the Testmo case 
 
 ## Running
 
-> **Warning:** the test orchestrator clears `com.x8bit.bitwarden.dev`'s data before every test.
-> Don't run these on a device whose debug install you want to keep.
+> **Warning:** every test starts by clearing `com.x8bit.bitwarden.dev`'s data. Don't run these on a
+> device whose debug install you want to keep.
 
 The tests read three instrumentation arguments:
 
@@ -32,8 +32,18 @@ The tests read three instrumentation arguments:
 | `BW_SEEDER_URL` | SeederApi base URL (https) |
 | `BW_SEEDER_TOKEN` | SeederApi Basic credential: base64 of `username:password` |
 
-Prefer `am instrument` so the token is never stored by Gradle (Gradle records
-`-Pandroid.testInstrumentationRunnerArguments.*` values in its execution history):
+Locally, the simplest way is the run script. Export the three values as environment variables, then:
+
+```shell
+./scripts/run-e2e-tests.sh                        # every e2e test
+./scripts/run-e2e-tests.sh --test VaultLoginTest  # one class (or Class#method)
+```
+
+It reinstalls the app and the tests, then runs each test in its own `am instrument` call after
+`pm clear`. `--serial` picks a device when more than one is connected.
+
+To run a single test by hand, use `am instrument` so the token is never stored by Gradle (Gradle
+records `-Pandroid.testInstrumentationRunnerArguments.*` values in its execution history):
 
 ```shell
 ./gradlew :app:installStandardDebug :app:installStandardDebugAndroidTest
@@ -49,6 +59,14 @@ adb shell am instrument -w \
 `./gradlew :app:connectedStandardDebugAndroidTest` with the same arguments also works and uses the
 orchestrator, but use it only on ephemeral machines (CI) for the reason above. Plain
 `connectedAndroidTest` also runs the F-Droid variant.
+
+## CI
+
+`.github/workflows/test-device.yml` runs the tests with `connectedStandardDebugAndroidTest` on an
+emulator, on manual dispatch and on weekdays at 05:00 UTC. Scheduled runs are skipped until the
+repository variable `E2E_SCHEDULE_ENABLED` is `true`. The workflow needs the `E2E_TEST_SERVER_URL`
+and `E2E_SEEDER_URL` secrets and the `seederapi-sh-ci-username` / `seederapi-sh-ci-password`
+entries in the `gh-org-bitwarden` key vault (BRE-2399), so it can't pass until CI can read them.
 
 The debug app logs HTTP bodies, and saved test outputs
 (`app/build/outputs/androidTest-results/`) include logcat with the seeded account's tokens. Don't

@@ -1,16 +1,117 @@
 name: Test Device
 
 on:
+  schedule:
+    # Weekdays at 05:00 UTC. Scheduled runs are skipped until E2E_SCHEDULE_ENABLED is "true".
+    - cron: "0 5 * * 1-5"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  _API_LEVEL: "37.0"
+  _EMULATOR_TARGET: google_apis_playstore
+
 jobs:
   test:
     name: Test Device
+    if: github.event_name != 'schedule' || vars.E2E_SCHEDULE_ENABLED == 'true'
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      id-token: write
+      packages: read
 
     steps:
-    - name: Placeholder step
-      run: echo "Placeholder workflow step"
+      - name: Check out repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "seederapi-sh-ci-username,seederapi-sh-ci-password"
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
+      # The repository and its logs are public, so the server under test is kept in secrets. A
+      # secret masks only its exact value; this also masks the host names on their own. Secrets are
+      # checked before the build so a missing one fails in seconds, not after the build.
+      - name: Check secrets, mask the test server hosts and build the Seeder token
+        env:
+          BW_SEEDER_PASSWORD: ${{ steps.get-kv-secrets.outputs.seederapi-sh-ci-password }}
+          BW_SEEDER_URL: ${{ secrets.E2E_SEEDER_URL }}
+          BW_SEEDER_USERNAME: ${{ steps.get-kv-secrets.outputs.seederapi-sh-ci-username }}
+          BW_TEST_SERVER_URL: ${{ secrets.E2E_TEST_SERVER_URL }}
+        run: |
+          for name in BW_TEST_SERVER_URL BW_SEEDER_URL BW_SEEDER_USERNAME BW_SEEDER_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is empty; check the E2E_* secrets and the Key Vault entries."
+              exit 1
+            fi
+          done
+          for url in "$BW_TEST_SERVER_URL" "$BW_SEEDER_URL"; do
+            host="${url#*://}"
+            host="${host%%/*}"
+            host="${host##*@}"
+            echo "::add-mask::${host%%:*}"
+          done
+          token=$(printf '%s:%s' "$BW_SEEDER_USERNAME" "$BW_SEEDER_PASSWORD" | base64 -w0)
+          echo "::add-mask::$token"
+          echo "BW_SEEDER_TOKEN=$token" >> "$GITHUB_ENV"
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Build the app and the tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :app:assembleStandardDebug :app:assembleStandardDebugAndroidTest
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # Runs through Gradle so the orchestrator clears app data between tests. Gradle keeps the
+      # instrumentation arguments in its execution history, which is fine on a throwaway runner.
+      # Test outputs are never uploaded: the debug app logs HTTP bodies, so logcat holds the seeded
+      # account's tokens, and this repository's artifacts are public.
+      - name: Test
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        env:
+          BW_SEEDER_URL: ${{ secrets.E2E_SEEDER_URL }}
+          BW_TEST_SERVER_URL: ${{ secrets.E2E_TEST_SERVER_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          api-level: ${{ env._API_LEVEL }}
+          target: ${{ env._EMULATOR_TARGET }}
+          arch: x86_64
+          profile: pixel_6a
+          cores: 4
+          ram-size: 4096M
+          force-avd-creation: true
+          emulator-options: >-
+            -gpu swiftshader_indirect -no-window -noaudio -no-boot-anim -no-snapshot
+            -camera-back none
+          disable-animations: true
+          script: >-
+            ./gradlew :app:connectedStandardDebugAndroidTest
+            -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e
+            -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL"
+            -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL"
+            -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"

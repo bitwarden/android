@@ -14,8 +14,9 @@ import org.junit.Rule
 
 /**
  * Base class for end-to-end tests against a real server: launches [MainActivity], provides a
- * [SeederClient], and deletes seeded data after each test. The test orchestrator clears app data
- * between tests, so every test starts from the accessibility disclosure.
+ * [SeederClient], and deletes seeded data after each test. Every test expects a cleared app and
+ * starts from the accessibility disclosure: the orchestrator clears app data in Gradle runs, and
+ * `scripts/run-e2e-tests.sh` runs `pm clear` before each test.
  */
 abstract class BaseE2eTest {
     /**
