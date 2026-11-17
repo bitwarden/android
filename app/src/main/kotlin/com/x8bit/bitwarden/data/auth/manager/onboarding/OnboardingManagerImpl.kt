@@ -21,51 +21,34 @@ internal class OnboardingManagerImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
+    /**
+     * The setup steps in the order they are shown, each with the live-state check that decides
+     * whether the step is still needed.
+     */
+    private val setupSteps: List<SetupStep> = listOf(
+        SetupStep(OnboardingStatus.ACCOUNT_LOCK_SETUP) { userId ->
+            biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false) &&
+                authDiskSource.getUserBiometricUnlockKey(userId = userId) == null
+        },
+        SetupStep(OnboardingStatus.AUTOFILL_SETUP) {
+            !settingsRepository.isAutofillEnabledStateFlow.value
+        },
+        SetupStep(OnboardingStatus.BROWSER_AUTOFILL_SETUP) {
+            settingsRepository.isAutofillEnabledStateFlow.value &&
+                browserThirdPartyAutofillEnabledManager
+                    .browserThirdPartyAutofillStatus
+                    .isDefaultBrowserAvailableAndDisabled
+        },
+    )
+
     override fun goToNextStep() {
         val userId = activeUserId ?: return
-        when (authDiskSource.getOnboardingStatus(userId = userId)) {
-            OnboardingStatus.ACCOUNT_LOCK_SETUP -> {
-                authDiskSource.storeOnboardingStatus(
-                    userId = userId,
-                    onboardingStatus = getOnboardingStatusAfterUnlockSetup(),
-                )
-            }
-
-            OnboardingStatus.AUTOFILL_SETUP -> {
-                authDiskSource.storeOnboardingStatus(
-                    userId = userId,
-                    onboardingStatus = getOnboardingStatusAfterAutofillSetup(),
-                )
-            }
-
-            OnboardingStatus.BROWSER_AUTOFILL_SETUP -> {
-                // Always go straight to the final step.
-                authDiskSource.storeOnboardingStatus(
-                    userId = userId,
-                    onboardingStatus = OnboardingStatus.FINAL_STEP,
-                )
-            }
-
-            OnboardingStatus.FINAL_STEP -> {
-                // Always go straight to completion.
-                authDiskSource.storeOnboardingStatus(
-                    userId = userId,
-                    onboardingStatus = OnboardingStatus.COMPLETE,
-                )
-            }
-
-            OnboardingStatus.COMPLETE -> {
-                // Don't do anything, we're done!
-            }
-
-            null -> {
-                // Let's set do the full setup.
-                authDiskSource.storeOnboardingStatus(
-                    userId = userId,
-                    onboardingStatus = getInitialOnboardingStatus(userId = userId),
-                )
-            }
+        val nextStatus = when (val current = authDiskSource.getOnboardingStatus(userId = userId)) {
+            OnboardingStatus.COMPLETE -> return
+            OnboardingStatus.FINAL_STEP -> OnboardingStatus.COMPLETE
+            else -> getNextStatus(userId = userId, current = current)
         }
+        authDiskSource.storeOnboardingStatus(userId = userId, onboardingStatus = nextStatus)
     }
 
     override fun initializeOnboardingFlow(userId: String) {
@@ -76,7 +59,7 @@ internal class OnboardingManagerImpl(
         }
         authDiskSource.storeOnboardingStatus(
             userId = userId,
-            onboardingStatus = getInitialOnboardingStatus(userId = userId),
+            onboardingStatus = getNextStatus(userId = userId, current = null),
         )
     }
 
@@ -86,59 +69,22 @@ internal class OnboardingManagerImpl(
         }
     }
 
-    private fun getOnboardingStatusAfterUnlockSetup(): OnboardingStatus {
-        val isAutofillSetup = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillNotSetup = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isDefaultBrowserAvailableAndDisabled
-        return when {
-            !isAutofillSetup -> {
-                // If Autofill is not configured, go to the autofill setup.
-                OnboardingStatus.AUTOFILL_SETUP
-            }
-
-            isBrowserAutofillNotSetup -> {
-                // If Autofill is configured but the default browser is not,
-                // go to the autofill browser setup.
-                OnboardingStatus.BROWSER_AUTOFILL_SETUP
-            }
-
-            else -> {
-                // Otherwise we are done, go to the final step.
-                OnboardingStatus.FINAL_STEP
-            }
-        }
+    /**
+     * The first step after [current] that is still needed. Only later steps are considered, so
+     * skipping a step never sends the user back to it.
+     */
+    private fun getNextStatus(userId: String, current: OnboardingStatus?): OnboardingStatus {
+        // A null (or unlisted) current status gives -1 + 1, which starts at the first step.
+        val startIndex = setupSteps.indexOfFirst { it.status == current } + 1
+        return setupSteps
+            .drop(n = startIndex)
+            .firstOrNull { it.isNeeded(userId) }
+            ?.status
+            ?: if (current == null) OnboardingStatus.COMPLETE else OnboardingStatus.FINAL_STEP
     }
 
-    private fun getOnboardingStatusAfterAutofillSetup(): OnboardingStatus {
-        val isAutofillSetup = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillNotSetup = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isDefaultBrowserAvailableAndDisabled
-        return if (isAutofillSetup && isBrowserAutofillNotSetup) {
-            // If Autofill is configured but the default browser is not,
-            // go to the autofill browser setup.
-            OnboardingStatus.BROWSER_AUTOFILL_SETUP
-        } else {
-            // Otherwise we are done, go to the final step.
-            OnboardingStatus.FINAL_STEP
-        }
-    }
-
-    private fun getInitialOnboardingStatus(userId: String): OnboardingStatus {
-        val isBiometricsSupported = biometricsSupportManager.isBiometricsSupported(
-            isDeviceCredentialAllowed = false,
-        )
-        val isBiometricsSetup = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
-        val isAutofillSetup = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillNotSetup = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isDefaultBrowserAvailableAndDisabled
-        return when {
-            isBiometricsSupported && !isBiometricsSetup -> OnboardingStatus.ACCOUNT_LOCK_SETUP
-            !isAutofillSetup -> OnboardingStatus.AUTOFILL_SETUP
-            isBrowserAutofillNotSetup -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
-            else -> OnboardingStatus.COMPLETE
-        }
-    }
+    private class SetupStep(
+        val status: OnboardingStatus,
+        val isNeeded: (userId: String) -> Boolean,
+    )
 }
