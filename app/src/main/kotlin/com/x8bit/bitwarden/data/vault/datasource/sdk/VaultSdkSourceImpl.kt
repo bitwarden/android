@@ -14,6 +14,7 @@ import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.Account
@@ -22,6 +23,7 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.CipherListItem
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.sdk.VaultClient
 import com.bitwarden.send.Send
@@ -48,11 +50,17 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegist
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.util.listStreamFlow
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -348,6 +356,24 @@ class VaultSdkSourceImpl(
                 .ciphers()
                 .decryptListWithFailures(cipherList)
         }
+
+    override fun decryptCipherListFlow(
+        userId: String,
+        chunkSize: UInt?,
+    ): Flow<Result<CipherListItem>> =
+        flow {
+            emitAll(
+                getClient(userId = userId)
+                    .vault()
+                    .ciphers()
+                    .listStreamFlow(chunkSize = chunkSize)
+                    .map { it.asSuccess() },
+            )
+        }
+            .catch { error ->
+                Timber.w(error)
+                emit(error.asFailure())
+            }
 
     override suspend fun decryptCollection(
         userId: String,

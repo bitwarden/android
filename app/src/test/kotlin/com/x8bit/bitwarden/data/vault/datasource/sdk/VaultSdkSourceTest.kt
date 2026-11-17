@@ -31,6 +31,8 @@ import com.bitwarden.fido.SilentlyDiscoverCredentialsException
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.CipherListItem
+import com.bitwarden.sdk.CipherListStream
 import com.bitwarden.sdk.CiphersClient
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientFido2
@@ -51,6 +53,7 @@ import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.DecryptException
+import com.bitwarden.vault.DecryptStreamException
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -75,6 +78,8 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -1667,6 +1672,74 @@ class VaultSdkSourceTest {
             )
             assertTrue(result.isFailure)
         }
+
+    @Test
+    fun `decryptCipherListFlow should emit each item of the user's stream as a success`() =
+        runTest {
+            val userId = "userId"
+            val items = listOf(mockk<CipherListItem>(), mockk<CipherListItem>())
+            val stream = mockk<CipherListStream> {
+                coEvery { nextChunk() } returnsMany listOf(items, null)
+                every { close() } just runs
+            }
+            every { ciphersClient.listStream(chunkSize = 10u) } returns stream
+
+            val result = vaultSdkSource
+                .decryptCipherListFlow(userId = userId, chunkSize = 10u)
+                .toList()
+
+            assertEquals(items.map { Result.success(it) }, result)
+            coVerify(exactly = 1) { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
+    fun `decryptCipherListFlow should emit a stream error as a final failure and complete`() =
+        runTest {
+            val item = mockk<CipherListItem>()
+            val error = BitwardenException.DecryptStream(mockk<DecryptStreamException>())
+            val stream = mockk<CipherListStream> {
+                coEvery { nextChunk() } returns listOf(item) andThenThrows error
+                every { close() } just runs
+            }
+            every { ciphersClient.listStream(chunkSize = null) } returns stream
+
+            val result = vaultSdkSource.decryptCipherListFlow(userId = "userId").toList()
+
+            assertEquals(listOf(Result.success(item), Result.failure(error)), result)
+        }
+
+    @Test
+    fun `decryptCipherListFlow should emit a client error as a failure and complete`() = runTest {
+        val error = IllegalStateException("No client")
+        coEvery { sdkClientManager.getOrCreateClient(userId = "userId") } throws error
+
+        val result = vaultSdkSource.decryptCipherListFlow(userId = "userId").toList()
+
+        assertEquals(listOf(Result.failure<CipherListItem>(error)), result)
+    }
+
+    @Test
+    fun `decryptCipherListFlow should stop reading chunks when the collector stops`() = runTest {
+        val items = listOf(mockk<CipherListItem>(), mockk<CipherListItem>())
+        val stream = mockk<CipherListStream> {
+            coEvery { nextChunk() } returns items
+            every { close() } just runs
+        }
+        every { ciphersClient.listStream(chunkSize = null) } returns stream
+
+        val result = vaultSdkSource.decryptCipherListFlow(userId = "userId").take(1).toList()
+
+        assertEquals(listOf(Result.success(items.first())), result)
+        coVerify(exactly = 1) { stream.nextChunk() }
+        verify(exactly = 1) { stream.close() }
+    }
+
+    @Test
+    fun `decryptCipherListFlow should not get the client until it is collected`() {
+        vaultSdkSource.decryptCipherListFlow(userId = "userId")
+
+        coVerify(exactly = 0) { sdkClientManager.getOrCreateClient(userId = any()) }
+    }
 
     @Test
     fun `makeUpdateKdf should return results when successful`() = runTest {

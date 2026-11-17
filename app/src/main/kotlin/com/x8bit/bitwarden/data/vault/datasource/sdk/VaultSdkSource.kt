@@ -17,6 +17,7 @@ import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.sdk.CipherListItem
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
@@ -37,6 +38,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2Cred
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.time.Instant
 
@@ -229,6 +231,24 @@ interface VaultSdkSource {
         userId: String,
         cipherList: List<Cipher>,
     ): Result<DecryptCipherListResult>
+
+    /**
+     * Decrypts every [Cipher] stored for the user with the given [userId] to a [CipherListItem],
+     * in the order of the cipher repository, reading and decrypting up to [chunkSize] ciphers at a
+     * time (the SDK default when `null`).
+     *
+     * Each item is emitted as a success. A cipher that fails to decrypt is a successful
+     * [CipherListItem.Failed] in its place. When the listing itself fails, for example because the
+     * vault is locked, the flow emits one failure as its last value and completes. The flow does
+     * not throw.
+     *
+     * Ciphers are read only as the flow is collected, and a collector that stops early stops the
+     * reading.
+     */
+    fun decryptCipherListFlow(
+        userId: String,
+        chunkSize: UInt? = null,
+    ): Flow<Result<CipherListItem>>
 
     /**
      * Decrypts a [Collection] for the user with the given [userId], returning a [CollectionView]
