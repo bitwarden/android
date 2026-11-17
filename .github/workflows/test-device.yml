@@ -11,7 +11,7 @@ permissions:
 
 env:
   _API_LEVEL: "37.0"
-  _EMULATOR_TARGET: google_apis_playstore
+  _EMULATOR_TARGET: google_apis_playstore_ps16k
   BW_TEST_SERVER_URL: https://qa-automation.sh.bitwarden.pw
   BW_SEEDER_URL: https://qa-automation.sh.bitwarden.pw/seeder
 
