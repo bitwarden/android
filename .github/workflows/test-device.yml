@@ -100,10 +100,12 @@ jobs:
             -camera-back none
           disable-animations: true
           # The runner splits the script on newlines and runs each line on its own. The first line
-          # waits for the package manager, which can come up after sys.boot_completed on API 37.
+          # waits for system_server to settle after the first boot; the last shows whether it
+          # restarted during the test run.
           script: |
-            timeout 300 sh -c 'until adb shell pm path android > /dev/null 2>&1; do sleep 5; done'
+            ./scripts/wait-for-stable-emulator.sh
             ./gradlew :app:connectedStandardDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"
+            adb shell pidof system_server || echo "system_server not running after the tests"
 
       # The connected test task can report success after failing to install, with no tests run, so
       # the result files are checked directly.
