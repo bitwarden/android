@@ -68,7 +68,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.ui.platform.components.card.AutofillPromptActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.SetUpAutofillActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.TurnOnBrowserAutofillActionCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
@@ -399,8 +400,7 @@ private fun AutofillCallToActionCard(
     ) {
         when (it) {
             CtaState.Autofill -> {
-                AutofillPromptActionCard(
-                    browserPackage = null,
+                SetUpAutofillActionCard(
                     onTurnOnClick = autoFillHandlers.onAutofillActionCardClick,
                     secondaryButton = BitwardenButtonData(
                         label = BitwardenString.having_trouble_get_help.asText(),
@@ -410,7 +410,7 @@ private fun AutofillCallToActionCard(
             }
 
             is CtaState.BrowserAutofill -> {
-                AutofillPromptActionCard(
+                TurnOnBrowserAutofillActionCard(
                     browserPackage = it.browserPackage,
                     onTurnOnClick = autoFillHandlers.onBrowserAutofillActionCardClick,
                     secondaryButton = BitwardenButtonData(

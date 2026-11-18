@@ -13,7 +13,8 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.components.card.AutofillPromptActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.SetUpAutofillActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.TurnOnBrowserAutofillActionCard
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
 /**
@@ -138,8 +139,7 @@ fun VaultActionCard(
         }
 
         VaultState.ActionCardState.SetUpAutofill -> {
-            AutofillPromptActionCard(
-                browserPackage = null,
+            SetUpAutofillActionCard(
                 onTurnOnClick = { vaultHandlers.actionCardClick(actionCardState) },
                 secondaryButton = BitwardenButtonData(
                     label = BitwardenString.dont_remind_me_again.asText(),
@@ -151,7 +151,7 @@ fun VaultActionCard(
         }
 
         is VaultState.ActionCardState.TurnOnBrowserAutofill -> {
-            AutofillPromptActionCard(
+            TurnOnBrowserAutofillActionCard(
                 browserPackage = actionCardState.browserPackage,
                 onTurnOnClick = { vaultHandlers.actionCardClick(actionCardState) },
                 secondaryButton = BitwardenButtonData(
