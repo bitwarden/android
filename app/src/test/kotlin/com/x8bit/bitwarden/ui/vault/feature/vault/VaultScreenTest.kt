@@ -1852,6 +1852,44 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `TurnOnBrowserAutofill action card opt out click should send OptOutClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPromptStatus = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+        )
+
+        composeTestRule.onNodeWithText(text = "Don’t remind me again").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.AutofillActionCardOptOutClick)
+        }
+    }
+
+    @Test
+    fun `TurnOnBrowserAutofill action card dismiss click should send DismissActionCardClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_VIEW_STATE,
+            autofillPromptStatus = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+        )
+
+        composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAction.DismissActionCardClick(
+                    VaultState.ActionCardState.TurnOnBrowserAutofill(
+                        browserPackage = BrowserPackage.CHROME_STABLE,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `UpgradePremium action card should display when eligible`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             premiumCard = PremiumCard.UPGRADE,
