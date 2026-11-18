@@ -97,6 +97,7 @@ org.jdom:jdom2:2.0.6=classpath
 org.jetbrains.intellij.deps:coverage-report:1.0.25=classpath
 org.jetbrains.intellij.deps:intellij-coverage-agent:1.0.765=classpath
 org.jetbrains.intellij.deps:intellij-coverage-reporter:1.0.765=classpath
+org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.4.21=classpath
 org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:2.4.21=classpath
 org.jetbrains.kotlin.plugin.parcelize:org.jetbrains.kotlin.plugin.parcelize.gradle.plugin:2.4.21=classpath
 org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.4.21=classpath
