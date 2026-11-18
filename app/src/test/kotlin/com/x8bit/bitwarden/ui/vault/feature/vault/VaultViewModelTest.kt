@@ -896,8 +896,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `actionCard should skip the autofill card when autofill is On or Unknown`() {
-        listOf(AutofillPromptStatus.On, AutofillPromptStatus.Unknown, null).forEach { prompt ->
+    fun `actionCard should skip the autofill card when there is no autofill prompt`() {
+        listOf(AutofillPromptStatus.On, null).forEach { prompt ->
             val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
                 autofillPromptStatus = prompt,
                 premiumCard = PremiumCard.UPGRADE,

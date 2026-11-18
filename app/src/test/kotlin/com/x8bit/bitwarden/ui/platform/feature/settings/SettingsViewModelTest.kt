@@ -208,7 +208,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
             AutofillPromptStatus.AutofillOff to 1,
             AutofillPromptStatus.BrowserOff(browserPackage = BrowserPackage.CHROME_STABLE) to 1,
             AutofillPromptStatus.On to 0,
-            AutofillPromptStatus.Unknown to 0,
         )
             .forEach { (status, expectedCount) ->
                 mutableAutofillPromptStatusFlow.value = status

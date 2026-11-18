@@ -21,15 +21,6 @@ data class BrowserThirdPartyAutofillStatus(
     val defaultBrowserPackageName: String?,
 ) {
     /**
-     * The total number of available browsers.
-     */
-    val availableCount: Int
-        get() = (if (braveStableStatusData.isAvailable) 1 else 0) +
-            (if (chromeStableStatusData.isAvailable) 1 else 0) +
-            (if (chromeBetaChannelStatusData.isAvailable) 1 else 0) +
-            (if (vivaldiStableChannelStatusData.isAvailable) 1 else 0)
-
-    /**
      * Whether any of the available browsers have third party autofill disabled.
      */
     val isAnyIsAvailableAndDisabled: Boolean
@@ -53,15 +44,11 @@ data class BrowserThirdPartyAutofillStatus(
      * cannot be determined.
      */
     val isDefaultBrowserAvailableAndDisabled: Boolean
-        get() {
-            val browserPackage = defaultBrowserPackage ?: return false
-            return when (browserPackage) {
-                BrowserPackage.BRAVE_RELEASE -> braveStableStatusData.isAvailableButDisabled
-                BrowserPackage.CHROME_STABLE -> chromeStableStatusData.isAvailableButDisabled
-                BrowserPackage.CHROME_BETA -> chromeBetaChannelStatusData.isAvailableButDisabled
-                BrowserPackage.VIVALDI_STABLE -> {
-                    vivaldiStableChannelStatusData.isAvailableButDisabled
-                }
-            }
+        get() = when (defaultBrowserPackage) {
+            BrowserPackage.BRAVE_RELEASE -> braveStableStatusData.isAvailableButDisabled
+            BrowserPackage.CHROME_STABLE -> chromeStableStatusData.isAvailableButDisabled
+            BrowserPackage.CHROME_BETA -> chromeBetaChannelStatusData.isAvailableButDisabled
+            BrowserPackage.VIVALDI_STABLE -> vivaldiStableChannelStatusData.isAvailableButDisabled
+            null -> false
         }
 }

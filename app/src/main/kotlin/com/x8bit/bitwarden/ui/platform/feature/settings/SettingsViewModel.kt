@@ -446,7 +446,5 @@ private fun AutofillPromptStatus.toAutofillBadgeCount(): Int =
         is AutofillPromptStatus.BrowserOff,
             -> 1
 
-        AutofillPromptStatus.On,
-        AutofillPromptStatus.Unknown,
-            -> 0
+        AutofillPromptStatus.On -> 0
     }

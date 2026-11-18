@@ -349,7 +349,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
                 browserPackage = BrowserPackage.CHROME_STABLE,
             ) to CtaState.BrowserAutofill(browserPackage = BrowserPackage.CHROME_STABLE),
             AutofillPromptStatus.On to CtaState.Default,
-            AutofillPromptStatus.Unknown to CtaState.Default,
         )
             .forEach { (prompt, expected) ->
                 assertEquals(expected, DEFAULT_STATE.copy(autofillPromptStatus = prompt).ctaState)

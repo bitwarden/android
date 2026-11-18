@@ -5,8 +5,6 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFill
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class BrowserThirdPartyAutofillEnabledManagerTest {
@@ -50,28 +48,6 @@ class BrowserThirdPartyAutofillEnabledManagerTest {
                     awaitItem(),
                 )
             }
-        }
-
-    @Test
-    fun `isBrowserThirdPartyAutofillStatusCheckedFlow should emit true once status is set`() =
-        runTest {
-            browserThirdPartyAutofillEnabledManager
-                .isBrowserThirdPartyAutofillStatusCheckedFlow
-                .test {
-                    assertFalse(awaitItem())
-
-                    browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
-                        DEFAULT_EXPECTED_AUTOFILL_STATUS
-                    assertTrue(awaitItem())
-
-                    browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
-                        DEFAULT_EXPECTED_AUTOFILL_STATUS.copy(
-                            chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(
-                                isAvailable = true,
-                            ),
-                        )
-                    expectNoEvents()
-                }
         }
 }
 

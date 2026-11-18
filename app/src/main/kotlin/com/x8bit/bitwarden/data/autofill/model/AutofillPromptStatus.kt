@@ -9,12 +9,6 @@ import kotlinx.parcelize.Parcelize
  */
 sealed class AutofillPromptStatus : Parcelable {
     /**
-     * The device has not been checked yet, so no prompt should be shown.
-     */
-    @Parcelize
-    data object Unknown : AutofillPromptStatus()
-
-    /**
      * Bitwarden is the selected autofill service and the default browser needs no setup.
      */
     @Parcelize

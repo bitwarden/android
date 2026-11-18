@@ -1999,7 +1999,6 @@ data class VaultState(
             }
 
             AutofillPromptStatus.On,
-            AutofillPromptStatus.Unknown,
             null,
                 -> null
         }

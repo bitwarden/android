@@ -4,6 +4,7 @@ import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,36 +32,37 @@ class AutofillPromptManagerImpl(
 ) : AutofillPromptManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    // Both values start as placeholders that read as "off", so stay Unknown until each has been
-    // set at least once. This does not depend on the order the two values are set in.
+    /**
+     * No "not checked yet" state is needed here. Autofill is checked when `MainActivity` is
+     * created, before anything is drawn. The browser check can land slightly later, but until
+     * then the placeholder reports no browsers as available, which maps to
+     * [AutofillPromptStatus.On] and shows no prompt.
+     */
     override val autofillPromptStatusFlow: StateFlow<AutofillPromptStatus> =
         combine(
-            autofillEnabledManager.isAutofillEnabledCheckedFlow,
-            browserThirdPartyAutofillEnabledManager.isBrowserThirdPartyAutofillStatusCheckedFlow,
             autofillEnabledManager.isAutofillEnabledStateFlow,
             browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatusFlow,
-        ) { isAutofillChecked, isBrowserChecked, isAutofillEnabled, browserStatus ->
-            when {
-                !isAutofillChecked || !isBrowserChecked -> AutofillPromptStatus.Unknown
-                !isAutofillEnabled -> AutofillPromptStatus.AutofillOff
-                else -> {
-                    browserStatus
-                        .defaultBrowserPackage
-                        ?.takeIf { browserStatus.isDefaultBrowserAvailableAndDisabled }
-                        ?.let { AutofillPromptStatus.BrowserOff(browserPackage = it) }
-                        ?: AutofillPromptStatus.On
-                }
-            }
+        ) { isAutofillEnabled, browserStatus ->
+            toAutofillPromptStatus(
+                isAutofillEnabled = isAutofillEnabled,
+                browserStatus = browserStatus,
+            )
         }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
-                initialValue = AutofillPromptStatus.Unknown,
+                initialValue = toAutofillPromptStatus(
+                    isAutofillEnabled = autofillEnabledManager.isAutofillEnabled,
+                    browserStatus = browserThirdPartyAutofillEnabledManager
+                        .browserThirdPartyAutofillStatus,
+                ),
             )
 
-    // The foreground flow is only here to re-run this block. The snooze expires with the
-    // passage of time, which nothing else emits for, so each return to the app re-checks it
-    // against the clock.
+    /**
+     * The foreground flow is only here to re-run this block. The snooze expires with the
+     * passage of time, which nothing else emits for, so each return to the app re-checks it
+     * against the clock.
+     */
     override val vaultAutofillPromptFlow: StateFlow<AutofillPromptStatus?> =
         combine(
             autofillPromptStatusFlow,
@@ -90,4 +92,20 @@ class AutofillPromptManagerImpl(
     override fun optOutOfVaultPrompt() {
         settingsDiskSource.isAutofillBannerOptedOut = true
     }
+}
+
+/**
+ * Turning on system autofill comes first, so [AutofillPromptStatus.AutofillOff] takes priority
+ * over [AutofillPromptStatus.BrowserOff].
+ */
+private fun toAutofillPromptStatus(
+    isAutofillEnabled: Boolean,
+    browserStatus: BrowserThirdPartyAutofillStatus,
+): AutofillPromptStatus {
+    if (!isAutofillEnabled) return AutofillPromptStatus.AutofillOff
+    return browserStatus
+        .defaultBrowserPackage
+        ?.takeIf { browserStatus.isDefaultBrowserAvailableAndDisabled }
+        ?.let { AutofillPromptStatus.BrowserOff(browserPackage = it) }
+        ?: AutofillPromptStatus.On
 }

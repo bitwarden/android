@@ -344,9 +344,7 @@ data class AutoFillState(
                 CtaState.BrowserAutofill(browserPackage = status.browserPackage)
             }
 
-            AutofillPromptStatus.On,
-            AutofillPromptStatus.Unknown,
-                -> CtaState.Default
+            AutofillPromptStatus.On -> CtaState.Default
         }
 
     /**

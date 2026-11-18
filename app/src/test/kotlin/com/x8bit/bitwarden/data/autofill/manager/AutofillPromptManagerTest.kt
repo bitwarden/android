@@ -31,32 +31,30 @@ class AutofillPromptManagerTest {
     private val autofillPromptManager: AutofillPromptManager = createManager(clock = FIXED_CLOCK)
 
     @Test
-    fun `autofillPromptStatusFlow should be Unknown before anything is checked`() {
+    fun `autofillPromptStatusFlow should start from the current device values`() {
+        setDeviceStatus(
+            isAutofillEnabled = true,
+            browserStatus = createStatus(
+                defaultBrowserPackageName = BrowserPackage.CHROME_STABLE.packageName,
+                chromeStable = AVAILABLE_DISABLED,
+            ),
+        )
+
+        val manager = createManager(clock = FIXED_CLOCK)
+
         assertEquals(
-            AutofillPromptStatus.Unknown,
-            autofillPromptManager.autofillPromptStatusFlow.value,
+            AutofillPromptStatus.BrowserOff(browserPackage = BrowserPackage.CHROME_STABLE),
+            manager.autofillPromptStatusFlow.value,
         )
     }
 
     @Test
-    fun `autofillPromptStatusFlow should be Unknown when only autofill has been checked`() {
-        autofillEnabledManager.isAutofillEnabled = false
+    fun `autofillPromptStatusFlow should be On while the browser status is the placeholder`() {
+        // The real placeholder, before the first browser check lands.
+        autofillEnabledManager.isAutofillEnabled = true
 
         assertEquals(
-            AutofillPromptStatus.Unknown,
-            autofillPromptManager.autofillPromptStatusFlow.value,
-        )
-    }
-
-    @Test
-    fun `autofillPromptStatusFlow should be Unknown when only the browser has been checked`() {
-        browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus = createStatus(
-            defaultBrowserPackageName = BrowserPackage.CHROME_STABLE.packageName,
-            chromeStable = AVAILABLE_DISABLED,
-        )
-
-        assertEquals(
-            AutofillPromptStatus.Unknown,
+            AutofillPromptStatus.On,
             autofillPromptManager.autofillPromptStatusFlow.value,
         )
     }
@@ -133,18 +131,15 @@ class AutofillPromptManagerTest {
     fun `autofillPromptStatusFlow should update as autofill and browser status change`() =
         runTest {
             autofillPromptManager.autofillPromptStatusFlow.test {
-                assertEquals(AutofillPromptStatus.Unknown, awaitItem())
+                assertEquals(AutofillPromptStatus.AutofillOff, awaitItem())
 
-                // Browser checked first: still Unknown until autofill is checked too.
+                // Autofill off still takes priority over the browser.
                 browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     createStatus(
                         defaultBrowserPackageName = BrowserPackage.CHROME_STABLE.packageName,
                         chromeStable = AVAILABLE_DISABLED,
                     )
                 expectNoEvents()
-
-                autofillEnabledManager.isAutofillEnabled = false
-                assertEquals(AutofillPromptStatus.AutofillOff, awaitItem())
 
                 autofillEnabledManager.isAutofillEnabled = true
                 assertEquals(
@@ -162,11 +157,6 @@ class AutofillPromptManagerTest {
                 assertEquals(AutofillPromptStatus.On, awaitItem())
             }
         }
-
-    @Test
-    fun `vaultAutofillPromptFlow should be null while the status is Unknown`() {
-        assertNull(autofillPromptManager.vaultAutofillPromptFlow.value)
-    }
 
     @Test
     fun `vaultAutofillPromptFlow should be null when autofill is On`() {
