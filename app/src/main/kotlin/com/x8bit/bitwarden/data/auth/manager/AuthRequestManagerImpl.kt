@@ -4,6 +4,8 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.data.manager.appstate.AppStateManager
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.NewAuthRequestService
@@ -27,6 +29,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -53,6 +56,7 @@ class AuthRequestManagerImpl(
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val pushManager: PushManager,
+    private val appStateManager: AppStateManager,
 ) : AuthRequestManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -97,6 +101,9 @@ class AuthRequestManagerImpl(
         var isComplete = false
         while (currentCoroutineContext().isActive && !isComplete) {
             delay(timeMillis = PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS)
+            // Network requests made while backgrounded are likely to fail (e.g. connectivity is
+            // restricted), so hold off polling until the app is foregrounded again.
+            appStateManager.appForegroundStateFlow.first { it == AppForegroundState.FOREGROUNDED }
             newAuthRequestService
                 .getAuthRequestUpdate(
                     requestId = authRequest.id,
