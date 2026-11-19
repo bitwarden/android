@@ -309,6 +309,16 @@ interface AuthDiskSource : AppIdProvider {
     fun storeEncryptedPin(userId: String, encryptedPin: String?)
 
     /**
+     * Retrieves the number of digits in the PIN for the given [userId].
+     */
+    fun getPinLength(userId: String): Int?
+
+    /**
+     * Stores the number of digits in the PIN for the given [userId].
+     */
+    fun storePinLength(userId: String, pinLength: Int?)
+
+    /**
      * Gets the organization keys for the given [userId] in the form of a mapping from organization
      * ID to encrypted organization key.
      */

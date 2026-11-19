@@ -11,10 +11,10 @@ import androidx.navigation3.ui.NavDisplay
 import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.platform.components.biometrics.BiometricChanges
-import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
-import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.navigation.NavigationController
 import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
 import com.bitwarden.ui.platform.navigation.util.rememberNavigationController

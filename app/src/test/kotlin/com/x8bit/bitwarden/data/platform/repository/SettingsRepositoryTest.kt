@@ -1212,6 +1212,7 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
+            storePinLength(userId = USER_ID, pinLength = 4)
         }
 
         settingsRepository.clearUnlockPin()
@@ -1229,6 +1230,7 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
+            assertPinLength(userId = USER_ID, pinLength = null)
         }
     }
 

@@ -5,6 +5,8 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.manager.appstate.FakeAppStateManager
+import com.bitwarden.data.manager.appstate.model.AppForegroundState
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.model.AuthRequestsResponseJson
 import com.bitwarden.network.model.KdfTypeJson
@@ -58,6 +60,9 @@ class AuthRequestManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val mutablePasswordlessRequestFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
+    private val fakeAppStateManager = FakeAppStateManager(
+        appForegroundState = AppForegroundState.FOREGROUNDED,
+    )
     private val pushManager: PushManager = mockk {
         every { passwordlessRequestFlow } returns mutablePasswordlessRequestFlow
     }
@@ -70,6 +75,7 @@ class AuthRequestManagerTest {
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
         pushManager = pushManager,
+        appStateManager = fakeAppStateManager,
     )
 
     @Suppress("MaxLineLength")
@@ -170,6 +176,89 @@ class AuthRequestManagerTest {
                 .test {
                     assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
                     assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(
+                        CreateAuthRequestResult.Success(
+                            authRequest = authRequest.copy(requestApproved = true),
+                            privateKey = authRequestResponse.privateKey,
+                            accessCode = authRequestResponse.accessCode,
+                        ),
+                        awaitItem(),
+                    )
+                    awaitComplete()
+                }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates should not poll while the app is backgrounded and should resume polling once foregrounded`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val pendingJson = AuthRequestsResponseJson.AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = Instant.parse("2024-09-13T00:00:00Z"),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+            )
+            val authRequest = AuthRequest(
+                id = pendingJson.id,
+                publicKey = pendingJson.publicKey,
+                platform = pendingJson.platform,
+                ipAddress = pendingJson.ipAddress,
+                key = pendingJson.key,
+                masterPasswordHash = pendingJson.masterPasswordHash,
+                creationDate = pendingJson.creationDate,
+                responseDate = pendingJson.responseDate,
+                requestApproved = false,
+                originUrl = pendingJson.originUrl,
+                fingerprint = authRequestResponse.fingerprint,
+            )
+            fakeAppStateManager.appForegroundState = AppForegroundState.BACKGROUNDED
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns authRequestResponse.asSuccess()
+            coEvery {
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequestResponse.publicKey,
+                    deviceId = fakeAuthDiskSource.uniqueAppId,
+                    accessCode = authRequestResponse.accessCode,
+                    fingerprint = authRequestResponse.fingerprint,
+                    authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
+                )
+            } returns pendingJson.asSuccess()
+            coEvery {
+                newAuthRequestService.getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                    isSso = false,
+                )
+            } returns pendingJson.copy(requestApproved = true).asSuccess()
+
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.OTHER_DEVICE,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+
+                    // Well past several polling intervals while backgrounded.
+                    testScheduler.advanceTimeBy(delayTimeMillis = 60_000L)
+                    testScheduler.runCurrent()
+                    coVerify(exactly = 0) {
+                        newAuthRequestService.getAuthRequestUpdate(any(), any(), any())
+                    }
+                    expectNoEvents()
+
+                    fakeAppStateManager.appForegroundState = AppForegroundState.FOREGROUNDED
+
                     assertEquals(
                         CreateAuthRequestResult.Success(
                             authRequest = authRequest.copy(requestApproved = true),

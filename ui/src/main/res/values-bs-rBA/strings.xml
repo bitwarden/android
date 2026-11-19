@@ -4,7 +4,6 @@
     <string name="add_folder">Dodaj folder</string>
     <string name="add_item">Dodaj stavku</string>
     <string name="an_error_has_occurred">Došlo je do greške.</string>
-    <string name="apply">Primijeni</string>
     <string name="back">Nazad</string>
     <string name="cancel">Otkaži</string>
     <string name="copy">Kopiraj</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Folder je izbrisan.</string>
     <string name="folder_none">Nema foldera</string>
     <string name="folder_updated">Folder ažuriran.</string>
-    <string name="folders">Folderi</string>
     <string name="hide">Sakrij</string>
     <string name="internet_connection_required_message">Molimo da se povežete na internet prije nego što nastavite.</string>
     <string name="internet_connection_required_title">Neophodna je internet veza</string>
@@ -209,7 +207,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="copy_totp">Iskopirajte TOTP</string>
     <string name="copy_totp_automatically_description">Ako je za Vašu prijavu priložen autentifikacioni ključ, TOTP verifikacioni kod se automatski kopira u Vašu memoriju kad god automatski popunite prijavu.</string>
     <string name="copy_totp_automatically">Kopiraj TOTP (autentifikacijski kod) automatski</string>
-    <string name="premium_required">Za korišćenje ove funkcije potrebno je premium članstvo.</string>
     <string name="attachment_deleted">Prilog izbrisan</string>
     <string name="attachments_are_a_premium_feature">Privici su Premium značajka. Vaš trenutni plan ne uključuje pristup ovoj značajki.</string>
     <string name="choose_file">Odaberite datoteku</string>
@@ -292,9 +289,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="icons_url">URL adresa servera ikona</string>
     <string name="vault_is_locked">Trezor je zaključan</string>
     <string name="go_to_my_vault">Idi na moj trezor</string>
-    <string name="collections">Zbirke</string>
     <string name="shared_folders">Dijeljene fascikle</string>
-    <string name="no_items_collection">Nema stavki u ovoj kolekciji.</string>
     <string name="there_are_no_items_in_this_shared_folder">Nema stavki u ovoj dijeljenoj fascikli.</string>
     <string name="no_items_folder">U ovom folderu nema stavki.</string>
     <string name="no_items_trash">U smeću nema predmeta.</string>
@@ -349,16 +344,11 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="type">Vrsta</string>
     <string name="move_down">Pomjeri dole</string>
     <string name="move_up">Pomjeri gore</string>
-    <string name="owner">Vlasnik</string>
-    <string name="no_collections_to_list">Nema kolekcija za prikazati.</string>
     <string name="there_are_no_shared_folders_to_list">Nema dijeljenih fascikli za prikaz.</string>
     <string name="moved_item_to_org">%1$s premješteno u %2$s.</string>
     <string name="select_one_collection">Morate odabrati barem jednu kategoriju</string>
     <string name="you_must_select_at_least_one_shared_folder">Morate odabrati barem jednu dijeljenu fasciklu.</string>
     <string name="share">Podijeli</string>
-    <string name="move_to_organization">Premjesti u organizaciju</string>
-    <string name="no_orgs_to_list">Nema organizacija za prikaz.</string>
-    <string name="move_to_org_desc">Odaberi organizaciju u koju želiš premjestiti ovu stavku. Premještanje prenosi vlasništvo stavke na organizaciju. Nakon premještanja više nećeš biti izravni vlasnik ove stavke.</string>
     <string name="no_vaults_to_list">Nema trezora za prikaz.</string>
     <string name="move_to_vault_desc">Odaberite trezor u koji želite premjestiti ovu stavku. Premještanje u drugi trezor prenosi vlasništvo nad stavkom na tu organizaciju. Nakon što se premjesti, više nećete biti izravni vlasnik ove stavke.</string>
     <string name="number_of_words">Broj riječi</string>
@@ -473,7 +463,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="hide_text_by_default">Zadano sakrij tekst pri pristupanju Send-u</string>
     <string name="type_file">Datoteka</string>
     <string name="deletion_date">Datum brisanja</string>
-    <string name="deletion_time">Vrijeme brisanja</string>
     <string name="deletion_date_info">Ovaj Send će biti trajno izbrisan na odabrani datum i vrijeme.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Ko može vidjeti</string>
@@ -608,7 +597,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Jeste li sigurni da želite uključiti snimanje ekrana?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Pokušavate li se prijaviti?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tip uređaja</string>
@@ -669,7 +657,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Nema zahtjeva na čekanju</string>
     <string name="enable_camer_permission_to_use_the_scanner">Omogućite dozvolu za korištenje kamere da bi koristili skener</string>
     <string name="language">Jezik</string>
-    <string name="language_change_x_description">Jezik je promijenjen u %1$s. Ponovo pokrenite aplikaciju da biste vidjeli promjenu</string>
     <string name="default_system">Zadano (Sistem)</string>
     <string name="weak_master_password">Slaba glavna lozinka</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Slaba lozinka prepoznata. Koristite jaku lozinku za zaštitu Vašeg računa. Da li ste sigurni da želite koristiti slabu lozinku?</string>
@@ -983,7 +970,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacija s lozinkom nije uspjela jer odabrana stavka ne postoji.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operacija s lozinkom nije uspjela jer odabrana stavka nema važeću lozinku.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operacija s lozinkom nije uspjela jer nijedna stavka nije odabrana.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operacija s vjerodajnicama nije uspjela jer je zahtjev nevažeći.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operacija s vjerodajnicama nije uspjela jer zahtjev nije podržan.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacija s vjerodajnicama nije uspjela jer je prekoračen broj pokušaja verifikacije korisnika.</string>
@@ -1064,7 +1050,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Saznajte više o privilegiranim aplikacijama</string>
     <string name="privileged_apps">Privilegirane aplikacije</string>
     <string name="unrecognized_browser">Neprepoznati preglednik</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Saznajte više o korištenju pristupnih ključeva s Bitwarden.</string>
     <string name="all_trusted_apps">Sve pouzdane aplikacije</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Jeste li sigurni da želite prestati vjerovati %s?</string>
     <string name="installed_apps">Instalirane aplikacije</string>
@@ -1081,8 +1066,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Verifikacijski kod dodan</string>
     <string name="refresh_period">Period osvježavanja</string>
     <string name="algorithm">Algoritam</string>
-    <string name="advanced">Napredno</string>
-    <string name="collapse_advanced_options">Skupi napredne opcije</string>
     <string name="number_of_digits">Broj cifara</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekunda</item>
@@ -1167,7 +1150,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Odaberite karticu za %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Napredne opcije</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Više o detekciji podudaranja</annotation></string>
     <string name="keep_your_credential_secure">Čuvajte svoje vjerodajnice sigurnima</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Saznajte više o tome kako zadržati sigurnost vjerodajnica pri korištenju „%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Jeste li sigurni da želite koristiti „%1$s”?</string>
@@ -1211,7 +1193,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Uvezite lozinke, pristupne ključeve i druge tipove stavki iz svog Bitwarden trezora.</string>
     <string name="items_to_import">Stavke za uvoz</string>
     <string name="exporting_items">Izvoz stavki…</string>
-    <string name="export_failed">Izvoz nije uspio</string>
     <string name="passwords">Lozinke</string>
     <string name="passkeys">Pristupni ključevi</string>
     <string name="why_is_this_step_required">Zašto je ovaj korak potreban?</string>
@@ -1231,7 +1212,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Prenesi stavke u %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> zahtijeva da sve stavke budu u vlasništvu organizacije radi sigurnosti i usklađenosti. Kliknite Prihvati za prijenos vlasništva nad vašim stavkama. <annotation link="learnMore">Saznajte više</annotation></string>
     <string name="decline_and_leave">Odbij i napusti</string>
-    <string name="why_am_i_seeing_this">Zašto vidim ovo?</string>
     <string name="migrating_items_to_x">Migracija stavki u %s</string>
     <string name="failed_to_migrate_items_to_x">Migracija stavki u %s nije uspjela</string>
     <string name="search_archive">Pretraži arhivu</string>
@@ -1249,6 +1229,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Arhiviranje stavki je Premium značajka. Vaš trenutni plan ne uključuje pristup ovoj značajki.</string>
     <string name="totp_is_a_premium_feature">Autentifikacijski ključ (TOTP) je Premium značajka. Vaš trenutni plan ne uključuje pristup ovoj značajki.</string>
     <string name="upgrade_to_premium">Nadogradi na Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Za upravljanje svojom Premium pretplatom, morat ćete se prijaviti na svoj web trezor na računaru.</string>
     <string name="unlock_advanced_security_features">Otključajte napredne sigurnosne značajke</string>
@@ -1330,7 +1311,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arhiviraj stavku</string>
     <string name="once_archived_this_item_will_be_excluded">Nakon arhiviranja, ova stavka će biti isključena iz rezultata pretraživanja i prijedloga za automatsko popunjavanje.</string>
     <string name="pricing_unavailable">Cijene nedostupne</string>
-    <string name="current_plan">Trenutni plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Iznos naplate</string>
     <string name="storage_cost">Trošak pohrane</string>
@@ -1407,8 +1387,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Zemlja izdavanja</string>
     <string name="issuing_state">Država / provincija izdavanja</string>
     <string name="license_class">Klasa dozvole</string>
-    <string name="surname">Prezime</string>
-    <string name="given_name">Ime</string>
     <string name="date_of_birth">Datum rođenja</string>
     <string name="nationality">Nacionalnost</string>
     <string name="passport_type">Tip pasoša</string>

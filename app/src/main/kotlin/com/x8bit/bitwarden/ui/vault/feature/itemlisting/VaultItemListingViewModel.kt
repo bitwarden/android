@@ -39,6 +39,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -107,7 +108,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -161,9 +162,16 @@ class VaultItemListingViewModel @AssistedInject constructor(
     private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val activeAccountSummary = userState.toActiveAccountSummary()
-        val accountSummaries = userState.toAccountSummaries()
+        val userState = authRepository.userStateFlow.value
+        val accountSummaries = userState?.toAccountSummaries().orEmpty().toImmutableList()
+        val activeAccount = userState?.activeAccount ?: run {
+            // We use this empty account to avoid a crash that can occur during a race condition.
+            // The state-based navigation brought us here but the UserState has now been set to
+            // null, we just need to wait here a short while longer and state-based navigation will
+            // get us out of here.
+            UserState.EMPTY_ACCOUNT
+        }
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val providerCreateCredentialRequest = specialCircumstance?.toCreateCredentialRequestOrNull()
         val providerGetCredentialsRequest = specialCircumstance?.toGetCredentialsRequestOrNull()
@@ -187,13 +195,13 @@ class VaultItemListingViewModel @AssistedInject constructor(
             policyDisablesSend = policyManager.getEffectiveSendPolicy().disableSend,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
-            hasMasterPassword = userState.activeAccount.hasMasterPassword,
+            hasMasterPassword = activeAccount.hasMasterPassword,
             totpData = specialCircumstance?.toTotpDataOrNull(),
             createCredentialRequest = providerCreateCredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertCredentialRequest,
             providerGetPasswordCredentialRequest = passwordGetCredentialRequest,
             getCredentialsRequest = providerGetCredentialsRequest,
-            isPremium = userState.activeAccount.isPremium,
+            isPremium = activeAccount.isPremium,
             isRefreshing = false,
         )
     },

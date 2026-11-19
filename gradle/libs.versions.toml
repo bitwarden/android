@@ -11,7 +11,7 @@ targetSdk = "37"
 minSdk = "29"
 
 # Dependency Versions
-androidGradlePlugin = "9.5.0"
+androidGradlePlugin = "9.5.1"
 androidxActivity = "1.13.0"
 androidxAppCompat = "1.8.0"
 androdixAutofill = "1.3.0"
@@ -24,12 +24,12 @@ androidxCredentials = "1.6.0"
 androidxCredentialsProviderEvents = "1.0.0-alpha06"
 androidxHilt = "1.4.0"
 androidxLifecycle = "2.11.0"
-androidxNavigation3 = "1.2.0"
+androidxNavigation3 = "1.2.1"
 androidxRoom3 = "3.0.3"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.2.0"
 androidxWork = "2.12.0"
-bitwardenSdk = "4.0.0-9737-d9119f7a"
+bitwardenSdk = "4.0.0-10369-56c7617b"
 coil = "3.6.3"
 crashlytics = "3.0.8"
 detekt = "1.23.8"
@@ -49,7 +49,7 @@ kotlinxCollectionsImmutable = "0.5.2"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.12.0"
 kotlinxKover = "0.9.11"
-ksp = "2.3.12"
+ksp = "2.3.13"
 mockk = "1.14.11"
 okhttp = "5.5.1"
 retrofitBom = "3.0.0"
@@ -103,8 +103,10 @@ coil-coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+detekt-detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+detekt-detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 google-billing = { module = "com.android.billingclient:billing", version.ref = "googleBilling" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
@@ -152,6 +154,7 @@ google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlu
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }

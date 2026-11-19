@@ -78,7 +78,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
@@ -96,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
@@ -290,6 +290,9 @@ class AuthRepositoryTest {
     }
     private val authStateManager: AuthStateManager = mockk()
     private val organizationManager: OrganizationManager = mockk()
+    private val onboardingManager: OnboardingManager = mockk {
+        every { initializeOnboardingFlow(userId = any()) } just runs
+    }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
@@ -320,6 +323,7 @@ class AuthRepositoryTest {
         toastManager = toastManager,
         featureFlagManager = featureFlagManager,
         organizationManager = organizationManager,
+        onboardingManager = onboardingManager,
         authStateManager = authStateManager,
     )
 
@@ -1564,6 +1568,9 @@ class AuthRepositoryTest {
                 settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(LoginResult.Success, result)
+            verify(exactly = 1) {
+                onboardingManager.initializeOnboardingFlow(userId = USER_ID_1)
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -2058,6 +2065,19 @@ class AuthRepositoryTest {
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    fun `login success should initialize the onboarding flow for the user`() =
+        runTest {
+            setupPasswordLoginSuccess()
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            verify(exactly = 1) {
+                onboardingManager.initializeOnboardingFlow(userId = USER_ID_1)
             }
         }
 
@@ -7422,142 +7442,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setOnboardingStatus should save the onboarding status to disk`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
-        assertEquals(
-            OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
-        )
-    }
-
-    @Test
-    fun `setOnboardingStatus with no userId does not change the onboarding state`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
-        assertEquals(
-            OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
-        )
-
-        fakeAuthDiskSource.userState = null
-        repository.setOnboardingStatus(status = OnboardingStatus.COMPLETE)
-        val activeUserId = SINGLE_USER_STATE_1.activeUserId
-        assertFalse(
-            fakeAuthDiskSource.getOnboardingStatus(activeUserId) == OnboardingStatus.COMPLETE,
-        )
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `on successful login a new user should have onboarding status set if has not previously logged in`() =
-        runTest {
-            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                authSdkSource.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                    passwordPassesPolicy = true,
-                )
-            } returns SINGLE_USER_STATE_1
-            every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns false
-            val result = repository.login(email = EMAIL, password = PASSWORD)
-            assertEquals(LoginResult.Success, result)
-            coVerify(exactly = 1) { authSdkSource.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = USER_ID_1,
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            // This should only be set after they complete a registration and not based on login.
-            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
-            verify(exactly = 1) {
-                userStateManager.hasPendingAccountAddition = false
-            }
-        }
-
-    @Test
-    fun `on successful login does not set onboarding status if user has previously logged in`() =
-        runTest {
-            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                authSdkSource.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                    passwordPassesPolicy = true,
-                )
-            } returns SINGLE_USER_STATE_1
-            every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns true
-            val result = repository.login(email = EMAIL, password = PASSWORD)
-            assertEquals(LoginResult.Success, result)
-            coVerify(exactly = 1) { authSdkSource.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = USER_ID_1,
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            verify(exactly = 1) {
-                userStateManager.hasPendingAccountAddition = false
-                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
-            }
-            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
-        }
-
-    @Test
     fun `cancelKeyConnectorLogin should clear keyConnectorResponse`() =
         runTest {
             assertDoesNotThrow { repository.cancelKeyConnectorLogin() }
@@ -7575,6 +7459,41 @@ class AuthRepositoryTest {
                 continueResult,
             )
         }
+
+    private fun setupPasswordLoginSuccess() {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
+            )
+        } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+        coEvery {
+            vaultRepository.unlockVault(
+                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                userId = USER_ID_1,
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = PASSWORD,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                ),
+                organizationKeys = null,
+            )
+        } returns VaultUnlockResult.Success
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = true,
+            )
+        } returns SINGLE_USER_STATE_1
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

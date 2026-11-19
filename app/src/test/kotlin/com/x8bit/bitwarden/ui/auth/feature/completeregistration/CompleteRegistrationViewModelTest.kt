@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
@@ -33,7 +35,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -70,10 +71,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isMasterPasswordStrong = any(),
             )
         } returns RegisterResult.Success
-        coEvery { setOnboardingStatus(OnboardingStatus.NOT_STARTED) } just Runs
+        every { setOnboardingStatus(status = any()) } just runs
     }
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any(), duration = any()) } just runs
+    }
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow) } returns true
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -206,10 +210,31 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             expectNoEvents()
         }
-        verify(exactly = 1) {
-            mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        verify(exactly = 0) {
+            mockAuthRepository.setOnboardingStatus(status = any())
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when login attempt returns success with UpdatedOnboardingFlow disabled should set onboarding status to ACCOUNT_LOCK_SETUP`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow)
+            } returns false
+            val viewModel = createCompleteRegistrationViewModel(
+                completeRegistrationState = VALID_INPUT_STATE,
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.eventFlow.test {
+                expectNoEvents()
+            }
+            verify(exactly = 1) {
+                mockAuthRepository.setOnboardingStatus(
+                    status = OnboardingStatus.ACCOUNT_LOCK_SETUP,
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -229,9 +254,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     CompleteRegistrationEvent.NavigateToLogin(EMAIL),
                     awaitItem(),
                 )
-            }
-            verify(exactly = 1) {
-                mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
             }
         }
 
@@ -645,6 +667,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager = specialCircumstanceManager,
         generatorRepository = generatorRepository,
         toastManager = toastManager,
+        featureFlagManager = featureFlagManager,
     )
 
     companion object {

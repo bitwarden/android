@@ -4,7 +4,6 @@
     <string name="add_folder">フォルダーを追加</string>
     <string name="add_item">アイテムの追加</string>
     <string name="an_error_has_occurred">エラーが発生しました。</string>
-    <string name="apply">適用</string>
     <string name="back">戻る</string>
     <string name="cancel">キャンセル</string>
     <string name="copy">コピー</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">フォルダーを削除しました。</string>
     <string name="folder_none">フォルダーなし</string>
     <string name="folder_updated">フォルダーを更新しました。</string>
-    <string name="folders">フォルダー</string>
     <string name="hide">隠す</string>
     <string name="internet_connection_required_message">続行する前に、インターネットに接続してください。</string>
     <string name="internet_connection_required_title">インターネット接続が必要です</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">TOTP のコピー</string>
     <string name="copy_totp_automatically_description">ログイン情報に認証キーがある場合は、自動入力時にクリップボードに TOTP 認証コードをコピーします。</string>
     <string name="copy_totp_automatically">TOTP を自動的にコピー</string>
-    <string name="premium_required">この機能を使うにはプレミアム会員になってください。</string>
     <string name="attachment_deleted">添付ファイルを削除しました</string>
     <string name="attachments_are_a_premium_feature">添付ファイルはプレミアム機能です。現在のプランにはこの機能へのアクセス権が含まれていません。</string>
     <string name="choose_file">ファイルを選択</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">アイコンのサーバー URL</string>
     <string name="vault_is_locked">保管庫はロックされています</string>
     <string name="go_to_my_vault">保管庫を表示</string>
-    <string name="collections">コレクション</string>
     <string name="shared_folders">共有フォルダー</string>
-    <string name="no_items_collection">このコレクションにはアイテムがありません。</string>
     <string name="there_are_no_items_in_this_shared_folder">この共有フォルダーにはアイテムがありません。</string>
     <string name="no_items_folder">このフォルダーにはアイテムがありません。</string>
     <string name="no_items_trash">ごみ箱にアイテムはありません。</string>
@@ -345,16 +340,11 @@
     <string name="type">タイプ</string>
     <string name="move_down">下へ</string>
     <string name="move_up">上へ</string>
-    <string name="owner">所有者</string>
-    <string name="no_collections_to_list">表示するコレクションがありません</string>
     <string name="there_are_no_shared_folders_to_list">表示できる共有フォルダーがありません。</string>
     <string name="moved_item_to_org">%1$s を %2$s に移動しました。</string>
     <string name="select_one_collection">コレクションを最低１つは選んでください。</string>
     <string name="you_must_select_at_least_one_shared_folder">共有フォルダーを少なくとも一つ選択してください。</string>
     <string name="share">共有</string>
-    <string name="move_to_organization">組織に移動</string>
-    <string name="no_orgs_to_list">表示する組織がありません。</string>
-    <string name="move_to_org_desc">このアイテムを移動する組織を選択してください。組織に移動すると、アイテムの所有権がその組織に移行します。 このアイテムが移動された後、あなたはこのアイテムの直接の所有者にはなりません。</string>
     <string name="no_vaults_to_list">表示できる保管庫がありません。</string>
     <string name="move_to_vault_desc">このアイテムを移動する保管庫を選択してください。別の保管庫に移動すると、アイテムの所有権はその組織に移ります。移動した後、あなたはこのアイテムの直接の所有者ではなくなります。</string>
     <string name="number_of_words">単語数</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">Send へのアクセス時に既定でテキストを非表示にする</string>
     <string name="type_file">ファイル</string>
     <string name="deletion_date">削除日</string>
-    <string name="deletion_time">削除時刻</string>
     <string name="deletion_date_info">Send は指定された日時に完全に削除されます。</string>
     <string name="this_date_is_enforced_by_your_organization">この日付はあなたの組織によって強制されます</string>
     <string name="who_can_view">表示できる人</string>
@@ -601,7 +590,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">スクリーンショットを撮影できるようにしてもよろしいですか？</string>
     <string name="access_requested">アクセスが要求されました</string>
     <string name="account_access_requested">アカウントへのアクセスが要求されました</string>
-    <string name="are_you_trying_to_log_in">ログインしようとしていますか？</string>
     <string name="are_you_trying_to_access_your_account">アカウントにアクセスしようとしていますか？</string>
     <string name="access_attempt_by_x_on_y">%2$s の %1$s からアクセスを試みました</string>
     <string name="device_type">デバイス種別</string>
@@ -662,7 +650,6 @@
     <string name="no_pending_requests">保留中のリクエストはありません</string>
     <string name="enable_camer_permission_to_use_the_scanner">スキャナを使用できるようカメラ権限を許可する</string>
     <string name="language">言語 (Language)</string>
-    <string name="language_change_x_description">言語を %1$s に変更しました。変更を反映するにはアプリを再起動してください。</string>
     <string name="default_system">デフォルト (システム)</string>
     <string name="weak_master_password">脆弱なマスターパスワード</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">入力されたパスワードは脆弱です。アカウントを守るためより強力なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</string>
@@ -972,7 +959,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">リクエストがサポートされていないため、パスキー操作に失敗しました。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">選択したアイテムが存在しないため、パスワード操作に失敗しました。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">選択したアイテムに有効なパスワードがないため、パスワード操作に失敗しました。</string>
-    <string name="password_operation_failed_because_no_item_was_selected">アイテムが選択されていないため、パスワード操作に失敗しました。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">リクエストが無効なため、認証情報操作に失敗しました。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">リクエストがサポートされていないため、認証情報操作に失敗しました。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">ユーザー検証の試行回数が超過したため、認証情報操作に失敗しました。</string>
@@ -1053,7 +1039,6 @@
     <string name="learn_more_about_privileged_apps">特権アプリに関する詳細</string>
     <string name="privileged_apps">特権アプリ</string>
     <string name="unrecognized_browser">認識されないブラウザ</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden でのパスキーの使用方法に関する詳細はこちらをご覧ください。</string>
     <string name="all_trusted_apps">すべての信頼できるアプリ</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s を信頼しないようにしてもよろしいですか？</string>
     <string name="installed_apps">インストール済みアプリ</string>
@@ -1070,8 +1055,6 @@
     <string name="verification_code_added">認証コードが追加されました</string>
     <string name="refresh_period">更新頻度</string>
     <string name="algorithm">アルゴリズム</string>
-    <string name="advanced">上級者向け</string>
-    <string name="collapse_advanced_options">高度なオプションを閉じる</string>
     <string name="number_of_digits">桁数</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d 秒</item>
@@ -1152,7 +1135,6 @@
     <string name="select_a_card_for_x">%s のカードを選択</string>
     <string name="choose_an_identity">ID を選択してください</string>
     <string name="advanced_options">高度な設定</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">一致検出の詳細</annotation></string>
     <string name="keep_your_credential_secure">資格情報を安全に保つ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” を使用する際に認証情報を安全に保つ方法の詳細はこちら</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” を使用してもよろしいですか？</string>
@@ -1194,7 +1176,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Bitwarden 保管庫からパスワード、パスキー、その他のアイテムタイプをインポートします。</string>
     <string name="items_to_import">インポートするアイテム</string>
     <string name="exporting_items">アイテムをエクスポート中…</string>
-    <string name="export_failed">エクスポート失敗</string>
     <string name="passwords">パスワード</string>
     <string name="passkeys">パスキー</string>
     <string name="why_is_this_step_required">この手順が必要な理由</string>
@@ -1214,7 +1195,6 @@
     <string name="transfer_items_to_org">アイテムを %1$s に移行</string>
     <string name="transfer_items_description">セキュリティとコンプライアンスのため、<annotation arg="0">%1$s</annotation> はすべてのアイテムが組織によって所有されることを要求しています。「同意」をクリックしてアイテムの所有権を移行してください。<annotation link="learnMore">詳細はこちら</annotation></string>
     <string name="decline_and_leave">拒否して退会</string>
-    <string name="why_am_i_seeing_this">これが表示される理由は？</string>
     <string name="migrating_items_to_x">アイテムを %s に移行中</string>
     <string name="failed_to_migrate_items_to_x">アイテムの %s への移行に失敗しました</string>
     <string name="search_archive">アーカイブを検索</string>
@@ -1232,6 +1212,7 @@
     <string name="archiving_items_is_a_premium_feature">アイテムのアーカイブはプレミアム機能です。現在のプランではこの機能にはアクセスできません。</string>
     <string name="totp_is_a_premium_feature">認証キー（TOTP）はプレミアム機能です。現在のプランにはこの機能へのアクセス権が含まれていません。</string>
     <string name="upgrade_to_premium">プレミアムにアップグレード</string>
+    <string name="explore_premium">プレミアムの詳細</string>
     <string name="plan">プラン</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">プレミアムサブスクリプションを管理するには、PC でウェブ保管庫にログインする必要があります。</string>
     <string name="unlock_advanced_security_features">高度なセキュリティ機能を有効にする</string>
@@ -1313,7 +1294,6 @@
     <string name="archive_item">アイテムをアーカイブ</string>
     <string name="once_archived_this_item_will_be_excluded">アーカイブすると、このアイテムは検索結果と自動入力の候補から除外されます。</string>
     <string name="pricing_unavailable">料金が利用できません</string>
-    <string name="current_plan">現在のプラン</string>
     <string name="premium_plan_name">プレミアム</string>
     <string name="billing_amount">請求額</string>
     <string name="storage_cost">ストレージコスト</string>
@@ -1388,8 +1368,6 @@
     <string name="issuing_country">発行国</string>
     <string name="issuing_state">発行都道府県</string>
     <string name="license_class">免許種別</string>
-    <string name="surname">姓</string>
-    <string name="given_name">名</string>
     <string name="date_of_birth">生年月日</string>
     <string name="nationality">国籍</string>
     <string name="passport_type">パスポートの種類</string>

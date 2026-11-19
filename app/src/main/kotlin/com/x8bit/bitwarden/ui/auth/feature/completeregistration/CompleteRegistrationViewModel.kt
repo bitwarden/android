@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -60,6 +62,7 @@ class CompleteRegistrationViewModel @AssistedInject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val toastManager: ToastManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: CompleteRegistrationState(
         userEmail = route.emailAddress,
@@ -256,10 +259,10 @@ class CompleteRegistrationViewModel @AssistedInject constructor(
     private fun handleLoginResult(action: Internal.ReceiveLoginResult) {
         clearDialogState()
         toastManager.show(messageId = BitwardenString.account_created_success)
-
-        authRepository.setOnboardingStatus(
-            status = OnboardingStatus.NOT_STARTED,
-        )
+        if (!featureFlagManager.getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow)) {
+            // Go to the start of the onboarding flow for new accounts.
+            authRepository.setOnboardingStatus(status = OnboardingStatus.ACCOUNT_LOCK_SETUP)
+        }
 
         // If the login result is Success the state based navigation will take care of it.
         // otherwise we need to navigate to the login screen.

@@ -25,7 +25,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.NoLogoutOnKdfChange,
-    FlagKey.MigrateMyVaultToMyItems,
     FlagKey.CardScanner,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
@@ -42,6 +41,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.IdentityAutofill,
     FlagKey.SdkPinUnlock,
     FlagKey.SdkPreLogin,
+    FlagKey.UpdatedOnboardingFlow,
     FlagKey.AutofillOffBanner,
         -> {
         @Suppress("UNCHECKED_CAST")
@@ -89,7 +89,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }
 
-    FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
@@ -112,5 +111,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.IdentityAutofill -> stringResource(BitwardenString.identity_autofill)
     FlagKey.SdkPinUnlock -> stringResource(BitwardenString.sdk_pin_unlock)
     FlagKey.SdkPreLogin -> stringResource(BitwardenString.sdk_pre_login)
+    FlagKey.UpdatedOnboardingFlow -> stringResource(BitwardenString.updated_onboarding_flow)
     FlagKey.AutofillOffBanner -> stringResource(BitwardenString.autofill_off_banner)
 }

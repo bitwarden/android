@@ -150,9 +150,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(
-                "We were unable to automatically open the Android autofill settings menu for " +
-                    "you. You can navigate to the autofill settings menu manually from Android " +
-                    "Settings > System > Languages and input > Advanced > Autofill service.",
+                text = "We were unable to automatically open the Android autofill settings menu " +
+                    "for you. You can navigate to the autofill settings menu manually from " +
+                    "Android Settings.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -782,7 +782,10 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 browserAutofillSettingsOptions = persistentListOf(
-                    BrowserAutofillSettingsOption.ChromeStable(enabled = true),
+                    BrowserAutofillSettingsOption.ChromeStable(
+                        isEnabled = true,
+                        isDefault = false,
+                    ),
                 ),
             )
         }
@@ -799,8 +802,8 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             it.copy(
                 isAutoFillServicesEnabled = true,
                 browserAutofillSettingsOptions = persistentListOf(
-                    BrowserAutofillSettingsOption.ChromeStable(enabled = true),
-                    BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
+                    BrowserAutofillSettingsOption.ChromeStable(isEnabled = true, isDefault = false),
+                    BrowserAutofillSettingsOption.ChromeBeta(isEnabled = false, isDefault = false),
                 ),
             )
         }

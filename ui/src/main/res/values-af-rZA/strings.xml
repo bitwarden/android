@@ -4,7 +4,6 @@
     <string name="add_folder">Voeg vouer toe</string>
     <string name="add_item">Voeg item toe</string>
     <string name="an_error_has_occurred">’n Fout het voorgekom.</string>
-    <string name="apply">Pas toe</string>
     <string name="back">Terug</string>
     <string name="cancel">Kanselleer</string>
     <string name="copy">Kopieer</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Vouer geskrap.</string>
     <string name="folder_none">Geen vouer</string>
     <string name="folder_updated">Vouer bygewerk.</string>
-    <string name="folders">Vouers</string>
     <string name="hide">Versteek</string>
     <string name="internet_connection_required_message">Koppel asb. aan die internet voor u voortgaan.</string>
     <string name="internet_connection_required_title">Internetverbinding word vereis</string>
@@ -208,7 +206,6 @@ Skandering gebeur outomaties.</string>
     <string name="copy_totp">Kopieer TOTP</string>
     <string name="copy_totp_automatically_description">Indien ’n aantekening ’n waarmerksleutel het, kopieer die TOTP-bevestigingskope na u knipbord wanneer u die aantekening outo-invul.</string>
     <string name="copy_totp_automatically">Kopieer TOTP outomaties</string>
-    <string name="premium_required">’n Premie-lidmaatskap is nodig om hierdie funksie te gebruik.</string>
     <string name="attachment_deleted">Aanhegsel geskrap</string>
     <string name="attachments_are_a_premium_feature">Aanhegsels is ’n Premium-funksie. U huidige plan sluit nie toegang tot hierdie funksie in nie.</string>
     <string name="choose_file">Kies lêer</string>
@@ -291,9 +288,7 @@ Skandering gebeur outomaties.</string>
     <string name="icons_url">Ikoonbedienerbronadres</string>
     <string name="vault_is_locked">Kluis is vergrendel</string>
     <string name="go_to_my_vault">Gaan na my kluis</string>
-    <string name="collections">Versamelings</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Daar is geen items in hierdie vouer.</string>
     <string name="no_items_trash">Daar is geen items in die asblik.</string>
@@ -347,16 +342,11 @@ Skandering gebeur outomaties.</string>
     <string name="type">Tipe</string>
     <string name="move_down">Skuif af</string>
     <string name="move_up">Skuif op</string>
-    <string name="owner">Eienaar</string>
-    <string name="no_collections_to_list">Daar is geen versamelings om te lys nie.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s geskuif na %2$s.</string>
     <string name="select_one_collection">U moet ten minste een versameling kies.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Deel</string>
-    <string name="move_to_organization">Skuif na organisasie</string>
-    <string name="no_orgs_to_list">Geen organisasies om te lys nie.</string>
-    <string name="move_to_org_desc">Kies ’n organisasie waarheen u hierdie item wil skuif. Deur te skuif kry die organisasie die einaarskap van die item. U is dan nie meer die direkte eienaar van die item wanneer dit geskuif is nie.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Aantal woorde</string>
@@ -471,7 +461,6 @@ Skandering gebeur outomaties.</string>
     <string name="hide_text_by_default">Versteek die teks be verstek wanneer die Send gebruik word</string>
     <string name="type_file">Lêer</string>
     <string name="deletion_date">Skrapdatum</string>
-    <string name="deletion_time">Skraptyd</string>
     <string name="deletion_date_info">Die Send sal outomaties op die aangewese datum en tyd geskrap word.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Wie kan sien</string>
@@ -605,7 +594,6 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Is u seker u wil skermopname aktiveer?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Probeer u aanteken?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Toesteltipe</string>
@@ -666,7 +654,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Geen hangende versoeke</string>
     <string name="enable_camer_permission_to_use_the_scanner">Laat die kameraversoek toe om die skandeerder te gebruik</string>
     <string name="language">Taal</string>
-    <string name="language_change_x_description">Die taal is na %1$s verander. Asseblief herbegin die toep om die veranderinge te sien</string>
     <string name="default_system">Verstek (Sisteem)</string>
     <string name="weak_master_password">Swak Hoofwagwoord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Swak wagwoord geïdentifiseer. Gebruik \'n sterk wagwoord om jou rekening te beskerm. Is jy seker dat jy \'n swak wagwoord wil gebruik?</string>
@@ -979,7 +966,6 @@ Hier is hoe:</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking het misluk omdat die versoek nie ondersteun word nie.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Wagwoordbewerking het misluk omdat die gekose item nie bestaan nie.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Wagwoordbewerking het misluk omdat die gekose item nie ’n geldige wagwoord het nie.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Wagwoordbewerking het misluk omdat geen item gekies is nie.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Aanmeldbesonderheidbewerking het misluk omdat die versoek ongeldig is.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Aanmeldbesonderheidbewerking het misluk omdat die versoek nie ondersteun word nie.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Aanmeldbesonderheidbewerking het misluk omdat gebruikerverifiëringspogings oorskry is.</string>
@@ -1062,7 +1048,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="learn_more_about_privileged_apps">Kom meer te wete oor bevoorregte toeps</string>
     <string name="privileged_apps">Bevoorregte toeps</string>
     <string name="unrecognized_browser">Nie-herkende blaaier</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Kom meer te wete oor die gebruik van passkeys met Bitwarden.</string>
     <string name="all_trusted_apps">Alle vertroude toeps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Is u seker u wil ophou om %s te vertrou?</string>
     <string name="installed_apps">Geïnstalleerde toeps</string>
@@ -1079,8 +1064,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="verification_code_added">Bevestigingskode toegevoeg</string>
     <string name="refresh_period">Verfrissingstydperk</string>
     <string name="algorithm">Algoritme</string>
-    <string name="advanced">Gevorderd</string>
-    <string name="collapse_advanced_options">Vou gevorderde opsies in</string>
     <string name="number_of_digits">Aantal syfers</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekonde</item>
@@ -1163,7 +1146,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="select_a_card_for_x">Kies ’n kaart vir %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Gevorderde opsies</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Meer oor ooreenkomsbespeuring</annotation></string>
     <string name="keep_your_credential_secure">Hou u aanmeldbesonderhede veilig</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Kom meer te wete oor hoe om aanmeldbesonderhede veilig te hou wanneer u “%1$s” gebruik.</string>
     <string name="are_you_sure_you_want_to_use">Is u seker u wil “%1$s” gebruik?</string>
@@ -1208,7 +1190,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Voer wagwoorde, passkeys en ander itemtipes uit u Bitwarden-kluis in.</string>
     <string name="items_to_import">Items om in te voer</string>
     <string name="exporting_items">Voer items uit…</string>
-    <string name="export_failed">Uitvoer het misluk</string>
     <string name="passwords">Wagwoorde</string>
     <string name="passkeys">Sleutelpasse</string>
     <string name="why_is_this_step_required">Waarom word hierdie stap vereis?</string>
@@ -1228,7 +1209,6 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="transfer_items_to_org">Dra items oor na %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> vereis dat alle items aan die organisasie moet behoort vir beveiliging en nakoming. Klik op aanvaar om eienaarskap van u items oor te dra. <annotation link="learnMore">Meer inligting</annotation></string>
     <string name="decline_and_leave">Weier en verlaat</string>
-    <string name="why_am_i_seeing_this">Waarom sien ek dit?</string>
     <string name="migrating_items_to_x">Migreer items na %s</string>
     <string name="failed_to_migrate_items_to_x">Kon nie items na %s migreer nie</string>
     <string name="search_archive">Deursoek argief</string>
@@ -1246,6 +1226,7 @@ Die vervanging van die sertifikaat kan u verbinding met omgewings wat dit tans g
     <string name="archiving_items_is_a_premium_feature">Die argivering van items is ’n Premium-funksie. U huidige plan sluit nie toegang tot hierdie funksie in nie.</string>
     <string name="totp_is_a_premium_feature">Waarmerksleutel (TOTP) is ’n Premium-funksie. U huidige plan sluit nie toegang tot hierdie funksie in nie.</string>
     <string name="upgrade_to_premium">Gradeer op na Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Om u Premium-intekening te bestuur, moet u op ’n rekenaar by u webkluis aanmeld.</string>
     <string name="unlock_advanced_security_features">Ontsluit gevorderde beveiligingsfunksies</string>
@@ -1328,7 +1309,6 @@ Sodra sinchronisering voltooi is, sal u na hierdie toep teruggebring word.</stri
     <string name="archive_item">Argiveer item</string>
     <string name="once_archived_this_item_will_be_excluded">Sodra hierdie item geargiveer is, sal dit van soekresultate en outovulvoorstelle uitgesluit word.</string>
     <string name="pricing_unavailable">Prys nie beskikbaar nie</string>
-    <string name="current_plan">Huidige plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Faktureringsbedrag</string>
     <string name="storage_cost">Bergingskoste</string>
@@ -1404,8 +1384,6 @@ Sodra sinchronisering voltooi is, sal u na hierdie toep teruggebring word.</stri
     <string name="issuing_country">Uitreikende land</string>
     <string name="issuing_state">Uitreikende staat / provinsie</string>
     <string name="license_class">Lisensieklas</string>
-    <string name="surname">Van</string>
-    <string name="given_name">Voornaam</string>
     <string name="date_of_birth">Geboortedatum</string>
     <string name="nationality">Nasionaliteit</string>
     <string name="passport_type">Paspoorttipe</string>

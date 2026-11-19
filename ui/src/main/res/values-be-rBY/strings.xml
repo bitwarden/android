@@ -4,7 +4,6 @@
     <string name="add_folder">Дадаць папку</string>
     <string name="add_item">Дадаць элемент</string>
     <string name="an_error_has_occurred">Адбылася памылка.</string>
-    <string name="apply">Прымяніць</string>
     <string name="back">Назад</string>
     <string name="cancel">Скасаваць</string>
     <string name="copy">Скапіяваць</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Папка выдалена.</string>
     <string name="folder_none">Без папкі</string>
     <string name="folder_updated">Папка абноўлена.</string>
-    <string name="folders">Папкі</string>
     <string name="hide">Схаваць</string>
     <string name="internet_connection_required_message">Калі ласка, спачатку падлучыце інтэрнэт.</string>
     <string name="internet_connection_required_title">Патрабуецца доступ да інтэрнэту</string>
@@ -209,7 +207,6 @@
     <string name="copy_totp">Скапіяваць TOTP</string>
     <string name="copy_totp_automatically_description">Калі падчас уваходу выкарыстоўваецца ключ аўтэнтыфікацыі, то неабходна скапіяваць праверачны код TOTP у буфер абмену пры аўтазапаўненні ўваходу.</string>
     <string name="copy_totp_automatically">Скапіяваць TOTP аўтаматычна</string>
-    <string name="premium_required">Для выкарыстання гэтай функцыі патрабуецца прэміяльны статус.</string>
     <string name="attachment_deleted">Далучэнне выдалена</string>
     <string name="attachments_are_a_premium_feature">Далучэнні — гэта функцыя Premium. Ваш бягучы план не ўключае доступ да гэтай функцыі.</string>
     <string name="choose_file">Выбраць файл</string>
@@ -292,9 +289,7 @@
     <string name="icons_url">URL-адрас сервера значкоў</string>
     <string name="vault_is_locked">Сховішча заблакіравана</string>
     <string name="go_to_my_vault">Перайсці ў сховішча</string>
-    <string name="collections">Калекцыі</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">У гэтай калекцыі няма элементаў.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">У гэтай папцы адсутнічаюць элементы.</string>
     <string name="no_items_trash">У сметніцы адсутнічаюць элементы.</string>
@@ -350,16 +345,11 @@
     <string name="type">Тып</string>
     <string name="move_down">Перамясціць уніз</string>
     <string name="move_up">Перамясціць уверх</string>
-    <string name="owner">Уладальнік</string>
-    <string name="no_collections_to_list">У спісе адсутнічаюць калекцыі.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s перамешчана ў %2$s.</string>
     <string name="select_one_collection">Вы павінны выбраць прынамсі адну калекцыю.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Абагуліць</string>
-    <string name="move_to_organization">Перамясціць у арганізацыю</string>
-    <string name="no_orgs_to_list">Няма арганізацый для паказу.</string>
-    <string name="move_to_org_desc">Выберыце арганізацыю, у якую вы хочаце перамясціць гэты элемент. Пры перамяшчэнні ў арганізацыю ўсе правы ўласнасці на дадзены элемент пяройдуць да гэтай арганізацыі. Вы больш не будзеце адзіным уласнікам гэтага элемента пасля яго перамяшчэння.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Колькасць слоў</string>
@@ -474,7 +464,6 @@
     <string name="hide_text_by_default">Пры доступе да Send прадвызначана хаваць тэкст</string>
     <string name="type_file">Файл</string>
     <string name="deletion_date">Дата выдалення</string>
-    <string name="deletion_time">Час выдалення</string>
     <string name="deletion_date_info">Send будзе незваротна выдалены ў азначаныя дату і час.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Хто можа праглядаць</string>
@@ -611,7 +600,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">Вы сапраўды хочаце дазволіць здымкі экрана?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Вы спрабуеце ўвайсці?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Тып прылады</string>
@@ -672,7 +660,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Няма запытаў, якія чакаюць уваходу</string>
     <string name="enable_camer_permission_to_use_the_scanner">Каб выкарыстоўваць сканер, дайце дазвол на выкарыстанне камеры</string>
     <string name="language">Мова</string>
-    <string name="language_change_x_description">Мова была зменена на %1$s. Перазапусціце праграму, каб убачыць змены</string>
     <string name="default_system">Прадвызначана (сістэмная)</string>
     <string name="weak_master_password">Ненадзейны асноўны пароль</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Вызначаны ненадзейны пароль. Выкарыстоўвайце надзейны пароль для абароны вашага ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць ненадзейны пароль?</string>
@@ -988,7 +975,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Аперацыя з ключом доступу не ўдалася, бо запыт не падтрымліваецца.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Аперацыя з паролем не ўдалася, бо выбраны элемент не існуе.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Аперацыя з паролем не ўдалася, бо выбраны элемент не мае сапраўднага пароля.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Аперацыя з паролем не ўдалася, бо элемент не быў выбраны.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Аперацыя з уліковымі данымі не ўдалася, бо запыт няправільны.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Аперацыя з уліковымі данымі не ўдалася, бо запыт не падтрымліваецца.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Аперацыя з уліковымі данымі не ўдалася, бо перавышана колькасць спроб праверкі карыстальніка.</string>
@@ -1069,7 +1055,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Даведацца больш пра прывілеяваныя праграмы</string>
     <string name="privileged_apps">Прывілеяваныя праграмы</string>
     <string name="unrecognized_browser">Нераспазнаны браўзер</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Даведацца больш пра выкарыстанне ключоў доступу з Bitwarden.</string>
     <string name="all_trusted_apps">Усе давераныя праграмы</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Вы сапраўды хочаце перастаць давяраць %s?</string>
     <string name="installed_apps">Усталяваныя праграмы</string>
@@ -1086,8 +1071,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Дададзены праверачны код</string>
     <string name="refresh_period">Перыяд абнаўлення</string>
     <string name="algorithm">Алгарытм</string>
-    <string name="advanced">Дадаткова</string>
-    <string name="collapse_advanced_options">Згарнуць дадатковыя параметры</string>
     <string name="number_of_digits">Колькасць лічбаў</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d секунда</item>
@@ -1174,7 +1157,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Выберыце картку для %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Дадатковыя параметры</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Больш пра выяўленне супадзенняў</annotation></string>
     <string name="keep_your_credential_secure">Захоўвайце свае ўліковыя даныя ў бяспецы</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Даведайцеся больш пра тое, як захоўваць уліковыя даныя ў бяспецы пры выкарыстанні «%1$s».</string>
     <string name="are_you_sure_you_want_to_use">Вы сапраўды хочаце выкарыстоўваць «%1$s»?</string>
@@ -1221,7 +1203,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Імпартаваць паролі, ключы доступу і іншыя тыпы элементаў з вашага сховішча Bitwarden.</string>
     <string name="items_to_import">Элементы для імпартавання</string>
     <string name="exporting_items">Экспартаванне элементаў…</string>
-    <string name="export_failed">Экспарт не ўдаўся</string>
     <string name="passwords">Паролі</string>
     <string name="passkeys">Ключы доступу</string>
     <string name="why_is_this_step_required">Чаму гэты крок патрэбны?</string>
@@ -1241,7 +1222,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Перадаць элементы ў %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> патрабуе, каб усе элементы належалі арганізацыі для бяспекі і адпаведнасці патрабаванням. Націсніце «Прыняць», каб перадаць правы ўласнасці на вашы элементы. <annotation link="learnMore">Даведацца больш</annotation></string>
     <string name="decline_and_leave">Адмовіцца і выйсці</string>
-    <string name="why_am_i_seeing_this">Чаму я гэта бачу?</string>
     <string name="migrating_items_to_x">Міграцыя элементаў у %s</string>
     <string name="failed_to_migrate_items_to_x">Не ўдалося перанесці элементы ў %s</string>
     <string name="search_archive">Пошук у архіве</string>
@@ -1259,6 +1239,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Архіваванне элементаў — гэта функцыя Premium. Ваш бягучы план не ўключае доступ да гэтай функцыі.</string>
     <string name="totp_is_a_premium_feature">Ключ аўтэнтыфікацыі (TOTP) — гэта функцыя Premium. Ваш бягучы план не ўключае доступ да гэтай функцыі.</string>
     <string name="upgrade_to_premium">Абнавіць да Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Тарыф</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Каб кіраваць падпіскай Premium, вам трэба ўвайсці ў вэб-сховішча на камп\'ютары.</string>
     <string name="unlock_advanced_security_features">Адкрыйце пашыраныя функцыі бяспекі</string>
@@ -1340,7 +1321,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Архіваваць элемент</string>
     <string name="once_archived_this_item_will_be_excluded">Пасля архівавання гэты элемент будзе выключаны з вынікаў пошуку і прапаноў аўтазапаўнення.</string>
     <string name="pricing_unavailable">Цана недаступная</string>
-    <string name="current_plan">Бягучы план</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Сума для аплаты</string>
     <string name="storage_cost">Кошт сховішча</string>
@@ -1418,8 +1398,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Краіна выдачы</string>
     <string name="issuing_state">Штат / вобласць выдачы</string>
     <string name="license_class">Клас ліцэнзіі</string>
-    <string name="surname">Прозвішча</string>
-    <string name="given_name">Імя</string>
     <string name="date_of_birth">Дата нараджэння</string>
     <string name="nationality">Грамадзянства</string>
     <string name="passport_type">Тып пашпарта</string>

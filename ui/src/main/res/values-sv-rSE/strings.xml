@@ -4,7 +4,6 @@
     <string name="add_folder">Lägg till mapp</string>
     <string name="add_item">Lägg till objekt</string>
     <string name="an_error_has_occurred">Ett fel har inträffat</string>
-    <string name="apply">Verkställ</string>
     <string name="back">Tillbaka</string>
     <string name="cancel">Avbryt</string>
     <string name="copy">Kopiera</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Mapp borttagen.</string>
     <string name="folder_none">Ingen mapp</string>
     <string name="folder_updated">Mappen sparades</string>
-    <string name="folders">Mappar</string>
     <string name="hide">Dölj</string>
     <string name="internet_connection_required_message">Anslut till internet innan du fortsätter.</string>
     <string name="internet_connection_required_title">Internetanslutning krävs</string>
@@ -208,7 +206,6 @@ Skanningen sker automatiskt.</string>
     <string name="copy_totp">Kopiera TOTP</string>
     <string name="copy_totp_automatically_description">Om en inloggning har en autentiseringsnyckel, kopiera TOTP-verifieringskoden till ditt urklipp när du automatiskt fyller i inloggningen.</string>
     <string name="copy_totp_automatically">Kopiera TOTP automatiskt</string>
-    <string name="premium_required">Ett premium-medlemskap krävs för att använda den här funktionen.</string>
     <string name="attachment_deleted">Bilaga borttagen</string>
     <string name="attachments_are_a_premium_feature">Bilagor är en Premium-funktion. Din nuvarande prenumeration inkluderar inte tillgång till denna funktion.</string>
     <string name="choose_file">Välj fil</string>
@@ -291,9 +288,7 @@ Skanningen sker automatiskt.</string>
     <string name="icons_url">Ikonserver-URL</string>
     <string name="vault_is_locked">Valvet är låst</string>
     <string name="go_to_my_vault">Gå till mitt valv</string>
-    <string name="collections">Samlingar</string>
     <string name="shared_folders">Delade mappar</string>
-    <string name="no_items_collection">Det finns inga objekt i denna samling.</string>
     <string name="there_are_no_items_in_this_shared_folder">Det finns inga objekt i den här delade mappen.</string>
     <string name="no_items_folder">Det finns inga objekt i den här mappen.</string>
     <string name="no_items_trash">Det finns inga objekt i papperskorgen.</string>
@@ -347,16 +342,11 @@ Skanningen sker automatiskt.</string>
     <string name="type">Typ</string>
     <string name="move_down">Flytta ner</string>
     <string name="move_up">Flytta upp</string>
-    <string name="owner">Ägare</string>
-    <string name="no_collections_to_list">Det finns inga samlingar att visa.</string>
     <string name="there_are_no_shared_folders_to_list">Det finns inga delade mappar att lista.</string>
     <string name="moved_item_to_org">%1$s flyttades till %2$s.</string>
     <string name="select_one_collection">Du måste markera minst en samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du måste välja minst en delad mapp.</string>
     <string name="share">Dela</string>
-    <string name="move_to_organization">Flytta till organisation</string>
-    <string name="no_orgs_to_list">Inga organisationer att lista.</string>
-    <string name="move_to_org_desc">Välj en organisation som du vill flytta detta objektet till. Flytt till en organisation överför ägandet av objektet till den organisationen. Du kommer inte längre att vara direkt ägare till detta objekt när det har flyttats.</string>
     <string name="no_vaults_to_list">Det finns inga valv att lista.</string>
     <string name="move_to_vault_desc">Välj ett valv som du vill flytta objektet till. När objektet flyttas till ett annat valv överförs ägarskapet till den organisationen. Du är inte längre direkt ägare till objektet när det har flyttats.</string>
     <string name="number_of_words">Antal ord</string>
@@ -471,7 +461,6 @@ Skanningen sker automatiskt.</string>
     <string name="hide_text_by_default">Dölj texten som standard när denna Send öppnas</string>
     <string name="type_file">Fil</string>
     <string name="deletion_date">Raderingsdatum</string>
-    <string name="deletion_time">Raderingstid</string>
     <string name="deletion_date_info">Denna Send kommer att raderas permanent på angivet datum och klockslag.</string>
     <string name="this_date_is_enforced_by_your_organization">Detta datum tillämpas av din organisation</string>
     <string name="who_can_view">Vem kan se</string>
@@ -603,22 +592,21 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
     <string name="generic_error_message">Vi kunde inte behandla din begäran. Försök igen eller kontakta oss.</string>
     <string name="allow_screen_capture">Tillåt skärmdump</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Är du säker på att du vill tillåta skärmdumpar?</string>
-    <string name="access_requested">Access requested</string>
-    <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Försöker du logga in?</string>
-    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
-    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
+    <string name="access_requested">Åtkomst har begärts</string>
+    <string name="account_access_requested">Åtkomst till kontot har begärts</string>
+    <string name="are_you_trying_to_access_your_account">Försöker du komma åt ditt konto?</string>
+    <string name="access_attempt_by_x_on_y">Åtkomstförsök av %1$s på %2$s</string>
     <string name="device_type">Enhetstyp</string>
     <string name="ip_address">IP-adress</string>
     <string name="time">Tid</string>
     <string name="select_time">Välj tid</string>
     <string name="switch_input_mode">Växla inmatningsläge</string>
-    <string name="confirm_access">Confirm access</string>
-    <string name="deny_access">Deny access</string>
-    <string name="access_denied">Access denied</string>
-    <string name="account_access_requests">Account access requests</string>
+    <string name="confirm_access">Bekräfta åtkomst</string>
+    <string name="deny_access">Neka åtkomst</string>
+    <string name="access_denied">Åtkomst nekades</string>
+    <string name="account_access_requests">Begäranden om kontoåtkomst</string>
     <string name="no_thanks">Nej tack</string>
-    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Bekräfta åtkomstförsök för %1$s</string>
     <string name="username_type">Typ av användarnamn</string>
     <string name="plus_addressed_email">Plusadresserad e-post</string>
     <string name="catch_all_email">E-post med catch-all</string>
@@ -645,28 +633,27 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
     <string name="i_understand">Jag förstår</string>
     <string name="accept">Acceptera</string>
     <string name="decline">Neka</string>
-    <string name="access_request_has_already_expired">Access request has already expired.</string>
-    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
+    <string name="access_request_has_already_expired">Åtkomstbegäran har redan upphört att gälla.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Åtkomstförsök från:
 %1$s
-Do you want to switch to this account?</string>
+Vill du byta till det här kontot?</string>
     <string name="new_to_bitwarden">Ny i Bitwarden?</string>
     <string name="get_master_passwordword_hint">Hämta huvudlösenordsledtråd</string>
     <string name="logging_in_as_x_on_y">Loggar in som %1$s på %2$s</string>
     <string name="not_you">Är det inte du?</string>
     <string name="log_in_with_master_password">Logga in med huvudlösenord</string>
     <string name="log_in_initiated">Inloggning påbörjad</string>
-    <string name="request_sent_to_your_device">Request sent to your device</string>
-    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
-    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
+    <string name="request_sent_to_your_device">Begäran har skickats till din enhet</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Godkänn begäran i ditt Bitwarden-konto på en annan olåst enhet eller i webbappen. Begäranden om kontoåtkomst måste vara aktiverade i Inställningar.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Kontrollera att fingeravtrycksfrasen stämmer med den nedan innan du godkänner.</string>
     <string name="resend_notification">Skicka avisering igen</string>
     <string name="view_all_login_options">Visa alla inloggningsalternativ</string>
-    <string name="pending_access_requests">Pending access requests</string>
+    <string name="pending_access_requests">Väntande åtkomstbegäranden</string>
     <string name="decline_all_requests">Avvisa alla förfrågningar</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Är du säker på att du vill avvisa alla väntande inloggningsförfrågningar?</string>
     <string name="no_pending_requests">Inga väntande förfrågningar</string>
     <string name="enable_camer_permission_to_use_the_scanner">Bevilja kamerabehörighet för att använda skannern</string>
     <string name="language">Språk</string>
-    <string name="language_change_x_description">Språket har ändrats till %1$s. Starta om appen för att se ändringen</string>
     <string name="default_system">Standard (System)</string>
     <string name="weak_master_password">Svagt huvudlösenord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Ett svagt lösenord upptäcktes. Skydda ditt konto med ett starkt lösenord. Är du säker på att du vill använda ett svagt lösenord?</string>
@@ -693,8 +680,8 @@ Do you want to switch to this account?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Inloggningsnyckeln kommer inte att kopieras till det klonade objektet. Vill du fortsätta klona det här objektet?</string>
     <string name="master_password_re_prompt_help">Återupprepa huvudlösenord hjälp</string>
     <string name="admin_approval_requested">Godkännande från administratör har begärts</string>
-    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
-    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Din begäran har skickats till administratören. Du får ett e-postmeddelande när den har godkänts.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Administratören kan be dig bekräfta den här fingeravtrycksfrasen.</string>
     <string name="block_auto_fill">Blockera autofyll</string>
     <string name="no_uris_blocked">Inga blockerade URI:er</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofyll kommer inte att erbjudas för dessa URI:er.</string>
@@ -705,7 +692,7 @@ Do you want to switch to this account?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Separera flera URI:er med ett kommatecken.</string>
     <string name="invalid_uri">Ogiltig URI</string>
     <string name="the_urix_is_already_blocked">URI:n %1$s har redan blockerats</string>
-    <string name="access_approved">Access approved</string>
+    <string name="access_approved">Åtkomst har godkänts</string>
     <string name="need_another_option_view_all_login_options">Behöver du ett annat alternativ? <annotation link="viewAll">Visa alla inloggningsalternativ</annotation></string>
     <string name="log_in_with_device">Logga in med enhet</string>
     <string name="logging_in_on">Logga in på</string>
@@ -978,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsnyckel misslyckades eftersom begäran inte stöds.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för lösenord misslyckades därför att det valda objektet inte finns.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Lösenordsåtgärden misslyckades eftersom det valda objektet inte har ett giltigt lösenord.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Åtgärd för lösenord misslyckades därför att inget objekt valdes.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran är ogiltig.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsuppgifter misslyckades eftersom begäran inte stöds.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Åtgärd för inloggningsuppgifter misslyckades därför att antalet försök att verifiera användaren överstegs.</string>
@@ -1059,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Läs mer om privilegierade appar</string>
     <string name="privileged_apps">Privilegierade appar</string>
     <string name="unrecognized_browser">Okänd webbläsare</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Läs mer om hur du använder inloggningsnycklar med Bitwarden.</string>
     <string name="all_trusted_apps">Alla betrodda appar</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Är du säker på att du inte längre vill lita på %s?</string>
     <string name="installed_apps">Installerade appar</string>
@@ -1076,8 +1061,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Verifieringskod har lagts till</string>
     <string name="refresh_period">Uppdateringstid</string>
     <string name="algorithm">Algoritm</string>
-    <string name="advanced">Avancerat</string>
-    <string name="collapse_advanced_options">Fäll in avancerade alternativ</string>
     <string name="number_of_digits">Antal siffror</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekund</item>
@@ -1160,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
     <string name="choose_an_identity">Välj en identitet</string>
     <string name="advanced_options">Avancerade inställningar</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mer om matchningsdetektering</annotation></string>
     <string name="keep_your_credential_secure">Håll dina uppgifter säkra</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Läs mer om hur du håller autentiseringsuppgifter säkra när du använder ”%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Är du säker på att du vill använda ”%1$s”?</string>
@@ -1203,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importera lösenord, inloggningsnycklar och andra objekttyper från ditt Bitwarden-valv.</string>
     <string name="items_to_import">Objekt att importera</string>
     <string name="exporting_items">Exporterar objekt…</string>
-    <string name="export_failed">Exporten misslyckades</string>
     <string name="passwords">Lösenord</string>
     <string name="passkeys">Inloggningsnycklar</string>
     <string name="why_is_this_step_required">Varför krävs detta steg?</string>
@@ -1223,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Överför objekt till %1$s</string>
     <string name="transfer_items_description">%1$s kräver att alla objekt ägs av organisationen för säkerhet och efterlevnad. Klicka på acceptera för att överföra ägarskapet för dina objekt.</string>
     <string name="decline_and_leave">Avböj och lämna</string>
-    <string name="why_am_i_seeing_this">Varför ser jag det här?</string>
     <string name="migrating_items_to_x">Migrerar objekt till %s</string>
     <string name="failed_to_migrate_items_to_x">Det gick inte att migrera objekt till %s</string>
     <string name="search_archive">Sök i arkiv</string>
@@ -1241,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Arkivering av objekt är en Premium-funktion. Din nuvarande plan inkluderar inte tillgång till denna funktion.</string>
     <string name="totp_is_a_premium_feature">Autentiseringsnyckel (TOTP) är en Premium-funktion. Din nuvarande prenumeration inkluderar inte tillgång till denna funktion.</string>
     <string name="upgrade_to_premium">Uppgradera till premium</string>
+    <string name="explore_premium">Utforska Premium</string>
     <string name="plan">Prenumeration</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">För att hantera din Premium-prenumeration måste du logga in på ditt webbvalv på en dator.</string>
     <string name="unlock_advanced_security_features">Lås upp avancerade säkerhetsfunktioner</string>
@@ -1322,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arkivera objekt</string>
     <string name="once_archived_this_item_will_be_excluded">När det är arkiverat kommer detta objekt att exkluderas från sökresultat och autofyllnadsförslag.</string>
     <string name="pricing_unavailable">Prisinformation inte tillgänglig</string>
-    <string name="current_plan">Nuvarande prenumeration</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Faktureringsbelopp</string>
     <string name="storage_cost">Lagringskostnad</string>
@@ -1398,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Utfärdande land</string>
     <string name="issuing_state">Utfärdande delstat / provins</string>
     <string name="license_class">Licensklass</string>
-    <string name="surname">Efternamn</string>
-    <string name="given_name">Förnamn</string>
     <string name="date_of_birth">Födelsedatum</string>
     <string name="nationality">Nationalitet</string>
     <string name="passport_type">Passtyp</string>

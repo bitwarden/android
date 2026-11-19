@@ -4,7 +4,6 @@
     <string name="add_folder">Afig carpeta</string>
     <string name="add_item">Afig element</string>
     <string name="an_error_has_occurred">S\'ha produït un error.</string>
-    <string name="apply">Aplica</string>
     <string name="back">Arrere</string>
     <string name="cancel">Cancel·la</string>
     <string name="copy">Copia</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">S\'ha eliminat la carpeta.</string>
     <string name="folder_none">Cap carpeta</string>
     <string name="folder_updated">Carpeta guardada</string>
-    <string name="folders">Carpetes</string>
     <string name="hide">Amaga</string>
     <string name="internet_connection_required_message">Connecteu-vos a Internet abans de continuar.</string>
     <string name="internet_connection_required_title">Es requereix connexió a Internet</string>
@@ -208,7 +206,6 @@ L\'escaneig es farà automàticament.</string>
     <string name="copy_totp">Copia TOTP</string>
     <string name="copy_totp_automatically_description">Si el vostre inici de sessió té una clau d\'autenticació associada, el codi de verificació TOTP es copiarà al vostre porta-retalls quan s\'òmpliga automàticament l\'inici de sessió.</string>
     <string name="copy_totp_automatically">Copia TOTP automaticament</string>
-    <string name="premium_required">Cal una subscripció premium per utilitzar aquesta característica.</string>
     <string name="attachment_deleted">S\'ha suprimit un adjunt</string>
     <string name="attachments_are_a_premium_feature">Els fitxers adjunts són una funció Premium. El teu pla actual no inclou l\'accés a aquesta funció.</string>
     <string name="choose_file">Trieu fitxer</string>
@@ -291,9 +288,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="icons_url">URL del servidor d\'icones</string>
     <string name="vault_is_locked">La caixa forta està bloquejada</string>
     <string name="go_to_my_vault">Vés a la meua caixa forta</string>
-    <string name="collections">Col·leccions</string>
     <string name="shared_folders">Carpetes compartides</string>
-    <string name="no_items_collection">No hi ha elements en aquesta col·lecció.</string>
     <string name="there_are_no_items_in_this_shared_folder">No hi ha elements en aquesta carpeta compartida.</string>
     <string name="no_items_folder">No hi ha elements en aquesta carpeta.</string>
     <string name="no_items_trash">No hi ha elements a la paperera.</string>
@@ -347,16 +342,11 @@ L\'escaneig es farà automàticament.</string>
     <string name="type">Tipus</string>
     <string name="move_down">Desplaça cap avall</string>
     <string name="move_up">Desplaça cap amunt</string>
-    <string name="owner">Propietari</string>
-    <string name="no_collections_to_list">No hi ha cap col·lecció per llistar.</string>
     <string name="there_are_no_shared_folders_to_list">No hi ha carpetes compartides per llistar.</string>
     <string name="moved_item_to_org">%1$s desplaçat a %2$s.</string>
     <string name="select_one_collection">Heu d\'escollir com a mínim una col·lecció.</string>
     <string name="you_must_select_at_least_one_shared_folder">Has de seleccionar almenys una carpeta compartida.</string>
     <string name="share">Comparteix</string>
-    <string name="move_to_organization">Desplaça a l\'organització</string>
-    <string name="no_orgs_to_list">No hi ha cap organització per llistar.</string>
-    <string name="move_to_org_desc">Trieu una organització a la qual vulgueu desplaçar aquest element. El trasllat a una organització transfereix la propietat de l\'element a aquesta organització. Ja no sereu el propietari directe d\'aquest element una vegada s\'haja mogut.</string>
     <string name="no_vaults_to_list">No hi ha cofres per llistar.</string>
     <string name="move_to_vault_desc">Tria un cofre al qual vulguis moure aquest element. Moure a un altre cofre transfereix la propietat de l\'element a aquesta organització. Ja no seràs el propietari directe d\'aquest element un cop s\'hagi mogut.</string>
     <string name="number_of_words">Nombre de paraules</string>
@@ -471,7 +461,6 @@ L\'escaneig es farà automàticament.</string>
     <string name="hide_text_by_default">Quan accediu a Send, amaga el text per defecte</string>
     <string name="type_file">Fitxer</string>
     <string name="deletion_date">Data de supressió</string>
-    <string name="deletion_time">Hora de supressió</string>
     <string name="deletion_date_info">El Send se suprimirà permanentment a la data i hora especificades.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Qui pot veure</string>
@@ -605,7 +594,6 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Segur que voleu activar la captura de pantalla?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Esteu intentant iniciar sessió?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tipus de dispositiu</string>
@@ -666,7 +654,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Cap sol·licitud pendent</string>
     <string name="enable_camer_permission_to_use_the_scanner">Habilita el permís de la càmera per utilitzar l\'escàner</string>
     <string name="language">Idioma</string>
-    <string name="language_change_x_description">L\'idioma s\'ha canviat a %1$s. Reinicieu l\'aplicació per veure el canvi</string>
     <string name="default_system">Per defecte (Sistema)</string>
     <string name="weak_master_password">Contrasenya mestra poc segura</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">S\'ha identificat una contrasenya feble. Utilitzeu una contrasenya segura per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya feble?</string>
@@ -978,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">L\'operació de clau d\'accés ha fallat perquè la sol·licitud no és compatible.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">L\'operació de contrasenya ha fallat perquè l\'element seleccionat no existeix.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">L\'operació de contrasenya ha fallat perquè l\'element seleccionat no té una contrasenya vàlida.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">L\'operació de contrasenya ha fallat perquè no s\'ha seleccionat cap element.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">L\'operació de credencials ha fallat perquè la sol·licitud no és vàlida.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">L\'operació de credencials ha fallat perquè la sol·licitud no és compatible.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">L\'operació de credencials ha fallat perquè s\'han superat els intents de verificació de l\'usuari.</string>
@@ -1059,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Més informació sobre les aplicacions privilegiades</string>
     <string name="privileged_apps">Aplicacions privilegiades</string>
     <string name="unrecognized_browser">Navegador no reconegut</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Més informació sobre l\'ús de claus d\'accés amb Bitwarden.</string>
     <string name="all_trusted_apps">Totes les aplicacions de confiança</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Estàs segur que vols deixar de confiar en %s?</string>
     <string name="installed_apps">Aplicacions instal·lades</string>
@@ -1076,8 +1061,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">S\'ha afegit el codi de verificació</string>
     <string name="refresh_period">Període d\'actualització</string>
     <string name="algorithm">Algoritme</string>
-    <string name="advanced">Avançat</string>
-    <string name="collapse_advanced_options">Redueix les opcions avançades</string>
     <string name="number_of_digits">Nombre de dígits</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d segon</item>
@@ -1160,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Selecciona una targeta per a %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opcions avançades</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Més sobre la detecció de coincidències</annotation></string>
     <string name="keep_your_credential_secure">Mantén les teves credencials segures</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Més informació sobre com mantenir les credencials segures quan s\'utilitza “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Estàs segur que vols utilitzar “%1$s”?</string>
@@ -1203,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importa contrasenyes, claus d\'accés i altres tipus d\'elements des del teu cofre de Bitwarden.</string>
     <string name="items_to_import">Elements a importar</string>
     <string name="exporting_items">Exportant elements…</string>
-    <string name="export_failed">L\'exportació ha fallat</string>
     <string name="passwords">Contrasenyes</string>
     <string name="passkeys">Claus de pas</string>
     <string name="why_is_this_step_required">Per què és necessari aquest pas?</string>
@@ -1223,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transfereix elements a %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> requereix que tots els elements siguin propietat de l\'organització per seguretat i compliment. Fes clic a Acceptar per transferir la propietat dels teus elements. <annotation link="learnMore">Més informació</annotation></string>
     <string name="decline_and_leave">Rebutja i marxa</string>
-    <string name="why_am_i_seeing_this">Per què veig això?</string>
     <string name="migrating_items_to_x">Migrat elements a %s</string>
     <string name="failed_to_migrate_items_to_x">No s\'han pogut migrar els elements a %s</string>
     <string name="search_archive">Cerca a l\'arxiu</string>
@@ -1241,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Arxivar elements és una funció Premium. El teu pla actual no inclou l\'accés a aquesta funció.</string>
     <string name="totp_is_a_premium_feature">La clau d\'autenticació (TOTP) és una funció Premium. El teu pla actual no inclou l\'accés a aquesta funció.</string>
     <string name="upgrade_to_premium">Actualitza a Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Pla</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Per gestionar la teva subscripció Premium, hauràs d\'iniciar sessió al teu cofre web en un ordinador.</string>
     <string name="unlock_advanced_security_features">Desbloqueja funcions de seguretat avançades</string>
@@ -1322,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arxiva element</string>
     <string name="once_archived_this_item_will_be_excluded">Un cop arxivat, aquest element s\'exclourà dels resultats de cerca i de les suggerències d\'emplenament automàtic.</string>
     <string name="pricing_unavailable">Preu no disponible</string>
-    <string name="current_plan">Pla actual</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Import de la facturació</string>
     <string name="storage_cost">Cost d\'emmagatzematge</string>
@@ -1398,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">País emissor</string>
     <string name="issuing_state">Estat / província emissor</string>
     <string name="license_class">Classe de llicència</string>
-    <string name="surname">Cognom</string>
-    <string name="given_name">Nom</string>
     <string name="date_of_birth">Data de naixement</string>
     <string name="nationality">Nacionalitat</string>
     <string name="passport_type">Tipus de passaport</string>

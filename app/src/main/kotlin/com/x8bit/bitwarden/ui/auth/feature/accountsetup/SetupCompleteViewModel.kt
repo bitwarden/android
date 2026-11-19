@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,10 +12,7 @@ import javax.inject.Inject
 class SetupCompleteViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : BaseViewModel<SetupCompleteState, Unit, SetupCompleteAction>(
-    initialState = run {
-        val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-        SetupCompleteState(userId = userId)
-    },
+    initialState = SetupCompleteState,
 ) {
     override fun handleAction(action: SetupCompleteAction) {
         when (action) {
@@ -25,18 +21,14 @@ class SetupCompleteViewModel @Inject constructor(
     }
 
     private fun handleCompleteSetup() {
-        authRepository.setOnboardingStatus(
-            status = OnboardingStatus.COMPLETE,
-        )
+        authRepository.goToNextStep()
     }
 }
 
 /**
  * State for the [SetupCompleteScreen]
  */
-data class SetupCompleteState(
-    val userId: String,
-)
+data object SetupCompleteState
 
 /**
  * Model user actions for the [SetupCompleteScreen]

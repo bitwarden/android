@@ -4,7 +4,6 @@
     <string name="add_folder">Adăugare dosar</string>
     <string name="add_item">Adăugare articol</string>
     <string name="an_error_has_occurred">S-a produs o eroare.</string>
-    <string name="apply">Aplică</string>
     <string name="back">Înapoi</string>
     <string name="cancel">Anulare</string>
     <string name="copy">Copiere</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Dosar șters.</string>
     <string name="folder_none">Fără dosar</string>
     <string name="folder_updated">Dosar salvat</string>
-    <string name="folders">Dosare</string>
     <string name="hide">Ascundere</string>
     <string name="internet_connection_required_message">Conectează-te la internet înainte de a continua.</string>
     <string name="internet_connection_required_title">Conexiune la internet necesară</string>
@@ -209,7 +207,6 @@ Scanarea se va face automat.</string>
     <string name="copy_totp">Copiere TOTP</string>
     <string name="copy_totp_automatically_description">Dacă o autentificare are o cheie de autentificare, copiați codul de verificare TOTP în clipboard când completați automat autentificarea.</string>
     <string name="copy_totp_automatically">Copiați automat TOTP</string>
-    <string name="premium_required">Este necesar statutul de membru Premium pentru a utiliza această caracteristică.</string>
     <string name="attachment_deleted">Atașamentul s-a șters</string>
     <string name="attachments_are_a_premium_feature">Atașamentele sunt o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="choose_file">Alegere fișier</string>
@@ -292,9 +289,7 @@ Scanarea se va face automat.</string>
     <string name="icons_url">URL server de pictograme</string>
     <string name="vault_is_locked">Seiful este blocat</string>
     <string name="go_to_my_vault">Deschidere seif personal</string>
-    <string name="collections">Colecții</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Nu există elemente în această colecție.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nu există elemente în acest dosar.</string>
     <string name="no_items_trash">Nu există articole în coșul de reciclare.</string>
@@ -349,16 +344,11 @@ Scanarea se va face automat.</string>
     <string name="type">Tip</string>
     <string name="move_down">Mutare în jos</string>
     <string name="move_up">Mutare în sus</string>
-    <string name="owner">Proprietar</string>
-    <string name="no_collections_to_list">Nu există colecții de afișat.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s s-a mutat la %2$s.</string>
     <string name="select_one_collection">Trebuie să selectați cel puțin o colecție.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partajare</string>
-    <string name="move_to_organization">Mutare la organizație</string>
-    <string name="no_orgs_to_list">Nicio organizație de afișat.</string>
-    <string name="move_to_org_desc">Alegeți o organizație la care doriți să mutați acest articol. Mutarea într-o organizație, transferă proprietatea asupra articolului către organizația respectivă. Nu veți mai fi proprietarul direct al acestui articol odată ce a fost mutat.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Număr de cuvinte</string>
@@ -473,7 +463,6 @@ Scanarea se va face automat.</string>
     <string name="hide_text_by_default">Când Send-ul este accesat, ascundeți textul în mod implicit</string>
     <string name="type_file">Fişier</string>
     <string name="deletion_date">Data ștergerii</string>
-    <string name="deletion_time">Ora ștergerii</string>
     <string name="deletion_date_info">Send-ul va fi șters definitiv la data și ora specificate.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Cine poate vizualiza</string>
@@ -609,7 +598,6 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Sunteți sigur că doriți să activați captura de ecran?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Încercați să vă conectați?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tip dispozitiv</string>
@@ -670,7 +658,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Nicio cerere în așteptare</string>
     <string name="enable_camer_permission_to_use_the_scanner">Permite accesul camerei foto pentru a utiliza scanerul</string>
     <string name="language">Limbă</string>
-    <string name="language_change_x_description">Limba a fost schimbată în %1$s. Vă rugăm să reporniți aplicația pentru a vedea schimbarea</string>
     <string name="default_system">Implicit (sistem)</string>
     <string name="weak_master_password">Parolă principală slabă</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Parola slabă identificată. Utilizați o parolă puternică pentru a vă proteja contul. Sigur doriți să utilizați o parolă slabă?</string>
@@ -984,7 +971,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operațiunea cu cheia de acces a eșuat deoarece cererea nu este acceptată.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operațiunea cu parola a eșuat deoarece elementul selectat nu există.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operațiunea cu parola a eșuat deoarece elementul selectat nu are o parolă validă.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operațiunea cu parola a eșuat deoarece nu a fost selectat niciun element.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operațiunea cu acreditări a eșuat deoarece cererea este invalidă.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operațiunea cu acreditări a eșuat deoarece cererea nu este acceptată.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operațiunea cu acreditări a eșuat deoarece încercările de verificare a utilizatorului au fost depășite.</string>
@@ -1065,7 +1051,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Află mai multe despre aplicațiile privilegiate</string>
     <string name="privileged_apps">Aplicații privilegiate</string>
     <string name="unrecognized_browser">Browser nerecunoscut</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Află mai multe despre utilizarea cheilor de acces cu Bitwarden.</string>
     <string name="all_trusted_apps">Toate aplicațiile de încredere</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ești sigur că nu mai ai încredere în %s?</string>
     <string name="installed_apps">Aplicații instalate</string>
@@ -1082,8 +1067,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Cod de verificare adăugat</string>
     <string name="refresh_period">Perioadă de reîmprospătare</string>
     <string name="algorithm">Algoritm</string>
-    <string name="advanced">Avansat</string>
-    <string name="collapse_advanced_options">Restrânge opțiunile avansate</string>
     <string name="number_of_digits">Număr de cifre</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d secundă</item>
@@ -1168,7 +1151,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Selectează un card pentru %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opțiuni avansate</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mai multe despre detectarea potrivirilor</annotation></string>
     <string name="keep_your_credential_secure">Menține-ți acreditările în siguranță</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Află mai multe despre cum să menții acreditările în siguranță atunci când folosești „%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Ești sigur că vrei să folosești „%1$s”?</string>
@@ -1212,7 +1194,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importă parole, chei de acces și alte tipuri de elemente din seiful Bitwarden.</string>
     <string name="items_to_import">Elemente de importat</string>
     <string name="exporting_items">Se exportă elementele…</string>
-    <string name="export_failed">Exportul a eșuat</string>
     <string name="passwords">Parole</string>
     <string name="passkeys">Chei de acces</string>
     <string name="why_is_this_step_required">De ce este necesar acest pas?</string>
@@ -1232,7 +1213,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transferă elemente către %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> necesită ca toate elementele să fie deținute de organizație pentru securitate și conformitate. Faceți clic pe Accept pentru a transfera proprietatea elementelor dvs. <annotation link="learnMore">Află mai multe</annotation></string>
     <string name="decline_and_leave">Refuză și părăsește</string>
-    <string name="why_am_i_seeing_this">De ce văd acest lucru?</string>
     <string name="migrating_items_to_x">Se migrează elementele către %s</string>
     <string name="failed_to_migrate_items_to_x">Migrarea elementelor către %s a eșuat</string>
     <string name="search_archive">Caută în arhivă</string>
@@ -1250,6 +1230,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Arhivarea elementelor este o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="totp_is_a_premium_feature">Cheia Authenticator (TOTP) este o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="upgrade_to_premium">Actualizează la Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pentru a gestiona abonamentul Premium, va trebui să te autentifici în seiful web de pe un computer.</string>
     <string name="unlock_advanced_security_features">Deblochează funcții avansate de securitate</string>
@@ -1331,7 +1312,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Arhivează elementul</string>
     <string name="once_archived_this_item_will_be_excluded">Odată arhivat, acest element va fi exclus din rezultatele căutării și din sugestiile de completare automată.</string>
     <string name="pricing_unavailable">Prețuri indisponibile</string>
-    <string name="current_plan">Planul curent</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Suma de facturare</string>
     <string name="storage_cost">Costul stocării</string>
@@ -1408,8 +1388,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Țara emitentă</string>
     <string name="issuing_state">Stat / provincie emitent</string>
     <string name="license_class">Clasă licență</string>
-    <string name="surname">Nume de familie</string>
-    <string name="given_name">Prenume</string>
     <string name="date_of_birth">Data nașterii</string>
     <string name="nationality">Naționalitate</string>
     <string name="passport_type">Tip pașaport</string>

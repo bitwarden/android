@@ -4,7 +4,6 @@
     <string name="add_folder">ಫೋಲ್ಡರ್ ಸೇರಿಸಿ</string>
     <string name="add_item">ಐಟಂ ಸೇರಿಸಿ</string>
     <string name="an_error_has_occurred">ದೋಷ ಸಂಭವಿಸಿದೆ</string>
-    <string name="apply">ಅನ್ವಯಿಸು</string>
     <string name="back">ಹಿಂದಕ್ಕೆ</string>
     <string name="cancel">ರದ್ದು</string>
     <string name="copy">ನಕಲಿಸಿ</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ಫೋಲ್ಡರ್ ಅಳಿಸಲಾಗಿದೆ.</string>
     <string name="folder_none">ಫೋಲ್ಡರ್ ಇಲ್ಲ</string>
     <string name="folder_updated">ಫೋಲ್ಡರ್ ನವೀಕರಿಸಲಾಗಿದೆ.</string>
-    <string name="folders">ಫೋಲ್ಡರ್‌ಗಳು</string>
     <string name="hide">ಮರೆಮಾಡಿ</string>
     <string name="internet_connection_required_message">ಮುಂದುವರಿಯುವ ಮೊದಲು ದಯವಿಟ್ಟು ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಪಡಿಸಿ.</string>
     <string name="internet_connection_required_title">ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕ ಅಗತ್ಯವಿದೆ</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTP ಅನ್ನು ನಕಲಿಸಿ</string>
     <string name="copy_totp_automatically_description">ಲಾಗಿನ್ ಅಧಿಕೃತ ಕೀಲಿಯನ್ನು ಹೊಂದಿದ್ದರೆ, ನೀವು ಲಾಗಿನ್ ಅನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡುವಾಗ TOTP ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ನಿಮ್ಮ ಕ್ಲಿಪ್ಬೋರ್ಡ್ಗೆ ನಕಲಿಸಿ.</string>
     <string name="copy_totp_automatically">TOTP ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಕಲಿಸಿ</string>
-    <string name="premium_required">ಈ ವೈಶಿಷ್ಟ್ಯವನ್ನು ಬಳಸಲು ಪ್ರೀಮಿಯಂ ಸದಸ್ಯತ್ವ ಅಗತ್ಯವಿದೆ.</string>
     <string name="attachment_deleted">ಲಗತ್ತು ಅಳಿಸಲಾಗಿದೆ</string>
     <string name="attachments_are_a_premium_feature">ಲಗತ್ತುಗಳು ಪ್ರೀಮಿಯಂ ವೈಶಿಷ್ಟ್ಯವಾಗಿದೆ. ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಯೋಜನೆಯು ಈ ವೈಶಿಷ್ಟ್ಯಕ್ಕೆ ಪ್ರವೇಶವನ್ನು ಒಳಗೊಂಡಿಲ್ಲ.</string>
     <string name="choose_file">ಫೈಲ್ ಆಯ್ಕೆ</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">ಚಿಹ್ನೆಗಳು ಸರ್ವರ್ URL</string>
     <string name="vault_is_locked">ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ</string>
     <string name="go_to_my_vault">ನನ್ನ ವಾಲ್ಟ್ಗೆ ಹೋಗಿ</string>
-    <string name="collections">ಸಂಗ್ರಹಣೆಗಳು</string>
     <string name="shared_folders">ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ಗಳು</string>
-    <string name="no_items_collection">ಈ ಸಂಗ್ರಹದಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="there_are_no_items_in_this_shared_folder">ಈ ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="no_items_folder">ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="no_items_trash">ಅನುಪಯುಕ್ತದಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</string>
@@ -347,16 +342,11 @@
     <string name="type">ಪ್ರಕಾರ</string>
     <string name="move_down">ಕೆಳಕ್ಕೆ ಸರಿಸು</string>
     <string name="move_up">ಮೇಲಕ್ಕೆ ಸರಿಸಿ</string>
-    <string name="owner">ಮಾಲೀಕರು</string>
-    <string name="no_collections_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಗ್ರಹಗಳಿಲ್ಲ.</string>
     <string name="there_are_no_shared_folders_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ಗಳಿಲ್ಲ.</string>
     <string name="moved_item_to_org">%1$s ಅನ್ನು %2$s ಗೆ ಸರಿಸಲಾಗಿದೆ.</string>
     <string name="select_one_collection">ನೀವು ಕನಿಷ್ಠ ಒಂದು ಸಂಗ್ರಹವನ್ನು ಆರಿಸಬೇಕು.</string>
     <string name="you_must_select_at_least_one_shared_folder">ನೀವು ಕನಿಷ್ಟ ಒಂದು ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ ಅನ್ನು ಆಯ್ಕೆ ಮಾಡಬೇಕು.</string>
     <string name="share">ಹಂಚಿಕೊಳ್ಳಿ</string>
-    <string name="move_to_organization">ಸಂಸ್ಥೆಗೆ ಸರಿಸು</string>
-    <string name="no_orgs_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಸ್ಥೆಗಳು ಇಲ್ಲ.</string>
-    <string name="move_to_org_desc">ಈ ಐಟಂ ಅನ್ನು ಸರಿಸಲು ನೀವು ಬಯಸುವ ಸಂಸ್ಥೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಸಂಸ್ಥೆಗೆ ಸರಿಸುವುದು ಐಟಂನ ಮಾಲೀಕತ್ವವನ್ನು ಆ ಸಂಸ್ಥೆಗೆ ವರ್ಗಾಯಿಸುತ್ತದೆ. ಐಟಂ ಅನ್ನು ಸರಿಸಿದ ನಂತರ ನೀವು ಇನ್ನು ಮುಂದೆ ಅದರ ನೇರ ಮಾಲೀಕರಾಗಿರುವುದಿಲ್ಲ.</string>
     <string name="no_vaults_to_list">ಪಟ್ಟಿ ಮಾಡಲು ವಾಲ್ಟ್ಗಳಿಲ್ಲ.</string>
     <string name="move_to_vault_desc">ಈ ಐಟಂ ಅನ್ನು ಸರಿಸಲು ನೀವು ಬಯಸುವ ವಾಲ್ಟ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಇನ್ನೊಂದು ವಾಲ್ಟ್ಗೆ ಸರಿಸುವುದು ಐಟಂನ ಮಾಲೀಕತ್ವವನ್ನು ಆ ಸಂಸ್ಥೆಗೆ ವರ್ಗಾಯಿಸುತ್ತದೆ. ಐಟಂ ಅನ್ನು ಸರಿಸಿದ ನಂತರ ನೀವು ಇನ್ನು ಮುಂದೆ ಅದರ ನೇರ ಮಾಲೀಕರಾಗಿರುವುದಿಲ್ಲ.</string>
     <string name="number_of_words">ಪದಗಳ ಸಂಖ್ಯೆ</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸುವಾಗ, ಪಠ್ಯವನ್ನು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಮರೆಮಾಡಿ</string>
     <string name="type_file">ಫೈಲ್</string>
     <string name="deletion_date">ಅಳಿಸುವ ದಿನಾಂಕ</string>
-    <string name="deletion_time">ಅಳಿಸುವ ಸಮಯ</string>
     <string name="deletion_date_info">ಕಳುಹಿಸಿದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಮೇಲೆ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲಾಗುತ್ತದೆ.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">ಯಾರು ವೀಕ್ಷಿಸಬಹುದು</string>
@@ -605,7 +594,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">ನೀವು ಪರದೆಯ ಸೆರೆಹಿಡಿಯುವಿಕೆಯನ್ನು ಆನ್ ಮಾಡಲು ಖಚಿತವಾಗಿದ್ದೀರಾ?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">ನೀವು ಲಾಗಿನ್ ಮಾಡಲು ಪ್ರಯತ್ನಿಸುತ್ತಿದ್ದೀರಾ?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">ಸಾಧನದ ಪ್ರಕಾರ</string>
@@ -666,7 +654,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">ಯಾವುದೇ ಬಾಕಿ ವಿನಂತಿಗಳಿಲ್ಲ</string>
     <string name="enable_camer_permission_to_use_the_scanner">ಸ್ಕ್ಯಾನರ್ ಬಳಸಲು ಕ್ಯಾಮೆರಾ ಅನುಮತಿಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
     <string name="language">ಭಾಷೆ</string>
-    <string name="language_change_x_description">ಭಾಷೆಯನ್ನು %1$s ಗೆ ಬದಲಾಯಿಸಲಾಗಿದೆ. ಬದಲಾವಣೆಯನ್ನು ನೋಡಲು ದಯವಿಟ್ಟು ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಮರುಪ್ರಾರಂಭಿಸಿ</string>
     <string name="default_system">ಡೀಫಾಲ್ಟ್ (ಸಿಸ್ಟಮ್)</string>
     <string name="weak_master_password">ದುರ್ಬಲ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">ದುರ್ಬಲ ಪಾಸ್ವರ್ಡ್ ಗುರುತಿಸಲಾಗಿದೆ. ನಿಮ್ಮ ಖಾತೆಯನ್ನು ರಕ್ಷಿಸಲು ಬಲವಾದ ಪಾಸ್ವರ್ಡ್ ಬಳಸಿ. ನೀವು ದುರ್ಬಲ ಪಾಸ್ವರ್ಡ್ ಬಳಸಲು ಖಚಿತವಾಗಿದ್ದೀರಾ?</string>
@@ -978,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">ವಿನಂತಿಯು ಬೆಂಬಲಿತವಲ್ಲದ ಕಾರಣ ಪಾಸ್ಕೀ ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">ಆಯ್ಕೆ ಮಾಡಿದ ಐಟಂ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲದ ಕಾರಣ ಪಾಸ್ವರ್ಡ್ ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">ಆಯ್ಕೆ ಮಾಡಿದ ಐಟಂ ಮಾನ್ಯ ಪಾಸ್ವರ್ಡ್ ಹೊಂದಿಲ್ಲದ ಕಾರಣ ಪಾಸ್ವರ್ಡ್ ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">ಯಾವುದೇ ಐಟಂ ಆಯ್ಕೆಯಾಗದ ಕಾರಣ ಪಾಸ್ವರ್ಡ್ ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">ವಿನಂತಿಯು ಅಮಾನ್ಯವಾಗಿರುವ ಕಾರಣ ರುಜುವಾತು ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">ವಿನಂತಿಯು ಬೆಂಬಲಿತವಲ್ಲದ ಕಾರಣ ರುಜುವಾತು ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">ಬಳಕೆದಾರ ಪರಿಶೀಲನಾ ಪ್ರಯತ್ನಗಳು ಮೀರಿದ ಕಾರಣ ರುಜುವಾತು ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ.</string>
@@ -1059,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">ವಿಶೇಷಾಧಿಕಾರ ಅಪ್ಲಿಕೇಶನ್ಗಳ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</string>
     <string name="privileged_apps">ವಿಶೇಷಾಧಿಕಾರ ಅಪ್ಲಿಕೇಶನ್ಗಳು</string>
     <string name="unrecognized_browser">ಗುರುತಿಸಲಾಗದ ಬ್ರೌಸರ್</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ನೊಂದಿಗೆ ಪಾಸ್ಕೀಗಳನ್ನು ಬಳಸುವುದರ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</string>
     <string name="all_trusted_apps">ಎಲ್ಲಾ ವಿಶ್ವಾಸಾರ್ಹ ಅಪ್ಲಿಕೇಶನ್ಗಳು</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">ನೀವು %s ಅನ್ನು ನಂಬುವುದನ್ನು ನಿಲ್ಲಿಸಲು ಖಚಿತವಾಗಿದ್ದೀರಾ?</string>
     <string name="installed_apps">ಸ್ಥಾಪಿಸಿದ ಅಪ್ಲಿಕೇಶನ್ಗಳು</string>
@@ -1076,8 +1061,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">ಪರಿಶೀಲನಾ ಕೋಡ್ ಸೇರಿಸಲಾಗಿದೆ</string>
     <string name="refresh_period">ರಿಫ್ರೆಶ್ ಅವಧಿ</string>
     <string name="algorithm">ಅಲ್ಗಾರಿದಮ್</string>
-    <string name="advanced">ಮುಂದುವರಿದ</string>
-    <string name="collapse_advanced_options">ಮುಂದುವರಿದ ಆಯ್ಕೆಗಳನ್ನು ಮುಚ್ಚಿ</string>
     <string name="number_of_digits">ಅಂಕೆಗಳ ಸಂಖ್ಯೆ</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d ಸೆಕೆಂಡ್</item>
@@ -1160,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">%s ಗಾಗಿ ಕಾರ್ಡ್ ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">ಮುಂದುವರಿದ ಆಯ್ಕೆಗಳು</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ಹೊಂದಾಣಿಕೆ ಪತ್ತೆಯ ಬಗ್ಗೆ ಹೆಚ್ಚು</annotation></string>
     <string name="keep_your_credential_secure">ನಿಮ್ಮ ರುಜುವಾತುಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿರಿಸಿ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“ %1$s” ಬಳಸುವಾಗ ರುಜುವಾತುಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡುವುದು ಹೇಗೆ ಎಂಬುದರ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</string>
     <string name="are_you_sure_you_want_to_use">ನೀವು “ %1$s” ಬಳಸಲು ಖಚಿತವಾಗಿದ್ದೀರಾ?</string>
@@ -1203,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">ನಿಮ್ಮ Bitwarden ವಾಲ್ಟ್ನಿಂದ ಪಾಸ್ವರ್ಡ್ಗಳು, ಪಾಸ್ಕೀಗಳು ಮತ್ತು ಇತರ ಐಟಂ ಪ್ರಕಾರಗಳನ್ನು ಆಮದು ಮಾಡಿ.</string>
     <string name="items_to_import">ಆಮದು ಮಾಡಬೇಕಾದ ಐಟಂಗಳು</string>
     <string name="exporting_items">ಐಟಂಗಳನ್ನು ರಫ್ತು ಮಾಡಲಾಗುತ್ತಿದೆ…</string>
-    <string name="export_failed">ರಫ್ತು ವಿಫಲವಾಗಿದೆ</string>
     <string name="passwords">ಪಾಸ್ವರ್ಡ್ಗಳು</string>
     <string name="passkeys">ಪಾಸ್ಕೀಗಳು</string>
     <string name="why_is_this_step_required">ಈ ಹಂತ ಏಕೆ ಅಗತ್ಯ?</string>
@@ -1223,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">%1$s ಗೆ ಐಟಂಗಳನ್ನು ವರ್ಗಾಯಿಸಿ</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> ಸುರಕ್ಷತೆ ಮತ್ತು ಅನುಸರಣೆಗಾಗಿ ಎಲ್ಲಾ ಐಟಂಗಳು ಸಂಸ್ಥೆಯ ಮಾಲೀಕತ್ವದಲ್ಲಿರಬೇಕೆಂದು ಬಯಸುತ್ತದೆ. ನಿಮ್ಮ ಐಟಂಗಳ ಮಾಲೀಕತ್ವವನ್ನು ವರ್ಗಾಯಿಸಲು ಸ್ವೀಕರಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ. <annotation link="learnMore">ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</annotation></string>
     <string name="decline_and_leave">ನಿರಾಕರಿಸಿ ಮತ್ತು ತೊರೆಯಿರಿ</string>
-    <string name="why_am_i_seeing_this">ನಾನು ಇದನ್ನು ಏಕೆ ನೋಡುತ್ತಿದ್ದೇನೆ?</string>
     <string name="migrating_items_to_x">%s ಗೆ ಐಟಂಗಳನ್ನು ವಲಸೆ ಹೋಗುತ್ತಿದೆ</string>
     <string name="failed_to_migrate_items_to_x">%s ಗೆ ಐಟಂಗಳನ್ನು ವಲಸೆ ಹೋಗುವಲ್ಲಿ ವಿಫಲವಾಗಿದೆ</string>
     <string name="search_archive">ಆರ್ಕೈವ್ ಹುಡುಕು</string>
@@ -1241,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">ಐಟಂಗಳನ್ನು ಆರ್ಕೈವ್ ಮಾಡುವುದು ಪ್ರೀಮಿಯಂ ವೈಶಿಷ್ಟ್ಯವಾಗಿದೆ. ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಯೋಜನೆಯು ಈ ವೈಶಿಷ್ಟ್ಯಕ್ಕೆ ಪ್ರವೇಶವನ್ನು ಒಳಗೊಂಡಿಲ್ಲ.</string>
     <string name="totp_is_a_premium_feature">ಅಧಿಕೃತ ಕೀಲಿ (TOTP) ಪ್ರೀಮಿಯಂ ವೈಶಿಷ್ಟ್ಯವಾಗಿದೆ. ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಯೋಜನೆಯು ಈ ವೈಶಿಷ್ಟ್ಯಕ್ಕೆ ಪ್ರವೇಶವನ್ನು ಒಳಗೊಂಡಿಲ್ಲ.</string>
     <string name="upgrade_to_premium">ಪ್ರೀಮಿಯಂಗೆ ಅಪ್ಗ್ರೇಡ್ ಮಾಡಿ</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">ಯೋಜನೆ</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">ನಿಮ್ಮ ಪ್ರೀಮಿಯಂ ಚಂದಾದಾರಿಕೆಯನ್ನು ನಿರ್ವಹಿಸಲು, ನೀವು ಕಂಪ್ಯೂಟರ್ನಲ್ಲಿ ನಿಮ್ಮ ವೆಬ್ ವಾಲ್ಟ್ಗೆ ಲಾಗಿನ್ ಮಾಡಬೇಕಾಗುತ್ತದೆ.</string>
     <string name="unlock_advanced_security_features">ಮುಂದುವರಿದ ಸುರಕ್ಷತಾ ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿ</string>
@@ -1322,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">ಐಟಂ ಅನ್ನು ಆರ್ಕೈವ್ ಮಾಡಿ</string>
     <string name="once_archived_this_item_will_be_excluded">ಆರ್ಕೈವ್ ಮಾಡಿದ ನಂತರ, ಈ ಐಟಂ ಅನ್ನು ಹುಡುಕಾಟ ಫಲಿತಾಂಶಗಳು ಮತ್ತು ಸ್ವಯಂ ಭರ್ತಿ ಸಲಹೆಗಳಿಂದ ಹೊರಗಿಡಲಾಗುತ್ತದೆ.</string>
     <string name="pricing_unavailable">ಬೆಲೆ ಲಭ್ಯವಿಲ್ಲ</string>
-    <string name="current_plan">ಪ್ರಸ್ತುತ ಯೋಜನೆ</string>
     <string name="premium_plan_name">ಪ್ರೀಮಿಯಂ</string>
     <string name="billing_amount">ಬಿಲ್ಲಿಂಗ್ ಮೊತ್ತ</string>
     <string name="storage_cost">ಶೇಖರಣಾ ವೆಚ್ಚ</string>
@@ -1398,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">ಜಾರಿಗೊಳಿಸುವ ದೇಶ</string>
     <string name="issuing_state">ಜಾರಿಗೊಳಿಸುವ ರಾಜ್ಯ / ಪ್ರಾಂತ್ಯ</string>
     <string name="license_class">ಲೈಸೆನ್ಸ್ ವರ್ಗ</string>
-    <string name="surname">ಉಪನಾಮ</string>
-    <string name="given_name">ಮೊದಲ ಹೆಸರು</string>
     <string name="date_of_birth">ಜನ್ಮ ದಿನಾಂಕ</string>
     <string name="nationality">ರಾಷ್ಟ್ರೀಯತೆ</string>
     <string name="passport_type">ಪಾಸ್ಪೋರ್ಟ್ ಪ್ರಕಾರ</string>

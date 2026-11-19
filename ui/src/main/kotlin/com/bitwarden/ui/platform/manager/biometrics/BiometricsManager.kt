@@ -1,6 +1,11 @@
-package com.x8bit.bitwarden.ui.platform.manager.biometrics
+package com.bitwarden.ui.platform.manager.biometrics
 
+import android.app.Activity
 import androidx.compose.runtime.Immutable
+import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.biometrics.BiometricsSupportManager
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
+import com.bitwarden.ui.platform.manager.biometrics.model.BiometricsConfig
 import javax.crypto.Cipher
 
 /**
@@ -9,8 +14,8 @@ import javax.crypto.Cipher
 @Immutable
 interface BiometricsManager {
     /**
-     * Returns `true` if the device supports Class 3 (STRONG) biometric authentication, `false`
-     * otherwise.
+     * Returns `true` if the device supports the authenticators used when prompting for biometrics,
+     * `false` otherwise.
      */
     val isBiometricsSupported: Boolean
 
@@ -54,13 +59,20 @@ interface BiometricsManager {
         onError: () -> Unit,
         onNotSupported: () -> Unit,
     )
-}
 
-/**
- * Status of biometric support available on the device.
- */
-enum class BiometricSupportStatus {
-    CLASS_3_SUPPORTED,
-    CLASS_2_SUPPORTED,
-    NOT_SUPPORTED,
+    @Suppress("UndocumentedPublicClass")
+    @OmitFromCoverage
+    companion object {
+        /**
+         * Creates a new [BiometricsManager] instance.
+         */
+        fun create(
+            activity: Activity,
+            config: BiometricsConfig,
+        ): BiometricsManager = BiometricsManagerImpl(
+            activity = activity,
+            config = config,
+            biometricsSupportManager = BiometricsSupportManager.create(context = activity),
+        )
+    }
 }

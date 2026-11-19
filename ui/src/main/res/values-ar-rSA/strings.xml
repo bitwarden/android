@@ -4,7 +4,6 @@
     <string name="add_folder">إضافة مجلّد</string>
     <string name="add_item">إضافة عنصر</string>
     <string name="an_error_has_occurred">حدث خطأ</string>
-    <string name="apply">تطبيق</string>
     <string name="back">رجوع</string>
     <string name="cancel">إلغاء</string>
     <string name="copy">نسخ</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">حذفت المجلد.</string>
     <string name="folder_none">لا مجلد</string>
     <string name="folder_updated">حُفظ المجلد</string>
-    <string name="folders">المجلدات</string>
     <string name="hide">إخفاء</string>
     <string name="internet_connection_required_message">عليك الاتصال بالإنترنت قبل المواصلة.</string>
     <string name="internet_connection_required_title">الاتصال بالإنترنت مطلوب</string>
@@ -212,7 +210,6 @@
     <string name="copy_totp">نسخ TOTP</string>
     <string name="copy_totp_automatically_description">إذا كان تسجيل الدخول يحتوي على مفتاح مصادقة، انسخ رمز التحقق TOTP إلى الحافظة الخاصة بك عند ملء تسجيل الدخول تلقائيا.</string>
     <string name="copy_totp_automatically">نسخ TOTP تلقائياً</string>
-    <string name="premium_required">يطلب وجود اشتراك Premium لاستخدام هذه الميزة.</string>
     <string name="attachment_deleted">تم حذف المرفق</string>
     <string name="attachments_are_a_premium_feature">المرفقات ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
     <string name="choose_file">اختيار ملف</string>
@@ -295,9 +292,7 @@
     <string name="icons_url">رابط ملقم الأيقونات</string>
     <string name="vault_is_locked">الخزنة مقفلة</string>
     <string name="go_to_my_vault">الانتقال إلى خزنتي</string>
-    <string name="collections">المختارات</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">لا توجد عناصر في هذا المجلد.</string>
     <string name="no_items_trash">لا توجد عناصر في سلة المهملات.</string>
@@ -355,16 +350,11 @@
     <string name="type">نوع</string>
     <string name="move_down">تحريك للأسفل</string>
     <string name="move_up">التحريك للاعلى</string>
-    <string name="owner">المالك</string>
-    <string name="no_collections_to_list">لا توجد مجموعات لعرضها.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s نقل إلى %2$s.</string>
     <string name="select_one_collection">يجب اختيار مجموعة واحدة على الأقل.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">مشاركة</string>
-    <string name="move_to_organization">الانتقال إلى المنظمة</string>
-    <string name="no_orgs_to_list">لا توجد منظمات لعرضها.</string>
-    <string name="move_to_org_desc">اختر منظمة تود نقل هذا العنصر إليها. النقل إلى منظمة ينقل ملكية العنصر إليها. لن تعود المالك المباشر لهذا العنصر بمجرد نقله.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">عدد الكلمات</string>
@@ -479,7 +469,6 @@
     <string name="hide_text_by_default">عند الوصول إلى الإرسال، إخفاء النص بشكل افتراضي</string>
     <string name="type_file">ملف</string>
     <string name="deletion_date">تاريخ الحذف</string>
-    <string name="deletion_time">وقت الحذف</string>
     <string name="deletion_date_info">سيتم حذف الإرسال بشكل دائم في التاريخ والوقت المحددين.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">من يمكنه الاطلاع</string>
@@ -621,7 +610,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">هل أنت متأكد من أنك تريد تفعيل التقاط صورة الشاشة؟</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">هل تحاول تسجيل الدخول؟</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">نوع الجهاز</string>
@@ -682,7 +670,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">لا توجد طلبات معلقة</string>
     <string name="enable_camer_permission_to_use_the_scanner">تفعيل إذن الكاميرا لاستخدام الماسح الضوئي</string>
     <string name="language">اللّغة</string>
-    <string name="language_change_x_description">تم تغيير اللغة إلى %1$s. الرجاء إعادة تشغيل التطبيق لرؤية التغيير</string>
     <string name="default_system">الافتراضي (النظام)</string>
     <string name="weak_master_password">كلمة المرور الرئيسية الضعيفة</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">تم تحديد كلمة المرور ضعيفة. استخدم كلمة مرور قوية لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة مرور ضعيفة؟</string>
@@ -1003,7 +990,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">فشلت عملية المرور لأن الطلب غير مدعوم.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">فشلت عملية إدخال كلمة المرور لأن العنصر المحدد غير موجود.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">فشلت عملية كلمة المرور لأن العنصر المحدد ليس لديه كلمة مرور صالحة.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">فشلت عملية كلمة المرور لأنه لم يتم تحديد أي عنصر.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">فشلت عملية التحقق من صحة البيانات لأن الطلب غير صالح.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">فشلت عملية الاعتماد لأن الطلب غير مدعوم.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">فشلت عملية الاعتماد بسبب تجاوز محاولات التحقق من المستخدم.</string>
@@ -1084,7 +1070,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">معرفة المزيد عن التطبيقات المتميزة</string>
     <string name="privileged_apps">تطبيقات ذات صلاحيات</string>
     <string name="unrecognized_browser">متصفح غير معروف</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">تعرف على المزيد حول استخدام مفاتيح المرور مع Bitwarden.</string>
     <string name="all_trusted_apps">جميع التطبيقات الموثوق بها</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">هل أنت متأكد من أنك تريد إيقاف الثقة %s؟</string>
     <string name="installed_apps">التطبيقات المثبتة</string>
@@ -1101,8 +1086,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">تمت إضافة رمز التحقق</string>
     <string name="refresh_period">فترة التحديث</string>
     <string name="algorithm">الخوارزمية</string>
-    <string name="advanced">متقدم</string>
-    <string name="collapse_advanced_options">إخفاء الخيارات المتقدمة</string>
     <string name="number_of_digits">عدد الأرقام</string>
     <plurals name="refresh_period_seconds">
         <item quantity="zero">%d ثانية</item>
@@ -1193,7 +1176,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">اختر بطاقة لـ %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">الخيارات المتقدمة</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">المزيد عن اكتشاف المطابقة</annotation></string>
     <string name="keep_your_credential_secure">حافظ على بيانات الحساب آمنة</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">تعرف على المزيد حول كيفية الحفاظ على بيانات الحساب آمنة عند استخدام \"%1$s\".</string>
     <string name="are_you_sure_you_want_to_use">هل أنت متأكد من أنك تريد استخدام \"%1$s\"؟</string>
@@ -1240,7 +1222,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">استيراد كلمات السر، ومفاتيح المرور، وأنواع السلع الأخرى من خزنة Bitwarden الخاصة بك.</string>
     <string name="items_to_import">عناصر للاستيراد</string>
     <string name="exporting_items">تصدير العناصر…</string>
-    <string name="export_failed">فشل التصدير</string>
     <string name="passwords">كلمات المرور</string>
     <string name="passkeys">مفاتيح المرور</string>
     <string name="why_is_this_step_required">لماذا تعد هذه الخطوة ضرورية؟</string>
@@ -1260,7 +1241,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">نقل العناصر إلى %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> يتطلب أن تكون جميع المواد مملوكة للمنظمة من أجل الأمن والامتثال. انقر على قبول لنقل ملكية العناصر الخاصة بك. <annotation link="learnMore">اعرف المزيد</annotation></string>
     <string name="decline_and_leave">رفض و مغادرة</string>
-    <string name="why_am_i_seeing_this">لماذا يظهر لي هذا؟</string>
     <string name="migrating_items_to_x">نقل العناصر إلى %s</string>
     <string name="failed_to_migrate_items_to_x">فشل نقل العناصر إلى %s</string>
     <string name="search_archive">البحث في الأرشيف</string>
@@ -1278,6 +1258,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">أرشفة العناصر ميزة في الباقة Premium. باقتك الحالية لا تتضمن الوصول إليها.</string>
     <string name="totp_is_a_premium_feature">مفتاح المصادقة (TOTP) ميزة مخصصة لباقة Premium. باقتك الحالية لا تشمل صلاحية الوصول إلى هذه الميزة.</string>
     <string name="upgrade_to_premium">الترقية إلى الباقة Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">باقة</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">لإدارة اشتراكك في باقة Premium، ستحتاج إلى تسجيل الدخول إلى خزنتك على الويب من جهاز حاسوب.</string>
     <string name="unlock_advanced_security_features">استفد من ميزات الأمان المتقدمة</string>
@@ -1359,7 +1340,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">أرشفة العنصر</string>
     <string name="once_archived_this_item_will_be_excluded">بمجرد الأرشفة، سيتم استبعاد هذا العنصر من نتائج البحث واقتراحاتالملء التلقائي.</string>
     <string name="pricing_unavailable">السعر غير متاح</string>
-    <string name="current_plan">الباقة الحالية</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">مبلغ الفاتورة</string>
     <string name="storage_cost">تكلفة التخزين</string>
@@ -1439,8 +1419,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">بلد الإصدار</string>
     <string name="issuing_state">جهة الإصدار الولاية / المقاطعة</string>
     <string name="license_class">فئة الرخصة</string>
-    <string name="surname">اللقب</string>
-    <string name="given_name">الاسم</string>
     <string name="date_of_birth">تاريخ الميلاد</string>
     <string name="nationality">الجنسية</string>
     <string name="passport_type">نوع جواز السفر</string>

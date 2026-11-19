@@ -4,7 +4,6 @@
     <string name="add_folder">Aggiungi una cartella</string>
     <string name="add_item">Aggiungi un elemento</string>
     <string name="an_error_has_occurred">Avviso</string>
-    <string name="apply">Applica</string>
     <string name="back">Indietro</string>
     <string name="cancel">Annulla</string>
     <string name="copy">Copia</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Cartella eliminata</string>
     <string name="folder_none">Nessuna cartella</string>
     <string name="folder_updated">Cartella salvata</string>
-    <string name="folders">Cartelle</string>
     <string name="hide">Nascondi</string>
     <string name="internet_connection_required_message">Verifica la connessione a internet prima di continuare</string>
     <string name="internet_connection_required_title">Connessione a internet necessaria</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">Copia il codice 2FA</string>
     <string name="copy_totp_automatically_description">Copia automaticamente il codice 2FA negli appunti quando riempi automaticamente un login</string>
     <string name="copy_totp_automatically">Copia automatica del codice 2FA</string>
-    <string name="premium_required">Passa a un abbonamento premium per utilizzare questa funzionalità</string>
     <string name="attachment_deleted">Allegato eliminato</string>
     <string name="attachments_are_a_premium_feature">L\'archiviazione è una funzionalità Premium. Il tuo piano attuale non include questa funzionalità.</string>
     <string name="choose_file">Seleziona il file</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">URL del server di icone</string>
     <string name="vault_is_locked">La cassaforte è bloccata</string>
     <string name="go_to_my_vault">Vai alla cassaforte</string>
-    <string name="collections">Collezioni</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Non ci sono elementi in questa raccolta.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nessun elemento in questa cartella</string>
     <string name="no_items_trash">Nessun elemento nel cestino</string>
@@ -346,16 +341,11 @@
     <string name="type">Scegli il tipo di elemento</string>
     <string name="move_down">Sposta in basso</string>
     <string name="move_up">Sposta in alto</string>
-    <string name="owner">Propriet.</string>
-    <string name="no_collections_to_list">Nessuna raccolta da mostrare.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s spostato in %2$s</string>
     <string name="select_one_collection">Devi selezionare almeno una raccolta.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Condividi</string>
-    <string name="move_to_organization">Sposta in organizzazione</string>
-    <string name="no_orgs_to_list">Nessuna organizzazione da mostrare.</string>
-    <string name="move_to_org_desc">Scegli un\'organizzazione in cui vuoi spostare questo elemento. Spostarlo in un\'organizzazione trasferisce la proprietà dell\'elemento all\'organizzazione. Una volta spostato, non sarai più il proprietario diretto di questo elemento.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Numero di parole</string>
@@ -470,7 +460,6 @@
     <string name="hide_text_by_default">Nascondi il testo per impostazione predefinita</string>
     <string name="type_file">File</string>
     <string name="deletion_date">Eliminazione programmata</string>
-    <string name="deletion_time">Orario</string>
     <string name="deletion_date_info">Il Send verrà eliminato definitivamente dopo il periodo di tempo specificato</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Chi può visualizzare</string>
@@ -604,7 +593,6 @@ Tutte le sessioni attive verranno terminate entro un\'ora.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Vuoi davvero attivare la cattura dello schermo?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">Stai cercando di accedere?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tipo di dispositivo</string>
@@ -665,7 +653,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">Nessuna richiesta in sospeso</string>
     <string name="enable_camer_permission_to_use_the_scanner">Consenti a Bitwarden l\'accesso alla fotocamera per scansionare i QR code</string>
     <string name="language">Lingua</string>
-    <string name="language_change_x_description">La lingua è stata cambiata a %1$s. Riavvia l\'app per vedere la modifica.</string>
     <string name="default_system">Predefinito (Sistema)</string>
     <string name="weak_master_password">Password debole</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Hai scelto una password debole. È altamente consigliato impostare una password forte e unica per proteggere l\'account. Vuoi davvero usare questa password?</string>
@@ -977,7 +964,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operazione passkey non riuscita perché la richiesta non è supportata.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operazione password non riuscita: l\'elemento selezionato non esiste.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operazione sulla password fallita perché l\'elemento selezionato non ha una password valida.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operazione password non riuscita: non è stato selezionato un elemento.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operazione non riuscita: richiesta non valida.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operazione non riuscita: richiesta non supportata.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operazione sulle credenziali non riuscita: il limite dei tentativi di verifica è stato superato.</string>
@@ -1058,7 +1044,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Scopri di più sulle app privilegiate</string>
     <string name="privileged_apps">App privilegiate</string>
     <string name="unrecognized_browser">Browser non riconosciuto</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Scopri di più sull\'utilizzo delle passkey con Bitwarden</string>
     <string name="all_trusted_apps">Tutte le app affidabili</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Sei sicuro di voler segnare %s come non affidabile?</string>
     <string name="installed_apps">App installate</string>
@@ -1075,8 +1060,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Codice di verifica aggiunto</string>
     <string name="refresh_period">Periodo di aggiornamento</string>
     <string name="algorithm">Algoritmo</string>
-    <string name="advanced">Avanzato</string>
-    <string name="collapse_advanced_options">Comprimi opzioni avanzate</string>
     <string name="number_of_digits">Numero di cifre</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d secondo</item>
@@ -1159,7 +1142,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Seleziona una carta per %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opzioni avanzate</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Ulteriori informazioni sulla corrispondenza degli URL</annotation></string>
     <string name="keep_your_credential_secure">Mantieni le tue credenziali sicure</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Ulteriori informazioni su come mantenere le credenziali sicure quando si utilizza \'%1$s\'.</string>
     <string name="are_you_sure_you_want_to_use">Vuoi davvero usare \'%1$s\'?</string>
@@ -1202,7 +1184,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importa password, passkey e altro dalla tua cassaforte Bitwarden.</string>
     <string name="items_to_import">Elementi da importare</string>
     <string name="exporting_items">Esportazione…</string>
-    <string name="export_failed">Esportazione non riuscita</string>
     <string name="passwords">Password</string>
     <string name="passkeys">Passkey</string>
     <string name="why_is_this_step_required">Perché questo passo è necessario?</string>
@@ -1222,7 +1203,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Trasferisci gli elementi in %1$s</string>
     <string name="transfer_items_description">%1$s richiede che tutti gli elementi siano di proprietà dell\'organizzazione per motivi di conformità e sicurezza. Clicca su \'Accetta\' per trasferire la proprietà.</string>
     <string name="decline_and_leave">Rifiuta e abbandona</string>
-    <string name="why_am_i_seeing_this">Perché vedo questo avviso?</string>
     <string name="migrating_items_to_x">Migrazione degli elementi in %s</string>
     <string name="failed_to_migrate_items_to_x">Migrazione degli elementi in %s non riuscita</string>
     <string name="search_archive">Cerca nell\'archivio</string>
@@ -1240,6 +1220,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">L\'archiviazione è una funzionalità Premium. Il tuo piano attuale non include questa funzionalità.</string>
     <string name="totp_is_a_premium_feature">La chiave authenticator (TOTP) è una funzionalità Premium. Il tuo piano attuale non include l\'accesso a questa funzionalità.</string>
     <string name="upgrade_to_premium">Passa a Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Piano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Per gestire il tuo abbonamento Premium, dovrai accedere al tuo vault web da un computer.</string>
     <string name="unlock_advanced_security_features">Sblocca funzionalità di sicurezza avanzate</string>
@@ -1321,7 +1302,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Archivia elemento</string>
     <string name="once_archived_this_item_will_be_excluded">Una volta archiviato, questo elemento sarà escluso dai risultati di ricerca e dai suggerimenti di riempimento automatico.</string>
     <string name="pricing_unavailable">Prezzi non disponibili</string>
-    <string name="current_plan">Piano attuale</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Quantità di fattura</string>
     <string name="storage_cost">Costo per immagazzinamento</string>
@@ -1397,8 +1377,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Paese emittente</string>
     <string name="issuing_state">Stato/provincia emittente</string>
     <string name="license_class">Classe di licenza</string>
-    <string name="surname">Cognome</string>
-    <string name="given_name">Nome</string>
     <string name="date_of_birth">Data di nascita</string>
     <string name="nationality">Nazionalità</string>
     <string name="passport_type">Tipo di passaporto</string>

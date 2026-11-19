@@ -4,7 +4,6 @@
     <string name="add_folder">Klasör ekle</string>
     <string name="add_item">Kayıt ekle</string>
     <string name="an_error_has_occurred">Bir hata oluştu.</string>
-    <string name="apply">Uygula</string>
     <string name="back">Geri</string>
     <string name="cancel">İptal</string>
     <string name="copy">Kopyala</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Klasör silindi.</string>
     <string name="folder_none">Klasör yok</string>
     <string name="folder_updated">Klasör kaydedildi</string>
-    <string name="folders">Klasörler</string>
     <string name="hide">Gizle</string>
     <string name="internet_connection_required_message">Devam etmeden önce lütfen internete bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı gerekli</string>
@@ -208,7 +206,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="copy_totp">TOTP\'yi kopyala</string>
     <string name="copy_totp_automatically_description">Hesabınıza bağlı bir kimlik doğrulama anahtarı varsa giriş bilgilerini otomatik doldurduğunuzda TOTP doğrulama kodu panonuza kopyalanır.</string>
     <string name="copy_totp_automatically">TOTP\'yi otomatik kopyala</string>
-    <string name="premium_required">Bu özelliği kullanmak için premium üyelik gereklidir.</string>
     <string name="attachment_deleted">Dosya silindi</string>
     <string name="attachments_are_a_premium_feature">Ekler Premium özelliğidir. Mevcut planın bu özelliğe erişim sağlamamaktadır.</string>
     <string name="choose_file">Dosya seç</string>
@@ -291,9 +288,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="icons_url">Simge sunucusu URL\'si</string>
     <string name="vault_is_locked">Kasa kilitli</string>
     <string name="go_to_my_vault">Kasama git</string>
-    <string name="collections">Koleksiyonlar</string>
     <string name="shared_folders">Paylaşılan klasörler</string>
-    <string name="no_items_collection">Bu koleksiyonda hiç kayıt yok.</string>
     <string name="there_are_no_items_in_this_shared_folder">Bu paylaşılan klasörde hiç kayıt yok.</string>
     <string name="no_items_folder">Bu klasörde hiç kayıt yok.</string>
     <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
@@ -347,16 +342,11 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="type">Tür</string>
     <string name="move_down">Aşağı taşı</string>
     <string name="move_up">Yukarı taşı</string>
-    <string name="owner">Sahibi</string>
-    <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
     <string name="there_are_no_shared_folders_to_list">Listelenecek paylaşılan klasör yok.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
     <string name="you_must_select_at_least_one_shared_folder">En az bir paylaşılan klasör seçmelisiniz.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_organization">Kuruluşa taşı</string>
-    <string name="no_orgs_to_list">Listelenecek kuruluş yok.</string>
-    <string name="move_to_org_desc">Bu kaydı taşımak istediğiniz kuruluşu seçin. Taşıdığınız kaydın sahipliği seçtiğiniz kuruluşa aktarılacak. Artık bu kaydın doğrudan sahibi olmayacaksınız.</string>
     <string name="no_vaults_to_list">Listelenecek kasa yok.</string>
     <string name="move_to_vault_desc">Bu kaydı taşımak istediğiniz kasayı seçin. Başka bir kasaya taşımak, kaydın sahipliğini o kuruluşa devreder. Taşındıktan sonra bu kaydın doğrudan sahibi artık siz olmayacaksınız.</string>
     <string name="number_of_words">Kelime sayısı</string>
@@ -471,7 +461,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="hide_text_by_default">Send\'e erişirken varsayılan olarak metni gizle</string>
     <string name="type_file">Dosya</string>
     <string name="deletion_date">Silinme tarihi</string>
-    <string name="deletion_time">Silinme saati</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
     <string name="this_date_is_enforced_by_your_organization">Bu tarih kuruluşunuz tarafından zorunlu kılınıyor</string>
     <string name="who_can_view">Kim görebilir</string>
@@ -604,7 +593,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ekran kaydını açmak istediğinizden emin misiniz?</string>
     <string name="access_requested">Erişim istendi</string>
     <string name="account_access_requested">Hesap erişimi istendi</string>
-    <string name="are_you_trying_to_log_in">Giriş yapmaya mı çalışıyorsunuz?</string>
     <string name="are_you_trying_to_access_your_account">Hesabınıza erişmeye mi çalışıyorsunuz?</string>
     <string name="access_attempt_by_x_on_y">%1$s - %2$s erişim denemesi</string>
     <string name="device_type">Cihaz türü</string>
@@ -665,7 +653,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="no_pending_requests">Bekleyen istek yok</string>
     <string name="enable_camer_permission_to_use_the_scanner">Tarayıcıyı kullanmak için kameraya erişim izni verin</string>
     <string name="language">Dil</string>
-    <string name="language_change_x_description">Dil %1$s olarak değiştirildi. Değişikliği görmek için uygulamayı yeniden başlatın</string>
     <string name="default_system">Varsayılan (sistem)</string>
     <string name="weak_master_password">Zayıf ana parola</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zayıf bir parola tespit edildi. Hesabınızı korumak için daha güçlü bir parola kullanın. Zayıf parolayı kullanmak istediğinizden emin misiniz?</string>
@@ -977,7 +964,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Seçilen kayıtta geçerli bir parola bulunmadığından parola işlemi başarısız oldu.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için kimlik bilgileriyle ilgili işlem başarısız oldu.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Kullanıcı doğrulama denemeleri aşıldığı için kimlik bilgisi işlemi başarısız oldu.</string>
@@ -1058,7 +1044,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="learn_more_about_privileged_apps">Öncelikli uygulamalar hakkında daha fazla bilgi edinin</string>
     <string name="privileged_apps">Öncelikli uygulamalar</string>
     <string name="unrecognized_browser">Tanınmayan tarayıcı</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ile geçiş anahtarlarını kullanma hakkında bilgi alın.</string>
     <string name="all_trusted_apps">Tüm güvenilir uygulamalar</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s\'ye güvenmeyi bırakmak istediğinizden emin misiniz?</string>
     <string name="installed_apps">Yüklü uygulamalar</string>
@@ -1075,8 +1060,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="verification_code_added">Doğrulama kodu eklendi</string>
     <string name="refresh_period">Yenileme süresi</string>
     <string name="algorithm">Algoritma</string>
-    <string name="advanced">Gelişmiş</string>
-    <string name="collapse_advanced_options">Gelişmiş seçenekleri daralt</string>
     <string name="number_of_digits">Basamak sayısı</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d saniye</item>
@@ -1159,7 +1142,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="select_a_card_for_x">%s için kart seçin</string>
     <string name="choose_an_identity">Bir kimlik seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
     <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” kullanırken kimlik bilgilerini nasıl güvende tutabileceğiniz hakkında daha fazla bilgi edinin.</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” kullanmak istediğinizden emin misiniz?</string>
@@ -1202,7 +1184,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Parolaları, geçiş anahtarlarını ve diğer kayıtları Bitwarden kasanızdan içe aktarın.</string>
     <string name="items_to_import">İçe aktarılacak kayıtlar</string>
     <string name="exporting_items">Kayıtlar dışa aktarılıyor…</string>
-    <string name="export_failed">Dışa aktarma başarısız oldu</string>
     <string name="passwords">Parolalar</string>
     <string name="passkeys">Geçiş anahtarları</string>
     <string name="why_is_this_step_required">Bu adım neden gerekli?</string>
@@ -1222,7 +1203,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="transfer_items_to_org">Kayıtları %1$s kuruluşuna taşı</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation>, güvenlik ve mevzuata uyum amacıyla tüm kayıtların kuruluşa ait olmasını zorunlu kılıyor. Kayıtlarınızın sahipliğini devretmek için \"Kabul et\"e tıklayın. <annotation link="learnMore">Daha fazla bilgi</annotation></string>
     <string name="decline_and_leave">Reddet ve ayrıl</string>
-    <string name="why_am_i_seeing_this">Bunu neden görüyorum?</string>
     <string name="migrating_items_to_x">Kayıtlar %s konumuna taşınıyor</string>
     <string name="failed_to_migrate_items_to_x">Kayıtlar %s konumuna taşınamadı</string>
     <string name="search_archive">Arşivde ara</string>
@@ -1240,6 +1220,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archiving_items_is_a_premium_feature">Kayıtları arşivlemek bir Premium özelliğidir. Mevcut planınız bu özelliği içermiyor.</string>
     <string name="totp_is_a_premium_feature">Kimlik doğrulama anahtarı (TOTP) premium bir özelliktir. Mevcut paketiniz bu özelliği içermiyor.</string>
     <string name="upgrade_to_premium">Premium’a yükselt</string>
+    <string name="explore_premium">Premium\'u keşfet</string>
     <string name="plan">Paket</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Gelişmiş güvenlik özelliklerinin kilidini açın</string>
@@ -1321,7 +1302,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="archive_item">Kaydı arşivle</string>
     <string name="once_archived_this_item_will_be_excluded">Bu kayıt arşivlendikten sonra arama sonuçlarından ve otomatik doldurma önerilerinden çıkarılacaktır.</string>
     <string name="pricing_unavailable">Ön izleme kullanılamıyor</string>
-    <string name="current_plan">Mevcut plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Fatura tutarı</string>
     <string name="storage_cost">Depolama maliyeti</string>
@@ -1397,8 +1377,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="issuing_country">Veren ülke</string>
     <string name="issuing_state">Veren eyalet/şehir</string>
     <string name="license_class">Ehliyet sınıfı</string>
-    <string name="surname">Soyadı</string>
-    <string name="given_name">Adı</string>
     <string name="date_of_birth">Doğum tarihi</string>
     <string name="nationality">Uyruk</string>
     <string name="passport_type">Pasaport türü</string>

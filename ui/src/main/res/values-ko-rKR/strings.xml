@@ -4,7 +4,6 @@
     <string name="add_folder">폴더 추가</string>
     <string name="add_item">항목 추가</string>
     <string name="an_error_has_occurred">오류</string>
-    <string name="apply">적용</string>
     <string name="back">뒤로</string>
     <string name="cancel">취소</string>
     <string name="copy">복사</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">폴더를 삭제했습니다.</string>
     <string name="folder_none">폴더 없음</string>
     <string name="folder_updated">폴더가 저장됨</string>
-    <string name="folders">폴더</string>
     <string name="hide">숨기기</string>
     <string name="internet_connection_required_message">계속하기 전에 인터넷에 연결해 주세요.</string>
     <string name="internet_connection_required_title">인터넷 연결 필요</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">TOTP 복사</string>
     <string name="copy_totp_automatically_description">로그인에 인증 키가 연결되어 있을 경우, 그 로그인을 자동 완성할 때마다 TOTP 인증 코드가 클립보드에 자동으로 복사됩니다.</string>
     <string name="copy_totp_automatically">인증 코드 자동으로 복사하기</string>
-    <string name="premium_required">이 기능을 사용하려면 프리미엄 멤버십이 필요합니다.</string>
     <string name="attachment_deleted">첨부 파일 삭제함</string>
     <string name="attachments_are_a_premium_feature">첨부 파일은 프리미엄 기능입니다. 현재 요금제에는 이 기능에 대한 액세스가 포함되어 있지 않습니다.</string>
     <string name="choose_file">파일 선택</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">아이콘 서버 URL</string>
     <string name="vault_is_locked">보관함이 잠겨 있음</string>
     <string name="go_to_my_vault">내 보관함으로 이동</string>
-    <string name="collections">컬렉션</string>
     <string name="shared_folders">공유 폴더</string>
-    <string name="no_items_collection">이 컬렉션에 항목이 없습니다.</string>
     <string name="there_are_no_items_in_this_shared_folder">이 공유 폴더에 항목이 없습니다.</string>
     <string name="no_items_folder">이 폴더에 항목이 없습니다.</string>
     <string name="no_items_trash">휴지통에 아무 항목도 없습니다.</string>
@@ -345,16 +340,11 @@
     <string name="type">유형</string>
     <string name="move_down">아래로 옮기기</string>
     <string name="move_up">위로 옮기기</string>
-    <string name="owner">소유자</string>
-    <string name="no_collections_to_list">컬렉션이 없습니다.</string>
     <string name="there_are_no_shared_folders_to_list">공유 폴더가 없습니다.</string>
     <string name="moved_item_to_org">%1$s 항목이 %2$s 조직으로 이동되었습니다.</string>
     <string name="select_one_collection">반드시 하나 이상의 컬렉션을 선택해야 합니다.</string>
     <string name="you_must_select_at_least_one_shared_folder">반드시 하나 이상의 공유 폴더를 선택해야 합니다.</string>
     <string name="share">공유</string>
-    <string name="move_to_organization">조직으로 이동하기</string>
-    <string name="no_orgs_to_list">조직이 없습니다.</string>
-    <string name="move_to_org_desc">이 항목을 이동할 조직을 선택하십시오. 항목이 조직으로 이동되면 소유권이 조직으로 이전됩니다. 일단 이동되면, 더는 이동된 항목의 직접적인 소유자가 아니게 됩니다.</string>
     <string name="no_vaults_to_list">보관함이 없습니다.</string>
     <string name="move_to_vault_desc">이 항목을 이동할 보관함을 선택하십시오. 항목이 보관함으로 이동되면 소유권이 조직으로 이전됩니다. 일단 이동되면, 더는 이동된 항목의 직접적인 소유자가 아니게 됩니다.</string>
     <string name="number_of_words">단어 수</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">Send에 접근할 때 기본적으로 텍스트를 숨김</string>
     <string name="type_file">파일</string>
     <string name="deletion_date">삭제 날짜</string>
-    <string name="deletion_time">삭제 시간</string>
     <string name="deletion_date_info">이 Send가 정해진 일시에 영구적으로 삭제됩니다.</string>
     <string name="this_date_is_enforced_by_your_organization">조직에서 이 날짜로 강제했습니다</string>
     <string name="who_can_view">볼 수 있는 사람</string>
@@ -601,7 +590,6 @@
     <string name="are_you_sure_you_want_to_enable_screen_capture">화면 캡쳐를 허용하시겠습니까?</string>
     <string name="access_requested">Access requested</string>
     <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_log_in">귀하가 로그인하고 있나요?</string>
     <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
     <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">기기 유형</string>
@@ -662,7 +650,6 @@ Do you want to switch to this account?</string>
     <string name="no_pending_requests">대기 중인 요청이 없습니다</string>
     <string name="enable_camer_permission_to_use_the_scanner">스캐너 기능을 위해 권한을 허용해 주십시오</string>
     <string name="language">언어</string>
-    <string name="language_change_x_description">언어가 %1$s로 변경되었습니다. 적용된 모습을 보려면 앱을 다시 시작하세요.</string>
     <string name="default_system">기본 (시스템)</string>
     <string name="weak_master_password">취약한 마스터 비밀번호</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">취약한 비밀번호가 감지되었습니다. 계정을 보호하려면 강력한 비밀번호를 사용하세요. 취약한 비밀번호를 정말로 사용하시겠습니까?</string>
@@ -972,7 +959,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">요청이 지원되지 않아 패스키 작업 실패</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">선택한 항목이 존재하지 않아 비밀번호 작업 실패</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">선택한 항목에 유효한 비밀번호가 없어 비밀번호 작업 실패</string>
-    <string name="password_operation_failed_because_no_item_was_selected">선택한 항목이 없어 비밀번호 작업 실패</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">요청이 잘못되어 자격 증명 작업 실패</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">요청이 지원되지 않아 자격 증명 작업 실패</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">사용자 확인 시도 횟수 초과로 자격 증명 작업 실패</string>
@@ -1053,7 +1039,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">권한이 있는 앱에 대해 더 알아보기</string>
     <string name="privileged_apps">권한이 있는 앱</string>
     <string name="unrecognized_browser">인식되지 않은 브라우저</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden에서 패스키 사용에 대해 자세히 알아보세요.</string>
     <string name="all_trusted_apps">모든 신뢰하는 앱</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s을(를) 더 이상 신뢰하지 않도록 하시겠습니까?</string>
     <string name="installed_apps">설치된 앱</string>
@@ -1070,8 +1055,6 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">인증 코드 추가됨</string>
     <string name="refresh_period">새로 고침 간격</string>
     <string name="algorithm">알고리즘</string>
-    <string name="advanced">고급</string>
-    <string name="collapse_advanced_options">고급 설정 접기</string>
     <string name="number_of_digits">자릿수</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d초</item>
@@ -1152,7 +1135,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">%s에 대한 카드 선택</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">고급 옵션</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">일치 감지에 대한 자세한 내용</annotation></string>
     <string name="keep_your_credential_secure">자격 증명을 안전하게 유지</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s”을(를) 사용할 때 자격 증명을 안전하게 유지하는 방법에 대해 자세히 알아보세요.</string>
     <string name="are_you_sure_you_want_to_use">“%1$s”을(를) 사용하시겠습니까?</string>
@@ -1194,7 +1176,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Bitwarden 보관함에서 비밀번호, 패스키 및 기타 항목 유형을 가져옵니다.</string>
     <string name="items_to_import">가져올 항목</string>
     <string name="exporting_items">항목 내보내는 중…</string>
-    <string name="export_failed">내보내기 실패</string>
     <string name="passwords">비밀번호</string>
     <string name="passkeys">패스키</string>
     <string name="why_is_this_step_required">왜 이 절차가 필요합니까?</string>
@@ -1214,7 +1195,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">%1$s에 항목 전송</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation>은(는) 보안 및 규정 준수를 위해 모든 항목이 조직 소유여야 합니다. 항목 소유권을 이전하려면 수락을 클릭하세요. <annotation link="learnMore">자세히 알아보기</annotation></string>
     <string name="decline_and_leave">거부 및 떠나기</string>
-    <string name="why_am_i_seeing_this">왜 이 화면이 표시됩니까?</string>
     <string name="migrating_items_to_x">%s로 항목 마이그레이션 중</string>
     <string name="failed_to_migrate_items_to_x">%s로 항목 마이그레이션 실패</string>
     <string name="search_archive">아카이브 검색</string>
@@ -1232,6 +1212,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">항목 보관은 프리미엄 기능입니다. 현재 요금제에는 이 기능에 대한 액세스가 포함되어 있지 않습니다.</string>
     <string name="totp_is_a_premium_feature">인증자 키(TOTP)는 프리미엄 기능입니다. 현재 요금제에는 이 기능에 대한 액세스가 포함되어 있지 않습니다.</string>
     <string name="upgrade_to_premium">프리미엄으로 업그레이드</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">요금제</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">프리미엄 구독을 관리하려면 컴퓨터에서 웹 보관함에 로그인해야 합니다.</string>
     <string name="unlock_advanced_security_features">고급 보안 기능 잠금 해제</string>
@@ -1313,7 +1294,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">항목 보관</string>
     <string name="once_archived_this_item_will_be_excluded">일단 보관되면 이 항목은 검색 결과 및 자동 채우기 제안에서 제외됩니다.</string>
     <string name="pricing_unavailable">가격 정보를 사용할 수 없음</string>
-    <string name="current_plan">현재 요금제</string>
     <string name="premium_plan_name">프리미엄</string>
     <string name="billing_amount">청구 금액</string>
     <string name="storage_cost">스토리지 비용</string>
@@ -1388,8 +1368,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">발급 국가</string>
     <string name="issuing_state">발급 주/도</string>
     <string name="license_class">면허 등급</string>
-    <string name="surname">성</string>
-    <string name="given_name">이름</string>
     <string name="date_of_birth">생년월일</string>
     <string name="nationality">국적</string>
     <string name="passport_type">여권 유형</string>

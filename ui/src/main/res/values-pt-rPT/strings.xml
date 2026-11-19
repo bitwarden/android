@@ -4,7 +4,6 @@
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar item</string>
     <string name="an_error_has_occurred">Ocorreu um erro</string>
-    <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
     <string name="cancel">Cancelar</string>
     <string name="copy">Copiar</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Pasta eliminada.</string>
     <string name="folder_none">Sem pasta</string>
     <string name="folder_updated">Pasta guardada</string>
-    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Estabeleça uma ligação à Internet antes de continuar.</string>
     <string name="internet_connection_required_title">Ligação à Internet necessária</string>
@@ -208,7 +206,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="copy_totp">Copiar TOTP</string>
     <string name="copy_totp_automatically_description">Se uma credencial tiver uma chave de autenticação, copie o código de verificação TOTP para a sua área de transferência quando preencher automaticamente o início de sessão.</string>
     <string name="copy_totp_automatically">Copiar TOTP automaticamente</string>
-    <string name="premium_required">É necessária uma subscrição Premium para utilizar esta funcionalidade.</string>
     <string name="attachment_deleted">Anexo eliminado</string>
     <string name="attachments_are_a_premium_feature">Os anexos são uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="choose_file">Escolher ficheiro</string>
@@ -291,9 +288,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="icons_url">URL do servidor de ícones</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir para o meu cofre</string>
-    <string name="collections">Coleções</string>
     <string name="shared_folders">Pastas partilhadas</string>
-    <string name="no_items_collection">Não existem itens nesta coleção.</string>
     <string name="there_are_no_items_in_this_shared_folder">Não existem itens nesta pasta partilhada.</string>
     <string name="no_items_folder">Não existem itens nesta pasta.</string>
     <string name="no_items_trash">Não existem itens no lixo.</string>
@@ -347,16 +342,11 @@ A leitura será efetuada automaticamente.</string>
     <string name="type">Tipo</string>
     <string name="move_down">Mover para baixo</string>
     <string name="move_up">Mover para cima</string>
-    <string name="owner">Proprietário</string>
-    <string name="no_collections_to_list">Não existem coleções para apresentar.</string>
     <string name="there_are_no_shared_folders_to_list">Não existem pastas partilhadas para apresentar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Deve selecionar pelo menos uma coleção.</string>
     <string name="you_must_select_at_least_one_shared_folder">Tem de selecionar pelo menos uma pasta partilhada.</string>
     <string name="share">Partilhar</string>
-    <string name="move_to_organization">Mover para organização</string>
-    <string name="no_orgs_to_list">Não existem organizações para apresentar.</string>
-    <string name="move_to_org_desc">Escolha a organização para a qual pretende mover este item. Ao movê-lo para uma organização, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="no_vaults_to_list">Não existem cofres para apresentar.</string>
     <string name="move_to_vault_desc">Escolha o cofre para o qual pretende mover este item. Ao movê-lo para outro cofre, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="number_of_words">Número de palavras</string>
@@ -471,7 +461,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="hide_text_by_default">Ao aceder ao Send, ocultar o texto por defeito</string>
     <string name="type_file">Ficheiro</string>
     <string name="deletion_date">Data de eliminação</string>
-    <string name="deletion_time">Hora de eliminação</string>
     <string name="deletion_date_info">O Send será permanentemente eliminado na data e hora especificadas.</string>
     <string name="this_date_is_enforced_by_your_organization">Esta data é imposta pela sua organização</string>
     <string name="who_can_view">Quem pode ver</string>
@@ -604,7 +593,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Tem a certeza de que pretende ativar a captura de ecrã?</string>
     <string name="access_requested">Acesso pedido</string>
     <string name="account_access_requested">Acesso à conta solicitado</string>
-    <string name="are_you_trying_to_log_in">Está a tentar iniciar sessão?</string>
     <string name="are_you_trying_to_access_your_account">Está a tentar aceder à sua conta?</string>
     <string name="access_attempt_by_x_on_y">Tentativa de acesso por %1$s em %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
@@ -627,7 +615,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="domain_name">nome do domínio</string>
     <string name="domain_name_required_parenthesis">Nome do domínio (obrigatório)</string>
     <string name="api_key">Chave API</string>
-    <string name="api_key_required_parenthesis">Chave da API (obrigatório)</string>
+    <string name="api_key_required_parenthesis">Chave de API (obrigatório)</string>
     <string name="service">Serviço</string>
     <string name="api_access_token_required_parenthesis">Token de acesso à API (obrigatório)</string>
     <string name="api_access_token">Token de acesso à API</string>
@@ -665,7 +653,6 @@ Pretende mudar para esta conta?</string>
     <string name="no_pending_requests">Sem pedidos pendentes</string>
     <string name="enable_camer_permission_to_use_the_scanner">Ative a permissão da câmara para utilizar o digitalizador</string>
     <string name="language">Idioma</string>
-    <string name="language_change_x_description">O idioma foi alterado para %1$s. Reinicie a app para ver as alterações</string>
     <string name="default_system">Predefinido (Sistema)</string>
     <string name="weak_master_password">Palavra-passe mestra fraca</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Foi identificada uma palavra-passe fraca. Utilize uma palavra-passe forte para proteger a sua conta. Tem a certeza de que pretende utilizar uma palavra-passe fraca?</string>
@@ -978,7 +965,6 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação da palavra-passe falhou porque o item selecionado não existe.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">A operação da palavra-passe falhou porque o item selecionado não tem uma palavra-passe válida.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">A operação da palavra-passe falhou porque não foi selecionado nenhum item.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">A operação da credencial falhou porque o pedido é inválido.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">A operação da credencial falhou porque o pedido não é suportado.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação da credencial falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
@@ -1059,7 +1045,6 @@ Pretende mudar para esta conta?</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre as aplicações privilegiadas</string>
     <string name="privileged_apps">Apps privilegiadas</string>
     <string name="unrecognized_browser">Navegador não reconhecido</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Saiba mais sobre a utilização de chaves de acesso com o Bitwarden.</string>
     <string name="all_trusted_apps">Todas as apps de confiança</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem a certeza de que quer deixar de confiar em %s?</string>
     <string name="installed_apps">Apps instaladas</string>
@@ -1076,8 +1061,6 @@ Pretende mudar para esta conta?</string>
     <string name="verification_code_added">Códigos de verificação adicionados</string>
     <string name="refresh_period">Período de atualização</string>
     <string name="algorithm">Algoritmo</string>
-    <string name="advanced">Avançadas</string>
-    <string name="collapse_advanced_options">Ocultar opções avançadas</string>
     <string name="number_of_digits">Número de dígitos</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d segundo</item>
@@ -1160,7 +1143,6 @@ Pretende mudar para esta conta?</string>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
     <string name="choose_an_identity">Escolher uma identidade</string>
     <string name="advanced_options">Opções avançadas</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais informações sobre a deteção de correspondências</annotation></string>
     <string name="keep_your_credential_secure">Mantenha as suas credenciais seguras</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Saiba mais sobre como manter as credenciais seguras ao utilizar \"%1$s\".</string>
     <string name="are_you_sure_you_want_to_use">Tem a certeza de que pretende utilizar \"%1$s\"?</string>
@@ -1203,7 +1185,6 @@ Pretende mudar para esta conta?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importe palavras-passe, chaves de acesso e outros tipos de itens do seu cofre Bitwarden.</string>
     <string name="items_to_import">Itens a importar</string>
     <string name="exporting_items">A exportar itens…</string>
-    <string name="export_failed">Falha na exportação</string>
     <string name="passwords">Palavras-passe</string>
     <string name="passkeys">Chaves de acesso</string>
     <string name="why_is_this_step_required">Porque é que este passo é necessário?</string>
@@ -1223,7 +1204,6 @@ Pretende mudar para esta conta?</string>
     <string name="transfer_items_to_org">Transferir itens para %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> exige que todos os itens sejam propriedade da organização por motivos de segurança e conformidade. Clique em Aceitar para transferir a propriedade dos seus itens. <annotation link="learnMore">Saiba mais</annotation></string>
     <string name="decline_and_leave">Recusar e sair</string>
-    <string name="why_am_i_seeing_this">Porque é que estou a ver isto?</string>
     <string name="migrating_items_to_x">A migrar itens para %s</string>
     <string name="failed_to_migrate_items_to_x">Falha ao migrar itens para %s</string>
     <string name="search_archive">Procurar no arquivo</string>
@@ -1241,6 +1221,7 @@ Pretende mudar para esta conta?</string>
     <string name="archiving_items_is_a_premium_feature">O arquivo de itens é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="totp_is_a_premium_feature">A chave de autenticação (TOTP) é uma funcionalidade Premium. O seu plano atual não inclui acesso a esta funcionalidade.</string>
     <string name="upgrade_to_premium">Atualize para o Premium</string>
+    <string name="explore_premium">Explorar o Premium</string>
     <string name="plan">Plano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para gerir a sua subscrição Premium, terá de iniciar sessão no seu cofre web num computador.</string>
     <string name="unlock_advanced_security_features">Desbloqueie funcionalidades de segurança avançadas</string>
@@ -1322,7 +1303,6 @@ Pretende mudar para esta conta?</string>
     <string name="archive_item">Arquivar item</string>
     <string name="once_archived_this_item_will_be_excluded">Depois de arquivado, este item será excluído dos resultados de pesquisa e das sugestões de preenchimento automático.</string>
     <string name="pricing_unavailable">Preços indisponíveis</string>
-    <string name="current_plan">Plano atual</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Montante de faturação</string>
     <string name="storage_cost">Custo de armazenamento</string>
@@ -1398,8 +1378,6 @@ Pretende mudar para esta conta?</string>
     <string name="issuing_country">País de emissão</string>
     <string name="issuing_state">Estado / província de emissão</string>
     <string name="license_class">Categoria da carta de condução</string>
-    <string name="surname">Apelido</string>
-    <string name="given_name">Nome próprio</string>
     <string name="date_of_birth">Data de nascimento</string>
     <string name="nationality">Nacionalidade</string>
     <string name="passport_type">Tipo de passaporte</string>

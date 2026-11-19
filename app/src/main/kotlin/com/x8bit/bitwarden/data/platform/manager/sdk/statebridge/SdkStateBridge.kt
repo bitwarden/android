@@ -95,6 +95,17 @@ internal class SdkStateBridge(
         authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = null)
     }
 
+    override suspend fun setPinLength(value: UInt) {
+        authDiskSource.storePinLength(userId = userId, pinLength = value.toInt())
+    }
+
+    override suspend fun getPinLength(): UInt? =
+        authDiskSource.getPinLength(userId = userId)?.toUInt()
+
+    override suspend fun clearPinLength() {
+        authDiskSource.storePinLength(userId = userId, pinLength = null)
+    }
+
     override suspend fun setV2UpgradeToken(value: V2UpgradeToken) {
         authDiskSource.storeV2UpgradeToken(
             userId = userId,

@@ -58,6 +58,7 @@ dependencies {
     implementation(project(":core"))
 
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.biometrics)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)

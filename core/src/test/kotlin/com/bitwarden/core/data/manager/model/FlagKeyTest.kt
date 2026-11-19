@@ -13,10 +13,6 @@ class FlagKeyTest {
             "bitwarden-authentication-enabled",
         )
         assertEquals(
-            FlagKey.MigrateMyVaultToMyItems.keyName,
-            "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -73,6 +69,10 @@ class FlagKeyTest {
             "pm-27060-password-prelogin-from-sdk",
         )
         assertEquals(
+            FlagKey.UpdatedOnboardingFlow.keyName,
+            "pm-44455-account-setup-onboarding-on-sign-in",
+        )
+        assertEquals(
             FlagKey.AutofillOffBanner.keyName,
             "pm-42672-autofill-off-banner",
         )
@@ -83,7 +83,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
@@ -98,6 +97,7 @@ class FlagKeyTest {
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.UpdatedOnboardingFlow,
                 FlagKey.AutofillOffBanner,
             ).all {
                 !it.defaultValue
