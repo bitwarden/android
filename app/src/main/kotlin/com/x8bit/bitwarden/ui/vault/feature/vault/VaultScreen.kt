@@ -98,6 +98,7 @@ fun VaultScreen(
     onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
+    onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
@@ -184,6 +185,8 @@ fun VaultScreen(
             is VaultEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
             }
+
+            VaultEvent.NavigateToAutofillSettings -> onNavigateToAutofillScreen()
 
             VaultEvent.NavigateToUpgradePremium -> onNavigateToPlan()
         }
@@ -440,6 +443,24 @@ private fun VaultDialogs(
                 },
                 onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.ThirdPartyBrowserAutofill -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(
+                    id = BitwardenString.enable_browser_autofill_to_keep_filling_passwords,
+                ),
+                message = stringResource(
+                    id = BitwardenString.your_browser_recently_updated_how_autofill_works_singular,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = vaultHandlers.onEnabledThirdPartyAutofillClick,
+                onDismissClick = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                onDismissRequest = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
             )
         }
 

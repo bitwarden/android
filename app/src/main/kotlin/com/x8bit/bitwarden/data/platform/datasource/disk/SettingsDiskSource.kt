@@ -108,6 +108,11 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
 
     /**
+     * The time at which the browser autofill dialog is allowed to be shown to the user again.
+     */
+    var browserAutofillDialogReshowTime: Instant?
+
+    /**
      * Whether the user has opted out of the autofill banner on the vault ("Don't remind me
      * again"). This applies to every account on the device.
      */

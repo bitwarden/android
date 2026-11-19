@@ -51,6 +51,7 @@ private const val SHOULD_SHOW_ADD_LOGIN_COACH_MARK = "shouldShowAddLoginCoachMar
 private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMark"
 private const val RESUME_SCREEN = "resumeScreen"
 private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
+private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
 private const val AUTOFILL_BANNER_OPTED_OUT = "autofillBannerOptedOut"
 private const val AUTOFILL_BANNER_RESHOW_TIME = "autofillBannerReshowTime"
 private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
@@ -269,6 +270,12 @@ class SettingsDiskSourceImpl(
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccountFlow
             .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
+
+    override var browserAutofillDialogReshowTime: Instant?
+        get() = getLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME)?.let { Instant.ofEpochMilli(it) }
+        set(value) {
+            putLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME, value = value?.toEpochMilli())
+        }
 
     override var isAutofillBannerOptedOut: Boolean?
         get() = getBoolean(key = AUTOFILL_BANNER_OPTED_OUT)

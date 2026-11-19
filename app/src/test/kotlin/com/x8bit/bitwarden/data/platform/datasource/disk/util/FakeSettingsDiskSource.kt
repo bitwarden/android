@@ -107,6 +107,7 @@ class FakeSettingsDiskSource(
     private var hasSeenGeneratorCoachMark: Boolean? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
     private var storedHasShownAccessibilityDisclaimer: Boolean? = null
+    private var storedBrowserAutofillDialogReshowTime: Instant? = null
     private var storedIsAutofillBannerOptedOut: Boolean? = null
     private var storedAutofillBannerReshowTime: Instant? = null
 
@@ -255,6 +256,12 @@ class FakeSettingsDiskSource(
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
+        }
+
+    override var browserAutofillDialogReshowTime: Instant?
+        get() = storedBrowserAutofillDialogReshowTime
+        set(value) {
+            storedBrowserAutofillDialogReshowTime = value
         }
 
     override var isAutofillBannerOptedOut: Boolean?
@@ -743,6 +750,13 @@ class FakeSettingsDiskSource(
      */
     fun assertVaultTimeoutAction(userId: String, expected: VaultTimeoutAction?) {
         assertEquals(expected, storedVaultTimeoutActions[userId])
+    }
+
+    /**
+     * Asserts that the stored browser autofill dialog reshow time matches the [expected] one.
+     */
+    fun assertBrowserAutofillDialogReshowTime(expected: Instant?) {
+        assertEquals(expected, storedBrowserAutofillDialogReshowTime)
     }
 
     //region Private helper functions

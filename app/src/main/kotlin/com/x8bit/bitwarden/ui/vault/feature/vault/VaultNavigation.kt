@@ -26,6 +26,7 @@ fun EntryProviderScope<VaultGraph>.vaultDestination(
     onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
+    onNavigateToAutofillScreen: () -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
     rootPushEntry<VaultGraph.VaultRoute> {
@@ -42,6 +43,7 @@ fun EntryProviderScope<VaultGraph>.vaultDestination(
             onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToAboutScreen = onNavigateToAboutScreen,
+            onNavigateToAutofillScreen = onNavigateToAutofillScreen,
             onNavigateToPlan = onNavigateToPlan,
         )
     }

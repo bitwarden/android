@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
 import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
@@ -230,6 +231,11 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
     }
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
+        every { shouldShowDialog } returns false
+        every { browserCount } returns 1
+        every { delayDialog() } just runs
+    }
     private val mutableVaultAutofillPromptFlow = MutableStateFlow<AutofillPromptStatus?>(null)
     private val autofillPromptManager: AutofillPromptManager = mockk {
         every { vaultAutofillPromptFlow } returns mutableVaultAutofillPromptFlow
@@ -253,8 +259,15 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { dismissBanner() } just runs
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
+    private val mutableAutofillOffBannerFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
+        every {
+            getFeatureFlagFlow(FlagKey.AutofillOffBanner)
+        } returns mutableAutofillOffBannerFlagFlow
+        every {
+            getFeatureFlag(FlagKey.AutofillOffBanner)
+        } answers { mutableAutofillOffBannerFlagFlow.value }
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow =
@@ -422,6 +435,58 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    fun `autofill prompt should be hidden while the AutofillOffBanner flag is off`() = runTest {
+        mutableAutofillOffBannerFlagFlow.value = false
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableAutofillOffBannerFlagFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state should ignore the autofill prompt while AutofillOffBanner is off`() {
+        mutableAutofillOffBannerFlagFlow.value = false
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+
+        val viewModel = createViewModel()
+
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `browser autofill dialog should show while the AutofillOffBanner flag is off`() = runTest {
+        mutableAutofillOffBannerFlagFlow.value = false
+        every { browserAutofillDialogManager.shouldShowDialog } returns true
+
+        val viewModel = createViewModel()
+        advanceTimeBy(1000.milliseconds)
+
+        assertEquals(
+            VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1),
+            viewModel.stateFlow.value.dialog,
+        )
+    }
+
+    @Test
+    fun `browser autofill dialog should not show while the AutofillOffBanner flag is on`() =
+        runTest {
+            every { browserAutofillDialogManager.shouldShowDialog } returns true
+
+            val viewModel = createViewModel()
+            advanceTimeBy(1000.milliseconds)
+
+            assertNull(viewModel.stateFlow.value.dialog)
+        }
 
     @Test
     fun `CollapsedVaultSectionsFlow updates should update the state accordingly`() = runTest {
@@ -1169,6 +1234,30 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         verify(exactly = 1) {
             settingsRepository.dismissFlightRecorderBanner()
+        }
+    }
+
+    @Test
+    fun `on EnableThirdPartyAutofillClick should send NavigateToAutofillSettings`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+            assertEquals(VaultEvent.NavigateToAutofillSettings, awaitItem())
+        }
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on DismissThirdPartyAutofillDialogClick should call delay dialog`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
         }
     }
 
@@ -5097,6 +5186,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
+            browserAutofillDialogManager = browserAutofillDialogManager,
             autofillPromptManager = autofillPromptManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
             userNotificationPolicyManager = userNotificationPolicyManager,

@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.navigateToManageDevices
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToFlightRecorder
@@ -156,6 +157,11 @@ private fun VaultUnlockedNavBarNavigationControllers.vaultEntryProvider(
             root.navigateToTopLevelRoute(route = VaultUnlockedNavBarGraph.Settings)
             settings.popUpTo<SettingsGraph.SettingsRoute>()
             settings.navigateToAbout()
+        },
+        onNavigateToAutofillScreen = {
+            root.navigateToTopLevelRoute(route = VaultUnlockedNavBarGraph.Settings)
+            settings.popUpTo<SettingsGraph.SettingsRoute>()
+            settings.navigateToAutoFill()
         },
         onNavigateToPlan = { vaultUnlockedNavigationController.navigateToPlanModal() },
     )
