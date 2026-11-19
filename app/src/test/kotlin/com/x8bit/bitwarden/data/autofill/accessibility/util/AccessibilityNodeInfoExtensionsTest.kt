@@ -106,6 +106,61 @@ class AccessibilityNodeInfoExtensionsTest {
     }
 
     @Test
+    fun `isTotp when metadata does not describe a TOTP field should return false`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { viewIdResourceName } returns "username"
+            every { hintText } returns "Email address"
+            every { contentDescription } returns null
+        }
+
+        assertFalse(accessibilityNodeInfo.isTotp)
+    }
+
+    @Test
+    fun `isTotp when view ID contains OTP should return true`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { viewIdResourceName } returns "com.example:id/otp_input"
+            every { hintText } returns null
+            every { contentDescription } returns null
+        }
+
+        assertTrue(accessibilityNodeInfo.isTotp)
+    }
+
+    @Test
+    fun `isTotp when view ID uses camel case OTP should return true`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { viewIdResourceName } returns "inputOtp"
+            every { hintText } returns null
+            every { contentDescription } returns null
+        }
+
+        assertTrue(accessibilityNodeInfo.isTotp)
+    }
+
+    @Test
+    fun `isTotp when hint describes a one time code should return true`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { viewIdResourceName } returns null
+            every { hintText } returns "One-time code"
+            every { contentDescription } returns null
+        }
+
+        assertTrue(accessibilityNodeInfo.isTotp)
+    }
+
+    @Test
+    fun `isTotp when content description describes an authentication code should return true`() {
+        val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
+            every { viewIdResourceName } returns null
+            every { hintText } returns null
+            every { contentDescription } returns "Authentication code"
+        }
+
+        assertTrue(accessibilityNodeInfo.isTotp)
+    }
+
+    @Test
     fun `isSystemPackage when packageName is null should return false`() {
         val accessibilityNodeInfo = mockk<AccessibilityNodeInfo> {
             every { packageName } returns null
