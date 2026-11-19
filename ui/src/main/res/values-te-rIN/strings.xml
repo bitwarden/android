@@ -4,7 +4,6 @@
     <string name="add_folder">ఫోల్డర్ జోడించు</string>
     <string name="add_item">అంశం జోడించు</string>
     <string name="an_error_has_occurred">లోపం సంభవించింది</string>
-    <string name="apply">వర్తించు</string>
     <string name="back">వెనుకకు</string>
     <string name="cancel">రద్దు చేయి</string>
     <string name="copy">కాపీ చేయి</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ఫోల్డర్ తొలగించబడింది.</string>
     <string name="folder_none">ఫోల్డర్ లేదు</string>
     <string name="folder_updated">ఫోల్డర్ భద్రపరచబడింది</string>
-    <string name="folders">ఫోల్డర్‌లు</string>
     <string name="hide">దాచు</string>
     <string name="internet_connection_required_message">కొనసాగించే ముందు దయచేసి ఇంటర్నెట్‌కు కనెక్ట్ అవ్వండి.</string>
     <string name="internet_connection_required_title">ఇంటర్నెట్ కనెక్షన్ అవసరం</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTP కాపీ చేయి</string>
     <string name="copy_totp_automatically_description">ఒక లాగిన్‌కు ఆథెంటికేటర్ కీ ఉంటే, మీరు లాగిన్‌ను ఆటోఫిల్ చేసినప్పుడు TOTP ధృవీకరణ కోడ్‌ను మీ క్లిప్‌బోర్డ్‌కు కాపీ చేయండి.</string>
     <string name="copy_totp_automatically">TOTP ఆటోమేటిక్‌గా కాపీ చేయి</string>
-    <string name="premium_required">ఈ ఫీచర్ ఉపయోగించడానికి ప్రీమియం సభ్యత్వం అవసరం.</string>
     <string name="attachment_deleted">అటాచ్మెంట్ తొలగించబడింది</string>
     <string name="attachments_are_a_premium_feature">అటాచ్మెంట్‌లు ప్రీమియం ఫీచర్. మీ ప్రస్తుత ప్లాన్‌లో ఈ ఫీచర్‌కు ప్రాప్యత లేదు.</string>
     <string name="choose_file">ఫైల్ ఎంచుకోండి</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">చిహ్నాల సర్వర్ URL</string>
     <string name="vault_is_locked">ఖజానా లాక్ చేయబడింది</string>
     <string name="go_to_my_vault">నా ఖజానాకు వెళ్ళు</string>
-    <string name="collections">సేకరణలు</string>
     <string name="shared_folders">భాగస్వామ్య ఫోల్డర్‌లు</string>
-    <string name="no_items_collection">ఈ సేకరణలో అంశాలు లేవు.</string>
     <string name="there_are_no_items_in_this_shared_folder">ఈ భాగస్వామ్య ఫోల్డర్‌లో అంశాలు లేవు.</string>
     <string name="no_items_folder">ఈ ఫోల్డర్‌లో అంశాలు లేవు.</string>
     <string name="no_items_trash">ట్రాష్‌లో అంశాలు లేవు.</string>
@@ -347,16 +342,11 @@
     <string name="type">రకం</string>
     <string name="move_down">క్రిందికి తరలించు</string>
     <string name="move_up">పైకి తరలించు</string>
-    <string name="owner">యజమాని</string>
-    <string name="no_collections_to_list">జాబితా చేయడానికి సేకరణలు లేవు.</string>
     <string name="there_are_no_shared_folders_to_list">జాబితా చేయడానికి భాగస్వామ్య ఫోల్డర్‌లు లేవు.</string>
     <string name="moved_item_to_org">%1$s %2$sకి తరలించబడింది.</string>
     <string name="select_one_collection">మీరు కనీసం ఒక సేకరణను ఎంచుకోవాలి.</string>
     <string name="you_must_select_at_least_one_shared_folder">మీరు కనీసం ఒక భాగస్వామ్య ఫోల్డర్‌ను ఎంచుకోవాలి.</string>
     <string name="share">భాగస్వామ్యం చేయి</string>
-    <string name="move_to_organization">సంస్థకు తరలించు</string>
-    <string name="no_orgs_to_list">జాబితా చేయడానికి సంస్థలు లేవు.</string>
-    <string name="move_to_org_desc">మీరు ఈ అంశాన్ని తరలించాలనుకుంటున్న సంస్థను ఎంచుకోండి. సంస్థకు తరలించడం అంశం యొక్క యాజమాన్యాన్ని ఆ సంస్థకు బదిలీ చేస్తుంది. ఇది తరలించబడిన తర్వాత మీరు ఈ అంశానికి ప్రత్యక్ష యజమానిగా ఉండరు.</string>
     <string name="no_vaults_to_list">జాబితా చేయడానికి ఖజానాలు లేవు.</string>
     <string name="move_to_vault_desc">మీరు ఈ అంశాన్ని తరలించాలనుకుంటున్న ఖజానాను ఎంచుకోండి. మరొక ఖజానాకు తరలించడం అంశం యొక్క యాజమాన్యాన్ని ఆ సంస్థకు బదిలీ చేస్తుంది. ఇది తరలించబడిన తర్వాత మీరు ఈ అంశానికి ప్రత్యక్ష యజమానిగా ఉండరు.</string>
     <string name="number_of_words">పదాల సంఖ్య</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">Sendను యాక్సెస్ చేసినప్పుడు, టెక్స్ట్‌ను డిఫాల్ట్‌గా దాచు</string>
     <string name="type_file">ఫైల్</string>
     <string name="deletion_date">తొలగింపు తేదీ</string>
-    <string name="deletion_time">తొలగింపు సమయం</string>
     <string name="deletion_date_info">Send పేర్కొన్న తేదీ మరియు సమయంలో శాశ్వతంగా తొలగించబడుతుంది.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">ఎవరు చూడగలరు</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">మీ అభ్యర్థనను ప్రాసెస్ చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి లేదా మమ్మల్ని సంప్రదించండి.</string>
     <string name="allow_screen_capture">స్క్రీన్ క్యాప్చర్ అనుమతించు</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">మీరు ఖచ్చితంగా స్క్రీన్ క్యాప్చర్ ఆన్ చేయాలనుకుంటున్నారా?</string>
-    <string name="log_in_requested">లాగిన్ అభ్యర్థించబడింది</string>
-    <string name="are_you_trying_to_log_in">మీరు లాగిన్ అవ్వడానికి ప్రయత్నిస్తున్నారా?</string>
-    <string name="log_in_attempt_by_x_on_y">%2$sపై %1$s చేసిన లాగిన్ ప్రయత్నం</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">పరికర రకం</string>
     <string name="ip_address">IP చిరునామా</string>
     <string name="time">సమయం</string>
     <string name="select_time">సమయం ఎంచుకోండి</string>
     <string name="switch_input_mode">ఇన్‌పుట్ మోడ్ మార్చు</string>
-    <string name="confirm_log_in">లాగిన్ నిర్ధారించు</string>
-    <string name="deny_log_in">లాగిన్ నిరాకరించు</string>
-    <string name="log_in_denied">లాగిన్ నిరాకరించబడింది</string>
-    <string name="approve_login_requests">లాగిన్ అభ్యర్థనలను ఆమోదించు</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">వద్దు ధన్యవాదాలు</string>
-    <string name="confim_log_in_attemp_for_x">%1$s కోసం లాగిన్ ప్రయత్నాన్ని నిర్ధారించు</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">వినియోగదారు పేరు రకం</string>
     <string name="plus_addressed_email">ప్లస్ అడ్రస్ ఇమెయిల్</string>
     <string name="catch_all_email">క్యాచ్-ఆల్ ఇమెయిల్</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">నాకు అర్థమైంది</string>
     <string name="accept">ఆమోదించు</string>
     <string name="decline">తిరస్కరించు</string>
-    <string name="login_request_has_already_expired">లాగిన్ అభ్యర్థన ఇప్పటికే గడువు ముగిసింది.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">దీని నుండి లాగిన్ ప్రయత్నం:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-మీరు ఈ ఖాతాకు మారాలనుకుంటున్నారా?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwardenకి కొత్తగా ఉన్నారా?</string>
     <string name="get_master_passwordword_hint">మాస్టర్ పాస్వర్డ్ సూచన పొందండి</string>
     <string name="logging_in_as_x_on_y">%2$sపై %1$sగా లాగిన్ అవుతోంది</string>
     <string name="not_you">మీరు కాదా?</string>
     <string name="log_in_with_master_password">మాస్టర్ పాస్వర్డ్‌తో లాగిన్ అవ్వండి</string>
     <string name="log_in_initiated">లాగిన్ ప్రారంభించబడింది</string>
-    <string name="a_notification_has_been_sent_to_your_device">మీ పరికరానికి నోటిఫికేషన్ పంపబడింది.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">దయచేసి మీ ఖజానా అన్లాక్ చేయబడిందని మరియు ఇతర పరికరంలో వేలిముద్ర పదబంధం సరిపోలిందని నిర్ధారించుకోండి.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">నోటిఫికేషన్ మళ్లీ పంపు</string>
     <string name="view_all_login_options">అన్ని లాగిన్ ఎంపికలను చూడండి</string>
-    <string name="pending_log_in_requests">పెండింగ్ లాగిన్ అభ్యర్థనలు</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">అన్ని అభ్యర్థనలను తిరస్కరించు</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">మీరు ఖచ్చితంగా అన్ని పెండింగ్ లాగిన్ అభ్యర్థనలను తిరస్కరించాలనుకుంటున్నారా?</string>
     <string name="no_pending_requests">పెండింగ్ అభ్యర్థనలు లేవు</string>
     <string name="enable_camer_permission_to_use_the_scanner">స్కానర్ ఉపయోగించడానికి కెమెరా అనుమతిని ప్రారంభించండి</string>
     <string name="language">భాష</string>
-    <string name="language_change_x_description">భాష %1$sకి మార్చబడింది. మార్పు చూడడానికి దయచేసి యాప్‌ను పునఃప్రారంభించండి</string>
     <string name="default_system">డిఫాల్ట్ (సిస్టమ్)</string>
     <string name="weak_master_password">బలహీనమైన మాస్టర్ పాస్వర్డ్</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">బలహీనమైన పాస్వర్డ్ గుర్తించబడింది. మీ ఖాతాను రక్షించడానికి బలమైన పాస్వర్డ్ ఉపయోగించండి. మీరు ఖచ్చితంగా బలహీనమైన పాస్వర్డ్ ఉపయోగించాలనుకుంటున్నారా?</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">పాస్‌కీ క్లోన్ చేసిన అంశానికి కాపీ చేయబడదు. మీరు ఈ అంశాన్ని క్లోన్ చేయడం కొనసాగించాలనుకుంటున్నారా?</string>
     <string name="master_password_re_prompt_help">మాస్టర్ పాస్వర్డ్ మళ్లీ ప్రాంప్ట్ సహాయం</string>
     <string name="admin_approval_requested">నిర్వాహక ఆమోదం అభ్యర్థించబడింది</string>
-    <string name="your_request_has_been_sent_to_your_admin">మీ అభ్యర్థన మీ నిర్వాహకునికి పంపబడింది.</string>
-    <string name="you_will_be_notified_once_approved">ఆమోదించిన తర్వాత మీకు తెలియజేయబడుతుంది.</string>
-    <string name="trouble_logging_in">లాగిన్ అవ్వడంలో సమస్య ఉందా?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">ఆటోఫిల్‌ను బ్లాక్ చేయి</string>
     <string name="no_uris_blocked">URIలు బ్లాక్ చేయబడలేదు</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">ఈ URIల కోసం ఆటోఫిల్ అందించబడదు.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">ఆకృతి: %1$s. బహుళ URIలను కామాతో వేరు చేయండి.</string>
     <string name="invalid_uri">అమాన్యమైన URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s ఇప్పటికే బ్లాక్ చేయబడింది</string>
-    <string name="login_approved">లాగిన్ ఆమోదించబడింది</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">పరికరంతో లాగిన్ చేయడం తప్పనిసరిగా Bitwarden యాప్ యొక్క సెట్టింగ్‌లలో సెటప్ చేయాలి.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">మరొక ఎంపిక కావాలా? <annotation link="viewAll">అన్ని లాగిన్ ఎంపికలను చూడండి</annotation></string>
     <string name="log_in_with_device">పరికరంతో లాగిన్ అవ్వండి</string>
     <string name="logging_in_on">దీనిపై లాగిన్ అవుతోంది</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">అభ్యర్థనకు మద్దతు లేనందున పాస్‌కీ ఆపరేషన్ విఫలమైంది.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">ఎంచుకున్న అంశం లేనందున పాస్వర్డ్ ఆపరేషన్ విఫలమైంది.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">ఎంచుకున్న అంశం చెల్లుబాటు అయ్యే పాస్వర్డ్ కలిగి లేనందున పాస్వర్డ్ ఆపరేషన్ విఫలమైంది.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">ఏ అంశం ఎంచుకోబడలేదు కాబట్టి పాస్వర్డ్ ఆపరేషన్ విఫలమైంది.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">అభ్యర్థన అమాన్యమైనందున ధృవీకరణ పత్రాల ఆపరేషన్ విఫలమైంది.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">అభ్యర్థనకు మద్దతు లేనందున ధృవీకరణ పత్రాల ఆపరేషన్ విఫలమైంది.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">వినియోగదారు ధృవీకరణ ప్రయత్నాలు మించిపోయినందున ధృవీకరణ పత్రాల ఆపరేషన్ విఫలమైంది.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">ప్రివిలేజ్ కలిగిన యాప్‌ల గురించి మరింత తెలుసుకోండి</string>
     <string name="privileged_apps">ప్రివిలేజ్ కలిగిన యాప్‌లు</string>
     <string name="unrecognized_browser">గుర్తించబడని బ్రౌజర్</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwardenతో పాస్‌కీలను ఉపయోగించడం గురించి మరింత తెలుసుకోండి.</string>
     <string name="all_trusted_apps">అన్ని నమ్మదగిన యాప్‌లు</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">మీరు ఖచ్చితంగా %sని నమ్మడం మానేయాలనుకుంటున్నారా?</string>
     <string name="installed_apps">ఇన్‌స్టాల్ చేసిన యాప్‌లు</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">ధృవీకరణ కోడ్ జోడించబడింది</string>
     <string name="refresh_period">రిఫ్రెష్ వ్యవధి</string>
     <string name="algorithm">అల్గారిథమ్</string>
-    <string name="advanced">అధునాతన</string>
-    <string name="collapse_advanced_options">అధునాతన ఎంపికలను కుదించు</string>
     <string name="number_of_digits">అంకెల సంఖ్య</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d సెకను</item>
@@ -1159,7 +1143,6 @@
     <string name="select_a_card_for_x">%s కోసం కార్డ్ ఎంచుకోండి</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">అధునాతన ఎంపికలు</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">మ్యాచ్ గుర్తింపు గురించి మరింత</annotation></string>
     <string name="keep_your_credential_secure">మీ ధృవీకరణ పత్రాలను సురక్షితంగా ఉంచండి</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” ఉపయోగిస్తున్నప్పుడు ధృవీకరణ పత్రాలను సురక్షితంగా ఉంచడం గురించి మరింత తెలుసుకోండి.</string>
     <string name="are_you_sure_you_want_to_use">మీరు ఖచ్చితంగా “%1$s” ఉపయోగించాలనుకుంటున్నారా?</string>
@@ -1202,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">మీ Bitwarden ఖజానా నుండి పాస్వర్డ్‌లు, పాస్‌కీలు మరియు ఇతర అంశాల రకాలను దిగుమతి చేయండి.</string>
     <string name="items_to_import">దిగుమతి చేయవలసిన అంశాలు</string>
     <string name="exporting_items">అంశాలను ఎగుమతి చేస్తోంది…</string>
-    <string name="export_failed">ఎగుమతి విఫలమైంది</string>
     <string name="passwords">పాస్వర్డ్‌లు</string>
     <string name="passkeys">పాస్‌కీలు</string>
     <string name="why_is_this_step_required">ఈ దశ ఎందుకు అవసరం?</string>
@@ -1222,7 +1204,6 @@
     <string name="transfer_items_to_org">అంశాలను %1$sకి బదిలీ చేయి</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> భద్రత మరియు సమ్మతి కోసం అన్ని అంశాలు సంస్థ యాజమాన్యంలో ఉండాలని డిమాండ్ చేస్తోంది. మీ అంశాల యాజమాన్యాన్ని బదిలీ చేయడానికి ఆమోదించు క్లిక్ చేయండి. <annotation link="learnMore">మరింత తెలుసుకోండి</annotation></string>
     <string name="decline_and_leave">తిరస్కరించి విడిచివెళ్ళు</string>
-    <string name="why_am_i_seeing_this">నేను ఇది ఎందుకు చూస్తున్నాను?</string>
     <string name="migrating_items_to_x">అంశాలను %sకి మారుస్తోంది</string>
     <string name="failed_to_migrate_items_to_x">అంశాలను %sకి మార్చడంలో విఫలమైంది</string>
     <string name="search_archive">ఆర్కైవ్ శోధించు</string>
@@ -1240,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">అంశాలను ఆర్కైవ్ చేయడం ప్రీమియం ఫీచర్. మీ ప్రస్తుత ప్లాన్‌లో ఈ ఫీచర్‌కు ప్రాప్యత లేదు.</string>
     <string name="totp_is_a_premium_feature">ఆథెంటికేటర్ కీ (TOTP) ప్రీమియం ఫీచర్. మీ ప్రస్తుత ప్లాన్‌లో ఈ ఫీచర్‌కు ప్రాప్యత లేదు.</string>
     <string name="upgrade_to_premium">ప్రీమియం‌కు అప్‌గ్రేడ్ చేయి</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">ప్లాన్</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">మీ ప్రీమియం సభ్యత్వాన్ని నిర్వహించడానికి, మీరు కంప్యూటర్‌లో మీ వెబ్ ఖజానాకు లాగిన్ అవ్వాలి.</string>
     <string name="unlock_advanced_security_features">అధునాతన భద్రతా లక్షణాలను అన్లాక్ చేయి</string>
@@ -1321,7 +1303,6 @@
     <string name="archive_item">అంశాన్ని ఆర్కైవ్ చేయి</string>
     <string name="once_archived_this_item_will_be_excluded">ఆర్కైవ్ చేసిన తర్వాత, ఈ అంశం శోధన ఫలితాలు మరియు ఆటోఫిల్ సూచనల నుండి మినహాయించబడుతుంది.</string>
     <string name="pricing_unavailable">ధర అందుబాటులో లేదు</string>
-    <string name="current_plan">ప్రస్తుత ప్లాన్</string>
     <string name="premium_plan_name">ప్రీమియం</string>
     <string name="billing_amount">బిల్లింగ్ మొత్తం</string>
     <string name="storage_cost">నిల్వ ఖర్చు</string>
@@ -1397,8 +1378,6 @@
     <string name="issuing_country">జారీ చేసే దేశం</string>
     <string name="issuing_state">జారీ చేసే రాష్ట్రం / ప్రావిన్స్</string>
     <string name="license_class">లైసెన్స్ తరగతి</string>
-    <string name="surname">ఇంటి పేరు</string>
-    <string name="given_name">మొదటి పేరు</string>
     <string name="date_of_birth">పుట్టిన తేదీ</string>
     <string name="nationality">జాతీయత</string>
     <string name="passport_type">పాస్‌పోర్ట్ రకం</string>

@@ -9,21 +9,24 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the Auto-fill setup screen.
  */
-@HiltViewModel
-class SetupAutoFillViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SetupAutoFillViewModel.Factory::class)
+class SetupAutoFillViewModel @AssistedInject constructor(
+    @Assisted isInitialSetup: Boolean,
     savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val authRepository: AuthRepository,
@@ -34,7 +37,6 @@ class SetupAutoFillViewModel @Inject constructor(
         // We load the state from the savedStateHandle for testing purposes.
         initialState = savedStateHandle[KEY_STATE] ?: run {
             val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-            val isInitialSetup = savedStateHandle.toSetupAutoFillArgs().isInitialSetup
             SetupAutoFillState(
                 userId = userId,
                 dialogState = null,
@@ -43,6 +45,16 @@ class SetupAutoFillViewModel @Inject constructor(
             )
         },
     ) {
+    /**
+     * Factory for creating a [SetupAutoFillViewModel] for the given `isInitialSetup` value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SetupAutoFillViewModel] for the given [isInitialSetup].
+         */
+        fun create(isInitialSetup: Boolean): SetupAutoFillViewModel
+    }
 
     init {
         settingsRepository

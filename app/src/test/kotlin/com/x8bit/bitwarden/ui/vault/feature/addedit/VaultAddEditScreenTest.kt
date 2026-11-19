@@ -46,6 +46,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.advanceTimeByAndRunCurrent
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -63,9 +64,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
-import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -140,7 +139,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
-            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -334,7 +332,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog should display based on state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                isInAppUpgradeAvailable = true,
+            ),
         )
 
         composeTestRule
@@ -348,11 +348,13 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     fun `ArchiveRequiresPremium dialog on upgrade to Premium click should emit UpgradeToPremiumClick`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium,
+            dialog = VaultAddEditState.DialogState.ArchiveRequiresPremium(
+                isInAppUpgradeAvailable = true,
+            ),
         )
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -5607,7 +5609,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -5624,7 +5625,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -5641,7 +5641,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -5658,7 +5657,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_BANK_ACCOUNT = VaultAddEditState(
@@ -5675,7 +5673,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LICENSE = VaultAddEditState(
@@ -5692,7 +5689,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
@@ -5709,7 +5705,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -5736,7 +5731,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -5753,7 +5747,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -5770,7 +5763,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
-            isVfo1FoundationEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

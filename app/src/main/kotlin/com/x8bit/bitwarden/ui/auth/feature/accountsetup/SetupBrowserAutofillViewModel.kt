@@ -12,6 +12,9 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofill
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.util.toBrowserAutoFillSettingsOptions
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -19,15 +22,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the Setup Browser Autofill screen.
  */
-@HiltViewModel
-class SetupBrowserAutofillViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SetupBrowserAutofillViewModel.Factory::class)
+class SetupBrowserAutofillViewModel @AssistedInject constructor(
+    @Assisted isInitialSetup: Boolean,
     private val authRepository: AuthRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
@@ -36,12 +39,24 @@ class SetupBrowserAutofillViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: SetupBrowserAutofillState(
         dialogState = null,
-        isInitialSetup = savedStateHandle.toSetupBrowserAutofillArgs().isInitialSetup,
+        isInitialSetup = isInitialSetup,
         browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatus
             .toBrowserAutoFillSettingsOptions(),
     ),
 ) {
+    /**
+     * Factory for creating a [SetupBrowserAutofillViewModel] for the given `isInitialSetup`
+     * value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SetupBrowserAutofillViewModel] for the given [isInitialSetup].
+         */
+        fun create(isInitialSetup: Boolean): SetupBrowserAutofillViewModel
+    }
+
     init {
         browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatusFlow

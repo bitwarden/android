@@ -1,53 +1,24 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the login screen.
- */
-@Serializable
-data class LoginRoute(
-    val emailAddress: String,
-)
-
-/**
- * Class to retrieve login arguments from the [SavedStateHandle].
- */
-data class LoginArgs(val emailAddress: String)
-
-/**
- * Constructs a [LoginArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toLoginArgs(): LoginArgs {
-    val route = this.toRoute<LoginRoute>()
-    return LoginArgs(
-        emailAddress = route.emailAddress,
-    )
-}
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the login screen with the given email address and region label.
  */
-fun NavController.navigateToLogin(
+fun NavigationController<AuthGraph>.navigateToLogin(
     emailAddress: String,
-    navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = LoginRoute(emailAddress = emailAddress),
-        navOptions = navOptions,
-    )
+    this.navigate(route = AuthGraph.LoginRoute(emailAddress = emailAddress))
 }
 
 /**
- * Add the Login screen to the nav graph.
+ * Add the Login screen to the navigation entries.
  */
-fun NavGraphBuilder.loginDestination(
+fun EntryProviderScope<AuthGraph>.loginDestination(
     onNavigateBack: () -> Unit,
     onNavigateToMasterPasswordHint: (emailAddress: String) -> Unit,
     onNavigateToEnterpriseSignOn: (emailAddress: String) -> Unit,
@@ -58,8 +29,11 @@ fun NavGraphBuilder.loginDestination(
         isNewDeviceVerification: Boolean,
     ) -> Unit,
 ) {
-    composableWithSlideTransitions<LoginRoute> {
+    slideUpEntry<AuthGraph.LoginRoute> { route ->
         LoginScreen(
+            viewModel = hiltViewModel<LoginViewModel, LoginViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
             onNavigateToMasterPasswordHint = onNavigateToMasterPasswordHint,
             onNavigateToEnterpriseSignOn = onNavigateToEnterpriseSignOn,

@@ -4,7 +4,6 @@
     <string name="add_folder">Tilføj mappe</string>
     <string name="add_item">Tilføj emne</string>
     <string name="an_error_has_occurred">En fejl er opstået.</string>
-    <string name="apply">Anvend</string>
     <string name="back">Retur</string>
     <string name="cancel">Afbryd</string>
     <string name="copy">Kopiér</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Mappe slettet.</string>
     <string name="folder_none">Ingen mappe</string>
     <string name="folder_updated">Mappe gemt</string>
-    <string name="folders">Mapper</string>
     <string name="hide">Skjul</string>
     <string name="internet_connection_required_message">Opret forbindelse til internet for at fortsætte.</string>
     <string name="internet_connection_required_title">Internetforbindelse kræves</string>
@@ -208,7 +206,6 @@ Skanning vil ske automatisk.</string>
     <string name="copy_totp">Kopiér TOTP</string>
     <string name="copy_totp_automatically_description">Har et login en godkendelsesnøgle, kopiér da TOTP-bekræftelseskoden til udklipsholderen, når login autoudfyldes.</string>
     <string name="copy_totp_automatically">Kopiér TOTP automatisk</string>
-    <string name="premium_required">Premium-medlemskab kræves for brug af denne funktion.</string>
     <string name="attachment_deleted">Vedhæftning slettet</string>
     <string name="attachments_are_a_premium_feature">Vedhæftede filer er en Premium-funktion. Din nuværende plan inkluderer ikke adgang til denne funktion.</string>
     <string name="choose_file">Vælg fil</string>
@@ -291,9 +288,7 @@ Skanning vil ske automatisk.</string>
     <string name="icons_url">Ikonserver-URL</string>
     <string name="vault_is_locked">Boksen er låst</string>
     <string name="go_to_my_vault">Gå til min boks</string>
-    <string name="collections">Samlinger</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Der er ingen elementer i denne samling.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Der er ingen emner i denne mappe.</string>
     <string name="no_items_trash">Der er ingen emner i papirkurven.</string>
@@ -347,16 +342,11 @@ Skanning vil ske automatisk.</string>
     <string name="type">Type</string>
     <string name="move_down">Flyt ned</string>
     <string name="move_up">Flyt op</string>
-    <string name="owner">Ejer</string>
-    <string name="no_collections_to_list">Der er ingen samlinger at vise.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s flyttet til %2$s.</string>
     <string name="select_one_collection">Du skal vælge minimum én samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Del</string>
-    <string name="move_to_organization">Flyt til organisation</string>
-    <string name="no_orgs_to_list">Ingen organisationer at vise.</string>
-    <string name="move_to_org_desc">Vælg en organisation, som du ønsker at flytte dette emne til. Flytning til en organisation overfører ejerskabet af emnet til den pågældende organisation. Du vil efter flytningen ikke længere være den direkte ejer af emnet.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Antal ord</string>
@@ -471,7 +461,6 @@ Skanning vil ske automatisk.</string>
     <string name="hide_text_by_default">Når Send tilgås, skjul som standard teksten</string>
     <string name="type_file">Fil</string>
     <string name="deletion_date">Sletningsdato</string>
-    <string name="deletion_time">Sletningstidspunkt</string>
     <string name="deletion_date_info">Denne Send slettes permanent på den angivne dato og tid.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Hvem kan se</string>
@@ -603,20 +592,21 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
     <string name="generic_error_message">Anmodningen kunne ikke behandles. Forsøg igen eller kontakt os.</string>
     <string name="allow_screen_capture">Tillad skærmoptagelse</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Sikker på, at skærmoptagelse skal aktiveres?</string>
-    <string name="log_in_requested">Login udbedt</string>
-    <string name="are_you_trying_to_log_in">Forsøger at logge ind?</string>
-    <string name="log_in_attempt_by_x_on_y">Login forsøgt af %1$s på %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Enhedstype</string>
     <string name="ip_address">IP-adresse</string>
     <string name="time">Tid</string>
     <string name="select_time">Vælg tid</string>
     <string name="switch_input_mode">Skift inputtilstand</string>
-    <string name="confirm_log_in">Bekræft login</string>
-    <string name="deny_log_in">Afvis login</string>
-    <string name="log_in_denied">Login afvist</string>
-    <string name="approve_login_requests">Godkend loginanmodninger</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nej tak</string>
-    <string name="confim_log_in_attemp_for_x">Bekræft loginforsøg for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Brugernavnstype</string>
     <string name="plus_addressed_email">Plus-adresseret e-mail</string>
     <string name="catch_all_email">Fang-alle e-mail</string>
@@ -643,27 +633,27 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
     <string name="i_understand">Jeg forstår</string>
     <string name="accept">Acceptér</string>
     <string name="decline">Afvis</string>
-    <string name="login_request_has_already_expired">Loginanmodning er allerede udløbet.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login-forsøg fra:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Skift til denne konto?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Ny på Bitwarden?</string>
     <string name="get_master_passwordword_hint">Hent hovedadgangskodetip</string>
     <string name="logging_in_as_x_on_y">Logger ind som %1$s på %2$s</string>
     <string name="not_you">Ikke dig?</string>
     <string name="log_in_with_master_password">Log ind med hovedadgangskoden</string>
     <string name="log_in_initiated">Indlogning påbegyndt</string>
-    <string name="a_notification_has_been_sent_to_your_device">En notifikation er sendt til enheden.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Sørg for, at boksen er oplåst, samt at Fingeraftrykssætningen på den anden enhed matcher.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Gensend notifikation</string>
     <string name="view_all_login_options">Vis alle indlogningsmuligheder</string>
-    <string name="pending_log_in_requests">Afventende login-anmodninger</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Afvis alle anmodninger</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Sikker på, at alle afventende login-anmodninger skal afvises?</string>
     <string name="no_pending_requests">Ingen afventende anmodninger</string>
     <string name="enable_camer_permission_to_use_the_scanner">Tildel kameratilladelse for brug af skanneren</string>
     <string name="language">Sprog</string>
-    <string name="language_change_x_description">Sprog skiftet til %1$s. Genstart appen for at se ændringen</string>
     <string name="default_system">Standard (system)</string>
     <string name="weak_master_password">Svag hovedadgangskode</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Svag adgangskode identificeret. Brug en stærk adgangskode til beskyttelse af kontoen. Sikker på, at en svag adgangskode skal bruges?</string>
@@ -690,9 +680,8 @@ Skift til denne konto?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Adgangsnøglen kopieres ikke til det klonede emne. Fortsæt med at klone dette emne alligevel?</string>
     <string name="master_password_re_prompt_help">Hjælp til genanmodning om hovedadgangskode</string>
     <string name="admin_approval_requested">Admin-godkendelse udbedt</string>
-    <string name="your_request_has_been_sent_to_your_admin">Anmodningen er sendt til gruppe-admin.</string>
-    <string name="you_will_be_notified_once_approved">Underrettelse gives, når godkendelse foreligger.</string>
-    <string name="trouble_logging_in">Problemer med at logge ind?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokér autoudfyldning</string>
     <string name="no_uris_blocked">Ingen URI\'er blokeret</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autoudfyldning tilbydes ikke til disse URI\'er.</string>
@@ -703,8 +692,7 @@ Skift til denne konto?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Separér flere URI\'er med komma.</string>
     <string name="invalid_uri">Ugyldig URI</string>
     <string name="the_urix_is_already_blocked">URI\'en %1$s er allerede blokeret</string>
-    <string name="login_approved">Login godkendt</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log ind med enhed skal konfigureres i indstillingerne i Bitwarden-appen.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Har du brug for en anden mulighed? <annotation link="viewAll">Se alle login-muligheder</annotation></string>
     <string name="log_in_with_device">Log ind med enhed</string>
     <string name="logging_in_on">Logger ind på</string>
@@ -977,7 +965,6 @@ Skift til denne konto?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Adgangsnøgleoperation mislykkedes, fordi anmodningen ikke understøttes.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Adgangskodeoperation mislykkedes, fordi det valgte element ikke findes.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Adgangskodeoperation mislykkedes, fordi det valgte element ikke har en gyldig adgangskode.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Adgangskodeoperation mislykkedes, fordi der ikke blev valgt noget element.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Legitimationsoperation mislykkedes, fordi anmodningen er ugyldig.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Legitimationsoperation mislykkedes, fordi anmodningen ikke understøttes.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Legitimationsoperation mislykkedes, fordi forsøg på brugerverifikation blev overskredet.</string>
@@ -1058,7 +1045,6 @@ Skift til denne konto?</string>
     <string name="learn_more_about_privileged_apps">Lær mere om privilegerede apps</string>
     <string name="privileged_apps">Privilegerede apps</string>
     <string name="unrecognized_browser">Ikke-genkendt browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Lær mere om at bruge adgangsnøgler med Bitwarden.</string>
     <string name="all_trusted_apps">Alle betroede apps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Er du sikker på, at du vil stoppe med at stole på %s?</string>
     <string name="installed_apps">Installerede apps</string>
@@ -1075,8 +1061,6 @@ Skift til denne konto?</string>
     <string name="verification_code_added">Bekræftelseskode er tilføjet</string>
     <string name="refresh_period">Opdateringsperiode</string>
     <string name="algorithm">Algoritme</string>
-    <string name="advanced">Avanceret</string>
-    <string name="collapse_advanced_options">Sammenfold avancerede indstillinger</string>
     <string name="number_of_digits">Antal cifre</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekund</item>
@@ -1159,7 +1143,6 @@ Skift til denne konto?</string>
     <string name="select_a_card_for_x">Vælg et kort til %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Avancerede muligheder</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mere om matchdetektion</annotation></string>
     <string name="keep_your_credential_secure">Hold dine legitimationsoplysninger sikre</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Lær mere om, hvordan du holder legitimationsoplysninger sikre, når du bruger \"%1$s\".</string>
     <string name="are_you_sure_you_want_to_use">Er du sikker på, at du vil bruge \"%1$s\"?</string>
@@ -1202,7 +1185,6 @@ Skift til denne konto?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importér adgangskoder, adgangsnøgler og andre elementtyper fra din Bitwarden-vault.</string>
     <string name="items_to_import">Elementer til import</string>
     <string name="exporting_items">Eksporterer elementer…</string>
-    <string name="export_failed">Eksport mislykkedes</string>
     <string name="passwords">Adgangskoder</string>
     <string name="passkeys">Adgangsnøgler</string>
     <string name="why_is_this_step_required">Hvorfor er dette trin påkrævet?</string>
@@ -1222,7 +1204,6 @@ Skift til denne konto?</string>
     <string name="transfer_items_to_org">Overfør elementer til %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> kræver, at alle elementer ejes af organisationen af sikkerheds- og overholdelseshensyn. Klik på acceptér for at overføre ejerskabet af dine elementer. <annotation link="learnMore">Lær mere</annotation></string>
     <string name="decline_and_leave">Afvis og forlad</string>
-    <string name="why_am_i_seeing_this">Hvorfor ser jeg dette?</string>
     <string name="migrating_items_to_x">Migrerer elementer til %s</string>
     <string name="failed_to_migrate_items_to_x">Kunne ikke migrere elementer til %s</string>
     <string name="search_archive">Søg i arkiv</string>
@@ -1240,6 +1221,7 @@ Skift til denne konto?</string>
     <string name="archiving_items_is_a_premium_feature">Arkivering af elementer er en Premium-funktion. Din nuværende plan inkluderer ikke adgang til denne funktion.</string>
     <string name="totp_is_a_premium_feature">Autentifikatornøgle (TOTP) er en Premium-funktion. Din nuværende plan inkluderer ikke adgang til denne funktion.</string>
     <string name="upgrade_to_premium">Opgrader til Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">For at administrere dit Premium-abonnement skal du logge ind på din web-vault på en computer.</string>
     <string name="unlock_advanced_security_features">Lås op for avancerede sikkerhedsfunktioner</string>
@@ -1321,7 +1303,6 @@ Skift til denne konto?</string>
     <string name="archive_item">Arkivér element</string>
     <string name="once_archived_this_item_will_be_excluded">Når det er arkiveret, vil dette element blive udelukket fra søgeresultater og autofill-forslag.</string>
     <string name="pricing_unavailable">Priser ikke tilgængelige</string>
-    <string name="current_plan">Nuværende plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Fakturabeløb</string>
     <string name="storage_cost">Opbevaringsomkostning</string>
@@ -1397,8 +1378,6 @@ Skift til denne konto?</string>
     <string name="issuing_country">Udstedende land</string>
     <string name="issuing_state">Udstedende stat / provins</string>
     <string name="license_class">Licensklasse</string>
-    <string name="surname">Efternavn</string>
-    <string name="given_name">Fornavn</string>
     <string name="date_of_birth">Fødselsdato</string>
     <string name="nationality">Nationalitet</string>
     <string name="passport_type">Paptype</string>

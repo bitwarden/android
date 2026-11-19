@@ -2,26 +2,19 @@
 
 package com.bitwarden.testharness.ui.platform.feature.createpassword
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.credentialmanager.CredentialManagerGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
 
 /**
- * Create password test screen.
+ * Add Create Password destination to the navigation entries.
  */
-@Serializable
-data object CreatePasswordRoute
-
-/**
- * Add Create Password destination to the nav graph.
- */
-fun NavGraphBuilder.createPasswordDestination(
+fun EntryProviderScope<CredentialManagerGraph>.createPasswordDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<CreatePasswordRoute> {
+    pushEntry<CredentialManagerGraph.CreatePasswordRoute> {
         CreatePasswordScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -31,6 +24,6 @@ fun NavGraphBuilder.createPasswordDestination(
 /**
  * Navigate to the Create Password test screen.
  */
-fun NavController.navigateToCreatePassword(navOptions: NavOptions? = null) {
-    navigate(route = CreatePasswordRoute, navOptions = navOptions)
+fun NavigationController<CredentialManagerGraph>.navigateToCreatePassword() {
+    this.navigate(route = CredentialManagerGraph.CreatePasswordRoute)
 }

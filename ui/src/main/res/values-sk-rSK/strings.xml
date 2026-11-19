@@ -4,7 +4,6 @@
     <string name="add_folder">Pridať priečinok</string>
     <string name="add_item">Pridať položku</string>
     <string name="an_error_has_occurred">Vyskytla sa chyba</string>
-    <string name="apply">Použiť</string>
     <string name="back">Späť</string>
     <string name="cancel">Zrušiť</string>
     <string name="copy">Kopírovať</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Priečinok bol odstránený.</string>
     <string name="folder_none">Žiadny priečinok</string>
     <string name="folder_updated">Priečinok aktualizovaný.</string>
-    <string name="folders">Priečinky</string>
     <string name="hide">Skryť</string>
     <string name="internet_connection_required_message">Pripojte sa k internetu pred pokračovaním.</string>
     <string name="internet_connection_required_title">Vyžaduje sa internetové pripojenie</string>
@@ -210,7 +208,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="copy_totp">Kopírovať TOTP</string>
     <string name="copy_totp_automatically_description">Ak má prihlásenie nastavený kľúč overovateľa, TOTP overovací kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</string>
     <string name="copy_totp_automatically">Automaticky kopírovať TOTP</string>
-    <string name="premium_required">Na použitie tejto funkcie je potrebné prémiové členstvo.</string>
     <string name="attachment_deleted">Príloha odstránená</string>
     <string name="attachments_are_a_premium_feature">Prílohy sú prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="choose_file">Vybrať súbor</string>
@@ -293,9 +290,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="icons_url">URL servera ikôn</string>
     <string name="vault_is_locked">Trezor je uzamknutý</string>
     <string name="go_to_my_vault">Prejsť do môjho trezora</string>
-    <string name="collections">Zbierky</string>
     <string name="shared_folders">Zdieľané priečinky</string>
-    <string name="no_items_collection">V tejto zbierke sa nenachádzajú žiadne položky.</string>
     <string name="there_are_no_items_in_this_shared_folder">V tomto zdieľanom priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_folder">V tomto priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_trash">V koši nie sú žiadne položky.</string>
@@ -351,16 +346,11 @@ Skenovanie prebehne automaticky.</string>
     <string name="type">Typ</string>
     <string name="move_down">Posunúť nižšie</string>
     <string name="move_up">Posunúť vyššie</string>
-    <string name="owner">Vlastník</string>
-    <string name="no_collections_to_list">Neexistujú žiadne zbierky na zobrazenie.</string>
     <string name="there_are_no_shared_folders_to_list">Na zobrazenie nie sú žiadne zdieľané priečinky.</string>
     <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
     <string name="select_one_collection">Musíte vybrať aspoň jednu zbierku.</string>
     <string name="you_must_select_at_least_one_shared_folder">Musíte vybrať aspoň jeden zdieľaný priečinok.</string>
     <string name="share">Zdieľať</string>
-    <string name="move_to_organization">Presunúť do Organizácie</string>
-    <string name="no_orgs_to_list">Nenašli sa žiadne organizácie.</string>
-    <string name="move_to_org_desc">Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</string>
     <string name="no_vaults_to_list">Nie sú žiadne trezory na zobrazenie.</string>
     <string name="move_to_vault_desc">Vyberte trezor, do ktorého chcete túto položku presunúť. Presunutím do iného trezoru sa vlastníctvo položky prevedie na danú organizáciu. Po presunutí už nebudete priamym vlastníkom tejto položky.</string>
     <string name="number_of_words">Počet slov</string>
@@ -475,7 +465,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="hide_text_by_default">Pri prístupe k Sendu, predvolene skryť text</string>
     <string name="type_file">Súbor</string>
     <string name="deletion_date">Dátum odstránenia</string>
-    <string name="deletion_time">Čas odstránenia</string>
     <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
     <string name="this_date_is_enforced_by_your_organization">Tento dátum je stanovený vašou organizáciou</string>
     <string name="who_can_view">Kto môže zobraziť</string>
@@ -611,20 +600,21 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="generic_error_message">Vašu žiadosť sa nám nepodarilo spracovať. Skúste to, prosím, znova alebo nás kontaktujte.</string>
     <string name="allow_screen_capture">Povoliť snímanie obrazovky</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Naozaj chcete povoliť snímanie obrazovky?</string>
-    <string name="log_in_requested">Požadované prihlásenie</string>
-    <string name="are_you_trying_to_log_in">Snažíte sa prihlásiť?</string>
-    <string name="log_in_attempt_by_x_on_y">Pokus o prihlásenie do konta %1$s dňa %2$s</string>
+    <string name="access_requested">Požadovaný prístup</string>
+    <string name="account_access_requested">Žiadosť o prístup k účtu</string>
+    <string name="are_you_trying_to_access_your_account">Snažíte sa získať prístup k svojmu účtu?</string>
+    <string name="access_attempt_by_x_on_y">Pokus o prístup do účtu %1$s na %2$s</string>
     <string name="device_type">Typ zariadenia</string>
     <string name="ip_address">IP adresa</string>
     <string name="time">Čas</string>
     <string name="select_time">Vyberte čas</string>
     <string name="switch_input_mode">Prepnúť režim vstupu</string>
-    <string name="confirm_log_in">Potvrdiť prihlásenie</string>
-    <string name="deny_log_in">Odmietnuť prihlásenie</string>
-    <string name="log_in_denied">Prihlásenie zamietnuté</string>
-    <string name="approve_login_requests">Schvaľovanie žiadostí o prihlásenie</string>
+    <string name="confirm_access">Potvrdiť prístup</string>
+    <string name="deny_access">Zamietnuť prístup</string>
+    <string name="access_denied">Prístup zamietnutý</string>
+    <string name="account_access_requests">Žiadosti o prístup k účtu</string>
     <string name="no_thanks">Nie, ďakujem</string>
-    <string name="confim_log_in_attemp_for_x">Potvrdiť pokus o prihlásenie pre %1$s</string>
+    <string name="confirm_access_attempt_for_x">Potvrdiť pokus o prístup k %1$s</string>
     <string name="username_type">Typ používateľského mena</string>
     <string name="plus_addressed_email">E-mail s plusovým aliasom</string>
     <string name="catch_all_email">Catch-all e-mail</string>
@@ -651,8 +641,8 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="i_understand">Rozumiem</string>
     <string name="accept">Prijať</string>
     <string name="decline">Odmietnuť</string>
-    <string name="login_request_has_already_expired">Platnosť žiadosti o prihlásenie už vypršala.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prihlásenie z:
+    <string name="access_request_has_already_expired">Platnosť žiadosti o prístup už vypršala.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prístup z:
 %1$s
 Chcete prepnúť na tento účet?</string>
     <string name="new_to_bitwarden">Ste noví na Bitwardene?</string>
@@ -661,17 +651,17 @@ Chcete prepnúť na tento účet?</string>
     <string name="not_you">Nie ste to vy?</string>
     <string name="log_in_with_master_password">Prihlásenie pomocou hlavného hesla</string>
     <string name="log_in_initiated">Iniciované prihlásenie</string>
-    <string name="a_notification_has_been_sent_to_your_device">Do vášho zariadenia bolo odoslané upozornenie.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Skontrolujte, či je trezor odomknutý, a či sa fráza odtlačku prsta zhoduje na druhom zariadení.</string>
+    <string name="request_sent_to_your_device">Žiadosť bola odoslaná do vášho zariadenia</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Túto žiadosť potvrďte vo svojom účte Bitwarden na inom odomknutom zariadení alebo vo webovej aplikácii. Žiadosti o prístup k účtu musia byť povolené v nastaveniach.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Pred schválením sa uistite, že sa jedinečný identifikátor zhoduje s tým uvedeným nižšie.</string>
     <string name="resend_notification">Znova odoslať upozornenie</string>
     <string name="view_all_login_options">Zobraziť všetky možnosti prihlásenia</string>
-    <string name="pending_log_in_requests">Čakajúce požiadavky o prihlásenie</string>
+    <string name="pending_access_requests">Čakajúce žiadosti o prístup</string>
     <string name="decline_all_requests">Odmietnuť všetky žiadosti</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Naozaj chcete odmietnuť všetky čakajúce požiadavky o prihlásenie?</string>
     <string name="no_pending_requests">Žiadne čakajúce požiadavky</string>
     <string name="enable_camer_permission_to_use_the_scanner">Na použitie skenera povoľte prístup k fotoaparátu</string>
     <string name="language">Jazyk</string>
-    <string name="language_change_x_description">Jazyk bol zmenený na %1$s. Reštartujte aplikáciu, aby sa zmena prejavila</string>
     <string name="default_system">Predvolený (Systémový)</string>
     <string name="weak_master_password">Slabé hlavné heslo</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Nájdené slabé heslo. Používajte silné heslo na ochranu svojho účtu. Naozaj chcete použiť slabé heslo?</string>
@@ -698,9 +688,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Prístupový kľúč sa do klonovanej položky neskopíruje. Chcete pokračovať v klonovaní tejto položky?</string>
     <string name="master_password_re_prompt_help">Pomoc s opätovnou výzvou na zadanie hlavného hesla</string>
     <string name="admin_approval_requested">Vyžaduje sa schválenie správcom</string>
-    <string name="your_request_has_been_sent_to_your_admin">Vaša žiadosť bola odoslaná správcovi.</string>
-    <string name="you_will_be_notified_once_approved">Po schválení budete informovaný.</string>
-    <string name="trouble_logging_in">Máte problémy s prihlásením?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Vaša žiadosť bola odoslaná správcovi. Po jej schválení dostanete e-mail.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Váš správca vás môže požiadať o potvrdenie tohto jedinečného identifikátora.</string>
     <string name="block_auto_fill">Blokovať automatické vypĺňanie</string>
     <string name="no_uris_blocked">Žiadne URI nie sú blokované</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pre tieto URI nebude automatické vypĺňanie ponukané.</string>
@@ -711,8 +700,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formát: %1$s. Viaceré URI oddeľte čiarkou.</string>
     <string name="invalid_uri">Neplatný URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s je už blokovaný</string>
-    <string name="login_approved">Schválené prihlásenie</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden.</string>
+    <string name="access_approved">Prístup schválený</string>
     <string name="need_another_option_view_all_login_options">Potrebujete inú možnosť? <annotation link="viewAll">Zobraziť všetky možnosti prihlásenia</annotation></string>
     <string name="log_in_with_device">Prihlásiť pomocou zariadenia</string>
     <string name="logging_in_on">Prihlásenie na</string>
@@ -989,7 +977,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operácia s heslom zlyhala, pretože vybraná položka neexistuje.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operácia s heslom zlyhala, pretože vybraná položka nemá platné heslo.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operácia s heslom zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operácia s poverením zlyhala, pretože požiadavka je neplatná.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operácia s poverením zlyhala, pretože požiadavka nie je podporovaná.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operácia s poverením zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
@@ -1070,7 +1057,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="learn_more_about_privileged_apps">Viac informácií o privilegovaných aplikáciách</string>
     <string name="privileged_apps">Privilegované aplikácie</string>
     <string name="unrecognized_browser">Neznámy prehliadač</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Ďalšie informácie o používaní prístupových kľúčov s Bitwardenom.</string>
     <string name="all_trusted_apps">Všetky dôveryhodné aplikácie</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
     <string name="installed_apps">Nainštalované aplikácie</string>
@@ -1087,8 +1073,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="verification_code_added">Overovací kód bol pridaný</string>
     <string name="refresh_period">Interval obnovenia</string>
     <string name="algorithm">Algoritmus</string>
-    <string name="advanced">Rozšírené</string>
-    <string name="collapse_advanced_options">Zbaliť rozšírené možnosti</string>
     <string name="number_of_digits">Počet číslic</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekunda</item>
@@ -1175,7 +1159,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
     <string name="choose_an_identity">Vyberte identitu</string>
     <string name="advanced_options">Rozšírené možnosti</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Viac informácií o zisťovaní zhody</annotation></string>
     <string name="keep_your_credential_secure">Udržujte svoje prihlasovacie údaje v bezpečí</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Ďalšie informácie o tom, ako zabezpečiť prihlasovacie údaje pri používaní \"%1$s\".</string>
     <string name="are_you_sure_you_want_to_use">Naozaj chcete použiť \"%1$s\"?</string>
@@ -1220,7 +1203,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import hesiel, prístupových kľúčov a iných typov položiek z trezoru Bitwarden.</string>
     <string name="items_to_import">Položky na import</string>
     <string name="exporting_items">Exportujú sa položky…</string>
-    <string name="export_failed">Export zlyhal</string>
     <string name="passwords">Heslá</string>
     <string name="passkeys">Prístupové kľúče</string>
     <string name="why_is_this_step_required">Prečo je tento krok potrebný?</string>
@@ -1240,7 +1222,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="transfer_items_to_org">Prenos položiek do %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> vyžaduje, aby všetky položky patrili organizácii z dôvodu bezpečnosti a dodržiavania predpisov. <annotation link="learnMore">Viac informácií</annotation></string>
     <string name="decline_and_leave">Zamietnuť a odísť</string>
-    <string name="why_am_i_seeing_this">Prečo to vidím?</string>
     <string name="migrating_items_to_x">Presúvanie položiek do %s</string>
     <string name="failed_to_migrate_items_to_x">Nepodarilo sa presunúť položky do %s</string>
     <string name="search_archive">Prehľadať archív</string>
@@ -1258,6 +1239,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="archiving_items_is_a_premium_feature">Archivovanie položiek je prémiová funkcia. Váš aktuálny plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="totp_is_a_premium_feature">Kľúč overovacej aplikácie (TOTP) je prémiová funkcia. Váš súčasný plán nezahŕňa prístup k tejto funkcii.</string>
     <string name="upgrade_to_premium">Upgradovať na Prémium</string>
+    <string name="explore_premium">Preskúmať Prémium</string>
     <string name="plan">Plán</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Ak chcete spravovať prémiové predplatné, budete sa musieť prihlásiť do svojho trezora na počítači.</string>
     <string name="unlock_advanced_security_features">Odomknutie pokročilých funkcií zabezpečenia</string>
@@ -1339,7 +1321,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="archive_item">Archivovať položku</string>
     <string name="once_archived_this_item_will_be_excluded">Po archivácii bude táto položka vylúčená z výsledkov vyhľadávania a návrhov automatického vypĺňania.</string>
     <string name="pricing_unavailable">Cena nie je k dispozícii</string>
-    <string name="current_plan">Aktuálny plán</string>
     <string name="premium_plan_name">Prémium</string>
     <string name="billing_amount">Fakturačná suma</string>
     <string name="storage_cost">Náklady na skladovanie</string>
@@ -1417,8 +1398,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="issuing_country">Vydávajúca krajina</string>
     <string name="issuing_state">Vydávajúci štát/provincia</string>
     <string name="license_class">Skupina vodičského preukazu</string>
-    <string name="surname">Priezvisko</string>
-    <string name="given_name">Meno</string>
     <string name="date_of_birth">Dátum narodenia</string>
     <string name="nationality">Národnosť</string>
     <string name="passport_type">Typ pasu</string>

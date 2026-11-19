@@ -1,66 +1,55 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.PreAuthSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * The type-safe route for the settings about screen.
+ * Add the about screen to the settings navigation entries.
  */
-@Serializable
-sealed class SettingsAboutRoute {
-    /**
-     * The type-safe route for the settings about screen.
-     */
-    @Serializable
-    data object Standard : SettingsAboutRoute()
-
-    /**
-     * The type-safe route for the pre-auth settings about screen.
-     */
-    @Serializable
-    data object PreAuth : SettingsAboutRoute()
-}
-
-/**
- * Add settings destinations to the nav graph.
- */
-fun NavGraphBuilder.aboutDestination(
-    isPreAuth: Boolean,
+fun EntryProviderScope<SettingsGraph>.aboutDestination(
     onNavigateBack: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
 ) {
-    if (isPreAuth) {
-        composableWithPushTransitions<SettingsAboutRoute.PreAuth> {
-            AboutScreen(
-                onNavigateBack = onNavigateBack,
-                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
-                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
-            )
-        }
-    } else {
-        composableWithPushTransitions<SettingsAboutRoute.Standard> {
-            AboutScreen(
-                onNavigateBack = onNavigateBack,
-                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
-                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
-            )
-        }
+    pushEntry<SettingsGraph.AboutRoute> {
+        AboutScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+        )
+    }
+}
+
+/**
+ * Add the about screen to the pre-authentication settings navigation entries.
+ */
+fun EntryProviderScope<PreAuthSettingsGraph>.preAuthAboutDestination(
+    onNavigateBack: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
+) {
+    pushEntry<PreAuthSettingsGraph.AboutRoute> {
+        AboutScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+        )
     }
 }
 
 /**
  * Navigate to the about screen.
  */
-fun NavController.navigateToAbout(
-    isPreAuth: Boolean,
-    navOptions: NavOptions? = null,
-) {
-    navigate(
-        route = if (isPreAuth) SettingsAboutRoute.PreAuth else SettingsAboutRoute.Standard,
-        navOptions = navOptions,
-    )
+fun NavigationController<SettingsGraph>.navigateToAbout() {
+    this.navigate(route = SettingsGraph.AboutRoute)
+}
+
+/**
+ * Navigate to the pre-authentication about screen.
+ */
+fun NavigationController<PreAuthSettingsGraph>.navigateToPreAuthAbout() {
+    this.navigate(route = PreAuthSettingsGraph.AboutRoute)
 }

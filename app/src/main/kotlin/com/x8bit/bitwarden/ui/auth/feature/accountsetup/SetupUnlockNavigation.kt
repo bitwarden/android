@@ -1,113 +1,50 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
-import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the setup unlock screen.
- */
-@Parcelize
-@Serializable(with = SetupUnlockRoute.Serializer::class)
-sealed class SetupUnlockRoute : Parcelable {
-    /**
-     * The [isInitialSetup] value used in the setup unlock screen.
-     */
-    abstract val isInitialSetup: Boolean
-
-    /**
-     * Custom serializer to support polymorphic routes.
-     */
-    class Serializer : ParcelableRouteSerializer<SetupUnlockRoute>(SetupUnlockRoute::class)
-
-    /**
-     * The type-safe route for the standard setup unlock screen.
-     */
-    @Parcelize
-    @Serializable(with = Standard.Serializer::class)
-    data object Standard : SetupUnlockRoute() {
-        override val isInitialSetup: Boolean get() = false
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
-    }
-
-    /**
-     * The type-safe route for the root setup unlock screen.
-     */
-    @Parcelize
-    @Serializable(with = AsRoot.Serializer::class)
-    data object AsRoot : SetupUnlockRoute() {
-        override val isInitialSetup: Boolean get() = true
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<AsRoot>(AsRoot::class)
-    }
-}
-
-/**
- * Class to retrieve setup unlock arguments from the [SavedStateHandle].
- */
-data class SetupUnlockArgs(
-    val isInitialSetup: Boolean,
-)
-
-/**
- * Constructs a [SetupUnlockArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toSetupUnlockArgs(): SetupUnlockArgs {
-    val route = this.toRoute<SetupUnlockRoute>()
-    return SetupUnlockArgs(isInitialSetup = route.isInitialSetup)
-}
+import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
  * Navigate to the setup unlock screen.
  */
-fun NavController.navigateToSetupUnlockScreen(navOptions: NavOptions? = null) {
-    this.navigate(route = SetupUnlockRoute.Standard, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToSetupUnlockScreen() {
+    this.navigate(route = VaultUnlockedGraph.SetupUnlockRoute)
 }
 
 /**
- * Navigate to the setup unlock screen as root.
+ * Add the setup unlock screen to the vault unlocked navigation entries.
  */
-fun NavController.navigateToSetupUnlockScreenAsRoot(navOptions: NavOptions? = null) {
-    this.navigate(route = SetupUnlockRoute.AsRoot, navOptions = navOptions)
-}
-
-/**
- * Add the setup unlock screen to a nav graph.
- */
-fun NavGraphBuilder.setupUnlockDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.setupUnlockDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<SetupUnlockRoute.Standard> {
+    slideUpEntry<VaultUnlockedGraph.SetupUnlockRoute> {
         SetupUnlockScreen(
+            viewModel = setupUnlockViewModel(isInitialSetup = false),
             onNavigateBack = onNavigateBack,
         )
     }
 }
 
 /**
- * Add the setup unlock screen to the root nav graph.
+ * Add the setup unlock screen to the account setup navigation entries.
  */
-fun NavGraphBuilder.setupUnlockDestinationAsRoot() {
-    composableWithPushTransitions<SetupUnlockRoute.AsRoot> {
+fun EntryProviderScope<AccountSetupGraph>.setupUnlockDestinationAsRoot() {
+    entry<AccountSetupGraph.SetupUnlockRoute> {
         SetupUnlockScreen(
+            viewModel = setupUnlockViewModel(isInitialSetup = true),
             onNavigateBack = {
                 // No-Op
             },
         )
     }
 }
+
+@Composable
+private fun setupUnlockViewModel(
+    isInitialSetup: Boolean,
+): SetupUnlockViewModel = hiltViewModel<SetupUnlockViewModel, SetupUnlockViewModel.Factory>(
+    creationCallback = { it.create(isInitialSetup = isInitialSetup) },
+)

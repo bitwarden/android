@@ -13,14 +13,6 @@ class FlagKeyTest {
             "bitwarden-authentication-enabled",
         )
         assertEquals(
-            FlagKey.ForceUpdateKdfSettings.keyName,
-            "pm-18021-force-update-kdf-settings",
-        )
-        assertEquals(
-            FlagKey.MigrateMyVaultToMyItems.keyName,
-            "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -57,10 +49,6 @@ class FlagKeyTest {
             "fedramp-gov-region",
         )
         assertEquals(
-            FlagKey.Vfo1Foundation.keyName,
-            "vfo1-foundation",
-        )
-        assertEquals(
             FlagKey.SendControls.keyName,
             "pm-31885-send-controls",
         )
@@ -87,8 +75,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.ForceUpdateKdfSettings,
-                FlagKey.MigrateMyVaultToMyItems,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
@@ -98,7 +84,6 @@ class FlagKeyTest {
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
                 FlagKey.FedRamp,
-                FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,

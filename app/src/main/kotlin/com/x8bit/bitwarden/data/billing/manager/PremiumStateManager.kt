@@ -35,6 +35,11 @@ interface PremiumStateManager {
     val isPlanRowEligibleFlow: StateFlow<Boolean>
 
     /**
+     * Emits `true` when the plan badge should be shown for the active user.
+     */
+    val shouldShowPlanBadgeFlow: StateFlow<Boolean>
+
+    /**
      * Emits the active user's latest [SubscriptionStatusState].
      */
     val subscriptionStatusStateFlow: StateFlow<SubscriptionStatusState>
@@ -72,6 +77,11 @@ interface PremiumStateManager {
      * never re-appears for that user.
      */
     fun dismissUpgradedToPremiumCard()
+
+    /**
+     * Marks the plan badge as dismissed for the current user so it is no longer shown.
+     */
+    fun dismissPlanBadge()
 
     /**
      * Marks the active user as having a Premium upgrade in flight (Stripe checkout completed

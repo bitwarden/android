@@ -4,7 +4,6 @@
     <string name="add_folder">Qovluq əlavə et</string>
     <string name="add_item">Maddə əlavə edin</string>
     <string name="an_error_has_occurred">Bir xəta baş verdi</string>
-    <string name="apply">Tətbiq et</string>
     <string name="back">Geri</string>
     <string name="cancel">Ləğv et</string>
     <string name="copy">Kopyala</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Qovluq silindi.</string>
     <string name="folder_none">Qovluq yoxdur</string>
     <string name="folder_updated">Qovluq güncəlləndi.</string>
-    <string name="folders">Qovluqlar</string>
     <string name="hide">Gizlət</string>
     <string name="internet_connection_required_message">Davam etməzdən əvvəl lütfən internetə bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı tələb olunur</string>
@@ -105,7 +103,7 @@
     <string name="one_minute">1 dəqiqə</string>
     <string name="four_hours">4 saat</string>
     <string name="immediately">Dərhal</string>
-    <string name="vault_timeout_log_out_confirmation_title">Sessiya vaxtının bitməsi “Çıxış et” olaraq təyin edilsin?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Oturum vaxtının bitməsi “Çıxış et” olaraq təyin edilsin?</string>
     <string name="vault_timeout_log_out_confirmation_message">Vaxt bitdikdən sonra hesabdan çıxış ediləcək. Seyfinizə təkrar giriş edib erişmək üçün internetə bağlanmalısınız. Bu cihazdakı saxlanılmış ayarlarınız və PIN dəyişməyəcək.</string>
     <string name="logging_in">Giriş edilir…</string>
     <string name="login_to_bitwarden">Bitwarden-ə giriş edin</string>
@@ -208,7 +206,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="copy_totp">TOTP-ni kopyala</string>
     <string name="copy_totp_automatically_description">Bir giriş prosesinin kimlik doğrulayıcı açarı varsa, giriş məlumatları avto-doldurulanda TOTP doğrulama kodunu kopyalayın.</string>
     <string name="copy_totp_automatically">TOTP-ni avtomatik kopyala</string>
-    <string name="premium_required">Bu özəlliyi istifadə etmək üçün premium üzvlük lazımdır.</string>
     <string name="attachment_deleted">Qoşma silindi</string>
     <string name="attachments_are_a_premium_feature">Qoşmalar, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="choose_file">Fayl seç</string>
@@ -286,14 +283,12 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="address">Ünvan</string>
     <string name="expiration">Bitmə vaxtı</string>
     <string name="show_website_icons">Veb sayt ikonlarını göstər</string>
-    <string name="show_website_icons_help">Veb sayt ikonları üçün köməyi göstər</string>
+    <string name="show_website_icons_help">Veb-sayt simgələrini göstərməklə bağlı yardım</string>
     <string name="show_website_icons_description">Hər girişin yanında tanına bilən təsvir göstər</string>
     <string name="icons_url">İkon server URL-si</string>
     <string name="vault_is_locked">Seyf kilidlənib</string>
     <string name="go_to_my_vault">Seyfimə get</string>
-    <string name="collections">Kolleksiyalar</string>
     <string name="shared_folders">Paylaşılan qovluqlar</string>
-    <string name="no_items_collection">Bu kolleksiyada heç bir element yoxdur.</string>
     <string name="there_are_no_items_in_this_shared_folder">Bu paylaşılan qovluqda heç bir element yoxdur.</string>
     <string name="no_items_folder">Bu qovluqda heç bir element yoxdur.</string>
     <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
@@ -347,16 +342,11 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="type">Növ</string>
     <string name="move_down">Aşağı daşı</string>
     <string name="move_up">Yuxarı daşı</string>
-    <string name="owner">Sahibi</string>
-    <string name="no_collections_to_list">Sadalanacaq heç bir kolleksiya yoxdur.</string>
     <string name="there_are_no_shared_folders_to_list">Sadalanacaq heç bir paylaşılan qovluq yoxdur.</string>
     <string name="moved_item_to_org">%1$s, bura daşındı: %2$s.</string>
     <string name="select_one_collection">Ən azı bir kolleksiya seçməlisiniz.</string>
     <string name="you_must_select_at_least_one_shared_folder">Ən azı bir paylaşılan qovluq seçməlisiniz.</string>
     <string name="share">Paylaş</string>
-    <string name="move_to_organization">Təşkilata daşı</string>
-    <string name="no_orgs_to_list">Sadalanacaq heç bir təşkilat yoxdur.</string>
-    <string name="move_to_org_desc">Bu elementi daşımaq istədiyiniz təşkilatı seçin. Bir təşkilata daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
     <string name="no_vaults_to_list">Sadalanacaq seyf yoxdur.</string>
     <string name="move_to_vault_desc">Bu elementi daşımaq istədiyiniz seyfi seçin. Başqa bir seyfə daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
     <string name="number_of_words">Söz sayı</string>
@@ -402,7 +392,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="include_number">Rəqəm əlavə et</string>
     <string name="download">Endir</string>
     <string name="download_file">Faylı endir</string>
-    <string name="login_expired">Giriş sessiyanızın müddəti bitdi.</string>
+    <string name="login_expired">Giriş oturumunuzun müddəti bitdi.</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
     <string name="device_verification">Cihaz doğrulaması</string>
     <string name="biometrics_failed">Biometrik uğursuzdur</string>
@@ -413,7 +403,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="send_verification_code_to_email">Doğrulama kodunu e-poçtunuza göndərin</string>
     <string name="code_sent">Kod göndərildi!</string>
     <string name="confirm_your_identity">Davam etmək üçün kimliyinizi doğrulayın.</string>
-    <string name="export_vault_warning">Bu xaricə köçürmədəki seyf veriləriniz şifrələnməmiş formatdadır. Bu xaricə köçürülmüş faylı güvənli olmayan kanallar (e-poçt kimi) üzərində saxlamamalı və ya göndərməməlisiniz. İşiniz bitdikdən sonra faylı dərhal silin.</string>
+    <string name="export_vault_warning">Bu xaricə köçürmədəki seyf veriləriniz şifrlənməmiş formatdadır. Bu xaricə köçürülmüş faylı güvənli olmayan kanallar (e-poçt kimi) üzərində saxlamamalı və ya göndərməməlisiniz. İşiniz bitdikdən sonra faylı dərhal silin.</string>
     <string name="export_vault_file_pw_protect_info">Bu faylın xaricə köçürülməsi, parolla qorunacaq və şifrəsini açmaq üçün fayl parolu tələb olunacaq.</string>
     <string name="export_vault_confirmation_title">Seyfi xaricə köçürməyi təsdiqlə</string>
     <string name="warning">Xəbərdarlıq</string>
@@ -471,7 +461,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="hide_text_by_default">\"Send\"ə erişərkən ilkin olaraq mətni gizlədin</string>
     <string name="type_file">Fayl</string>
     <string name="deletion_date">Silinmə tarixi</string>
-    <string name="deletion_time">Silinmə vaxtı</string>
     <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
     <string name="this_date_is_enforced_by_your_organization">Bu tarix, təşkilatınız tərəfindən müəyyən olunub.</string>
     <string name="who_can_view">Kimlər baxa bilər</string>
@@ -552,11 +541,11 @@ Skan prosesi avtomatik baş tutacaq.</string>
         <item quantity="one">%1$d dəqiqə</item>
         <item quantity="other">%1$d dəqiqə</item>
     </plurals>
-    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Təşkilatınız, sessiyanın maksimum bitmə vaxtını %1$s %2$s olaraq təyin etdi.</string>
-    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Təşkilatınız, sessiyanın maksimum bitmə vaxtını %1$s olaraq təyin etdi.</string>
+    <string name="vault_timeout_policy_in_effect_hours_minutes_format" comment="First value will be the number of hours (2 hours, 1 hour) and second value will be the number of minutes (15 minutes, 1 minute)">Təşkilatınız, oturumun maksimum bitmə vaxtını %1$s %2$s olaraq təyin etdi.</string>
+    <string name="vault_timeout_policy_in_effect_format" comment="Value will be a number of hours or minutes (15 minutes, or 1 minute)">Təşkilatınız, oturumun maksimum bitmə vaxtını %1$s olaraq təyin etdi.</string>
     <string name="this_setting_is_managed_by_your_organization">Bu ayar, təşkilatınız tərəfindən idarə olunur.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_never">Təşkilatınız, sessiyanın ilkin bitmə vaxtını heç vaxt olaraq təyin etdi.</string>
-    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Təşkilatınız, sessiyanın ilkin bitmə vaxtını tətbiq başladılanda olaraq təyin etdi.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_never">Təşkilatınız, oturumun ilkin bitmə vaxtını heç vaxt olaraq təyin etdi.</string>
+    <string name="your_organization_has_set_the_default_session_timeout_to_on_app_restart">Təşkilatınız, oturumun ilkin bitmə vaxtını tətbiq başladılanda olaraq təyin etdi.</string>
     <string name="vault_timeout_to_large">Seyfin bitmə vaxtı, təşkilatınız tərəfindən ayarlanan məhdudiyyətləri aşır.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Bir və ya daha çox təşkilat siyasəti, fərdi seyfinizi xaricə köçürməyinizi əngəlləyir.</string>
     <string name="add_account">Hesab əlavə et</string>
@@ -602,20 +591,21 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="generic_error_message">Tələbinizi emal edə bilmədik. Lütfən yenidən sınayın və ya bizimlə əlaqə saxlayın.</string>
     <string name="allow_screen_capture">Ekranı çəkməyə icazə ver</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Ekranın çəkilməsini fəallaşdırmaq istədiyinizə əminsiniz?</string>
-    <string name="log_in_requested">Giriş tələb olundu</string>
-    <string name="are_you_trying_to_log_in">Giriş etməyə çalışırsınız?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s tərəfindən %2$s tarixində giriş cəhdi</string>
+    <string name="access_requested">Erişim tələb edildi</string>
+    <string name="account_access_requested">Hesab erişimi tələb olundu</string>
+    <string name="are_you_trying_to_access_your_account">Hesabınıza erişməyə çalışırsınız?</string>
+    <string name="access_attempt_by_x_on_y">%1$s tərəfindən %2$s tarixində erişim cəhdi</string>
     <string name="device_type">Cihaz növü</string>
     <string name="ip_address">IP ünvan</string>
     <string name="time">Vaxt</string>
     <string name="select_time">Vaxt seçin</string>
     <string name="switch_input_mode">Giriş rejimini dəyişdir</string>
-    <string name="confirm_log_in">Girişi təsdiqlə</string>
-    <string name="deny_log_in">Girişi rədd et</string>
-    <string name="log_in_denied">Giriş rədd edildi</string>
-    <string name="approve_login_requests">Giriş tələblərini təsdiqlə</string>
+    <string name="confirm_access">Erişimi təsdiqlə</string>
+    <string name="deny_access">Erişimə rədd cavabı ver</string>
+    <string name="access_denied">Erişim rədd edildi</string>
+    <string name="account_access_requests">Hesab erişim tələbləri</string>
     <string name="no_thanks">Xeyr təşəkkürlər</string>
-    <string name="confim_log_in_attemp_for_x">%1$s üçün giriş cəhdini təsdiqlə</string>
+    <string name="confirm_access_attempt_for_x">%1$s üçün erişim cəhdini təsdiqlə</string>
     <string name="username_type">İstifadəçi adı növü</string>
     <string name="plus_addressed_email">Plyus ünvanlı e-poçt</string>
     <string name="catch_all_email">Catch-all E-poçt</string>
@@ -635,15 +625,15 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="catch_all_email_description">Domeninizin konfiqurasiyalı catch-all gələn qutusunu istifadə edin.</string>
     <string name="forwarded_email_description">Xarici yönləndirmə xidməti ilə e-poçt ləqəbi yaradın.</string>
     <string name="accessibility_service_disclosure">Erişiləbilənlik Xidməti açıqlaması</string>
-    <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
+    <string name="accessibility_disclosure_text">Bitwarden, tətbiqlərdə və veb-saytlarda giriş xanalarını axtarmaq üçün Erişiləbilənlik Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq xana kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</string>
     <string name="accessibility_disclosure_start_up_text_1">Bitwarden-in erişiləbilənlik əsaslı avto-doldurma xidmətini təklif etməsi üçün bu bildiriş tələb olunur.</string>
     <string name="accessibility_disclosure_start_up_text_2">Bitwarden, Android-in Erişiləbilənlik Xidmətini istifadə edərək giriş xanalarını aşkarlamaq üçün ixtiyari bir avto-doldurma üsulu təklif edir. Bunu fəallaşdırsanız, Bitwarden müvafiq xanaları müəyyənləşdirəcək və uyuşma tapıldığı zaman giriş məlumatlarınızı dolduracaq.</string>
     <string name="accessibility_disclosure_start_up_text_3">Erişiləbilənlik Xidmətini istifadə etdiyiniz zaman ekrandakı heç bir məlumatı saxlamırıq və ekrandakı giriş məlumatlarını daxil etmə elementləri istisna olmaqla heç nəyi idarə etmirik.</string>
     <string name="i_understand">Anladım</string>
     <string name="accept">Qəbul et</string>
     <string name="decline">Rədd et</string>
-    <string name="login_request_has_already_expired">Giriş tələbinin müddəti artıq bitib.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Giriş cəhdi:
+    <string name="access_request_has_already_expired">Erişim tələbinin müddəti artıq bitib.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Erişim cəhdi:
 %1$s
 Bu hesaba keçmək istəyirsiniz?</string>
     <string name="new_to_bitwarden">Bitwarden-də yenisiniz?</string>
@@ -652,17 +642,17 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="not_you">Siz deyilsiniz?</string>
     <string name="log_in_with_master_password">Ana parolla giriş et</string>
     <string name="log_in_initiated">Giriş etmə başladıldı</string>
-    <string name="a_notification_has_been_sent_to_your_device">Cihazınıza bir bildiriş göndərildi.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Lütfən seyfinizin kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazla uyuşduğuna əmin olun.</string>
+    <string name="request_sent_to_your_device">Tələb cihazınıza göndərilib</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Bu tələbi, kilidi açılmış başqa bir cihazdakı və ya veb tətbiqdəki Bitwarden hesabınızda təsdiqləyin. Hesab erişim tələbləri, Ayarlarda işlək olmalıdır.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Təsdiqləməzdən əvvəl Barmaq izi ifadəsinin aşağıdakı ifadə ilə uyuşduğuna əmin olun.</string>
     <string name="resend_notification">Bildirişi təkrar göndər</string>
     <string name="view_all_login_options">Bütün giriş etmə seçimlərinə bax</string>
-    <string name="pending_log_in_requests">Gözlənilən giriş tələbləri</string>
+    <string name="pending_access_requests">Gözləyən erişim tələbləri</string>
     <string name="decline_all_requests">Bütün tələbləri rədd et</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Gözləyən bütün giriş tələblərini rədd etmək istədiyinizə əminsiniz?</string>
     <string name="no_pending_requests">Gözləyən heç bir tələb yoxdur</string>
     <string name="enable_camer_permission_to_use_the_scanner">Skaneri istifadə etmək üçün kamera iznini fəallaşdırın</string>
     <string name="language">Dil</string>
-    <string name="language_change_x_description">Dil, %1$s olaraq dəyişdirildi. Dəyişiklikləri görmək üçün lütfən tətbiqi yenidən başladın</string>
     <string name="default_system">İlkin (Sistem)</string>
     <string name="weak_master_password">Zəif ana parol</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zəif parol aşkarlandı. Hesabınızı qorumaq üçün güclü bir parol istifadə edin. Zəif bir parol istifadə etmək istədiyinizə əminsiniz?</string>
@@ -689,9 +679,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Keçid açarı, klonlanmış elementə kopyalanmayacaq. Bu elementi klonlamağa davam etmək istəyirsiniz?</string>
     <string name="master_password_re_prompt_help">Ana parolu təkrar soruş köməyi</string>
     <string name="admin_approval_requested">Admin təsdiqi tələb olunur</string>
-    <string name="your_request_has_been_sent_to_your_admin">Tələbiniz admininizə göndərildi.</string>
-    <string name="you_will_be_notified_once_approved">Təsdiqləndikdən sonra məlumatlandırılacaqsınız.</string>
-    <string name="trouble_logging_in">Girişdə problem var?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Tələbiniz admininizə göndərilib. Təsdiqləndikdən sonra bir e-poçt alacaqsınız.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Admininiz, sizdən bu Barmaq izi ifadəsini təsdiqləməyinizi istəyə bilər.</string>
     <string name="block_auto_fill">Avto-doldurmanı əngəllə</string>
     <string name="no_uris_blocked">Heç bir URI əngəllənməyib</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Bu URI-lər üçün avto-doldurma təklif olunmayacaq.</string>
@@ -702,8 +691,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Bir neçə URI-ı vergüllə ayırın.</string>
     <string name="invalid_uri">Yararsız URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s artıq əngəllənib</string>
-    <string name="login_approved">Giriş təsdiqləndi</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Cihazla giriş etmə, Bitwarden tətbiqinin ayarlarında qurulmalıdır.</string>
+    <string name="access_approved">Erişim təsdiqləndi</string>
     <string name="need_another_option_view_all_login_options">Başqa seçənəyə ehtiyacınız var? <annotation link="viewAll">Bütün giriş seçənəklərinə bax</annotation></string>
     <string name="log_in_with_device">Cihazla giriş et</string>
     <string name="logging_in_on">Giriş edilir</string>
@@ -801,7 +789,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="generate_button_label">Yarat</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Bu parolu bir yerə yazın və güvənli yerdə saxlayın.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Hesab kilidlənməsini önləməyin digər yolları haqqında daha ətraflı</string>
-    <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesab kilidlənməsini önləməyin yolları haqqında daha ətraflı</annotation></string>
+    <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesab kilidlənməsini önləməyin yolları barədə daha ətraflı</annotation></string>
     <string name="help_with_server_geolocations">Server coğrafi yerləri ilə bağlı kömək.</string>
     <string name="email_address_required">E-poçt ünvanı (lazımdır)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">E-poçt ünvanınızı doğrulamaq və hesabınızı yaratmağa davam etmək üçün e-poçtdakı keçidi seçin.</string>
@@ -822,7 +810,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="allow_bitwarden_authenticator_syncing">Kimlik doğrulayıcını sinxrn icazə ver</string>
     <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
     <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
-    <string name="autofill_setup">Avto-doldurmanı quraşdır</string>
+    <string name="autofill_setup">Avto-doldurma qurulumu</string>
     <string name="turn_on_browser_autofill_integration">Brauzer avto-doldurma inteqrasiyasını işə sal</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzer istifadə edirsiniz.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzerlər istifadə edirsiniz.</string>
@@ -976,7 +964,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilmiş element mövcud olmadığı üçün parol əməliyyatı uğursuz oldu.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Seçilmiş elementın yararlı bir parolu olmadığı üçün parol əməliyyatı uğursuz oldu.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün parol əməliyyatı uğursuz oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Sorğu yararsız olduğu üçün kimlik məlumatı əməliyyatı uğursuz oldu.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün kimlik məlumatı əməliyyatı uğursuz oldu.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">İstifadəçi doğrulama cəhdlərini aşdığı üçün kimlik məlumatı əməliyyatı uğursuz oldu.</string>
@@ -988,7 +975,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_beta_autofill_integration">Chrome Beta avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_vivaldi_autofill_integration">Vivaldi avto-doldurma inteqrasiyasını istifadə et</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilmiş brauzerlərdə dəstəklənən veb saytlar üçün giriş məlumatlarının doldurulmasını təkmilləşdirir. Fəallaşdırdıqdan sonra, üçüncü tərəf avto-doldurmanı fəallaşdırmaq üçün brauzer ayarlarına yönləndiriləcəksiniz.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilmiş brauzerlərdə dəstəklənən veb-saytlar üçün giriş məlumatlarının doldurulmasını təkmilləşdirir. Fəallaşdırdıqdan sonra, üçüncü tərəf avto-doldurmanı fəallaşdırmaq üçün brauzer ayarlarına yönləndiriləcəksiniz.</string>
     <string name="show_more">Daha çox göstər</string>
     <string name="no_folder">Qovluq yoxdur</string>
     <string name="show_less">Daha az göstər</string>
@@ -1059,12 +1046,11 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="learn_more_about_privileged_apps">İmtiyazlı tətbiqlər barədə daha ətraflı</string>
     <string name="privileged_apps">İmtiyazlı tətbiqlər</string>
     <string name="unrecognized_browser">Tanınmayan brauzer</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ilə keçid açarı istifadəsi barədə ətraflı öyrənin.</string>
     <string name="all_trusted_apps">Bütün güvənli tətbiqlər</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s - güvənməyi dayandırmaq istədiyinizə əminsiniz?</string>
     <string name="installed_apps">Quraşdırılmış tətbiqlər</string>
     <string name="delete_x">%s - sil</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Şifrə açıla bilmədi. Dəstəklə əlaqə saxlayın.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Deşifrlənə bilmədi. Dəstəklə əlaqə saxlayın.</string>
     <string name="decryption_error">Şifrə açma xətası</string>
     <string name="scan_a_qr_code">QR kodu skan et</string>
     <string name="cannot_add_authenticator_key">Kimlik doğrulayıcı açarı əlavə edilə bilmir?</string>
@@ -1076,8 +1062,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="verification_code_added">Doğrulama kodu əlavə edildi</string>
     <string name="refresh_period">Təzələmə periodu</string>
     <string name="algorithm">Alqoritm</string>
-    <string name="advanced">Qabaqcıl</string>
-    <string name="collapse_advanced_options">Qabaqcıl seçənəkləri yığcamlaşdır</string>
     <string name="number_of_digits">Rəqəm sayı</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d saniyə</item>
@@ -1154,13 +1138,12 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="copy_error_report">Xəta hesabatını kopyala</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden, %1$d seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
-        <item quantity="other">Bitwarden, %1$d seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
+        <item quantity="one">Bitwarden, %1$d seyf elementini deşifrləyə bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
+        <item quantity="other">Bitwarden, %1$d seyf elementini deşifrləyə bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
     </plurals>
     <string name="select_a_card_for_x">%s bir kart seçin</string>
     <string name="choose_an_identity">Bir kimlik seç</string>
     <string name="advanced_options">Qabaqcıl seçənəklər</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Uyuşma aşkarlaması barədə daha çox</annotation></string>
     <string name="keep_your_credential_secure">Kimlik məlumatlarınızı güvəndə saxlayın</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” istifadə edərək kimlik məlumatlarını necə güvəndə saxlayacağınızı öyrənin.</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” istifadə etmək istədiyinizə əminsiniz?</string>
@@ -1169,9 +1152,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"İlə başlayır\", kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Müntəzəm ifadə\", yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçənəkdir.</string>
     <string name="later">Sonra</string>
-    <string name="encryption_settings_updated">Şifrələmə ayarları güncəlləndi</string>
-    <string name="update_your_encryption_settings">Şifrələmə ayarlarınızı güncəlləyin</string>
-    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Tövsiyə edilən yeni şifrələmə ayarları, hesabınızın təhlükəsizliyini artıracaq. İndi güncəlləmək üçün ana parolunuzu daxil edin.</string>
+    <string name="encryption_settings_updated">Şifrləmə ayarları güncəlləndi</string>
+    <string name="update_your_encryption_settings">Şifrləmə ayarlarınızı güncəlləyin</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Tövsiyə edilən yeni şifrləmə ayarları, hesabınızın təhlükəsizliyini artıracaq. İndi güncəlləmək üçün ana parolunuzu daxil edin.</string>
     <string name="import_was_cancelled_in_the_selected_app">Seçilmiş tətbiqdə kimlik məlumatının daxilə köçürülməsi ləğv edildi. Heç bir element daxilə köçürülməyib.</string>
     <string name="import_cancelled">Daxilə köçürmə ləğv edildi</string>
     <string name="no_items_imported">Heç bir element daxilə köçürülmədi</string>
@@ -1203,7 +1186,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Bitwarden seyfindən parolları, keçid açarlarını və digər element növlərini daxilə köçürün.</string>
     <string name="items_to_import">Daxilə köçürüləcək elementlər</string>
     <string name="exporting_items">Elementlər xaricə köçürülür…</string>
-    <string name="export_failed">Xaricə köçürmə uğursuz oldu</string>
     <string name="passwords">Parollar</string>
     <string name="passkeys">Keçid açarları</string>
     <string name="why_is_this_step_required">Bu addım niyə tələb olunur?</string>
@@ -1223,7 +1205,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="transfer_items_to_org">Elementləri transfer et: %1$s</string>
     <string name="transfer_items_description">%1$s, təhlükəsizlik və riayətlilik üçün bütün elementlərin təşkilata aid olmasını tələb edir. Elementlərinizin sahibliyini transfer etmək üçün qəbul edin.</string>
     <string name="decline_and_leave">Rədd et və tərk et</string>
-    <string name="why_am_i_seeing_this">Bunu niyə görürəm?</string>
     <string name="migrating_items_to_x">Elementlər daşınır: %s</string>
     <string name="failed_to_migrate_items_to_x">Elementlər daşınmadı: %s</string>
     <string name="search_archive">Arxivdə axtar</string>
@@ -1241,6 +1222,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="archiving_items_is_a_premium_feature">Elementləri arxivləmə, Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="totp_is_a_premium_feature">Authenticator açarı (TOTP) Premium bir özəllikdir. Hazırkı planınızda bu özəlliyə erişim yoxdur.</string>
     <string name="upgrade_to_premium">\"Premium\"a yüksəlt</string>
+    <string name="explore_premium">Premium-u kəşf et</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium abunəliyinizi idarə etmək üçün kompüterinizdə veb seyfinizə giriş etməlisiniz.</string>
     <string name="unlock_advanced_security_features">Qabaqcıl təhlükəsizlik özəlliklərinin kilidini aç</string>
@@ -1279,7 +1261,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="server">Server</string>
     <string name="unknown_device">Bilinməyən cihaz</string>
     <string name="first_login_date"><annotation emphasis="bold">İlk giriş:</annotation> <annotation arg="0">%1$s</annotation></string>
-    <string name="current_session">Hazırkı sessiya</string>
+    <string name="current_session">Hazırkı oturum</string>
     <string name="pending_request">Gözləyən tələb</string>
     <string name="today">Bu gün</string>
     <string name="past_seven_days">Son 7 gün</string>
@@ -1290,7 +1272,7 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="trusted">Güvənilən</string>
     <string name="preview_not_available_for_files">%1$s fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
     <string name="this_file_is_too_large_to_preview">Bu fayl, önizləmək üçün çox böyükdür. Cihazınızda baxmaq üçün yenə də endirə bilərsiniz.</string>
-    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu faylın şifrəsini aça bilmədi, ona görə də önizləmə nümayiş oluna bilmir.</string>
+    <string name="bitwarden_could_not_decrypt_this_file_so_the_preview_cannot_be_displayed">Bitwarden bu faylı deşifrləyə bilmədi, ona görə də önizləmə nümayiş oluna bilmir.</string>
     <string name="preview_unavailable_for_this_file">Bu fayl üçün önizləmə mövcud deyil. Hələ də cihazınızda baxmaq üçün endirə bilərsiniz.</string>
     <string name="preview_unavailable">Önizləmə mövcud deyil</string>
     <string name="download_attachment">Qoşmanı endir</string>
@@ -1322,7 +1304,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="archive_item">Elementi arxivlə</string>
     <string name="once_archived_this_item_will_be_excluded">Arxivləndikdən sonra, bu element axtarış nəticələrindən və avto-doldurma təkliflərindən xaric ediləcək.</string>
     <string name="pricing_unavailable">Qiymət mövcud deyil</string>
-    <string name="current_plan">Hazırkı plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Faktura məbləği</string>
     <string name="storage_cost">Depolama xərci</string>
@@ -1398,8 +1379,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="issuing_country">Təqdim edən ölkə</string>
     <string name="issuing_state">Təqdim edən ştat/əyalət</string>
     <string name="license_class">Sür. vəs. sinifi</string>
-    <string name="surname">Soyad</string>
-    <string name="given_name">Verilmiş ad</string>
     <string name="date_of_birth">Doğum tarixi</string>
     <string name="nationality">Milliyəti</string>
     <string name="passport_type">Pasport növü</string>
@@ -1432,9 +1411,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="breeze_through_2fa_with_built_in_codes">Daxili kodlar vasitəsilə 2FA-nı icra et</string>
     <string name="run_reports_to_find_risky_passwords">Riskli parolları tapmaq üçün hesabatları çalışdır</string>
     <string name="add_a_trusted_emergency_contact">Güvənilən fövqəladə hal kontaktı əlavə et</string>
-    <string name="identify_unsecure_websites">Güvənli olmayan veb saytları müəyyənləşdir</string>
+    <string name="identify_unsecure_websites">Təhlükəli veb-saytları müəyyənləşdir</string>
     <string name="flag_accounts_with_inactive_2fa">2FA aktiv olmayan hesabları işarələ</string>
-    <string name="keep_documents_safe_and_encrypted">Sənədləri əmniyyətdə və şifrələnmiş saxla</string>
+    <string name="keep_documents_safe_and_encrypted">Sənədləri əmniyyətdə və şifrlənmiş halda saxla</string>
     <string name="share_files_securely_with_anyone_using_send">Send istifadəsi ilə faylları istədiyiniz şəxslə təhlükəsiz formatda paylaşın</string>
     <string name="receive_24_7_priority_support">24/7 prioritet dəstək alın</string>
     <string name="account_creation_restricted">Hesab yaratma məhdudlaşdırılıb</string>

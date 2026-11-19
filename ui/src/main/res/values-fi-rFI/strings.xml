@@ -4,7 +4,6 @@
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
-    <string name="apply">Käytä</string>
     <string name="back">Takaisin</string>
     <string name="cancel">Peruuta</string>
     <string name="copy">Kopioi</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Kansio poistettiin.</string>
     <string name="folder_none">Ei kansiota</string>
     <string name="folder_updated">Kansio tallennettiin.</string>
-    <string name="folders">Kansiot</string>
     <string name="hide">Piilota</string>
     <string name="internet_connection_required_message">Jatka muodostamalla yhteys Internetiin.</string>
     <string name="internet_connection_required_title">Internet-yhteys vaaditaan</string>
@@ -208,7 +206,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="copy_totp">Kopioi TOTP-koodi</string>
     <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen kirjautumisen todennusavaimen, kopioidaan TOTP-koodi leikepöydälle kun kohde täytetään automaattisesti.</string>
     <string name="copy_totp_automatically">Kopioi TOTP-koodi automaattisesti</string>
-    <string name="premium_required">Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</string>
     <string name="attachment_deleted">Tiedostoliite poistettiin</string>
     <string name="attachments_are_a_premium_feature">Liitteet ovat Premium-ominaisuus. Nykyinen suunnitelmasi ei sisällä pääsyä tähän ominaisuuteen.</string>
     <string name="choose_file">Valitse tiedosto</string>
@@ -291,9 +288,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="icons_url">Kuvakepalvelimen URL</string>
     <string name="vault_is_locked">Holvi on lukittu</string>
     <string name="go_to_my_vault">Mene holviin</string>
-    <string name="collections">Kokoelmat</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Tässä kokoelmassa ei ole kohteita.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Kansiossa ei ole kohteita.</string>
     <string name="no_items_trash">Roskakorissa ei ole kohteita.</string>
@@ -347,16 +342,11 @@ Koodi skannataan automaattisesti.</string>
     <string name="type">Tyyppi</string>
     <string name="move_down">Siirrä alas</string>
     <string name="move_up">Siirrä ylös</string>
-    <string name="owner">Omistaja</string>
-    <string name="no_collections_to_list">Ei näytettäviä kokoelmia.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s siirrettiin organisaatiolle %2$s.</string>
     <string name="select_one_collection">Valitse ainakin yksi kokoelma.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Jaa</string>
-    <string name="move_to_organization">Siirrä organisaatiolle</string>
-    <string name="no_orgs_to_list">Ei näytettäviä organisaatioita.</string>
-    <string name="move_to_org_desc">Valitse organisaatio, jolle haluat siirtää kohteen. Tämä siirtää kohteen organisaation omistukseen, etkä tämän jälkeen ole enää sen suora omistaja.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Sanojen määrä</string>
@@ -471,7 +461,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="hide_text_by_default">Piilota teksti oletuksena kun Send avataan</string>
     <string name="type_file">Tiedosto</string>
     <string name="deletion_date">Poistoajankohta</string>
-    <string name="deletion_time">Poistoaika</string>
     <string name="deletion_date_info">Send poistuu pysyvästi määritettynä ajankohtana.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kuka voi tarkastella</string>
@@ -603,20 +592,21 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
     <string name="generic_error_message">Pyyntöäsi ei voitu käsitellä. Yritä uudelleen tai ota meihin yhteyttä.</string>
     <string name="allow_screen_capture">Salli kuvankaappaus</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Haluatko varmasti sallia kuvankaappauksen?</string>
-    <string name="log_in_requested">Kirjautumista pyydetty</string>
-    <string name="are_you_trying_to_log_in">Yritätkö kirjautua sisään?</string>
-    <string name="log_in_attempt_by_x_on_y">Kirjautumisyritys tunnuksella %1$s kohteessa %2$s.</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Laitteen tyyppi</string>
     <string name="ip_address">IP-osoite</string>
     <string name="time">Aika</string>
     <string name="select_time">Valitse aika</string>
     <string name="switch_input_mode">Vaihda syöttötila</string>
-    <string name="confirm_log_in">Vahvista kirjautuminen</string>
-    <string name="deny_log_in">Hylkää kirjautuminen</string>
-    <string name="log_in_denied">Kirjautuminen estetty</string>
-    <string name="approve_login_requests">Hyväksy kirjautumispyyntöjä</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Ei kiitos</string>
-    <string name="confim_log_in_attemp_for_x">Vahvista kirjautuminen tunnuksella %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Käyttäjätunnuksen tyyppi</string>
     <string name="plus_addressed_email">Plus+merkkinen sähköposti</string>
     <string name="catch_all_email">Catch-all-sähköposti</string>
@@ -643,27 +633,27 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
     <string name="i_understand">Ymmärrän</string>
     <string name="accept">Hyväksy</string>
     <string name="decline">Älä hyväksy</string>
-    <string name="login_request_has_already_expired">Kirjautumispyyntö on jo erääntynyt.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Kirjautumisyritys tunnuksella:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Haluatko vaihtaa tähän tiliin?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Oletko uusi Bitwarden-käyttäjä?</string>
     <string name="get_master_passwordword_hint">Pyydä pääsalasanan vihjettä</string>
     <string name="logging_in_as_x_on_y">Kirjaudutaan palvelimelle %2$s tunnuksella %1$s</string>
     <string name="not_you">Etkö se ollut sinä?</string>
     <string name="log_in_with_master_password">Kirjaudu pääsalasanalla</string>
     <string name="log_in_initiated">Kirjautuminen aloitettu</string>
-    <string name="a_notification_has_been_sent_to_your_device">Laitteellesi on lähetetty ilmoitus.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelauseen.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Lähetä ilmoitus uudelleen</string>
     <string name="view_all_login_options">Näytä kaikki kirjautumisvaihtoehdot</string>
-    <string name="pending_log_in_requests">Odottavat kirjautumispyynnöt</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Hylkää kaikki pyynnöt</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Haluatko varmasti hylätä kaikki odottavat kirjautumispyynnöt?</string>
     <string name="no_pending_requests">Odottavia pyyntöjä ei ole</string>
     <string name="enable_camer_permission_to_use_the_scanner">Myönnä kameran käyttöoikeus käyttääksesi skannausta</string>
     <string name="language">Kieli</string>
-    <string name="language_change_x_description">Kieleksi vaihdettiin %1$s. Käynnistä sovellus uudelleen nähdäksesi muutoksen.</string>
     <string name="default_system">Oletus (järjestelmä)</string>
     <string name="weak_master_password">Heikko pääsalasana</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Havaittiin heikko salasana. Suojaa tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</string>
@@ -690,9 +680,8 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Pääsyavain ei kopioidu kloonattuun kohteeseen. Haluatko jatkaa kloonausta?</string>
     <string name="master_password_re_prompt_help">Pääsalasanan uudelleenkyselyn ohje</string>
     <string name="admin_approval_requested">Hyväksyntää pyydetty ylläpidolta</string>
-    <string name="your_request_has_been_sent_to_your_admin">Pyyntösi on välitetty ylläpidollesi.</string>
-    <string name="you_will_be_notified_once_approved">Saat ilmoituksen heti kun se on hyväksytty.</string>
-    <string name="trouble_logging_in">Ongelmia kirjautumisessa?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Estä automaattitäyttö</string>
     <string name="no_uris_blocked">Estettyjä URI-osoitteita ei ole</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Automaattista täyttöä ei tarjota näille URI-osoitteille.</string>
@@ -703,8 +692,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Muoto: %1$s. Erota useita URI-osoitteita pilkuilla.</string>
     <string name="invalid_uri">Virheellinen URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s on jo estetty</string>
-    <string name="login_approved">Kirjautuminen hyväksyttiin</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Kirjautuminen laitteella on määritettävä Bitwarden-sovelluksen asetuksissa.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Tarvitsetko toisen vaihtoehdon? <annotation link="viewAll">Näytä kaikki kirjautumisvaihtoehdot</annotation></string>
     <string name="log_in_with_device">Laitteella kirjautuminen</string>
     <string name="logging_in_on">Kirjaudutaan sijaintiin</string>
@@ -977,7 +965,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Pääsyavaimen toiminto epäonnistui, koska pyyntöä ei tueta.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Salasanatoiminto epäonnistui, koska valittua kohdetta ei ole olemassa.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Salasanatoiminto epäonnistui, koska valitulla kohteella ei ole kelvollista salasanaa.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Salasanatoiminto epäonnistui, koska kohdetta ei valittu.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Tunnistetietojen toiminto epäonnistui, koska pyyntö on virheellinen.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Tunnistetietojen toiminto epäonnistui, koska pyyntöä ei tueta.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Tunnistetietojen toiminto epäonnistui, koska käyttäjän vahvistusyritykset ylittivät sallitun määrän.</string>
@@ -1058,7 +1045,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="learn_more_about_privileged_apps">Lue lisää etuoikeutetuista sovelluksista</string>
     <string name="privileged_apps">Etuoikeutetut sovellukset</string>
     <string name="unrecognized_browser">Tuntematon selain</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Lue lisää pääsyavainten käytöstä Bitwardenin kanssa.</string>
     <string name="all_trusted_apps">Kaikki luotetut sovellukset</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Oletko varma, että haluat lopettaa luottamisen kohteeseen %s?</string>
     <string name="installed_apps">Asennetut sovellukset</string>
@@ -1075,8 +1061,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="verification_code_added">Vahvistuskoodi lisätty</string>
     <string name="refresh_period">Päivitysaika</string>
     <string name="algorithm">Algoritmi</string>
-    <string name="advanced">Lisäasetukset</string>
-    <string name="collapse_advanced_options">Tiivistä lisäasetukset</string>
     <string name="number_of_digits">Pituus</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekunti</item>
@@ -1159,7 +1143,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="select_a_card_for_x">Valitse kortti kohteelle %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Lisäasetukset</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lisää vastaavuuden tunnistuksesta</annotation></string>
     <string name="keep_your_credential_secure">Pidä tunnistetietosi turvassa</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Lue lisää siitä, miten tunnistetiedot pidetään turvassa käytettäessä “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Oletko varma, että haluat käyttää “%1$s”?</string>
@@ -1202,7 +1185,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Tuo salasanoja, pääsyavaimia ja muita kohdetyyppejä Bitwarden-holvistasi.</string>
     <string name="items_to_import">Tuotavat kohteet</string>
     <string name="exporting_items">Viedään kohteita…</string>
-    <string name="export_failed">Vienti epäonnistui</string>
     <string name="passwords">Salasanat</string>
     <string name="passkeys">Pääsyavaimet</string>
     <string name="why_is_this_step_required">Miksi tämä vaihe vaaditaan?</string>
@@ -1222,7 +1204,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="transfer_items_to_org">Siirrä kohteet organisaatiolle %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> vaatii, että kaikki kohteet ovat organisaation omistuksessa turvallisuuden ja vaatimustenmukaisuuden vuoksi. Hyväksy siirtääksesi kohteesi omistajuuden. <annotation link="learnMore">Lue lisää</annotation></string>
     <string name="decline_and_leave">Hylkää ja poistu</string>
-    <string name="why_am_i_seeing_this">Miksi näen tämän?</string>
     <string name="migrating_items_to_x">Siirretään kohteita kohteeseen %s</string>
     <string name="failed_to_migrate_items_to_x">Kohteiden siirtäminen kohteeseen %s epäonnistui</string>
     <string name="search_archive">Etsi arkistosta</string>
@@ -1240,6 +1221,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="archiving_items_is_a_premium_feature">Kohteiden arkistointi on Premium-ominaisuus. Nykyinen suunnitelmasi ei sisällä pääsyä tähän ominaisuuteen.</string>
     <string name="totp_is_a_premium_feature">Todennusavain (TOTP) on Premium-ominaisuus. Nykyinen suunnitelmasi ei sisällä pääsyä tähän ominaisuuteen.</string>
     <string name="upgrade_to_premium">Päivitä Premiumiin</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Tilaustyyppi</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Hallitaksesi Premium-tilaustasi, sinun on kirjauduttava verkkoholviisi tietokoneella.</string>
     <string name="unlock_advanced_security_features">Avaa edistyneet turvallisuusominaisuudet</string>
@@ -1321,7 +1303,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="archive_item">Arkistoi kohde</string>
     <string name="once_archived_this_item_will_be_excluded">Arkistoituna tämä kohde jätetään pois hakutuloksista ja automaattisen täytön ehdotuksista.</string>
     <string name="pricing_unavailable">Hinnoittelu ei käytettävissä</string>
-    <string name="current_plan">Nykyinen suunnitelma</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Laskutettava summa</string>
     <string name="storage_cost">Tallennustilan kustannus</string>
@@ -1397,8 +1378,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="issuing_country">Myöntävä maa</string>
     <string name="issuing_state">Myöntävä osavaltio / provinssi</string>
     <string name="license_class">Lisenssiluokka</string>
-    <string name="surname">Sukunimi</string>
-    <string name="given_name">Etunimi</string>
     <string name="date_of_birth">Syntymäaika</string>
     <string name="nationality">Kansallisuus</string>
     <string name="passport_type">Passin tyyppi</string>

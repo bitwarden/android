@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -58,7 +57,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun OtherScreen(
     onNavigateBack: () -> Unit,
-    viewModel: OtherViewModel = hiltViewModel(),
+    viewModel: OtherViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = rememberBitwardenSnackbarHostState()

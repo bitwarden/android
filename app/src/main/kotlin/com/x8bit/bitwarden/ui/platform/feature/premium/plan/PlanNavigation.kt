@@ -2,85 +2,27 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.premium.plan
 
-import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
+import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the plan screen.
+ * Add the standard plan screen to the navigation entries of the settings tab — bottom nav
+ * visible.
  */
-@OmitFromCoverage
-@Parcelize
-@Serializable(with = PlanRoute.Serializer::class)
-sealed class PlanRoute : Parcelable {
-
-    /**
-     * Custom serializer to support polymorphic routes.
-     */
-    class Serializer : ParcelableRouteSerializer<PlanRoute>(PlanRoute::class)
-
-    /**
-     * Standard destination — inside settingsGraph, bottom nav visible, back arrow.
-     */
-    @Parcelize
-    @Serializable(with = Standard.Serializer::class)
-    data object Standard : PlanRoute() {
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
-    }
-
-    /**
-     * Modal destination — parent vaultUnlockedGraph level, bottom nav hidden, close icon.
-     */
-    @Parcelize
-    @Serializable(with = Modal.Serializer::class)
-    data object Modal : PlanRoute() {
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Modal>(Modal::class)
-    }
-}
-
-/**
- * Class to retrieve plan arguments from the [SavedStateHandle].
- */
-@OmitFromCoverage
-data class PlanArgs(val planMode: PlanMode)
-
-/**
- * Constructs [PlanArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toPlanArgs(): PlanArgs {
-    val route = this.toRoute<PlanRoute>()
-    return PlanArgs(
-        planMode = when (route) {
-            is PlanRoute.Standard -> PlanMode.Standard
-            is PlanRoute.Modal -> PlanMode.Modal
-        },
-    )
-}
-
-/**
- * Register inside settingsGraph — bottom nav visible.
- */
-fun NavGraphBuilder.planDestination(
+fun EntryProviderScope<SettingsGraph>.planDestination(
     onNavigateBack: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
-    composableWithPushTransitions<PlanRoute.Standard> {
+    pushEntry<SettingsGraph.PlanRoute> {
         PlanScreen(
+            viewModel = planViewModel(planMode = PlanMode.Standard),
             onNavigateBack = onNavigateBack,
             onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
@@ -88,30 +30,38 @@ fun NavGraphBuilder.planDestination(
 }
 
 /**
- * Register at parent vaultUnlockedGraph level — bottom nav hidden.
+ * Add the modal plan screen to the vault unlocked navigation entries — bottom nav hidden.
  */
-fun NavGraphBuilder.planModalDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.planModalDestination(
     onNavigateBack: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
-    composableWithSlideTransitions<PlanRoute.Modal> {
+    slideUpEntry<VaultUnlockedGraph.PlanModalRoute> {
         PlanScreen(
+            viewModel = planViewModel(planMode = PlanMode.Modal),
             onNavigateBack = onNavigateBack,
             onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
         )
     }
 }
 
+@Composable
+private fun planViewModel(
+    planMode: PlanMode,
+): PlanViewModel = hiltViewModel<PlanViewModel, PlanViewModel.Factory>(
+    creationCallback = { factory -> factory.create(planMode = planMode) },
+)
+
 /**
- * Navigate to the plan screen (standard, within settings graph).
+ * Navigate to the plan screen (standard, within the settings tab).
  */
-fun NavController.navigateToPlan(navOptions: NavOptions? = null) {
-    navigate(route = PlanRoute.Standard, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToPlan() {
+    this.navigate(route = SettingsGraph.PlanRoute)
 }
 
 /**
- * Navigate to the plan screen (modal, at parent level).
+ * Navigate to the plan screen (modal, at the vault unlocked root level).
  */
-fun NavController.navigateToPlanModal(navOptions: NavOptions? = null) {
-    navigate(route = PlanRoute.Modal, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToPlanModal() {
+    this.navigate(route = VaultUnlockedGraph.PlanModalRoute)
 }

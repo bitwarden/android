@@ -15,35 +15,47 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RevokeFromOrganizationResult
 import com.x8bit.bitwarden.data.vault.manager.VaultMigrationManager
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * ViewModel for the Leave Organization screen.
  */
-@HiltViewModel
-class LeaveOrganizationViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = LeaveOrganizationViewModel.Factory::class)
+class LeaveOrganizationViewModel @AssistedInject constructor(
+    @Assisted route: MigrateToMyItemsGraph.LeaveOrganizationRoute,
     private val authRepository: AuthRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val vaultMigrationManager: VaultMigrationManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LeaveOrganizationState, LeaveOrganizationEvent, LeaveOrganizationAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toLeaveOrganizationArgs()
-        LeaveOrganizationState(
-            organizationId = args.organizationId,
-            organizationName = args.organizationName,
-            dialogState = null,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE] ?: LeaveOrganizationState(
+        organizationId = route.organizationId,
+        organizationName = route.organizationName,
+        dialogState = null,
+    ),
 ) {
+    /**
+     * Factory for creating a [LeaveOrganizationViewModel] for a specific
+     * [MigrateToMyItemsGraph.LeaveOrganizationRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [LeaveOrganizationViewModel] for the given [route].
+         */
+        fun create(route: MigrateToMyItemsGraph.LeaveOrganizationRoute): LeaveOrganizationViewModel
+    }
 
     init {
         stateFlow

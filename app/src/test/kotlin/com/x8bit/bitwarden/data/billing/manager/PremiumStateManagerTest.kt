@@ -877,6 +877,141 @@ class PremiumStateManagerTest {
     }
 
     @Test
+    fun `shouldShowPlanBadgeFlow emits true for a free user when nothing has been stored`() =
+        runTest {
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when there is no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when the badge has been dismissed`() = runTest {
+        fakeSettingsDiskSource.storeShouldShowPlanBadge(
+            userId = ACTIVE_USER_ID,
+            shouldShow = false,
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for a personal Premium user`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for an organization Premium user`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumFromOrganization = true),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for a free user with a subscription`() = runTest {
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.EXPIRED),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits true for a free user when the fetch fails`() = runTest {
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Error(error = IllegalStateException("Fail"))
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false once a subscription loads for a free user`() =
+        runTest {
+            val subscriptionResult = CompletableDeferred<SubscriptionResult>()
+            coEvery {
+                billingRepository.getSubscription()
+            } coAnswers { subscriptionResult.await() }
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+                subscriptionResult.complete(
+                    SubscriptionResult.Success(
+                        subscription = createSubscriptionInfo(
+                            status = PremiumSubscriptionStatus.EXPIRED,
+                        ),
+                    ),
+                )
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when the active user upgrades to Premium`() =
+        runTest {
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `dismissPlanBadge stores false and updates shouldShowPlanBadgeFlow`() = runTest {
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertTrue(awaitItem())
+            manager.dismissPlanBadge()
+            assertFalse(awaitItem())
+        }
+        fakeSettingsDiskSource.assertShouldShowPlanBadge(
+            userId = ACTIVE_USER_ID,
+            expected = false,
+        )
+    }
+
+    @Test
+    fun `dismissPlanBadge with no active user is a no-op`() {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.dismissPlanBadge()
+        fakeSettingsDiskSource.assertShouldShowPlanBadge(
+            userId = ACTIVE_USER_ID,
+            expected = null,
+        )
+    }
+
+    @Test
     fun `upgradeLifecycleStateFlow emits Free when nothing has been observed`() = runTest {
         val manager = createManager()
         manager.upgradeLifecycleStateFlow.test {

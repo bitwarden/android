@@ -2,24 +2,17 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraph
 
 /**
- * The type-safe route for the autofill screen.
- */
-@Serializable
-data object AutofillRoute
-
-/**
- * Add settings destinations to the nav graph.
+ * Add the autofill screen to the navigation entries.
  */
 @Suppress("LongParameterList")
-fun NavGraphBuilder.autoFillDestination(
+fun EntryProviderScope<SettingsGraph>.autoFillDestination(
     onNavigateBack: () -> Unit,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
@@ -27,7 +20,7 @@ fun NavGraphBuilder.autoFillDestination(
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
-    composableWithPushTransitions<AutofillRoute> {
+    pushEntry<SettingsGraph.AutofillRoute> {
         AutoFillScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToBlockAutoFillScreen = onNavigateToBlockAutoFillScreen,
@@ -40,8 +33,8 @@ fun NavGraphBuilder.autoFillDestination(
 }
 
 /**
- * Navigate to the auto-fill screen.
+ * Navigate to the autofill screen.
  */
-fun NavController.navigateToAutoFill(navOptions: NavOptions? = null) {
-    this.navigate(route = AutofillRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToAutoFill() {
+    this.navigate(route = SettingsGraph.AutofillRoute)
 }

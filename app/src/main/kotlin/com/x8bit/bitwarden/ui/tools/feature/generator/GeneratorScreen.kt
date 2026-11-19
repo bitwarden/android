@@ -32,10 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -85,6 +83,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
@@ -105,7 +104,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberRandomWor
 import com.x8bit.bitwarden.ui.tools.feature.generator.handlers.rememberUsernameTypeHandlers
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.ExploreGeneratorCoachMark
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.collections.immutable.ImmutableList
@@ -121,9 +119,9 @@ import kotlin.math.max
 @Suppress("LongMethod")
 @Composable
 fun GeneratorScreen(
-    viewModel: GeneratorViewModel = hiltViewModel(),
+    viewModel: GeneratorViewModel,
     onNavigateToPasswordHistory: () -> Unit,
-    navigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+    navigateToVaultAddItem: (route: VaultUnlockedGraph.VaultAddEditRoute) -> Unit,
     onNavigateBack: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -160,7 +158,7 @@ fun GeneratorScreen(
         when (event) {
             is GeneratorEvent.NavigateToAddLogin -> {
                 navigateToVaultAddItem(
-                    VaultAddEditArgs(
+                    VaultUnlockedGraph.VaultAddEditRoute(
                         vaultAddEditType = VaultAddEditType.AddItem(
                             initialData = event.initialData,
                         ),
@@ -1617,16 +1615,3 @@ private fun RandomWordIncludeNumberToggleItem(
 }
 
 //endregion Random Word Composables
-
-@Preview(showBackground = true)
-@Composable
-private fun Generator_preview() {
-    BitwardenTheme {
-        GeneratorScreen(
-            navigateToVaultAddItem = {},
-            onNavigateToPasswordHistory = {},
-            onNavigateBack = {},
-            onDimNavBarRequest = {},
-        )
-    }
-}

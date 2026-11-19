@@ -4,7 +4,6 @@
     <string name="add_folder">新增資料夾</string>
     <string name="add_item">新增項目</string>
     <string name="an_error_has_occurred">發生錯誤</string>
-    <string name="apply">套用</string>
     <string name="back">返回</string>
     <string name="cancel">取消</string>
     <string name="copy">複製</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">已刪除資料夾。</string>
     <string name="folder_none">（未分類）</string>
     <string name="folder_updated">已更新資料夾。</string>
-    <string name="folders">資料夾</string>
     <string name="hide">隱藏</string>
     <string name="internet_connection_required_message">請先連線至網際網路再繼續。</string>
     <string name="internet_connection_required_title">需要網際網路連線</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">複製 TOTP</string>
     <string name="copy_totp_automatically_description">若登入資料已包含驗證器金鑰，在自動填入此登入資料時，TOTP 驗證碼將複製至您的剪貼簿。</string>
     <string name="copy_totp_automatically">自動複製 TOTP</string>
-    <string name="premium_required">進階會員才可使用此功能。</string>
     <string name="attachment_deleted">已刪除附件</string>
     <string name="attachments_are_a_premium_feature">附件是進階版功能。您目前的方案不包含此功能的存取權限。</string>
     <string name="choose_file">選擇檔案</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">圖示伺服器 URL</string>
     <string name="vault_is_locked">密碼庫已鎖定</string>
     <string name="go_to_my_vault">前往我的密碼庫</string>
-    <string name="collections">集合</string>
     <string name="shared_folders">共享資料夾</string>
-    <string name="no_items_collection">此集合中沒有項目。</string>
     <string name="there_are_no_items_in_this_shared_folder">此共享資料夾中沒有項目。</string>
     <string name="no_items_folder">此資料夾中沒有項目。</string>
     <string name="no_items_trash">垃圾桶中沒有項目。</string>
@@ -345,16 +340,11 @@
     <string name="type">類型</string>
     <string name="move_down">下移</string>
     <string name="move_up">上移</string>
-    <string name="owner">擁有者</string>
-    <string name="no_collections_to_list">沒有可顯示的集合。</string>
     <string name="there_are_no_shared_folders_to_list">沒有可列出的共享資料夾。</string>
     <string name="moved_item_to_org">%1$s 已移動至 %2$s。</string>
     <string name="select_one_collection">您必須至少選擇一個集合。</string>
     <string name="you_must_select_at_least_one_shared_folder">您必須至少選擇一個共享資料夾。</string>
     <string name="share">共用</string>
-    <string name="move_to_organization">移動至組織</string>
-    <string name="no_orgs_to_list">沒有可列出的組織。</string>
-    <string name="move_to_org_desc">選擇您希望將這個項目移動至哪個組織。項目的擁有權將會轉移至該組織。轉移之後，您將不再是此項目的直接擁有者。</string>
     <string name="no_vaults_to_list">沒有可列出的保管庫。</string>
     <string name="move_to_vault_desc">選擇您要將此項目移至的保管庫。移至另一個保管庫後，此項目的擁有權將移轉給該組織。項目移動後，您將不再是此項目的直接擁有者。</string>
     <string name="number_of_words">單字數量</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">存取此 Send 時，將預設隱藏文字</string>
     <string name="type_file">檔案</string>
     <string name="deletion_date">刪除日期</string>
-    <string name="deletion_time">刪除時間</string>
     <string name="deletion_date_info">此 Send 將在指定的日期和時間後被永久刪除。</string>
     <string name="this_date_is_enforced_by_your_organization">此日期由您的組織強制設定</string>
     <string name="who_can_view">誰可以檢視</string>
@@ -600,20 +589,21 @@
     <string name="generic_error_message">我們無法處理您的要求，請再試一次或聯絡我們。</string>
     <string name="allow_screen_capture">允許螢幕擷取</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">您確定要啟用螢幕擷取嗎？</string>
-    <string name="log_in_requested">已要求登入</string>
-    <string name="are_you_trying_to_log_in">您正在嘗試登入嗎？</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s 在 %2$s 上的登入嘗試</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">裝置類型</string>
     <string name="ip_address">IP 位址</string>
     <string name="time">時間</string>
     <string name="select_time">選擇時間</string>
     <string name="switch_input_mode">切換輸入模式</string>
-    <string name="confirm_log_in">確認登入</string>
-    <string name="deny_log_in">拒絕登入</string>
-    <string name="log_in_denied">登入被拒絕</string>
-    <string name="approve_login_requests">批准登入要求</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">不用了，謝謝</string>
-    <string name="confim_log_in_attemp_for_x">確認 %1$s 的登入嘗試</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">使用者名稱類型</string>
     <string name="plus_addressed_email">加號地址電子郵件</string>
     <string name="catch_all_email">Catch-all 電子郵件</string>
@@ -640,27 +630,27 @@
     <string name="i_understand">我了解</string>
     <string name="accept">接受</string>
     <string name="decline">拒絕</string>
-    <string name="login_request_has_already_expired">登入要求已逾期。</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">登入嘗試來自：
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-您想要切換至這個帳戶嗎？</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">第一次使用 Bitwarden？</string>
     <string name="get_master_passwordword_hint">獲取主密碼提示</string>
     <string name="logging_in_as_x_on_y">在 %2$s 上以 %1$s 身分登入</string>
     <string name="not_you">不是您嗎？</string>
     <string name="log_in_with_master_password">使用主密碼登入</string>
     <string name="log_in_initiated">登入已發起</string>
-    <string name="a_notification_has_been_sent_to_your_device">通知已傳送至您的裝置。</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">請確保您的密碼庫已解鎖，並且指紋短語與其他裝置的一致。</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">重新傳送通知</string>
     <string name="view_all_login_options">檢視所有登入選項</string>
-    <string name="pending_log_in_requests">待處理的登入要求</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">拒絕所有要求</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">您確定要拒絕所有待處理的登入要求嗎？</string>
     <string name="no_pending_requests">無待處理的要求</string>
     <string name="enable_camer_permission_to_use_the_scanner">允許相機權限以使用掃描功能</string>
     <string name="language">語言</string>
-    <string name="language_change_x_description">語言已被變更為 %1$s。請重啓應用程式以查看變更</string>
     <string name="default_system">預設（系統）</string>
     <string name="weak_master_password">主密碼強度太弱</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">偵測到您的密碼強度不夠。我們建議您使用強密碼保護您的帳號。您確定要使用弱密碼嗎？</string>
@@ -687,9 +677,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">密碼金鑰不會被複製到克隆的項目。 您想繼續克隆該項目嗎？</string>
     <string name="master_password_re_prompt_help">重新詢問主密碼幫助</string>
     <string name="admin_approval_requested">已要求管理員核准</string>
-    <string name="your_request_has_been_sent_to_your_admin">您的要求已傳送給您的管理員</string>
-    <string name="you_will_be_notified_once_approved">核准後將通知您。</string>
-    <string name="trouble_logging_in">登入時遇到困難？</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">封鎖表單自動填入功能</string>
     <string name="no_uris_blocked">沒有封鎖任何 URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">不對下列 URI 提供自動填寫功能。</string>
@@ -700,8 +689,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">格式：%1$s，可用逗號分隔多組 URI。</string>
     <string name="invalid_uri">URI 無效</string>
     <string name="the_urix_is_already_blocked">已經封鎖 URI %1$s</string>
-    <string name="login_approved">登入已核准</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">必須先在 Bitwarden 應用程式設定中開啟，才可以使用裝置登入。</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">需要其他選項嗎？ <annotation link="viewAll">查看所有登入選項</annotation></string>
     <string name="log_in_with_device">使用裝置登入</string>
     <string name="logging_in_on">正登入到</string>
@@ -972,7 +960,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">通行金鑰操作失敗，因為該請求不受支援。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">密碼操作失敗，因為所選項目不存在。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">密碼操作失敗，因為所選項目沒有有效的密碼。</string>
-    <string name="password_operation_failed_because_no_item_was_selected">密碼操作失敗，因為未選取任何項目。</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">憑證操作失敗，因為請求無效。</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">憑證操作失敗，因為該請求不受支援。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">憑證操作失敗，因為超過使用者驗證嘗試次數。</string>
@@ -1053,7 +1040,6 @@
     <string name="learn_more_about_privileged_apps">了解更多關於受信任應用程式的資訊</string>
     <string name="privileged_apps">受信任的應用程式</string>
     <string name="unrecognized_browser">無法識別的瀏覽器</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">了解更多如何在 Bitwarden 中使用通行金鑰。</string>
     <string name="all_trusted_apps">所有信任的應用程式</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">您確定要停止信任 %s 嗎？</string>
     <string name="installed_apps">已安裝的應用程式</string>
@@ -1070,8 +1056,6 @@
     <string name="verification_code_added">驗證碼已匯入</string>
     <string name="refresh_period">更新週期</string>
     <string name="algorithm">演算法</string>
-    <string name="advanced">進階</string>
-    <string name="collapse_advanced_options">收合進階選項</string>
     <string name="number_of_digits">位數</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d 秒</item>
@@ -1152,7 +1136,6 @@
     <string name="select_a_card_for_x">選擇 %s 的付款卡</string>
     <string name="choose_an_identity">選擇身分資料</string>
     <string name="advanced_options">進階選項</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">深入了解匹配偵測</annotation></string>
     <string name="keep_your_credential_secure">保護您的憑證安全</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">瞭解在使用「%1$s」時如何確保憑證安全。
 </string>
@@ -1195,7 +1178,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">從您的 Bitwarden 密碼庫匯入密碼、通行金鑰及其他項目類型。</string>
     <string name="items_to_import">要匯入的項目</string>
     <string name="exporting_items">正在匯出項目…</string>
-    <string name="export_failed">匯出失敗</string>
     <string name="passwords">密碼</string>
     <string name="passkeys">通行金鑰</string>
     <string name="why_is_this_step_required">為什麼需要這個步驟？</string>
@@ -1215,7 +1197,6 @@
     <string name="transfer_items_to_org">將項目轉移至 %1$s</string>
     <string name="transfer_items_description">%1$s 為了安全性與合規性，要求所有項目皆由組織擁有。點擊接受即可轉移您項目的擁有權。</string>
     <string name="decline_and_leave">拒絕並離開</string>
-    <string name="why_am_i_seeing_this">為什麼我會看到此訊息？</string>
     <string name="migrating_items_to_x">正在將項目遷移至 %s</string>
     <string name="failed_to_migrate_items_to_x">無法將項目遷移至 %s</string>
     <string name="search_archive">搜尋封存</string>
@@ -1233,6 +1214,7 @@
     <string name="archiving_items_is_a_premium_feature">封存項目為進階版功能。您目前的方案不包含此功能。</string>
     <string name="totp_is_a_premium_feature">驗證器金鑰（TOTP）為 Premium 功能。您目前的方案未包含此功能。</string>
     <string name="upgrade_to_premium">升級到 Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">方案</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">若要管理您的 Premium 訂閱，您需要在電腦上登入您的網頁保管庫。</string>
     <string name="unlock_advanced_security_features">解鎖進階安全功能</string>
@@ -1314,7 +1296,6 @@
     <string name="archive_item">封存項目</string>
     <string name="once_archived_this_item_will_be_excluded">封存後，此項目將不會顯示在搜尋結果與自動填入建議中。</string>
     <string name="pricing_unavailable">無法取得價格資訊</string>
-    <string name="current_plan">目前方案</string>
     <string name="premium_plan_name">進階版</string>
     <string name="billing_amount">帳單金額</string>
     <string name="storage_cost">儲存空間費用</string>
@@ -1389,8 +1370,6 @@
     <string name="issuing_country">簽發國家</string>
     <string name="issuing_state">簽發州／省</string>
     <string name="license_class">駕照類別</string>
-    <string name="surname">姓氏</string>
-    <string name="given_name">名字</string>
     <string name="date_of_birth">出生日期</string>
     <string name="nationality">國籍</string>
     <string name="passport_type">護照類型</string>

@@ -10,6 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
@@ -24,6 +25,9 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -31,7 +35,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -39,18 +42,30 @@ private const val KEY_STATE = "state"
  * View model responsible for handling user interaction with the edit authenticator item screen.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class EditItemViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = EditItemViewModel.Factory::class)
+class EditItemViewModel @AssistedInject constructor(
+    @Assisted route: AuthenticatorGraph.EditItemRoute,
     private val authenticatorRepository: AuthenticatorRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditItemState, EditItemEvent, EditItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: EditItemState(
-        itemId = savedStateHandle.toEditItemArgs().itemId,
+        itemId = route.itemId,
         viewState = EditItemState.ViewState.Loading,
         dialog = null,
     ),
 ) {
+    /**
+     * Factory for creating an [EditItemViewModel] for a specific
+     * [AuthenticatorGraph.EditItemRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [EditItemViewModel] for the given [route].
+         */
+        fun create(route: AuthenticatorGraph.EditItemRoute): EditItemViewModel
+    }
 
     init {
         authenticatorRepository.getItemStateFlow(state.itemId)

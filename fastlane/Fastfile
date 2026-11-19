@@ -122,13 +122,14 @@ platform :android do
     )
   end
 
-  desc "Run static analysis (detekt + lint)"
+  desc "Run static analysis (detekt + lint) and the tests for the custom detekt rules"
   lane :checkLint do
     gradle(
       tasks: [
         "detekt",
         "lintStandardDebug",
         "lintDebug",
+        ":detekt-rules:test",
       ]
     )
   end

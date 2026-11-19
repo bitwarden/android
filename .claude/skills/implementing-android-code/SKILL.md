@@ -18,6 +18,8 @@ All ViewModels follow the **State-Action-Event (SAE)** pattern via `BaseViewMode
 
 **Key Requirements:**
 - Annotate with `@HiltViewModel`
+- ViewModels that need navigation arguments receive their route via **assisted injection**
+  (`@HiltViewModel(assistedFactory = ...)`, `@AssistedInject constructor(@Assisted route: XGraph.XRoute)`)
 - State class MUST be `@Parcelize data class : Parcelable`
 - Implement `handleAction(action: A)` - MUST be synchronous
 - Post internal actions from coroutines using `sendAction()`
@@ -60,9 +62,34 @@ class ExampleViewModel @Inject constructor(
 }
 ```
 
+**ViewModel with navigation arguments (assisted injection):**
+```kotlin
+@HiltViewModel(assistedFactory = ExampleViewModel.Factory::class)
+class ExampleViewModel @AssistedInject constructor(
+    @Assisted route: ExampleGraph.ExampleRoute,
+    savedStateHandle: SavedStateHandle,
+    private val repository: ExampleRepository,
+) : BaseViewModel<ExampleState, ExampleEvent, ExampleAction>(
+    initialState = savedStateHandle[KEY_STATE] ?: ExampleState(userId = route.userId),
+) {
+    /**
+     * Factory for creating an [ExampleViewModel] for a specific [ExampleGraph.ExampleRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [ExampleViewModel] for the given [route].
+         */
+        fun create(route: ExampleGraph.ExampleRoute): ExampleViewModel
+    }
+    // ...
+}
+```
+
 **Reference:**
 - `ui/src/main/kotlin/com/bitwarden/ui/platform/base/BaseViewModel.kt` (see `handleAction` method)
 - `app/src/main/kotlin/com/x8bit/bitwarden/ui/auth/feature/login/LoginViewModel.kt` (see class declaration)
+- `app/src/main/kotlin/com/x8bit/bitwarden/ui/vault/feature/item/VaultItemViewModel.kt` (assisted injection of the route)
 
 **Critical Gotchas:**
 - ❌ **NEVER** update `mutableStateFlow` directly inside coroutines
@@ -73,52 +100,132 @@ class ExampleViewModel @Inject constructor(
 
 ---
 
-### B. Navigation Implementation (Type-Safe)
+### B. Navigation Implementation (Navigation 3, Type-Safe)
 
-All navigation uses **type-safe routes** with kotlinx.serialization.
+All navigation uses **Navigation 3** with **type-safe `@Serializable` routes**. Every `NavDisplay`
+displays one **navigation graph**: a `@Serializable sealed class {Name}Graph : NavKey` whose nested
+subclasses are its routes (e.g. `AuthGraph.LoginRoute`). The back stack is owned by a
+`NavigationController<{Name}Graph>` (`ui/.../platform/navigation/NavigationController.kt`); never
+touch a `NavBackStack` directly. A route may host a nested graph (e.g. `RootNavGraph.AuthRoute`
+hosts the `AuthGraph`, each nav bar tab hosts its own graph).
 
 **Pattern Structure:**
-1. `@Serializable` route data class with parameters
-2. `...Args` helper class for extracting from `SavedStateHandle`
-3. `NavGraphBuilder.{screen}Destination()` extension for adding screen to graph
-4. `NavController.navigateTo{Screen}()` extension for navigation calls
+1. `@Serializable` route nested in the graph of the `NavDisplay` that shows the screen, holding every
+   argument (any `@Serializable` type)
+2. `EntryProviderScope<{Name}Graph>.{screen}Destination()` extension that adds the `entry`, declares
+   its transitions in metadata, and creates the ViewModel for the route (assisted injection)
+3. `NavigationController<{Name}Graph>.navigateTo{Screen}()` extension for navigation calls
+4. Groups of related destinations (a "flow") are added with
+   `EntryProviderScope<{Name}Graph>.{flow}Destinations(navigationController)`, and a route hosting a
+   nested graph is added with a `{flow}Graph()` extension that displays a `BitwardenNavDisplay`
+5. A screen shown by multiple graphs gets a route and a `...Destination` per graph; its ViewModel
+   takes the arguments it needs (e.g. `create(isPreAuth = true)`) instead of a route
 
-**Template**: See [Navigation template](templates.md#navigation-template-type-safe-routes)
+**Template**: See [Navigation template](templates.md#navigation-template-navigation-3)
 
 **Pattern Summary:**
 ```kotlin
 @Serializable
-data class ExampleRoute(val userId: String, val isEditMode: Boolean = false)
-
-data class ExampleArgs(val userId: String, val isEditMode: Boolean)
-
-fun SavedStateHandle.toExampleArgs(): ExampleArgs {
-    val route = this.toRoute<ExampleRoute>()
-    return ExampleArgs(userId = route.userId, isEditMode = route.isEditMode)
+sealed class ExampleGraph : NavKey {
+    @Serializable
+    data class ExampleRoute(val userId: String, val isEditMode: Boolean = false) : ExampleGraph()
 }
 
-fun NavController.navigateToExample(
-    userId: String,
-    isEditMode: Boolean = false,
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = ExampleRoute(userId, isEditMode), navOptions = navOptions)
+fun NavigationController<ExampleGraph>.navigateToExample(userId: String, isEditMode: Boolean = false) {
+    navigate(route = ExampleGraph.ExampleRoute(userId = userId, isEditMode = isEditMode))
 }
 
-fun NavGraphBuilder.exampleDestination(onNavigateBack: () -> Unit) {
-    composableWithSlideTransitions<ExampleRoute> {
-        ExampleScreen(onNavigateBack = onNavigateBack)
+fun EntryProviderScope<ExampleGraph>.exampleDestination(onNavigateBack: () -> Unit) {
+    slideUpEntry<ExampleGraph.ExampleRoute> { route ->
+        ExampleScreen(
+            viewModel = hiltViewModel<ExampleViewModel, ExampleViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
+            onNavigateBack = onNavigateBack,
+        )
     }
 }
 ```
 
-**Reference:** `app/src/main/kotlin/com/x8bit/bitwarden/ui/auth/feature/login/LoginNavigation.kt` (see `LoginRoute` and extensions)
+**Using a `NavigationController`** (`ui/.../platform/navigation/`; see the KDoc there for exact
+semantics):
+
+1. **Own it where the graph is displayed.** The `entry` (or screen) that shows a graph remembers its
+   controller, hands it to `BitwardenNavDisplay`, and passes it to the graph's destinations. A route
+   hosting a nested graph seeds the controller from its own `backStack` argument, so the parent can
+   choose where the nested flow starts:
+   ```kotlin
+   fun EntryProviderScope<RootNavGraph>.authGraph() {
+       entry<RootNavGraph.AuthRoute> { route ->
+           val navigationController = rememberNavigationController(
+               routes = route.backStack.toTypedArray(),
+           )
+           BitwardenNavDisplay(
+               navigationController = navigationController,
+               entryProvider = entryProvider {
+                   authDestinations(navigationController = navigationController)
+               },
+           )
+       }
+   }
+   ```
+2. **Screens never see the controller.** `...Destination()` functions take `onNavigate...` lambdas,
+   and the graph's `...Destinations(navigationController)` function wires each lambda to a
+   `navigateTo{Screen}()` extension or a controller call:
+   ```kotlin
+   checkEmailDestination(onNavigateBack = { navigationController.navigateBack() })
+   landingDestination(
+       onNavigateToLogin = { navigationController.navigateToLogin(emailAddress = it) },
+   )
+   ```
+3. **Pick the call that matches the user-visible behavior:**
+
+   | When the user should… | Use | Example |
+   |-----------------------|-----|---------|
+   | Open a new screen on top | `navigateTo{Screen}()` (wraps `navigate(route)`) | most destinations |
+   | Go back / close the screen | `navigateBack()` | every `onNavigateBack` |
+   | Open a screen that may already be showing (overlays, debug menu) | `addSingleTop(route)` | `UpdateBiometricsNavigation.kt` |
+   | Swap the current screen for a sibling, so back skips it | `replaceLast(route)` | QR scan ↔ manual entry in `VaultUnlockedNavigation.kt` |
+   | Return to an earlier screen in the flow | `popUpTo<Route>()` | `popUpToCompleteRegistration()` |
+   | Return to an earlier screen with new arguments | `navigatePoppingUpTo(route) { it is Route }` | login after registration in `AuthNavigation.kt` |
+   | Start the graph over from its first screen | `popToRoot()` | re-selecting the current tab |
+   | Follow app state rather than user input | `replaceAll(routes)` | `RootNavScreen.kt` (state → root route) |
+4. **Navigating in another graph** goes through that graph's controller. Nested graphs cannot reach
+   their parent's controller, so the parent passes callbacks down (e.g. a tab destination receives
+   `onNavigateToImportLogins = { vaultUnlockedNavigationController.navigateToImportLoginsScreen() }`
+   to open a full-screen flow above the nav bar).
+5. **Tabs** use a `BottomNavigationController` that bundles the nav bar's controller with one
+   controller per tab (`VaultUnlockedNavBarNavigationControllers.kt`). Nav bar clicks call
+   `navigateToTabOrPopToRoot(tab.rootRoute)` and system back calls its `navigateBack()`, which pops
+   within the selected tab before falling back to the start tab.
+6. **Reacting to back stack changes:** in composition, just read `navigationController.backStack`.
+   Outside of composition, collect `backStackSnapshot` from a `LaunchedEffect` keyed on the
+   controller (see `AuthenticatorNavigation.kt`).
+7. **Tests** pass `navigationControllerOf(routes)` (unsaved, `@VisibleForTesting`) into the screen in
+   place of the remembered one, then assert on `navigationController.backStack.toList()` (see
+   `RootNavScreenTest.kt`).
+
+**Transitions** live in entry metadata (`ui/.../theme/EntryTransitions.kt`): `EntryTransitions.slideUp`,
+`.push`, `.rootPush` (root of a push flow, e.g. a tab root), `.stay`, and
+`EntryTransitions.rootTransition(RootTransition.X)` for a section route of the `RootNavGraph`.
+
+**Reference:**
+- `app/src/main/kotlin/com/x8bit/bitwarden/ui/vault/feature/item/VaultItemNavigation.kt`
+- `app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlocked/VaultUnlockedGraph.kt` (a graph)
+- `app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlocked/VaultUnlockedNavigation.kt` (section hosting a nested graph)
+- `app/src/main/kotlin/com/x8bit/bitwarden/ui/platform/feature/vaultunlockednavbar/VaultUnlockedNavBarNavigation.kt` (tabs, each hosting its own graph)
 
 **Key Benefits:**
 - ✅ Type safety: Compile-time errors for missing parameters
 - ✅ No string literals in navigation code
-- ✅ Automatic serialization/deserialization
-- ✅ Clear contract for screen dependencies
+- ✅ Back stack is owned, observable state that is saved across process death
+- ✅ ViewModels receive their route directly (no `SavedStateHandle` argument parsing)
+
+**Gotchas:**
+- ❌ **NEVER** register the same route class twice in one entry provider (Navigation 3 throws)
+- ❌ **NEVER** read navigation arguments from `SavedStateHandle`; inject the route instead
+- ❌ **NEVER** mutate a `NavBackStack` directly (e.g. `removeLast()` on the last entry empties it and crashes `NavDisplay`); go through the `NavigationController`, whose pop operations always keep the root entry
+- ❌ **NEVER** chain `popUpTo` + `navigate` (or clear + push) when an atomic call exists; use `navigatePoppingUpTo`, `replaceAll`, or `replaceLast` so `NavDisplay` never sees an intermediate stack
 
 ---
 
@@ -133,7 +240,9 @@ All screens follow consistent Compose patterns.
 @Composable
 fun ExampleScreen(
     onNavigateBack: () -> Unit,
-    viewModel: ExampleViewModel = hiltViewModel(),
+    // Created by the navigation entry (assisted injection). Screens whose ViewModel needs no
+    // navigation arguments may default this to `hiltViewModel()` instead.
+    viewModel: ExampleViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -160,7 +269,7 @@ fun ExampleScreen(
 **Reference:** `app/src/main/kotlin/com/x8bit/bitwarden/ui/auth/feature/login/LoginScreen.kt` (see `LoginScreen` composable)
 
 **Essential Requirements:**
-- ✅ Use `hiltViewModel()` for dependency injection
+- ✅ Use `hiltViewModel()` for dependency injection (`hiltViewModel<VM, VM.Factory>(creationCallback = ...)` in the navigation entry for ViewModels with navigation arguments)
 - ✅ Use `collectAsStateWithLifecycle()` for state (not `collectAsState()`)
 - ✅ Use `EventsEffect(viewModel)` for one-shot events
 - ✅ Use `Bitwarden*` prefixed components from `:ui` module
@@ -521,7 +630,7 @@ Single-line branches (body fits on the same line as `->`) do **not** need braces
 ❌ **NEVER inject `...Impl` classes**
 - Only inject interfaces via Hilt
 
-❌ **NEVER create navigation without `@Serializable` routes**
+❌ **NEVER create navigation without `@Serializable` routes nested in a `...Graph` sealed class**
 - No string-based navigation, always type-safe
 
 ❌ **NEVER use raw `Result<T>` in repositories**

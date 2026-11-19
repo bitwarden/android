@@ -5,6 +5,7 @@
 - [Compatibility](#compatibility)
 - [Setup](#setup)
 - [Dependencies](#dependencies)
+- [Documentation](#documentation)
 
 ## Compatibility
 
@@ -272,3 +273,7 @@ The following is a list of additional third-party dependencies used as part of t
     - https://github.com/Kotlin/kotlinx-kover
     - Purpose: Kotlin code coverage toolset.
     - License: Apache 2.0
+
+## Documentation
+
+Architecture, code style, and troubleshooting guides live in the [`docs/`](docs/README.md) folder.

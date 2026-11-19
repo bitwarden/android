@@ -2,27 +2,20 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.popUpTo
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraph
 
 /**
- * The type-safe route for the select account screen.
+ * Add the [SelectAccountScreen] to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object SelectAccountRoute
-
-/**
- * Add the [SelectAccountScreen] to the nav graph.
- */
-fun NavGraphBuilder.selectAccountDestination(
+fun EntryProviderScope<ExportItemsGraph>.selectAccountDestination(
     onAccountSelected: (id: String, hasOtherAccounts: Boolean) -> Unit,
 ) {
-    composableWithRootPushTransitions<SelectAccountRoute> {
+    rootPushEntry<ExportItemsGraph.SelectAccountRoute> {
         SelectAccountScreen(
             onAccountSelected = onAccountSelected,
         )
@@ -32,21 +25,13 @@ fun NavGraphBuilder.selectAccountDestination(
 /**
  * Navigate to the [SelectAccountScreen].
  */
-fun NavController.navigateToSelectAccountScreen(
-    navOptions: NavOptions? = null,
-) {
-    navigate(
-        route = SelectAccountRoute,
-        navOptions = navOptions,
-    )
+fun NavigationController<ExportItemsGraph>.navigateToSelectAccountScreen() {
+    this.navigate(route = ExportItemsGraph.SelectAccountRoute)
 }
 
 /**
  * Pop up to the [SelectAccountScreen].
  */
-fun NavController.popUpToSelectAccountScreen() {
-    popBackStack(
-        route = SelectAccountRoute,
-        inclusive = false,
-    )
+fun NavigationController<ExportItemsGraph>.popUpToSelectAccountScreen() {
+    this.popUpTo<ExportItemsGraph.SelectAccountRoute>(inclusive = false)
 }

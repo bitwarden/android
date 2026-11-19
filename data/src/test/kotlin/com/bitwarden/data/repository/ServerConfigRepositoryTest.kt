@@ -16,6 +16,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -117,6 +118,82 @@ class ServerConfigRepositoryTest {
         repository.serverConfigStateFlow.test {
             assertEquals(fakeConfigDiskSource.serverConfig, awaitItem())
         }
+    }
+
+    @Test
+    fun `serverConfigStateFlow should return the same instance on every access`() {
+        assertSame(repository.serverConfigStateFlow, repository.serverConfigStateFlow)
+    }
+
+    @Test
+    fun `serverConfigStateFlow should be seeded from the disk source at creation`() {
+        fakeConfigDiskSource.serverConfig = SERVER_CONFIG
+
+        val newRepository = ServerConfigRepositoryImpl(
+            configDiskSource = fakeConfigDiskSource,
+            configService = configService,
+            clock = fixedClock,
+            dispatcherManager = fakeDispatcherManager,
+        )
+
+        assertEquals(SERVER_CONFIG, newRepository.serverConfigStateFlow.value)
+    }
+
+    @Test
+    fun `serverConfigStateFlow value should reflect disk source writes without collectors`() {
+        val stateFlow = repository.serverConfigStateFlow
+        assertNull(stateFlow.value)
+
+        fakeConfigDiskSource.serverConfig = SERVER_CONFIG
+        assertEquals(SERVER_CONFIG, stateFlow.value)
+
+        fakeConfigDiskSource.serverConfig = null
+        assertNull(stateFlow.value)
+    }
+
+    @Test
+    fun `serverConfigStateFlow should emit disk source updates to a single collector`() =
+        runTest {
+            val updatedConfig = SERVER_CONFIG.copy(lastSync = 1L)
+
+            repository.serverConfigStateFlow.test {
+                assertNull(awaitItem())
+
+                fakeConfigDiskSource.serverConfig = SERVER_CONFIG
+                assertEquals(SERVER_CONFIG, awaitItem())
+
+                fakeConfigDiskSource.serverConfig = updatedConfig
+                assertEquals(updatedConfig, awaitItem())
+
+                fakeConfigDiskSource.serverConfig = null
+                assertNull(awaitItem())
+            }
+        }
+
+    @Test
+    fun `serverConfigStateFlow collectors should observe the same updates`() = runTest {
+        repository.serverConfigStateFlow.test {
+            assertNull(awaitItem())
+
+            // A later access must share state with the first one rather than start over.
+            repository.serverConfigStateFlow.test {
+                assertNull(awaitItem())
+                fakeConfigDiskSource.serverConfig = SERVER_CONFIG
+                assertEquals(SERVER_CONFIG, awaitItem())
+            }
+
+            assertEquals(SERVER_CONFIG, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getServerConfig should update the shared serverConfigStateFlow value`() = runTest {
+        val stateFlow = repository.serverConfigStateFlow
+        assertNull(stateFlow.value)
+
+        repository.getServerConfig(forceRefresh = true)
+
+        assertEquals(SERVER_CONFIG, stateFlow.value)
     }
 
     @Suppress("MaxLineLength")

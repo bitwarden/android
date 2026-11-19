@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -47,7 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun LoginWithDeviceScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
-    viewModel: LoginWithDeviceViewModel = hiltViewModel(),
+    viewModel: LoginWithDeviceViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->

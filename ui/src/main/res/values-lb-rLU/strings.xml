@@ -4,7 +4,6 @@
     <string name="add_folder">Dossier bäisetzen</string>
     <string name="add_item">Element bäisetzen</string>
     <string name="an_error_has_occurred">E Feeler ass opgetrueden</string>
-    <string name="apply">Uwennen</string>
     <string name="back">Zeréck</string>
     <string name="cancel">Ofbriechen</string>
     <string name="copy">Kopéieren</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Dossier geläscht.</string>
     <string name="folder_none">Keen Dossier</string>
     <string name="folder_updated">Dossier gespäichert</string>
-    <string name="folders">Dossieren</string>
     <string name="hide">Verstoppen</string>
     <string name="internet_connection_required_message">Wannechgelift verbann dech mam Internet fir virunzefueren.</string>
     <string name="internet_connection_required_title">Internetverbindung noutwenneg</string>
@@ -76,7 +74,7 @@
     <string name="account">Kont</string>
     <string name="account_created_success">Your new account has been created!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
-    <string name="avoid_ambiguous_characters">Avoid ambiguous characters</string>
+    <string name="avoid_ambiguous_characters">Zweedeiteg Zeechen evitéieren</string>
     <string name="bitwarden_autofill_service">Bitwarden Auto-Ausfëllen Funktioun</string>
     <string name="change_master_password">Master-Passwuert änneren</string>
     <string name="close">Zoumaachen</string>
@@ -90,7 +88,7 @@
     <string name="edit_identity">Edit identity</string>
     <string name="edit_note">Edit note</string>
     <string name="edit_ssh_key">Edit SSH key</string>
-    <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
+    <string name="enter_email_for_hint">Gëff deng E-Mail-Adress vun dengem Kont an, fir den Hiweis fir däi Master-Passwuert ze kréien.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Aus Favoritten ewechhuelen</string>
     <string name="fingerprint">Fangerofdrock</string>
@@ -119,12 +117,12 @@
     </plurals>
     <string name="min_numbers">Minimum numbers</string>
     <string name="min_special">Minimum special</string>
-    <string name="never">Never</string>
+    <string name="never">Ni</string>
     <string name="no_cards">There are no cards in your vault.</string>
-    <string name="add_card">Add card</string>
+    <string name="add_card">Kaart bäisetzen</string>
     <string name="no_logins">There are no logins in your vault.</string>
     <string name="no_identities">There are no identities in your vault.</string>
-    <string name="add_identity">Add identity</string>
+    <string name="add_identity">Identitéit bäisetzen</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="add_note">Notiz bäisetzen</string>
     <string name="add_ssh_key">SSH-Schlëssel bäisetzen</string>
@@ -136,19 +134,19 @@
     <string name="new_text_send">New text Send</string>
     <string name="new_file_send">New file Send</string>
     <string name="no_username">Kee Benotzernumm</string>
-    <string name="options">Options</string>
-    <string name="other">Other</string>
+    <string name="options">Optiounen</string>
+    <string name="other">Aner</string>
     <string name="password_generator">Passwuertgenerator</string>
-    <string name="password_hint">Password hint</string>
-    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
-    <string name="password_override_alert">Are you sure you want to overwrite the current password?</string>
+    <string name="password_hint">Passwuert-Hiweis</string>
+    <string name="password_hint_alert">Mir hunn der eng E-Mail mat dengem Master-Passwuert-Hiweis geschéckt.</string>
+    <string name="password_override_alert">Bass du sécher, datt s du d\'aktuellt Passwuert iwwerschreiwe wëlls?</string>
     <string name="retype_master_password">Master-Passwuert widderhuelen</string>
     <string name="retype_new_master_password_required">Re-type new master password (required)</string>
     <string name="retype_master_password_required">Re-type master password (required)</string>
     <string name="search_vault">Tresor duerchsichen</string>
     <string name="select">Auswielen</string>
     <string name="item_details">Item details</string>
-    <string name="item_updated">Item saved</string>
+    <string name="item_updated">Element gespäichert</string>
     <string name="bank_account_saved">Bankkont gespäichert</string>
     <string name="card_saved">Kaart gespäichert</string>
     <string name="identity_saved">Identitéit gespäichert</string>
@@ -157,21 +155,21 @@
     <string name="passport_saved">Pass gespäichert</string>
     <string name="secure_note_saved">Sécher Notiz gespäichert</string>
     <string name="ssh_key_saved">SSH-Schlëssel gespäichert</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
-    <string name="syncing_complete">Syncing complete</string>
-    <string name="two_step_login">Two-step login</string>
+    <string name="submitting">Gëtt iwwermëttelt…</string>
+    <string name="syncing">Synchronisatioun…</string>
+    <string name="syncing_complete">Synchroniséierung ofgeschloss</string>
+    <string name="two_step_login">Zwee-Faktor-Authentifizéierung</string>
     <string name="unlock_with_biometrics">Biometresch entspären</string>
-    <string name="unlock_with_pin">Unlock with PIN code</string>
-    <string name="verification_code">Verification code</string>
+    <string name="unlock_with_pin">Mam PIN-Code entspären</string>
+    <string name="verification_code">Verifizéierungscode</string>
     <string name="view_login">View login</string>
     <string name="view_card">View card</string>
     <string name="view_identity">View identity</string>
     <string name="view_note">View note</string>
     <string name="view_ssh_key">View SSH key</string>
-    <string name="web_vault">Bitwarden web vault</string>
-    <string name="items">Items</string>
-    <string name="items_for_uri">Items for %1$s</string>
+    <string name="web_vault">Bitwarden Web-Tresor</string>
+    <string name="items">Elementer</string>
+    <string name="items_for_uri">Elementer fir %1$s</string>
     <string name="no_items_for_uri">There are no items in your vault for %1$s.</string>
     <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">No Zougangsdate sichen oder nei Zougangsdate bäisetzen</string>
@@ -182,7 +180,7 @@
     <string name="autofill_or_view">Do you want to autofill or view this item?</string>
     <string name="search_x" comment="%1$s is a placeholder for the type of item being searched for (e.g. Logins).">Search %1$s</string>
     <string name="learn_org">Learn about organizations</string>
-    <string name="authenticator_app_title">Authenticator app</string>
+    <string name="authenticator_app_title">Authentificator-App</string>
     <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
     <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
     <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
@@ -195,9 +193,9 @@
     <string name="yubi_key_instruction">To continue, hold your Yubico security key against the back of the device or insert it into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Yubico security key</string>
     <string name="add_new_attachment">Add new attachment</string>
-    <string name="attachments">Attachments</string>
-    <string name="unable_to_download_file">Unable to download file.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="attachments">Unhäng</string>
+    <string name="unable_to_download_file">Fichier konnt net erofgeluede ginn.</string>
+    <string name="downloading">Gëtt erofgelueden…</string>
     <string name="attachment_large_warning">This file is <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>. Would you like to download it?</string>
     <string name="authenticator_key">Authenticator key</string>
     <string name="verification_code_totp">Verification code (TOTP)</string>
@@ -205,14 +203,13 @@
     <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
     <string name="point_your_camera_at_the_qr_code">Point your camera at the QR Code.
 Scanning will happen automatically.</string>
-    <string name="copy_totp">Copy TOTP</string>
+    <string name="copy_totp">TOTP kopéieren</string>
     <string name="copy_totp_automatically_description">If a login has an authenticator key, copy the TOTP verification code to your clipboard when you autofill the login.</string>
     <string name="copy_totp_automatically">Copy TOTP automatically</string>
-    <string name="premium_required">A Premium membership is required to use this feature.</string>
-    <string name="attachment_deleted">Attachment deleted</string>
+    <string name="attachment_deleted">Unhang ewechgeholl</string>
     <string name="attachments_are_a_premium_feature">Attachments are a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="choose_file">Choose file</string>
-    <string name="file">File</string>
+    <string name="file">Fichier</string>
     <string name="no_file_chosen">No file chosen</string>
     <string name="file_name">Fichiersnumm</string>
     <string name="no_attachments">There are no attachments.</string>
@@ -291,9 +288,7 @@ Scanning will happen automatically.</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
     <string name="go_to_my_vault">Go to my vault</string>
-    <string name="collections">Collections</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">There are no items in this folder.</string>
     <string name="no_items_trash">There are no items in the trash.</string>
@@ -347,16 +342,11 @@ Scanning will happen automatically.</string>
     <string name="type">Type</string>
     <string name="move_down">Move down</string>
     <string name="move_up">Move Up</string>
-    <string name="owner">Owner</string>
-    <string name="no_collections_to_list">There are no collections to list.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s moved to %2$s.</string>
     <string name="select_one_collection">You must select at least one collection.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Share</string>
-    <string name="move_to_organization">Move to Organization</string>
-    <string name="no_orgs_to_list">No organizations to list.</string>
-    <string name="move_to_org_desc">Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Number of words</string>
@@ -469,9 +459,8 @@ Scanning will happen automatically.</string>
     <string name="text_to_share">Text to share</string>
     <string name="type_text">Text</string>
     <string name="hide_text_by_default">When accessing the Send, hide the text by default</string>
-    <string name="type_file">File</string>
+    <string name="type_file">Fichier</string>
     <string name="deletion_date">Deletion date</string>
-    <string name="deletion_time">Deletion time</string>
     <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Who can view</string>
@@ -603,20 +592,21 @@ select Add TOTP to store the key safely</string>
     <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
     <string name="allow_screen_capture">Allow screen capture</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Are you sure you want to turn on screen capture?</string>
-    <string name="log_in_requested">Login requested</string>
-    <string name="are_you_trying_to_log_in">Are you trying to log in?</string>
-    <string name="log_in_attempt_by_x_on_y">Login attempt by %1$s on %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Device type</string>
     <string name="ip_address">IP address</string>
     <string name="time">Time</string>
     <string name="select_time">Select time</string>
     <string name="switch_input_mode">Switch input mode</string>
-    <string name="confirm_log_in">Confirm login</string>
-    <string name="deny_log_in">Deny login</string>
-    <string name="log_in_denied">Login denied</string>
-    <string name="approve_login_requests">Approve login requests</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">No thanks</string>
-    <string name="confim_log_in_attemp_for_x">Confirm login attempt for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Username type</string>
     <string name="plus_addressed_email">Plus addressed email</string>
     <string name="catch_all_email">Catch-all email</string>
@@ -643,8 +633,8 @@ select Add TOTP to store the key safely</string>
     <string name="i_understand">I understand</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="login_request_has_already_expired">Login request has already expired.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login attempt from:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
 Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">New to Bitwarden?</string>
@@ -653,17 +643,17 @@ Do you want to switch to this account?</string>
     <string name="not_you">Not you?</string>
     <string name="log_in_with_master_password">Log in with master password</string>
     <string name="log_in_initiated">Login initiated</string>
-    <string name="a_notification_has_been_sent_to_your_device">A notification has been sent to your device.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Resend notification</string>
     <string name="view_all_login_options">View all log in options</string>
-    <string name="pending_log_in_requests">Pending login requests</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Decline all requests</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Are you sure you want to decline all pending login requests?</string>
     <string name="no_pending_requests">No pending requests</string>
     <string name="enable_camer_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
     <string name="language">Language</string>
-    <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
     <string name="default_system">Default (System)</string>
     <string name="weak_master_password">Weak Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</string>
@@ -690,9 +680,8 @@ Do you want to switch to this account?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</string>
     <string name="master_password_re_prompt_help">Master password re-prompt help</string>
     <string name="admin_approval_requested">Admin approval requested</string>
-    <string name="your_request_has_been_sent_to_your_admin">Your request has been sent to your admin.</string>
-    <string name="you_will_be_notified_once_approved">You will be notified once approved.</string>
-    <string name="trouble_logging_in">Trouble logging in?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Block autofill</string>
     <string name="no_uris_blocked">No URIs blocked</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autofill will not be offered for these URIs.</string>
@@ -703,8 +692,7 @@ Do you want to switch to this account?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Separate multiple URIs with a comma.</string>
     <string name="invalid_uri">Invalid URI</string>
     <string name="the_urix_is_already_blocked">The URI %1$s is already blocked</string>
-    <string name="login_approved">Login approved</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Log in with device must be set up in the settings of the Bitwarden app.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Need another option? <annotation link="viewAll">View all login options</annotation></string>
     <string name="log_in_with_device">Log in with device</string>
     <string name="logging_in_on">Logging in on</string>
@@ -806,7 +794,7 @@ Do you want to switch to this account?</string>
     <string name="help_with_server_geolocations">Help with server geolocations</string>
     <string name="email_address_required">Email address (required)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
-    <string name="change_email_address">Change email address</string>
+    <string name="change_email_address">E-Mail-Adress änneren</string>
     <string name="next">Next</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
@@ -837,7 +825,7 @@ Do you want to switch to this account?</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
     <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
+    <string name="master_password_hint_not_specified">Master-Passwuert-Hiweis</string>
     <string name="new_master_password_hint">New master password hint</string>
     <string name="get_started">Get started</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
@@ -937,8 +925,8 @@ Do you want to switch to this account?</string>
     <string name="coachmark_2_of_3">2 OF 3</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du muss den Authentifizéierungsschlëssel nëmme fir Zougangsdaten ariichten, déi eng zwee-Faktor-Authentifizéierung mat engem Code erfuerderen. De Schlëssel generéiert kontinuéierlech sechsstelleg Coden, mat deenen s du dech umelle kanns.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
-    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="learn_about_new_logins">Learn about new logins</string>
+    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du muss eng Websäiten-Adress bäisetzen, fir automatescht Ausfëlle fir den Zougrëff op dëse Kont benotzen ze kënnen.</string>
+    <string name="learn_about_new_logins">Erfuer méi iwwer nei Zougangsdaten</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
@@ -947,15 +935,15 @@ Do you want to switch to this account?</string>
     <string name="alias">Alias</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Benotz de Generator, fir sécher Passwierder, Passphrasen a Benotzernimm z\'erstellen.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
-    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Eenzegaarteg Benotzernimm setzen en zousätzleche Sécherheetsniveau bäi a kënnen Hacker dorunner hënneren, deng Konten ze fannen.</string>
     <string name="coachmark_1_of_6">1 OF 6</string>
     <string name="coachmark_2_of_6">2 OF 6</string>
     <string name="coachmark_3_of_6">3 OF 6</string>
     <string name="coachmark_4_of_6">4 OF 6</string>
     <string name="coachmark_5_of_6">5 OF 6</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Benotz dës Optiounen, fir däi Passwuert un d\'Ufuerderunge vun denger Kont-Websäit unzepassen.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Nodeems du däin neit Passwuert a Bitwarden gespäichert hues, vergiess net, et op denger Konto-Websäit z\'aktualiséieren.</string>
     <string name="verify_your_identity">Verify your identity</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
@@ -977,7 +965,6 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Password operation failed because the selected item does not have a valid password.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
@@ -1058,7 +1045,6 @@ Do you want to switch to this account?</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
     <string name="all_trusted_apps">All trusted apps</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
@@ -1075,14 +1061,12 @@ Do you want to switch to this account?</string>
     <string name="verification_code_added">Verification code added</string>
     <string name="refresh_period">Refresh period</string>
     <string name="algorithm">Algorithm</string>
-    <string name="advanced">Advanced</string>
-    <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
-    <string name="item_saved">Item saved</string>
+    <string name="item_saved">Element gespäichert</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
     <string name="search_codes">Search codes</string>
@@ -1103,7 +1087,7 @@ Do you want to switch to this account?</string>
     <string name="export_success">Data exported successfully</string>
     <string name="included_in_this_export">Included in this export</string>
     <string name="only_codes_stored_locally_on_this_device_will_be_exported">Only codes stored locally on this device will be exported. Synced codes aren’t included</string>
-    <string name="security">Security</string>
+    <string name="security">Sécherheet</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Versioun</string>
     <string name="version_x" comment="%1$s is the version string (e.g. 2025.1.0 (1234)).">Version: %1$s</string>
@@ -1159,7 +1143,6 @@ Do you want to switch to this account?</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
     <string name="keep_your_credential_secure">Keep your credentials secure</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
@@ -1202,7 +1185,6 @@ Do you want to switch to this account?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
     <string name="items_to_import">Items to import</string>
     <string name="exporting_items">Exporting items…</string>
-    <string name="export_failed">Export failed</string>
     <string name="passwords">Passwords</string>
     <string name="passkeys">Passkeys</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
@@ -1222,7 +1204,6 @@ Do you want to switch to this account?</string>
     <string name="transfer_items_to_org">Transfer items to %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> is requiring all items to be owned by the organization for security and compliance. Click accept to transfer ownership of your items. <annotation link="learnMore">Learn more</annotation></string>
     <string name="decline_and_leave">Decline and leave</string>
-    <string name="why_am_i_seeing_this">Why am I seeing this?</string>
     <string name="migrating_items_to_x">Migrating items to %s</string>
     <string name="failed_to_migrate_items_to_x">Failed to migrate items to %s</string>
     <string name="search_archive">Search archive</string>
@@ -1240,6 +1221,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">Archiving items is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="totp_is_a_premium_feature">Authenticator key (TOTP) is a Premium feature. Your current plan does not include access to this feature.</string>
     <string name="upgrade_to_premium">Upgrade to Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">To manage your Premium subscription, you’ll need to login to your web vault on a computer.</string>
     <string name="unlock_advanced_security_features">Unlock advanced security features</string>
@@ -1321,7 +1303,6 @@ Do you want to switch to this account?</string>
     <string name="archive_item">Archive item</string>
     <string name="once_archived_this_item_will_be_excluded">Once archived, this item will be excluded from search results and autofill suggestions.</string>
     <string name="pricing_unavailable">Pricing unavailable</string>
-    <string name="current_plan">Current plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Billing amount</string>
     <string name="storage_cost">Storage cost</string>
@@ -1397,8 +1378,6 @@ Do you want to switch to this account?</string>
     <string name="issuing_country">Issuing country</string>
     <string name="issuing_state">Issuing state / province</string>
     <string name="license_class">License class</string>
-    <string name="surname">Surname</string>
-    <string name="given_name">Given name</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="nationality">Nationality</string>
     <string name="passport_type">Passport type</string>

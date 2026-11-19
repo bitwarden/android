@@ -1,49 +1,23 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
-import kotlinx.serialization.Serializable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the view send screen.
+ * Add the view send screen to the navigation entries.
  */
-@Serializable
-data class ViewSendRoute(
-    val sendId: String,
-    val sendType: SendItemType,
-)
-
-/**
- * Class to retrieve vault item arguments from the [SavedStateHandle].
- */
-data class ViewSendArgs(
-    val sendId: String,
-    val sendType: SendItemType,
-)
-
-/**
- * Constructs a [ViewSendArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toViewSendArgs(): ViewSendArgs {
-    val route = this.toRoute<ViewSendRoute>()
-    return ViewSendArgs(sendId = route.sendId, sendType = route.sendType)
-}
-
-/**
- * Add the view send screen to the nav graph.
- */
-fun NavGraphBuilder.viewSendDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.viewSendDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
+    onNavigateToAddEditSend: (route: VaultUnlockedGraph.AddEditSendRoute) -> Unit,
 ) {
-    composableWithSlideTransitions<ViewSendRoute> {
+    slideUpEntry<VaultUnlockedGraph.ViewSendRoute> { route ->
         ViewSendScreen(
+            viewModel = hiltViewModel<ViewSendViewModel, ViewSendViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
             onNavigateToAddEditSend = onNavigateToAddEditSend,
         )
@@ -53,9 +27,8 @@ fun NavGraphBuilder.viewSendDestination(
 /**
  * Navigate to the view send screen.
  */
-fun NavController.navigateToViewSend(
-    route: ViewSendRoute,
-    navOptions: NavOptions? = null,
+fun NavigationController<VaultUnlockedGraph>.navigateToViewSend(
+    route: VaultUnlockedGraph.ViewSendRoute,
 ) {
-    this.navigate(route = route, navOptions = navOptions)
+    this.navigate(route = route)
 }

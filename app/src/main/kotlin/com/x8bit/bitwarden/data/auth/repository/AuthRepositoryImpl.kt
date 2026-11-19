@@ -1722,10 +1722,13 @@ internal class AuthRepositoryImpl(
         password?.let {
             // Automatically update kdf to minimums after password unlock and userState update
             kdfManager
-                .updateKdfToMinimumsIfNeeded(password = password)
+                .updateKdfToMinimumsIfNeeded(userId = userId, password = password)
                 .also { result ->
                     if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                        Timber.e(
+                            t = result.error,
+                            message = "Failed to silent update KDF settings on login.",
+                        )
                     }
                 }
         }

@@ -4,7 +4,6 @@
     <string name="add_folder">Bagong Folder</string>
     <string name="add_item">Bagong Item</string>
     <string name="an_error_has_occurred">Nagkaproblema.</string>
-    <string name="apply">Ilapat</string>
     <string name="back">Bumalik</string>
     <string name="cancel">Kanselahin</string>
     <string name="copy">Kopyahin</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Binura ang folder.</string>
     <string name="folder_none">Walang Folder</string>
     <string name="folder_updated">Sinave ang folder</string>
-    <string name="folders">Mga Folder</string>
     <string name="hide">Itago</string>
     <string name="internet_connection_required_message">Mangyaring kumonekta sa internet bago magpatuloy.</string>
     <string name="internet_connection_required_title">Kailangang kumonekta sa internet</string>
@@ -208,7 +206,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="copy_totp">Kopyahin ang TOTP</string>
     <string name="copy_totp_automatically_description">Kung may authenticator key ang login, kopyahin ang TOTP verification code sa clipboard mo pagka-autofill ng login.</string>
     <string name="copy_totp_automatically">Awtomatikong kopyahin ang TOTP</string>
-    <string name="premium_required">Kailangan mo ng premium membership para magamit ang feature na ito.</string>
     <string name="attachment_deleted">Tinanggal ang attachment</string>
     <string name="attachments_are_a_premium_feature">Ang mga attachment ay isang Premium na feature. Ang iyong kasalukuyang plano ay hindi kasama ang access sa feature na ito.</string>
     <string name="choose_file">Pumili ng file</string>
@@ -291,9 +288,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="icons_url">URL ng server ng mga icon</string>
     <string name="vault_is_locked">Naka-lock ang vault</string>
     <string name="go_to_my_vault">Pumunta sa vault ko</string>
-    <string name="collections">Mga Koleksyon</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Walang mga item sa koleksyong ito.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Walang mga item sa folder na ito.</string>
     <string name="no_items_trash">Walang mga item sa basurahan.</string>
@@ -347,16 +342,11 @@ Awtomatikong itong magsa-scan.</string>
     <string name="type">Uri</string>
     <string name="move_down">Ilipat pababa</string>
     <string name="move_up">Ilipat Pataas</string>
-    <string name="owner">May-ari</string>
-    <string name="no_collections_to_list">Walang maililistang koleksyon.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">Nilipat ang %1$s sa %2$s.</string>
     <string name="select_one_collection">Kailangan mong pumili ng isa man lang na koleksyon.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Ibahagi</string>
-    <string name="move_to_organization">Ilipat sa Organisasyon</string>
-    <string name="no_orgs_to_list">Walang maililistang organisasyon.</string>
-    <string name="move_to_org_desc">Piliin kung saang organisasyon mo ililipat ang item na ito. Magiging pag-aari ng organisasyon ang anumang item na ililipat mo rito. Hindi ka na ang direktang may-ari ng item na ito pagkalipat.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Bilang ng mga salita</string>
@@ -471,7 +461,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="hide_text_by_default">Kung binubuksan ang Send na ito, itago ang teksto by default</string>
     <string name="type_file">File</string>
     <string name="deletion_date">Petsa kung kailan buburahin</string>
-    <string name="deletion_time">Oras kung kailan buburahin</string>
     <string name="deletion_date_info">Permanenteng mabubura ang Send sa napiling petsa at oras.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Sino ang maaaring tumingin</string>
@@ -603,20 +592,21 @@ pindutin ang Magdagdag ng TOTP para ligtas na mai-store ang key</string>
     <string name="generic_error_message">Hindi namin maproseso ang kahilingan mo. Pakisubukan ulit o kontakin kami.</string>
     <string name="allow_screen_capture">Payagan ang pag-capture sa screen</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Sigurado ka bang gusto mong payagan ang pag-capture sa screen?</string>
-    <string name="log_in_requested">Hiniling ang pag-log in</string>
-    <string name="are_you_trying_to_log_in">Sinusubukan mo bang mag-log in?</string>
-    <string name="log_in_attempt_by_x_on_y">Sinubukang mag-log in ni %1$s sa %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Uri ng device</string>
     <string name="ip_address">IP address</string>
     <string name="time">Oras</string>
     <string name="select_time">Pumili ng oras</string>
     <string name="switch_input_mode">Lumipat ng input mode</string>
-    <string name="confirm_log_in">Kumpirmahin ang pag-login</string>
-    <string name="deny_log_in">Tanggihan ang login</string>
-    <string name="log_in_denied">Tinanggihan ang login</string>
-    <string name="approve_login_requests">Aprubahan ang mga kahilingang mag-log in</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Salamat na lang</string>
-    <string name="confim_log_in_attemp_for_x">Kumpirmahin ang tangkang mag-log in mula sa %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Uri ng username</string>
     <string name="plus_addressed_email">Plus-addressed na email</string>
     <string name="catch_all_email">Catch-all email</string>
@@ -643,27 +633,27 @@ pindutin ang Magdagdag ng TOTP para ligtas na mai-store ang key</string>
     <string name="i_understand">Naiintindihan ko</string>
     <string name="accept">Tanggapin</string>
     <string name="decline">Tanggihan</string>
-    <string name="login_request_has_already_expired">Nag-expire na ang hiling mag-log in.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tangkang mag-log in sa:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Gusto mo bang pumunta sa account na ito?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bago sa Bitwarden?</string>
     <string name="get_master_passwordword_hint">Kunin ang palatandaan ng master password</string>
     <string name="logging_in_as_x_on_y">Naglo-log in bilang %1$s sa %2$s</string>
     <string name="not_you">Hindi ikaw?</string>
     <string name="log_in_with_master_password">Mag-log in gamit ang master password</string>
     <string name="log_in_initiated">Sinimulan ang pag-log in</string>
-    <string name="a_notification_has_been_sent_to_your_device">Nakapagpadala na ng notipikasyon sa device mo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Tiyaking naka-unlock ang vault mo at magkatugma ang Parirala ng fingerprint sa dalawang device.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Ipadala ulit ang notipikasyon</string>
     <string name="view_all_login_options">Tingnan lahat ng mga opsyon sa pag-log in</string>
-    <string name="pending_log_in_requests">Nakabinbing mga kahilingan sa pag-log in</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Tanggihan lahat</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Sigurado ka bang gusto mong tanggihan lahat ng mga nakabinbing hiling mag-log in?</string>
     <string name="no_pending_requests">Walang nakabinbing kahilingan</string>
     <string name="enable_camer_permission_to_use_the_scanner">Pahintulutang ma-access ang kamera para magamit ang scanner</string>
     <string name="language">Wika</string>
-    <string name="language_change_x_description">Ginawang %1$s ang wika. I-restart ang app para mailapat ang pagbabago</string>
     <string name="default_system">Default (Sistema)</string>
     <string name="weak_master_password">Mahinang Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mahina ang password. Gumamit ng malakas na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gumamit ng mahinang password?</string>
@@ -690,9 +680,8 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Hindi makokopya ang passkey sa dinobleng item. Sigurado ka bang dodoblehin mo ang item na ito?</string>
     <string name="master_password_re_prompt_help">Tulong para sa pag-reprompt ng master password</string>
     <string name="admin_approval_requested">Hiniling ang pag-apruba ng admin</string>
-    <string name="your_request_has_been_sent_to_your_admin">Ang iyong kahilingan ay naipadala na sa iyong admin.</string>
-    <string name="you_will_be_notified_once_approved">Aabisuhan ka kapag naaprubahan.</string>
-    <string name="trouble_logging_in">Nagkaproblema sa pag-log in?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">I-block ang autofill</string>
     <string name="no_uris_blocked">Walang naka-block na URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Hindi iaalok ang autofill para sa mga URI na ito.</string>
@@ -703,8 +692,7 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Paghiwalayin ang maraming URI gamit ang kuwit.</string>
     <string name="invalid_uri">Hindi wastong URI</string>
     <string name="the_urix_is_already_blocked">Ang URI %1$s ay naka-block na</string>
-    <string name="login_approved">Naaprubahan ang login</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Ang pag-log in gamit ang device ay dapat i-set up sa mga setting ng Bitwarden app.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Kailangan ng ibang opsyon? <annotation link="viewAll">Tingnan ang lahat ng opsyon sa pag-log in</annotation></string>
     <string name="log_in_with_device">Mag-log in gamit ang device</string>
     <string name="logging_in_on">Naglo-log in sa</string>
@@ -977,7 +965,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Nabigo ang operasyon ng passkey dahil hindi sinusuportahan ang kahilingan.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Nabigo ang operasyon ng password dahil wala ang napiling item.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Nabigo ang operasyon ng password dahil ang napiling item ay walang wastong password.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Nabigo ang operasyon ng password dahil walang napiling item.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Nabigo ang operasyon ng kredensyal dahil hindi wasto ang kahilingan.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Nabigo ang operasyon ng kredensyal dahil hindi sinusuportahan ang kahilingan.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Nabigo ang operasyon ng kredensyal dahil lumampas ang mga pagtatangkang pag-verify ng user.</string>
@@ -1058,7 +1045,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="learn_more_about_privileged_apps">Matuto pa tungkol sa mga privileged na app</string>
     <string name="privileged_apps">Mga privileged na app</string>
     <string name="unrecognized_browser">Hindi nakikilalang browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Matuto pa tungkol sa paggamit ng mga passkey sa Bitwarden.</string>
     <string name="all_trusted_apps">Lahat ng pinagkakatiwalaang app</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Sigurado ka bang gusto mong ihinto ang pagtitiwala sa %s?</string>
     <string name="installed_apps">Mga naka-install na app</string>
@@ -1075,8 +1061,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="verification_code_added">Naidagdag ang verification code</string>
     <string name="refresh_period">Panahon ng pag-refresh</string>
     <string name="algorithm">Algorithm</string>
-    <string name="advanced">Advanced</string>
-    <string name="collapse_advanced_options">I-collapse ang mga advanced na opsyon</string>
     <string name="number_of_digits">Bilang ng mga digit</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d segundo</item>
@@ -1159,7 +1143,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="select_a_card_for_x">Pumili ng card para sa %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Mga advanced na opsyon</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Higit pa tungkol sa match detection</annotation></string>
     <string name="keep_your_credential_secure">Panatilihing secure ang iyong mga kredensyal</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Matuto pa tungkol sa kung paano panatilihing secure ang mga kredensyal kapag gumagamit ng “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Sigurado ka bang gusto mong gamitin ang “%1$s”?</string>
@@ -1202,7 +1185,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Mag-import ng mga password, passkey, at iba pang uri ng item mula sa iyong Bitwarden vault.</string>
     <string name="items_to_import">Mga item na i-import</string>
     <string name="exporting_items">Nag-e-export ng mga item…</string>
-    <string name="export_failed">Nabigo ang pag-export</string>
     <string name="passwords">Mga password</string>
     <string name="passkeys">Mga passkey</string>
     <string name="why_is_this_step_required">Bakit kinakailangan ang hakbang na ito?</string>
@@ -1222,7 +1204,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="transfer_items_to_org">Ilipat ang mga item sa %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> ay nangangailangan na ang lahat ng item ay pagmamay-ari ng organisasyon para sa seguridad at pagsunod. Mag-click ng accept upang ilipat ang pagmamay-ari ng iyong mga item. <annotation link="learnMore">Matuto pa</annotation></string>
     <string name="decline_and_leave">Tumanggi at umalis</string>
-    <string name="why_am_i_seeing_this">Bakit ko ito nakikita?</string>
     <string name="migrating_items_to_x">Inililipat ang mga item sa %s</string>
     <string name="failed_to_migrate_items_to_x">Nabigo ang paglipat ng mga item sa %s</string>
     <string name="search_archive">Maghanap sa archive</string>
@@ -1240,6 +1221,7 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="archiving_items_is_a_premium_feature">Ang pag-archive ng mga item ay isang Premium na feature. Ang iyong kasalukuyang plano ay hindi kasama ang access sa feature na ito.</string>
     <string name="totp_is_a_premium_feature">Ang Authenticator key (TOTP) ay isang Premium na feature. Ang iyong kasalukuyang plano ay hindi kasama ang access sa feature na ito.</string>
     <string name="upgrade_to_premium">Mag-upgrade sa Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Upang pamahalaan ang iyong Premium subscription, kakailanganin mong mag-log in sa iyong web vault sa isang computer.</string>
     <string name="unlock_advanced_security_features">I-unlock ang mga advanced na feature ng seguridad</string>
@@ -1321,7 +1303,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="archive_item">I-archive ang item</string>
     <string name="once_archived_this_item_will_be_excluded">Kapag na-archive, ang item na ito ay hindi isasama sa mga resulta ng paghahanap at mga mungkahi sa autofill.</string>
     <string name="pricing_unavailable">Hindi available ang pagpepresyo</string>
-    <string name="current_plan">Kasalukuyang plano</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Halaga ng pagsingil</string>
     <string name="storage_cost">Gastos sa storage</string>
@@ -1397,8 +1378,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="issuing_country">Bansang nag-isyu</string>
     <string name="issuing_state">Estado / lalawigan na nag-isyu</string>
     <string name="license_class">Klase ng lisensya</string>
-    <string name="surname">Apelyido</string>
-    <string name="given_name">Pangalan</string>
     <string name="date_of_birth">Petsa ng kapanganakan</string>
     <string name="nationality">Nasyonalidad</string>
     <string name="passport_type">Uri ng passport</string>

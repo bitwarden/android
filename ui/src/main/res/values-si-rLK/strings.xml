@@ -4,7 +4,6 @@
     <string name="add_folder">බහාලුම එකතු කරන්න</string>
     <string name="add_item">අයිතමය එක් කරන්න</string>
     <string name="an_error_has_occurred">දෝෂයක් ඇතිවිය</string>
-    <string name="apply">යොදන්න</string>
     <string name="back">ආපසු</string>
     <string name="cancel">අවලංගු කරන්න</string>
     <string name="copy">පිටපත්</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ෆෝල්ඩරය මකා ඇත.</string>
     <string name="folder_none">බහාලුමක් නැත</string>
     <string name="folder_updated">ෆෝල්ඩරය සුරකින ලදී</string>
-    <string name="folders">බහාලුම්</string>
     <string name="hide">සඟවන්න</string>
     <string name="internet_connection_required_message">කරුණාකර ඉදිරියට යාමට පෙර අන්තර්ජාලයට සම්බන්ධ වන්න.</string>
     <string name="internet_connection_required_title">අන්තර්ජාල සම්බන්ධතාවය අවශ්‍යයි</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTP පිටපත් කරන්න</string>
     <string name="copy_totp_automatically_description">පිවිසුමකට සත්‍යාපක යතුරක් තිබේ නම්, ඔබ පිවිසුම ස්වයං පිරවුම් කරන විට TOTP සත්‍යාපන කේතය ඔබගේ ක්ලිප්බෝඩයට පිටපත් කරන්න.</string>
     <string name="copy_totp_automatically">TOTP ස්වයංක්‍රීයව පිටපත් කරන්න</string>
-    <string name="premium_required">මෙම විශේෂාංගය භාවිතා කිරීමට වාරික සාමාජිකත්වයක් අවශ්‍ය වේ.</string>
     <string name="attachment_deleted">ඇමුණුම මකා ඇත</string>
     <string name="attachments_are_a_premium_feature">ඇමුණුම් වාරික විශේෂාංගයකි. ඔබගේ වත්මන් සැලැස්මට මෙම විශේෂාංගය සඳහා ප්‍රවේශය ඇතුළත් නොවේ.</string>
     <string name="choose_file">ගොනුව තෝරන්න</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">නිරූපක සේවාදායක URL</string>
     <string name="vault_is_locked">සුරක්ෂිතාගාරය අගුළු ලා ඇත</string>
     <string name="go_to_my_vault">මගේ සුරක්ෂිතාගාරය වෙත යන්න</string>
-    <string name="collections">එකතු කිරීම්</string>
     <string name="shared_folders">බෙදාගත් ෆෝල්ඩර</string>
-    <string name="no_items_collection">මෙම එකතුවෙහි අයිතම නොමැත.</string>
     <string name="there_are_no_items_in_this_shared_folder">මෙම බෙදාගත් ෆෝල්ඩරයේ අයිතම නොමැත.</string>
     <string name="no_items_folder">මෙම ෆෝල්ඩරයේ අයිතම නොමැත.</string>
     <string name="no_items_trash">කුණු කූඩයේ අයිතම නොමැත.</string>
@@ -347,16 +342,11 @@
     <string name="type">වර්ගය</string>
     <string name="move_down">පහළට ගෙනයන්න</string>
     <string name="move_up">ඉහළට ගෙනයන්න</string>
-    <string name="owner">හිමිකරු</string>
-    <string name="no_collections_to_list">ලැයිස්තුගත කිරීමට එකතු කිරීම් නොමැත.</string>
     <string name="there_are_no_shared_folders_to_list">ලැයිස්තුගත කිරීමට බෙදාගත් ෆෝල්ඩර නොමැත.</string>
     <string name="moved_item_to_org">%1$s %2$s වෙත ගෙන යන ලදී.</string>
     <string name="select_one_collection">ඔබ අවම වශයෙන් එක් එකතුවක් තෝරා ගත යුතුය.</string>
     <string name="you_must_select_at_least_one_shared_folder">ඔබ අවම වශයෙන් එක් බෙදාගත් ෆෝල්ඩරයක් තෝරා ගත යුතුය.</string>
     <string name="share">බෙදාගන්න</string>
-    <string name="move_to_organization">සංවිධානය වෙත ගෙනයන්න</string>
-    <string name="no_orgs_to_list">ලැයිස්තුගත කිරීමට සංවිධාන නොමැත.</string>
-    <string name="move_to_org_desc">මෙම අයිතමය ගෙන යාමට ඔබ කැමති සංවිධානයක් තෝරන්න. සංවිධානයකට ගෙන යාමෙන් අයිතමයේ හිමිකාරිත්වය එම සංවිධානයට පැවරේ. එය ගෙන ගිය පසු ඔබ තවදුරටත් මෙම අයිතමයේ සෘජු හිමිකරු නොවනු ඇත.</string>
     <string name="no_vaults_to_list">ලැයිස්තුගත කිරීමට සුරක්ෂිතාගාර නොමැත.</string>
     <string name="move_to_vault_desc">මෙම අයිතමය ගෙන යාමට ඔබ කැමති සුරක්ෂිතාගාරයක් තෝරන්න. වෙනත් සුරක්ෂිතාගාරයකට ගෙන යාමෙන් අයිතමයේ හිමිකාරිත්වය එම සංවිධානයට පැවරේ. එය ගෙන ගිය පසු ඔබ තවදුරටත් මෙම අයිතමයේ සෘජු හිමිකරු නොවනු ඇත.</string>
     <string name="number_of_words">වචන ගණන</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">යැවීමට ප්‍රවේශ වන විට, පෙරනිමියෙන් පෙළ සඟවන්න</string>
     <string name="type_file">ගොනුව</string>
     <string name="deletion_date">මැකීමේ දිනය</string>
-    <string name="deletion_time">මැකීමේ වේලාව</string>
     <string name="deletion_date_info">යැවීම නියමිත දිනය සහ වේලාවට ස්ථිරව මකා දමනු ලැබේ.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">බැලිය හැක්කේ කාටද</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">අපට ඔබගේ ඉල්ලීම සැකසීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න හෝ අප හා සම්බන්ධ වන්න.</string>
     <string name="allow_screen_capture">තිර ග්‍රහණයට ඉඩ දෙන්න</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">ඔබට තිර ග්‍රහණය ක්‍රියාත්මක කිරීමට අවශ්‍ය බව විශ්වාසද?</string>
-    <string name="log_in_requested">පිවිසුම ඉල්ලා ඇත</string>
-    <string name="are_you_trying_to_log_in">ඔබ පිවිසීමට උත්සාහ කරනවාද?</string>
-    <string name="log_in_attempt_by_x_on_y">%2$s මත %1$s විසින් පිවිසුම් උත්සාහය</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">උපාංග වර්ගය</string>
     <string name="ip_address">IP ලිපිනය</string>
     <string name="time">වේලාව</string>
     <string name="select_time">වේලාව තෝරන්න</string>
     <string name="switch_input_mode">ආදාන මාදිලිය මාරු කරන්න</string>
-    <string name="confirm_log_in">පිවිසුම තහවුරු කරන්න</string>
-    <string name="deny_log_in">පිවිසුම ප්‍රතික්ෂේප කරන්න</string>
-    <string name="log_in_denied">පිවිසුම ප්‍රතික්ෂේප කරන ලදී</string>
-    <string name="approve_login_requests">පිවිසුම් ඉල්ලීම් අනුමත කරන්න</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">ස්තුතියි, එපා</string>
-    <string name="confim_log_in_attemp_for_x">%1$s සඳහා පිවිසුම් උත්සාහය තහවුරු කරන්න</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">පරිශීලක නම් වර්ගය</string>
     <string name="plus_addressed_email">ප්ලස් ලිපින විද්‍යුත් තැපෑල</string>
     <string name="catch_all_email">සියල්ල අල්ලා ගන්නා විද්‍යුත් තැපෑල</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">මට තේරෙනවා</string>
     <string name="accept">පිළිගන්න</string>
     <string name="decline">ප්‍රතික්ෂේප කරන්න</string>
-    <string name="login_request_has_already_expired">පිවිසුම් ඉල්ලීම දැනටමත් කල් ඉකුත් වී ඇත.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">පිවිසුම් උත්සාහය:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-ඔබට මෙම ගිණුමට මාරු වීමට අවශ්‍යද?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden ට අලුත්ද?</string>
     <string name="get_master_passwordword_hint">ප්‍රධාන මුරපද ඉඟිය ලබා ගන්න</string>
     <string name="logging_in_as_x_on_y">%2$s මත %1$s ලෙස පිවිසෙමින්</string>
     <string name="not_you">ඔබ නොවේද?</string>
     <string name="log_in_with_master_password">ප්‍රධාන මුරපදය සමඟ පිවිසෙන්න</string>
     <string name="log_in_initiated">පිවිසුම ආරම්භ කරන ලදී</string>
-    <string name="a_notification_has_been_sent_to_your_device">දැනුම්දීමක් ඔබගේ උපාංගයට යවා ඇත.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">කරුණාකර ඔබගේ සුරක්ෂිතාගාරය අගුළු ඇර ඇති බවත් අනෙක් උපාංගයේ ඇඟිලි සලකුණු වාක්‍යාංශය ගැළපෙන බවටත් සහතික වන්න.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">දැනුම්දීම නැවත යවන්න</string>
     <string name="view_all_login_options">සියලු පිවිසුම් විකල්ප බලන්න</string>
-    <string name="pending_log_in_requests">විකල්ප පිවිසුම් ඉල්ලීම්</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">සියලු ඉල්ලීම් ප්‍රතික්ෂේප කරන්න</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">ඔබට සියලු විකල්ප පිවිසුම් ඉල්ලීම් ප්‍රතික්ෂේප කිරීමට අවශ්‍ය බව විශ්වාසද?</string>
     <string name="no_pending_requests">විකල්ප ඉල්ලීම් නොමැත</string>
     <string name="enable_camer_permission_to_use_the_scanner">ස්කෑනරය භාවිතා කිරීමට කැමරා අවසරය සක්‍රිය කරන්න</string>
     <string name="language">භාෂාව</string>
-    <string name="language_change_x_description">භාෂාව %1$s ලෙස වෙනස් කර ඇත. වෙනස බැලීමට කරුණාකර යෙදුම නැවත ආරම්භ කරන්න</string>
     <string name="default_system">පෙරනිමි (පද්ධතිය)</string>
     <string name="weak_master_password">දුර්වල ප්‍රධාන මුරපදය</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">දුර්වල මුරපදයක් හඳුනාගෙන ඇත. ඔබගේ ගිණුම ආරක්ෂා කිරීමට ශක්තිමත් මුරපදයක් භාවිතා කරන්න. ඔබට දුර්වල මුරපදයක් භාවිතා කිරීමට අවශ්‍ය බව විශ්වාසද?</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">පාස්කී ක්ලෝන කළ අයිතමයට පිටපත් නොකෙරේ. ඔබට මෙම අයිතමය ක්ලෝන කිරීම දිගටම කරගෙන යාමට අවශ්‍යද?</string>
     <string name="master_password_re_prompt_help">ප්‍රධාන මුරපදය නැවත විමසීමේ උපකාරය</string>
     <string name="admin_approval_requested">පරිපාලක අනුමැතිය ඉල්ලා ඇත</string>
-    <string name="your_request_has_been_sent_to_your_admin">ඔබගේ ඉල්ලීම ඔබගේ පරිපාලක වෙත යවා ඇත.</string>
-    <string name="you_will_be_notified_once_approved">අනුමත කළ පසු ඔබට දැනුම් දෙනු ලැබේ.</string>
-    <string name="trouble_logging_in">පිවිසීමේ ගැටළුවක්ද?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">ස්වයං පිරවුම් අවහිර කරන්න</string>
     <string name="no_uris_blocked">URIs කිසිවක් අවහිර කර නොමැත</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">මෙම URIs සඳහා ස්වයං පිරවුම් ඉදිරිපත් නොකෙරේ.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">ආකෘතිය: %1$s. URIs කිහිපයක් කොමාවකින් වෙන් කරන්න.</string>
     <string name="invalid_uri">අවලංගු URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s දැනටමත් අවහිර කර ඇත</string>
-    <string name="login_approved">පිවිසුම අනුමත කරන ලදී</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">උපාංගය සමඟ පිවිසීම Bitwarden යෙදුමේ සැකසීම් තුළ සැකසිය යුතුය.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">වෙනත් විකල්පයක් අවශ්‍යද? <annotation link="viewAll">සියලු පිවිසුම් විකල්ප බලන්න</annotation></string>
     <string name="log_in_with_device">උපාංගය සමඟ පිවිසෙන්න</string>
     <string name="logging_in_on">පිවිසෙමින් සිටින්නේ</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">ඉල්ලීම සහාය නොදක්වන නිසා පාස්කී මෙහෙයුම අසාර්ථක විය.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">තෝරාගත් අයිතමය නොපවතින නිසා මුරපද මෙහෙයුම අසාර්ථක විය.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">තෝරාගත් අයිතමයට වලංගු මුරපදයක් නොමැති නිසා මුරපද මෙහෙයුම අසාර්ථක විය.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">අයිතමයක් තෝරා නොගත් නිසා මුරපද මෙහෙයුම අසාර්ථක විය.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">ඉල්ලීම අවලංගු නිසා අක්තපත්‍ර මෙහෙයුම අසාර්ථක විය.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">ඉල්ලීම සහාය නොදක්වන නිසා අක්තපත්‍ර මෙහෙයුම අසාර්ථක විය.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">පරිශීලක සත්‍යාපන උත්සාහයන් ඉක්මවා ගිය නිසා අක්තපත්‍ර මෙහෙයුම අසාර්ථක විය.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">වරප්‍රසාදිත යෙදුම් ගැන වැඩිදුර ඉගෙන ගන්න</string>
     <string name="privileged_apps">වරප්‍රසාදිත යෙදුම්</string>
     <string name="unrecognized_browser">හඳුනා නොගත් බ්‍රවුසරය</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden සමඟ පාස්කීස් භාවිතා කිරීම ගැන වැඩිදුර ඉගෙන ගන්න.</string>
     <string name="all_trusted_apps">සියලු විශ්වාසනීය යෙදුම්</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s විශ්වාස කිරීම නැවැත්වීමට ඔබට අවශ්‍ය බව විශ්වාසද?</string>
     <string name="installed_apps">ස්ථාපිත යෙදුම්</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">සත්‍යාපන කේතය එකතු කරන ලදී</string>
     <string name="refresh_period">නැවුම් කිරීමේ කාල සීමාව</string>
     <string name="algorithm">ඇල්ගොරිතම</string>
-    <string name="advanced">උසස්</string>
-    <string name="collapse_advanced_options">උසස් විකල්ප හකුළන්න</string>
     <string name="number_of_digits">ඉලක්කම් ගණන</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d තත්පරය</item>
@@ -1159,7 +1143,6 @@
     <string name="select_a_card_for_x">%s සඳහා කාඩ්පතක් තෝරන්න</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">උසස් විකල්ප</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ගැළපුම් හඳුනාගැනීම ගැන තවත්</annotation></string>
     <string name="keep_your_credential_secure">ඔබගේ අක්තපත්‍ර ආරක්ෂිතව තබා ගන්න</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” භාවිතා කරන විට අක්තපත්‍ර ආරක්ෂිතව තබා ගන්නේ කෙසේද යන්න ගැන වැඩිදුර ඉගෙන ගන්න.</string>
     <string name="are_you_sure_you_want_to_use">ඔබට “%1$s” භාවිතා කිරීමට අවශ්‍ය බව විශ්වාසද?</string>
@@ -1202,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">ඔබගේ Bitwarden සුරක්ෂිතාගාරයෙන් මුරපද, පාස්කීස් සහ අනෙකුත් අයිතම වර්ග ආයාත කරන්න.</string>
     <string name="items_to_import">ආයාත කිරීමට අයිතම</string>
     <string name="exporting_items">අයිතම අපනයනය කරමින්...</string>
-    <string name="export_failed">අපනයනය අසාර්ථක විය</string>
     <string name="passwords">මුරපද</string>
     <string name="passkeys">පාස්කීස්</string>
     <string name="why_is_this_step_required">මෙම පියවර අවශ්‍ය වන්නේ ඇයි?</string>
@@ -1222,7 +1204,6 @@
     <string name="transfer_items_to_org">%1$s වෙත අයිතම මාරු කරන්න</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> ආරක්ෂාව සහ අනුකූලතාව සඳහා සියලු අයිතම සංවිධානය සතු විය යුතු බවට අවශ්‍ය කරයි. ඔබගේ අයිතමවල හිමිකාරිත්වය මාරු කිරීමට පිළිගන්න තෝරන්න. <annotation link="learnMore">වැඩිදුර ඉගෙන ගන්න</annotation></string>
     <string name="decline_and_leave">ප්‍රතික්ෂේප කර ඉවත් වන්න</string>
-    <string name="why_am_i_seeing_this">මම මෙය දකින්නේ ඇයි?</string>
     <string name="migrating_items_to_x">%s වෙත අයිතම සංක්‍රමණය කරමින්</string>
     <string name="failed_to_migrate_items_to_x">%s වෙත අයිතම සංක්‍රමණය කිරීම අසාර්ථක විය</string>
     <string name="search_archive">සංරක්ෂිතය සොයන්න</string>
@@ -1240,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">අයිතම සංරක්ෂිතයට යැවීම වාරික විශේෂාංගයකි. ඔබගේ වත්මන් සැලැස්මට මෙම විශේෂාංගය සඳහා ප්‍රවේශය ඇතුළත් නොවේ.</string>
     <string name="totp_is_a_premium_feature">සත්‍යාපක යතුර (TOTP) වාරික විශේෂාංගයකි. ඔබගේ වත්මන් සැලැස්මට මෙම විශේෂාංගය සඳහා ප්‍රවේශය ඇතුළත් නොවේ.</string>
     <string name="upgrade_to_premium">වාරිකයට උත්ශ්‍රේණි කරන්න</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">සැලැස්ම</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">ඔබගේ වාරික දායකත්වය කළමනාකරණය කිරීමට, ඔබට පරිගණකයක ඔබගේ වෙබ් සුරක්ෂිතාගාරයට පිවිසීමට අවශ්‍ය වනු ඇත.</string>
     <string name="unlock_advanced_security_features">උසස් ආරක්ෂක විශේෂාංග අගුළු අරින්න</string>
@@ -1321,7 +1303,6 @@
     <string name="archive_item">අයිතමය සංරක්ෂිතයට යවන්න</string>
     <string name="once_archived_this_item_will_be_excluded">සංරක්ෂිත කළ පසු, මෙම අයිතමය සෙවුම් ප්‍රතිඵලවලින් සහ ස්වයං පිරවුම් යෝජනාවලින් බැහැර කරනු ලැබේ.</string>
     <string name="pricing_unavailable">මිල ගණන් ලබා ගත නොහැක</string>
-    <string name="current_plan">වත්මන් සැලැස්ම</string>
     <string name="premium_plan_name">වාරික</string>
     <string name="billing_amount">බිල්පත් මුදල</string>
     <string name="storage_cost">ගබඩා පිරිවැය</string>
@@ -1397,8 +1378,6 @@
     <string name="issuing_country">නිකුත් කරන රට</string>
     <string name="issuing_state">නිකුත් කරන ප්‍රාන්තය / පළාත</string>
     <string name="license_class">බලපත්‍ර පන්තිය</string>
-    <string name="surname">වාසගම</string>
-    <string name="given_name">ලබා දුන් නම</string>
     <string name="date_of_birth">උපන් දිනය</string>
     <string name="nationality">ජාතිකත්වය</string>
     <string name="passport_type">ගමන් බලපත්‍ර වර්ගය</string>

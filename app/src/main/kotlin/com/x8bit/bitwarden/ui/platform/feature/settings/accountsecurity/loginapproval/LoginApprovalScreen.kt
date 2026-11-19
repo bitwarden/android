@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -51,7 +50,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 @Suppress("LongMethod")
 @Composable
 fun LoginApprovalScreen(
-    viewModel: LoginApprovalViewModel = hiltViewModel(),
+    viewModel: LoginApprovalViewModel,
     exitManager: ExitManager = LocalExitManager.current,
     onNavigateBack: () -> Unit,
 ) {

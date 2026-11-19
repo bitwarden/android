@@ -20,12 +20,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setHorizonOSAppLayout
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
@@ -35,12 +36,11 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavRoute
+import com.x8bit.bitwarden.ui.platform.feature.main.MainGraph
 import com.x8bit.bitwarden.ui.platform.feature.overlaynav.overlayNavDestination
 import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
@@ -122,14 +122,16 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
-            val navController = rememberBitwardenNavController(name = "MainActivity")
-            SetupEventsEffect(navController = navController)
+            val navigationController = rememberNavigationController<MainGraph>(
+                routes = arrayOf(MainGraph.OverlayNavRoute),
+            )
+            SetupEventsEffect(navigationController = navigationController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             MainActivityContent(
                 state = state,
                 authTabLaunchers = authTabLaunchers,
-                navController = navController,
+                navigationController = navigationController,
                 sendAction = mainViewModel::trySendAction,
                 onSplashScreenRemoved = { shouldShowSplashScreen = false },
             )
@@ -203,7 +205,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun SetupEventsEffect(navController: NavController) {
+    private fun SetupEventsEffect(navigationController: NavigationController<MainGraph>) {
         EventsEffect(viewModel = mainViewModel) { event ->
             when (event) {
                 is MainEvent.CompleteAccessibilityAutofill -> {
@@ -212,7 +214,7 @@ class MainActivity : AppCompatActivity() {
 
                 is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                 MainEvent.Recreate -> handleRecreate()
-                MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                MainEvent.NavigateToDebugMenu -> navigationController.navigateToDebugMenuScreen()
                 is MainEvent.UpdateAppLocale -> {
                     AppCompatDelegate.setApplicationLocales(
                         LocaleListCompat.forLanguageTags(event.localeName),
@@ -262,7 +264,7 @@ class MainActivity : AppCompatActivity() {
 private fun MainActivityContent(
     state: MainState,
     authTabLaunchers: AuthTabLaunchers,
-    navController: NavHostController,
+    navigationController: NavigationController<MainGraph>,
     sendAction: (MainAction) -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
@@ -275,19 +277,19 @@ private fun MainActivityContent(
             theme = state.theme,
             dynamicColor = state.isDynamicColorsEnabled,
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = OverlayNavRoute,
+            BitwardenNavDisplay(
                 modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
-            ) {
-                // The OverlayNav and Debug destinations are the only UIs that can be
-                // displayed here, everything else should be inside the OverlayNav.
-                overlayNavDestination(onSplashScreenRemoved = onSplashScreenRemoved)
-                debugMenuDestination(
-                    onNavigateBack = { navController.popBackStack() },
-                    onSplashScreenRemoved = onSplashScreenRemoved,
-                )
-            }
+                navigationController = navigationController,
+                entryProvider = entryProvider {
+                    // The OverlayNav and Debug destinations are the only UIs that can be
+                    // displayed here, everything else should be inside the OverlayNav.
+                    overlayNavDestination(onSplashScreenRemoved = onSplashScreenRemoved)
+                    debugMenuDestination(
+                        onNavigateBack = { navigationController.navigateBack() },
+                        onSplashScreenRemoved = onSplashScreenRemoved,
+                    )
+                },
+            )
         }
     }
 }

@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.webAuthnAuthTabData
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -66,19 +67,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(
-            ::generateUriForWebAuth,
-            SavedStateHandle::toTwoFactorLoginArgs,
-        )
+        mockkStatic(::generateUriForWebAuth)
         mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            ::generateUriForWebAuth,
-            SavedStateHandle::toTwoFactorLoginArgs,
-        )
+        unmockkStatic(::generateUriForWebAuth)
         unmockkStatic(Uri::class)
     }
 
@@ -1120,6 +1115,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
         val localViewModel =
             TwoFactorLoginViewModel(
+                route = DEFAULT_ROUTE,
                 authRepository = localAuthRepository,
                 environmentRepository = environmentRepository,
                 resourceManager = resourceManager,
@@ -1199,17 +1195,12 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         state: TwoFactorLoginState? = null,
     ): TwoFactorLoginViewModel =
         TwoFactorLoginViewModel(
+            route = DEFAULT_ROUTE,
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             resourceManager = resourceManager,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toTwoFactorLoginArgs() } returns TwoFactorLoginArgs(
-                    emailAddress = DEFAULT_EMAIL_ADDRESS,
-                    password = DEFAULT_PASSWORD,
-                    orgIdentifier = DEFAULT_ENCODED_ORG_IDENTIFIER,
-                    isNewDeviceVerification = false,
-                )
             },
         )
 }
@@ -1230,6 +1221,12 @@ private const val DEFAULT_EMAIL_ADDRESS = "example@email.com"
 private const val DEFAULT_ORG_IDENTIFIER = "org_identifier"
 private const val DEFAULT_ENCODED_ORG_IDENTIFIER = "org_identifier"
 private const val DEFAULT_PASSWORD = "password123"
+private val DEFAULT_ROUTE = AuthGraph.TwoFactorLoginRoute(
+    emailAddress = DEFAULT_EMAIL_ADDRESS,
+    password = DEFAULT_PASSWORD,
+    orgIdentifier = DEFAULT_ENCODED_ORG_IDENTIFIER,
+    isNewDeviceVerification = false,
+)
 private val DEFAULT_STATE = TwoFactorLoginState(
     authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
     availableAuthMethods = listOf(

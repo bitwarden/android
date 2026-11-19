@@ -5,8 +5,16 @@ import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import java.time.Clock
+
+/**
+ * Provides access to the biometrics manager throughout the app.
+ */
+val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
+    error("CompositionLocal BiometricsManager not present")
+}
 
 /**
  * Provides access to the exit manager throughout the app.

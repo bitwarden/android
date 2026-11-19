@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.manager.di
 import android.content.Context
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.DevicesService
@@ -85,6 +86,7 @@ object AuthManagerModule {
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
         pushManager: PushManager,
+        appStateManager: AppStateManager,
     ): AuthRequestManager =
         AuthRequestManagerImpl(
             clock = clock,
@@ -94,6 +96,7 @@ object AuthManagerModule {
             vaultSdkSource = vaultSdkSource,
             authDiskSource = authDiskSource,
             pushManager = pushManager,
+            appStateManager = appStateManager,
         )
 
     @Provides
@@ -180,12 +183,10 @@ object AuthManagerModule {
         authDiskSource: AuthDiskSource,
         vaultSdkSource: VaultSdkSource,
         accountsService: AccountsService,
-        featureFlagManager: FeatureFlagManager,
     ): KdfManager = KdfManagerImpl(
         authDiskSource = authDiskSource,
         vaultSdkSource = vaultSdkSource,
         accountsService = accountsService,
-        featureFlagManager = featureFlagManager,
     )
 
     @Provides

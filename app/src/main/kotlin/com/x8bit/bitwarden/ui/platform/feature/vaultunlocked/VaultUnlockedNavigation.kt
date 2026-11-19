@@ -2,51 +2,40 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navOptions
-import androidx.navigation.navigation
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.popUpTo
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutofillScreen
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanMode
-import com.x8bit.bitwarden.ui.platform.feature.premium.plan.PlanRoute
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlanModal
 import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planModalDestination
 import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.navigateToUpgradedToPremium
 import com.x8bit.bitwarden.ui.platform.feature.premium.upgraded.upgradedToPremiumDestination
-import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavGraph
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation.deleteAccountConfirmationDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation.navigateToDeleteAccountConfirmation
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.loginApprovalDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.manageDevicesDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.managedevices.navigateToManageDevices
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.aboutPrivilegedAppsDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.exportVaultDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToFlightRecorder
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.navigateToRecordedLogs
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.recordedLogsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.folderAddEditDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigateToFolderAddEdit
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
-import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavbarRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
@@ -57,7 +46,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.addEditSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.navigateToViewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.viewSendDestination
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
@@ -67,8 +55,6 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.previewAttachmen
 import com.x8bit.bitwarden.ui.vault.feature.cardscanner.cardScanDestination
 import com.x8bit.bitwarden.ui.vault.feature.cardscanner.navigateToCardScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
-import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
@@ -78,266 +64,238 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMo
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the vault unlocked graph.
+ * Add the vault unlocked section to the root navigation entries. The
+ * [RootNavGraph.VaultUnlockedRoute] hosts the [VaultUnlockedGraph].
  */
-@Serializable
-data object VaultUnlockedGraphRoute
-
-/**
- * Navigate to the vault unlocked screen.
- */
-fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
-    navigate(route = VaultUnlockedGraphRoute, navOptions = navOptions)
+fun EntryProviderScope<RootNavGraph>.vaultUnlockedGraph() {
+    entry<RootNavGraph.VaultUnlockedRoute> { route ->
+        val navigationController = rememberNavigationController(
+            routes = route.backStack.toTypedArray(),
+        )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                vaultUnlockedDestinations(navigationController = navigationController)
+            },
+        )
+    }
 }
 
 /**
- * Add vault unlocked destinations to the root nav graph.
+ * Add all the destinations available while the vault is unlocked to the vault unlocked navigation
+ * entries. The [VaultUnlockedGraph.NavBarRoute] is the root of the standard vault unlocked back
+ * stack.
  */
 @Suppress("LongMethod")
-fun NavGraphBuilder.vaultUnlockedGraph(
-    navController: NavController,
+private fun EntryProviderScope<VaultUnlockedGraph>.vaultUnlockedDestinations(
+    navigationController: NavigationController<VaultUnlockedGraph>,
 ) {
-    navigation<VaultUnlockedGraphRoute>(
-        startDestination = VaultUnlockedNavbarRoute,
-    ) {
-        vaultItemListingDestinationAsRoot(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(it) },
-            onNavigateToVaultAddItemScreen = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
-            onNavigateToVaultEditItemScreen = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToAddFolderScreen = {
-                navController.navigateToFolderAddEdit(
-                    folderAddEditType = FolderAddEditType.AddItem,
-                    parentFolderName = it,
-                )
-            },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-        )
-        vaultUnlockedNavBarDestination(
-            onNavigateToExportVault = { navController.navigateToExportVault() },
-            onNavigateToFolders = { navController.navigateToFolders() },
-            onNavigateToVaultAddItem = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
-            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
-            onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
-            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
-            onNavigateToViewSend = { navController.navigateToViewSend(route = it) },
-            onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
-            onNavigateToPendingRequests = { navController.navigateToPendingRequests() },
-            onNavigateToManageDevices = { navController.navigateToManageDevices() },
-            onNavigateToPasswordHistory = {
-                navController.navigateToPasswordHistory(
-                    passwordHistoryMode = GeneratorPasswordHistoryMode.Default,
-                )
-            },
-            onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
-            onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
-            onNavigateToSetupBrowserAutofill = {
-                navController.navigateToSetupBrowserAutofillScreen()
-            },
-            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
-            onNavigateToAddFolderScreen = {
-                navController.navigateToFolderAddEdit(
-                    folderAddEditType = FolderAddEditType.AddItem,
-                    parentFolderName = it,
-                )
-            },
-            onNavigateToFlightRecorder = {
-                navController.navigateToFlightRecorder(isPreAuth = false)
-            },
-            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
-            onNavigateToAboutPrivilegedApps = {
-                navController.navigateToAboutPrivilegedAppsScreen()
-            },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-            onNavigateToUpgradedToPremium = {
-                navController.navigateToUpgradedToPremium(planMode = PlanMode.Standard)
-            },
-        )
-        flightRecorderDestination(
-            isPreAuth = false,
-            onNavigateBack = { navController.popBackStack() },
-        )
-        recordedLogsDestination(
-            isPreAuth = false,
-            onNavigateBack = { navController.popBackStack() },
-        )
-        aboutPrivilegedAppsDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        deleteAccountDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDeleteAccountConfirmation = {
-                navController.navigateToDeleteAccountConfirmation()
-            },
-        )
-        deleteAccountConfirmationDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        loginApprovalDestination(onNavigateBack = { navController.popBackStack() })
-        pendingRequestsDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToLoginApproval = { navController.navigateToLoginApproval(it) },
-        )
-        manageDevicesDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToLoginApproval = { navController.navigateToLoginApproval(it) },
-        )
-        vaultAddEditDestination(
-            onNavigateToQrCodeScanScreen = {
-                navController.navigateToQrCodeScanScreen()
-            },
-            onNavigateToCardScanScreen = {
-                navController.navigateToCardScanScreen()
-            },
-            onNavigateToManualCodeEntryScreen = {
-                navController.navigateToManualCodeEntryScreen()
-            },
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
-            onNavigateToAttachments = { navController.navigateToAttachment(it) },
-            onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
-                navController.navigateToVaultMoveToOrganization(
-                    vaultItemId = vaultItemId,
-                    showOnlyCollections = showOnlyCollections,
-                )
-            },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-            onCloseAndNavigateToVaultItem = { cipherId, cipherType ->
-                navController.navigateToVaultItem(
-                    args = VaultItemArgs(
-                        vaultItemId = cipherId,
-                        cipherType = cipherType,
-                        showCreatedSnackbar = true,
-                    ),
-                    navOptions = navOptions { popUpTo<VaultAddEditRoute> { inclusive = true } },
-                )
-            },
-        )
-        vaultMoveToOrganizationDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        vaultItemDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
-                navController.navigateToVaultMoveToOrganization(
-                    vaultItemId = vaultItemId,
-                    showOnlyCollections = showOnlyCollections,
-                )
-            },
-            onNavigateToAttachments = { navController.navigateToAttachment(it) },
-            onNavigateToPasswordHistory = {
-                navController.navigateToPasswordHistory(
-                    passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
-                )
-            },
-            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-        )
-        cardScanDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        vaultQrCodeScanDestination(
-            onNavigateToManualCodeEntryScreen = {
-                navController.popBackStack()
-                navController.navigateToManualCodeEntryScreen()
-            },
-            onNavigateBack = { navController.popBackStack() },
-        )
-        vaultManualCodeEntryDestination(
-            onNavigateToQrCodeScreen = {
-                navController.popBackStack()
-                navController.navigateToQrCodeScanScreen()
-            },
-            onNavigateBack = { navController.popBackStack() },
-        )
+    vaultItemListingDestinationAsRoot(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToVaultItemScreen = { navigationController.navigateToVaultItem(route = it) },
+        onNavigateToVaultAddItemScreen = {
+            navigationController.navigateToVaultAddEdit(route = it)
+        },
+        onNavigateToSearchVault = { navigationController.navigateToSearch(searchType = it) },
+        onNavigateToVaultEditItemScreen = {
+            navigationController.navigateToVaultAddEdit(route = it)
+        },
+        onNavigateToAddFolderScreen = {
+            navigationController.navigateToFolderAddEdit(
+                folderAddEditType = FolderAddEditType.AddItem,
+                parentFolderName = it,
+            )
+        },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+    )
+    vaultUnlockedNavBarDestination(navigationController = navigationController)
+    flightRecorderDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    recordedLogsDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    aboutPrivilegedAppsDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    deleteAccountDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToDeleteAccountConfirmation = {
+            navigationController.navigateToDeleteAccountConfirmation()
+        },
+    )
+    deleteAccountConfirmationDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    loginApprovalDestination(onNavigateBack = { navigationController.navigateBack() })
+    pendingRequestsDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToLoginApproval = {
+            navigationController.navigateToLoginApproval(fingerprint = it)
+        },
+    )
+    manageDevicesDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToLoginApproval = {
+            navigationController.navigateToLoginApproval(fingerprint = it)
+        },
+    )
+    vaultAddEditDestination(
+        onNavigateToQrCodeScanScreen = { navigationController.navigateToQrCodeScanScreen() },
+        onNavigateToCardScanScreen = { navigationController.navigateToCardScanScreen() },
+        onNavigateToManualCodeEntryScreen = {
+            navigationController.navigateToManualCodeEntryScreen()
+        },
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToGeneratorModal = { navigationController.navigateToGeneratorModal(mode = it) },
+        onNavigateToAttachments = { navigationController.navigateToAttachment(cipherId = it) },
+        onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
+            navigationController.navigateToVaultMoveToOrganization(
+                vaultItemId = vaultItemId,
+                showOnlyCollections = showOnlyCollections,
+            )
+        },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+        onCloseAndNavigateToVaultItem = { cipherId, cipherType ->
+            navigationController.navigatePoppingUpTo(
+                route = VaultUnlockedGraph.VaultItemRoute(
+                    vaultItemId = cipherId,
+                    cipherType = cipherType,
+                    showCreatedSnackbar = true,
+                ),
+                inclusive = true,
+                predicate = { it is VaultUnlockedGraph.VaultAddEditRoute },
+            )
+        },
+    )
+    vaultMoveToOrganizationDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    vaultItemDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToVaultEditItem = { navigationController.navigateToVaultAddEdit(route = it) },
+        onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
+            navigationController.navigateToVaultMoveToOrganization(
+                vaultItemId = vaultItemId,
+                showOnlyCollections = showOnlyCollections,
+            )
+        },
+        onNavigateToAttachments = { navigationController.navigateToAttachment(cipherId = it) },
+        onNavigateToPasswordHistory = {
+            navigationController.navigateToPasswordHistory(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
+            )
+        },
+        onNavigateToPreviewAttachment = {
+            navigationController.navigateToPreviewAttachment(route = it)
+        },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+    )
+    cardScanDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    vaultQrCodeScanDestination(
+        onNavigateToManualCodeEntryScreen = {
+            navigationController.replaceLast(route = VaultUnlockedGraph.ManualCodeEntryRoute)
+        },
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    vaultManualCodeEntryDestination(
+        onNavigateToQrCodeScreen = {
+            navigationController.replaceLast(route = VaultUnlockedGraph.QrCodeScanRoute)
+        },
+        onNavigateBack = { navigationController.navigateBack() },
+    )
 
-        addEditSendDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
-            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-        )
-        viewSendDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
-        )
-        passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
-        exportVaultDestination(onNavigateBack = { navController.popBackStack() })
-        foldersDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddFolderScreen = {
-                navController.navigateToFolderAddEdit(FolderAddEditType.AddItem)
-            },
-            onNavigateToEditFolderScreen = {
-                navController.navigateToFolderAddEdit(
-                    FolderAddEditType.EditItem(it),
-                )
-            },
-        )
+    addEditSendDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateUpToSearchOrRoot = {
+            navigationController.navigateUpToSearchOrVaultUnlockedRoot()
+        },
+        onNavigateToGeneratorModal = { navigationController.navigateToGeneratorModal(mode = it) },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+    )
+    viewSendDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToAddEditSend = { navigationController.navigateToAddEditSend(route = it) },
+    )
+    passwordHistoryDestination(onNavigateBack = { navigationController.navigateBack() })
+    exportVaultDestination(onNavigateBack = { navigationController.navigateBack() })
+    foldersDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToAddFolderScreen = {
+            navigationController.navigateToFolderAddEdit(
+                folderAddEditType = FolderAddEditType.AddItem,
+            )
+        },
+        onNavigateToEditFolderScreen = {
+            navigationController.navigateToFolderAddEdit(
+                folderAddEditType = FolderAddEditType.EditItem(folderId = it),
+            )
+        },
+    )
 
-        folderAddEditDestination(onNavigateBack = { navController.popBackStack() })
-        generatorModalDestination(onNavigateBack = { navController.popBackStack() })
-        searchDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
-            onNavigateToViewSend = { navController.navigateToViewSend(it) },
-            onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
-            onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-        )
-        attachmentDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToPreviewAttachment = { navController.navigateToPreviewAttachment(it) },
-            onNavigateToPlan = { navController.navigateToPlanModal() },
-        )
-        setupUnlockDestination(
-            onNavigateBack = {
-                navController.popBackStack()
-            },
-        )
-        setupAutoFillDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToBrowserAutofill = { navController.navigateToSetupBrowserAutofillScreen() },
-        )
-        setupBrowserAutofillDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        importLoginsScreenDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        previewAttachmentDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        planModalDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToUpgradedToPremium = {
-                navController.navigateToUpgradedToPremium(planMode = PlanMode.Modal)
-            },
-        )
-        upgradedToPremiumDestination(
-            onDismiss = { planMode ->
-                when (planMode) {
-                    PlanMode.Modal -> navController.popBackStack<PlanRoute.Modal>(inclusive = true)
-                    PlanMode.Standard -> navController.popBackStack()
+    folderAddEditDestination(onNavigateBack = { navigationController.navigateBack() })
+    generatorModalDestination(onNavigateBack = { navigationController.navigateBack() })
+    searchDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToAddEditSend = { navigationController.navigateToAddEditSend(route = it) },
+        onNavigateToViewSend = { navigationController.navigateToViewSend(route = it) },
+        onNavigateToEditCipher = { navigationController.navigateToVaultAddEdit(route = it) },
+        onNavigateToViewCipher = { navigationController.navigateToVaultItem(route = it) },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+    )
+    attachmentDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToPreviewAttachment = {
+            navigationController.navigateToPreviewAttachment(route = it)
+        },
+        onNavigateToPlan = { navigationController.navigateToPlanModal() },
+    )
+    setupUnlockDestination(
+        onNavigateBack = {
+            navigationController.navigateBack()
+        },
+    )
+    setupAutoFillDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToBrowserAutofill = {
+            navigationController.navigateToSetupBrowserAutofillScreen()
+        },
+    )
+    setupBrowserAutofillDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    importLoginsScreenDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    previewAttachmentDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    planModalDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToUpgradedToPremium = {
+            navigationController.navigateToUpgradedToPremium(planMode = PlanMode.Modal)
+        },
+    )
+    upgradedToPremiumDestination(
+        onDismiss = { planMode ->
+            when (planMode) {
+                PlanMode.Standard -> navigationController.navigateBack()
+                PlanMode.Modal -> {
+                    navigationController.popUpTo<VaultUnlockedGraph.PlanModalRoute>(
+                        inclusive = true,
+                    )
                 }
-            },
-        )
-    }
+            }
+        },
+    )
 }
 
-private fun NavController.navigateUpToSearchOrVaultUnlockedRoot() {
-    if (!this.popBackStack<SearchRoute>(inclusive = false)) {
-        this.navigateUpToVaultUnlockedRoot()
+private fun NavigationController<VaultUnlockedGraph>.navigateUpToSearchOrVaultUnlockedRoot() {
+    if (!this.popUpTo<VaultUnlockedGraph.SearchRoute>()) {
+        this.popUpTo<VaultUnlockedGraph.NavBarRoute>()
     }
-}
-
-private fun NavController.navigateUpToVaultUnlockedRoot() {
-    this.popBackStack<VaultUnlockedNavbarRoute>(inclusive = false)
 }

@@ -1,25 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the pending requests screen.
+ * Add the pending requests screen to the navigation entries.
  */
-@Serializable
-data object PendingRequestsRoute
-
-/**
- * Add pending requests destinations to the nav graph.
- */
-fun NavGraphBuilder.pendingRequestsDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.pendingRequestsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
 ) {
-    composableWithSlideTransitions<PendingRequestsRoute> {
+    slideUpEntry<VaultUnlockedGraph.PendingRequestsRoute> {
         PendingRequestsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToLoginApproval = onNavigateToLoginApproval,
@@ -30,6 +23,6 @@ fun NavGraphBuilder.pendingRequestsDestination(
 /**
  * Navigate to the Pending Login Requests screen.
  */
-fun NavController.navigateToPendingRequests(navOptions: NavOptions? = null) {
-    this.navigate(route = PendingRequestsRoute, navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToPendingRequests() {
+    this.navigate(route = VaultUnlockedGraph.PendingRequestsRoute)
 }

@@ -4,7 +4,6 @@
     <string name="add_folder">เพิ่มโฟลเดอร์</string>
     <string name="add_item">เพิ่มรายการ</string>
     <string name="an_error_has_occurred">เกิดข้อผิดพลาด</string>
-    <string name="apply">นำไปใช้</string>
     <string name="back">ย้อนกลับ</string>
     <string name="cancel">ยกเลิก</string>
     <string name="copy">คัดลอก</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ลบโฟลเดอร์แล้ว.</string>
     <string name="folder_none">ไม่มีโฟลเดอร์</string>
     <string name="folder_updated">ปรับปรุงโฟลเดอร์แล้ว</string>
-    <string name="folders">โฟลเดอร์</string>
     <string name="hide">ซ่อน</string>
     <string name="internet_connection_required_message">โปรดเชื่อมต่ออินเทอร์เน็ตก่อนดำเนินการต่อ</string>
     <string name="internet_connection_required_title">ต้องการการเชื่อมต่ออินเทอร์เน็ต</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">คัดลอก TOTP</string>
     <string name="copy_totp_automatically_description">หากข้อมูลเข้าสู่ระบบมีคีย์แอปยืนยันตัวตน ให้คัดลอกรหัสยืนยัน TOTP ไปยังคลิปบอร์ดเมื่อป้อนอัตโนมัติ</string>
     <string name="copy_totp_automatically">คัดลอก TOTP อัตโนมัติ</string>
-    <string name="premium_required">จำเป็นต้องมีสมาชิกระดับพรีเมียมเพื่อใช้คุณลักษณะนี้</string>
     <string name="attachment_deleted">ลบสิ่งที่แนบมา</string>
     <string name="attachments_are_a_premium_feature">ไฟล์แนบเป็นคุณสมบัติพรีเมียม แผนการสมัครสมาชิกปัจจุบันของคุณไม่สามารถใช้งานได้</string>
     <string name="choose_file">เลือกไฟล์</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">URL ของเซิร์ฟเวอร์ไอคอน</string>
     <string name="vault_is_locked">ห้องนิรภัยถูกล็อก</string>
     <string name="go_to_my_vault">ไปที่ห้องนิรภัยของฉัน</string>
-    <string name="collections">คอลเลกชัน</string>
     <string name="shared_folders">โฟลเดอร์ที่แชร์</string>
-    <string name="no_items_collection">ไม่มีรายการในคอลเลกชันนี้</string>
     <string name="there_are_no_items_in_this_shared_folder">ไม่มีรายการในโฟลเดอร์ที่แชร์นี้</string>
     <string name="no_items_folder">ไม่มีรายการในโฟลเดอร์นี้</string>
     <string name="no_items_trash">ไม่มีรายการในถังขยะ</string>
@@ -345,16 +340,11 @@
     <string name="type">ชนิด</string>
     <string name="move_down">เลื่อนลง</string>
     <string name="move_up">เลื่อนขึ้น</string>
-    <string name="owner">เจ้าของ</string>
-    <string name="no_collections_to_list">ไม่มีคอลเลกชันที่จะแสดง</string>
     <string name="there_are_no_shared_folders_to_list">ไม่มีโฟลเดอร์ที่แชร์ที่จะแสดง</string>
     <string name="moved_item_to_org">%1$s ย้ายไปที่ %2$s.</string>
     <string name="select_one_collection">คุณต้องเลือกอย่างน้อยหนึ่งคอลเลกชัน</string>
     <string name="you_must_select_at_least_one_shared_folder">คุณต้องเลือกโฟลเดอร์ที่แชร์อย่างน้อยหนึ่งโฟลเดอร์</string>
     <string name="share">แบ่งปัน</string>
-    <string name="move_to_organization">ย้ายไปองค์กร</string>
-    <string name="no_orgs_to_list">ไม่มีองค์กรที่จะแสดง</string>
-    <string name="move_to_org_desc">เลือกองค์กรที่คุณต้องการย้ายรายการนี้ไป การย้ายไปองค์กรจะเป็นการโอนสิทธิ์ความเป็นเจ้าของรายการไปยังองค์กรนั้น คุณจะไม่ใช่เจ้าของโดยตรงของรายการนี้อีกต่อไปหลังจากย้ายแล้ว</string>
     <string name="no_vaults_to_list">ไม่มีคลังข้อมูลที่จะแสดง</string>
     <string name="move_to_vault_desc">เลือกคลังข้อมูลที่คุณต้องการย้ายรายการนี้ไป การย้ายไปยังคลังข้อมูลอื่นจะโอนความเป็นเจ้าของรายการไปยังองค์กรนั้น คุณจะไม่ใช่เจ้าของโดยตรงของรายการนี้อีกต่อไปเมื่อถูกย้ายแล้ว</string>
     <string name="number_of_words">จำนวนคำ</string>
@@ -469,7 +459,6 @@
     <string name="hide_text_by_default">เมื่อเข้าถึง Send ให้ซ่อนข้อความตามค่าเริ่มต้น</string>
     <string name="type_file">ไฟล์</string>
     <string name="deletion_date">วันที่ลบ</string>
-    <string name="deletion_time">เวลาลบ</string>
     <string name="deletion_date_info">Send นี้จะถูกลบถาวรในวันที่และเวลาที่ระบุ</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">ใครสามารดูได้</string>
@@ -599,20 +588,21 @@
     <string name="generic_error_message">เราไม่สามารถดำเนินการตามคำขอของคุณได้ โปรดลองอีกครั้งหรือติดต่อเรา</string>
     <string name="allow_screen_capture">อนุญาตการจับภาพหน้าจอ</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">ยืนยันที่จะเปิดใช้งานการจับภาพหน้าจอหรือไม่</string>
-    <string name="log_in_requested">มีการขอเข้าสู่ระบบ</string>
-    <string name="are_you_trying_to_log_in">คุณกำลังพยายามเข้าสู่ระบบใช่หรือไม่</string>
-    <string name="log_in_attempt_by_x_on_y">ความพยายามเข้าสู่ระบบโดย %1$s เมื่อ %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">ประเภทอุปกรณ์</string>
     <string name="ip_address">ที่อยู่ IP</string>
     <string name="time">เวลา</string>
     <string name="select_time">เลือกเวลา</string>
     <string name="switch_input_mode">สลับโหมดการป้อนข้อมูล</string>
-    <string name="confirm_log_in">ยืนยันการเข้าสู่ระบบ</string>
-    <string name="deny_log_in">ปฏิเสธการเข้าสู่ระบบ</string>
-    <string name="log_in_denied">ปฏิเสธการเข้าสู่ระบบแล้ว</string>
-    <string name="approve_login_requests">อนุมัติคำขอเข้าสู่ระบบ</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">ไม่ ขอบคุณ</string>
-    <string name="confim_log_in_attemp_for_x">ยืนยันความพยายามเข้าสู่ระบบสำหรับ %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">ประเภทชื่อผู้ใช้</string>
     <string name="plus_addressed_email">อีเมลแบบ Plus Addressing</string>
     <string name="catch_all_email">อีเมลแบบ Catch-all</string>
@@ -639,27 +629,27 @@
     <string name="i_understand">ฉันเข้าใจ</string>
     <string name="accept">ยอมรับ</string>
     <string name="decline">ปฏิเสธ</string>
-    <string name="login_request_has_already_expired">คำขอเข้าสู่ระบบหมดอายุแล้ว</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">พยายามเข้าสู่ระบบจาก:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-คุณต้องการสลับไปใช้บัญชีนี้หรือไม่</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">เพิ่งเคยใช้ Bitwarden ใช่ไหม</string>
     <string name="get_master_passwordword_hint">รับคำใบ้รหัสผ่านหลัก</string>
     <string name="logging_in_as_x_on_y">กำลังเข้าสู่ระบบในชื่อ %1$s เมื่อ %2$s</string>
     <string name="not_you">ไม่ใช่คุณหรือ</string>
     <string name="log_in_with_master_password">เข้าสู่ระบบด้วยรหัสผ่านหลัก</string>
     <string name="log_in_initiated">เริ่มการเข้าสู่ระบบแล้ว</string>
-    <string name="a_notification_has_been_sent_to_your_device">ส่งการแจ้งเตือนไปยังอุปกรณ์ของคุณแล้ว</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">โปรดตรวจสอบให้แน่ใจว่าตู้นิรภัยของคุณปลดล็อกแล้วและวลีลายนิ้วมือตรงกันบนอุปกรณ์อื่น</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">ส่งการแจ้งเตือนอีกครั้ง</string>
     <string name="view_all_login_options">ดูตัวเลือกการเข้าสู่ระบบทั้งหมด</string>
-    <string name="pending_log_in_requests">คำขอเข้าสู่ระบบที่รอดำเนินการ</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">ปฏิเสธคำขอทั้งหมด</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">ยืนยันที่จะปฏิเสธคำขอเข้าสู่ระบบที่รอดำเนินการทั้งหมดหรือไม่</string>
     <string name="no_pending_requests">ไม่มีคำขอที่รอดำเนินการ</string>
     <string name="enable_camer_permission_to_use_the_scanner">เปิดใช้งานสิทธิ์กล้องเพื่อใช้สแกนเนอร์</string>
     <string name="language">ภาษา</string>
-    <string name="language_change_x_description">เปลี่ยนภาษาเป็น %1$s แล้ว โปรดเริ่มแอปใหม่เพื่อให้การเปลี่ยนแปลงมีผล</string>
     <string name="default_system">ค่าเริ่มต้น (ระบบ)</string>
     <string name="weak_master_password">รหัสผ่านหลักไม่ปลอดภัย</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">ตรวจพบรหัสผ่านที่ไม่ปลอดภัย ใช้รหัสผ่านที่รัดกุมเพื่อปกป้องบัญชีของคุณ ยืนยันที่จะใช้รหัสผ่านที่ไม่ปลอดภัยหรือไม่</string>
@@ -686,9 +676,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">พาสคีย์จะไม่ถูกคัดลอกไปยังรายการที่โคลน ต้องการดำเนินการโคลนรายการนี้ต่อหรือไม่</string>
     <string name="master_password_re_prompt_help">ความช่วยเหลือเกี่ยวกับการถามรหัสผ่านหลักซ้ำ</string>
     <string name="admin_approval_requested">ส่งคำขออนุมัติจากผู้ดูแลระบบแล้ว</string>
-    <string name="your_request_has_been_sent_to_your_admin">คำขอของคุณถูกส่งไปยังผู้ดูแลระบบแล้ว</string>
-    <string name="you_will_be_notified_once_approved">คุณจะได้รับการแจ้งเตือนเมื่อได้รับการอนุมัติ</string>
-    <string name="trouble_logging_in">พบปัญหาในการเข้าสู่ระบบหรือไม่</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">ปิดกั้นการป้อนอัตโนมัติ</string>
     <string name="no_uris_blocked">ไม่มี URI ที่ถูกบล็อก</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">จะไม่เสนอป้อนอัตโนมัติสำหรับ URI เหล่านี้</string>
@@ -699,8 +688,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">รูปแบบ: %1$s แยกหลาย URI ด้วยเครื่องหมายจุลภาค</string>
     <string name="invalid_uri">URI ไม่ถูกต้อง</string>
     <string name="the_urix_is_already_blocked">URI %1$s ถูกปิดกั้นอยู่แล้ว</string>
-    <string name="login_approved">อนุมัติการเข้าสู่ระบบแล้ว</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">ต้องตั้งค่าเข้าสู่ระบบด้วยอุปกรณ์ ในการตั้งค่าของแอป Bitwarden</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">ต้องการตัวเลือกอื่นหรือไม่ <annotation link="viewAll">ดูตัวเลือกการเข้าสู่ระบบทั้งหมด</annotation></string>
     <string name="log_in_with_device">เข้าสู่ระบบด้วยอุปกรณ์</string>
     <string name="logging_in_on">กำลังเข้าสู่ระบบบน</string>
@@ -971,7 +959,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">การดำเนินการพาสคีย์ล้มเหลวเนื่องจากไม่รองรับคำขอ</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">การดำเนินการรหัสผ่านล้มเหลวเนื่องจากไม่มีรายการที่เลือก</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">การดำเนินการรหัสผ่านล้มเหลวเนื่องจากรายการที่เลือกไม่มีรหัสผ่านที่ถูกต้อง</string>
-    <string name="password_operation_failed_because_no_item_was_selected">การดำเนินการรหัสผ่านล้มเหลวเนื่องจากไม่ได้เลือกรายการ</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">การดำเนินการข้อมูลประจำตัวล้มเหลวเนื่องจากคำขอไม่ถูกต้อง</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">การดำเนินการข้อมูลประจำตัวล้มเหลวเนื่องจากไม่รองรับคำขอ</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">การดำเนินการข้อมูลประจำตัวล้มเหลวเนื่องจากเกินจำนวนครั้งการยืนยันตัวตน</string>
@@ -1052,7 +1039,6 @@
     <string name="learn_more_about_privileged_apps">เรียนรู้เพิ่มเติมเกี่ยวกับแอปที่มีสิทธิ์พิเศษ</string>
     <string name="privileged_apps">แอปที่มีสิทธิ์พิเศษ</string>
     <string name="unrecognized_browser">เบราว์เซอร์ที่ไม่รู้จัก</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">เรียนรู้เพิ่มเติมเกี่ยวกับการใช้พาสคีย์กับ Bitwarden</string>
     <string name="all_trusted_apps">แอปที่เชื่อถือทั้งหมด</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">ยืนยันที่จะเลิกเชื่อถือ %s หรือไม่</string>
     <string name="installed_apps">แอปที่ติดตั้งแล้ว</string>
@@ -1069,8 +1055,6 @@
     <string name="verification_code_added">เพิ่มรหัสยืนยันแล้ว</string>
     <string name="refresh_period">ระยะเวลารีเฟรช</string>
     <string name="algorithm">อัลกอริทึม</string>
-    <string name="advanced">ขั้นสูง</string>
-    <string name="collapse_advanced_options">ย่อตัวเลือกขั้นสูง</string>
     <string name="number_of_digits">จำนวนหลัก</string>
     <plurals name="refresh_period_seconds">
         <item quantity="other">%d วินาที</item>
@@ -1151,7 +1135,6 @@
     <string name="select_a_card_for_x">เลือกบัตรสำหรับ %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">ตัวเลือกขั้นสูง</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">เพิ่มเติมเกี่ยวกับการตรวจสอบการจับคู่</annotation></string>
     <string name="keep_your_credential_secure">รักษาความปลอดภัยข้อมูลประจำตัวของคุณ</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">เรียนรู้เพิ่มเติมเกี่ยวกับวิธีรักษาความปลอดภัยข้อมูลประจำตัวเมื่อใช้ “%1$s”</string>
     <string name="are_you_sure_you_want_to_use">ยืนยันที่จะใช้ “%1$s” หรือไม่</string>
@@ -1193,7 +1176,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">นำเข้ารหัสผ่าน พาสคีย์ และรายการประเภทอื่นจากตู้นิรภัย Bitwarden ของคุณ</string>
     <string name="items_to_import">รายการที่จะนำเข้า</string>
     <string name="exporting_items">กำลังส่งออกรายการ…</string>
-    <string name="export_failed">การส่งออกล้มเหลว</string>
     <string name="passwords">รหัสผ่าน</string>
     <string name="passkeys">พาสคีย์</string>
     <string name="why_is_this_step_required">ทำไมขั้นตอนนี้ถึงจำเป็น</string>
@@ -1213,7 +1195,6 @@
     <string name="transfer_items_to_org">โอนรายการไปยัง %1$s</string>
     <string name="transfer_items_description">%1$s กำหนดให้รายการทั้งหมดต้องเป็นขององค์กรเพื่อความปลอดภัยและการปฏิบัติตามข้อกำหนด คลิกยอมรับเพื่อโอนความเป็นเจ้าของรายการของคุณ</string>
     <string name="decline_and_leave">ปฏิเสธและออกจากองค์กร</string>
-    <string name="why_am_i_seeing_this">ทำไมฉันถึงเห็นสิ่งนี้</string>
     <string name="migrating_items_to_x">กำลังย้ายรายการไปยัง %s</string>
     <string name="failed_to_migrate_items_to_x">ย้ายรายการไปยัง %s ไม่สำเร็จ</string>
     <string name="search_archive">ค้นหารายการเก็บถาวร</string>
@@ -1231,6 +1212,7 @@
     <string name="archiving_items_is_a_premium_feature">การเก็บถาวรรายการเป็นฟีเจอร์พรีเมียม แผนปัจจุบันของคุณไม่สามารถใช้งานฟีเจอร์นี้ได้</string>
     <string name="totp_is_a_premium_feature">คีย์ตัวตรวจสอบสิทธิ์ (TOTP) เป็นคุณสมบัติพรีเมียม แผนปัจจุบันของคุณไม่รวมการเข้าถึงคุณสมบัตินี้</string>
     <string name="upgrade_to_premium">อัปเกรดเป็นพรีเมียม</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">แผน</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">ในการจัดการการสมัครสมาชิกพรีเมียมของคุณ คุณจะต้องลงชื่อเข้าใช้คลังข้อมูลเว็บของคุณบนคอมพิวเตอร์</string>
     <string name="unlock_advanced_security_features">ปลดล็อกคุณสมบัติความปลอดภัยขั้นสูง</string>
@@ -1312,7 +1294,6 @@
     <string name="archive_item">เก็บถาวรรายการ</string>
     <string name="once_archived_this_item_will_be_excluded">เมื่อเก็บถาวรแล้ว รายการนี้จะถูกแยกออกจากผลการค้นหาและคำแนะนำการเติมข้อมูลอัตโนมัติ</string>
     <string name="pricing_unavailable">ไม่มีข้อมูลราคา</string>
-    <string name="current_plan">แผนปัจจุบัน</string>
     <string name="premium_plan_name">พรีเมียม</string>
     <string name="billing_amount">จำนวนเงินเรียกเก็บ</string>
     <string name="storage_cost">ค่าใช้จ่ายในการจัดเก็บ</string>
@@ -1387,8 +1368,6 @@
     <string name="issuing_country">ประเทศผู้ออก</string>
     <string name="issuing_state">รัฐ/จังหวัดที่ออก</string>
     <string name="license_class">ชั้นใบอนุญาต</string>
-    <string name="surname">นามสกุล</string>
-    <string name="given_name">ชื่อจริง</string>
     <string name="date_of_birth">วันเกิด</string>
     <string name="nationality">สัญชาติ</string>
     <string name="passport_type">ประเภทหนังสือเดินทาง</string>

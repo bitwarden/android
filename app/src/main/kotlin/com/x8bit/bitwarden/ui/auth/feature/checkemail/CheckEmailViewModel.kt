@@ -4,26 +4,41 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * Models logic for the check email screen.
  */
-@HiltViewModel
-class CheckEmailViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = CheckEmailViewModel.Factory::class)
+class CheckEmailViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.CheckEmailRoute,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<CheckEmailState, CheckEmailEvent, CheckEmailAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: CheckEmailState(
-            email = savedStateHandle.toCheckEmailArgs().emailAddress,
+            email = route.emailAddress,
         ),
 ) {
+    /**
+     * Factory for creating a [CheckEmailViewModel] for a specific [AuthGraph.CheckEmailRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [CheckEmailViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.CheckEmailRoute): CheckEmailViewModel
+    }
+
     init {
         // As state updates, write to saved state handle:
         stateFlow

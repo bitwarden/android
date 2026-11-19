@@ -1,22 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.overlaynav
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.x8bit.bitwarden.ui.platform.feature.main.MainGraph
 
 /**
- * The type-safe route for the overlay navigation screen.
+ * Add the overlay navigation screen to the navigation entries.
  */
-@Serializable
-data object OverlayNavRoute
-
-/**
- * Add the overlay navigation screen to the nav graph.
- */
-fun NavGraphBuilder.overlayNavDestination(
+fun EntryProviderScope<MainGraph>.overlayNavDestination(
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composable<OverlayNavRoute> {
+    entry<MainGraph.OverlayNavRoute> {
         OverlayNavScreen(onSplashScreenRemoved = onSplashScreenRemoved)
     }
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -33,7 +32,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -71,6 +69,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -169,15 +168,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     private val premiumStateManager: PremiumStateManager = mockk {
         every { isInAppUpgradeAvailable() } returns false
     }
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
-    }
 
     @BeforeEach
     fun setup() {
         mockkStatic(
-            SavedStateHandle::toSearchArgs,
             List<CipherListView>::toViewState,
             List<CipherListView>::filterAndOrganize,
             List<CipherListView>::toFilteredList,
@@ -187,7 +181,6 @@ class SearchViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            SavedStateHandle::toSearchArgs,
             List<CipherListView>::toViewState,
             List<CipherListView>::filterAndOrganize,
             List<CipherListView>::toFilteredList,
@@ -354,7 +347,9 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 isPremium = false,
-                dialogState = SearchState.DialogState.ArchiveRequiresPremium,
+                dialogState = SearchState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -1759,7 +1754,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1788,76 +1782,6 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `Vfo1FoundationFlagUpdateReceive should re-derive the view state using the latest vault data`() =
-        runTest {
-            setupMockUri()
-            val ciphers = listOf(createMockCipherListView(number = 1))
-            val expectedViewStateOn = SearchState.ViewState.Content(
-                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 1)),
-            )
-            val expectedViewStateOff = SearchState.ViewState.Content(
-                displayItems = persistentListOf(createMockDisplayItemForCipher(number = 2)),
-            )
-            every {
-                ciphers.filterAndOrganize(
-                    searchTypeData = SearchTypeData.Vault.All,
-                    searchTerm = "",
-                )
-            } returns ciphers
-            every {
-                ciphers.toFilteredList(vaultFilterType = VaultFilterType.AllVaults)
-            } returns ciphers
-            every {
-                ciphers.toViewState(
-                    searchTerm = "",
-                    baseIconUrl = "https://icons.bitwarden.net",
-                    isIconLoadingDisabled = false,
-                    isAutofill = false,
-                    hasMasterPassword = true,
-                    isPremiumUser = true,
-                    isVfo1FoundationEnabled = true,
-                )
-            } returns expectedViewStateOn
-            every {
-                ciphers.toViewState(
-                    searchTerm = "",
-                    baseIconUrl = "https://icons.bitwarden.net",
-                    isIconLoadingDisabled = false,
-                    isAutofill = false,
-                    hasMasterPassword = true,
-                    isPremiumUser = true,
-                    isVfo1FoundationEnabled = false,
-                )
-            } returns expectedViewStateOff
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    decryptCipherListResult = createMockDecryptCipherListResult(
-                        number = 1,
-                        successes = ciphers,
-                    ),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-
-            val viewModel = createViewModel()
-
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-
-            mutableVfo1FoundationFlagFlow.value = false
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    isVfo1FoundationEnabled = false,
-                    viewState = expectedViewStateOff,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
 
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to Empty`() = runTest {
@@ -1941,7 +1865,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -2060,7 +1983,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -2182,7 +2104,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -2336,39 +2257,37 @@ class SearchViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: SearchState? = null,
     ): SearchViewModel = SearchViewModel(
-        SavedStateHandle().apply {
+        route = VaultUnlockedGraph.SearchRoute(
+            searchType = when (val searchType = initialState?.searchType) {
+                SearchTypeData.Sends.All -> SearchType.Sends.All
+                SearchTypeData.Sends.Files -> SearchType.Sends.Files
+                SearchTypeData.Sends.Texts -> SearchType.Sends.Texts
+                SearchTypeData.Vault.All -> SearchType.Vault.All
+                SearchTypeData.Vault.Archive -> SearchType.Vault.Archive
+                SearchTypeData.Vault.Cards -> SearchType.Vault.Cards
+                is SearchTypeData.Vault.Collection -> SearchType.Vault.Collection(
+                    collectionId = searchType.collectionId,
+                )
+
+                is SearchTypeData.Vault.Folder -> SearchType.Vault.Folder(
+                    folderId = searchType.folderId,
+                )
+
+                SearchTypeData.Vault.Identities -> SearchType.Vault.Identities
+                SearchTypeData.Vault.Logins -> SearchType.Vault.Logins
+                SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
+                SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
+                SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
+                SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
+                SearchTypeData.Vault.Licenses -> SearchType.Vault.Licenses
+                SearchTypeData.Vault.Passports -> SearchType.Vault.Passports
+                SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
+                SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
+                null -> SearchType.Vault.All
+            },
+        ),
+        savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
-            every {
-                toSearchArgs()
-            } returns SearchArgs(
-                type = when (val searchType = initialState?.searchType) {
-                    SearchTypeData.Sends.All -> SearchType.Sends.All
-                    SearchTypeData.Sends.Files -> SearchType.Sends.Files
-                    SearchTypeData.Sends.Texts -> SearchType.Sends.Texts
-                    SearchTypeData.Vault.All -> SearchType.Vault.All
-                    SearchTypeData.Vault.Archive -> SearchType.Vault.Archive
-                    SearchTypeData.Vault.Cards -> SearchType.Vault.Cards
-                    is SearchTypeData.Vault.Collection -> SearchType.Vault.Collection(
-                        collectionId = searchType.collectionId,
-                    )
-
-                    is SearchTypeData.Vault.Folder -> SearchType.Vault.Folder(
-                        folderId = searchType.folderId,
-                    )
-
-                    SearchTypeData.Vault.Identities -> SearchType.Vault.Identities
-                    SearchTypeData.Vault.Logins -> SearchType.Vault.Logins
-                    SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
-                    SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
-                    SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
-                    SearchTypeData.Vault.BankAccounts -> SearchType.Vault.BankAccounts
-                    SearchTypeData.Vault.Licenses -> SearchType.Vault.Licenses
-                    SearchTypeData.Vault.Passports -> SearchType.Vault.Passports
-                    SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
-                    SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
-                    null -> SearchType.Vault.All
-                },
-            )
         },
         clock = clock,
         vaultRepo = vaultRepository,
@@ -2382,7 +2301,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
         premiumStateManager = premiumStateManager,
-        featureFlagManager = featureFlagManager,
         snackbarRelayManager = snackbarRelayManager,
     )
 
@@ -2419,7 +2337,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isVfo1FoundationEnabled = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -2464,7 +2381,6 @@ private val DEFAULT_STATE: SearchState = SearchState(
     autofillSelectionData = null,
     isPremium = true,
     restrictItemTypesPolicyOrgIds = persistentListOf(),
-    isVfo1FoundationEnabled = true,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(

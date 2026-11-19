@@ -24,9 +24,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
 
     FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
-    FlagKey.ForceUpdateKdfSettings,
     FlagKey.NoLogoutOnKdfChange,
-    FlagKey.MigrateMyVaultToMyItems,
     FlagKey.CardScanner,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
@@ -38,7 +36,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
     FlagKey.FedRamp,
-    FlagKey.Vfo1Foundation,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
     FlagKey.IdentityAutofill,
@@ -85,13 +82,11 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.NoLogoutOnKdfChange -> stringResource(BitwardenString.avoid_logout_on_kdf_change)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }
 
-    FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
@@ -106,7 +101,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
-    FlagKey.Vfo1Foundation -> stringResource(BitwardenString.vfo1_foundation)
     FlagKey.SendControls -> stringResource(BitwardenString.send_controls)
     FlagKey.SendControlsExistingSends -> {
         stringResource(BitwardenString.send_controls_existing_sends)

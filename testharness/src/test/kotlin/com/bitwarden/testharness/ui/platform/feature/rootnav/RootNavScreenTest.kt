@@ -1,22 +1,28 @@
 package com.bitwarden.testharness.ui.platform.feature.rootnav
 
+import androidx.compose.material3.Text
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
+import androidx.navigation3.runtime.NavEntry
 import com.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.platform.base.createMockNavHostController
+import com.bitwarden.ui.platform.navigation.util.navigationControllerOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 /**
  * Tests for the [RootNavScreen] composable in the testharness module.
- *
- * Verifies that root-level navigation correctly routes to different test flows
- * based on the [RootNavState].
  */
 class RootNavScreenTest : BaseComposeTest() {
-    private val mockNavHostController = createMockNavHostController()
+    private val navigationController = navigationControllerOf<RootNavGraph>(
+        routes = arrayOf(RootNavGraph.LandingRoute),
+    )
     private val rootNavStateFlow = MutableStateFlow<RootNavState>(RootNavState.Splash)
     private val viewModel = mockk<RootNavViewModel> {
         every { eventFlow } returns emptyFlow()
@@ -30,7 +36,8 @@ class RootNavScreenTest : BaseComposeTest() {
         setTestContent {
             RootNavScreen(
                 viewModel = viewModel,
-                navController = mockNavHostController,
+                navigationController = navigationController,
+                entryProvider = { key -> NavEntry(key = key) { Text(text = key.toString()) } },
                 onSplashScreenRemoved = { isSplashScreenRemoved = true },
             )
         }
@@ -39,40 +46,68 @@ class RootNavScreenTest : BaseComposeTest() {
     @Test
     fun `initial state does not invoke splash screen removal`() {
         composeTestRule.runOnIdle {
-            assert(!isSplashScreenRemoved)
+            assertFalse(isSplashScreenRemoved)
         }
     }
 
     @Test
     fun `splash screen callback is called when transitioning from Splash state`() {
         composeTestRule.runOnIdle {
-            assert(!isSplashScreenRemoved)
+            assertFalse(isSplashScreenRemoved)
         }
 
         // Transition to Landing state
         rootNavStateFlow.value = RootNavState.Landing
         composeTestRule.runOnIdle {
-            assert(isSplashScreenRemoved)
+            assertTrue(isSplashScreenRemoved)
         }
     }
 
     @Test
-    fun `nav host displays landing destination as start destination`() {
+    fun `nav display displays the landing destination as the initial destination`() {
+        composeTestRule
+            .onNodeWithText(text = RootNavGraph.LandingRoute.toString())
+            .assertIsDisplayed()
         composeTestRule.runOnIdle {
-            // The NavHost is configured with LandingRoute as startDestination
-            assert(true)
+            assertEquals(
+                listOf(RootNavGraph.LandingRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
     @Test
-    fun `nav host contains autofill and credential manager graphs`() {
+    fun `nav display displays the destination on top of the back stack`() {
+        navigationController.navigate(RootNavGraph.CredentialManagerRoute)
+
+        composeTestRule
+            .onNodeWithText(text = RootNavGraph.CredentialManagerRoute.toString())
+            .assertIsDisplayed()
         composeTestRule.runOnIdle {
-            // The NavHost contains:
-            // - landingDestination()
-            // - autofillGraph()
-            // - credentialManagerGraph()
-            // Navigation to these graphs is triggered by user interaction in LandingScreen
-            assert(true)
+            assertEquals(
+                listOf(RootNavGraph.LandingRoute, RootNavGraph.CredentialManagerRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+    }
+
+    @Test
+    fun `system back should remove the top destination from the back stack`() {
+        navigationController.navigate(RootNavGraph.AutofillRoute)
+        // Wait for the new destination to be displayed so the back handler has been enabled.
+        composeTestRule
+            .onNodeWithText(text = RootNavGraph.AutofillRoute.toString())
+            .assertIsDisplayed()
+        backDispatcher?.onBackPressed()
+
+        composeTestRule
+            .onNodeWithText(text = RootNavGraph.LandingRoute.toString())
+            .assertIsDisplayed()
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(RootNavGraph.LandingRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 }

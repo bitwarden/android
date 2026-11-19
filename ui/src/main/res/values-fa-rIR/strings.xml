@@ -4,7 +4,6 @@
     <string name="add_folder">افزودن پوشه</string>
     <string name="add_item">افزودن مورد</string>
     <string name="an_error_has_occurred">خطایی رخ داده است</string>
-    <string name="apply">اعمال</string>
     <string name="back">بازگشت</string>
     <string name="cancel">انصراف</string>
     <string name="copy">کپی</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">پوشه حذف شد.</string>
     <string name="folder_none">بدون پوشه</string>
     <string name="folder_updated">پوشه ذخیره شد</string>
-    <string name="folders">پوشه‌ها</string>
     <string name="hide">پنهان‌سازی</string>
     <string name="internet_connection_required_message">لطفاً قبل از ادامه به اینترنت متصل شوید.</string>
     <string name="internet_connection_required_title">اتصال به اینترنت لازم است</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">کپی TOTP</string>
     <string name="copy_totp_automatically_description">اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام پر کردن خودکار ورود، کد تأیید TOTP را در حافظه موقت خود کپی کن.</string>
     <string name="copy_totp_automatically">TOTP را به صورت خودکار کپی کن</string>
-    <string name="premium_required">برای استفاده از این ویژگی عضویت ویژه لازم است.</string>
     <string name="attachment_deleted">پیوست حذف شد</string>
     <string name="attachments_are_a_premium_feature">پیوست‌ها یک ویژگی ویژه هستند. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
     <string name="choose_file">انتخاب پرونده</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">نشانی اینترنتی سرور نمادها</string>
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
     <string name="go_to_my_vault">برو به گاوصندوق من</string>
-    <string name="collections">مجموعه‌ها</string>
     <string name="shared_folders">پوشه‌های مشترک</string>
-    <string name="no_items_collection">در این مجموعه موردی برای نمایش نیست.</string>
     <string name="there_are_no_items_in_this_shared_folder">در این پوشه‌ی اشتراک گذاری شده موردی برای نمایش نیست.</string>
     <string name="no_items_folder">در این پوشه موردی برای نمایش نیست.</string>
     <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
@@ -347,16 +342,11 @@
     <string name="type">نوع</string>
     <string name="move_down">انتقال به پایین</string>
     <string name="move_up">انتقال به بالا</string>
-    <string name="owner">مالک</string>
-    <string name="no_collections_to_list">هیچ مجموعه‌ای برای لیست کردن وجود ندارد.</string>
     <string name="there_are_no_shared_folders_to_list">هیچ موردی اشتراک گذاری شده برای نمایش وجود ندارد.</string>
     <string name="moved_item_to_org">%1$s منتقل شد به %2$s.</string>
     <string name="select_one_collection">شما باید حداقل یک مجموعه را انتخاب کنید.</string>
     <string name="you_must_select_at_least_one_shared_folder">شما باید حداقل یک پوشه اشتراک گذاری شده را انتخاب کنید.</string>
     <string name="share">اشتراک گذاری</string>
-    <string name="move_to_organization">انتقال به سازمان</string>
-    <string name="no_orgs_to_list">هیچ سازمانی برای نمایش وجود ندارد.</string>
-    <string name="move_to_org_desc">سازمانی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
     <string name="no_vaults_to_list">هیچ گاوصندوقی برای فهرست کردن وجود ندارد.</string>
     <string name="move_to_vault_desc">گاوصندوقی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به گاوصندوق دیگر، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
     <string name="number_of_words">تعداد کلمات</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">هنگام دسترسی به ارسال، متن را به طور پیش‌فرض پنهان کن</string>
     <string name="type_file">پرونده</string>
     <string name="deletion_date">تاریخ حذف</string>
-    <string name="deletion_time">زمان حذف</string>
     <string name="deletion_date_info">ارسال در تاریخ و ساعت مشخص شده برای همیشه حذف خواهد شد.</string>
     <string name="this_date_is_enforced_by_your_organization">این تاریخ توسط سازمان شما اعمال شده است</string>
     <string name="who_can_view">چه کسی می‌تواند ببیند</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">ما نتوانستیم درخواست شما را پردازش کنیم. لطفاً دوباره امتحان کنید یا با ما تماس بگیرید.</string>
     <string name="allow_screen_capture">اجازه ضبط صفحه نمایش</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">آیا مطمئنید که می‌خواهید ضبط از صفحه نمایش را فعال کنید؟</string>
-    <string name="log_in_requested">ورود الزامیست</string>
-    <string name="are_you_trying_to_log_in">آیا در تلاش برای ورود به سیستم هستید؟</string>
-    <string name="log_in_attempt_by_x_on_y">تلاش برای ورود به سیستم توسط %1$s در %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">نوع دستگاه</string>
     <string name="ip_address">نشانی IP</string>
     <string name="time">زمان</string>
     <string name="select_time">انتخاب زمان</string>
     <string name="switch_input_mode">تغییر حالت ورودی</string>
-    <string name="confirm_log_in">تأیید ورود</string>
-    <string name="deny_log_in">رد ورود</string>
-    <string name="log_in_denied">ورود رد شد</string>
-    <string name="approve_login_requests">درخواست‌های ورود را تأیید کنید</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">نه ممنون</string>
-    <string name="confim_log_in_attemp_for_x">تأیید تلاش برای ورود به سیستم برای %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">نوع نام کاربری</string>
     <string name="plus_addressed_email">به علاوه نشانی ایمیل داده شده</string>
     <string name="catch_all_email">دریافت همه ایمیل‌ها</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">فهمیدم</string>
     <string name="accept">پذیرفتن</string>
     <string name="decline">رد کردن</string>
-    <string name="login_request_has_already_expired">درخواست ورود قبلاً منقضی شده است.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">تلاش برای ورود از:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-آیا می‌خواهید به این حساب کاربری تغییر دهید؟</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">در Bitwarden تازه وارد هستید؟</string>
     <string name="get_master_passwordword_hint">دریافت یادآور کلمه عبور اصلی</string>
     <string name="logging_in_as_x_on_y">درحال وارد شدن به عنوان %1$s در %2$s</string>
     <string name="not_you">شما نیستید؟</string>
     <string name="log_in_with_master_password">با کلمه عبور اصلی وارد شوید</string>
     <string name="log_in_initiated">ورود به سیستم آغاز شد</string>
-    <string name="a_notification_has_been_sent_to_your_device">یک اعلان به دستگاه شما ارسال شده است.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">لطفاً مطمئن شوید که قفل گاوصندوق شما باز است و عبارت اثر انگشت با دستگاه دیگر مطابقت دارد.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">ارسال مجدد اعلان</string>
     <string name="view_all_login_options">مشاهده همه گزینه‌های ورود به سیستم</string>
-    <string name="pending_log_in_requests">در حال انتظار برای ورود به سیستم</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">رد کردن همه درخواست‌ها</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">آیا مطمئنید که می‌خواهید همه درخواست‌های ورود در انتظار را رد کنید؟</string>
     <string name="no_pending_requests">بدون درخواست معلق</string>
     <string name="enable_camer_permission_to_use_the_scanner">اجازه دوربین را برای استفاده از اسکنر فعال کنید</string>
     <string name="language">زبان</string>
-    <string name="language_change_x_description">زبان به %1$s تغییر کرده است. لطفاً برنامه را مجدداً راه‌اندازی کنید تا تغییرات را مشاهده کنید</string>
     <string name="default_system">پیش‌فرض (سیستم)</string>
     <string name="weak_master_password">کلمه عبور اصلی ضعیف</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">کلمه عبور ضعیف شناسایی شد. از یک کلمه عبور قوی برای محافظت از حساب کاربری خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور ضعیف استفاده کنید؟</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">کلید عبور در مورد شبیه‌سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه‌سازی این مورد ادامه دهید؟</string>
     <string name="master_password_re_prompt_help">راهنمای درخواست مجدد کلمه عبور اصلی</string>
     <string name="admin_approval_requested">تأیید مدیر درخواست شد</string>
-    <string name="your_request_has_been_sent_to_your_admin">درخواست شما به مدیرتان فرستاده شد.</string>
-    <string name="you_will_be_notified_once_approved">به محض تأیید مطلع خواهید شد.</string>
-    <string name="trouble_logging_in">در ورود مشکلی دارید؟</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">پر کردن خودکار را مسدود کنید</string>
     <string name="no_uris_blocked">هیچ آدرس اینترنتی مسدود نشده است</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">قالب: %1$s. چندین نشانی اینترنتی را با کاما جدا کنید.</string>
     <string name="invalid_uri">نشانی اینترنتی نامعتبر</string>
     <string name="the_urix_is_already_blocked">%1$s نشانی اینترنتی قبلاً مسدود شده است</string>
-    <string name="login_approved">ورود تأیید شد</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">ورود با دستگاه باید در تنظیمات برنامه Bitwarden تنظیم شود.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">به گزینه دیگری نیاز دارید؟ <annotation link="viewAll">مشاهده همه گزینه‌های ورود</annotation></string>
     <string name="log_in_with_device">ورود با دستگاه</string>
     <string name="logging_in_on">ورود در</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">عملیات کلید عبور ناموفق بود زیرا درخواست پشتیبانی نمی‌شود.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">عملیات کلمه عبور ناموفق بود زیرا مورد انتخاب‌شده وجود ندارد.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">عملیات کلمه عبور ناموفق بود زیرا مورد انتخاب‌شده یک کلمه عبور معتبر ندارد.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">عملیات کلمه عبور ناموفق بود زیرا هیچ موردی انتخاب نشده است.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">عملیات اعتبارنامه به دلیل نامعتبر بودن درخواست، ناموفق بود.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">عملیات اعتبارنامه به دلیل پشتیبانی نشدن درخواست، ناموفق بود.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">عملیات اعتبارنامه ناموفق بود زیرا تعداد تلاش‌های تأیید هویت کاربر بیش از حد مجاز شده است.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">اطلاعات بیشتر درباره‌ی برنامه‌های دارای امتیاز ویژه</string>
     <string name="privileged_apps">برنامه‌های دارای امتیاز ویژه</string>
     <string name="unrecognized_browser">مرورگر شناسایی نشده</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">اطلاعات بیشتر درباره‌ی استفاده از کلیدهای عبور با Bitwarden.</string>
     <string name="all_trusted_apps">تمام برنامه‌های مورد اعتماد</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">آیا مطمئن هستید که می‌خواهید دیگر به %s اعتماد نکنید؟</string>
     <string name="installed_apps">برنامه‌های نصب شده</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">کد تأیید اضافه شد</string>
     <string name="refresh_period">تازه کردن دوره</string>
     <string name="algorithm">الگوریتم</string>
-    <string name="advanced">پیشرفته</string>
-    <string name="collapse_advanced_options">بستن گزینه‌های پیشرفته</string>
     <string name="number_of_digits">تعداد ارقام</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d ثانیه</item>
@@ -1159,7 +1143,6 @@
     <string name="select_a_card_for_x">یک کارت برای %s انتخاب کنید</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">گزینه‌های پیشرفته</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">اطلاعات بیشتر در مورد تشخیص تطابق</annotation></string>
     <string name="keep_your_credential_secure">اعتبارنامه‌های خود را ایمن نگه دارید</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">درباره نحوه ایمن نگه داشتن اعتبارنامه‌ها هنگام استفاده از «%1$s» بیشتر بیاموزید.</string>
     <string name="are_you_sure_you_want_to_use">آیا مطمئن هستید که می‌خواهید از «%1$s» استفاده کنید؟</string>
@@ -1202,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">کلمات عبور، کلیدهای عبور و انواع دیگر موارد را از گاوصندوق Bitwarden خود وارد کنید.</string>
     <string name="items_to_import">مواردی برای درون ریزی</string>
     <string name="exporting_items">درحال برون ریزی موارد…</string>
-    <string name="export_failed">برون ریزی ناموفق</string>
     <string name="passwords">کلمه‌های عبور</string>
     <string name="passkeys">کلیدهای عبور</string>
     <string name="why_is_this_step_required">چرا این مرحله لازم است؟</string>
@@ -1222,7 +1204,6 @@
     <string name="transfer_items_to_org">انتقال موارد به %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> برای امنیت و انطباق، ضروریست که همه موارد متعلق به سازمان باشند. برای انتقال مالکیت موارد خود، روی پذیرش کلیک کنید. <annotation link="learnMore">بیشتر بدانید</annotation></string>
     <string name="decline_and_leave">رد کردن و خروج</string>
-    <string name="why_am_i_seeing_this">چرا من این را میبینم؟</string>
     <string name="migrating_items_to_x">انتقال موارد به %s</string>
     <string name="failed_to_migrate_items_to_x">انتقال موارد به %s ناموفق بود</string>
     <string name="search_archive">جستجوی بایگانی</string>
@@ -1240,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">بایگانی کردن موارد یک ویژگی ویژه هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
     <string name="totp_is_a_premium_feature">کلید تولیدکننده رمز دوعاملی (TOTP) یک ویژگی ویژه هست. طرح فعلی شما شامل دسترسی به این قابلیت نیست.</string>
     <string name="upgrade_to_premium">ارتقا به ویژه</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">طرح</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">برای مدیریت اشتراک ویژه خود، باید از طریق رایانه به گاوصندوق وب خود وارد شوید.</string>
     <string name="unlock_advanced_security_features">ویژگی‌های امنیتی پیشرفته را باز کنید</string>
@@ -1321,7 +1303,6 @@
     <string name="archive_item">بایگانی مورد</string>
     <string name="once_archived_this_item_will_be_excluded">پس از بایگانی، این مورد از نتایج جستجو و پیشنهادات پر کردن خودکار حذف خواهد شد.</string>
     <string name="pricing_unavailable">قیمت گذاری در دسترس نیست</string>
-    <string name="current_plan">طرح فعلی</string>
     <string name="premium_plan_name">ویژه</string>
     <string name="billing_amount">مبلغ صورتحساب</string>
     <string name="storage_cost">هزینه ذخیره‌سازی</string>
@@ -1397,8 +1378,6 @@
     <string name="issuing_country">کشور صادرکننده</string>
     <string name="issuing_state">ایالت / استان صادرکننده</string>
     <string name="license_class">کلاس مجوز</string>
-    <string name="surname">نام خانوادگی</string>
-    <string name="given_name">نام کوچک</string>
     <string name="date_of_birth">تاریخ تولد</string>
     <string name="nationality">ملیت</string>
     <string name="passport_type">نوع گذرنامه</string>

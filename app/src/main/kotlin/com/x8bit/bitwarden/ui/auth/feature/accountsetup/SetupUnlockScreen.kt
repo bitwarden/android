@@ -31,8 +31,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -45,6 +45,8 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -53,9 +55,6 @@ import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHandler
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
-import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 
 /**
  * Top level composable for the setup unlock screen.
@@ -64,7 +63,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 @Suppress("LongMethod")
 @Composable
 fun SetupUnlockScreen(
-    viewModel: SetupUnlockViewModel = hiltViewModel(),
+    viewModel: SetupUnlockViewModel,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onNavigateBack: () -> Unit,
 ) {

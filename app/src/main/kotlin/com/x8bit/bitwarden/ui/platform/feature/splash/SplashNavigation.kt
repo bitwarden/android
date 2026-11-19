@@ -1,29 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.splash
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.util.rootTransitionEntry
+import com.bitwarden.ui.platform.theme.RootTransition
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavGraph
 
 /**
- * The type-safe route for the splash screen.
+ * Add the splash screen to the navigation entries.
  */
-@Serializable
-data object SplashRoute
-
-/**
- * Add splash destinations to the nav graph.
- */
-fun NavGraphBuilder.splashDestination() {
-    composable<SplashRoute> { SplashScreen() }
-}
-
-/**
- * Navigate to the splash screen.
- */
-fun NavController.navigateToSplash(
-    navOptions: NavOptions? = null,
-) {
-    navigate(SplashRoute, navOptions)
+fun EntryProviderScope<RootNavGraph>.splashDestination() {
+    rootTransitionEntry<RootNavGraph.SplashRoute>(rootTransition = RootTransition.NONE) {
+        SplashScreen()
+    }
 }

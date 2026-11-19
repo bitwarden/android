@@ -50,15 +50,18 @@ class AutofillActivityManagerImpl(
             autofillManagerHasEnabledAutofillServices &&
             autofillManagerIsAutofillSupported
 
-    private val browserAutofillStatus: BrowserThirdPartyAutofillStatus
-        get() = BrowserThirdPartyAutofillStatus(
-            braveStableStatusData = browserThirdPartyAutofillManager.stableBraveAutofillStatus,
-            chromeStableStatusData = browserThirdPartyAutofillManager.stableChromeAutofillStatus,
-            chromeBetaChannelStatusData = browserThirdPartyAutofillManager.betaChromeAutofillStatus,
+    private suspend fun getBrowserAutofillStatus(): BrowserThirdPartyAutofillStatus =
+        BrowserThirdPartyAutofillStatus(
+            braveStableStatusData = browserThirdPartyAutofillManager
+                .getStableBraveAutofillStatus(),
+            chromeStableStatusData = browserThirdPartyAutofillManager
+                .getStableChromeAutofillStatus(),
+            chromeBetaChannelStatusData = browserThirdPartyAutofillManager
+                .getBetaChromeAutofillStatus(),
             vivaldiStableChannelStatusData = browserThirdPartyAutofillManager
-                .stableVivaldiAutofillStatus,
+                .getStableVivaldiAutofillStatus(),
             defaultBrowserPackageName = browserThirdPartyAutofillManager
-                .defaultBrowserPackageName,
+                .getDefaultBrowserPackageName(),
         )
 
     init {
@@ -67,7 +70,7 @@ class AutofillActivityManagerImpl(
             .onEach {
                 autofillEnabledManager.isAutofillEnabled = isAutofillEnabledAndSupported
                 browserThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
-                    browserAutofillStatus
+                    getBrowserAutofillStatus()
             }
             .launchIn(lifecycleScope)
     }

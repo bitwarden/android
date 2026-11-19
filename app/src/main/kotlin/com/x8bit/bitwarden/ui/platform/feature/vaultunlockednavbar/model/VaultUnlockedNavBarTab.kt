@@ -4,14 +4,7 @@ import android.os.Parcelable
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraphRoute
-import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsRoute
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorGraphRoute
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorRoute
-import com.x8bit.bitwarden.ui.tools.feature.send.SendGraphRoute
-import com.x8bit.bitwarden.ui.tools.feature.send.SendRoute
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavBarGraph
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -24,14 +17,18 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     /**
+     * The route of the tab within the [VaultUnlockedNavBarGraph].
+     */
+    abstract override val rootRoute: VaultUnlockedNavBarGraph
+
+    /**
      * Show the Generator screen.
      */
     @Parcelize
     data object Generator : VaultUnlockedNavBarTab() {
         override val iconRes get() = BitwardenDrawable.ic_generator
         override val labelRes get() = BitwardenString.generator
-        override val graphRoute get() = GeneratorGraphRoute
-        override val startDestinationRoute get() = GeneratorRoute.Standard
+        override val rootRoute get() = VaultUnlockedNavBarGraph.Generator
         override val testTag get() = "GeneratorTab"
         override val notificationCount get() = 0
     }
@@ -43,8 +40,7 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     data object Send : VaultUnlockedNavBarTab() {
         override val iconRes get() = BitwardenDrawable.ic_send
         override val labelRes get() = BitwardenString.send
-        override val graphRoute get() = SendGraphRoute
-        override val startDestinationRoute get() = SendRoute
+        override val rootRoute get() = VaultUnlockedNavBarGraph.Send
         override val testTag get() = "SendTab"
         override val notificationCount get() = 0
     }
@@ -57,8 +53,7 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
         override val labelRes: Int,
     ) : VaultUnlockedNavBarTab() {
         override val iconRes get() = BitwardenDrawable.ic_vault
-        override val graphRoute get() = VaultGraphRoute
-        override val startDestinationRoute get() = VaultRoute
+        override val rootRoute get() = VaultUnlockedNavBarGraph.Vault
         override val testTag get() = "VaultTab"
         override val notificationCount get() = 0
     }
@@ -72,8 +67,7 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     ) : VaultUnlockedNavBarTab() {
         override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = BitwardenString.settings
-        override val graphRoute get() = SettingsGraphRoute
-        override val startDestinationRoute get() = SettingsRoute.Standard
+        override val rootRoute get() = VaultUnlockedNavBarGraph.Settings
         override val testTag get() = "SettingsTab"
     }
 }

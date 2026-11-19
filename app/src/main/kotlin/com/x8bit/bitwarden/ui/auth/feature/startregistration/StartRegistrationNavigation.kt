@@ -1,37 +1,27 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the start registration screen.
- */
-@Serializable
-data object StartRegistrationRoute
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the start registration screen.
  */
-fun NavController.navigateToStartRegistration(navOptions: NavOptions? = null) {
-    this.navigate(route = StartRegistrationRoute, navOptions = navOptions)
+fun NavigationController<AuthGraph>.navigateToStartRegistration() {
+    this.navigate(route = AuthGraph.StartRegistrationRoute)
 }
 
 /**
- * Add the start registration screen to the nav graph.
+ * Add the start registration screen to the navigation entries.
  */
-fun NavGraphBuilder.startRegistrationDestination(
+fun EntryProviderScope<AuthGraph>.startRegistrationDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToCompleteRegistration: (
-        emailAddress: String,
-        verificationToken: String,
-    ) -> Unit,
+    onNavigateToCompleteRegistration: (emailAddress: String, verificationToken: String) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
 ) {
-    composableWithSlideTransitions<StartRegistrationRoute> {
+    slideUpEntry<AuthGraph.StartRegistrationRoute> {
         StartRegistrationScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToCompleteRegistration = onNavigateToCompleteRegistration,

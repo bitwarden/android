@@ -58,6 +58,7 @@ dependencies {
     implementation(project(":core"))
 
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.biometrics)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
@@ -74,7 +75,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.credentials)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.coil.coil.compose)
     implementation(libs.coil.coil.gif)
     implementation(libs.kotlinx.serialization)
@@ -101,8 +104,8 @@ dependencies {
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.camera.camera2)
+    testFixturesImplementation(platform(libs.androidx.compose.bom))
     testFixturesImplementation(libs.androidx.compose.ui.test)
-    testFixturesImplementation(libs.androidx.navigation.compose)
     testFixturesImplementation(libs.google.hilt.android.testing)
     testFixturesImplementation(platform(libs.junit.bom))
     testFixturesImplementation(libs.junit.jupiter)

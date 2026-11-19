@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import io.mockk.awaits
@@ -34,13 +35,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -71,20 +68,6 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         every {
             specialCircumstance
         } returns SpecialCircumstance.CredentialExchangeExport(data = DEFAULT_IMPORT_REQUEST)
-    }
-
-    @BeforeEach
-    fun setUp() {
-        mockkStatic(
-            SavedStateHandle::toVerifyPasswordArgs,
-        )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toVerifyPasswordArgs,
-        )
     }
 
     @Nested
@@ -923,20 +906,15 @@ class VerifyPasswordViewModelTest : BaseViewModelTest() {
         state: VerifyPasswordState? = null,
         userId: String = DEFAULT_USER_ID,
     ): VerifyPasswordViewModel = VerifyPasswordViewModel(
+        route = ExportItemsGraph.VerifyPasswordRoute(
+            userId = userId,
+            hasOtherAccounts = true,
+        ),
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         policyManager = policyManager,
         specialCircumstanceManager = specialCircumstanceManager,
-        savedStateHandle = SavedStateHandle().apply {
-            set("state", state)
-            set("userId", userId)
-            every {
-                toVerifyPasswordArgs()
-            } returns VerifyPasswordArgs(
-                userId = userId,
-                hasOtherAccounts = true,
-            )
-        },
+        savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 }
 

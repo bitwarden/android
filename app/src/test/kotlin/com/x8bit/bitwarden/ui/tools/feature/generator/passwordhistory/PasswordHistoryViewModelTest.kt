@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordHistoryView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
 import io.mockk.just
@@ -302,6 +303,9 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: PasswordHistoryState = createPasswordHistoryState(),
     ): PasswordHistoryViewModel = PasswordHistoryViewModel(
+        route = VaultUnlockedGraph.PasswordHistoryRoute(
+            passwordHistoryMode = initialState.passwordHistoryMode,
+        ),
         clock = fixedClock,
         clipboardManager = clipboardManager,
         generatorRepository = fakeGeneratorRepository,
@@ -320,20 +324,8 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     private fun createSavedStateHandleWithState(
         state: PasswordHistoryState? = createPasswordHistoryState(),
-        passwordHistoryMode: GeneratorPasswordHistoryMode = GeneratorPasswordHistoryMode.Default,
     ) = SavedStateHandle().apply {
         set("state", state)
-        set(
-            "password_history_mode",
-            when (passwordHistoryMode) {
-                is GeneratorPasswordHistoryMode.Default -> "default"
-                is GeneratorPasswordHistoryMode.Item -> "item"
-            },
-        )
-        set(
-            "password_history_id",
-            (passwordHistoryMode as? GeneratorPasswordHistoryMode.Item)?.itemId,
-        )
     }
 
     //endregion Helper Functions

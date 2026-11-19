@@ -30,9 +30,7 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                ForceUpdateKdfSettings,
                 NoLogoutOnKdfChange,
-                MigrateMyVaultToMyItems,
                 CardScanner,
                 ManageDevices,
                 AttachmentUpdates,
@@ -44,7 +42,6 @@ sealed class FlagKey<out T : Any> {
                 DebugDisableSelfHostPremiumCheck,
                 FillAssistTargetingRules,
                 FedRamp,
-                Vfo1Foundation,
                 SendControls,
                 SendControlsExistingSends,
                 IdentityAutofill,
@@ -63,26 +60,10 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     *  Data object holding the feature flag key for the Force Update KDF Settings feature.
-     */
-    data object ForceUpdateKdfSettings : FlagKey<Boolean>() {
-        override val keyName: String = "pm-18021-force-update-kdf-settings"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      *  Data object holding the feature flag key for the No Logout On KDF Change feature.
      */
     data object NoLogoutOnKdfChange : FlagKey<Boolean>() {
         override val keyName: String = "pm-23995-no-logout-on-kdf-change"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     *  Data object holding the feature flag key for the Migrate My Vault to My Items feature.
-     */
-    data object MigrateMyVaultToMyItems : FlagKey<Boolean>() {
-        override val keyName: String = "pm-20558-migrate-myvault-to-myitems"
         override val defaultValue: Boolean = false
     }
 
@@ -165,15 +146,6 @@ sealed class FlagKey<out T : Any> {
     data object FedRamp : FlagKey<Boolean>() {
         override val keyName: String get() = "fedramp-gov-region"
         override val defaultValue: Boolean get() = false
-    }
-
-    /**
-     * Data object holding the feature flag key for gating the VFO-1 naming (terminology rename)
-     * work.
-     */
-    data object Vfo1Foundation : FlagKey<Boolean>() {
-        override val keyName: String = "vfo1-foundation"
-        override val defaultValue: Boolean = false
     }
 
     /**
