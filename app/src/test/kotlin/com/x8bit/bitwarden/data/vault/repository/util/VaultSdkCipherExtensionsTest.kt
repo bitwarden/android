@@ -132,6 +132,65 @@ class VaultSdkCipherExtensionsTest {
     }
 
     @Test
+    fun `toEncryptedSdkCipher should pass partialData through to the Cipher`() {
+        val syncCipher = createMockCipher(number = 1).copy(partialData = "mockPartialData")
+        val sdkCipher = syncCipher.toEncryptedSdkCipher()
+        assertEquals("mockPartialData", sdkCipher.partialData)
+    }
+
+    @Test
+    fun `toEncryptedNetworkCipherResponse should pass partialData through to the response`() {
+        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
+            .copy(partialData = "mockPartialData")
+        val result = sdkCipher.toEncryptedNetworkCipherResponse(encryptedFor = "mockUserId-1")
+        assertEquals("mockPartialData", result.partialData)
+    }
+
+    @Test
+    fun `toEncryptedSdkCipher should leave partialData null for a full cipher`() {
+        val sdkCipher = createMockCipher(number = 1).toEncryptedSdkCipher()
+        assertNull(sdkCipher.partialData)
+    }
+
+    @Test
+    fun `partialData should survive a network to SDK to network round trip`() {
+        val syncCipher = createMockCipher(number = 1, partialData = "mockPartialData")
+
+        val roundTripped = syncCipher
+            .toEncryptedSdkCipher()
+            .toEncryptedNetworkCipherResponse(encryptedFor = "mockEncryptedFor-1")
+
+        assertEquals("mockPartialData", roundTripped.partialData)
+    }
+
+    @Test
+    fun `toEncryptedNetworkCipherResponse should leave partialData null for a full cipher`() {
+        val result = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
+            .toEncryptedNetworkCipherResponse(encryptedFor = "mockUserId-1")
+        assertNull(result.partialData)
+    }
+
+    @Test
+    fun `toEncryptedNetworkCipher from mini response should pass partialData through`() {
+        val originalCipher = createMockCipher(number = 1)
+        val miniResponse = createMockCipherMiniResponse(
+            number = 2,
+            partialData = "mockPartialData",
+        )
+
+        val result = miniResponse.toEncryptedNetworkCipher(originalCipher = originalCipher)
+
+        assertEquals("mockPartialData", result.partialData)
+    }
+
+    @Test
+    fun `toEncryptedNetworkCipher from mini response should keep null partialData`() {
+        val result = createMockCipherMiniResponse(number = 2)
+            .toEncryptedNetworkCipher(originalCipher = createMockCipher(number = 1))
+        assertNull(result.partialData)
+    }
+
+    @Test
     fun `toSdkLogin should convert a SyncResponseJson Cipher Login to a Login`() {
         val syncLogin = createMockLogin(number = 1)
         val sdkLogin = syncLogin.toSdkLogin()

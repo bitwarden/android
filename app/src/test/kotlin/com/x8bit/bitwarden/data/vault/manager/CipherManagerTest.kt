@@ -155,6 +155,69 @@ class CipherManagerTest {
     }
 
     @Test
+    fun `write operations on a partial cipher should return errors without calling any source`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val partial = createMockCipherView(number = 1).copy(partial = true)
+
+            assertTrue(cipherManager.createCipher(cipherView = partial) is CreateCipherResult.Error)
+            assertTrue(
+                cipherManager.createCipherInOrganization(
+                    cipherView = partial,
+                    collectionIds = listOf("collectionId"),
+                ) is CreateCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.updateCipher(cipherId = "mockId-1", cipherView = partial)
+                    is UpdateCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.shareCipher(
+                    cipherId = "mockId-1",
+                    organizationId = "mockOrganizationId-1",
+                    cipherView = partial,
+                    collectionIds = listOf("collectionId"),
+                ) is ShareCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.archiveCipher(cipherId = "mockId-1", cipherView = partial)
+                    is ArchiveCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.unarchiveCipher(cipherId = "mockId-1", cipherView = partial)
+                    is UnarchiveCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.softDeleteCipher(cipherId = "mockId-1", cipherView = partial)
+                    is DeleteCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.restoreCipher(cipherId = "mockId-1", cipherView = partial)
+                    is RestoreCipherResult.Error,
+            )
+            assertTrue(
+                cipherManager.createAttachment(
+                    cipherId = "mockId-1",
+                    cipherView = partial,
+                    fileSizeBytes = "1",
+                    fileName = "file.png",
+                    fileUri = mockk(),
+                ) is CreateAttachmentResult.Error,
+            )
+            assertTrue(
+                cipherManager.deleteCipherAttachment(
+                    cipherId = "mockId-1",
+                    attachmentId = "attachmentId",
+                    cipherView = partial,
+                ) is DeleteAttachmentResult.Error,
+            )
+            assertTrue(
+                cipherManager.migrateAttachments(userId = "mockUserId-1", cipherView = partial)
+                    .exceptionOrNull() is IllegalStateException,
+            )
+        }
+
+    @Test
     fun `createCipher with no active user should return CreateCipherResult failure`() = runTest {
         fakeAuthDiskSource.userState = null
 

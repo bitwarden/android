@@ -22,6 +22,8 @@ data class CipherMiniResponseJson(
      * @property organizationId The organization ID (nullable).
      * @property type The type of cipher.
      * @property data Serialized cipher data (newer API format).
+     * @property partialData The reduced data blob the server sends in place of [data] for a gated
+     * (PAM) cipher (nullable, `null` for full ciphers).
      * @property attachments List of attachments (nullable).
      * @property shouldOrganizationUseTotp If the organization should use TOTP.
      * @property revisionDate The revision date.
@@ -56,6 +58,9 @@ data class CipherMiniResponseJson(
 
         @SerialName("data")
         val data: String?,
+
+        @SerialName("partialData")
+        val partialData: String? = null,
 
         @SerialName("attachments")
         val attachments: List<SyncResponseJson.Cipher.Attachment>?,

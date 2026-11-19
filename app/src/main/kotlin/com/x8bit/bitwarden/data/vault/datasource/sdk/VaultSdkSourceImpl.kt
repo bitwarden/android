@@ -321,6 +321,7 @@ class VaultSdkSourceImpl(
         cipherView: CipherView,
     ): Result<EncryptionContext> =
         runCatchingWithLogs {
+            check(!cipherView.partial) { PARTIAL_CIPHER_ERROR }
             getClient(userId = userId)
                 .vault()
                 .ciphers()
@@ -491,6 +492,7 @@ class VaultSdkSourceImpl(
         organizationId: String,
         cipherView: CipherView,
     ): Result<CipherView> = runCatchingWithLogs {
+        check(!cipherView.partial) { PARTIAL_CIPHER_ERROR }
         getClient(userId = userId)
             .vault()
             .ciphers()
@@ -503,6 +505,7 @@ class VaultSdkSourceImpl(
         cipherViews: List<CipherView>,
         collectionIds: List<CollectionId>,
     ): Result<List<EncryptionContext>> = runCatchingWithLogs {
+        check(cipherViews.none { it.partial }) { PARTIAL_CIPHER_ERROR }
         getClient(userId = userId)
             .vault()
             .ciphers()
@@ -687,3 +690,6 @@ class VaultSdkSourceImpl(
             .makeUpdateKdf(password = password, kdf = kdf)
     }
 }
+
+private const val PARTIAL_CIPHER_ERROR: String =
+    "A partial (gated) cipher cannot be re-encrypted or moved."

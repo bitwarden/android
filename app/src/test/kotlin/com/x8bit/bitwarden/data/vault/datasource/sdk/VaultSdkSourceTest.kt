@@ -779,7 +779,7 @@ class VaultSdkSourceTest {
     @Test
     fun `decryptCipher should call SDK and return a Result with correct data`() = runBlocking {
         val userId = "userId"
-        val mockCipher = mockk<CipherView>()
+        val mockCipher = mockk<CipherView> { every { partial } returns false }
         val expectedResult = mockk<EncryptionContext> {
             every { cipher } returns createMockSdkCipher(number = 1)
         }
@@ -1170,10 +1170,63 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `encryptCipher should fail closed for a partial cipher without calling the SDK`() =
+        runTest {
+            val partialCipher = createMockCipherView(number = 1).copy(partial = true)
+
+            val result = vaultSdkSource.encryptCipher(
+                userId = "userId",
+                cipherView = partialCipher,
+            )
+
+            assertTrue(result.exceptionOrNull() is IllegalStateException)
+            coVerify(exactly = 0) { ciphersClient.encrypt(cipherView = any()) }
+        }
+
+    @Test
+    fun `moveToOrganization should fail closed for a partial cipher without calling the SDK`() =
+        runTest {
+            val partialCipher = createMockCipherView(number = 1).copy(partial = true)
+
+            val result = vaultSdkSource.moveToOrganization(
+                userId = "userId",
+                organizationId = "organizationId",
+                cipherView = partialCipher,
+            )
+
+            assertTrue(result.exceptionOrNull() is IllegalStateException)
+            coVerify(exactly = 0) {
+                ciphersClient.moveToOrganization(cipher = any(), organizationId = any())
+            }
+        }
+
+    @Test
+    fun `bulkMoveToOrganization should fail closed if any cipher is partial`() = runTest {
+        val result = vaultSdkSource.bulkMoveToOrganization(
+            userId = "userId",
+            organizationId = "organizationId",
+            cipherViews = listOf(
+                createMockCipherView(number = 1),
+                createMockCipherView(number = 2).copy(partial = true),
+            ),
+            collectionIds = listOf("collectionId-1"),
+        )
+
+        assertTrue(result.exceptionOrNull() is IllegalStateException)
+        coVerify(exactly = 0) {
+            ciphersClient.prepareCiphersForBulkShare(
+                organizationId = any(),
+                ciphers = any(),
+                collectionIds = any(),
+            )
+        }
+    }
+
+    @Test
     fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val organizationId = "organizationId"
-        val mockCipher = mockk<CipherView>()
+        val mockCipher = mockk<CipherView> { every { partial } returns false }
         val expectedResult = mockk<CipherView>()
         coEvery {
             ciphersClient.moveToOrganization(cipher = mockCipher, organizationId = organizationId)
@@ -1192,7 +1245,10 @@ class VaultSdkSourceTest {
     fun `bulkMoveToOrganization should call SDK and return Result with correct data`() = runTest {
         val userId = "userId"
         val organizationId = "organizationId"
-        val cipherViews = listOf(mockk<CipherView>(), mockk<CipherView>())
+        val cipherViews = listOf(
+            mockk<CipherView> { every { partial } returns false },
+            mockk<CipherView> { every { partial } returns false },
+        )
         val collectionIds = listOf("collectionId-1", "collectionId-2")
         val expectedResult = listOf(mockk<EncryptionContext>(), mockk<EncryptionContext>())
 
@@ -1226,7 +1282,7 @@ class VaultSdkSourceTest {
         runTest {
             val userId = "userId"
             val organizationId = "organizationId"
-            val cipherViews = listOf(mockk<CipherView>())
+            val cipherViews = listOf(mockk<CipherView> { every { partial } returns false })
             val collectionIds = listOf("collectionId-1")
             val error = BitwardenException.Decrypt(mockk<DecryptException>("mockException"))
 
