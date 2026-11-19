@@ -52,8 +52,9 @@ private val IP_ADDRESS_WITH_OPTIONAL_PORT =
  */
 fun String.toUriOrNull(): URI? =
     try {
-        // URI cannot parse IP addresses without a scheme, so add one if necessary.
-        if (this.isIpAddress() && !this.hasHttpProtocol()) {
+        // URI cannot parse IP addresses without a scheme, so add one if necessary. A leading
+        // bracket is a bracketed IPv6 literal (e.g. "[::1]:8080").
+        if ((this.isIpAddress() || this.startsWith("[")) && !this.hasHttpProtocol()) {
             URI("https://$this")
         } else {
             URI(this)
