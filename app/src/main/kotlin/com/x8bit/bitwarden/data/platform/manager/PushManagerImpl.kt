@@ -64,6 +64,7 @@ internal class PushManagerImpl @Inject constructor(
     private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
+    private val mutablePamRefreshSharedFlow = bufferedMutableSharedFlow<Unit>()
     private val mutablePremiumStatusChangedSharedFlow =
         bufferedMutableSharedFlow<PremiumStatusChangedData>()
     private val mutableSyncCipherDeleteSharedFlow =
@@ -88,6 +89,9 @@ internal class PushManagerImpl @Inject constructor(
 
     override val passwordlessRequestFlow: SharedFlow<PasswordlessRequestData>
         get() = mutablePasswordlessRequestSharedFlow.asSharedFlow()
+
+    override val pamRefreshFlow: SharedFlow<Unit>
+        get() = mutablePamRefreshSharedFlow.asSharedFlow()
 
     override val premiumStatusChangedFlow: SharedFlow<PremiumStatusChangedData>
         get() = mutablePremiumStatusChangedSharedFlow.asSharedFlow()
@@ -304,6 +308,12 @@ internal class PushManagerImpl @Inject constructor(
                         )
                     }
                     ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(it) }
+            }
+
+            NotificationType.REFRESH_APPROVER_INBOX,
+            NotificationType.REFRESH_ACCESS_REQUEST,
+                -> {
+                mutablePamRefreshSharedFlow.tryEmit(Unit)
             }
 
             NotificationType.PREMIUM_STATUS_CHANGED -> {

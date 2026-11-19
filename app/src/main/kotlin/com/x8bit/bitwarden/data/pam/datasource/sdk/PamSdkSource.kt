@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.pam.datasource.sdk
 
+import com.bitwarden.pam.AccessDecisionRequest
 import com.bitwarden.pam.AccessLeaseExtensionRequest
 import com.bitwarden.pam.AccessLeaseRevokeRequest
 import com.bitwarden.pam.AccessLeaseView
@@ -97,5 +98,25 @@ interface PamSdkSource {
         userId: String,
         leaseId: String,
         request: AccessLeaseExtensionRequest,
+    ): Result<AccessRequestView>
+
+    /**
+     * Lists the pending access requests the user can decide on as an approver.
+     */
+    suspend fun listApprovalInbox(userId: String): Result<List<AccessRequestView>>
+
+    /**
+     * Lists the access requests the user has decided on (or that were decided by others) as an
+     * approver.
+     */
+    suspend fun listApprovalHistory(userId: String): Result<List<AccessRequestView>>
+
+    /**
+     * Records the approver's decision on the request with the given [requestId].
+     */
+    suspend fun decideAccessRequest(
+        userId: String,
+        requestId: String,
+        request: AccessDecisionRequest,
     ): Result<AccessRequestView>
 }

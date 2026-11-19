@@ -43,6 +43,11 @@ private val JSON = Json {
  */
 fun SyncResponseJson.Profile.Organization.toOrganization(): Organization? =
     this.name?.let {
+        val isCustomEditor = this.type == OrganizationType.CUSTOM &&
+            this.permissions.editAnyCollection
+        val isUnrestrictedAdmin = this.allowAdminAccessToAllCollectionItems &&
+            (this.type == OrganizationType.ADMIN || this.type == OrganizationType.OWNER)
+        val canEditAllCiphers = isCustomEditor || isUnrestrictedAdmin
         Organization(
             id = this.id,
             name = it,
@@ -53,6 +58,9 @@ fun SyncResponseJson.Profile.Organization.toOrganization(): Organization? =
             userIsClaimedByOrganization = this.userIsClaimedByOrganization,
             limitItemDeletion = this.limitItemDeletion,
             shouldUseEvents = this.shouldUseEvents,
+            usePam = this.usePam,
+            isProviderUser = this.isProviderUser,
+            canEditAllCiphers = canEditAllCiphers,
         )
     }
 
