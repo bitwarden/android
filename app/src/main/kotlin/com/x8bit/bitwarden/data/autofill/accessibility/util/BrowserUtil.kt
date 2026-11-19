@@ -27,6 +27,7 @@ fun String.getSupportedBrowserOrNull(): Browser? =
 private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(packageName = "alook.browser", urlFieldId = "search_fragment_input_view"),
     Browser(packageName = "alook.browser.google", urlFieldId = "search_fragment_input_view"),
+    Browser(packageName = "app.newsdiary", urlFieldId = "url_bar"),
     Browser(packageName = "app.vanadium.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.amazon.cloud9", urlFieldId = "url"),
     Browser(packageName = "com.android.browser", urlFieldId = "url"),
