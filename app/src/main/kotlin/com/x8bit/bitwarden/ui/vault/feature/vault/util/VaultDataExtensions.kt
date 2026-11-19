@@ -245,9 +245,12 @@ fun List<LoginUriView>?.toLoginIconData(
         BitwardenDrawable.ic_globe
     }
 
+    // Prefer a website URI over an app URI so that an item with both an `androidapp://` URI and
+    // an `https://` URI displays the website's icon, matching the behavior of the other clients.
     var uri = this
-        ?.map { it.uri }
-        ?.firstOrNull { uri -> uri?.contains(".") == true }
+        ?.mapNotNull { it.uri }
+        ?.filter { it.contains(".") }
+        ?.let { uris -> uris.firstOrNull { !it.isAppUri() } ?: uris.firstOrNull() }
         ?: return IconData.Local(defaultIconRes)
 
     if (uri.startsWith(ANDROID_URI)) {
@@ -276,6 +279,12 @@ fun List<LoginUriView>?.toLoginIconData(
         fallbackIconRes = defaultIconRes,
     )
 }
+
+/**
+ * Determines whether this URI references a native app rather than a website.
+ */
+private fun String.isAppUri(): Boolean =
+    this.startsWith(ANDROID_URI) || this.startsWith(IOS_URI)
 
 /**
  * Transforms a [CipherListView] into a [VaultState.ViewState.VaultItem].
