@@ -8,12 +8,14 @@ enum class VaultCardBrand {
     VISA,
     MASTERCARD,
     AMEX,
-    DISCOVER,
+    DINA_CARD,
     DINERS_CLUB,
+    DISCOVER,
     JCB,
     MAESTRO,
-    UNIONPAY,
+    MIR,
     RUPAY,
+    UNIONPAY,
     OTHER,
 }
 
