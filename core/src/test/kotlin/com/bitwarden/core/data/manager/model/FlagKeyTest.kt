@@ -72,6 +72,10 @@ class FlagKeyTest {
             FlagKey.SdkPreLogin.keyName,
             "pm-27060-password-prelogin-from-sdk",
         )
+        assertEquals(
+            FlagKey.AutofillOffBanner.keyName,
+            "pm-42672-autofill-off-banner",
+        )
     }
 
     @Test
@@ -94,6 +98,7 @@ class FlagKeyTest {
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.AutofillOffBanner,
             ).all {
                 !it.defaultValue
             },
