@@ -13,7 +13,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutofillStyle
 class AutoFillHandlers(
     val onBackClick: () -> Unit,
     val onAutofillActionCardClick: () -> Unit,
+    val onAutofillActionCardDismissClick: () -> Unit,
     val onBrowserAutofillActionCardClick: () -> Unit,
+    val onBrowserAutofillActionCardDismissClick: () -> Unit,
     val onAutofillServicesClick: (isEnabled: Boolean) -> Unit,
     val onAutofillStyleChange: (style: AutofillStyle) -> Unit,
     val onBrowserAutofillSelected: (browserPackage: BrowserPackage) -> Unit,
@@ -42,8 +44,14 @@ class AutoFillHandlers(
             onAutofillActionCardClick = {
                 viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick)
             },
+            onAutofillActionCardDismissClick = {
+                viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard)
+            },
             onBrowserAutofillActionCardClick = {
                 viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+            },
+            onBrowserAutofillActionCardDismissClick = {
+                viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
             },
             onAutofillServicesClick = {
                 viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(it))

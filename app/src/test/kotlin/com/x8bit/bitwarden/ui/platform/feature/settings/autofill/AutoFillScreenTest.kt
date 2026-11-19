@@ -554,6 +554,84 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `when autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick) }
+    }
+
+    @Test
+    fun `when autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription("Close")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AutoFillAction.DismissShowAutofillActionCard) }
+    }
+
+    @Test
+    fun `browser autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+        }
+    }
+
+    @Test
     fun `set up autofill banner should replace the help card while autofill is off`() {
         composeTestRule.onNodeWithText(text = "Set up autofill").assertDoesNotExist()
         composeTestRule
@@ -562,7 +640,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
         }
         composeTestRule
             .onNodeWithText(text = "Set up autofill")
@@ -583,7 +661,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(text = "Don’t remind me again").assertDoesNotExist()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.On)
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.On)
         }
         composeTestRule.onNodeWithText(text = "Set up autofill").assertDoesNotExist()
         composeTestRule
@@ -595,7 +673,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `set up autofill banner turn on click should send AutofillActionCardCtaClick`() {
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
         }
         composeTestRule
             .onNodeWithText(text = "Turn on autofill")
@@ -610,7 +688,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `set up autofill banner get help click should send HelpCardClick`() {
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
         }
         composeTestRule
             .onNodeWithText(text = "Having trouble? Get help")
@@ -623,17 +701,17 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `autofill action cards should not show a dismiss button`() {
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
         }
         composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
 
-        mutableStateFlow.update { DEFAULT_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
         composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
     }
 
     @Test
     fun `browser autofill banner should show the default browser name`() {
-        mutableStateFlow.update { DEFAULT_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
 
         composeTestRule
             .onNodeWithText(text = "Turn on autofill in Chrome")
@@ -654,7 +732,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `browser autofill banner turn on click should send BrowserAutofillActionCardCtaClick`() {
-        mutableStateFlow.update { DEFAULT_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
         composeTestRule
             .onNodeWithText(text = "Turn on in Chrome")
             .performScrollTo()
@@ -667,7 +745,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `browser autofill banner get help click should send HelpCardClick`() {
-        mutableStateFlow.update { DEFAULT_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
         composeTestRule
             .onNodeWithText(text = "Having trouble? Get help")
             .performScrollTo()
@@ -972,10 +1050,15 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showInlineAutofillOption = true,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
+    showAutofillActionCard = false,
+    showBrowserAutofillActionCard = false,
+    isAutofillOffBannerEnabled = false,
     autofillPromptStatus = AutofillPromptStatus.On,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
 )
+
+private val BANNER_STATE: AutoFillState = DEFAULT_STATE.copy(isAutofillOffBannerEnabled = true)
 
 private val BROWSER_OFF_PROMPT = AutofillPromptStatus.BrowserOff(
     browserPackage = BrowserPackage.CHROME_STABLE,
