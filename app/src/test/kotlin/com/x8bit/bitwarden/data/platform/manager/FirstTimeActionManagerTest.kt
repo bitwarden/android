@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.KdfTypeJson
@@ -48,6 +49,13 @@ class FirstTimeActionManagerTest {
         every { browserThirdPartyAutofillStatusFlow } returns mutableThirdPartyAutofillStatusFlow
     }
 
+    private val mutableAutofillOffBannerFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.AutofillOffBanner)
+        } returns mutableAutofillOffBannerFlagFlow
+    }
+
     private val firstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
@@ -55,6 +63,7 @@ class FirstTimeActionManagerTest {
         dispatcherManager = FakeDispatcherManager(),
         autofillEnabledManager = autofillEnabledManager,
         thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
+        featureFlagManager = featureFlagManager,
     )
 
     @Suppress("MaxLineLength")
@@ -81,6 +90,34 @@ class FirstTimeActionManagerTest {
                 assertEquals(1, awaitItem())
                 mutableAutofillEnabledFlow.update { true }
                 assertEquals(0, awaitItem())
+            }
+        }
+
+    @Test
+    fun `allAutofillSettingsBadgeCountFlow should be 0 while the AutofillOffBanner flag is on`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = USER_ID, showBadge = true)
+            firstTimeActionManager.allAutofillSettingsBadgeCountFlow.test {
+                assertEquals(1, awaitItem())
+
+                mutableAutofillOffBannerFlagFlow.value = true
+                assertEquals(0, awaitItem())
+
+                mutableAutofillOffBannerFlagFlow.value = false
+                assertEquals(1, awaitItem())
+            }
+        }
+
+    @Test
+    fun `allSettingsBadgeCountFlow should not count autofill while AutofillOffBanner is on`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            mutableAutofillOffBannerFlagFlow.value = true
+            fakeSettingsDiskSource.storeShowAutoFillSettingBadge(userId = USER_ID, showBadge = true)
+            fakeSettingsDiskSource.storeShowUnlockSettingBadge(userId = USER_ID, showBadge = true)
+            firstTimeActionManager.allSettingsBadgeCountFlow.test {
+                assertEquals(1, awaitItem())
             }
         }
 

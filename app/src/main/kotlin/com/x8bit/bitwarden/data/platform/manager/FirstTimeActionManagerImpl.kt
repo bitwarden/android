@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
@@ -27,7 +28,7 @@ import javax.inject.Inject
 /**
  * Implementation of [FirstTimeActionManager]
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 class FirstTimeActionManagerImpl @Inject constructor(
     dispatcherManager: DispatcherManager,
     private val authDiskSource: AuthDiskSource,
@@ -35,6 +36,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
     private val vaultDiskSource: VaultDiskSource,
     private val autofillEnabledManager: AutofillEnabledManager,
     private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : FirstTimeActionManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -76,22 +78,31 @@ class FirstTimeActionManagerImpl @Inject constructor(
                 initialValue = 0,
             )
 
+    /**
+     * Always 0 while [FlagKey.AutofillOffBanner] is on, because the autofill off banner replaces
+     * these badges.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                combine(
-                    getShowAutofillSettingBadgeFlowInternal(userId = it),
-                    getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
-                ) { showAutofillBadge, showBrowserAutofillBadge ->
-                    listOf(showAutofillBadge, showBrowserAutofillBadge)
-                }
-                    .map { list ->
-                        list.count { showBadge -> showBadge }
+        get() = combine(
+            featureFlagManager.getFeatureFlagFlow(FlagKey.AutofillOffBanner),
+            authDiskSource
+                .activeUserIdChangesFlow
+                .filterNotNull()
+                .flatMapLatest {
+                    combine(
+                        getShowAutofillSettingBadgeFlowInternal(userId = it),
+                        getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
+                    ) { showAutofillBadge, showBrowserAutofillBadge ->
+                        listOf(showAutofillBadge, showBrowserAutofillBadge)
                     }
-            }
+                        .map { list ->
+                            list.count { showBadge -> showBadge }
+                        }
+                },
+        ) { isAutofillOffBannerEnabled, badgeCount ->
+            if (isAutofillOffBannerEnabled) 0 else badgeCount
+        }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Lazily,
