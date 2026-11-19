@@ -15,7 +15,8 @@ These are a proof of concept (QA-1407). Test method names carry the Testmo case 
 The app's unit UI tests don't use test tags; they find nodes by text and semantics. These
 end-to-end tests are an exception: they drive the whole app the way a user does, so they find
 nodes by `testTag` (`hasTestTag`), the same stable IDs the Appium suite in bitwarden/test
-already relies on. Matching by text (`hasText`) is the fallback only where a node has no tag yet. Add new tags for these tests the same way as for the Appium suite, and don't use them in
+already relies on. Matching by text (`hasText`) is the fallback only where a node has no tag
+yet. Add new tags for these tests the same way as for the Appium suite, and don't use them in
 unit UI tests.
 
 ## Requirements
