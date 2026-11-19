@@ -136,6 +136,7 @@ fun SetupUnlockScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun SetupUnlockScreenContent(
     state: SetupUnlockState,
@@ -159,26 +160,32 @@ private fun SetupUnlockScreenContent(
             isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
             onDisableBiometrics = handler.onDisableBiometrics,
             onEnableBiometrics = handler.onEnableBiometrics,
-            cardStyle = CardStyle.Top(),
+            cardStyle = if (state.isUpdatedOnboardingFlowEnabled) {
+                CardStyle.Full
+            } else {
+                CardStyle.Top()
+            },
             modifier = Modifier
                 .testTag(tag = "UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-        BitwardenUnlockWithPinSwitch(
-            isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
-            isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
-            onUnlockWithPinToggleAction = handler.onUnlockWithPinToggle,
-            cardStyle = if (biometricSupportStatus == BiometricSupportStatus.NOT_SUPPORTED) {
-                CardStyle.Full
-            } else {
-                CardStyle.Bottom
-            },
-            modifier = Modifier
-                .testTag(tag = "UnlockWithPinSwitch")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
+        if (!state.isUpdatedOnboardingFlowEnabled) {
+            BitwardenUnlockWithPinSwitch(
+                isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
+                isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
+                onUnlockWithPinToggleAction = handler.onUnlockWithPinToggle,
+                cardStyle = if (biometricSupportStatus == BiometricSupportStatus.NOT_SUPPORTED) {
+                    CardStyle.Full
+                } else {
+                    CardStyle.Bottom
+                },
+                modifier = Modifier
+                    .testTag(tag = "UnlockWithPinSwitch")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
         BitwardenFilledButton(

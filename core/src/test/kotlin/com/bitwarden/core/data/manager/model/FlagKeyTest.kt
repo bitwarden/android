@@ -68,6 +68,10 @@ class FlagKeyTest {
             FlagKey.SdkPreLogin.keyName,
             "pm-27060-password-prelogin-from-sdk",
         )
+        assertEquals(
+            FlagKey.UpdatedOnboardingFlow.keyName,
+            "pm-44455-account-setup-onboarding-on-sign-in",
+        )
     }
 
     @Test
@@ -89,6 +93,7 @@ class FlagKeyTest {
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.UpdatedOnboardingFlow,
             ).all {
                 !it.defaultValue
             },

@@ -5,7 +5,6 @@ import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.CookieDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
@@ -117,7 +116,7 @@ class DebugMenuRepositoryTest {
         }
 
     @Test
-    fun `resetOnboardingStatusForCurrentUser should set the onboarding status to NOT_STARTED`() {
+    fun `resetOnboardingStatusForCurrentUser should clear the onboarding status`() {
         val userId = "testUserId"
         val mockUserStateJson = mockk<UserStateJson>(relaxed = true) {
             every { activeUserId } returns userId
@@ -128,7 +127,7 @@ class DebugMenuRepositoryTest {
         verify {
             mockAuthDiskSource.storeOnboardingStatus(
                 userId = userId,
-                onboardingStatus = OnboardingStatus.NOT_STARTED,
+                onboardingStatus = null,
             )
         }
     }
@@ -140,7 +139,7 @@ class DebugMenuRepositoryTest {
         verify(exactly = 0) {
             mockAuthDiskSource.storeOnboardingStatus(
                 userId = any(),
-                onboardingStatus = OnboardingStatus.NOT_STARTED,
+                onboardingStatus = any(),
             )
         }
     }

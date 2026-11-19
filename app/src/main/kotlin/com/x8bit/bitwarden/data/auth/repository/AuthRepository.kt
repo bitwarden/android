@@ -2,12 +2,12 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
 import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.OrganizationManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
@@ -50,6 +50,7 @@ interface AuthRepository :
     AuthStateManager,
     BiometricsEncryptionManager,
     KdfManager,
+    OnboardingManager,
     OrganizationManager,
     PasswordPolicyManager,
     UserStateManager {
@@ -377,9 +378,4 @@ interface AuthRepository :
         email: String,
         token: String,
     ): EmailTokenResult
-
-    /**
-     * Update the value of the onboarding status for the user.
-     */
-    fun setOnboardingStatus(status: OnboardingStatus)
 }

@@ -81,7 +81,9 @@ fun SetupAutoFillScreen(
         is SetupAutoFillDialogState.AutoFillFallbackDialog -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = BitwardenString.bitwarden_autofill_go_to_settings),
+                message = stringResource(
+                    id = BitwardenString.we_were_unable_to_automatically_open_the_autofill_settings,
+                ),
                 onDismissRequest = handler.onDismissDialog,
             )
         }
@@ -270,7 +272,6 @@ private fun SetupAutoFillContentDisabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = false,
                 isInitialSetup = true,
@@ -288,7 +289,6 @@ private fun SetupAutoFillContentEnabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = true,
                 isInitialSetup = true,
