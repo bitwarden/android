@@ -243,6 +243,7 @@ fun List<CollectionView>.getDefaultCollectionViewOrNull(
 ): CollectionView? =
     if (isIndividualVaultDisabled) {
         firstOrNull { it.type == CollectionType.DEFAULT_USER_COLLECTION }
+            ?: singleOrNull()
     } else {
         null
     }
