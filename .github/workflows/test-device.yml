@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  _API_LEVEL: "36"
+  _API_LEVEL: "37.0"
   _EMULATOR_TARGET: google_apis_playstore
   BW_TEST_SERVER_URL: https://qa-automation.sh.bitwarden.pw
   BW_SEEDER_URL: https://qa-automation.sh.bitwarden.pw/seeder
@@ -79,6 +79,20 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # The runner image's avdmanager writes target=android-0 for "37.0"-style packages, which makes
+      # surfaceflinger crash-loop (hasReadColorBufferDma). Command-line Tools 22.0+ writes it correctly.
+      # https://github.com/ReactiveCircus/android-emulator-runner/issues/482
+      - name: Update Android command-line tools
+        run: |
+          sdk="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          yes | "$sdk/cmdline-tools/latest/bin/sdkmanager" --install "cmdline-tools;latest" > /dev/null
+          # sdkmanager installs next to the existing copy rather than over it.
+          if [ -d "$sdk/cmdline-tools/latest-2" ]; then
+            rm -rf "$sdk/cmdline-tools/latest"
+            mv "$sdk/cmdline-tools/latest-2" "$sdk/cmdline-tools/latest"
+          fi
+          "$sdk/cmdline-tools/latest/bin/sdkmanager" --version
+
       # Runs through Gradle so the orchestrator clears app data between tests. Gradle keeps the
       # instrumentation arguments in its execution history, which is fine on a throwaway runner.
       # Test outputs are never uploaded: the debug app logs HTTP bodies, so logcat holds the seeded
@@ -103,6 +117,7 @@ jobs:
           # waits for system_server to settle after the first boot; the last shows whether it
           # restarted during the test run.
           script: |
+            grep -H '^target' "$HOME/.android/avd/test.ini" || true
             ./scripts/wait-for-stable-emulator.sh
             ./gradlew :app:connectedStandardDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"
             adb shell pidof system_server || echo "system_server not running after the tests"
