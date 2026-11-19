@@ -436,7 +436,7 @@ class VaultItemViewModel @AssistedInject constructor(
                                 .common
                                 .customFields
                                 .map { customField ->
-                                    if (customField == action.field) {
+                                    if (customField.id == action.field.id) {
                                         action.field.copy(isVisible = action.isVisible)
                                     } else {
                                         customField
