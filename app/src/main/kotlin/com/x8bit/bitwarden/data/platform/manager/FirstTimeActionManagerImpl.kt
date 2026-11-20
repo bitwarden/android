@@ -78,36 +78,32 @@ class FirstTimeActionManagerImpl @Inject constructor(
                 initialValue = 0,
             )
 
-    /**
-     * Always 0 while [FlagKey.AutofillOffBanner] is on, because the autofill off banner replaces
-     * these badges.
-     */
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-        get() = combine(
-            featureFlagManager.getFeatureFlagFlow(FlagKey.AutofillOffBanner),
-            authDiskSource
-                .activeUserIdChangesFlow
-                .filterNotNull()
-                .flatMapLatest {
-                    combine(
-                        getShowAutofillSettingBadgeFlowInternal(userId = it),
-                        getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
-                    ) { showAutofillBadge, showBrowserAutofillBadge ->
-                        listOf(showAutofillBadge, showBrowserAutofillBadge)
+    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int> = combine(
+        featureFlagManager.getFeatureFlagFlow(FlagKey.AutofillOffBanner),
+        authDiskSource
+            .activeUserIdChangesFlow
+            .filterNotNull()
+            .flatMapLatest {
+                combine(
+                    getShowAutofillSettingBadgeFlowInternal(userId = it),
+                    getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
+                ) { showAutofillBadge, showBrowserAutofillBadge ->
+                    listOf(showAutofillBadge, showBrowserAutofillBadge)
+                }
+                    .map { list ->
+                        list.count { showBadge -> showBadge }
                     }
-                        .map { list ->
-                            list.count { showBadge -> showBadge }
-                        }
-                },
-        ) { isAutofillOffBannerEnabled, badgeCount ->
-            if (isAutofillOffBannerEnabled) 0 else badgeCount
-        }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
+            },
+    ) { isAutofillOffBannerEnabled, badgeCount ->
+        // The autofill off banner replaces these badges, so hide them while the flag is on.
+        if (isAutofillOffBannerEnabled) 0 else badgeCount
+    }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Lazily,
+            initialValue = 0,
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val allVaultSettingsBadgeCountFlow: StateFlow<Int>
