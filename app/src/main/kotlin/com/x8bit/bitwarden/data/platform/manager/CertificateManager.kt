@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import androidx.annotation.WorkerThread
 import com.bitwarden.network.ssl.CertificateProvider
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 
@@ -8,6 +10,20 @@ import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
  * Primary access point for disk information related to key data.
  */
 interface CertificateManager : CertificateProvider {
+
+    /**
+     * The mTLS certificate configured for the current environment, resolved from its key store on
+     * every access, or `null` when none is configured or it cannot be loaded.
+     */
+    @get:WorkerThread
+    val mutualTlsCertificate: MutualTlsCertificate?
+
+    /**
+     * Resolves the mTLS certificate that [keyUri] references from its key store, or returns `null`
+     * when [keyUri] is malformed or the certificate cannot be loaded.
+     */
+    @WorkerThread
+    fun getMutualTlsCertificate(keyUri: String): MutualTlsCertificate?
 
     /**
      * Returns a list of aliases for all mTLS keys stored in the application KeyStore.

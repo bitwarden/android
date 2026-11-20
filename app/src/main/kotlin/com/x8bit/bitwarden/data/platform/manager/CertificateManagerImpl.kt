@@ -1,10 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.content.Context
-import android.net.Uri
 import android.security.KeyChain
 import android.security.KeyChainException
-import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.error.MissingPropertyException
@@ -39,28 +37,33 @@ class CertificateManagerImpl(
         the main thread will result in an exception being thrown when retrieving the mutual TLS
         certificate from [KeyManager].
      */
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     @get:WorkerThread
-    internal val mutualTlsCertificate: MutualTlsCertificate?
-        get() {
-            val keyUri = getKeyUri()
-                ?: return null
+    override val mutualTlsCertificate: MutualTlsCertificate?
+        get() = environmentRepository
+            .environment
+            .environmentUrlData
+            .keyUri
+            ?.let { getMutualTlsCertificate(keyUri = it) }
 
-            val host = MutualTlsKeyHost
-                .entries
-                .find { it.name == keyUri.authority }
-                ?: return null
+    @WorkerThread
+    override fun getMutualTlsCertificate(keyUri: String): MutualTlsCertificate? {
+        val uri = keyUri.toUri()
 
-            val alias = keyUri.path
-                ?.trim('/')
-                ?.takeUnless { it.isEmpty() }
-                ?: return null
+        val host = MutualTlsKeyHost
+            .entries
+            .find { it.name == uri.authority }
+            ?: return null
 
-            return getMutualTlsCertificateChain(
-                alias = alias,
-                host = host,
-            )
-        }
+        val alias = uri.path
+            ?.trim('/')
+            ?.takeUnless { it.isEmpty() }
+            ?: return null
+
+        return getMutualTlsCertificateChain(
+            alias = alias,
+            host = host,
+        )
+    }
 
     override fun getMutualTlsKeyAliases(): List<String> = androidKeyStore.aliases().toList()
 
@@ -167,12 +170,6 @@ class CertificateManagerImpl(
 
     @WorkerThread
     override fun getPrivateKey(alias: String?): PrivateKey? = mutualTlsCertificate?.privateKey
-
-    private fun getKeyUri(): Uri? = environmentRepository
-        .environment
-        .environmentUrlData
-        .keyUri
-        ?.toUri()
 
     private fun removeKeyFromAndroidKeyStore(alias: String) {
         try {

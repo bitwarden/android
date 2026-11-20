@@ -245,6 +245,7 @@ object PlatformManagerModule {
         sdkRepositoryFactory: SdkRepositoryFactory,
         sdkPlatformApiFactory: SdkPlatformApiFactory,
         sdkLoggerFactory: SdkLoggerFactory,
+        certificateManager: CertificateManager,
     ): SdkClientManager = SdkClientManagerImpl(
         dispatcherManager = dispatcherManager,
         featureFlagManager = featureFlagManager,
@@ -252,6 +253,7 @@ object PlatformManagerModule {
         sdkRepoFactory = sdkRepositoryFactory,
         sdkPlatformApiFactory = sdkPlatformApiFactory,
         sdkLoggerFactory = sdkLoggerFactory,
+        certificateManager = certificateManager,
     )
 
     @Provides
