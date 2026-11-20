@@ -39,80 +39,76 @@ class FirstTimeActionManagerImpl @Inject constructor(
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    override val allSettingsBadgeCountFlow: StateFlow<Int>
-        get() = combine(
-            listOf(
-                allSecuritySettingsBadgeCountFlow,
-                allAutofillSettingsBadgeCountFlow,
-                allVaultSettingsBadgeCountFlow,
-            ),
-        ) {
-            it.sum()
-        }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val allSecuritySettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                // can be expanded to support multiple security settings
-                settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = it)
-                    .map { showUnlockBadge ->
-                        listOfNotNull(showUnlockBadge)
-                    }
-                    .map { list ->
-                        list.count { badgeOnValue -> badgeOnValue }
-                    }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                combine(
-                    getShowAutofillSettingBadgeFlowInternal(userId = it),
-                    getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
-                ) { showAutofillBadge, showBrowserAutofillBadge ->
-                    listOf(showAutofillBadge, showBrowserAutofillBadge)
+    override val allSecuritySettingsBadgeCountFlow: StateFlow<Int> = authDiskSource
+        .activeUserIdChangesFlow
+        .filterNotNull()
+        .flatMapLatest {
+            // can be expanded to support multiple security settings
+            settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = it)
+                .map { showUnlockBadge ->
+                    listOfNotNull(showUnlockBadge)
                 }
-                    .map { list ->
-                        list.count { showBadge -> showBadge }
-                    }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
+                .map { list ->
+                    list.count { badgeOnValue -> badgeOnValue }
+                }
+        }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0,
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val allVaultSettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .filterNotNull()
-            .flatMapLatest {
-                getShowImportLoginsSettingBadgeFlowInternal(userId = it)
-                    .map { showImportLogins -> listOf(showImportLogins) }
-                    .map { list -> list.count { showImportLogins -> showImportLogins } }
+    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int> = authDiskSource
+        .activeUserIdChangesFlow
+        .filterNotNull()
+        .flatMapLatest {
+            combine(
+                getShowAutofillSettingBadgeFlowInternal(userId = it),
+                getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
+            ) { showAutofillBadge, showBrowserAutofillBadge ->
+                listOf(showAutofillBadge, showBrowserAutofillBadge)
             }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
+                .map { list ->
+                    list.count { showBadge -> showBadge }
+                }
+        }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0,
+        )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val allVaultSettingsBadgeCountFlow: StateFlow<Int> = authDiskSource
+        .activeUserIdChangesFlow
+        .filterNotNull()
+        .flatMapLatest {
+            getShowImportLoginsSettingBadgeFlowInternal(userId = it)
+                .map { showImportLogins -> listOf(showImportLogins) }
+                .map { list -> list.count { showImportLogins -> showImportLogins } }
+        }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0,
+        )
+
+    override val allSettingsBadgeCountFlow: StateFlow<Int> = combine(
+        listOf(
+            allSecuritySettingsBadgeCountFlow,
+            allAutofillSettingsBadgeCountFlow,
+            allVaultSettingsBadgeCountFlow,
+        ),
+    ) {
+        it.sum()
+    }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0,
+        )
 
     /**
      * Returns a [Flow] that emits every time the active user's first time state is changed.

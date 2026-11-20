@@ -6,12 +6,14 @@ import com.bitwarden.authenticator.data.platform.manager.lock.model.AppTimeout
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -22,8 +24,24 @@ import org.junit.jupiter.api.Test
 class SettingsRepositoryTest {
 
     private val mutableAppTimeoutInMinutesFlow = MutableStateFlow<Int?>(null)
+    private val mutableDynamicColorsFlow = bufferedMutableSharedFlow<Boolean?>()
+    private val mutableShowNextCodeFlow = bufferedMutableSharedFlow<Boolean?>()
     private val settingsDiskSource: SettingsDiskSource = mockk {
+        // The repository eagerly shares these flows when it is constructed.
         every { getAlertThresholdSeconds() } returns 7
+        every { getAlertThresholdSecondsFlow() } returns emptyFlow()
+        every { appTheme } returns AppTheme.DEFAULT
+        every { appThemeFlow } returns emptyFlow()
+        every { isDynamicColorsEnabled } returns null
+        every { isDynamicColorsEnabledFlow } returns mutableDynamicColorsFlow
+        every { hasSeenWelcomeTutorial } returns false
+        every { hasSeenWelcomeTutorialFlow } returns emptyFlow()
+        every { getScreenCaptureAllowed() } returns null
+        every { getScreenCaptureAllowedFlow() } returns emptyFlow()
+        every { isCrashLoggingEnabled } returns null
+        every { isCrashLoggingEnabledFlow } returns emptyFlow()
+        every { isShowNextCodeEnabled } returns null
+        every { isShowNextCodeEnabledFlow } returns mutableShowNextCodeFlow
         every { appTimeoutInMinutesFlow } returns mutableAppTimeoutInMinutesFlow
         every { appTimeoutInMinutes } answers { mutableAppTimeoutInMinutesFlow.value }
     }
@@ -130,8 +148,6 @@ class SettingsRepositoryTest {
     @Test
     fun `isDynamicColorsEnabledFlow should match SettingsDiskSource`() = runTest {
         // Reading from repository should read from disk source:
-        val mutableDynamicColorsFlow = bufferedMutableSharedFlow<Boolean?>()
-        every { settingsDiskSource.isDynamicColorsEnabledFlow } returns mutableDynamicColorsFlow
         every { settingsDiskSource.isDynamicColorsEnabled } returns null
 
         settingsRepository.isDynamicColorsEnabledFlow.test {
@@ -189,8 +205,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `isShowNextCodeEnabledFlow should map null to false and emit updates`() = runTest {
-        val mutableShowNextCodeFlow = bufferedMutableSharedFlow<Boolean?>()
-        every { settingsDiskSource.isShowNextCodeEnabledFlow } returns mutableShowNextCodeFlow
         every { settingsDiskSource.isShowNextCodeEnabled } returns null
 
         settingsRepository.isShowNextCodeEnabledFlow.test {

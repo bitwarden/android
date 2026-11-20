@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -27,11 +28,13 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -72,26 +75,24 @@ class SettingsRepositoryImpl(
             settingsDiskSource.appLanguage = value
         }
 
-    override val appLanguageStateFlow: StateFlow<AppLanguage>
-        get() = settingsDiskSource
-            .appLanguageFlow
-            .map { it ?: AppLanguage.DEFAULT }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = appLanguage,
-            )
+    override val appLanguageStateFlow: StateFlow<AppLanguage> = settingsDiskSource
+        .appLanguageFlow
+        .map { it ?: AppLanguage.DEFAULT }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = appLanguage,
+        )
 
     override var appTheme: AppTheme by settingsDiskSource::appTheme
 
-    override val appThemeStateFlow: StateFlow<AppTheme>
-        get() = settingsDiskSource
-            .appThemeFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource.appTheme,
-            )
+    override val appThemeStateFlow: StateFlow<AppTheme> = settingsDiskSource
+        .appThemeFlow
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.appTheme,
+        )
 
     override var isDynamicColorsEnabled: Boolean
         get() = settingsDiskSource.isDynamicColorsEnabled ?: false
@@ -99,15 +100,14 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isDynamicColorsEnabled = value
         }
 
-    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .isDynamicColorsEnabledFlow
-            .map { it ?: false }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isDynamicColorsEnabled,
-            )
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean> = settingsDiskSource
+        .isDynamicColorsEnabledFlow
+        .map { it ?: false }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isDynamicColorsEnabled,
+        )
 
     override var initialAutofillDialogShown: Boolean
         get() = settingsDiskSource.initialAutofillDialogShown ?: false
@@ -122,18 +122,20 @@ class SettingsRepositoryImpl(
             settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = value)
         }
 
-    override val vaultLastSyncStateFlow: StateFlow<Instant?>
-        get() = activeUserId
-            ?.let {
-                settingsDiskSource
-                    .getLastSyncTimeFlow(userId = it)
-                    .stateIn(
-                        scope = unconfinedScope,
-                        started = SharingStarted.Eagerly,
-                        initialValue = settingsDiskSource.getLastSyncTime(userId = it),
-                    )
-            }
-            ?: MutableStateFlow(value = null)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val vaultLastSyncStateFlow: StateFlow<Instant?> = authDiskSource
+        .activeUserIdChangesFlow
+        .flatMapLatest { userId ->
+            userId
+                ?.let { settingsDiskSource.getLastSyncTimeFlow(userId = it) }
+                ?: flowOf(value = null)
+        }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = activeUserId
+                ?.let { settingsDiskSource.getLastSyncTime(userId = it) },
+        )
 
     override var isAuthenticatorSyncEnabled: Boolean
         // Authenticator sync is enabled if there is an authenticator sync unlock key for
@@ -175,17 +177,16 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isIconLoadingDisabled = value
         }
 
-    override val isIconLoadingDisabledFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .isIconLoadingDisabledFlow
-            .map { it ?: false }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource
-                    .isIconLoadingDisabled
-                    ?: false,
-            )
+    override val isIconLoadingDisabledFlow: StateFlow<Boolean> = settingsDiskSource
+        .isIconLoadingDisabledFlow
+        .map { it ?: false }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource
+                .isIconLoadingDisabled
+                ?: false,
+        )
     override var clearClipboardFrequency: ClearClipboardFrequency
         get() = activeUserId
             ?.let { userId ->
@@ -205,15 +206,14 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isCrashLoggingEnabled = value
         }
 
-    override val isCrashLoggingEnabledFlow: Flow<Boolean>
-        get() = settingsDiskSource
-            .isCrashLoggingEnabledFlow
-            .map { it ?: isCrashLoggingEnabled }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isCrashLoggingEnabled,
-            )
+    override val isCrashLoggingEnabledFlow: Flow<Boolean> = settingsDiskSource
+        .isCrashLoggingEnabledFlow
+        .map { it ?: isCrashLoggingEnabled }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isCrashLoggingEnabled,
+        )
 
     override var hasUserLoggedInOrCreatedAccount: Boolean
         get() = settingsDiskSource.hasUserLoggedInOrCreatedAccount ?: false
@@ -221,15 +221,14 @@ class SettingsRepositoryImpl(
             settingsDiskSource.hasUserLoggedInOrCreatedAccount = value
         }
 
-    override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean>
-        get() = settingsDiskSource
-            .hasUserLoggedInOrCreatedAccountFlow
-            .map { it ?: hasUserLoggedInOrCreatedAccount }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = hasUserLoggedInOrCreatedAccount,
-            )
+    override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean> = settingsDiskSource
+        .hasUserLoggedInOrCreatedAccountFlow
+        .map { it ?: hasUserLoggedInOrCreatedAccount }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = hasUserLoggedInOrCreatedAccount,
+        )
 
     override var vaultTimeout: VaultTimeout
         get() = activeUserId
@@ -393,26 +392,24 @@ class SettingsRepositoryImpl(
             settingsDiskSource.screenCaptureAllowed = value
         }
 
-    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .screenCaptureAllowedFlow
-            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = isScreenCaptureAllowed,
-            )
+    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean> = settingsDiskSource
+        .screenCaptureAllowedFlow
+        .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isScreenCaptureAllowed,
+        )
 
-    override val hasShownAccessibilityDisclaimerFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .hasShownAccessibilityDisclaimerFlow
-            .map { buildInfoManager.isFdroid || it ?: false }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = buildInfoManager.isFdroid ||
-                    settingsDiskSource.hasShownAccessibilityDisclaimer ?: false,
-            )
+    override val hasShownAccessibilityDisclaimerFlow: StateFlow<Boolean> = settingsDiskSource
+        .hasShownAccessibilityDisclaimerFlow
+        .map { buildInfoManager.isFdroid || it ?: false }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = buildInfoManager.isFdroid ||
+                settingsDiskSource.hasShownAccessibilityDisclaimer ?: false,
+        )
 
     init {
         policyManager

@@ -48,28 +48,27 @@ internal class UserNotificationPolicyManagerImpl(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val displayDataFlow: StateFlow<UserNotificationPolicyData?>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .flatMapLatest { userId ->
-                userId ?: return@flatMapLatest flowOf(null)
-                combine(
-                    settingsDiskSource.getVaultPolicyBannerDismissedDateFlow(userId = userId),
-                    policyManager
-                        .getActivePoliciesFlow(type = PolicyType.ORGANIZATION_USER_NOTIFICATION)
-                        .map { it.firstOrNull() },
-                ) { revisionDate, policy ->
-                    (policy?.userNotificationPolicyData)?.takeIf {
-                        policy.revisionDate?.toEpochMilli() != revisionDate?.toEpochMilli() ||
-                            revisionDate == null
-                    }
+    override val displayDataFlow: StateFlow<UserNotificationPolicyData?> = authDiskSource
+        .activeUserIdChangesFlow
+        .flatMapLatest { userId ->
+            userId ?: return@flatMapLatest flowOf(null)
+            combine(
+                settingsDiskSource.getVaultPolicyBannerDismissedDateFlow(userId = userId),
+                policyManager
+                    .getActivePoliciesFlow(type = PolicyType.ORGANIZATION_USER_NOTIFICATION)
+                    .map { it.firstOrNull() },
+            ) { revisionDate, policy ->
+                (policy?.userNotificationPolicyData)?.takeIf {
+                    policy.revisionDate?.toEpochMilli() != revisionDate?.toEpochMilli() ||
+                        revisionDate == null
                 }
             }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = displayData,
-            )
+        }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = displayData,
+        )
 
     override fun dismissBanner() {
         policyManager
