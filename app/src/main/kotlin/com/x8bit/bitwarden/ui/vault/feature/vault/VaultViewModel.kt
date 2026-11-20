@@ -33,7 +33,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_URL
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
@@ -89,6 +92,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -125,6 +129,7 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
+    private val autofillPromptManager: AutofillPromptManager,
     private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     private val userNotificationPolicyManager: UserNotificationPolicyManager,
     buildInfoManager: BuildInfoManager,
@@ -170,6 +175,10 @@ class VaultViewModel @Inject constructor(
             isIntroducingArchiveActionCardDismissed = settingsRepository
                 .getIntroducingArchiveActionCardDismissedFlow()
                 .value,
+            autofillPromptStatus = autofillPromptManager
+                .vaultAutofillPromptFlow
+                .value
+                .takeIf { featureFlagManager.getFeatureFlag(FlagKey.AutofillOffBanner) },
             validTotpIds = persistentSetOf(),
             collapsedSections = settingsRepository.collapsedVaultSections.toImmutableSet(),
             policyBanner = userNotificationPolicyManager.displayData?.let {
@@ -276,6 +285,7 @@ class VaultViewModel @Inject constructor(
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
         settingsRepository
             .getIntroducingArchiveActionCardDismissedFlow()
             .map { VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive(it) }
@@ -291,6 +301,16 @@ class VaultViewModel @Inject constructor(
         userNotificationPolicyManager
             .displayDataFlow
             .map { VaultAction.Internal.UserNotificationPolicyReceive(policyInfo = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        combine(
+            autofillPromptManager.vaultAutofillPromptFlow,
+            featureFlagManager.getFeatureFlagFlow(FlagKey.AutofillOffBanner),
+        ) { autofillPromptStatus, isAutofillOffBannerEnabled ->
+            autofillPromptStatus.takeIf { isAutofillOffBannerEnabled }
+        }
+            .map { VaultAction.Internal.AutofillPromptStatusReceive(autofillPromptStatus = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -337,6 +357,7 @@ class VaultViewModel @Inject constructor(
                         .ThirdPartyBrowserAutofill(browserAutofillDialogManager.browserCount)
                         .takeIf {
                             vaultState.dialog == null &&
+                                !featureFlagManager.getFeatureFlag(FlagKey.AutofillOffBanner) &&
                                 browserAutofillDialogManager.shouldShowDialog
                         }
                         ?: vaultState.dialog,
@@ -407,6 +428,7 @@ class VaultViewModel @Inject constructor(
 
             VaultAction.UpgradeToPremiumClick -> handleUpgradeToPremiumClick()
             is VaultAction.DismissActionCardClick -> handleDismissActionCardClick(action)
+            VaultAction.AutofillActionCardOptOutClick -> handleAutofillActionCardOptOutClick()
             is VaultAction.ActionCardClick -> handleActionCardClick(action)
             is VaultAction.SectionHeaderClick -> handleSectionHeaderClick(action)
         }
@@ -493,7 +515,17 @@ class VaultViewModel @Inject constructor(
             is VaultState.ActionCardState.VaultPolicyBanner -> {
                 userNotificationPolicyManager.dismissBanner()
             }
+
+            VaultState.ActionCardState.SetUpAutofill,
+            is VaultState.ActionCardState.TurnOnBrowserAutofill,
+                -> {
+                autofillPromptManager.snoozeVaultPrompt()
+            }
         }
+    }
+
+    private fun handleAutofillActionCardOptOutClick() {
+        autofillPromptManager.optOutOfVaultPrompt()
     }
 
     private fun handleActionCardClick(action: VaultAction.ActionCardClick) {
@@ -527,6 +559,14 @@ class VaultViewModel @Inject constructor(
                     ),
                 )
                 userNotificationPolicyManager.dismissBanner()
+            }
+
+            VaultState.ActionCardState.SetUpAutofill -> {
+                sendEvent(VaultEvent.NavigateToSetupAutofill)
+            }
+
+            is VaultState.ActionCardState.TurnOnBrowserAutofill -> {
+                sendEvent(VaultEvent.NavigateToSetupBrowserAutofill)
             }
         }
     }
@@ -1213,6 +1253,10 @@ class VaultViewModel @Inject constructor(
                 handleIntroducingArchiveActionCardDismissedFlowReceive(action)
             }
 
+            is VaultAction.Internal.AutofillPromptStatusReceive -> {
+                handleAutofillPromptStatusReceive(action)
+            }
+
             is VaultAction.Internal.CollapsedSectionsReceive -> {
                 handleCollapsedSectionsReceive(action)
             }
@@ -1386,6 +1430,12 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isIntroducingArchiveActionCardDismissed = action.isDismissed)
         }
+    }
+
+    private fun handleAutofillPromptStatusReceive(
+        action: VaultAction.Internal.AutofillPromptStatusReceive,
+    ) {
+        mutableStateFlow.update { it.copy(autofillPromptStatus = action.autofillPromptStatus) }
     }
 
     private fun handleCollapsedSectionsReceive(
@@ -1922,6 +1972,7 @@ data class VaultState(
     val hasShownDecryptionFailureAlert: Boolean,
     val restrictItemTypesPolicyOrgIds: List<String>,
     val isIntroducingArchiveActionCardDismissed: Boolean,
+    val autofillPromptStatus: AutofillPromptStatus? = null,
     val premiumCard: PremiumCard = PremiumCard.NONE,
     val isUpgradedToPremiumCardEligible: Boolean = false,
     val isAwaitingKdfSync: Boolean = false,
@@ -1946,6 +1997,7 @@ data class VaultState(
                             button = it.buttonText,
                         )
                     }
+                    ?: autofillActionCard
                     ?: ActionCardState.UpgradedToPremium
                         .takeIf { isUpgradedToPremiumCardEligible }
                     ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
@@ -1967,6 +2019,7 @@ data class VaultState(
                             button = it.buttonText,
                         )
                     }
+                    ?: autofillActionCard
                     ?: ActionCardState.UpgradePremium.takeIf { premiumCard == PremiumCard.UPGRADE }
                     ?: ActionCardState.PremiumNeedsAttention.takeIf {
                         premiumCard == PremiumCard.NEEDS_ATTENTION
@@ -1976,6 +2029,21 @@ data class VaultState(
 
             is ViewState.Error,
             ViewState.Loading,
+                -> null
+        }
+
+    /**
+     * The autofill action card to display, or null if autofill needs no attention on the vault.
+     */
+    private val autofillActionCard: ActionCardState?
+        get() = when (val prompt = autofillPromptStatus) {
+            AutofillPromptStatus.AutofillOff -> ActionCardState.SetUpAutofill
+            is AutofillPromptStatus.BrowserOff -> {
+                ActionCardState.TurnOnBrowserAutofill(browserPackage = prompt.browserPackage)
+            }
+
+            AutofillPromptStatus.On,
+            null,
                 -> null
         }
 
@@ -2404,6 +2472,22 @@ data class VaultState(
          * Indicates that the import items card should be displayed.
          */
         data object ImportItems : ActionCardState()
+
+        /**
+         * Indicates that Bitwarden is not the selected autofill service and the user should be
+         * prompted to set up autofill.
+         */
+        data object SetUpAutofill : ActionCardState()
+
+        /**
+         * Indicates that Bitwarden is the selected autofill service, but the default browser has
+         * third party autofill turned off.
+         *
+         * @property browserPackage The default browser that needs third party autofill turned on.
+         */
+        data class TurnOnBrowserAutofill(
+            val browserPackage: BrowserPackage,
+        ) : ActionCardState()
     }
 
     /**
@@ -2562,6 +2646,16 @@ sealed class VaultEvent {
      * Navigate to the import logins screen.
      */
     data object NavigateToImportLogins : VaultEvent()
+
+    /**
+     * Navigate to the setup autofill screen.
+     */
+    data object NavigateToSetupAutofill : VaultEvent()
+
+    /**
+     * Navigate to the setup browser autofill screen.
+     */
+    data object NavigateToSetupBrowserAutofill : VaultEvent()
 
     /**
      * Indicates that we should prompt the user for app review.
@@ -2853,6 +2947,11 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * User clicked "Don't remind me again" on an autofill action card.
+     */
+    data object AutofillActionCardOptOutClick : VaultAction()
+
+    /**
      * User clicked the header of the given [section] to expand or collapse it.
      */
     data class SectionHeaderClick(
@@ -3012,6 +3111,13 @@ sealed class VaultAction {
          */
         data class IntroducingArchiveActionCardDismissedFlowReceive(
             val isDismissed: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the autofill prompt to show on the vault has been updated.
+         */
+        data class AutofillPromptStatusReceive(
+            val autofillPromptStatus: AutofillPromptStatus?,
         ) : Internal()
 
         /**

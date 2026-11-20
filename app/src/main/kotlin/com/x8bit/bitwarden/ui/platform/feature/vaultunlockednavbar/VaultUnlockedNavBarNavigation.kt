@@ -141,6 +141,12 @@ private fun VaultUnlockedNavBarNavigationControllers.vaultEntryProvider(
         onNavigateToImportLogins = {
             vaultUnlockedNavigationController.navigateToImportLoginsScreen()
         },
+        onNavigateToSetupAutofill = {
+            vaultUnlockedNavigationController.navigateToSetupAutoFillScreen()
+        },
+        onNavigateToSetupBrowserAutofill = {
+            vaultUnlockedNavigationController.navigateToSetupBrowserAutofillScreen()
+        },
         onNavigateToAddFolderScreen = {
             vaultUnlockedNavigationController.navigateToFolderAddEdit(
                 folderAddEditType = FolderAddEditType.AddItem,

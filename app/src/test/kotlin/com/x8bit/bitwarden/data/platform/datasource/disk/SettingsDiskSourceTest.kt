@@ -1952,4 +1952,61 @@ class SettingsDiskSourceTest {
         val actual = fakeSharedPreferences.getLong(browserAutofillDialogReshowTimeKey, 0L)
         assertEquals(timeMs, actual)
     }
+
+    @Test
+    fun `isAutofillBannerOptedOut should pull from and update SharedPreferences`() {
+        val key = "bwPreferencesStorage:autofillBannerOptedOut"
+        assertNull(settingsDiskSource.isAutofillBannerOptedOut)
+
+        fakeSharedPreferences.edit { putBoolean(key, false) }
+        assertEquals(false, settingsDiskSource.isAutofillBannerOptedOut)
+
+        settingsDiskSource.isAutofillBannerOptedOut = true
+        assertTrue(fakeSharedPreferences.getBoolean(key, false))
+    }
+
+    @Test
+    fun `isAutofillBannerOptedOutFlow should react to changes in isAutofillBannerOptedOut`() =
+        runTest {
+            settingsDiskSource.isAutofillBannerOptedOutFlow.test {
+                assertNull(awaitItem())
+                settingsDiskSource.isAutofillBannerOptedOut = true
+                assertEquals(true, awaitItem())
+            }
+        }
+
+    @Test
+    fun `autofillBannerReshowTime should pull from and update SharedPreferences`() {
+        val key = "bwPreferencesStorage:autofillBannerReshowTime"
+        assertNull(settingsDiskSource.autofillBannerReshowTime)
+
+        fakeSharedPreferences.edit { putLong(key, 11111L) }
+        assertEquals(Instant.ofEpochMilli(11111L), settingsDiskSource.autofillBannerReshowTime)
+
+        settingsDiskSource.autofillBannerReshowTime = Instant.ofEpochMilli(22222L)
+        assertEquals(22222L, fakeSharedPreferences.getLong(key, 0L))
+    }
+
+    @Test
+    fun `autofillBannerReshowTimeFlow should react to changes in autofillBannerReshowTime`() =
+        runTest {
+            val reshowTime = Instant.ofEpochMilli(11111L)
+            settingsDiskSource.autofillBannerReshowTimeFlow.test {
+                assertNull(awaitItem())
+                settingsDiskSource.autofillBannerReshowTime = reshowTime
+                assertEquals(reshowTime, awaitItem())
+            }
+        }
+
+    @Test
+    fun `clearData should not clear the app-wide autofill banner values`() {
+        val reshowTime = Instant.ofEpochMilli(11111L)
+        settingsDiskSource.isAutofillBannerOptedOut = true
+        settingsDiskSource.autofillBannerReshowTime = reshowTime
+
+        settingsDiskSource.clearData(userId = "mockUserId")
+
+        assertEquals(true, settingsDiskSource.isAutofillBannerOptedOut)
+        assertEquals(reshowTime, settingsDiskSource.autofillBannerReshowTime)
+    }
 }

@@ -19,6 +19,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.manager.util.startSystemAccessibilitySettingsActivity
 import com.bitwarden.ui.platform.manager.util.startSystemAutofillSettingsActivity
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -631,6 +632,129 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `set up autofill banner should replace the help card while autofill is off`() {
+        composeTestRule.onNodeWithText(text = "Set up autofill").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Having trouble with autofill?")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+        }
+        composeTestRule
+            .onNodeWithText(text = "Set up autofill")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "Bitwarden can suggest your passwords and other credentials when you " +
+                    "sign in to apps and websites.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Having trouble? Get help")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Having trouble with autofill?").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Don’t remind me again").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.On)
+        }
+        composeTestRule.onNodeWithText(text = "Set up autofill").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Having trouble with autofill?")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `set up autofill banner turn on click should send AutofillActionCardCtaClick`() {
+        mutableStateFlow.update {
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+        }
+        composeTestRule
+            .onNodeWithText(text = "Turn on autofill")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick)
+        }
+    }
+
+    @Test
+    fun `set up autofill banner get help click should send HelpCardClick`() {
+        mutableStateFlow.update {
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+        }
+        composeTestRule
+            .onNodeWithText(text = "Having trouble? Get help")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(AutoFillAction.HelpCardClick) }
+    }
+
+    @Test
+    fun `autofill action cards should not show a dismiss button`() {
+        mutableStateFlow.update {
+            BANNER_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff)
+        }
+        composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
+
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
+    }
+
+    @Test
+    fun `browser autofill banner should show the default browser name`() {
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+
+        composeTestRule
+            .onNodeWithText(text = "Turn on autofill in Chrome")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                text = "Chrome needs one more setting before Bitwarden can fill your passwords.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Having trouble? Get help")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText(text = "Having trouble with autofill?").assertDoesNotExist()
+    }
+
+    @Test
+    fun `browser autofill banner turn on click should send BrowserAutofillActionCardCtaClick`() {
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        composeTestRule
+            .onNodeWithText(text = "Turn on in Chrome")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+        }
+    }
+
+    @Test
+    fun `browser autofill banner get help click should send HelpCardClick`() {
+        mutableStateFlow.update { BANNER_STATE.copy(autofillPromptStatus = BROWSER_OFF_PROMPT) }
+        composeTestRule
+            .onNodeWithText(text = "Having trouble? Get help")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(AutoFillAction.HelpCardClick) }
+    }
+
+    @Test
     fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
@@ -931,6 +1055,14 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     showBrowserAutofillActionCard = false,
+    isAutofillOffBannerEnabled = false,
+    autofillPromptStatus = AutofillPromptStatus.On,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
+)
+
+private val BANNER_STATE: AutoFillState = DEFAULT_STATE.copy(isAutofillOffBannerEnabled = true)
+
+private val BROWSER_OFF_PROMPT = AutofillPromptStatus.BrowserOff(
+    browserPackage = BrowserPackage.CHROME_STABLE,
 )

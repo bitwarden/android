@@ -29,7 +29,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
 import com.x8bit.bitwarden.data.billing.model.PremiumCard
 import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
@@ -233,6 +236,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { browserCount } returns 1
         every { delayDialog() } just runs
     }
+    private val mutableVaultAutofillPromptFlow = MutableStateFlow<AutofillPromptStatus?>(null)
+    private val autofillPromptManager: AutofillPromptManager = mockk {
+        every { vaultAutofillPromptFlow } returns mutableVaultAutofillPromptFlow
+        every { snoozeVaultPrompt() } just runs
+        every { optOutOfVaultPrompt() } just runs
+    }
 
     private val buildInfoManager = mockk<BuildInfoManager> {
         every { isFdroid } returns false
@@ -250,8 +259,15 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { dismissBanner() } just runs
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
+    private val mutableAutofillOffBannerFlagFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
+        every {
+            getFeatureFlagFlow(FlagKey.AutofillOffBanner)
+        } returns mutableAutofillOffBannerFlagFlow
+        every {
+            getFeatureFlag(FlagKey.AutofillOffBanner)
+        } answers { mutableAutofillOffBannerFlagFlow.value }
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow =
@@ -385,6 +401,94 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `vaultAutofillPromptFlow updates should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+            assertEquals(
+                DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff),
+                awaitItem(),
+            )
+
+            val browserOff = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            )
+            mutableVaultAutofillPromptFlow.value = browserOff
+            assertEquals(DEFAULT_STATE.copy(autofillPromptStatus = browserOff), awaitItem())
+
+            mutableVaultAutofillPromptFlow.value = null
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `initial state should use the current vaultAutofillPromptFlow value`() {
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `autofill prompt should be hidden while the AutofillOffBanner flag is off`() = runTest {
+        mutableAutofillOffBannerFlagFlow.value = false
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableAutofillOffBannerFlagFlow.value = true
+            assertEquals(
+                DEFAULT_STATE.copy(autofillPromptStatus = AutofillPromptStatus.AutofillOff),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state should ignore the autofill prompt while AutofillOffBanner is off`() {
+        mutableAutofillOffBannerFlagFlow.value = false
+        mutableVaultAutofillPromptFlow.value = AutofillPromptStatus.AutofillOff
+
+        val viewModel = createViewModel()
+
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `browser autofill dialog should show while the AutofillOffBanner flag is off`() = runTest {
+        mutableAutofillOffBannerFlagFlow.value = false
+        every { browserAutofillDialogManager.shouldShowDialog } returns true
+
+        val viewModel = createViewModel()
+        advanceTimeBy(1000.milliseconds)
+
+        assertEquals(
+            VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1),
+            viewModel.stateFlow.value.dialog,
+        )
+    }
+
+    @Test
+    fun `browser autofill dialog should not show while the AutofillOffBanner flag is on`() =
+        runTest {
+            every { browserAutofillDialogManager.shouldShowDialog } returns true
+
+            val viewModel = createViewModel()
+            advanceTimeBy(1000.milliseconds)
+
+            assertNull(viewModel.stateFlow.value.dialog)
+        }
+
+    @Test
     fun `CollapsedVaultSectionsFlow updates should update the state accordingly`() = runTest {
         val viewModel = createViewModel()
 
@@ -446,6 +550,44 @@ class VaultViewModelTest : BaseViewModelTest() {
                 settingsRepository.dismissIntroducingArchiveActionCard()
             }
         }
+
+    @Test
+    fun `DismissActionCardClick with SetUpAutofill should snooze the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+        )
+
+        verify(exactly = 1) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `DismissActionCardClick with TurnOnBrowserAutofill should snooze the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.DismissActionCardClick(
+                VaultState.ActionCardState.TurnOnBrowserAutofill(
+                    browserPackage = BrowserPackage.CHROME_STABLE,
+                ),
+            ),
+        )
+
+        verify(exactly = 1) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `AutofillActionCardOptOutClick should opt out of the vault prompt`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.AutofillActionCardOptOutClick)
+
+        verify(exactly = 1) { autofillPromptManager.optOutOfVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+    }
 
     @Test
     fun `PremiumUpgradeBannerEligibleFlow updates should update state`() =
@@ -752,6 +894,82 @@ class VaultViewModelTest : BaseViewModelTest() {
             VAULT_POLICY_BANNER_ACTION_CARD,
             state.actionCard,
         )
+    }
+
+    @Test
+    fun `actionCard should return SetUpAutofill when autofill is off`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should return TurnOnBrowserAutofill when the browser is off`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPromptStatus = AutofillPromptStatus.BrowserOff(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+        )
+
+        assertEquals(
+            VaultState.ActionCardState.TurnOnBrowserAutofill(
+                browserPackage = BrowserPackage.CHROME_STABLE,
+            ),
+            state.actionCard,
+        )
+    }
+
+    @Test
+    fun `actionCard should rank the autofill card above Premium and archive cards`() {
+        val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
+            isUpgradedToPremiumCardEligible = true,
+            premiumCard = PremiumCard.UPGRADE,
+            isPremium = true,
+            isIntroducingArchiveActionCardDismissed = false,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should rank the autofill card above import on an empty vault`() {
+        val state = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
+            premiumCard = PremiumCard.UPGRADE,
+            showImportActionCard = true,
+        )
+
+        assertEquals(VaultState.ActionCardState.SetUpAutofill, state.actionCard)
+    }
+
+    @Test
+    fun `actionCard should rank the policy banner above the autofill card`() {
+        val contentState = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+            policyBanner = POLICY_BANNER,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
+        )
+        val noItemsState = createMockVaultState(viewState = VaultState.ViewState.NoItems).copy(
+            policyBanner = POLICY_BANNER,
+            autofillPromptStatus = AutofillPromptStatus.AutofillOff,
+        )
+
+        assertEquals(VAULT_POLICY_BANNER_ACTION_CARD, contentState.actionCard)
+        assertEquals(VAULT_POLICY_BANNER_ACTION_CARD, noItemsState.actionCard)
+    }
+
+    @Test
+    fun `actionCard should skip the autofill card when there is no autofill prompt`() {
+        listOf(AutofillPromptStatus.On, null).forEach { prompt ->
+            val state = createMockVaultState(viewState = DEFAULT_CONTENT_VIEW_STATE).copy(
+                autofillPromptStatus = prompt,
+                premiumCard = PremiumCard.UPGRADE,
+            )
+
+            assertEquals(VaultState.ActionCardState.UpgradePremium, state.actionCard)
+        }
     }
 
     @Test
@@ -4261,6 +4479,40 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    fun `ActionCardClick with SetUpAutofill should emit NavigateToSetupAutofill`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultAction.ActionCardClick(VaultState.ActionCardState.SetUpAutofill),
+            )
+            assertEquals(VaultEvent.NavigateToSetupAutofill, awaitItem())
+        }
+        // Opening the setup screen must not hide the banner (Scenario F).
+        verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+        verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+    }
+
+    @Test
+    fun `ActionCardClick with TurnOnBrowserAutofill should emit NavigateToSetupBrowserAutofill`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.ActionCardClick(
+                        VaultState.ActionCardState.TurnOnBrowserAutofill(
+                            browserPackage = BrowserPackage.CHROME_STABLE,
+                        ),
+                    ),
+                )
+                assertEquals(VaultEvent.NavigateToSetupBrowserAutofill, awaitItem())
+            }
+            verify(exactly = 0) { autofillPromptManager.snoozeVaultPrompt() }
+            verify(exactly = 0) { autofillPromptManager.optOutOfVaultPrompt() }
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `actionCard should return ImportItems when NoItems is showing and showImportActionCard is true`() {
@@ -4935,6 +5187,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
+            autofillPromptManager = autofillPromptManager,
             credentialExchangeRegistryManager = credentialExchangeRegistryManager,
             userNotificationPolicyManager = userNotificationPolicyManager,
             buildInfoManager = buildInfoManager,
