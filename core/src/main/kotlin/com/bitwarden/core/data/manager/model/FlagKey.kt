@@ -47,6 +47,7 @@ sealed class FlagKey<out T : Any> {
                 IdentityAutofill,
                 SdkPinUnlock,
                 SdkPreLogin,
+                SdkCipherOperations,
                 UpdatedOnboardingFlow,
             )
         }
@@ -198,6 +199,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object SdkPreLogin : FlagKey<Boolean>() {
         override val keyName: String = "pm-27060-password-prelogin-from-sdk"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for performing cipher operations (create, edit,
+     * delete, restore, share, collections, and attachments) through the SDK.
+     */
+    data object SdkCipherOperations : FlagKey<Boolean>() {
+        override val keyName: String = "pm-44389-mobile-sdk-cipher-operations"
         override val defaultValue: Boolean = false
     }
 
