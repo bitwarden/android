@@ -71,6 +71,7 @@ class CredentialProviderViewModel @Inject constructor(
     private fun handleFido2Assertion(request: Fido2CredentialAssertionRequest) {
         // Set the user's verification status when a new FIDO 2 request is received
         bitwardenCredentialManager.isUserVerified = request.isUserPreVerified
+        switchToRequestedAccount(request.userId)
 
         credentialProviderRequestManager.setPendingCredentialRequest(
             CredentialProviderRequest.Fido2Assertion(request),
@@ -80,6 +81,7 @@ class CredentialProviderViewModel @Inject constructor(
     private fun handlePasswordGet(request: ProviderGetPasswordCredentialRequest) {
         // Set the user's verification status when a new GetPassword request is received
         bitwardenCredentialManager.isUserVerified = request.isUserPreVerified
+        switchToRequestedAccount(request.userId)
 
         credentialProviderRequestManager.setPendingCredentialRequest(
             CredentialProviderRequest.GetPassword(request),
@@ -87,9 +89,18 @@ class CredentialProviderViewModel @Inject constructor(
     }
 
     private fun handleGetCredentials(request: GetCredentialsRequest) {
+        switchToRequestedAccount(request.userId)
+
         credentialProviderRequestManager.setPendingCredentialRequest(
             CredentialProviderRequest.GetCredentials(request),
         )
+    }
+
+    private fun switchToRequestedAccount(userId: String) {
+        if (authRepository.activeUserId != null && authRepository.activeUserId != userId) {
+            bitwardenCredentialManager.isUserVerified = false
+            authRepository.switchAccount(userId)
+        }
     }
 }
 

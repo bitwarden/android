@@ -150,6 +150,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -4191,11 +4193,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Suppress("MaxLineLength")
-    @Test
-    fun `GetCredentialsRequest should validate request and emit CompleteProviderGetCredentialsRequest event`() =
+    @ParameterizedTest
+    @CsvSource("true, false", "false, false", "false, true")
+    fun `credential discovery should wait for selected vault and retain current account choices`(
+        hasMatches: Boolean,
+        discoveryFails: Boolean,
+    ) =
         runTest {
             setupMockUri()
             val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
+            val selectedAccount = DEFAULT_ACCOUNT.copy(userId = mockGetCredentialsRequest.userId)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                activeUserId = selectedAccount.userId,
+                accounts = listOf(DEFAULT_ACCOUNT, selectedAccount),
+            )
+            val entries = if (hasMatches) listOf(mockk<PublicKeyCredentialEntry>()) else emptyList()
             val mockCipherView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
@@ -4203,7 +4215,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             coEvery {
                 bitwardenCredentialManager.getCredentialEntries(any())
-            } returns emptyList<PublicKeyCredentialEntry>().asSuccess()
+            } returns if (discoveryFails) {
+                IllegalStateException().asFailure()
+            } else {
+                entries.asSuccess()
+            }
             coEvery {
                 originManager.validateOrigin(relyingPartyId = any(), callingAppInfo = any())
             } returns ValidateOriginResult.Success("mockOrigin")
@@ -4228,18 +4244,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             val viewModel = createVaultItemListingViewModel()
+            // Switching accounts clears the vault flow; cached data in Pending is not ready.
+            mutableVaultDataStateFlow.value = DataState.Pending(dataState.data)
+            coVerify(exactly = 0) { bitwardenCredentialManager.getCredentialEntries(any()) }
+            val currentAccounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+                selectedAccount,
+            )
+            mutableUserStateFlow.value = requireNotNull(mutableUserStateFlow.value).copy(
+                accounts = currentAccounts,
+            )
             mutableVaultDataStateFlow.value = dataState
 
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
                         result = GetCredentialsResult.Success(
-                            credentialEntries = emptyList(),
+                            credentialEntries = entries,
                             userId = "mockUserId-1",
+                            accounts = currentAccounts,
                         ),
                     ),
                     awaitItem(),
                 )
+                mutableVaultDataStateFlow.value = DataState.Loaded(
+                    dataState.data.copy(sendViewList = emptyList()),
+                )
+                expectNoEvents()
+            }
+            coVerify(exactly = 1) {
+                bitwardenCredentialManager.getCredentialEntries(mockGetCredentialsRequest)
             }
         }
 
@@ -4248,7 +4282,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `GetCredentialsRequest should emit GetCredentialEntriesResultReceive when result is received`() =
         runTest {
             setupMockUri()
-            val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
+            val mockGetCredentialsRequest = createMockGetCredentialsRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
             val mockCipherView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
@@ -4298,7 +4335,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `GetCredentialsRequest should display error dialog when callingApp cannot be verified`() =
         runTest {
             setupMockUri()
-            val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
+            val mockGetCredentialsRequest = createMockGetCredentialsRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
             val mockCipherView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
@@ -4346,7 +4386,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `GetCredentialsRequest should display error dialog when origin validation fails`() =
         runTest {
             setupMockUri()
-            val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
+            val mockGetCredentialsRequest = createMockGetCredentialsRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
             val mockCipherView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
@@ -4371,6 +4414,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             mutableVaultDataStateFlow.value = dataState
 
+            coVerify(exactly = 0) { bitwardenCredentialManager.getCredentialEntries(any()) }
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = BitwardenString.an_error_has_occurred.asText(),
@@ -6311,12 +6355,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `TrustPrivilegedAppClick during BeginGetCredentials should clear dialog, trust privileged app, and get credential entries`() =
+    fun `TrustPrivilegedAppClick during BeginGetCredentials should complete discovery after vault reload preserves prompt`() =
         runTest {
+            setupMockUri()
             mockkStatic(CallingAppInfo::getSignatureFingerprintAsHexString)
+            val request = createMockGetCredentialsRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
-                    getCredentialsRequest = createMockGetCredentialsRequest(number = 1),
+                    getCredentialsRequest = request,
                 )
 
             every {
@@ -6333,6 +6382,32 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns emptyList<CredentialEntry>().asSuccess()
 
             val viewModel = createVaultItemListingViewModel()
+            val vaultData = VaultData(
+                decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(vaultData)
+            val expectedDialog = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                message = BitwardenString
+                    .passkey_operation_failed_because_browser_x_is_not_trusted
+                    .asText("mockPackageName"),
+                selectedCipherId = null,
+            )
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                vaultData.copy(sendViewList = emptyList()),
+            )
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+            coVerify(exactly = 1) {
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
+            }
+            coVerify(exactly = 0) { bitwardenCredentialManager.getCredentialEntries(any()) }
 
             viewModel.trySendAction(
                 VaultItemListingsAction.TrustPrivilegedAppClick(selectedCipherId = null),
@@ -6341,14 +6416,128 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             // Verify the dialog is cleared
             assertNull(viewModel.stateFlow.value.dialogState)
 
-            coVerify {
+            coVerify(exactly = 1) {
                 privilegedAppRepository.addTrustedPrivilegedApp(
                     packageName = "mockPackageName",
                     signature = "mockSignature",
                 )
                 bitwardenCredentialManager.getCredentialEntries(
-                    getCredentialsRequest = any(),
+                    getCredentialsRequest = request,
                 )
+            }
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
+                        result = GetCredentialsResult.Success(
+                            credentialEntries = emptyList(),
+                            userId = request.userId,
+                            accounts = DEFAULT_USER_STATE.accounts,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                mutableVaultDataStateFlow.value = DataState.Loaded(vaultData)
+                expectNoEvents()
+            }
+            coVerify(exactly = 1) {
+                bitwardenCredentialManager.getCredentialEntries(request)
+            }
+        }
+
+    @Test
+    fun `vault error and no network during BeginGetCredentials should preserve trust prompt`() =
+        runTest {
+            setupMockUri()
+            mockkStatic(CallingAppInfo::getSignatureFingerprintAsHexString)
+            val request = createMockGetCredentialsRequest(
+                number = 1,
+                userId = DEFAULT_USER_STATE.activeUserId,
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderGetCredentials(
+                    getCredentialsRequest = request,
+                )
+
+            every {
+                mockCallingAppInfo.getSignatureFingerprintAsHexString()
+            } returns "mockSignature"
+            coEvery {
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
+            } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
+            coEvery {
+                bitwardenCredentialManager.getCredentialEntries(any())
+            } returns emptyList<CredentialEntry>().asSuccess()
+
+            val viewModel = createVaultItemListingViewModel()
+            val vaultData = VaultData(
+                decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(vaultData)
+            val expectedDialog = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                message = BitwardenString
+                    .passkey_operation_failed_because_browser_x_is_not_trusted
+                    .asText("mockPackageName"),
+                selectedCipherId = null,
+            )
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+
+            mutableVaultDataStateFlow.value = DataState.Error(
+                data = vaultData,
+                error = IllegalStateException(),
+            )
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+            mutableVaultDataStateFlow.value = DataState.NoNetwork(data = vaultData)
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+            mutableVaultDataStateFlow.value = DataState.Error<VaultData>(
+                error = IllegalStateException(),
+            )
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+            mutableVaultDataStateFlow.value = DataState.NoNetwork<VaultData>()
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+
+            mutableVaultDataStateFlow.value = DataState.Loaded(vaultData)
+            assertEquals(expectedDialog, viewModel.stateFlow.value.dialogState)
+            coVerify(exactly = 1) {
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
+            }
+            coVerify(exactly = 0) { bitwardenCredentialManager.getCredentialEntries(any()) }
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.TrustPrivilegedAppClick(selectedCipherId = null),
+            )
+
+            assertNull(viewModel.stateFlow.value.dialogState)
+            coVerify(exactly = 1) {
+                privilegedAppRepository.addTrustedPrivilegedApp(
+                    packageName = "mockPackageName",
+                    signature = "mockSignature",
+                )
+                bitwardenCredentialManager.getCredentialEntries(
+                    getCredentialsRequest = request,
+                )
+            }
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
+                        result = GetCredentialsResult.Success(
+                            credentialEntries = emptyList(),
+                            userId = request.userId,
+                            accounts = DEFAULT_USER_STATE.accounts,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                mutableVaultDataStateFlow.value = DataState.Loaded(vaultData)
+                expectNoEvents()
             }
         }
 
