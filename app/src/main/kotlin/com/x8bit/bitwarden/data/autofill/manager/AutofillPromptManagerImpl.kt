@@ -71,11 +71,16 @@ class AutofillPromptManagerImpl(
             appStateManager.appForegroundStateFlow,
         ) { status, isOptedOut, reshowTime, _ ->
             val isSnoozed = reshowTime?.isAfter(clock.instant()) == true
-            when {
-                isOptedOut == true || isSnoozed -> null
-                status is AutofillPromptStatus.AutofillOff -> status
-                status is AutofillPromptStatus.BrowserOff -> status
-                else -> null
+            if (isOptedOut == true || isSnoozed) {
+                null
+            } else {
+                when (status) {
+                    AutofillPromptStatus.AutofillOff,
+                    is AutofillPromptStatus.BrowserOff,
+                        -> status
+
+                    AutofillPromptStatus.On -> null
+                }
             }
         }
             .stateIn(
