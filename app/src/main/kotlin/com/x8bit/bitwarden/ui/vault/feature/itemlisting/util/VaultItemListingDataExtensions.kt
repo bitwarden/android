@@ -156,10 +156,26 @@ fun VaultData.toViewState(
     val allFilteredCipherViewList = filteredFailuresCipherViewList
         .plus(filteredCipherViewList)
 
+    // The subfolders displayed within a folder must be filtered the same way as the top level
+    // list, otherwise folders without items are shown once the user navigates into a folder.
+    val allActiveCipherViewList = decryptCipherListResult
+        .successes
+        .plus(failuresCipherViewList)
+        .filter { it.isActive }
+        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
+        .toFilteredList(vaultFilterType)
+
     val folderList =
         (itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
             ?.folderId
-            ?.let { folderViewList.getFolders(it) }
+            ?.let { folderId ->
+                folderViewList
+                    .getFolders(folderId)
+                    .toFilteredList(
+                        cipherList = allActiveCipherViewList,
+                        vaultFilterType = vaultFilterType,
+                    )
+            }
             .orEmpty()
 
     val collectionList =
@@ -172,12 +188,7 @@ fun VaultData.toViewState(
     val nestedCollectionCipherViewList = if (collectionList.isEmpty()) {
         emptyList()
     } else {
-        decryptCipherListResult
-            .successes
-            .plus(failuresCipherViewList)
-            .filter { it.isActive }
-            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
-            .toFilteredList(vaultFilterType)
+        allActiveCipherViewList
     }
 
     return if (folderList.isNotEmpty() || allFilteredCipherViewList.isNotEmpty() ||
