@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -18,6 +18,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -36,7 +39,7 @@ class SetupUnlockViewModel @AssistedInject constructor(
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -52,6 +55,9 @@ class SetupUnlockViewModel @AssistedInject constructor(
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
                 authRepository.isBiometricIntegrityValid(userId = userId),
             dialogState = null,
+            isUpdatedOnboardingFlowEnabled = featureFlagManager.getFeatureFlag(
+                key = FlagKey.UpdatedOnboardingFlow,
+            ),
             isInitialSetup = isInitialSetup,
         )
     },
@@ -65,6 +71,14 @@ class SetupUnlockViewModel @AssistedInject constructor(
          * Creates a [SetupUnlockViewModel] for the given [isInitialSetup].
          */
         fun create(isInitialSetup: Boolean): SetupUnlockViewModel
+    }
+
+    init {
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.UpdatedOnboardingFlow)
+            .map { SetupUnlockAction.Internal.ReceiveUpdatedOnboardingFlow(isEnabled = it) }
+            .onEach(action = ::sendAction)
+            .launchIn(scope = viewModelScope)
     }
 
     override fun handleAction(action: SetupUnlockAction) {
@@ -99,7 +113,7 @@ class SetupUnlockViewModel @AssistedInject constructor(
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            updateOnboardingStatusToNextStep()
+            authRepository.goToNextStep()
         } else {
             sendEvent(SetupUnlockEvent.NavigateBack)
         }
@@ -130,7 +144,7 @@ class SetupUnlockViewModel @AssistedInject constructor(
 
     private fun handleSetUpLaterClick() {
         firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
-        updateOnboardingStatusToNextStep()
+        authRepository.goToNextStep()
     }
 
     private fun handleDismissDialog() {
@@ -183,6 +197,10 @@ class SetupUnlockViewModel @AssistedInject constructor(
             is SetupUnlockAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
+
+            is SetupUnlockAction.Internal.ReceiveUpdatedOnboardingFlow -> {
+                handleReceiveUpdatedOnboardingFlow(action)
+            }
         }
     }
 
@@ -210,17 +228,10 @@ class SetupUnlockViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateOnboardingStatusToNextStep() {
-        val isAutofillEnabled = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isAnyIsAvailableAndDisabled
-        val nextStep = when {
-            !isAutofillEnabled -> OnboardingStatus.AUTOFILL_SETUP
-            isBrowserAutofillUnconfigured -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
-            else -> OnboardingStatus.FINAL_STEP
-        }
-        authRepository.setOnboardingStatus(nextStep)
+    private fun handleReceiveUpdatedOnboardingFlow(
+        action: SetupUnlockAction.Internal.ReceiveUpdatedOnboardingFlow,
+    ) {
+        mutableStateFlow.update { it.copy(isUpdatedOnboardingFlowEnabled = action.isEnabled) }
     }
 }
 
@@ -235,12 +246,14 @@ data class SetupUnlockState(
     val isUnlockWithBiometricsEnabled: Boolean,
     val dialogState: DialogState?,
     val isInitialSetup: Boolean,
+    val isUpdatedOnboardingFlowEnabled: Boolean,
 ) : Parcelable {
     /**
      * Indicates whether the continue button should be enabled or disabled.
      */
     val isContinueButtonEnabled: Boolean
-        get() = isUnlockWithBiometricsEnabled || isUnlockWithPinEnabled
+        get() = isUnlockWithBiometricsEnabled ||
+            (!isUpdatedOnboardingFlowEnabled && isUnlockWithPinEnabled)
 
     /**
      * Represents the dialog UI state for the setup unlock screen.
@@ -340,6 +353,13 @@ sealed class SetupUnlockAction {
          */
         data class BiometricsKeyResultReceive(
             val result: BiometricsKeyResult,
+        ) : Internal()
+
+        /**
+         *
+         */
+        data class ReceiveUpdatedOnboardingFlow(
+            val isEnabled: Boolean,
         ) : Internal()
     }
 }

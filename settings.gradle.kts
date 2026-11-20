@@ -48,6 +48,7 @@ include(
     ":core",
     ":cxf",
     ":data",
+    ":detekt-rules",
     ":network",
     ":testharness",
     ":ui",

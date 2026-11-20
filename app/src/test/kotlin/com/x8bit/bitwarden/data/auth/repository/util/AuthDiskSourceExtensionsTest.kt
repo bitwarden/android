@@ -440,15 +440,11 @@ class AuthDiskSourceExtensionsTest {
 
     @Test
     fun `userStateChangesFlow should emit changes when user state changes`() = runTest {
-        authDiskSource.storeOnboardingStatus(MOCK_USER_ID, OnboardingStatus.NOT_STARTED)
+        authDiskSource.storeOnboardingStatus(MOCK_USER_ID, OnboardingStatus.ACCOUNT_LOCK_SETUP)
         authDiskSource.onboardingStatusChangesFlow.test {
             assertNull(awaitItem())
             authDiskSource.userState = MOCK_USER_STATE
-            assertEquals(
-
-                OnboardingStatus.NOT_STARTED,
-                awaitItem(),
-            )
+            assertEquals(OnboardingStatus.ACCOUNT_LOCK_SETUP, awaitItem())
             authDiskSource.userState = MOCK_USER_STATE.copy(
                 accounts = mapOf(
                     MOCK_USER_ID to MOCK_ACCOUNT,

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -88,8 +89,9 @@ fun BitwardenTextButton(
         label
     }
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
     val colorAlpha by animateFloatAsState(
-        targetValue = if (isFocused) 1f else 0f,
+        targetValue = if (isFocused || isHovered) 1f else 0f,
         animationSpec = focusAnimationSpec(),
     )
     TextButton(
