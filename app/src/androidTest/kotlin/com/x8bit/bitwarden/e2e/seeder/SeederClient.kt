@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.e2e.seeder
 
+import com.bitwarden.core.di.CoreModule
 import com.x8bit.bitwarden.e2e.config.E2eConfig
+import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.MediaType.Companion.toMediaType
@@ -73,10 +74,8 @@ class SeederClient(private val config: E2eConfig) {
             .header("x-play-id", playId)
 }
 
-private val json = Json {
-    ignoreUnknownKeys = true
-    encodeDefaults = true
-}
+// The app's own Json, so the tests parse with exactly the rules the app uses.
+private val json = CoreModule.providesJson(buildInfoManager = BitwardenBuildInfoManagerImpl())
 
 // Shared so tests don't each create their own connection pool. Seeding can be slow on a cold
 // server, so the read timeout is longer than OkHttp's default.
