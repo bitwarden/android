@@ -3,6 +3,26 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.aeriumbrowser.android",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "BD:ED:28:12:DF:1D:31:54:C0:1A:E7:13:89:D4:52:D9:21:00:02:00:D4:66:C1:90:4D:9A:DF:A8:45:68:5D:D4"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "FC:20:0D:57:1C:59:12:E3:8D:02:A2:CB:82:21:F3:2C:F4:79:34:20:2E:61:2D:CA:76:B5:1E:07:3C:FB:27:4B"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "CE:1E:D2:FD:85:72:EA:D4:B5:D1:3B:9A:FE:85:DC:89:8C:61:9F:33:E5:D0:E1:9F:18:94:11:54:D1:F3:34:B2"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.iode.firefox",
         "signatures": [
           {
