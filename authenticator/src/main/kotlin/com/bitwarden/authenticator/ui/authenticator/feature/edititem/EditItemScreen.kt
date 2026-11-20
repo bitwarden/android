@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -199,7 +200,7 @@ fun EditItemContent(
                 singleLine = true,
                 cardStyle = CardStyle.Middle(),
                 actions = {
-                    if (viewState.itemData.totpCode.isNotEmpty()) {
+                    AnimatedVisibility(visible = viewState.itemData.totpCode.isNotEmpty()) {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_clear,
                             contentDescription = stringResource(id = BitwardenString.clear),
