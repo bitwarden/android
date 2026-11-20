@@ -26,6 +26,12 @@ sealed class ImportCredentialsSelectionResult {
     data object Cancelled : ImportCredentialsSelectionResult()
 
     /**
+     * Represents that no credential provider on the device matched the import request,
+     * so there is no app available to import from.
+     */
+    data object NoExportOptions : ImportCredentialsSelectionResult()
+
+    /**
      * Represents a failure during the credential selection step of the import process.
      *
      * @property error The exception that caused the failure.
