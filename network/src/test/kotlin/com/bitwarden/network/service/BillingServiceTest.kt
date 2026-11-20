@@ -3,15 +3,15 @@ package com.bitwarden.network.service
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.AuthenticatedBillingApi
 import com.bitwarden.network.base.BaseServiceTest
-import com.bitwarden.network.model.BitwardenDiscountJson
 import com.bitwarden.network.model.BitwardenSubscriptionResponseJson
 import com.bitwarden.network.model.CadenceTypeJson
-import com.bitwarden.network.model.CartItemJson
-import com.bitwarden.network.model.CartJson
 import com.bitwarden.network.model.CheckoutSessionResponseJson
 import com.bitwarden.network.model.DiscountTypeJson
 import com.bitwarden.network.model.GetSubscriptionResponse
-import com.bitwarden.network.model.PasswordManagerCartItemsJson
+import com.bitwarden.network.model.InvoicePreviewDiscountJson
+import com.bitwarden.network.model.InvoicePreviewItemJson
+import com.bitwarden.network.model.InvoicePreviewJson
+import com.bitwarden.network.model.PasswordManagerInvoicePreviewJson
 import com.bitwarden.network.model.PortalUrlResponseJson
 import com.bitwarden.network.model.PremiumPlanResponseJson
 import com.bitwarden.network.model.StorageJson
@@ -159,7 +159,7 @@ class BillingServiceTest : BaseServiceTest() {
         }
 
     @Test
-    fun `getSubscription with null storage and discount should parse`() =
+    fun `getSubscription with null storage and discounts should parse`() =
         runTest {
             val response = MockResponse()
                 .setBody(SUBSCRIPTION_RESPONSE_MINIMAL_JSON)
@@ -276,28 +276,34 @@ private val PREMIUM_PLAN_RESPONSE = PremiumPlanResponseJson(
 private const val SUBSCRIPTION_RESPONSE_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 19.80,
-        "discount": null
+        "discounts": null
       },
       "additionalStorage": {
-        "translationKey": "additionalStorage",
         "quantity": 24,
         "cost": 24.00,
-        "discount": null
+        "discounts": null
       }
     },
-    "secretsManager": null,
     "cadence": "annually",
-    "discount": {
-      "type": "amount-off",
-      "value": 2.10
-    },
-    "estimatedTax": 3.85
+    "discounts": [
+      {
+        "type": "amount-off",
+        "value": 2.10,
+        "amount": 2.10,
+        "label": "Welcome Coupon",
+        "durationInMonths": 12
+      }
+    ],
+    "startingBalance": 0,
+    "estimatedTax": 3.85,
+    "total": 45.55,
+    "amountDue": 45.55,
+    "nextPaymentAttempt": "2026-04-02T00:00:00Z"
   },
   "storage": {
     "available": 5,
@@ -306,7 +312,6 @@ private const val SUBSCRIPTION_RESPONSE_JSON = """
   },
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": "2026-04-02T00:00:00Z",
   "suspension": null,
   "gracePeriod": null
 }
@@ -314,28 +319,34 @@ private const val SUBSCRIPTION_RESPONSE_JSON = """
 
 private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
     status = SubscriptionStatusJson.ACTIVE,
-    cart = CartJson(
-        passwordManager = PasswordManagerCartItemsJson(
-            seats = CartItemJson(
-                translationKey = "premiumMembership",
+    invoicePreview = InvoicePreviewJson(
+        passwordManager = PasswordManagerInvoicePreviewJson(
+            seats = InvoicePreviewItemJson(
                 quantity = 1,
                 cost = BigDecimal("19.80"),
-                discount = null,
+                discounts = null,
             ),
-            additionalStorage = CartItemJson(
-                translationKey = "additionalStorage",
+            additionalStorage = InvoicePreviewItemJson(
                 quantity = 24,
                 cost = BigDecimal("24.00"),
-                discount = null,
+                discounts = null,
             ),
         ),
-        secretsManager = null,
         cadence = CadenceTypeJson.ANNUALLY,
-        discount = BitwardenDiscountJson(
-            type = DiscountTypeJson.AMOUNT_OFF,
-            value = BigDecimal("2.10"),
+        discounts = listOf(
+            InvoicePreviewDiscountJson(
+                type = DiscountTypeJson.AMOUNT_OFF,
+                value = BigDecimal("2.10"),
+                amount = BigDecimal("2.10"),
+                label = "Welcome Coupon",
+                durationInMonths = 12,
+            ),
         ),
+        startingBalance = BigDecimal("0"),
         estimatedTax = BigDecimal("3.85"),
+        total = BigDecimal("45.55"),
+        amountDue = BigDecimal("45.55"),
+        nextPaymentAttempt = Instant.parse("2026-04-02T00:00:00Z"),
     ),
     storage = StorageJson(
         available = 5,
@@ -344,7 +355,6 @@ private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
     ),
     cancelAt = null,
     canceled = null,
-    nextCharge = Instant.parse("2026-04-02T00:00:00Z"),
     suspension = null,
     gracePeriod = null,
 )
@@ -352,25 +362,26 @@ private val SUBSCRIPTION_RESPONSE = BitwardenSubscriptionResponseJson(
 private const val SUBSCRIPTION_RESPONSE_MONTHLY_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 1.67,
-        "discount": null
+        "discounts": null
       },
       "additionalStorage": null
     },
-    "secretsManager": null,
     "cadence": "monthly",
-    "discount": null,
-    "estimatedTax": 0
+    "discounts": null,
+    "startingBalance": null,
+    "estimatedTax": 0,
+    "total": 1.67,
+    "amountDue": 1.67,
+    "nextPaymentAttempt": null
   },
   "storage": null,
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": null,
   "suspension": null,
   "gracePeriod": null
 }
@@ -378,25 +389,26 @@ private const val SUBSCRIPTION_RESPONSE_MONTHLY_JSON = """
 
 private val SUBSCRIPTION_RESPONSE_MONTHLY = BitwardenSubscriptionResponseJson(
     status = SubscriptionStatusJson.ACTIVE,
-    cart = CartJson(
-        passwordManager = PasswordManagerCartItemsJson(
-            seats = CartItemJson(
-                translationKey = "premiumMembership",
+    invoicePreview = InvoicePreviewJson(
+        passwordManager = PasswordManagerInvoicePreviewJson(
+            seats = InvoicePreviewItemJson(
                 quantity = 1,
                 cost = BigDecimal("1.67"),
-                discount = null,
+                discounts = null,
             ),
             additionalStorage = null,
         ),
-        secretsManager = null,
         cadence = CadenceTypeJson.MONTHLY,
-        discount = null,
+        discounts = null,
+        startingBalance = null,
         estimatedTax = BigDecimal("0"),
+        total = BigDecimal("1.67"),
+        amountDue = BigDecimal("1.67"),
+        nextPaymentAttempt = null,
     ),
     storage = null,
     cancelAt = null,
     canceled = null,
-    nextCharge = null,
     suspension = null,
     gracePeriod = null,
 )
@@ -404,25 +416,26 @@ private val SUBSCRIPTION_RESPONSE_MONTHLY = BitwardenSubscriptionResponseJson(
 private const val SUBSCRIPTION_RESPONSE_MINIMAL_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 19.80,
-        "discount": null
+        "discounts": null
       },
       "additionalStorage": null
     },
-    "secretsManager": null,
     "cadence": "annually",
-    "discount": null,
-    "estimatedTax": 0
+    "discounts": null,
+    "startingBalance": null,
+    "estimatedTax": 0,
+    "total": 19.80,
+    "amountDue": 19.80,
+    "nextPaymentAttempt": null
   },
   "storage": null,
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": null,
   "suspension": null,
   "gracePeriod": null
 }
@@ -430,25 +443,26 @@ private const val SUBSCRIPTION_RESPONSE_MINIMAL_JSON = """
 
 private val SUBSCRIPTION_RESPONSE_MINIMAL = BitwardenSubscriptionResponseJson(
     status = SubscriptionStatusJson.ACTIVE,
-    cart = CartJson(
-        passwordManager = PasswordManagerCartItemsJson(
-            seats = CartItemJson(
-                translationKey = "premiumMembership",
+    invoicePreview = InvoicePreviewJson(
+        passwordManager = PasswordManagerInvoicePreviewJson(
+            seats = InvoicePreviewItemJson(
                 quantity = 1,
                 cost = BigDecimal("19.80"),
-                discount = null,
+                discounts = null,
             ),
             additionalStorage = null,
         ),
-        secretsManager = null,
         cadence = CadenceTypeJson.ANNUALLY,
-        discount = null,
+        discounts = null,
+        startingBalance = null,
         estimatedTax = BigDecimal("0"),
+        total = BigDecimal("19.80"),
+        amountDue = BigDecimal("19.80"),
+        nextPaymentAttempt = null,
     ),
     storage = null,
     cancelAt = null,
     canceled = null,
-    nextCharge = null,
     suspension = null,
     gracePeriod = null,
 )
@@ -456,38 +470,49 @@ private val SUBSCRIPTION_RESPONSE_MINIMAL = BitwardenSubscriptionResponseJson(
 private const val SUBSCRIPTION_RESPONSE_AMOUNT_OFF_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 19.80,
-        "discount": null
+        "discounts": null
       },
       "additionalStorage": null
     },
-    "secretsManager": null,
     "cadence": "annually",
-    "discount": {
-      "type": "amount-off",
-      "value": 5.00
-    },
-    "estimatedTax": 0
+    "discounts": [
+      {
+        "type": "amount-off",
+        "value": 5.00,
+        "amount": 5.00,
+        "label": null,
+        "durationInMonths": null
+      }
+    ],
+    "startingBalance": null,
+    "estimatedTax": 0,
+    "total": 19.80,
+    "amountDue": 19.80,
+    "nextPaymentAttempt": null
   },
   "storage": null,
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": null,
   "suspension": null,
   "gracePeriod": null
 }
 """
 
 private val SUBSCRIPTION_RESPONSE_AMOUNT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
-    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
-        discount = BitwardenDiscountJson(
-            type = DiscountTypeJson.AMOUNT_OFF,
-            value = BigDecimal("5.00"),
+    invoicePreview = SUBSCRIPTION_RESPONSE_MINIMAL.invoicePreview.copy(
+        discounts = listOf(
+            InvoicePreviewDiscountJson(
+                type = DiscountTypeJson.AMOUNT_OFF,
+                value = BigDecimal("5.00"),
+                amount = BigDecimal("5.00"),
+                label = null,
+                durationInMonths = null,
+            ),
         ),
     ),
 )
@@ -495,38 +520,55 @@ private val SUBSCRIPTION_RESPONSE_AMOUNT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.cop
 private const val SUBSCRIPTION_RESPONSE_PERCENT_OFF_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 19.80,
-        "discount": null
+        "discounts": [
+          {
+            "type": "percent-off",
+            "value": 15,
+            "amount": 2.97,
+            "label": null,
+            "durationInMonths": null
+          }
+        ]
       },
       "additionalStorage": null
     },
-    "secretsManager": null,
     "cadence": "annually",
-    "discount": {
-      "type": "percent-off",
-      "value": 15.00
-    },
-    "estimatedTax": 0
+    "discounts": null,
+    "startingBalance": null,
+    "estimatedTax": 0,
+    "total": 19.80,
+    "amountDue": 19.80,
+    "nextPaymentAttempt": null
   },
   "storage": null,
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": null,
   "suspension": null,
   "gracePeriod": null
 }
 """
 
 private val SUBSCRIPTION_RESPONSE_PERCENT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.copy(
-    cart = SUBSCRIPTION_RESPONSE_MINIMAL.cart.copy(
-        discount = BitwardenDiscountJson(
-            type = DiscountTypeJson.PERCENT_OFF,
-            value = BigDecimal("15.00"),
+    invoicePreview = SUBSCRIPTION_RESPONSE_MINIMAL.invoicePreview.copy(
+        passwordManager = SUBSCRIPTION_RESPONSE_MINIMAL.invoicePreview.passwordManager.copy(
+            seats = InvoicePreviewItemJson(
+                quantity = 1,
+                cost = BigDecimal("19.80"),
+                discounts = listOf(
+                    InvoicePreviewDiscountJson(
+                        type = DiscountTypeJson.PERCENT_OFF,
+                        value = BigDecimal("15"),
+                        amount = BigDecimal("2.97"),
+                        label = null,
+                        durationInMonths = null,
+                    ),
+                ),
+            ),
         ),
     ),
 )
@@ -534,25 +576,26 @@ private val SUBSCRIPTION_RESPONSE_PERCENT_OFF = SUBSCRIPTION_RESPONSE_MINIMAL.co
 private const val SUBSCRIPTION_RESPONSE_UNKNOWN_CADENCE_JSON = """
 {
   "status": "active",
-  "cart": {
+  "invoicePreview": {
     "passwordManager": {
       "seats": {
-        "translationKey": "premiumMembership",
         "quantity": 1,
         "cost": 19.80,
-        "discount": null
+        "discounts": null
       },
       "additionalStorage": null
     },
-    "secretsManager": null,
     "cadence": "weekly",
-    "discount": null,
-    "estimatedTax": 0
+    "discounts": null,
+    "startingBalance": null,
+    "estimatedTax": 0,
+    "total": 19.80,
+    "amountDue": 19.80,
+    "nextPaymentAttempt": null
   },
   "storage": null,
   "cancelAt": null,
   "canceled": null,
-  "nextCharge": null,
   "suspension": null,
   "gracePeriod": null
 }
@@ -569,30 +612,30 @@ private fun subscriptionResponseJsonForStatus(
         SubscriptionStatusJson.INCOMPLETE_EXPIRED -> "incomplete_expired"
         SubscriptionStatusJson.UNPAID -> "unpaid"
         SubscriptionStatusJson.TRIALING -> "trialing"
-        SubscriptionStatusJson.PAUSED -> "paused"
     }
     return """
     {
       "status": "$wireValue",
-      "cart": {
+      "invoicePreview": {
         "passwordManager": {
           "seats": {
-            "translationKey": "premiumMembership",
             "quantity": 1,
             "cost": 19.80,
-            "discount": null
+            "discounts": null
           },
           "additionalStorage": null
         },
-        "secretsManager": null,
         "cadence": "annually",
-        "discount": null,
-        "estimatedTax": 0
+        "discounts": null,
+        "startingBalance": null,
+        "estimatedTax": 0,
+        "total": 19.80,
+        "amountDue": 19.80,
+        "nextPaymentAttempt": null
       },
       "storage": null,
       "cancelAt": null,
       "canceled": null,
-      "nextCharge": null,
       "suspension": null,
       "gracePeriod": null
     }
