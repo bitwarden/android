@@ -68,6 +68,10 @@ class FlagKeyTest {
             FlagKey.SdkPreLogin.keyName,
             "pm-27060-password-prelogin-from-sdk",
         )
+        assertEquals(
+            FlagKey.SdkCipherOperations.keyName,
+            "pm-44389-mobile-sdk-cipher-operations",
+        )
     }
 
     @Test
@@ -89,6 +93,7 @@ class FlagKeyTest {
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.SdkCipherOperations,
             ).all {
                 !it.defaultValue
             },
