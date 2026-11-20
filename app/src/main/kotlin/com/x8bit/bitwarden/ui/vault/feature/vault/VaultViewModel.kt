@@ -355,6 +355,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
             is VaultAction.VerificationCodesClick -> handleVerificationCodeClick()
             is VaultAction.LoginGroupClick -> handleLoginClick()
+            is VaultAction.PasskeyGroupClick -> handlePasskeyClick()
             is VaultAction.SearchIconClick -> handleSearchIconClick()
             is VaultAction.LockAccountClick -> handleLockAccountClick(action)
             is VaultAction.LogoutAccountClick -> handleLogoutAccountClick(action)
@@ -648,6 +649,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleLoginClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Login))
+    }
+
+    private fun handlePasskeyClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Passkey))
     }
 
     private fun handleSearchIconClick() {
@@ -2053,6 +2058,7 @@ data class VaultState(
          *
          * @property totpItemsCount The count of totp code items.
          * @property loginItemsCount The count of Login type items.
+         * @property passkeyItemsCount The count of Login type items that have a passkey.
          * @property cardItemsCount The count of Card type items.
          * @property bankAccountItemsCount The count of Bank Account type items.
          * @property licenseItemsCount The count of License type items.
@@ -2068,6 +2074,7 @@ data class VaultState(
          * @property archiveSubText The subtext to be displayed on the archive item.
          * @property archiveEndIcon The end icon to be displayed on the archive item.
          * @property showCardGroup Is the card group available for display.
+         * @property showPasskeyGroup Is the passkey group available for display.
          * @property showBankAccountGroup Is the bank account group available for display.
          * @property showLicenseGroup Is the license group available for display.
          * @property showPassportGroup Is the passport group available for display.
@@ -2077,6 +2084,7 @@ data class VaultState(
             val itemTypesCount: Int,
             val totpItemsCount: Int,
             val loginItemsCount: Int,
+            val passkeyItemsCount: Int = 0,
             val cardItemsCount: Int,
             val identityItemsCount: Int,
             val secureNoteItemsCount: Int,
@@ -2093,6 +2101,7 @@ data class VaultState(
             val archiveSubText: Text?,
             @field:DrawableRes val archiveEndIcon: Int?,
             val showCardGroup: Boolean,
+            val showPasskeyGroup: Boolean = false,
             val showBankAccountGroup: Boolean,
             val showLicenseGroup: Boolean,
             val showPassportGroup: Boolean,
@@ -2720,6 +2729,11 @@ sealed class VaultAction {
      * User clicked the login types button.
      */
     data object LoginGroupClick : VaultAction()
+
+    /**
+     * User clicked the passkey types button.
+     */
+    data object PasskeyGroupClick : VaultAction()
 
     /**
      * User clicked the card types button.

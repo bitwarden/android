@@ -21,6 +21,12 @@ sealed class VaultItemListingType {
     data object Login : VaultItemListingType()
 
     /**
+     * A Passkey listing.
+     */
+    @Serializable
+    data object Passkey : VaultItemListingType()
+
+    /**
      * An Identity listing.
      */
     @Serializable
