@@ -1289,47 +1289,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an unlocked vault and they have a OnboardingStatus of NOT_STARTED the nav state should be OnboardingAccountLockSetup`() {
-        mutableUserStateFlow.tryEmit(
-            UserState(
-                activeUserId = "activeUserId",
-                accounts = listOf(
-                    UserState.Account(
-                        userId = "activeUserId",
-                        name = "name",
-                        email = "email",
-                        avatarColorHex = "avatarColorHex",
-                        environment = Environment.Prod.Us,
-                        isPremium = true,
-                        isPremiumFromSelf = true,
-                        isLoggedIn = true,
-                        isVaultUnlocked = true,
-                        needsPasswordReset = false,
-                        isBiometricsEnabled = false,
-                        organizations = emptyList(),
-                        needsMasterPassword = false,
-                        trustedDevice = null,
-                        hasMasterPassword = true,
-                        isUsingKeyConnector = false,
-                        onboardingStatus = OnboardingStatus.NOT_STARTED,
-                        firstTimeState = FirstTimeState(
-                            showImportLoginsCard = true,
-                        ),
-                        isExportable = true,
-                        creationDate = null,
-                    ),
-                ),
-            ),
-        )
-        val viewModel = createViewModel()
-        assertEquals(
-            RootNavState.OnboardingAccountLockSetup,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `when the active user has an unlocked vault and they have a OnboardingStatus of ACCOUNT_LOCK_SETUP the nav state should be OnboardingAccountLockSetup`() {
         mutableUserStateFlow.tryEmit(
             UserState(
@@ -1494,7 +1453,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an locked vault and they have a OnboardingStatus of NOT_STARTED the nav state should be VaultLocked`() {
+    fun `when the active user has an locked vault and they have a OnboardingStatus of ACCOUNT_LOCK_SETUP the nav state should be VaultLocked`() {
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -1516,7 +1475,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         trustedDevice = null,
                         hasMasterPassword = true,
                         isUsingKeyConnector = false,
-                        onboardingStatus = OnboardingStatus.NOT_STARTED,
+                        onboardingStatus = OnboardingStatus.ACCOUNT_LOCK_SETUP,
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),

@@ -140,7 +140,7 @@ private fun SetupBrowserAutofillContent(
     ) {
         Spacer(Modifier.height(height = 24.dp))
         Text(
-            text = stringResource(id = BitwardenString.turn_on_browser_autofill_integration),
+            text = state.heading(),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -150,13 +150,7 @@ private fun SetupBrowserAutofillContent(
         )
         Spacer(Modifier.height(height = 8.dp))
         Text(
-            text = stringResource(
-                id = if (state.browserCount > 1) {
-                    BitwardenString.youre_using_a_browser_that_requires_special_permissions_plural
-                } else {
-                    BitwardenString.youre_using_a_browser_that_requires_special_permissions_singular
-                },
-            ),
+            text = state.description(),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -211,9 +205,11 @@ private fun SetupBrowserAutofillDialogs(
     when (dialogState) {
         SetupBrowserAutofillState.DialogState.TurnOnLaterDialog -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(BitwardenString.turn_on_browser_autofill_integration_later),
+                title = stringResource(
+                    id = BitwardenString.turn_on_browser_autofill_integration_later,
+                ),
                 message = stringResource(
-                    id = BitwardenString.return_to_complete_this_step_anytime_in_settings,
+                    id = BitwardenString.we_were_unable_to_automatically_open_the_autofill_settings,
                 ),
                 confirmButtonText = stringResource(id = BitwardenString.confirm),
                 dismissButtonText = stringResource(id = BitwardenString.cancel),
@@ -236,9 +232,12 @@ private fun SetupBrowserAutofillContent_preview() {
                 dialogState = null,
                 isInitialSetup = true,
                 browserAutofillSettingsOptions = persistentListOf(
-                    BrowserAutofillSettingsOption.BraveStable(enabled = true),
-                    BrowserAutofillSettingsOption.ChromeStable(enabled = false),
-                    BrowserAutofillSettingsOption.ChromeBeta(enabled = true),
+                    BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = false),
+                    BrowserAutofillSettingsOption.ChromeStable(
+                        isEnabled = false,
+                        isDefault = false,
+                    ),
+                    BrowserAutofillSettingsOption.ChromeBeta(isEnabled = true, isDefault = false),
                 ),
             ),
             onWhyIsThisStepRequiredClick = { },

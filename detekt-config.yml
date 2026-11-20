@@ -2,6 +2,8 @@ build:
   maxIssues: 0
   excludeCorrectable: false
   weights:
+    # Advisory until the existing violations are fixed. Remove this to make the rule fail the build.
+    NoSharingInPropertyGetter: 0
 
 config:
   validation: true
@@ -24,6 +26,12 @@ console-reports:
 output-reports:
   active: true
   exclude:
+
+bitwarden:
+  active: true
+  NoSharingInPropertyGetter:
+    active: true
+    severity: warning
 
 comments:
   active: true

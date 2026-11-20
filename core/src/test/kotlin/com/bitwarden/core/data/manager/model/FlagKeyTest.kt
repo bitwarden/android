@@ -72,6 +72,10 @@ class FlagKeyTest {
             FlagKey.SdkCipherOperations.keyName,
             "pm-44389-mobile-sdk-cipher-operations",
         )
+        assertEquals(
+            FlagKey.UpdatedOnboardingFlow.keyName,
+            "pm-44455-account-setup-onboarding-on-sign-in",
+        )
     }
 
     @Test
@@ -94,6 +98,7 @@ class FlagKeyTest {
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
                 FlagKey.SdkCipherOperations,
+                FlagKey.UpdatedOnboardingFlow,
             ).all {
                 !it.defaultValue
             },

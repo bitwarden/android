@@ -48,6 +48,7 @@ sealed class FlagKey<out T : Any> {
                 SdkPinUnlock,
                 SdkPreLogin,
                 SdkCipherOperations,
+                UpdatedOnboardingFlow,
             )
         }
     }
@@ -207,6 +208,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object SdkCipherOperations : FlagKey<Boolean>() {
         override val keyName: String = "pm-44389-mobile-sdk-cipher-operations"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the Update onboarding flow.
+     */
+    data object UpdatedOnboardingFlow : FlagKey<Boolean>() {
+        override val keyName: String = "pm-44455-account-setup-onboarding-on-sign-in"
         override val defaultValue: Boolean = false
     }
 
