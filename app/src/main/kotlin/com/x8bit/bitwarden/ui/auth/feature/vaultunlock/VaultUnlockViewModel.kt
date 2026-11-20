@@ -29,12 +29,16 @@ import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrN
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -45,16 +49,17 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.crypto.Cipher
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR = 2
 
 /**
  * Manages application state for the initial vault unlock screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList")
-@HiltViewModel
-class VaultUnlockViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = VaultUnlockViewModel.Factory::class)
+class VaultUnlockViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.VaultUnlockRoute,
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -86,7 +91,7 @@ class VaultUnlockViewModel @Inject constructor(
 
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val showAccountMenu =
-            savedStateHandle.toVaultUnlockArgs().unlockType == UnlockType.STANDARD &&
+            route.unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.ProviderGetCredentials &&
                     specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(
@@ -112,6 +117,17 @@ class VaultUnlockViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Factory for creating a [VaultUnlockViewModel] for a specific [AuthGraph.VaultUnlockRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultUnlockViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.VaultUnlockRoute): VaultUnlockViewModel
+    }
+
     init {
         authRepository
             .userStateFlow
@@ -365,6 +381,10 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
+            is VaultUnlockResult.BiometricKeystoreAuthorizationError -> {
+                handleBiometricKeystoreAuthorizationError(result)
+            }
+
             is VaultUnlockResult.GenericError,
             is VaultUnlockResult.InvalidStateError,
                 -> {
@@ -380,15 +400,54 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
-            VaultUnlockResult.Success -> {
-                if (specialCircumstanceManager.specialCircumstance == null) {
-                    specialCircumstanceManager.specialCircumstance =
-                        appResumeManager.getResumeSpecialCircumstance()
-                }
+            VaultUnlockResult.Success -> handleVaultUnlockSuccess()
+        }
+    }
 
-                mutableStateFlow.update { it.copy(dialog = null) }
-                // Don't do anything, we'll navigate to the right place.
+    private fun handleVaultUnlockSuccess() {
+        if (specialCircumstanceManager.specialCircumstance == null) {
+            specialCircumstanceManager.specialCircumstance =
+                appResumeManager.getResumeSpecialCircumstance()
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+                keystoreAuthorizationFailureCount = 0,
+            )
+        }
+        // Don't do anything, we'll navigate to the right place.
+    }
+
+    private fun handleBiometricKeystoreAuthorizationError(
+        result: VaultUnlockResult.BiometricKeystoreAuthorizationError,
+    ) {
+        val failureCount = state.keystoreAuthorizationFailureCount + 1
+        if (failureCount >= KEYSTORE_AUTH_FAILURES_BEFORE_CLEAR) {
+            authRepository.clearBiometrics(userId = state.userId)
+            mutableStateFlow.update {
+                it.copy(
+                    isBiometricsValid = false,
+                    keystoreAuthorizationFailureCount = failureCount,
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        title = BitwardenString.biometrics_failed.asText(),
+                        message = BitwardenString.biometrics_decoding_failure.asText(),
+                        throwable = result.error,
+                    ),
+                )
             }
+            return
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                keystoreAuthorizationFailureCount = failureCount,
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
+                    throwable = result.error,
+                ),
+            )
         }
     }
 
@@ -427,6 +486,11 @@ class VaultUnlockViewModel @Inject constructor(
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
                 input = "",
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
+                keystoreAuthorizationFailureCount = if (it.userId != userState.activeUserId) {
+                    0
+                } else {
+                    it.keystoreAuthorizationFailureCount
+                },
             )
         }
 
@@ -467,6 +531,7 @@ data class VaultUnlockState(
     val createCredentialRequest: CreateCredentialRequest? = null,
     private val hasMasterPassword: Boolean,
     val isFromLockFlow: Boolean,
+    val keystoreAuthorizationFailureCount: Int = 0,
 ) : Parcelable {
 
     /**

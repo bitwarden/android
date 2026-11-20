@@ -41,6 +41,7 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.KeysJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
 import com.bitwarden.network.model.MasterPasswordUnlockDataJson
@@ -77,11 +78,11 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthStateManager
@@ -94,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateNewUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeviceInfo
@@ -272,9 +274,9 @@ class AuthRepositoryTest {
         coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
     }
     private val kdfManager: KdfManager = mockk {
-        every { needsKdfUpdateToMinimums() } returns false
+        every { needsKdfUpdateToMinimums(userId = any()) } returns false
         coEvery {
-            updateKdfToMinimumsIfNeeded(password = any())
+            updateKdfToMinimumsIfNeeded(userId = any(), password = any())
         } returns UpdateKdfMinimumsResult.Success
     }
     private val toastManager: ToastManager = mockk {
@@ -288,6 +290,9 @@ class AuthRepositoryTest {
     }
     private val authStateManager: AuthStateManager = mockk()
     private val organizationManager: OrganizationManager = mockk()
+    private val onboardingManager: OnboardingManager = mockk {
+        every { initializeOnboardingFlow(userId = any()) } just runs
+    }
 
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
@@ -318,6 +323,7 @@ class AuthRepositoryTest {
         toastManager = toastManager,
         featureFlagManager = featureFlagManager,
         organizationManager = organizationManager,
+        onboardingManager = onboardingManager,
         authStateManager = authStateManager,
     )
 
@@ -449,7 +455,12 @@ class AuthRepositoryTest {
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
@@ -459,7 +470,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         }
     }
 
@@ -471,7 +487,12 @@ class AuthRepositoryTest {
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         val error = Throwable("Fail")
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(
@@ -487,7 +508,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
             accountsService.deleteAccount(
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
@@ -502,7 +528,12 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(
@@ -521,7 +552,12 @@ class AuthRepositoryTest {
             userStateManager.hasPendingAccountDeletion = true
         }
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            authSdkSource.hashPassword(
+                salt = SALT,
+                password = masterPassword,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
             accountsService.deleteAccount(
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
@@ -1532,6 +1568,9 @@ class AuthRepositoryTest {
                 settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
             }
             assertEquals(LoginResult.Success, result)
+            verify(exactly = 1) {
+                onboardingManager.initializeOnboardingFlow(userId = USER_ID_1)
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -2026,6 +2065,198 @@ class AuthRepositoryTest {
             verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    fun `login success should initialize the onboarding flow for the user`() =
+        runTest {
+            setupPasswordLoginSuccess()
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            verify(exactly = 1) {
+                onboardingManager.initializeOnboardingFlow(userId = USER_ID_1)
+            }
+        }
+
+    @Test
+    fun `login for the first account should update the user's KDF after saving it`() =
+        runTest {
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns SINGLE_USER_STATE_1
+            var userStateDuringKdfUpdate: UserStateJson? = null
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } answers {
+                userStateDuringKdfUpdate = fakeAuthDiskSource.userState
+                UpdateKdfMinimumsResult.Success
+            }
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            // The logging in user must already be saved as the active user when the KDF is
+            // updated, so the update is performed for that user.
+            assertEquals(SINGLE_USER_STATE_1, userStateDuringKdfUpdate)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+        }
+
+    @Test
+    fun `login get token succeeds when the KDF update fails should still return Success`() =
+        runTest {
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns SINGLE_USER_STATE_1
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } returns UpdateKdfMinimumsResult.Error(error = Throwable("Fail"))
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            fakeAuthDiskSource.assertUserState(userState = SINGLE_USER_STATE_1)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+        }
+
+    @Test
+    fun `login adding an account should only update the new user's KDF after saving it`() =
+        runTest {
+            // User 2 is the active user when User 1 is added.
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            repository.hasPendingAccountAddition = true
+            coEvery {
+                authSdkSource.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                    deeplinkScheme = DEEPLINK_SCHEME,
+                )
+            } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+            var userStateDuringUnlock: UserStateJson? = null
+            coEvery {
+                vaultRepository.unlockVault(
+                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                        password = PASSWORD,
+                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                    ),
+                    organizationKeys = null,
+                )
+            } answers {
+                userStateDuringUnlock = fakeAuthDiskSource.userState
+                VaultUnlockResult.Success
+            }
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = SINGLE_USER_STATE_2,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                    passwordPassesPolicy = true,
+                )
+            } returns MULTI_USER_STATE
+            var userStateDuringKdfUpdate: UserStateJson? = null
+            coEvery {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            } answers {
+                userStateDuringKdfUpdate = fakeAuthDiskSource.userState
+                UpdateKdfMinimumsResult.Success
+            }
+
+            val result = repository.login(email = EMAIL, password = PASSWORD)
+
+            assertEquals(LoginResult.Success, result)
+            // The previously active user is still active on disk while the new user's vault is
+            // unlocked, so the KDF must not be updated at that point.
+            assertEquals(SINGLE_USER_STATE_2, userStateDuringUnlock)
+            // The new user must already be saved as the active user when the KDF is updated.
+            assertEquals(MULTI_USER_STATE, userStateDuringKdfUpdate)
+            coVerify(exactly = 1) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_1, password = PASSWORD)
+            }
+            // The KDF of the previously active user must never be updated with the new user's
+            // password.
+            coVerify(exactly = 0) {
+                kdfManager.updateKdfToMinimumsIfNeeded(userId = USER_ID_2, password = any())
             }
         }
 
@@ -3537,10 +3768,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = true,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             coEvery {
@@ -3602,10 +3835,12 @@ class AuthRepositoryTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             coEvery {
@@ -3686,10 +3921,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             val accountCryptographicState = WrappedAccountCryptographicState.V1("privateKey")
@@ -3776,11 +4013,13 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 accountKeys = ACCOUNT_KEYS_WITH_NULL_FIELDS,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
             )
             val accountCryptographicState = WrappedAccountCryptographicState.V1(
@@ -3870,10 +4109,12 @@ class AuthRepositoryTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -3962,10 +4203,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -4092,10 +4335,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -4136,10 +4381,12 @@ class AuthRepositoryTest {
         runTest {
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
-                keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
                     trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = keyConnectorUrl,
+                    ),
                 ),
                 key = null,
                 privateKey = null,
@@ -4992,7 +5239,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `removePassword with no masterKeyWrappedUserKey should return error`() = runTest {
+    fun `removePassword with no userDecryptionOptions should return error`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1.copy(
@@ -5004,7 +5251,7 @@ class AuthRepositoryTest {
         val result = repository.removePassword(masterPassword = PASSWORD)
 
         assertEquals(
-            RemovePasswordResult.Error(error = MissingPropertyException("User Key")),
+            RemovePasswordResult.Error(error = MissingPropertyException("Master Password Unlock")),
             result,
         )
     }
@@ -5044,15 +5291,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns error.asFailure()
 
@@ -5076,15 +5324,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns expectedResult.asSuccess()
 
@@ -5111,15 +5360,16 @@ class AuthRepositoryTest {
                     keyConnectorUrl = url,
                 ),
             )
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             every { organizationManager.organizations } returns organizations
             coEvery {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns expectedResult.asSuccess()
 
@@ -5136,6 +5386,7 @@ class AuthRepositoryTest {
     fun `removePassword with migrateExistingUserToKeyConnector success should sync and return success`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val masterPasswordUnlock = PROFILE_1.userDecryptionOptions?.masterPasswordUnlock!!
             val url = "www.example.com"
             val organizations = listOf(
                 createMockOrganization(
@@ -5150,10 +5401,10 @@ class AuthRepositoryTest {
                 keyConnectorManager.migrateExistingUserToKeyConnector(
                     userId = USER_ID_1,
                     url = url,
-                    userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = PROFILE_1.email,
+                    userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                    salt = masterPasswordUnlock.salt,
                     masterPassword = PASSWORD,
-                    kdf = PROFILE_1.toSdkParams(),
+                    kdf = masterPasswordUnlock.kdf.toKdf(),
                 )
             } returns MigrateExistingUserToKeyConnectorResult.Success.asSuccess()
             every {
@@ -5294,7 +5545,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
-                salt = EMAIL,
+                salt = SALT,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -5319,7 +5570,7 @@ class AuthRepositoryTest {
         )
         coVerify {
             authSdkSource.hashPassword(
-                salt = EMAIL,
+                salt = SALT,
                 password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
@@ -6037,7 +6288,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = organizationIdentifier,
                 passwordHint = passwordHint,
                 kdf = profile.toKdfRequestModel(),
-                salt = profile.email,
+                salt = SALT,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
                 keys = KeysJson(
@@ -6070,7 +6321,13 @@ class AuthRepositoryTest {
                     privateKey = privateRsaKey,
                 ),
             )
-            fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
+            fakeAuthDiskSource.assertUserState(
+                SINGLE_USER_STATE_1.copy(
+                    accounts = mapOf(
+                        USER_ID_1 to ACCOUNT_1.copy(profile = PROFILE_1_WITH_EMAIL_SALT),
+                    ),
+                ),
+            )
             coVerify(exactly = 1) {
                 authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
                 accountsService.setPassword(body = setPasswordRequestJson)
@@ -6383,7 +6640,6 @@ class AuthRepositoryTest {
         coEvery {
             accountsService.resendVerificationCodeEmail(
                 body = ResendEmailRequestJson(
-                    deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     ssoToken = null,
@@ -6395,7 +6651,6 @@ class AuthRepositoryTest {
         coVerify {
             accountsService.resendVerificationCodeEmail(
                 body = ResendEmailRequestJson(
-                    deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     ssoToken = null,
@@ -6449,7 +6704,6 @@ class AuthRepositoryTest {
             coEvery {
                 accountsService.resendVerificationCodeEmail(
                     body = ResendEmailRequestJson(
-                        deviceIdentifier = UNIQUE_APP_ID,
                         email = EMAIL,
                         passwordHash = PASSWORD_HASH,
                         ssoToken = null,
@@ -6466,7 +6720,6 @@ class AuthRepositoryTest {
             coVerify {
                 accountsService.resendVerificationCodeEmail(
                     body = ResendEmailRequestJson(
-                        deviceIdentifier = UNIQUE_APP_ID,
                         email = EMAIL,
                         passwordHash = PASSWORD_HASH,
                         ssoToken = null,
@@ -7189,142 +7442,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setOnboardingStatus should save the onboarding status to disk`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
-        assertEquals(
-            OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
-        )
-    }
-
-    @Test
-    fun `setOnboardingStatus with no userId does not change the onboarding state`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
-        assertEquals(
-            OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
-        )
-
-        fakeAuthDiskSource.userState = null
-        repository.setOnboardingStatus(status = OnboardingStatus.COMPLETE)
-        val activeUserId = SINGLE_USER_STATE_1.activeUserId
-        assertFalse(
-            fakeAuthDiskSource.getOnboardingStatus(activeUserId) == OnboardingStatus.COMPLETE,
-        )
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `on successful login a new user should have onboarding status set if has not previously logged in`() =
-        runTest {
-            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                authSdkSource.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                    passwordPassesPolicy = true,
-                )
-            } returns SINGLE_USER_STATE_1
-            every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns false
-            val result = repository.login(email = EMAIL, password = PASSWORD)
-            assertEquals(LoginResult.Success, result)
-            coVerify(exactly = 1) { authSdkSource.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = USER_ID_1,
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            // This should only be set after they complete a registration and not based on login.
-            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
-            verify(exactly = 1) {
-                userStateManager.hasPendingAccountAddition = false
-            }
-        }
-
-    @Test
-    fun `on successful login does not set onboarding status if user has previously logged in`() =
-        runTest {
-            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
-            coEvery {
-                authSdkSource.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SDK_SUCCESS.asSuccess()
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    uniqueAppId = UNIQUE_APP_ID,
-                    deeplinkScheme = DEEPLINK_SCHEME,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
-                        password = PASSWORD,
-                        masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
-                    ),
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                    passwordPassesPolicy = true,
-                )
-            } returns SINGLE_USER_STATE_1
-            every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns true
-            val result = repository.login(email = EMAIL, password = PASSWORD)
-            assertEquals(LoginResult.Success, result)
-            coVerify(exactly = 1) { authSdkSource.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertAccountCryptographicState(
-                userId = USER_ID_1,
-                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
-            )
-            verify(exactly = 1) {
-                userStateManager.hasPendingAccountAddition = false
-                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
-            }
-            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
-        }
-
-    @Test
     fun `cancelKeyConnectorLogin should clear keyConnectorResponse`() =
         runTest {
             assertDoesNotThrow { repository.cancelKeyConnectorLogin() }
@@ -7342,6 +7459,41 @@ class AuthRepositoryTest {
                 continueResult,
             )
         }
+
+    private fun setupPasswordLoginSuccess() {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                uniqueAppId = UNIQUE_APP_ID,
+                deeplinkScheme = DEEPLINK_SCHEME,
+            )
+        } returns GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.asSuccess()
+        coEvery {
+            vaultRepository.unlockVault(
+                accountCryptographicState = ACCOUNT_CRYPTOGRAPHIC_STATE_V2,
+                userId = USER_ID_1,
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                initUserCryptoMethod = InitUserCryptoMethod.MasterPasswordUnlock(
+                    password = PASSWORD,
+                    masterPasswordUnlock = MOCK_MASTER_PASSWORD_UNLOCK,
+                ),
+                organizationKeys = null,
+            )
+        } returns VaultUnlockResult.Success
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                passwordPassesPolicy = true,
+            )
+        } returns SINGLE_USER_STATE_1
+    }
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(
@@ -7472,7 +7624,6 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
-    keyConnectorUrl = null,
 )
 private val GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     accessToken = ACCESS_TOKEN,
@@ -7504,7 +7655,6 @@ private val GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS = GetTokenResponseJson.
             salt = SALT,
         ),
     ),
-    keyConnectorUrl = null,
 )
 private val BASE_PROFILE_1 = AccountJson.Profile(
     userId = USER_ID_1,
@@ -7527,6 +7677,19 @@ private val BASE_PROFILE_1 = AccountJson.Profile(
 )
 
 private val PROFILE_1 = BASE_PROFILE_1.copy(
+    userDecryptionOptions = UserDecryptionOptionsJson(
+        hasMasterPassword = true,
+        trustedDeviceUserDecryptionOptions = null,
+        keyConnectorUserDecryptionOptions = null,
+        masterPasswordUnlock = MasterPasswordUnlockDataJson(
+            kdf = BASE_PROFILE_1.toSdkParams().toKdfRequestModel(),
+            masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
+            salt = SALT,
+        ),
+    ),
+)
+
+private val PROFILE_1_WITH_EMAIL_SALT = BASE_PROFILE_1.copy(
     userDecryptionOptions = UserDecryptionOptionsJson(
         hasMasterPassword = true,
         trustedDeviceUserDecryptionOptions = null,

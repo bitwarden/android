@@ -52,4 +52,6 @@ private val PolicyTypeJson.toSdkPolicyType: PolicyType
 
         PolicyTypeJson.ORGANIZATION_USER_NOTIFICATION -> PolicyType.ORGANIZATION_USER_NOTIFICATION
         PolicyTypeJson.SEND_CONTROLS -> PolicyType.SEND_CONTROLS
+        PolicyTypeJson.FILL_ASSIST -> PolicyType.FILL_ASSIST
+        PolicyTypeJson.AUTOTYPE_GA_POLICY -> PolicyType.AUTOTYPE_GA_POLICY
     }

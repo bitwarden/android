@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -21,30 +22,28 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
@@ -72,10 +71,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isMasterPasswordStrong = any(),
             )
         } returns RegisterResult.Success
-        coEvery { setOnboardingStatus(OnboardingStatus.NOT_STARTED) } just Runs
+        every { setOnboardingStatus(status = any()) } just runs
     }
     private val toastManager: ToastManager = mockk {
         every { show(messageId = any(), duration = any()) } just runs
+    }
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow) } returns true
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -95,16 +97,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
-        mockkStatic(
-            SavedStateHandle::toCompleteRegistrationArgs,
-        )
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toCompleteRegistrationArgs,
-        )
     }
 
     @Test
@@ -218,10 +210,31 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             expectNoEvents()
         }
-        verify(exactly = 1) {
-            mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        verify(exactly = 0) {
+            mockAuthRepository.setOnboardingStatus(status = any())
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when login attempt returns success with UpdatedOnboardingFlow disabled should set onboarding status to ACCOUNT_LOCK_SETUP`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow)
+            } returns false
+            val viewModel = createCompleteRegistrationViewModel(
+                completeRegistrationState = VALID_INPUT_STATE,
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+            viewModel.eventFlow.test {
+                expectNoEvents()
+            }
+            verify(exactly = 1) {
+                mockAuthRepository.setOnboardingStatus(
+                    status = OnboardingStatus.ACCOUNT_LOCK_SETUP,
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -241,9 +254,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     CompleteRegistrationEvent.NavigateToLogin(EMAIL),
                     awaitItem(),
                 )
-            }
-            verify(exactly = 1) {
-                mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
             }
         }
 
@@ -644,19 +654,20 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
     ): CompleteRegistrationViewModel = CompleteRegistrationViewModel(
+        route = AuthGraph.CompleteRegistrationRoute(
+            emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
+            verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
+            fromEmail = completeRegistrationState?.fromEmail == true,
+        ),
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = completeRegistrationState)
-            every { toCompleteRegistrationArgs() } returns CompleteRegistrationArgs(
-                emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
-                verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
-                fromEmail = completeRegistrationState?.fromEmail == true,
-            )
         },
         authRepository = mockAuthRepository,
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         generatorRepository = generatorRepository,
         toastManager = toastManager,
+        featureFlagManager = featureFlagManager,
     )
 
     companion object {

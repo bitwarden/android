@@ -58,7 +58,7 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenExpandableFloatingActionButton
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabIcon
 import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
-import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingListHeader
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -360,14 +360,11 @@ private fun ItemListingContent(
 
         if (state.shouldShowLocalHeader) {
             item(key = "local_items_header") {
-                BitwardenExpandingHeader(
-                    collapsedText = stringResource(
-                        id = BitwardenString.local_codes,
-                        state.itemList.size,
-                    ),
+                BitwardenExpandingListHeader(
+                    label = stringResource(id = BitwardenString.local_codes_header),
+                    supportingLabel = state.itemList.size.toString(),
                     isExpanded = isLocalHeaderExpanded,
                     onClick = { isLocalHeaderExpanded = !isLocalHeaderExpanded },
-                    capitalizeText = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -402,11 +399,11 @@ private fun ItemListingContent(
             is SharedCodesDisplayState.Codes -> {
                 state.sharedItems.sections.forEachIndexed { _, section ->
                     item(key = "sharedSection_${section.id}") {
-                        BitwardenExpandingHeader(
-                            collapsedText = section.label(),
+                        BitwardenExpandingListHeader(
+                            label = section.label(),
+                            supportingLabel = section.codes.size.toString(),
                             isExpanded = section.isExpanded,
                             onClick = { onSectionExpandedClick(section) },
-                            capitalizeText = true,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .standardHorizontalMargin()

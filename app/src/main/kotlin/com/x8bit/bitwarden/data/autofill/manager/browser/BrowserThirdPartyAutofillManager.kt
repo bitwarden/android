@@ -9,27 +9,28 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFill
 interface BrowserThirdPartyAutofillManager {
 
     /**
-     * The data representing the status of the stable Brave version
+     * Retrieves the data representing the status of the stable Brave version.
      */
-    val stableBraveAutofillStatus: BrowserThirdPartyAutoFillData
+    suspend fun getStableBraveAutofillStatus(): BrowserThirdPartyAutoFillData
 
     /**
-     * The data representing the status of the stable Chrome version
+     * Retrieves the data representing the status of the stable Chrome version.
      */
-    val stableChromeAutofillStatus: BrowserThirdPartyAutoFillData
+    suspend fun getStableChromeAutofillStatus(): BrowserThirdPartyAutoFillData
 
     /**
-     * The data representing the status of the beta Chrome version
+     * Retrieves the data representing the status of the beta Chrome version.
      */
-    val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
+    suspend fun getBetaChromeAutofillStatus(): BrowserThirdPartyAutoFillData
 
     /**
-     * The data representing the status of the Vivaldi version
+     * Retrieves the data representing the status of the Vivaldi version.
      */
-    val stableVivaldiAutofillStatus: BrowserThirdPartyAutoFillData
+    suspend fun getStableVivaldiAutofillStatus(): BrowserThirdPartyAutoFillData
 
     /**
-     * The package name of the device's default browser, or null if it cannot be determined.
+     * Retrieves the package name of the device's default browser, or null if it cannot be
+     * determined.
      */
-    val defaultBrowserPackageName: String?
+    suspend fun getDefaultBrowserPackageName(): String?
 }

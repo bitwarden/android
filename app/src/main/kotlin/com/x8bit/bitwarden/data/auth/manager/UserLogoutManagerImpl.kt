@@ -83,6 +83,7 @@ internal class UserLogoutManagerImpl(
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId)
+        val pinLength = authDiskSource.getPinLength(userId = userId)
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
         val ephemeralPinProtectedUserKeyEnvelope = authDiskSource
             .getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
@@ -92,6 +93,7 @@ internal class UserLogoutManagerImpl(
             .shouldClearOnSoftLogout(userId = userId)
         val vaultPolicyBannerDismissedDate = settingsDiskSource
             .getVaultPolicyBannerDismissedDate(userId = userId)
+        val shouldShowPlanBadge = settingsDiskSource.getShouldShowPlanBadge(userId = userId)
 
         clearData(userId = userId)
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
@@ -102,10 +104,8 @@ internal class UserLogoutManagerImpl(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
             )
-            storeVaultTimeoutAction(
-                userId = userId,
-                vaultTimeoutAction = vaultTimeoutAction,
-            )
+            storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+            storeShouldShowPlanBadge(userId = userId, shouldShow = shouldShowPlanBadge)
             if (!shouldClearOnSoftLogout) {
                 // We make sure the data is preserved if it should not be cleared.
                 storeVaultPolicyBannerDismissedDate(
@@ -116,6 +116,7 @@ internal class UserLogoutManagerImpl(
         }
         authDiskSource.apply {
             storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            storePinLength(userId = userId, pinLength = pinLength)
             storePinProtectedUserKey(userId = userId, pinProtectedUserKey = pinProtectedUserKey)
             storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,

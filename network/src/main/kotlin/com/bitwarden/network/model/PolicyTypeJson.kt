@@ -145,6 +145,21 @@ enum class PolicyTypeJson {
      */
     @SerialName("21")
     SEND_CONTROLS,
+
+    /**
+     * Enables the Fill Assist targeting-rules autofill engine as the default for members who
+     * have not explicitly set their Fill Assist preference, and optionally overrides the default
+     * rules feed URL.
+     */
+    @SerialName("22")
+    FILL_ASSIST,
+
+    /**
+     * Enables AutoType GA policy for members who have not explicitly set their AutoType GA
+     * preference.
+     */
+    @SerialName("23")
+    AUTOTYPE_GA_POLICY,
 }
 
 @Keep

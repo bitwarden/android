@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.credentials.datasource.disk.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import androidx.room3.ColumnInfo
+import androidx.room3.Entity
 
 /**
  * Entity representing a trusted privileged app in the database.

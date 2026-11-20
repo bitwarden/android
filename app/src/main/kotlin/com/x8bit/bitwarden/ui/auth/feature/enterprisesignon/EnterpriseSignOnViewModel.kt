@@ -23,13 +23,16 @@ import com.x8bit.bitwarden.data.platform.util.ssoAuthTabData
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_SSO_DATA = "ssoData"
 private const val KEY_SSO_CALLBACK_RESULT = "ssoCallbackResult"
@@ -40,8 +43,9 @@ private const val RANDOM_STRING_LENGTH = 64
  * Manages application state for the enterprise single sign on screen.
  */
 @Suppress("TooManyFunctions")
-@HiltViewModel
-class EnterpriseSignOnViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = EnterpriseSignOnViewModel.Factory::class)
+class EnterpriseSignOnViewModel @AssistedInject constructor(
+    @Assisted private val route: AuthGraph.EnterpriseSignOnRoute,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val generatorRepository: GeneratorRepository,
@@ -52,9 +56,20 @@ class EnterpriseSignOnViewModel @Inject constructor(
         ?: EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            emailAddress = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+            emailAddress = route.emailAddress,
         ),
 ) {
+    /**
+     * Factory for creating an [EnterpriseSignOnViewModel] for a specific
+     * [AuthGraph.EnterpriseSignOnRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates an [EnterpriseSignOnViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.EnterpriseSignOnRoute): EnterpriseSignOnViewModel
+    }
 
     /**
      * Data needed once a response is received from the SSO backend.
@@ -162,7 +177,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     EnterpriseSignOnEvent.NavigateToTwoFactorLogin(
-                        emailAddress = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                        emailAddress = state.emailAddress,
                         orgIdentifier = state.orgIdentifierInput,
                     ),
                 )
@@ -341,7 +356,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     showLoading()
                     viewModelScope.launch {
                         val result = authRepository.login(
-                            email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                            email = state.emailAddress,
                             ssoCode = ssoCallbackResult.code,
                             ssoCodeVerifier = ssoData.codeVerifier,
                             ssoRedirectUri = ssoData.redirectUri,
@@ -366,7 +381,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val result = authRepository.getVerifiedOrganizationDomainSsoDetails(
-                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+                email = state.emailAddress,
             )
             sendAction(
                 EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive(

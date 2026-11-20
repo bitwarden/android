@@ -5,6 +5,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -135,6 +136,27 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     fun getIntroducingArchiveActionCardDismissedFlow(userId: String): Flow<Boolean?>
 
     /**
+     * Retrieves the stored set of collapsed vault sections for the given [userId].
+     *
+     * Returns `null` if no value has been stored, which is equivalent to every section being
+     * expanded. Stored values that do not match a known [VaultSection] are skipped.
+     */
+    fun getCollapsedVaultSections(userId: String): Set<VaultSection>?
+
+    /**
+     * Stores the given set of [collapsedVaultSections] for the given [userId].
+     */
+    fun storeCollapsedVaultSections(
+        userId: String,
+        collapsedVaultSections: Set<VaultSection>?,
+    )
+
+    /**
+     * Emits updates that track [getCollapsedVaultSections] for the given [userId].
+     */
+    fun getCollapsedVaultSectionsFlow(userId: String): Flow<Set<VaultSection>?>
+
+    /**
      * Retrieves the stored value of whether the Premium upgrade banner has been dismissed.
      */
     fun getPremiumUpgradeBannerDismissed(userId: String): Boolean?
@@ -229,6 +251,22 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
      * Emits updates that track [getPremiumUpgradePending] for the given [userId].
      */
     fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Retrieves the stored value of whether the plan badge should be shown for the given
+     * [userId].
+     */
+    fun getShouldShowPlanBadge(userId: String): Boolean?
+
+    /**
+     * Stores whether the plan badge should be shown for the given [userId].
+     */
+    fun storeShouldShowPlanBadge(userId: String, shouldShow: Boolean?)
+
+    /**
+     * Emits updates that track [getShouldShowPlanBadge] for the given [userId].
+     */
+    fun getShouldShowPlanBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
      * Retrieves the biometric integrity validity for the given [userId] and

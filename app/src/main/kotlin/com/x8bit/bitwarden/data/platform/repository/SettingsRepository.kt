@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
@@ -277,6 +278,21 @@ interface SettingsRepository : FlightRecorderManager {
      * Stores that the introducing archive action card has been dismissed for the active user.
      */
     fun dismissIntroducingArchiveActionCard()
+
+    /**
+     * The set of collapsed vault sections for the active user.
+     */
+    val collapsedVaultSections: Set<VaultSection>
+
+    /**
+     * Gets updates for the set of collapsed vault sections for the active user.
+     */
+    fun getCollapsedVaultSectionsFlow(): Flow<Set<VaultSection>>
+
+    /**
+     * Toggles whether the given [section] is collapsed for the active user.
+     */
+    fun toggleVaultSectionCollapsed(section: VaultSection)
 
     /**
      * Gets updates for whether the Premium upgrade banner is dismissed.

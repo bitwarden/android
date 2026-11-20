@@ -37,11 +37,11 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 
 /**
  * Top-level composable for the Update Biometrics screen.
@@ -149,7 +149,7 @@ private fun UpdateBiometricsContent(
         Spacer(modifier = Modifier.height(height = 32.dp))
 
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_account_setup),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_fingerprint_unlock),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

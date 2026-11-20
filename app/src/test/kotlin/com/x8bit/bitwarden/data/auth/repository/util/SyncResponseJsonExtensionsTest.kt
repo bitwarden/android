@@ -87,6 +87,18 @@ class SyncResponseJsonExtensionsTest {
         )
     }
 
+    @Test
+    fun `toSdkProfileOrganizations should filter out organizations with null user IDs`() {
+        assertEquals(
+            listOf(createMockSdkProfileOrganization(number = 1)),
+            listOf(
+                createMockOrganizationNetwork(number = 1),
+                createMockOrganizationNetwork(number = 2, userId = null),
+            )
+                .toSdkProfileOrganizations(),
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toSdkProfileOrganizations should return empty list when all organizations have null names`() {
@@ -191,6 +203,64 @@ class SyncResponseJsonExtensionsTest {
 
         assertEquals(
             policyInformation,
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    fun `policyInformation drops unknown allowedSendTypes and keeps the SendControls policy`() {
+        val policy = createMockSdkPolicy(
+            type = PolicyType.SEND_CONTROLS,
+            data = """
+                {
+                  "disableSend": false,
+                  "disableHideEmail": true,
+                  "whoCanAccess": 2,
+                  "allowedDomains": "bitwarden.com",
+                  "deletionHours": 168,
+                  "allowedSendTypes": [0, 2]
+                }
+            """.trimIndent(),
+        )
+
+        assertEquals(
+            PolicyInformation.SendControls(
+                disableSend = false,
+                disableHideEmail = true,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                allowedDomains = "bitwarden.com",
+                deletionHours = 168,
+                allowedSendTypes = listOf(SendTypeJson.TEXT),
+            ),
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    fun `policyInformation maps allowedSendTypes with only unknown types to an empty list`() {
+        val policy = createMockSdkPolicy(
+            type = PolicyType.SEND_CONTROLS,
+            data = """
+                {
+                  "disableSend": false,
+                  "disableHideEmail": true,
+                  "whoCanAccess": 2,
+                  "allowedDomains": "bitwarden.com",
+                  "deletionHours": 168,
+                  "allowedSendTypes": [2]
+                }
+            """.trimIndent(),
+        )
+
+        assertEquals(
+            PolicyInformation.SendControls(
+                disableSend = false,
+                disableHideEmail = true,
+                whoCanAccess = SendAccessTypeJson.SPECIFIC_PEOPLE,
+                allowedDomains = "bitwarden.com",
+                deletionHours = 168,
+                allowedSendTypes = emptyList(),
+            ),
             policy.policyInformation,
         )
     }

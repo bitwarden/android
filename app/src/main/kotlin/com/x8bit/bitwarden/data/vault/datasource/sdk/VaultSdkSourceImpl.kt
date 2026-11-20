@@ -89,7 +89,7 @@ class VaultSdkSourceImpl(
     override suspend fun deriveKeyConnector(
         userId: String,
         userKeyEncrypted: String,
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
     ): Result<DeriveKeyConnectorResult> =
@@ -102,7 +102,7 @@ class VaultSdkSourceImpl(
                             userKeyEncrypted = userKeyEncrypted,
                             password = password,
                             kdf = kdf,
-                            email = email,
+                            email = salt,
                         ),
                     )
                 DeriveKeyConnectorResult.Success(key)

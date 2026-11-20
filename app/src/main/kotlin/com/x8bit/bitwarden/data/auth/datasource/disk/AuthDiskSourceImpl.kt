@@ -48,6 +48,7 @@ private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
 private const val PIN_PROTECTED_USER_KEY_KEY = "pinKeyEncryptedUserKey"
 private const val PIN_PROTECTED_USER_KEY_KEY_ENVELOPE = "pinKeyEncryptedUserKeyEnvelope"
 private const val ENCRYPTED_PIN_KEY = "protectedPin"
+private const val PIN_LENGTH_KEY = "pinLength"
 private const val ORGANIZATIONS_KEY = "organizations"
 private const val ORGANIZATION_KEYS_KEY = "encOrgKeys"
 private const val TWO_FACTOR_TOKEN_KEY = "twoFactorToken"
@@ -68,7 +69,7 @@ private const val V2_ENCRYPTED_MIGRATIONS_GRACE_PERIOD_START =
 /**
  * Primary implementation of [AuthDiskSource].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
     keystoreEncryptedPreferences: SharedPreferences,
@@ -194,6 +195,7 @@ class AuthDiskSourceImpl(
         storeShowImportLogins(userId = userId, showImportLogins = null)
         storeLastLockTimestamp(userId = userId, lastLockTimestamp = null)
         storeEncryptedPin(userId = userId, encryptedPin = null)
+        storePinLength(userId = userId, pinLength = null)
         storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
         storeEphemeralPinProtectedUserKeyEnvelope(
             userId = userId,
@@ -469,6 +471,16 @@ class AuthDiskSourceImpl(
         putString(
             key = ENCRYPTED_PIN_KEY.appendIdentifier(userId),
             value = encryptedPin,
+        )
+    }
+
+    override fun getPinLength(userId: String): Int? =
+        getInt(key = PIN_LENGTH_KEY.appendIdentifier(userId))
+
+    override fun storePinLength(userId: String, pinLength: Int?) {
+        putInt(
+            key = PIN_LENGTH_KEY.appendIdentifier(userId),
+            value = pinLength,
         )
     }
 

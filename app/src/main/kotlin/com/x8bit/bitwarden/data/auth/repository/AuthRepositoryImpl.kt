@@ -57,7 +57,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
@@ -71,6 +70,7 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
@@ -170,6 +170,7 @@ internal class AuthRepositoryImpl(
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
     authStateManager: AuthStateManager,
+    onboardingManager: OnboardingManager,
     organizationManager: OrganizationManager,
     passwordPolicyManager: PasswordPolicyManager,
     logsManager: LogsManager,
@@ -180,6 +181,7 @@ internal class AuthRepositoryImpl(
     AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    OnboardingManager by onboardingManager,
     OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
@@ -522,7 +524,8 @@ internal class AuthRepositoryImpl(
                 ),
             )
         }
-        settingsRepository.storeUserHasLoggedInValue(userId)
+        settingsRepository.storeUserHasLoggedInValue(userId = userId)
+        initializeOnboardingFlow(userId = userId)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
@@ -934,11 +937,12 @@ internal class AuthRepositoryImpl(
             ?.profile
             ?: return RemovePasswordResult.Error(error = NoActiveUserException())
         val userId = profile.userId
-        val userKey = profile
+        val masterPasswordUnlock = profile
             .userDecryptionOptions
             ?.masterPasswordUnlock
-            ?.masterKeyWrappedUserKey
-            ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
+            ?: return RemovePasswordResult.Error(
+                error = MissingPropertyException("Master Password Unlock"),
+            )
         val keyConnectorUrl = organizations
             .find {
                 it.isKeyConnectorEnabled &&
@@ -953,10 +957,10 @@ internal class AuthRepositoryImpl(
             .migrateExistingUserToKeyConnector(
                 userId = userId,
                 url = keyConnectorUrl,
-                userKeyEncrypted = userKey,
-                email = profile.email,
+                userKeyEncrypted = masterPasswordUnlock.masterKeyWrappedUserKey,
+                salt = masterPasswordUnlock.salt,
                 masterPassword = masterPassword,
-                kdf = profile.toSdkParams(),
+                kdf = masterPasswordUnlock.kdf.toKdf(),
             )
             .map { migrateResult: MigrateExistingUserToKeyConnectorResult ->
                 when (migrateResult) {
@@ -1500,15 +1504,6 @@ internal class AuthRepositoryImpl(
             )
     }
 
-    override fun setOnboardingStatus(status: OnboardingStatus) {
-        activeUserId?.let { userId ->
-            authDiskSource.storeOnboardingStatus(
-                userId = userId,
-                onboardingStatus = status,
-            )
-        }
-    }
-
     /**
      * Enrolls the active user in password reset if their organization requires it.
      */
@@ -1672,11 +1667,9 @@ internal class AuthRepositoryImpl(
             },
         ) {
             val keyConnectorUrl = loginResponse
-                .keyConnectorUrl
-                ?: loginResponse
-                    .userDecryptionOptions
-                    ?.keyConnectorUserDecryptionOptions
-                    ?.keyConnectorUrl
+                .userDecryptionOptions
+                ?.keyConnectorUserDecryptionOptions
+                ?.keyConnectorUrl
             val isDeviceUnlockAvailable = deviceData != null ||
                 loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
             // if possible attempt to unlock the vault with trusted device data
@@ -1723,10 +1716,13 @@ internal class AuthRepositoryImpl(
         password?.let {
             // Automatically update kdf to minimums after password unlock and userState update
             kdfManager
-                .updateKdfToMinimumsIfNeeded(password = password)
+                .updateKdfToMinimumsIfNeeded(userId = userId, password = password)
                 .also { result ->
                     if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                        Timber.e(
+                            t = result.error,
+                            message = "Failed to silent update KDF settings on login.",
+                        )
                     }
                 }
         }
@@ -1752,6 +1748,8 @@ internal class AuthRepositoryImpl(
         if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
             organizationIdentifier = orgIdentifier
         }
+
+        initializeOnboardingFlow(userId = userId)
 
         // Remove any cached data after successfully logging in.
         identityTokenAuthModel = null
@@ -1781,7 +1779,6 @@ internal class AuthRepositoryImpl(
         twoFactorResponse = loginResponse
         twoFactorDeviceData = deviceData
         resendEmailRequestJson = ResendEmailRequestJson(
-            deviceIdentifier = authDiskSource.uniqueAppId,
             email = email,
             passwordHash = authModel.password,
             ssoToken = loginResponse.ssoToken,

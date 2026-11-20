@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.billing.manager.PremiumStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
@@ -45,6 +43,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -57,6 +56,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.util.savedSnackbarMessage
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -69,15 +71,13 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.io.File
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 private const val KEY_HAS_SHOWN_CREATED_SNACKBAR = "hasShownCreatedSnackbar"
 
 /**
- * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block, used to free
- * up a slot for combining in the `vfo1-foundation` feature flag flow.
+ * A holder for the raw flow values combined in [VaultItemViewModel]'s `init` block.
  */
 private data class VaultItemCombinedFlowData(
     val cipherViewState: DataState<CipherView?>,
@@ -91,8 +91,9 @@ private data class VaultItemCombinedFlowData(
  * ViewModel responsible for handling user interactions in the vault item screen
  */
 @Suppress("LargeClass", "TooManyFunctions", "LongParameterList")
-@HiltViewModel
-class VaultItemViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = VaultItemViewModel.Factory::class)
+class VaultItemViewModel @AssistedInject constructor(
+    @Assisted private val route: VaultUnlockedGraph.VaultItemRoute,
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -103,22 +104,30 @@ class VaultItemViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val premiumStateManager: PremiumStateManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toVaultItemArgs()
-        VaultItemState(
-            vaultItemId = args.vaultItemId,
-            cipherType = args.cipherType,
-            viewState = VaultItemState.ViewState.Loading,
-            dialog = null,
-            baseIconUrl = environmentRepository.environment.baseIconUrl,
-            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
+        vaultItemId = route.vaultItemId,
+        cipherType = route.cipherType,
+        viewState = VaultItemState.ViewState.Loading,
+        dialog = null,
+        baseIconUrl = environmentRepository.environment.baseIconUrl,
+        isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        hasPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true,
+    ),
 ) {
+    /**
+     * Factory for creating a [VaultItemViewModel] for a specific
+     * [VaultUnlockedGraph.VaultItemRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultItemViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.VaultItemRoute): VaultItemViewModel
+    }
+
     /**
      * Reference to a temporary attachment saved in cache.
      */
@@ -142,7 +151,7 @@ class VaultItemViewModel @Inject constructor(
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientViewed(cipherId = state.vaultItemId),
         )
-        if (savedStateHandle.toVaultItemArgs().showCreatedSnackbar && !hasShownCreatedSnackbar) {
+        if (route.showCreatedSnackbar && !hasShownCreatedSnackbar) {
             hasShownCreatedSnackbar = true
             sendEvent(VaultItemEvent.ShowSnackbar(message = state.cipherType.savedSnackbarMessage))
         }
@@ -161,9 +170,7 @@ class VaultItemViewModel @Inject constructor(
                 folderState = folderState,
             )
         }
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.Vfo1Foundation),
-            ) { combinedFlowData, isVfo1FoundationEnabled ->
+            .map { combinedFlowData ->
                 val cipherViewState = combinedFlowData.cipherViewState
                 val userState = combinedFlowData.userState
                 val authCodeState = combinedFlowData.authCodeState
@@ -242,18 +249,13 @@ class VaultItemViewModel @Inject constructor(
                                     }
                                 }
                                 ?.name
-                            val collectionIcon = if (isVfo1FoundationEnabled) {
-                                BitwardenDrawable.ic_shared_folder
-                            } else {
-                                BitwardenDrawable.ic_collections
-                            }
                             val relatedLocations = persistentListOfNotNull(
                                 organizationName?.let { VaultItemLocation.Organization(it) },
                                 *collections
                                     .map {
                                         VaultItemLocation.Collection(
                                             name = it,
-                                            icon = collectionIcon,
+                                            icon = BitwardenDrawable.ic_shared_folder,
                                         )
                                     }
                                     .toTypedArray(),
@@ -758,6 +760,7 @@ class VaultItemViewModel @Inject constructor(
                 it.copy(
                     dialog = VaultItemState.DialogState.RequiresPremium(
                         message = BitwardenString.archiving_items_is_a_premium_feature.asText(),
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
                     ),
                 )
             }
@@ -815,6 +818,7 @@ class VaultItemViewModel @Inject constructor(
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = BitwardenString.totp_is_a_premium_feature.asText(),
+                    isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
                 ),
             )
         }
@@ -1560,6 +1564,7 @@ class VaultItemViewModel @Inject constructor(
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
             hasOrganizations = this.data?.hasOrganizations == true,
+            isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -2001,6 +2006,7 @@ data class VaultItemState(
              * @property favorite Indicates that the cipher is favorite.
              * @property passwordHistoryCount An integer indicating how many times the password.
              * @property hasOrganizations Indicates if the user has organizations.
+             * @property isInAppUpgradeAvailable Indicates that in-app billing is supported.
              */
             @Parcelize
             data class Common(
@@ -2023,6 +2029,7 @@ data class VaultItemState(
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,
                 val hasOrganizations: Boolean,
+                val isInAppUpgradeAvailable: Boolean,
             ) : Parcelable {
 
                 /**
@@ -2417,6 +2424,7 @@ data class VaultItemState(
         @Parcelize
         data class RequiresPremium(
             val message: Text,
+            val isInAppUpgradeAvailable: Boolean,
         ) : DialogState()
 
         /**

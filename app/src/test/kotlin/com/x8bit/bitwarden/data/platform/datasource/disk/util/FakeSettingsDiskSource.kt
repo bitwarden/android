@@ -9,6 +9,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,6 +21,7 @@ import java.time.Instant
 /**
  * Fake, memory-based implementation of [SettingsDiskSource].
  */
+@Suppress("LargeClass")
 class FakeSettingsDiskSource(
     flightRecorderDiskSource: FakeFlightRecorderDiskSource = FakeFlightRecorderDiskSource(),
 ) : SettingsDiskSource,
@@ -70,11 +72,13 @@ class FakeSettingsDiskSource(
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private var storedIntroducingArchiveActionCardDismissed = mutableMapOf<String, Boolean?>()
+    private var storedCollapsedVaultSections = mutableMapOf<String, Set<VaultSection>?>()
     private var storedPremiumUpgradeBannerDismissed = mutableMapOf<String, Boolean?>()
     private val storedVaultPolicyBannerDismissedDate = mutableMapOf<String, Instant?>()
     private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
     private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
     private val storedPremiumUpgradePending = mutableMapOf<String, Boolean?>()
+    private val storedShouldShowPlanBadge = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedFillAssistEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
@@ -124,6 +128,9 @@ class FakeSettingsDiskSource(
     private val mutableIntroducingArchiveActionCardDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableCollapsedVaultSectionsFlow =
+        mutableMapOf<String, MutableSharedFlow<Set<VaultSection>?>>()
+
     private val mutablePremiumUpgradeBannerDismissedFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
@@ -138,6 +145,8 @@ class FakeSettingsDiskSource(
 
     private val mutablePremiumUpgradePendingFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShouldShowPlanBadgeFlow = mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = storedAppLanguage
@@ -274,10 +283,13 @@ class FakeSettingsDiskSource(
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
         storedVaultPolicyBannerDismissedDate.remove(userId)
+        storedCollapsedVaultSections.remove(userId)
+        storedShouldShowPlanBadge.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
         mutableLastSyncCallFlowMap.remove(userId)
+        mutableShouldShowPlanBadgeFlow.remove(userId)
     }
 
     override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]
@@ -382,6 +394,21 @@ class FakeSettingsDiskSource(
         getMutableIntroducingArchiveActionCardDismissedFlow(userId = userId).tryEmit(isDismissed)
     }
 
+    override fun getCollapsedVaultSections(userId: String): Set<VaultSection>? =
+        storedCollapsedVaultSections[userId]
+
+    override fun storeCollapsedVaultSections(
+        userId: String,
+        collapsedVaultSections: Set<VaultSection>?,
+    ) {
+        storedCollapsedVaultSections[userId] = collapsedVaultSections
+        getMutableCollapsedVaultSectionsFlow(userId = userId).tryEmit(collapsedVaultSections)
+    }
+
+    override fun getCollapsedVaultSectionsFlow(userId: String): Flow<Set<VaultSection>?> =
+        getMutableCollapsedVaultSectionsFlow(userId = userId)
+            .onSubscription { emit(getCollapsedVaultSections(userId = userId)) }
+
     override fun getPremiumUpgradeBannerDismissed(userId: String): Boolean? =
         storedPremiumUpgradeBannerDismissed[userId]
 
@@ -446,6 +473,19 @@ class FakeSettingsDiskSource(
     override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
         getMutablePremiumUpgradePendingFlow(userId = userId)
             .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
+
+    override fun getShouldShowPlanBadge(
+        userId: String,
+    ): Boolean? = storedShouldShowPlanBadge[userId]
+
+    override fun storeShouldShowPlanBadge(userId: String, shouldShow: Boolean?) {
+        storedShouldShowPlanBadge[userId] = shouldShow
+        getMutableShouldShowPlanBadgeFlow(userId = userId).tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowPlanBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShouldShowPlanBadgeFlow(userId = userId)
+            .onSubscription { emit(getShouldShowPlanBadge(userId = userId)) }
 
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
@@ -617,6 +657,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored collapsed vault sections match the [expected] ones.
+     */
+    fun assertCollapsedVaultSections(userId: String, expected: Set<VaultSection>?) {
+        assertEquals(expected, storedCollapsedVaultSections[userId])
+    }
+
+    /**
      * Asserts that the stored Premium upgrade banner dismissed matches the [expected] one.
      */
     fun assertPremiumUpgradeBannerDismissed(userId: String, expected: Boolean?) {
@@ -649,6 +696,13 @@ class FakeSettingsDiskSource(
      */
     fun assertPremiumUpgradePending(userId: String, expected: Boolean?) {
         assertEquals(expected, storedPremiumUpgradePending[userId])
+    }
+
+    /**
+     * Asserts that the stored "should show plan badge" value matches the [expected] one.
+     */
+    fun assertShouldShowPlanBadge(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedShouldShowPlanBadge[userId])
     }
 
     /**
@@ -722,6 +776,13 @@ class FakeSettingsDiskSource(
             bufferedMutableSharedFlow(replay = 1)
         }
 
+    private fun getMutableCollapsedVaultSectionsFlow(
+        userId: String,
+    ): MutableSharedFlow<Set<VaultSection>?> =
+        mutableCollapsedVaultSectionsFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
     private fun getMutablePremiumUpgradeBannerDismissedFlow(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
@@ -754,6 +815,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradePendingFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShouldShowPlanBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShouldShowPlanBadgeFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

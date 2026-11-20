@@ -50,7 +50,7 @@ class KeyConnectorManagerTest {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
                     userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = EMAIL,
+                    salt = SALT,
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
@@ -60,7 +60,7 @@ class KeyConnectorManagerTest {
                 userId = USER_ID,
                 url = URL,
                 userKeyEncrypted = ENCRYPTED_USER_KEY,
-                email = EMAIL,
+                salt = SALT,
                 masterPassword = MASTER_PASSWORD,
                 kdf = KDF,
             )
@@ -77,7 +77,7 @@ class KeyConnectorManagerTest {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
                     userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = EMAIL,
+                    salt = SALT,
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
@@ -90,7 +90,7 @@ class KeyConnectorManagerTest {
                 userId = USER_ID,
                 url = URL,
                 userKeyEncrypted = ENCRYPTED_USER_KEY,
-                email = EMAIL,
+                salt = SALT,
                 masterPassword = MASTER_PASSWORD,
                 kdf = KDF,
             )
@@ -109,7 +109,7 @@ class KeyConnectorManagerTest {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
                     userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = EMAIL,
+                    salt = SALT,
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
@@ -119,7 +119,7 @@ class KeyConnectorManagerTest {
                 userId = USER_ID,
                 url = URL,
                 userKeyEncrypted = ENCRYPTED_USER_KEY,
-                email = EMAIL,
+                salt = SALT,
                 masterPassword = MASTER_PASSWORD,
                 kdf = KDF,
             )
@@ -139,7 +139,7 @@ class KeyConnectorManagerTest {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
                     userKeyEncrypted = ENCRYPTED_USER_KEY,
-                    email = EMAIL,
+                    salt = SALT,
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
@@ -153,7 +153,7 @@ class KeyConnectorManagerTest {
                 userId = USER_ID,
                 url = URL,
                 userKeyEncrypted = ENCRYPTED_USER_KEY,
-                email = EMAIL,
+                salt = SALT,
                 masterPassword = MASTER_PASSWORD,
                 kdf = KDF,
             )
@@ -170,7 +170,7 @@ class KeyConnectorManagerTest {
             vaultSdkSource.deriveKeyConnector(
                 userId = USER_ID,
                 userKeyEncrypted = ENCRYPTED_USER_KEY,
-                email = EMAIL,
+                salt = SALT,
                 password = MASTER_PASSWORD,
                 kdf = KDF,
             )
@@ -184,7 +184,7 @@ class KeyConnectorManagerTest {
             userId = USER_ID,
             url = URL,
             userKeyEncrypted = ENCRYPTED_USER_KEY,
-            email = EMAIL,
+            salt = SALT,
             masterPassword = MASTER_PASSWORD,
             kdf = KDF,
         )
@@ -452,11 +452,11 @@ private const val USER_ID: String = "userId"
 private const val URL: String = "www.example.com"
 private const val USER_KEY: String = "userKey"
 private const val ENCRYPTED_USER_KEY: String = "userKeyEncrypted"
-private const val EMAIL: String = "email@email.com"
 private const val MASTER_PASSWORD: String = "masterPassword"
 private const val MASTER_KEY: String = "masterKey"
 private const val PUBLIC_KEY: String = "publicKey"
 private const val PRIVATE_KEY: String = "privateKey"
+private const val SALT: String = "salt"
 private const val SIGNED_PUBLIC_KEY: String = "mockSignedPublicKey-1"
 private const val SIGNING_KEY: String = "mockWrappedSigningKey-1"
 private const val SECURITY_STATE: String = "mockSecurityState-1"

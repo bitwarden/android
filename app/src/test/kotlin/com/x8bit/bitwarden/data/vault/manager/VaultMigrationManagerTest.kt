@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.manager
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherMiniResponseJson
@@ -17,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkSignalStrength
@@ -76,10 +74,6 @@ class VaultMigrationManagerTest {
         every { getPersonalOwnershipPolicyOrganizationId() } returns null
     }
 
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.MigrateMyVaultToMyItems) } returns true
-    }
-
     private val fakeNetworkConnectionManager = FakeNetworkConnectionManager(
         isNetworkConnected = true,
         networkConnection = NetworkConnection.Wifi(strength = NetworkSignalStrength.GOOD),
@@ -114,7 +108,6 @@ class VaultMigrationManagerTest {
             settingsDiskSource = settingsDiskSource,
             vaultLockManager = vaultLockManager,
             policyManager = policyManager,
-            featureFlagManager = mockFeatureFlagManager,
             connectionManager = fakeNetworkConnectionManager,
             dispatcherManager = fakeDispatcherManager,
         )
@@ -201,41 +194,6 @@ class VaultMigrationManagerTest {
             mutableHasPersonalCiphersFlow.value = true
 
             // Should remain NoMigrationRequired since no policy
-            expectNoEvents()
-        }
-    }
-
-    @Test
-    fun `should emit NoMigrationRequired when feature flag is disabled`() = runTest {
-        val userId = "mockId-1"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-        val mockPolicy = createMockSdkPolicy(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
-        every {
-            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
-        } returns listOf(mockPolicy)
-
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.MigrateMyVaultToMyItems)
-        } returns false
-
-        val vaultMigrationManager = createVaultMigrationManager()
-
-        vaultMigrationManager.vaultMigrationDataStateFlow.test {
-            assertEquals(VaultMigrationData.NoMigrationRequired, awaitItem())
-
-            // Simulate vault unlock
-            mutableVaultUnlockDataStateFlow.value = listOf(
-                VaultUnlockData(
-                    userId = userId,
-                    status = VaultUnlockData.Status.UNLOCKED,
-                ),
-            )
-
-            // Emit personal ciphers exist
-            mutableHasPersonalCiphersFlow.value = true
-
-            // Should remain NoMigrationRequired since feature flag is disabled
             expectNoEvents()
         }
     }

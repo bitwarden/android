@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.ui.platform.base.util.PinThisComposable
 import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
@@ -102,6 +103,10 @@ fun BitwardenDatePickerButton(
         },
     )
     if (shouldShowDialog) {
+        // Keep this button composed while the dialog is showing. In a lazy list, the button can
+        // scroll out of view when the soft keyboard opens, and disposing it would dismiss the
+        // dialog and recreate it once the keyboard closes.
+        PinThisComposable()
         BitwardenDatePickerDialog(
             initialDate = currentDate,
             onDateSelect = { date ->

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -13,21 +12,19 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.B
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SetupBrowserAutofillViewModelTest {
     private val authRepository: AuthRepository = mockk {
-        every { setOnboardingStatus(status = any()) } just runs
+        every { goToNextStep() } just runs
     }
     private val mutableBrowserThirdPartyAutofillStatusFlow =
         MutableStateFlow(DEFAULT_BROWSER_AUTOFILL_STATUS)
@@ -43,16 +40,6 @@ class SetupBrowserAutofillViewModelTest {
         every { storeShowBrowserAutofillSettingBadge(showBadge = any()) } just runs
     }
 
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toSetupBrowserAutofillArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toSetupBrowserAutofillArgs)
-    }
-
     @Test
     fun `browserThirdPartyAutofillStatusFlow should update the state`() = runTest {
         val viewModel = createViewModel()
@@ -63,14 +50,27 @@ class SetupBrowserAutofillViewModelTest {
                     isAvailable = true,
                     isThirdPartyEnabled = true,
                 ),
+                defaultBrowserPackageName = BrowserPackage.BRAVE_RELEASE.packageName,
             )
             assertEquals(
                 DEFAULT_STATE.copy(
                     browserAutofillSettingsOptions = persistentListOf(
-                        BrowserAutofillSettingsOption.BraveStable(enabled = true),
-                        BrowserAutofillSettingsOption.ChromeStable(enabled = false),
-                        BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
-                        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
+                        BrowserAutofillSettingsOption.BraveStable(
+                            isEnabled = true,
+                            isDefault = true,
+                        ),
+                        BrowserAutofillSettingsOption.ChromeStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.ChromeBeta(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.VivaldiStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
                     ),
                 ),
                 awaitItem(),
@@ -84,14 +84,108 @@ class SetupBrowserAutofillViewModelTest {
             assertEquals(
                 DEFAULT_STATE.copy(
                     browserAutofillSettingsOptions = persistentListOf(
-                        BrowserAutofillSettingsOption.ChromeStable(enabled = false),
-                        BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
-                        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
+                        BrowserAutofillSettingsOption.ChromeStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.ChromeBeta(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.VivaldiStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
                     ),
                 ),
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `initial state should mark the default browser option as default`() = runTest {
+        mutableBrowserThirdPartyAutofillStatusFlow.value = DEFAULT_BROWSER_AUTOFILL_STATUS.copy(
+            defaultBrowserPackageName = BrowserPackage.CHROME_STABLE.packageName,
+        )
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    browserAutofillSettingsOptions = persistentListOf(
+                        BrowserAutofillSettingsOption.ChromeStable(
+                            isEnabled = false,
+                            isDefault = true,
+                        ),
+                        BrowserAutofillSettingsOption.BraveStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.ChromeBeta(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                        BrowserAutofillSettingsOption.VivaldiStable(
+                            isEnabled = false,
+                            isDefault = false,
+                        ),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `initial state should not mark any option as default for an unsupported browser`() =
+        runTest {
+            mutableBrowserThirdPartyAutofillStatusFlow.value =
+                DEFAULT_BROWSER_AUTOFILL_STATUS.copy(
+                    defaultBrowserPackageName = "com.unsupported.browser",
+                )
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+        }
+
+    @Test
+    fun `isContinueEnabled should be true when there is no default browser option`() {
+        val state = DEFAULT_STATE.copy(
+            browserAutofillSettingsOptions = persistentListOf(
+                BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = false),
+                BrowserAutofillSettingsOption.ChromeStable(isEnabled = false, isDefault = false),
+            ),
+        )
+        assertTrue(state.isContinueEnabled)
+    }
+
+    @Test
+    fun `isContinueEnabled should be true when there are no browser options`() {
+        val state = DEFAULT_STATE.copy(browserAutofillSettingsOptions = persistentListOf())
+        assertTrue(state.isContinueEnabled)
+    }
+
+    @Test
+    fun `isContinueEnabled should be true when the default browser option is enabled`() {
+        val state = DEFAULT_STATE.copy(
+            browserAutofillSettingsOptions = persistentListOf(
+                BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = true),
+                BrowserAutofillSettingsOption.ChromeStable(isEnabled = false, isDefault = false),
+            ),
+        )
+        assertTrue(state.isContinueEnabled)
+    }
+
+    @Test
+    fun `isContinueEnabled should be false when the default browser option is disabled`() {
+        val state = DEFAULT_STATE.copy(
+            browserAutofillSettingsOptions = persistentListOf(
+                BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = true),
+                BrowserAutofillSettingsOption.ChromeStable(isEnabled = true, isDefault = false),
+            ),
+        )
+        assertFalse(state.isContinueEnabled)
     }
 
     @Test
@@ -148,12 +242,12 @@ class SetupBrowserAutofillViewModelTest {
     }
 
     @Test
-    fun `ContinueClick should set the onboarding state to FINAL_STEP`() {
+    fun `ContinueClick should call goToNextStep when initial setup`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupBrowserAutofillAction.ContinueClick)
         verify(exactly = 1) {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
@@ -168,12 +262,12 @@ class SetupBrowserAutofillViewModelTest {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         }
         verify(exactly = 0) {
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
     @Test
-    fun `TurnOnLaterClick should set the onboarding state to FINAL_STEP`() = runTest {
+    fun `TurnOnLaterClick should show the TurnOnLaterDialog`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
@@ -188,7 +282,7 @@ class SetupBrowserAutofillViewModelTest {
     }
 
     @Test
-    fun `TurnOnLaterConfirmClick should set the onboarding state to FINAL_STEP`() = runTest {
+    fun `TurnOnLaterConfirmClick should dismiss the dialog and call goToNextStep`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             dialogState = SetupBrowserAutofillState.DialogState.TurnOnLaterDialog,
         )
@@ -203,18 +297,16 @@ class SetupBrowserAutofillViewModelTest {
         }
         verify(exactly = 1) {
             firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         }
     }
 
     private fun createViewModel(
         initialState: SetupBrowserAutofillState? = null,
     ): SetupBrowserAutofillViewModel = SetupBrowserAutofillViewModel(
+        isInitialSetup = true,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = initialState)
-            every {
-                toSetupBrowserAutofillArgs()
-            } returns SetupBrowserAutofillScreenArgs(isInitialSetup = true)
         },
         authRepository = authRepository,
         browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
@@ -246,9 +338,9 @@ private val DEFAULT_STATE = SetupBrowserAutofillState(
     dialogState = null,
     isInitialSetup = true,
     browserAutofillSettingsOptions = persistentListOf(
-        BrowserAutofillSettingsOption.BraveStable(enabled = false),
-        BrowserAutofillSettingsOption.ChromeStable(enabled = false),
-        BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
-        BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
+        BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = false),
+        BrowserAutofillSettingsOption.ChromeStable(isEnabled = false, isDefault = false),
+        BrowserAutofillSettingsOption.ChromeBeta(isEnabled = false, isDefault = false),
+        BrowserAutofillSettingsOption.VivaldiStable(isEnabled = false, isDefault = false),
     ),
 )

@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.manager.policy.UserNotificationPolicyManager
 import com.x8bit.bitwarden.data.platform.manager.policy.model.UserNotificationPolicyData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockBankAccountView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
@@ -169,9 +170,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
-            every { needsKdfUpdateToMinimums() } returns false
+            every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
+            every { needsKdfUpdateToMinimums(userId = any()) } returns false
             coEvery {
-                updateKdfToMinimumsIfNeeded(password = any())
+                updateKdfToMinimumsIfNeeded(userId = any(), password = any())
             } returns UpdateKdfMinimumsResult.Success
         }
     private val environmentRepository = FakeEnvironmentRepository()
@@ -179,6 +181,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private var mutableFlightRecorderDataFlow =
         MutableStateFlow(FlightRecorderDataSet(data = emptySet()))
     private var mutableIntroducingArchiveActionCardDismissedFlow = MutableStateFlow(false)
+    private val mutableCollapsedVaultSectionsFlow = MutableStateFlow<Set<VaultSection>>(emptySet())
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
@@ -191,6 +194,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getIntroducingArchiveActionCardDismissedFlow()
         } returns mutableIntroducingArchiveActionCardDismissedFlow
+        every { collapsedVaultSections } returns emptySet()
+        every { getCollapsedVaultSectionsFlow() } returns mutableCollapsedVaultSectionsFlow
+        every { toggleVaultSectionCollapsed(section = any()) } just runs
     }
 
     private val vaultRepository: VaultRepository = mockk {
@@ -244,10 +250,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { dismissBanner() } just runs
     }
     private val mutableNewItemTypesFlagFlow = MutableStateFlow(false)
-    private val mutableVfo1FoundationFlagFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlagFlow(FlagKey.NewItemTypes) } returns mutableNewItemTypesFlagFlow
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlagFlow
     }
 
     private val mutablePremiumUpgradeBannerEligibleFlow =
@@ -298,7 +302,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should trigger a forced sync when KDF update is required`() = runTest {
-        every { authRepository.needsKdfUpdateToMinimums() } returns true
+        every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
         createViewModel()
         coVerify { vaultRepository.syncForResult(forced = true) }
         verify(exactly = 0) { vaultRepository.syncIfNecessary() }
@@ -306,7 +310,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `KDF dialog is suppressed while sync is pending even when vault data loads`() = runTest {
-        every { authRepository.needsKdfUpdateToMinimums() } returns true
+        every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
         coEvery { vaultRepository.syncForResult(forced = any()) } just awaits
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
@@ -334,7 +338,9 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `KDF dialog is not shown after sync completes when KDF update is no longer needed`() =
         runTest {
-            every { authRepository.needsKdfUpdateToMinimums() } returns true andThen false
+            every {
+                authRepository.needsKdfUpdateToMinimums(userId = "activeUserId")
+            } returns true andThen false
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE.copy(dialog = null),
@@ -345,7 +351,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `KDF dialog is shown after sync completes when KDF update is still needed`() =
         runTest {
-            every { authRepository.needsKdfUpdateToMinimums() } returns true
+            every { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
             val viewModel = createViewModel()
             @Suppress("MaxLineLength")
             assertEquals(
@@ -377,6 +383,33 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE, awaitItem())
             }
         }
+
+    @Test
+    fun `CollapsedVaultSectionsFlow updates should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableCollapsedVaultSectionsFlow.value = setOf(VaultSection.TYPES)
+            assertEquals(
+                DEFAULT_STATE.copy(collapsedSections = persistentSetOf(VaultSection.TYPES)),
+                awaitItem(),
+            )
+            mutableCollapsedVaultSectionsFlow.value = emptySet()
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SectionHeaderClick should toggle the section collapsed state`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.SectionHeaderClick(section = VaultSection.FAVORITES))
+
+        verify(exactly = 1) {
+            settingsRepository.toggleVaultSectionCollapsed(section = VaultSection.FAVORITES)
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1117,7 +1150,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 isPremium = false,
-                dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                    isInAppUpgradeAvailable = false,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -1438,6 +1473,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on SyncClick should call sync on the VaultRepository and show the syncing dialog`() {
+        coEvery { vaultRepository.syncForResult(forced = true) } just awaits
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.SyncClick)
         assertEquals(
@@ -1446,8 +1482,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify {
-            vaultRepository.sync(forced = true)
+        coVerify {
+            vaultRepository.syncForResult(forced = true)
         }
     }
 
@@ -1467,8 +1503,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify(exactly = 0) {
-            vaultRepository.sync(forced = true)
+        coVerify(exactly = 0) {
+            vaultRepository.syncForResult(forced = true)
         }
     }
 
@@ -1755,6 +1791,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
+                expectNoEvents()
             }
         }
 
@@ -1810,6 +1847,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
+                expectNoEvents()
             }
         }
 
@@ -2221,6 +2259,43 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `SyncClick with a sync error should show SyncError and keep content`() = runTest {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
+        )
+        mutableVaultDataStateFlow.value = DataState.Loaded(data = vaultData)
+        coEvery {
+            vaultRepository.syncForResult(forced = true)
+        } returns SyncVaultDataResult.Error(throwable = Throwable("Fail"))
+        val viewModel = createViewModel()
+        advanceTimeBy(1500.milliseconds)
+        val contentState = viewModel.stateFlow.value
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.SyncClick)
+            mutableVaultDataStateFlow.value = DataState.NoNetwork(data = vaultData)
+            advanceTimeBy(1500.milliseconds)
+            assertEquals(
+                contentState.copy(
+                    dialog = VaultState.DialogState.SyncError(
+                        title = BitwardenString.vault_sync_unsuccessful.asText(),
+                        message = BitwardenString.vault_sync_failed_description.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            expectNoEvents()
+        }
+    }
+
     @Test
     fun `vaultDataStateFlow updates should do nothing when switching accounts`() {
         val viewModel = createViewModel()
@@ -2565,7 +2640,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     isPremium = false,
-                    dialog = VaultState.DialogState.ArchiveRequiresPremium,
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = false,
+                    ),
                     viewState = VaultState.ViewState.Content(
                         loginItemsCount = 1,
                         cardItemsCount = 0,
@@ -2893,7 +2970,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.TryAgainClick)
 
-        verify { vaultRepository.sync(forced = true) }
+        coVerify { vaultRepository.syncForResult(forced = true) }
     }
 
     @Test
@@ -2938,8 +3015,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.RefreshPull)
         advanceTimeBy(300.milliseconds)
-        verify(exactly = 1) {
-            vaultRepository.sync(forced = false)
+        coVerify(exactly = 1) {
+            vaultRepository.syncForResult(forced = false)
         }
     }
 
@@ -2963,8 +3040,59 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify(exactly = 0) {
-            vaultRepository.sync(forced = false)
+        coVerify(exactly = 0) {
+            vaultRepository.syncForResult(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull with a sync error should show unsuccessful snackbar`() = runTest {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
+        )
+        mutableVaultDataStateFlow.value = DataState.Loaded(data = vaultData)
+        coEvery {
+            vaultRepository.syncForResult(forced = false)
+        } returns SyncVaultDataResult.Error(throwable = Throwable("Fail"))
+        val viewModel = createViewModel()
+        advanceTimeBy(1500.milliseconds)
+        val contentState = viewModel.stateFlow.value
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.RefreshPull)
+            advanceTimeBy(300.milliseconds)
+            assertEquals(
+                contentState.copy(isRefreshing = false, dialog = null),
+                viewModel.stateFlow.value,
+            )
+            assertEquals(
+                VaultEvent.ShowSnackbar(BitwardenString.vault_sync_unsuccessful.asText()),
+                awaitItem(),
+            )
+            expectNoEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull with a successful sync should show syncing complete`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.RefreshPull)
+            advanceTimeBy(300.milliseconds)
+            assertEquals(DEFAULT_STATE.copy(isRefreshing = false), viewModel.stateFlow.value)
+            assertEquals(
+                VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
+                awaitItem(),
+            )
+            expectNoEvents()
         }
     }
 
@@ -4490,7 +4618,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            coEvery { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns true
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -4559,7 +4687,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            coEvery { authRepository.needsKdfUpdateToMinimums(userId = "activeUserId") } returns false
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -4623,7 +4751,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
         val password = "mock_password"
         coEvery {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            authRepository.updateKdfToMinimumsIfNeeded(
+                userId = "activeUserId",
+                password = password,
+            )
         } returns UpdateKdfMinimumsResult.Success
 
         val viewModel = createViewModel()
@@ -4633,9 +4764,35 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
 
         coVerify(exactly = 1) {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            authRepository.updateKdfToMinimumsIfNeeded(
+                userId = "activeUserId",
+                password = password,
+            )
         }
     }
+
+    @Test
+    fun `on KdfUpdatePasswordRepromptSubmit with no active user should show an error`() =
+        runTest {
+            val viewModel = createViewModel()
+            mutableUserStateFlow.value = null
+
+            viewModel.trySendAction(
+                action = VaultAction.KdfUpdatePasswordRepromptSubmit(password = "mock_password"),
+            )
+
+            assertEquals(
+                VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.kdf_update_failed_active_account_not_found.asText(),
+                    error = null,
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify(exactly = 0) {
+                authRepository.updateKdfToMinimumsIfNeeded(userId = any(), password = any())
+            }
+        }
 
     @Test
     fun `credentialExchangeRegistryManager should register when not fdroid`() = runTest {

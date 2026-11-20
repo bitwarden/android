@@ -19,6 +19,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -32,6 +33,13 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 /**
+ * Stand-in value for a locked password field. The existing password is never readable, and
+ * [BitwardenHiddenPasswordField] masks any non-empty value with a fixed number of dots, so this
+ * only signals that a password is set.
+ */
+private const val LOCKED_PASSWORD_PLACEHOLDER: String = "locked"
+
+/**
  * Displays UX for choosing authentication type for a send.
  *
  * @param sendAuth The current authentication configuration.
@@ -42,10 +50,12 @@ import kotlinx.collections.immutable.toPersistentList
  * (only relevant for [SendAuth.Email]).
  * @param onAddNewEmailClick Callback invoked when adding a new email.
  * @param onRemoveEmailClick Callback invoked when removing an email.
- * @param password The current password value (only relevant for [SendAuth.Password]).
  * @param onOpenPasswordGeneratorClick Callback invoked when the Generator button is clicked
  * @param onPasswordCopyClick Callback invoked when the Copy button is clicked
+ * @param password The current password value (only relevant for [SendAuth.Password]).
  * @param isEnabled Whether the chooser is enabled.
+ * @param isExistingPasswordLocked Whether the send already has a password that cannot be
+ * overwritten and must be removed before a new one can be set.
  * @param isSendsRestrictedByPolicy if sends are restricted by a policy.
  * @param modifier Modifier for the composable.
  */
@@ -62,6 +72,7 @@ fun AddEditSendAuthTypeChooser(
     onPasswordCopyClick: (String) -> Unit,
     password: String,
     isEnabled: Boolean,
+    isExistingPasswordLocked: Boolean,
     isSendsRestrictedByPolicy: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -113,36 +124,48 @@ fun AddEditSendAuthTypeChooser(
             }
 
             is SendAuth.Password -> {
-                BitwardenPasswordField(
-                    label = stringResource(id = BitwardenString.password),
-                    value = password,
-                    onValueChange = onPasswordChange,
-                    cardStyle = CardStyle.Bottom,
-                    passwordFieldTestTag = "SendPasswordEntry",
-                    readOnly = isSendsRestrictedByPolicy,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_generate,
-                        contentDescription = stringResource(id = BitwardenString.generate_password),
-                        onClick = {
-                            if (password.isEmpty()) {
-                                onOpenPasswordGeneratorClick()
-                            } else {
-                                shouldShowDialog = true
-                            }
-                        },
-                        modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                if (isExistingPasswordLocked) {
+                    BitwardenHiddenPasswordField(
+                        label = stringResource(id = BitwardenString.password),
+                        value = LOCKED_PASSWORD_PLACEHOLDER,
+                        cardStyle = CardStyle.Bottom,
+                        passwordFieldTestTag = "SendPasswordEntry",
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = BitwardenString.copy_password),
-                        isEnabled = password.isNotEmpty(),
-                        onClick = {
-                            onPasswordCopyClick(password)
-                        },
-                        modifier = Modifier.testTag(tag = "CopyPasswordButton"),
-                    )
+                } else {
+                    BitwardenPasswordField(
+                        label = stringResource(id = BitwardenString.password),
+                        value = password,
+                        onValueChange = onPasswordChange,
+                        cardStyle = CardStyle.Bottom,
+                        passwordFieldTestTag = "SendPasswordEntry",
+                        readOnly = isSendsRestrictedByPolicy,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_generate,
+                            contentDescription = stringResource(
+                                id = BitwardenString.generate_password,
+                            ),
+                            onClick = {
+                                if (password.isEmpty()) {
+                                    onOpenPasswordGeneratorClick()
+                                } else {
+                                    shouldShowDialog = true
+                                }
+                            },
+                            modifier = Modifier.testTag(tag = "RegeneratePasswordButton"),
+                        )
+                        BitwardenStandardIconButton(
+                            vectorIconRes = BitwardenDrawable.ic_copy,
+                            contentDescription = stringResource(id = BitwardenString.copy_password),
+                            isEnabled = password.isNotEmpty(),
+                            onClick = {
+                                onPasswordCopyClick(password)
+                            },
+                            modifier = Modifier.testTag(tag = "CopyPasswordButton"),
+                        )
+                    }
                 }
             }
 

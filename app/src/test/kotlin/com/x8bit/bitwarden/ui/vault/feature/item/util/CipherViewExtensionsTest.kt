@@ -61,6 +61,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -95,6 +96,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -135,6 +137,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -166,6 +169,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -195,6 +199,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -227,6 +232,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -269,6 +275,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -316,6 +323,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -365,6 +373,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -398,6 +407,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         val expectedState = VaultItemState.ViewState.Content(
@@ -429,6 +439,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -469,6 +480,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -513,6 +525,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -558,6 +571,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -604,6 +618,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(
@@ -660,6 +675,7 @@ class CipherViewExtensionsTest {
                     isIconLoadingDisabled = true,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
                 assertEquals(
                     it.value,
@@ -688,6 +704,7 @@ class CipherViewExtensionsTest {
                     isIconLoadingDisabled = true,
                     relatedLocations = persistentListOf(),
                     hasOrganizations = true,
+                    isInAppUpgradeAvailable = false,
                 )
                 assertEquals(
                     IconData.Local(it.value),
@@ -722,6 +739,7 @@ class CipherViewExtensionsTest {
             isIconLoadingDisabled = true,
             relatedLocations = persistentListOf(),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
 
         assertEquals(

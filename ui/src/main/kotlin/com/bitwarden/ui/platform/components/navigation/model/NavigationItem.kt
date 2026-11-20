@@ -1,14 +1,11 @@
 package com.bitwarden.ui.platform.components.navigation.model
 
+import androidx.navigation3.runtime.NavKey
+
 /**
  * Represents a user-interactable item to navigate a user via the bottom app bar or navigation rail.
  */
 interface NavigationItem {
-    /**
-     * The resource ID for the icon representing the tab when it is selected.
-     */
-    val iconResSelected: Int
-
     /**
      * Resource id for the icon representing the tab.
      */
@@ -20,14 +17,9 @@ interface NavigationItem {
     val labelRes: Int
 
     /**
-     * Route of the tab's graph.
+     * The route of the tab's root destination, which also identifies the tab's back stack.
      */
-    val graphRoute: Any
-
-    /**
-     * Route of the tab's start destination.
-     */
-    val startDestinationRoute: Any
+    val rootRoute: NavKey
 
     /**
      * The test tag of the tab.

@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -61,7 +60,7 @@ fun SetupAutoFillScreen(
     onNavigateBack: () -> Unit,
     onNavigateToBrowserAutofill: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
-    viewModel: SetupAutoFillViewModel = hiltViewModel(),
+    viewModel: SetupAutoFillViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberSetupAutoFillHandler(viewModel = viewModel)
@@ -82,7 +81,9 @@ fun SetupAutoFillScreen(
         is SetupAutoFillDialogState.AutoFillFallbackDialog -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = BitwardenString.bitwarden_autofill_go_to_settings),
+                message = stringResource(
+                    id = BitwardenString.we_were_unable_to_automatically_open_the_autofill_settings,
+                ),
                 onDismissRequest = handler.onDismissDialog,
             )
         }
@@ -271,7 +272,6 @@ private fun SetupAutoFillContentDisabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = false,
                 isInitialSetup = true,
@@ -289,7 +289,6 @@ private fun SetupAutoFillContentEnabled_preview() {
     BitwardenTheme {
         SetupAutoFillContent(
             state = SetupAutoFillState(
-                userId = "disputationi",
                 dialogState = null,
                 autofillEnabled = true,
                 isInitialSetup = true,

@@ -1,14 +1,18 @@
-name: SDLC / Label PR
+name: SDLC / Labeler
 run-name: Label PR ${{ github.event.pull_request.number || inputs.pr-number }}${{ github.event_name == 'workflow_dispatch' && format(' / mode "{0}" dry-run "{1}"', inputs.mode, inputs.dry-run) || '' }}
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, reopened, synchronize, labeled, unlabeled, edited]
   workflow_dispatch:
     inputs:
       pr-number:
         description: "Pull Request Number"
         required: true
         type: number
+      label-pr:
+        description: "Label PR - Run the labeler job (otherwise only enforce labels)"
+        type: boolean
+        default: true
       mode:
         description: "Labeling Mode"
         type: choice
@@ -21,12 +25,19 @@ on:
         type: boolean
         default: false
 
+concurrency:
+  group: sdlc-label-pr-${{ github.event.pull_request.number || inputs.pr-number }}
+  cancel-in-progress: false
+  queue: max # allows multiple pending runs
+
 env:
   _PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr-number }}
 
 jobs:
   label-pr:
     name: Label PR by Changed Files
+    # only auto-label when PR is opened or new commits are pushed
+    if: ${{ inputs.label-pr || contains(fromJSON('["opened","reopened","synchronize"]'), github.event.action) }}
     runs-on: ubuntu-24.04
     permissions:
       pull-requests: write # required to update labels
@@ -88,3 +99,14 @@ jobs:
           echo ""
           python3 .github/scripts/label-pr.py "$_PR_NUMBER" "$_PR_LABELS" "$_LABEL_MODE" "$_DRY_RUN"
 
+  enforce-labels:
+    name: Enforce PR labels
+    # label-pr is skipped on label events, so !cancelled() lets this job run after a skipped job
+    needs: label-pr
+    if: ${{ !cancelled() && !inputs.dry-run }}
+    permissions:
+      pull-requests: read
+    uses: ./.github/workflows/sdlc-enforce-labels.yml
+    with:
+      pr-number: ${{ github.event.pull_request.number || inputs.pr-number }}
+      event-labels: ${{ toJSON(github.event.pull_request.labels) }}

@@ -12,7 +12,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -22,7 +21,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dialog.PremiumRequiredDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
@@ -31,8 +30,8 @@ import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
 
 /**
  * Displays the attachments screen.
@@ -41,10 +40,10 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentsScreen(
-    viewModel: AttachmentsViewModel = hiltViewModel(),
+    viewModel: AttachmentsViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToPreview: (route: PreviewAttachmentRoute) -> Unit,
+    onNavigateToPreview: (route: VaultUnlockedGraph.PreviewAttachmentRoute) -> Unit,
     onNavigateToPlan: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -69,7 +68,7 @@ fun AttachmentsScreen(
             is AttachmentsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is AttachmentsEvent.NavigateToPreview -> {
                 onNavigateToPreview(
-                    PreviewAttachmentRoute(
+                    VaultUnlockedGraph.PreviewAttachmentRoute(
                         cipherId = event.cipherId,
                         attachmentId = event.attachmentId,
                         fileName = event.fileName,
@@ -139,13 +138,10 @@ private fun AttachmentsDialogs(
     attachmentsHandlers: AttachmentsHandlers,
 ) {
     when (dialogState) {
-        AttachmentsState.DialogState.RequiresPremium -> BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.premium_subscription_required),
+        is AttachmentsState.DialogState.RequiresPremium -> PremiumRequiredDialog(
             message = stringResource(id = BitwardenString.attachments_are_a_premium_feature),
-            confirmButtonText = stringResource(id = BitwardenString.upgrade_to_premium),
-            onConfirmClick = attachmentsHandlers.onUpgradeToPremiumClick,
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onDismissClick = attachmentsHandlers.onDismissRequest,
+            isInAppUpgradeAvailable = dialogState.isInAppUpgradeAvailable,
+            onUpgradeToPremiumClick = attachmentsHandlers.onUpgradeToPremiumClick,
             onDismissRequest = attachmentsHandlers.onDismissRequest,
         )
 

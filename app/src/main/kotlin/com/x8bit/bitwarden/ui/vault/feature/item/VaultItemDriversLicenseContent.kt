@@ -369,6 +369,7 @@ fun VaultItemDriversLicenseContent(
         )
 
         vaultItemAttachments(
+            isInAppUpgradeAvailable = commonState.isInAppUpgradeAvailable,
             attachments = commonState.attachments,
             vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
         )

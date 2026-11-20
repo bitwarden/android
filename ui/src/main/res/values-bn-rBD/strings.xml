@@ -4,7 +4,6 @@
     <string name="add_folder">ফোল্ডার জুড়ুন</string>
     <string name="add_item">বস্তু জুড়ুন</string>
     <string name="an_error_has_occurred">একটি ত্রুটি উৎপন্ন হয়েছে।</string>
-    <string name="apply">প্রয়োগ করুন</string>
     <string name="back">পেছনে যান</string>
     <string name="cancel">বাতিল</string>
     <string name="copy">অনুলিপি</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">ফোল্ডারটি মুছে ফেলা হয়েছে।</string>
     <string name="folder_none">কোন ফোল্ডার নেই</string>
     <string name="folder_updated">ফোল্ডার হালনাগাদকৃত।</string>
-    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="hide">লুকান</string>
     <string name="internet_connection_required_message">চালিয়ে যাওয়ার আগে দয়া করে ইন্টারনেটে সংযোগ করুন।</string>
     <string name="internet_connection_required_title">ইন্টারনেট সংযোগ প্রয়োজন</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTP কপি করুন</string>
     <string name="copy_totp_automatically_description">যদি একটি লগইনে অথেন্টিকেটর কী থাকে, তাহলে আপনি লগইনটি অটোফিল করার সময় TOTP যাচাইকরণ কোডটি আপনার ক্লিপবোর্ডে কপি করুন।</string>
     <string name="copy_totp_automatically">স্বয়ংক্রিয়ভাবে TOTP কপি করুন</string>
-    <string name="premium_required">এই বৈশিষ্ট্যটি ব্যবহার করার জন্য একটি প্রিমিয়াম সদস্যতা প্রয়োজন।</string>
     <string name="attachment_deleted">সংযুক্তি মুছে ফেলা হয়েছে</string>
     <string name="attachments_are_a_premium_feature">সংযুক্তিগুলি একটি প্রিমিয়াম বৈশিষ্ট্য। আপনার বর্তমান প্ল্যানে এই বৈশিষ্ট্যটিতে অ্যাক্সেস অন্তর্ভুক্ত নয়।</string>
     <string name="choose_file">ফাইল নির্বাচন করুন</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">আইকন সার্ভার URL</string>
     <string name="vault_is_locked">ভল্ট লক করা আছে</string>
     <string name="go_to_my_vault">আমার ভল্টে যান</string>
-    <string name="collections">সংগ্রহ</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">এই সংগ্রহে কোনও আইটেম নেই।</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">এই ফোল্ডারে কোনও আইটেম নেই।</string>
     <string name="no_items_trash">ট্র্যাশে কোনও আইটেম নেই।</string>
@@ -347,16 +342,11 @@
     <string name="type">ধরন</string>
     <string name="move_down">নিচে নামান</string>
     <string name="move_up">উপরে উঠান</string>
-    <string name="owner">মালিক</string>
-    <string name="no_collections_to_list">তালিকার জন্য কোনও সংগ্রহ নেই।</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s কে %2$s-এ সরানো হয়েছে।</string>
     <string name="select_one_collection">আপনাকে কমপক্ষে একটি সংগ্রহ নির্বাচন করতে হবে।</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">শেয়ার করুন</string>
-    <string name="move_to_organization">সংগঠনে সরান</string>
-    <string name="no_orgs_to_list">তালিকাভুক্ত করার মতো কোনও সংগঠন নেই।</string>
-    <string name="move_to_org_desc">আপনি এই আইটেমটি যে সংগঠনে সরাতে চান তা নির্বাচন করুন। একটি সংগঠনে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">শব্দসংখ্যা</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">সেন্ড অ্যাক্সেস করার সময়, ডিফল্টভাবে পাঠ্য লুকান</string>
     <string name="type_file">ফাইল</string>
     <string name="deletion_date">মুছে ফেলার তারিখ</string>
-    <string name="deletion_time">মোছার সময়</string>
     <string name="deletion_date_info">নির্দিষ্ট তারিখ এবং সময়ে সেন্ডটি স্থায়ীভাবে মুছে ফেলা হবে।</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">কে দেখতে পারেন</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">আমরা আপনার অনুরোধ প্রক্রিয়া করতে অক্ষম ছিলাম। দয়া করে আবার চেষ্টা করুন বা আমাদের সাথে যোগাযোগ করুন।</string>
     <string name="allow_screen_capture">স্ক্রিন ক্যাপচার অনুমতি দিন</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">আপনি কি নিশ্চিত যে আপনি স্ক্রিন ক্যাপচার চালু করতে চান?</string>
-    <string name="log_in_requested">লগইন অনুরোধ করা হয়েছে</string>
-    <string name="are_you_trying_to_log_in">আপনি কি লগ ইন করার চেষ্টা করছেন?</string>
-    <string name="log_in_attempt_by_x_on_y">%2$s-এ %1$s দ্বারা লগইন প্রচেষ্টা</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">ডিভাইসের ধরন</string>
     <string name="ip_address">আইপি অ্যাড্রেস</string>
     <string name="time">সময়</string>
     <string name="select_time">সময় নির্বাচন করুন</string>
     <string name="switch_input_mode">ইনপুট মোড পরিবর্তন করুন</string>
-    <string name="confirm_log_in">লগইন নিশ্চিত করুন</string>
-    <string name="deny_log_in">লগইন অস্বীকার করুন</string>
-    <string name="log_in_denied">লগইন অস্বীকার করা হয়েছে</string>
-    <string name="approve_login_requests">লগইন অনুরোধ অনুমোদন করুন</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">না, থাক</string>
-    <string name="confim_log_in_attemp_for_x">%1$s এর জন্য লগইন প্রচেষ্টা নিশ্চিত করুন</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">ইউজারনেমের ধরন</string>
     <string name="plus_addressed_email">প্লাস ঠিকানা ইমেল</string>
     <string name="catch_all_email">ক্যাচ-অল ইমেল</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">আমি বুঝতে পেরেছি</string>
     <string name="accept">সম্মতি দিন</string>
     <string name="decline">নাকচ করুন</string>
-    <string name="login_request_has_already_expired">লগইন অনুরোধ ইতিমধ্যেই মেয়াদ শেষ হয়ে গেছে।</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">থেকে লগইন প্রচেষ্টা:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-আপনি কি এই অ্যাকাউন্টে স্যুইচ করতে চান?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">বিটওয়ার্ডেনে নতুন?</string>
     <string name="get_master_passwordword_hint">মাস্টার পাসওয়ার্ড ইঙ্গিত পান</string>
     <string name="logging_in_as_x_on_y">%2$s-এ %1$s হিসেবে লগইন করা হচ্ছে।</string>
     <string name="not_you">আপনি নন?</string>
     <string name="log_in_with_master_password">মাস্টার পাসওয়ার্ড দিয়ে লগইন করুন</string>
     <string name="log_in_initiated">লগইন শুরু হয়েছে</string>
-    <string name="a_notification_has_been_sent_to_your_device">আপনার ডিভাইসে একটি নোটিফিকেশন পাঠানো হয়েছে।</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">অনুগ্রহ করে নিশ্চিত করুন যে আপনার ভল্ট আনলক করা আছে এবং অন্য ডিভাইসে ফিঙ্গারপ্রিন্ট বাক্যাংশটি মেলে।</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">বিজ্ঞপ্তি পুনরায় পাঠান</string>
     <string name="view_all_login_options">সব লগইন বিকল্প দেখুন</string>
-    <string name="pending_log_in_requests">মুলতুবি লগইন অনুরোধ</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">সব অনুরোধ প্রত্যাখ্যান করুন</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">আপনি কি নিশ্চিত যে আপনি সব মুলতুবি লগইন অনুরোধ প্রত্যাখ্যান করতে চান?</string>
     <string name="no_pending_requests">কোন মুলতুবি অনুরোধ নেই</string>
     <string name="enable_camer_permission_to_use_the_scanner">স্ক্যানার ব্যবহার করতে ক্যামেরা অনুমতি সক্ষম করুন</string>
     <string name="language">ভাষা</string>
-    <string name="language_change_x_description">ভাষাটি %1$s তে পরিবর্তন করা হয়েছে। পরিবর্তনটি দেখতে অনুগ্রহ করে অ্যাপটি পুনরায় চালু করুন।</string>
     <string name="default_system">পূর্ব-নির্ধারিত (সিস্টেমে)</string>
     <string name="weak_master_password">দুর্বল মাস্টার পাসওয়ার্ড</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">দুর্বল পাসওয়ার্ড শনাক্ত করা হয়েছে। আপনার অ্যাকাউন্ট সুরক্ষিত রাখতে একটি শক্তিশালী পাসওয়ার্ড ব্যবহার করুন। আপনি কি নিশ্চিত যে আপনি একটি দুর্বল পাসওয়ার্ড ব্যবহার করে যেতে চান?</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">পাসকীটি ক্লোন করা আইটেমে কপি করা হবে না। আপনি কি এই আইটেমটি ক্লোন করা চালিয়ে যেতে চান?</string>
     <string name="master_password_re_prompt_help">মাস্টার পাসওয়ার্ড পুনরায় প্রম্পট সাহায্য</string>
     <string name="admin_approval_requested">প্রশাসকের অনুমোদন অনুরোধ করা হয়েছে</string>
-    <string name="your_request_has_been_sent_to_your_admin">আপনার অনুরোধ আপনার প্রশাসকের কাছে পাঠানো হয়েছে।</string>
-    <string name="you_will_be_notified_once_approved">অনুমোদিত হলে আপনাকে বিজ্ঞপ্তি দেওয়া হবে।</string>
-    <string name="trouble_logging_in">লগইন করতে সমস্যা হচ্ছে?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">অটোফিল ব্লক করুন</string>
     <string name="no_uris_blocked">কোন URI ব্লক করা হয়নি</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">এই URIগুলির জন্য অটোফিল অফার করা হবে না।</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">বিন্যাস: %1$s। একাধিক URI কমা দিয়ে আলাদা করুন।</string>
     <string name="invalid_uri">অবৈধ URI</string>
     <string name="the_urix_is_already_blocked">URI %1$s ইতিমধ্যে ব্লক করা আছে</string>
-    <string name="login_approved">লগইন অনুমোদিত হয়েছে</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">ডিভাইসের সাথে লগইন অবশ্যই Bitwarden অ্যাপের সেটিংসে সেট আপ করতে হবে।</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">অন্য কোন বিকল্প প্রয়োজন? <annotation link="viewAll">সব লগইন বিকল্প দেখুন</annotation></string>
     <string name="log_in_with_device">ডিভাইস দিয়ে লগ ইন করুন</string>
     <string name="logging_in_on">এতে লগ ইন করা হচ্ছে</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">অনুরোধটি অসমর্থিত হওয়ায় পাসকী অপারেশন ব্যর্থ হয়েছে।</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">নির্বাচিত আইটেমটি বিদ্যমান নেই বলে পাসওয়ার্ড অপারেশন ব্যর্থ হয়েছে।</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">নির্বাচিত আইটেমটিতে একটি বৈধ পাসওয়ার্ড নেই বলে পাসওয়ার্ড অপারেশন ব্যর্থ হয়েছে।</string>
-    <string name="password_operation_failed_because_no_item_was_selected">কোনও আইটেম নির্বাচন করা হয়নি বলে পাসওয়ার্ড অপারেশন ব্যর্থ হয়েছে।</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">অনুরোধটি অবৈধ হওয়ায় শংসাপত্র অপারেশন ব্যর্থ হয়েছে।</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">অনুরোধটি অসমর্থিত হওয়ায় শংসাপত্র অপারেশন ব্যর্থ হয়েছে।</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">ব্যবহারকারী যাচাইকরণ প্রচেষ্টা অতিক্রম করার কারণে শংসাপত্র অপারেশন ব্যর্থ হয়েছে।</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">বিশেষাধিকারপ্রাপ্ত অ্যাপ সম্পর্কে আরও জানুন</string>
     <string name="privileged_apps">বিশেষাধিকারপ্রাপ্ত অ্যাপ</string>
     <string name="unrecognized_browser">অস্বীকৃত ব্রাউজার</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden-এর সাথে পাসকী ব্যবহার সম্পর্কে আরও জানুন।</string>
     <string name="all_trusted_apps">সব বিশ্বস্ত অ্যাপ</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">আপ্নি কি নিশ্চিত যে %s কে বিশ্বাস করা বন্ধ করতে চান?</string>
     <string name="installed_apps">ইনস্টল করা অ্যাপ</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">যাচাইকরণ কোড যোগ করা হয়েছে</string>
     <string name="refresh_period">রিফ্রেশ সময়কাল</string>
     <string name="algorithm">অ্যালগরিদম</string>
-    <string name="advanced">উন্নত</string>
-    <string name="collapse_advanced_options">উন্নত বিকল্পগুলি সংকুচিত করুন</string>
     <string name="number_of_digits">অঙ্কের সংখ্যা</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d সেকেন্ড</item>
@@ -1143,6 +1127,7 @@
     <string name="save_option_as_default">সংরক্ষণ বিকল্পটি ডিফল্ট হিসাবে</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden অ্যাপ থেকে সিঙ্ক করা অ্যাকাউন্ট</string>
     <string name="local_codes">স্থানীয় কোড (%1$d)</string>
+    <string name="local_codes_header">স্থানীয় কোড</string>
     <string name="required_information_missing">প্রয়োজনীয় তথ্য অনুপস্থিত</string>
     <string name="required_information_missing_message">প্রয়োজনীয় তথ্য অনুপস্থিত (যেমন, \'পরিষেবা\' বা \'গোপন\')। আপনার ফাইল পরীক্ষা করে আবার চেষ্টা করুন। সহায়তার জন্য bitwarden.com/help দেখুন</string>
     <string name="file_could_not_be_processed">ফাইল প্রক্রিয়া করা যায়নি</string>
@@ -1158,7 +1143,6 @@
     <string name="select_a_card_for_x">%s এর জন্য একটি কার্ড নির্বাচন করুন</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">উন্নত বিকল্প</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">ম্যাচ সনাক্তকরণ সম্পর্কে আরও</annotation></string>
     <string name="keep_your_credential_secure">আপনার শংসাপত্রগুলি সুরক্ষিত রাখুন</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” ব্যবহার করার সময় কীভাবে শংসাপত্রগুলি সুরক্ষিত রাখতে হয় তা আরও জানুন।</string>
     <string name="are_you_sure_you_want_to_use">আপনি কি নিশ্চিত যে আপনি “%1$s” ব্যবহার করতে চান?</string>
@@ -1201,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">আপনার Bitwarden ভল্ট থেকে পাসওয়ার্ড, পাসকী এবং অন্যান্য আইটেমের ধরন আমদানি করুন।</string>
     <string name="items_to_import">আমদানির জন্য আইটেম</string>
     <string name="exporting_items">আইটেম রপ্তানি করা হচ্ছে…</string>
-    <string name="export_failed">রপ্তানি ব্যর্থ হয়েছে</string>
     <string name="passwords">পাসওয়ার্ড</string>
     <string name="passkeys">পাসকীগুলি</string>
     <string name="why_is_this_step_required">কেন এই ধাপটি প্রয়োজন?</string>
@@ -1221,7 +1204,6 @@
     <string name="transfer_items_to_org">আইটেম %1$s-এ স্থানান্তর করুন</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> নিরাপত্তা এবং সম্মতির জন্য সমস্ত আইটেম সংগঠনের মালিকানাধীন হওয়ার প্রয়োজন করছে। আপনার আইটেমগুলির মালিকানা স্থানান্তর করতে গ্রহণ করুন ক্লিক করুন। <annotation link="learnMore">আরও জানুন</annotation></string>
     <string name="decline_and_leave">প্রত্যাখ্যান করুন এবং ছেড়ে যান</string>
-    <string name="why_am_i_seeing_this">আমি কেন এটি দেখছি?</string>
     <string name="migrating_items_to_x">আইটেম %s-এ মাইগ্রেট করা হচ্ছে</string>
     <string name="failed_to_migrate_items_to_x">আইটেম %s-এ মাইগ্রেট করতে ব্যর্থ হয়েছে</string>
     <string name="search_archive">আর্কাইভ অনুসন্ধান করুন</string>
@@ -1239,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">আইটেম আর্কাইভ করা একটি প্রিমিয়াম বৈশিষ্ট্য। আপনার বর্তমান প্ল্যানে এই বৈশিষ্ট্যটিতে অ্যাক্সেস অন্তর্ভুক্ত নয়।</string>
     <string name="totp_is_a_premium_feature">অথেন্টিকেটর কী (TOTP) একটি প্রিমিয়াম বৈশিষ্ট্য। আপনার বর্তমান প্ল্যানে এই বৈশিষ্ট্যটিতে অ্যাক্সেস অন্তর্ভুক্ত নয়।</string>
     <string name="upgrade_to_premium">প্রিমিয়ামে আপগ্রেড করুন</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">প্ল্যান</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">আপনার প্রিমিয়াম সাবস্ক্রিপশন পরিচালনা করতে, আপনাকে একটি কম্পিউটারে আপনার ওয়েব ভল্টে লগইন করতে হবে।</string>
     <string name="unlock_advanced_security_features">উন্নত নিরাপত্তা বৈশিষ্ট্য আনলক করুন</string>
@@ -1320,7 +1303,6 @@
     <string name="archive_item">আইটেম আর্কাইভ করুন</string>
     <string name="once_archived_this_item_will_be_excluded">একবার আর্কাইভ করা হলে, এই আইটেমটি অনুসন্ধান ফলাফল এবং অটোফিল পরামর্শ থেকে বাদ দেওয়া হবে।</string>
     <string name="pricing_unavailable">মূল্য উপলব্ধ নয়</string>
-    <string name="current_plan">বর্তমান প্ল্যান</string>
     <string name="premium_plan_name">প্রিমিয়াম</string>
     <string name="billing_amount">বিলিং পরিমাণ</string>
     <string name="storage_cost">স্টোরেজ খরচ</string>
@@ -1396,8 +1378,6 @@
     <string name="issuing_country">জারিকারী দেশ</string>
     <string name="issuing_state">জারিকারী রাজ্য / প্রদেশ</string>
     <string name="license_class">লাইসেন্স শ্রেণী</string>
-    <string name="surname">পদবি</string>
-    <string name="given_name">নাম</string>
     <string name="date_of_birth">জন্ম তারিখ</string>
     <string name="nationality">জাতীয়তা</string>
     <string name="passport_type">পাসপোর্টের ধরন</string>
@@ -1442,6 +1422,7 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

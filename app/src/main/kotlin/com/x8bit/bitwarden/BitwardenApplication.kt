@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
@@ -11,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import dagger.Lazy
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,7 +24,7 @@ import javax.inject.Inject
  */
 @OmitFromCoverage
 @HiltAndroidApp
-class BitwardenApplication : Application() {
+class BitwardenApplication : Application(), SingletonImageLoader.Factory {
     // Inject classes here that must be triggered on startup but are not otherwise consumed by
     // other callers.
     @Inject
@@ -50,6 +54,9 @@ class BitwardenApplication : Application() {
     @Inject
     lateinit var environmentRepository: EnvironmentRepository
 
+    @Inject
+    lateinit var imageLoader: Lazy<ImageLoader>
+
     override fun onCreate() {
         super.onCreate()
         // These must be initialized in order to ensure that the restrictionManager does not
@@ -62,4 +69,6 @@ class BitwardenApplication : Application() {
         super.onLowMemory()
         Timber.w("onLowMemory")
     }
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader.get()
 }

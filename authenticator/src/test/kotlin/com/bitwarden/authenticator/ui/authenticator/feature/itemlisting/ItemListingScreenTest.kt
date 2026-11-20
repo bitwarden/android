@@ -442,7 +442,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "LOCAL CODES (1)")
+            .onNodeWithText(text = "LOCAL CODES")
             .assertIsDisplayed()
 
         composeTestRule
@@ -528,7 +528,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "LOCAL CODES (1)")
+            .onNodeWithText(text = "LOCAL CODES")
             .performClick()
 
         composeTestRule

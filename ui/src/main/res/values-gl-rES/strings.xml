@@ -4,7 +4,6 @@
     <string name="add_folder">Engadir cartafol</string>
     <string name="add_item">Engadir elemento</string>
     <string name="an_error_has_occurred">Produciuse un erro.</string>
-    <string name="apply">Aplicar</string>
     <string name="back">Atrás</string>
     <string name="cancel">Cancelar</string>
     <string name="copy">Copiar</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Cartafol eliminado.</string>
     <string name="folder_none">Sen cartafoles</string>
     <string name="folder_updated">Cartafol gardado</string>
-    <string name="folders">Cartafoles</string>
     <string name="hide">Agochar</string>
     <string name="internet_connection_required_message">Por favor conéctese a Internet antes de continuar.</string>
     <string name="internet_connection_required_title">Requírese unha conexión a Internet</string>
@@ -208,7 +206,6 @@ Escanearase automaticamente.</string>
     <string name="copy_totp">Copiar TOTP</string>
     <string name="copy_totp_automatically_description">Se unha credencial ten clave de autenticación, copia o código TOTP no portapapeis ó autoencher os datos.</string>
     <string name="copy_totp_automatically">Copiar TOTP automaticamente</string>
-    <string name="premium_required">Requírese un plan Prémium para poder empregar esta función.</string>
     <string name="attachment_deleted">Anexo eliminado</string>
     <string name="attachments_are_a_premium_feature">Os anexos son unha función Premium. O teu plan actual non inclúe acceso a esta función.</string>
     <string name="choose_file">Seleccionar arquivo</string>
@@ -291,9 +288,7 @@ Escanearase automaticamente.</string>
     <string name="icons_url">URL do servidor de iconas</string>
     <string name="vault_is_locked">A caixa forte está pechada</string>
     <string name="go_to_my_vault">Ir á caixa forte</string>
-    <string name="collections">Coleccións</string>
     <string name="shared_folders">Cartafoles compartidos</string>
-    <string name="no_items_collection">Non hai elementos nesta colección.</string>
     <string name="there_are_no_items_in_this_shared_folder">Non hai elementos neste cartafol compartido.</string>
     <string name="no_items_folder">No hai entradas neste cartafol.</string>
     <string name="no_items_trash">No hai entradas no lixo.</string>
@@ -347,16 +342,11 @@ Escanearase automaticamente.</string>
     <string name="type">Tipo</string>
     <string name="move_down">Baixar</string>
     <string name="move_up">Subir</string>
-    <string name="owner">Propietario</string>
-    <string name="no_collections_to_list">Non hai coleccións que listar.</string>
     <string name="there_are_no_shared_folders_to_list">Non hai cartafoles compartidos para listar.</string>
     <string name="moved_item_to_org">%1$s movido a %2$s.</string>
     <string name="select_one_collection">Debes seleccionar polo menos unha colección.</string>
     <string name="you_must_select_at_least_one_shared_folder">Debes seleccionar polo menos un cartafol compartido.</string>
     <string name="share">Compartir</string>
-    <string name="move_to_organization">Mover á organización</string>
-    <string name="no_orgs_to_list">Non hai organizacións que listar.</string>
-    <string name="move_to_org_desc">Escolle a organización á que queres transferir esta entrada. Ó transferila, tamén transfires a súa propiedade á organización. Unha vez transferida, xa non serás o propietario directo desde elemento.</string>
     <string name="no_vaults_to_list">Non hai cofres para listar.</string>
     <string name="move_to_vault_desc">Escolle un cofre ao que queiras mover este elemento. Mover a outro cofre transfire a propiedade do elemento a esa organización. Xa non serás o propietario directo deste elemento unha vez movido.</string>
     <string name="number_of_words">Número de palabras</string>
@@ -471,7 +461,6 @@ Escanearase automaticamente.</string>
     <string name="hide_text_by_default">Cando se acceda ó Send, amosar o texto agochado</string>
     <string name="type_file">Arquivo</string>
     <string name="deletion_date">Data de eliminación</string>
-    <string name="deletion_time">Hora de eliminación</string>
     <string name="deletion_date_info">Este Send será permanente eliminado na data e hora especificadas.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Quen pode ver</string>
@@ -603,20 +592,21 @@ selecciona Engadir TOTP para gardar a clave de forma segura</string>
     <string name="generic_error_message">Non puidemos procesar a túa solicitude. Por favor, téntao de novo ou contáctanos.</string>
     <string name="allow_screen_capture">Permitir a captura de pantalla</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Seguro que queres permitir a captura de pantalla?</string>
-    <string name="log_in_requested">Inicio de sesión solicitado</string>
-    <string name="are_you_trying_to_log_in">Estás intentando iniciar sesión?</string>
-    <string name="log_in_attempt_by_x_on_y">Intento de inicio de sesión de %1$s en %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Enderezo IP</string>
     <string name="time">Hora</string>
     <string name="select_time">Seleccionar hora</string>
     <string name="switch_input_mode">Cambiar modo de entrada</string>
-    <string name="confirm_log_in">Aprobar inicio de sesión</string>
-    <string name="deny_log_in">Denegar inicio de sesión</string>
-    <string name="log_in_denied">Inicio de sesión denegado</string>
-    <string name="approve_login_requests">Aprobar solicitudes de inicio de sesión</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Non, grazas</string>
-    <string name="confim_log_in_attemp_for_x">Aprobar inicio de sesión para %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Tipo de nome de usuario</string>
     <string name="plus_addressed_email">Correo con alias</string>
     <string name="catch_all_email">Correo \"catch-all\"</string>
@@ -643,27 +633,27 @@ selecciona Engadir TOTP para gardar a clave de forma segura</string>
     <string name="i_understand">Entendo</string>
     <string name="accept">Aceptar</string>
     <string name="decline">Rexeitar</string>
-    <string name="login_request_has_already_expired">A solicitude de inicio de sesión expirou.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Intento de inicio de sesión dende: 
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Queres comprobalo dende esa conta?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Novo en Bitwarden?</string>
     <string name="get_master_passwordword_hint">Obter pista do contrasinal mestre</string>
     <string name="logging_in_as_x_on_y">Iniciando sesión coma %1$s en %2$s</string>
     <string name="not_you">Non es ti?</string>
     <string name="log_in_with_master_password">Iniciar sesión co contrasinal mestre</string>
     <string name="log_in_initiated">Inicio de sesión comezado</string>
-    <string name="a_notification_has_been_sent_to_your_device">Enviouse unha notificación ó teu dispositivo.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Por favor asegúrate de que a caixa forte está desbloqueada e a frase de pegada dixital coincide ca do outro dispositivo.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Volver enviar notificación</string>
     <string name="view_all_login_options">Ver todas as opcións de inicio de sesión</string>
-    <string name="pending_log_in_requests">Solicitudes de inicio de sesión pendentes</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Denegar todas as solicitudes</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Seguro que queres denegar todas as solicitudes pendentes?</string>
     <string name="no_pending_requests">Sen solicitudes pendentes</string>
     <string name="enable_camer_permission_to_use_the_scanner">Activa o permiso de cámara para empregar o escáner</string>
     <string name="language">Lingua</string>
-    <string name="language_change_x_description">A lingua foi cambiada a %1$s. Por favor, reinicie a aplicación para ver o cambio</string>
     <string name="default_system">Predeterminado (Sistema)</string>
     <string name="weak_master_password">Contrasinal mestre feble</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Contrasinal feble e atopado nunha filtración de datos. Emprega un contrasinal forte e único para a túa conta. Seguro que queres utilizar este contrasinal?</string>
@@ -690,9 +680,8 @@ Queres comprobalo dende esa conta?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">A Clave de acceso non se incluirá na entrada clonada. Queres continuar co duplicado?</string>
     <string name="master_password_re_prompt_help">Axuda para \"Volver solicitar o contrasinal mestre\"</string>
     <string name="admin_approval_requested">Aprobación do administrador solicitada</string>
-    <string name="your_request_has_been_sent_to_your_admin">A solicitude foi enviada ó teu administrador.</string>
-    <string name="you_will_be_notified_once_approved">Serás notificado cando se aprobe.</string>
-    <string name="trouble_logging_in">Problemas ó iniciar sesión?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Bloquear autocompletado</string>
     <string name="no_uris_blocked">Non hai URI bloqueados</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">O autoenchido non se ofrecerá nas seguintes URIs.</string>
@@ -703,8 +692,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formato: %1$s. Separa varias URIs cunha coma (,).</string>
     <string name="invalid_uri">URI inválida</string>
     <string name="the_urix_is_already_blocked">A URI %1$s xa está bloqueada</string>
-    <string name="login_approved">Inicio de sesión aprobado</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">O inicio de sesión con dispositivo debe configurarse nos axustes da aplicación Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Necesitas outra opción? <annotation link="viewAll">Ver todas as opcións de inicio de sesión</annotation></string>
     <string name="log_in_with_device">Iniciar sesión cun dispositivo</string>
     <string name="logging_in_on">Iniciando sesión en</string>
@@ -977,7 +965,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operación de chave de acceso fallou porque a solicitude non é compatible.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operación de contrasinal fallou porque o elemento seleccionado non existe.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">A operación de contrasinal fallou porque o elemento seleccionado non ten un contrasinal válido.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">A operación de contrasinal fallou porque non se seleccionou ningún elemento.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">A operación de credenciais fallou porque a solicitude non é válida.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">A operación de credenciais fallou porque a solicitude non é compatible.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operación de credenciais fallou porque se superaron os intentos de verificación do usuario.</string>
@@ -1058,7 +1045,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="learn_more_about_privileged_apps">Máis información sobre aplicacións privilexiadas</string>
     <string name="privileged_apps">Aplicacións privilexiadas</string>
     <string name="unrecognized_browser">Navegador non recoñecido</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Máis información sobre o uso de chaves de acceso con Bitwarden.</string>
     <string name="all_trusted_apps">Todas as aplicacións de confianza</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Seguro que queres deixar de confiar en %s?</string>
     <string name="installed_apps">Aplicacións instaladas</string>
@@ -1075,8 +1061,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="verification_code_added">Código de verificación engadido</string>
     <string name="refresh_period">Período de refresco</string>
     <string name="algorithm">Algoritmo</string>
-    <string name="advanced">Avanzado</string>
-    <string name="collapse_advanced_options">Colapsar opcións avanzadas</string>
     <string name="number_of_digits">Número de díxitos</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d segundo</item>
@@ -1143,6 +1127,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="save_option_as_default">Gardar opción como predeterminada</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada desde a aplicación Bitwarden</string>
     <string name="local_codes">Códigos locais (%1$d)</string>
+    <string name="local_codes_header">Códigos locais</string>
     <string name="required_information_missing">Falta información obrigatoria</string>
     <string name="required_information_missing_message">Falta información obrigatoria (p. ex., \'services\' ou \'secret\'). Comproba o teu ficheiro e inténtao de novo. Visita bitwarden.com/help para obter axuda</string>
     <string name="file_could_not_be_processed">Non se puido procesar o ficheiro</string>
@@ -1158,7 +1143,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="select_a_card_for_x">Selecciona unha tarxeta para %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opcións avanzadas</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Máis sobre a detección de coincidencias</annotation></string>
     <string name="keep_your_credential_secure">Mantén as túas credenciais seguras</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Máis información sobre como manter as credenciais seguras ao usar “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Seguro que queres usar “%1$s”?</string>
@@ -1201,7 +1185,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importa contrasinais, chaves de acceso e outros tipos de elementos desde o teu cofre de Bitwarden.</string>
     <string name="items_to_import">Elementos para importar</string>
     <string name="exporting_items">Exportando elementos…</string>
-    <string name="export_failed">Exportado falido</string>
     <string name="passwords">Contrasinais</string>
     <string name="passkeys">Claves de acceso</string>
     <string name="why_is_this_step_required">Por que é necesario este paso?</string>
@@ -1221,7 +1204,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="transfer_items_to_org">Transferir elementos a %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> require que todos os elementos sexan propiedade da organización por razóns de seguridade e cumprimento. Fai clic en aceptar para transferir a propiedade dos teus elementos. <annotation link="learnMore">Máis información</annotation></string>
     <string name="decline_and_leave">Rexeitar e marchar</string>
-    <string name="why_am_i_seeing_this">Por que estou a ver isto?</string>
     <string name="migrating_items_to_x">Migrando elementos a %s</string>
     <string name="failed_to_migrate_items_to_x">Fallou a migración de elementos a %s</string>
     <string name="search_archive">Buscar no arquivo</string>
@@ -1239,6 +1221,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="archiving_items_is_a_premium_feature">Arquivar elementos é unha función Premium. O teu plan actual non inclúe acceso a esta función.</string>
     <string name="totp_is_a_premium_feature">A chave de autenticador (TOTP) é unha función Premium. O teu plan actual non inclúe acceso a esta función.</string>
     <string name="upgrade_to_premium">Actualizar a Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para xestionar a túa subscrición Premium, terás que iniciar sesión no teu cofre web nun ordenador.</string>
     <string name="unlock_advanced_security_features">Desbloquear funcións de seguridade avanzadas</string>
@@ -1320,7 +1303,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="archive_item">Arquivar elemento</string>
     <string name="once_archived_this_item_will_be_excluded">Unha vez arquivado, este elemento excluirase dos resultados de busca e das suxestións de autocompletado.</string>
     <string name="pricing_unavailable">Prezos non dispoñibles</string>
-    <string name="current_plan">Plan actual</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Importe da facturación</string>
     <string name="storage_cost">Custo de almacenamento</string>
@@ -1396,8 +1378,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="issuing_country">País emisor</string>
     <string name="issuing_state">Estado/provincia emisor</string>
     <string name="license_class">Clase de licenza</string>
-    <string name="surname">Apelido</string>
-    <string name="given_name">Nome de pila</string>
     <string name="date_of_birth">Data de nacemento</string>
     <string name="nationality">Nacionalidade</string>
     <string name="passport_type">Tipo de pasaporte</string>
@@ -1442,6 +1422,7 @@ Queres comprobalo dende esa conta?</string>
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

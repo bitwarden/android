@@ -93,6 +93,7 @@ private fun LazyListScope.sharedCodes(
                 item {
                     BitwardenListHeaderText(
                         label = section.label(),
+                        supportingLabel = section.codes.size.toString(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .standardHorizontalMargin()

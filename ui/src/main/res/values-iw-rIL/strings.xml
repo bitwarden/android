@@ -4,7 +4,6 @@
     <string name="add_folder">הוספת תיקייה</string>
     <string name="add_item">הוסף פריט</string>
     <string name="an_error_has_occurred">אירעה שגיאה</string>
-    <string name="apply">החלה</string>
     <string name="back">הקודם</string>
     <string name="cancel">ביטול</string>
     <string name="copy">העתק</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">תיקייה נמחקה.</string>
     <string name="folder_none">ללא תיקייה</string>
     <string name="folder_updated">התיקייה נשמרה</string>
-    <string name="folders">תיקיות</string>
     <string name="hide">הסתר</string>
     <string name="internet_connection_required_message">אנא התחבר לאינטרנט לפני שתמשיך.</string>
     <string name="internet_connection_required_title">נדרש חיבור לאינטרנט</string>
@@ -209,7 +207,6 @@
     <string name="copy_totp">העתק TOTP</string>
     <string name="copy_totp_automatically_description">אם לכניסה שלך יש מפתח מאמת, העתק את קוד האימות ה־TOTP ללוח ההעתקה שלך כאשר אתה ממלא אוטומטית את הכניסה.</string>
     <string name="copy_totp_automatically">העתק TOTP באופן אוטומטי</string>
-    <string name="premium_required">נדרשת חברות פרימיום כדי להשתמש בתכונה זו.</string>
     <string name="attachment_deleted">הצרופה נמחקה</string>
     <string name="attachments_are_a_premium_feature">קבצים מצורפים הם תכונת פרימיום. התוכנית הנוכחית שלך אינה כוללת גישה לתכונה זו.</string>
     <string name="choose_file">בחר קובץ</string>
@@ -292,9 +289,7 @@
     <string name="icons_url">URL של שרת הסמלים</string>
     <string name="vault_is_locked">הכספת נעולה</string>
     <string name="go_to_my_vault">עבור לכספת שלי</string>
-    <string name="collections">אוספים</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">אין פריטים באוסף זה.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">אין פריטים בתיקייה זו.</string>
     <string name="no_items_trash">אין פריטים בסל המחזור.</string>
@@ -349,16 +344,11 @@
     <string name="type">סוג</string>
     <string name="move_down">הזז למטה</string>
     <string name="move_up">הזז למעלה</string>
-    <string name="owner">בעלים</string>
-    <string name="no_collections_to_list">אין אוספים להציג ברשימה.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s הועבר אל %2$s.</string>
     <string name="select_one_collection">עליך לבחור לפחות אוסף אחד.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">שיתוף</string>
-    <string name="move_to_organization">העבר לארגון</string>
-    <string name="no_orgs_to_list">אין ארגונים להצגה ברשימה.</string>
-    <string name="move_to_org_desc">בחר ארגון שאליו ברצונך להעביר פריט זה. ההעברה לארגון מעבירה את הבעלות על הפריט לאותו ארגון. לאחר העברת פריט זה לא תהיה יותר הבעלים הישיר.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">מספר המילים</string>
@@ -473,7 +463,6 @@
     <string name="hide_text_by_default">בעת גישה לסֵנְד, הסתר את הטקסט כברירת מחדל</string>
     <string name="type_file">קובץ</string>
     <string name="deletion_date">תאריך מחיקה</string>
-    <string name="deletion_time">זמן המחיקה</string>
     <string name="deletion_date_info">הסֵנְד יימחק לצמיתות בתאריך ובשעה שצוינו.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">מי יכול לצפות</string>
@@ -607,20 +596,21 @@
     <string name="generic_error_message">לא הצלחנו לעבד את הבקשה שלך. נא לנסות שוב או ליצור איתנו קשר.</string>
     <string name="allow_screen_capture">אפשר לכידת מסך</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">האם אתה בטוח שברצונך להפעיל לכידת מסך?</string>
-    <string name="log_in_requested">התבקשה כניסה</string>
-    <string name="are_you_trying_to_log_in">האם את/ה מנסה להיכנס?</string>
-    <string name="log_in_attempt_by_x_on_y">ניסיון כניסה על ידי %1$s ב־%2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">סוג מכשיר</string>
     <string name="ip_address">כתובת IP</string>
     <string name="time">זמן</string>
     <string name="select_time">בחר זמן</string>
     <string name="switch_input_mode">החלף מצב קלט</string>
-    <string name="confirm_log_in">אשר כניסה</string>
-    <string name="deny_log_in">דחה כניסה</string>
-    <string name="log_in_denied">הכניסה נדחתה</string>
-    <string name="approve_login_requests">אשר בקשות כניסה</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">לא תודה</string>
-    <string name="confim_log_in_attemp_for_x">אשר ניסיון כניסה עבור %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">סוג שם משתמש</string>
     <string name="plus_addressed_email">דוא\"ל ממוען בפלוס</string>
     <string name="catch_all_email">דוא\"ל תופס־כל</string>
@@ -647,27 +637,27 @@
     <string name="i_understand">אני מבין</string>
     <string name="accept">קבל</string>
     <string name="decline">סרב</string>
-    <string name="login_request_has_already_expired">כבר פג תוקפה של בקשת הכניסה.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">ניסיון כניסה מ:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-האם ברצונך לעבור לחשבון זה?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">חדש ב־Bitwarden?</string>
     <string name="get_master_passwordword_hint">קבל רמז לסיסמה הראשית</string>
     <string name="logging_in_as_x_on_y">נכנס כ־%1$s ב־%2$s</string>
     <string name="not_you">לא את/ה?</string>
     <string name="log_in_with_master_password">כניסה עם סיסמה ראשית</string>
     <string name="log_in_initiated">הכניסה החלה</string>
-    <string name="a_notification_has_been_sent_to_your_device">התראה נשלחה למכשיר שלך.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">נא לוודא שהכספת שלך פתוחה ושביטוי טביעת האצבע תואם את המכשיר האחר.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">שלח מחדש התראה</string>
     <string name="view_all_login_options">הצג את כל אפשרויות הכניסה</string>
-    <string name="pending_log_in_requests">בקשות כניסה ממתינות</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">סרב לכל הבקשות</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">האם אתה בטוח שברצונך לדחות את כל בקשות הכניסה הממתינות?</string>
     <string name="no_pending_requests">אין בקשות ממתינות</string>
     <string name="enable_camer_permission_to_use_the_scanner">אפשר הרשאת מצלמה כדי להשתמש בסורק</string>
     <string name="language">שפה</string>
-    <string name="language_change_x_description">השפה שונתה ל־%1$s. נא להתחיל מחדש את היישום כדי לראות את השינוי</string>
     <string name="default_system">ברירת מחדל (מערכת)</string>
     <string name="weak_master_password">סיסמה ראשית חלשה</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">סיסמה חלשה זוהתה. השתמש בסיסמה חזקה כדי להגן על חשבונך. האם אתה בטוח שאתה רוצה להשתמש בסיסמה חלשה?</string>
@@ -694,9 +684,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">מפתח הגישה לא יועתק לפריט המשוכפל. האם ברצונך להמשיך לשכפל פריט זה?</string>
     <string name="master_password_re_prompt_help">עזרה עם בקשה חוזרת של סיסמה ראשית</string>
     <string name="admin_approval_requested">התבקש אישור מנהל</string>
-    <string name="your_request_has_been_sent_to_your_admin">הבקשה שלך נשלחה למנהל שלך.</string>
-    <string name="you_will_be_notified_once_approved">תקבל התראה כשתאושר.</string>
-    <string name="trouble_logging_in">בעיות בכניסה?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">חסום מילוי אוטומטי</string>
     <string name="no_uris_blocked">אין URIs חסומים</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">מילוי אוטומטי לא יוצע עבור כתובות ה־URI האלה.</string>
@@ -707,8 +696,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">פורמט: %1$s. הפרד כתובות URI מרובות עם פסיק.</string>
     <string name="invalid_uri">כתובת URI לא חוקית</string>
     <string name="the_urix_is_already_blocked">כתובת URI זו %1$s כבר חסומה</string>
-    <string name="login_approved">כניסה אושרה</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">כניסה עם מכשיר צריכה להיות מוגדרת בהגדרות של היישום Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">זקוקים לאפשרות אחרת? <annotation link="viewAll">הצגת כל אפשרויות הכניסה</annotation></string>
     <string name="log_in_with_device">כניסה עם מכשיר</string>
     <string name="logging_in_on">נכנס ב־</string>
@@ -983,7 +971,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה נתמכת.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">פעולת הסיסמה נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">פעולת הסיסמה נכשלה מכיוון שלפריט הנבחר אין סיסמה תקפה.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">פעולת הסיסמה נכשלה בגלל שלא נבחר פריט.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">פעולת מפתח הגישה נכשלה בגלל שהבקשה אינה תקינה.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">פעולת מפתח הגישה נכשלה בגלל שהבקשה איננה נתמכת.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">פעולת האישור נכשלה בגלל שניסיונות אימות המשתמש חרגו.</string>
@@ -1064,7 +1051,6 @@
     <string name="learn_more_about_privileged_apps">למד עוד אודות יישומים מורשים</string>
     <string name="privileged_apps">יישומים מורשים</string>
     <string name="unrecognized_browser">דפדפן לא מזוהה</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">למד עוד אודות שימוש במפתחות גישה עם Bitwarden.</string>
     <string name="all_trusted_apps">כל היישומים המהימנים</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">האם אתה בטוח שברצונך להפסיק לתת אמון ב־%s?</string>
     <string name="installed_apps">יישומים מותקנים</string>
@@ -1081,8 +1067,6 @@
     <string name="verification_code_added">נוסף קוד אימות</string>
     <string name="refresh_period">תקופת רענון</string>
     <string name="algorithm">אלגוריתם</string>
-    <string name="advanced">מתקדם</string>
-    <string name="collapse_advanced_options">כווץ אפשרויות מתקדמות</string>
     <string name="number_of_digits">מספר ספרות</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">שנייה %d</item>
@@ -1150,6 +1134,7 @@
     <string name="save_option_as_default">שמור אפשרות כברירת מחדל</string>
     <string name="account_synced_from_bitwarden_app">חשבון המיובא מתוך יישום Bitwarden</string>
     <string name="local_codes">קודים מקומיים (%1$d)</string>
+    <string name="local_codes_header">קודים מקומיים</string>
     <string name="required_information_missing">חסר מידע נדרש</string>
     <string name="required_information_missing_message">חסר מידע נדרש (למשל \'שירותים\' או \'סוד\'). בדוק את הקובץ שלך ונסה שוב. בקר ב־bitwarden.com/help עבור תמיכה</string>
     <string name="file_could_not_be_processed">לא היה ניתן לעבד את הקובץ</string>
@@ -1166,7 +1151,6 @@
     <string name="select_a_card_for_x">בחר כרטיס עבור %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">אפשרויות מתקדמות</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">למד עוד על זיהוי התאמה</annotation></string>
     <string name="keep_your_credential_secure">שמור את האישורים שלך מאובטחים</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">למד עוד על איך יש לשמור את האישורים שלך מאובטחים כאשר משתמשים ב“%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">האם אתה בטוח שברצונך להשתמש ב“%1$s”?</string>
@@ -1210,7 +1194,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">ייבא סיסמאות, מפתחות גישה, וסוגי פריטים אחרים מכספת ה־Bitwarden שלך.</string>
     <string name="items_to_import">פריטים לייבוא</string>
     <string name="exporting_items">מייצא פריטים…</string>
-    <string name="export_failed">ייצוא נכשל</string>
     <string name="passwords">סיסמאות</string>
     <string name="passkeys">מפתחות גישה</string>
     <string name="why_is_this_step_required">למה שלב זה נדרש?</string>
@@ -1230,7 +1213,6 @@
     <string name="transfer_items_to_org">העברת הפריטים אל %1$s</string>
     <string name="transfer_items_description">%1$s מחייב שכל הפריטים יהיו בבעלות של הארגון לאבטחה ולתאימות. ליחצו על \"אישור\" להעברת הבעלות על הפריטים שלך.</string>
     <string name="decline_and_leave">סירוב ועזיבה</string>
-    <string name="why_am_i_seeing_this">למה אני רואה זאת?</string>
     <string name="migrating_items_to_x">מתבצעת הסבת הפריטים אל %s</string>
     <string name="failed_to_migrate_items_to_x">העברת הפריטים ל%s נכשלה</string>
     <string name="search_archive">חיפוש בארכיב</string>
@@ -1248,6 +1230,7 @@
     <string name="archiving_items_is_a_premium_feature">ארכוב פריטים היא תכולת פרמיום. התכנית הנוכחית שלך אינה כוללת גישה לתכולה זו.</string>
     <string name="totp_is_a_premium_feature">מפתח אימות (TOTP) הוא תכונת פרימיום. התוכנית הנוכחית שלך אינה כוללת גישה לתכונה זו.</string>
     <string name="upgrade_to_premium">שדרוג לפרמיום</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">תוכנית</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">כדי לנהל את מנוי הפרימיום שלך, תצטרך להתחבר לכספת האינטרנט שלך במחשב.</string>
     <string name="unlock_advanced_security_features">פתח תכונות אבטחה מתקדמות</string>
@@ -1329,7 +1312,6 @@
     <string name="archive_item">אחסן פריט בארכיון</string>
     <string name="once_archived_this_item_will_be_excluded">לאחר ארכוב, פריט זה לא יופיע בתוצאות החיפוש ובהצעות למילוי אוטומטי.</string>
     <string name="pricing_unavailable">התמחור אינו זמין</string>
-    <string name="current_plan">תוכנית נוכחית</string>
     <string name="premium_plan_name">פרימיום</string>
     <string name="billing_amount">סכום לחיוב</string>
     <string name="storage_cost">עלות אחסון</string>
@@ -1406,8 +1388,6 @@
     <string name="issuing_country">מדינה מנפיקה</string>
     <string name="issuing_state">מדינה/מחוז מנפיק</string>
     <string name="license_class">דרגת רישיון</string>
-    <string name="surname">שם משפחה</string>
-    <string name="given_name">שם פרטי</string>
     <string name="date_of_birth">תאריך לידה</string>
     <string name="nationality">לאום</string>
     <string name="passport_type">סוג דרכון</string>
@@ -1452,6 +1432,7 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

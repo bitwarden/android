@@ -308,5 +308,6 @@ private val DEFAULT_STATE = SettingsState(
     securityCount = 0,
     autoFillCount = 0,
     vaultCount = 0,
+    showPlanBadge = false,
     isPlanRowEligible = false,
 )

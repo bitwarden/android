@@ -157,13 +157,61 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `continue button is enabled or disabled according to state`() {
+        // No default browser: enabled
         composeTestRule
             .onNodeWithText(text = "Continue")
             .assertIsEnabled()
+
+        // Default browser disabled: disabled
         mutableStateFlow.update {
             it.copy(
                 browserAutofillSettingsOptions = persistentListOf(
-                    BrowserAutofillSettingsOption.BraveStable(enabled = false),
+                    BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = true),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .assertIsNotEnabled()
+
+        // Default browser enabled: enabled
+        mutableStateFlow.update {
+            it.copy(
+                browserAutofillSettingsOptions = persistentListOf(
+                    BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = true),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun `continue button is enabled when there is no default browser and all are disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                browserAutofillSettingsOptions = persistentListOf(
+                    BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = false),
+                    BrowserAutofillSettingsOption.ChromeStable(
+                        isEnabled = false,
+                        isDefault = false,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun `continue button is disabled when only a non-default browser is enabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                browserAutofillSettingsOptions = persistentListOf(
+                    BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = false),
+                    BrowserAutofillSettingsOption.ChromeStable(isEnabled = false, isDefault = true),
                 ),
             )
         }
@@ -246,6 +294,6 @@ private val DEFAULT_STATE: SetupBrowserAutofillState = SetupBrowserAutofillState
     dialogState = null,
     isInitialSetup = true,
     browserAutofillSettingsOptions = persistentListOf(
-        BrowserAutofillSettingsOption.BraveStable(enabled = true),
+        BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = false),
     ),
 )

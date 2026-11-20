@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
@@ -63,7 +62,7 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.handlers.
 fun VerifyPasswordScreen(
     onNavigateBack: () -> Unit,
     onPasswordVerified: (userId: String) -> Unit,
-    viewModel: VerifyPasswordViewModel = hiltViewModel(),
+    viewModel: VerifyPasswordViewModel,
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
     credentialExchangeRequestValidator: CredentialExchangeRequestValidator =

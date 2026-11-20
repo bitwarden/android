@@ -2,13 +2,20 @@
 
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.bitwarden.organizations.CollectionManagementSettings
+import com.bitwarden.organizations.FamilySponsorship
 import com.bitwarden.organizations.MemberDecryptionType
+import com.bitwarden.organizations.OrganizationDetails
+import com.bitwarden.organizations.OrganizationMembership
+import com.bitwarden.organizations.OrganizationPlan
+import com.bitwarden.organizations.OrganizationProvider
 import com.bitwarden.organizations.OrganizationUserStatusType
 import com.bitwarden.organizations.OrganizationUserType
 import com.bitwarden.organizations.Permissions
 import com.bitwarden.organizations.ProductTierType
 import com.bitwarden.organizations.ProfileOrganization
 import com.bitwarden.organizations.ProviderType
+import com.bitwarden.organizations.SsoSettings
 import java.time.Instant
 
 /**
@@ -37,7 +44,7 @@ fun createMockSdkProfileOrganization(
     identifier: String? = "mockIdentifier-$number",
     use2fa: Boolean = false,
     familySponsorshipToDelete: Boolean? = false,
-    userId: String? = "mockUserId-$number",
+    userId: String = "mockUserId-$number",
     shouldUseEvents: Boolean = false,
     familySponsorshipFriendlyName: String? = "mockFamilySponsorshipFriendlyName-$number",
     useTotp: Boolean = false,
@@ -67,6 +74,7 @@ fun createMockSdkProfileOrganization(
     familySponsorshipAvailable: Boolean = false,
     productTierType: ProductTierType = ProductTierType.FREE,
     accessSecretsManager: Boolean = false,
+    accessPam: Boolean = false,
     limitCollectionCreation: Boolean = false,
     limitCollectionDeletion: Boolean = false,
     allowAdminAccessToAllCollectionItems: Boolean = false,
@@ -78,69 +86,89 @@ fun createMockSdkProfileOrganization(
     ssoMemberDecryptionType: MemberDecryptionType? = null,
     usePhishingBlocker: Boolean = false,
     useMyItems: Boolean = false,
+    usePam: Boolean = false,
+    useInviteLinks: Boolean = false,
 ): ProfileOrganization =
     ProfileOrganization(
-        id = id,
-        name = name,
-        status = status,
-        type = type,
-        enabled = enabled,
-        usePolicies = usePolicies,
-        useGroups = useGroups,
-        useDirectory = useDirectory,
-        useEvents = shouldUseEvents,
-        useTotp = useTotp,
-        use2fa = use2fa,
-        useApi = useApi,
-        useSso = useSso,
-        useOrganizationDomains = useOrganizationDomains,
-        useKeyConnector = shouldUseKeyConnector,
-        useScim = useScim,
-        useCustomPermissions = useCustomPermissions,
-        useResetPassword = useResetPassword,
-        useSecretsManager = useSecretsManager,
-        usePasswordManager = usePasswordManager,
-        useActivateAutofillPolicy = useActivateAutofillPolicy,
-        useAutomaticUserConfirmation = useAutomaticUserConfirmation,
-        selfHost = selfHost,
-        usersGetPremium = usersGetPremium,
-        seats = seats,
-        maxCollections = maxCollections,
-        maxStorageGb = maxStorageGb,
-        ssoBound = ssoBound,
-        identifier = identifier,
-        permissions = permissions,
-        resetPasswordEnrolled = resetPasswordEnrolled,
-        userId = userId,
-        organizationUserId = organizationUserId,
-        hasPublicAndPrivateKeys = hasPublicAndPrivateKeys,
-        providerId = providerId,
-        providerName = providerName,
-        providerType = providerType,
-        isProviderUser = isProviderUser,
-        isMember = isMember,
-        familySponsorshipFriendlyName = familySponsorshipFriendlyName,
-        familySponsorshipAvailable = familySponsorshipAvailable,
-        productTierType = productTierType,
-        keyConnectorEnabled = keyConnectorEnabled,
-        keyConnectorUrl = keyConnectorUrl,
-        familySponsorshipLastSyncDate = familySponsorshipLastSyncDate,
-        familySponsorshipValidUntil = familySponsorshipValidUntil,
-        familySponsorshipToDelete = familySponsorshipToDelete,
-        accessSecretsManager = accessSecretsManager,
-        limitCollectionCreation = limitCollectionCreation,
-        limitCollectionDeletion = limitCollectionDeletion,
-        limitItemDeletion = limitItemDeletion,
-        allowAdminAccessToAllCollectionItems = allowAdminAccessToAllCollectionItems,
-        userIsManagedByOrganization = userIsClaimedByOrganization,
-        useAccessIntelligence = useAccessIntelligence,
-        useAdminSponsoredFamilies = useAdminSponsoredFamilies,
-        useDisableSmAdsForUsers = useDisableSmAdsForUsers,
-        isAdminInitiated = isAdminInitiated,
-        ssoEnabled = ssoEnabled,
-        ssoMemberDecryptionType = ssoMemberDecryptionType,
-        usePhishingBlocker = usePhishingBlocker,
-        useMyItems = useMyItems,
+        details = OrganizationDetails(
+            id = id,
+            name = name,
+            enabled = enabled,
+            hasPublicAndPrivateKeys = hasPublicAndPrivateKeys,
+        ),
+        plan = OrganizationPlan(
+            productTierType = productTierType,
+            seats = seats,
+            maxCollections = maxCollections,
+            maxStorageGb = maxStorageGb,
+            selfHost = selfHost,
+            usersGetPremium = usersGetPremium,
+            usePolicies = usePolicies,
+            useGroups = useGroups,
+            useDirectory = useDirectory,
+            useEvents = shouldUseEvents,
+            useTotp = useTotp,
+            use2fa = use2fa,
+            useApi = useApi,
+            useSso = useSso,
+            useOrganizationDomains = useOrganizationDomains,
+            useKeyConnector = shouldUseKeyConnector,
+            useScim = useScim,
+            useCustomPermissions = useCustomPermissions,
+            useResetPassword = useResetPassword,
+            useSecretsManager = useSecretsManager,
+            usePasswordManager = usePasswordManager,
+            usePam = usePam,
+            useActivateAutofillPolicy = useActivateAutofillPolicy,
+            useAutomaticUserConfirmation = useAutomaticUserConfirmation,
+            useAccessIntelligence = useAccessIntelligence,
+            useAdminSponsoredFamilies = useAdminSponsoredFamilies,
+            useDisableSmAdsForUsers = useDisableSmAdsForUsers,
+            usePhishingBlocker = usePhishingBlocker,
+            useMyItems = useMyItems,
+            useInviteLinks = useInviteLinks,
+        ),
+        membership = OrganizationMembership(
+            status = status,
+            type = type,
+            permissions = permissions,
+            userId = userId,
+            organizationUserId = organizationUserId,
+            isMember = isMember,
+            isProviderUser = isProviderUser,
+            resetPasswordEnrolled = resetPasswordEnrolled,
+            ssoBound = ssoBound,
+            userIsClaimedByOrganization = userIsClaimedByOrganization,
+            accessSecretsManager = accessSecretsManager,
+            accessPam = accessPam,
+        ),
+        collectionManagement = CollectionManagementSettings(
+            limitCollectionCreation = limitCollectionCreation,
+            limitCollectionDeletion = limitCollectionDeletion,
+            limitItemDeletion = limitItemDeletion,
+            allowAdminAccessToAllCollectionItems = allowAdminAccessToAllCollectionItems,
+        ),
+        provider = providerId
+            ?.let { id ->
+                providerType?.let { type ->
+                    OrganizationProvider(id = id, type = type, name = providerName)
+                }
+            },
+        sso = SsoSettings(
+            enabled = ssoEnabled,
+            identifier = identifier,
+            memberDecryptionType = ssoMemberDecryptionType,
+            keyConnectorEnabled = keyConnectorEnabled,
+            keyConnectorUrl = keyConnectorUrl,
+        ),
+        familySponsorship = FamilySponsorship(
+            available = familySponsorshipAvailable,
+            friendlyName = familySponsorshipFriendlyName,
+            validUntil = familySponsorshipValidUntil,
+            lastSyncDate = familySponsorshipLastSyncDate,
+            toDelete = familySponsorshipToDelete,
+            isAdminInitiated = isAdminInitiated,
+        ),
     )
 
 /**
@@ -159,6 +187,8 @@ fun createMockSdkPermissions(
     manageSso: Boolean = false,
     manageUsers: Boolean = false,
     manageScim: Boolean = false,
+    manageAccessRules: Boolean = false,
+    manageRotation: Boolean = false,
 ): Permissions =
     Permissions(
         manageResetPassword = shouldManageResetPassword,
@@ -173,4 +203,6 @@ fun createMockSdkPermissions(
         manageSso = manageSso,
         manageUsers = manageUsers,
         manageScim = manageScim,
+        manageAccessRules = manageAccessRules,
+        manageRotation = manageRotation,
     )

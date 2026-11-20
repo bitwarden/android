@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
@@ -42,7 +41,7 @@ import com.bitwarden.ui.util.asText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewAttachmentScreen(
-    viewModel: PreviewAttachmentViewModel = hiltViewModel(),
+    viewModel: PreviewAttachmentViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
 ) {

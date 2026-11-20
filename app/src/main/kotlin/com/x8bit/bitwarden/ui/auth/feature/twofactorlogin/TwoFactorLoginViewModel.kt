@@ -29,12 +29,16 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.duoAuthTabData
 import com.x8bit.bitwarden.data.platform.util.webAuthnAuthTabData
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -42,43 +46,50 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * Manages application state for the Two-Factor Login screen.
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = TwoFactorLoginViewModel.Factory::class)
 @Suppress("TooManyFunctions")
-class TwoFactorLoginViewModel @Inject constructor(
+class TwoFactorLoginViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.TwoFactorLoginRoute,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val resourceManager: ResourceManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = savedStateHandle.toTwoFactorLoginArgs()
-            TwoFactorLoginState(
-                authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
-                availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
-                codeInput = "",
-                displayEmail = authRepository.twoFactorResponse?.twoFactorDisplayEmail
-                    ?: args.emailAddress,
-                dialogState = null,
-                isContinueButtonEnabled = authRepository
-                    .twoFactorResponse
-                    .preferredAuthMethod
-                    .isContinueButtonEnabled,
-                isRememberEnabled = false,
-                email = args.emailAddress,
-                password = args.password,
-                orgIdentifier = args.orgIdentifier,
-                isNewDeviceVerification = args.isNewDeviceVerification,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: TwoFactorLoginState(
+        authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
+        availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
+        codeInput = "",
+        displayEmail = authRepository.twoFactorResponse?.twoFactorDisplayEmail
+            ?: route.emailAddress,
+        dialogState = null,
+        isContinueButtonEnabled = authRepository
+            .twoFactorResponse
+            .preferredAuthMethod
+            .isContinueButtonEnabled,
+        isRememberEnabled = false,
+        email = route.emailAddress,
+        password = route.password,
+        orgIdentifier = route.orgIdentifier,
+        isNewDeviceVerification = route.isNewDeviceVerification,
+    ),
 ) {
+    /**
+     * Factory for creating a [TwoFactorLoginViewModel] for a specific
+     * [AuthGraph.TwoFactorLoginRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [TwoFactorLoginViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.TwoFactorLoginRoute): TwoFactorLoginViewModel
+    }
 
     private val recover2faUri: Uri
         get() {

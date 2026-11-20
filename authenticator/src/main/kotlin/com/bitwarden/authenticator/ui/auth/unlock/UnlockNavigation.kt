@@ -1,31 +1,13 @@
 package com.bitwarden.authenticator.ui.auth.unlock
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavGraph
 
 /**
- * The type-safe route for the unlock screen.
+ * Add the unlock screen to the navigation entries.
  */
-@Serializable
-data object UnlockRoute
-
-/**
- * Navigate to the unlock screen.
- */
-fun NavController.navigateToUnlock(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = UnlockRoute, navOptions = navOptions)
-}
-
-/**
- * Add the unlock screen to the nav graph.
- */
-fun NavGraphBuilder.unlockDestination() {
-    composable<UnlockRoute> {
+fun EntryProviderScope<RootNavGraph>.unlockDestination() {
+    entry<RootNavGraph.UnlockRoute> {
         UnlockScreen()
     }
 }

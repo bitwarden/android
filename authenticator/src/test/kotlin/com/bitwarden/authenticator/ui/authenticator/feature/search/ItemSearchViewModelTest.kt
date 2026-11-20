@@ -401,7 +401,6 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
             label = BitwardenString.shared_accounts_header.asText(
                 "mockEmail-2",
                 "mockkEnvironmentLabel-2",
-                1,
             ),
             codes = persistentListOf(
                 VerificationCodeDisplayItem(

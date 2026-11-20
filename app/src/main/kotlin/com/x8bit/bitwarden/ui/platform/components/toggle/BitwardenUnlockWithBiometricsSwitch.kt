@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.components.toggle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 
 /**
  * Displays a switch for enabling or disabling unlock with biometrics functionality.

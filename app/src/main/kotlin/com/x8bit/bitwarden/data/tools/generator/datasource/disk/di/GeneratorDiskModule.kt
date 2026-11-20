@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk.di
 
 import android.app.Application
 import android.content.SharedPreferences
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -50,16 +51,15 @@ object GeneratorDiskModule {
     fun providePasswordHistoryDatabase(
         app: Application,
         databaseSchemeManager: DatabaseSchemeManager,
-    ): PasswordHistoryDatabase {
-        return Room
-            .databaseBuilder(
+    ): PasswordHistoryDatabase =
+        Room
+            .databaseBuilder<PasswordHistoryDatabase>(
                 context = app,
-                klass = PasswordHistoryDatabase::class.java,
                 name = "passcode_history_database",
             )
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
+            .setDriver(driver = AndroidSQLiteDriver())
             .build()
-    }
 
     @Provides
     @Singleton

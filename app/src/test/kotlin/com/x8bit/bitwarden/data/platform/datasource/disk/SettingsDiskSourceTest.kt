@@ -10,6 +10,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -162,6 +163,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isPending = true,
         )
+        settingsDiskSource.storeShouldShowPlanBadge(
+            userId = userId,
+            shouldShow = true,
+        )
         settingsDiskSource.storeInlineAutofillEnabled(
             userId = userId,
             isInlineAutofillEnabled = true,
@@ -175,6 +180,10 @@ class SettingsDiskSourceTest {
             lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
         )
         settingsDiskSource.storeClearClipboardFrequencySeconds(userId = userId, frequency = 5)
+        settingsDiskSource.storeCollapsedVaultSections(
+            userId = userId,
+            collapsedVaultSections = setOf(VaultSection.TYPES),
+        )
         val systemBioIntegrityState = "system_biometrics_integrity_state"
         settingsDiskSource.storeAccountBiometricIntegrityValidity(
             userId = userId,
@@ -195,18 +204,10 @@ class SettingsDiskSourceTest {
         assertTrue(
             settingsDiskSource.getIntroducingArchiveActionCardDismissed(userId = userId) ?: false,
         )
-        assertTrue(
-            settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false,
-        )
-        assertTrue(
-            settingsDiskSource.getPremiumUpgradePending(userId = userId) ?: false,
-        )
+        assertTrue(settingsDiskSource.getPremiumUpgradeBannerDismissed(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getUpgradedToPremiumCardConsumed(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getUpgradedToPremiumCardPending(userId = userId) ?: false)
+        assertTrue(settingsDiskSource.getPremiumUpgradePending(userId = userId) ?: false)
 
         // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
@@ -226,6 +227,8 @@ class SettingsDiskSourceTest {
             ),
         )
         assertNull(settingsDiskSource.getVaultPolicyBannerDismissedDate(userId = userId))
+        assertNull(settingsDiskSource.getCollapsedVaultSections(userId = userId))
+        assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = userId))
     }
 
     @Suppress("MaxLineLength")
@@ -917,6 +920,70 @@ class SettingsDiskSourceTest {
                 }
         }
 
+    @Test
+    fun `getCollapsedVaultSections when values are present should pull from SharedPreferences`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getCollapsedVaultSections(userId = mockUserId))
+        fakeSharedPreferences.edit {
+            putString(collapsedVaultSectionsKey, """["types","hiddenItems"]""")
+        }
+        assertEquals(
+            setOf(VaultSection.TYPES, VaultSection.HIDDEN_ITEMS),
+            settingsDiskSource.getCollapsedVaultSections(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `getCollapsedVaultSections should skip unknown stored values`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putString(collapsedVaultSectionsKey, """["types","unknownSection"]""")
+        }
+        assertEquals(
+            setOf(VaultSection.TYPES),
+            settingsDiskSource.getCollapsedVaultSections(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeCollapsedVaultSections should update SharedPreferences`() {
+        val collapsedVaultSectionsBaseKey = "bwPreferencesStorage:collapsedVaultSections"
+        val mockUserId = "mockUserId"
+        val collapsedVaultSectionsKey = "${collapsedVaultSectionsBaseKey}_$mockUserId"
+        settingsDiskSource.storeCollapsedVaultSections(
+            userId = mockUserId,
+            collapsedVaultSections = setOf(VaultSection.NO_FOLDER),
+        )
+        assertEquals(
+            """["noFolder"]""",
+            fakeSharedPreferences.getString(collapsedVaultSectionsKey, null),
+        )
+    }
+
+    @Test
+    fun `getCollapsedVaultSectionsFlow should react to changes in storeCollapsedVaultSections`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getCollapsedVaultSectionsFlow(userId = mockUserId)
+                .test {
+                    // The initial values of the Flow and the property are in sync
+                    assertNull(settingsDiskSource.getCollapsedVaultSections(userId = mockUserId))
+                    assertNull(awaitItem())
+
+                    // Updating the disk source updates shared preferences
+                    settingsDiskSource.storeCollapsedVaultSections(
+                        userId = mockUserId,
+                        collapsedVaultSections = setOf(VaultSection.FAVORITES),
+                    )
+                    assertEquals(setOf(VaultSection.FAVORITES), awaitItem())
+                }
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `getPremiumUpgradeBannerDismissed when values are present should pull from SharedPreferences`() {
@@ -1147,6 +1214,62 @@ class SettingsDiskSourceTest {
                     settingsDiskSource.storePremiumUpgradePending(
                         userId = mockUserId,
                         isPending = false,
+                    )
+                    assertEquals(false, awaitItem())
+                }
+        }
+
+    @Test
+    fun `getShouldShowPlanBadge when values are present should pull from SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId))
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        assertEquals(
+            true,
+            settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId),
+        )
+    }
+
+    @Test
+    fun `storeShouldShowPlanBadge for non-null values should update SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        settingsDiskSource.storeShouldShowPlanBadge(userId = mockUserId, shouldShow = true)
+        assertTrue(fakeSharedPreferences.getBoolean(key, false))
+    }
+
+    @Test
+    fun `storeShouldShowPlanBadge for null values should clear SharedPreferences`() {
+        val baseKey = "bwPreferencesStorage:shouldShowPlanBadge"
+        val mockUserId = "mockUserId"
+        val key = "${baseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(key, true) }
+        settingsDiskSource.storeShouldShowPlanBadge(userId = mockUserId, shouldShow = null)
+        assertFalse(fakeSharedPreferences.contains(key))
+    }
+
+    @Test
+    fun `getShouldShowPlanBadgeFlow should react to changes in storeShouldShowPlanBadge`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource
+                .getShouldShowPlanBadgeFlow(userId = mockUserId)
+                .test {
+                    assertNull(settingsDiskSource.getShouldShowPlanBadge(userId = mockUserId))
+                    assertNull(awaitItem())
+
+                    settingsDiskSource.storeShouldShowPlanBadge(
+                        userId = mockUserId,
+                        shouldShow = true,
+                    )
+                    assertEquals(true, awaitItem())
+
+                    settingsDiskSource.storeShouldShowPlanBadge(
+                        userId = mockUserId,
+                        shouldShow = false,
                     )
                     assertEquals(false, awaitItem())
                 }

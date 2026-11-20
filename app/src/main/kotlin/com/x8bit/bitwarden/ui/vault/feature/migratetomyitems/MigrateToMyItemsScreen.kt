@@ -138,7 +138,7 @@ private fun MigrateToMyItemsContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_migrate_to_my_items),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_business_lock),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

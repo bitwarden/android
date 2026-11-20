@@ -2,27 +2,20 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.biometrics
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.overlaynav.OverlayNavGraph
 
 /**
- * The type-safe route for the Update Biometrics screen.
+ * Add the Update Biometrics screen to the navigation entries.
  */
-@OmitFromCoverage
-@Serializable
-data object UpdateBiometricsRoute
-
-/**
- * Add the Update Biometrics screen to the nav graph.
- */
-fun NavGraphBuilder.updateBiometricsDestination(
+fun EntryProviderScope<OverlayNavGraph>.updateBiometricsDestination(
     onDismiss: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithSlideTransitions<UpdateBiometricsRoute> {
+    slideUpEntry<OverlayNavGraph.UpdateBiometricsRoute> {
         UpdateBiometricsScreen(onDismiss = onDismiss)
         // If we are displaying the update biometrics screen, then we can just
         // hide the splash screen.
@@ -33,8 +26,6 @@ fun NavGraphBuilder.updateBiometricsDestination(
 /**
  * Navigate to the Update Biometrics screen.
  */
-fun NavController.navigateToUpdateBiometrics() {
-    this.navigate(route = UpdateBiometricsRoute) {
-        launchSingleTop = true
-    }
+fun NavigationController<OverlayNavGraph>.navigateToUpdateBiometrics() {
+    this.addSingleTop(route = OverlayNavGraph.UpdateBiometricsRoute)
 }

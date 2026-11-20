@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -40,7 +39,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 @Composable
 fun MasterPasswordHintScreen(
     onNavigateBack: () -> Unit,
-    viewModel: MasterPasswordHintViewModel = hiltViewModel(),
+    viewModel: MasterPasswordHintViewModel,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->

@@ -71,7 +71,6 @@ class SharedVerificationCodesStateTest {
                     label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
-                        1,
                     ),
                     codes = persistentListOf(
                         VerificationCodeDisplayItem(
@@ -95,7 +94,6 @@ class SharedVerificationCodesStateTest {
                     label = BitwardenString.shared_accounts_header.asText(
                         "John@test.com",
                         "bitwarden.com",
-                        1,
                     ),
                     codes = persistentListOf(
                         VerificationCodeDisplayItem(
@@ -170,7 +168,6 @@ class SharedVerificationCodesStateTest {
                     label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
-                        1,
                     ),
                     codes = persistentListOf(
                         VerificationCodeDisplayItem(
@@ -194,7 +191,6 @@ class SharedVerificationCodesStateTest {
                     label = BitwardenString.shared_accounts_header.asText(
                         "John@test.com",
                         "bitwarden.com",
-                        1,
                     ),
                     codes = persistentListOf(
                         VerificationCodeDisplayItem(

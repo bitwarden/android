@@ -2,40 +2,29 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.reviewexport
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.popUpToSelectAccountScreen
-import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the Review Export screen.
+ * Defines the destination for the Review Export screen within the navigation entries.
  *
- * This route is used to navigate to the screen where the user can review the items
- * that will be exported from their vault. This screen operates on the currently
- * active user context for determining which items to review for export.
+ * This extension function on [EntryProviderScope] sets up the [ReviewExportScreen]
+ * composable for the [ExportItemsGraph.ReviewExportRoute], using push transitions.
+ *
+ * @param navigationController The [NavigationController] used for handling back navigation from
+ * the screen.
  */
-@OmitFromCoverage
-@Serializable
-data object ReviewExportRoute
-
-/**
- * Defines the destination for the Review Export screen within the navigation graph.
- *
- * This extension function on [NavGraphBuilder] sets up the [ReviewExportScreen]
- * composable for the [ReviewExportRoute], using push transitions.
- *
- * @param navController The [NavController] used for handling back navigation from the screen.
- */
-fun NavGraphBuilder.reviewExportDestination(
-    navController: NavController,
+fun EntryProviderScope<ExportItemsGraph>.reviewExportDestination(
+    navigationController: NavigationController<ExportItemsGraph>,
 ) {
-    composableWithPushTransitions<ReviewExportRoute> {
+    pushEntry<ExportItemsGraph.ReviewExportRoute> {
         ReviewExportScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToAccountSelection = { navController.popUpToSelectAccountScreen() },
+            onNavigateBack = { navigationController.navigateBack() },
+            onNavigateToAccountSelection = { navigationController.popUpToSelectAccountScreen() },
         )
     }
 }
@@ -43,13 +32,9 @@ fun NavGraphBuilder.reviewExportDestination(
 /**
  * Navigates to the Review Export screen.
  *
- * This extension function on [NavController] provides a type-safe way to navigate
- * to the [ReviewExportRoute].
- *
- * @param navOptions Optional [NavOptions] for this navigation action.
+ * This extension function on [NavigationController] provides a type-safe way to navigate
+ * to the [ExportItemsGraph.ReviewExportRoute].
  */
-fun NavController.navigateToReviewExport(
-    navOptions: NavOptions? = null,
-) {
-    navigate(route = ReviewExportRoute, navOptions = navOptions)
+fun NavigationController<ExportItemsGraph>.navigateToReviewExport() {
+    this.navigate(route = ExportItemsGraph.ReviewExportRoute)
 }

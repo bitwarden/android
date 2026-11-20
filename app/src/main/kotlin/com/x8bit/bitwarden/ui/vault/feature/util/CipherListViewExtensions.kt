@@ -143,16 +143,10 @@ fun CipherListView.toOverflowActions(
 /**
  * Checks if the list is empty and if not returns an icon in a list.
  */
-fun CipherListView.toLabelIcons(isVfo1FoundationEnabled: Boolean = false): ImmutableList<IconData> {
+fun CipherListView.toLabelIcons(): ImmutableList<IconData> {
     return listOfNotNull(
-        if (isVfo1FoundationEnabled) {
-            VaultTrailingIcon.COLLECTION.takeIf {
-                this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
-            }
-        } else {
-            VaultTrailingIcon.COLLECTION_LEGACY.takeIf {
-                this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
-            }
+        VaultTrailingIcon.COLLECTION.takeIf {
+            this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
         },
         VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments > 0U },
     )

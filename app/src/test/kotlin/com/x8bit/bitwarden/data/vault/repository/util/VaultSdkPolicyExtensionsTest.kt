@@ -82,4 +82,6 @@ private val POLICY_TYPE_MAP: Map<PolicyTypeJson, PolicyType> = mapOf(
         PolicyType.BLOCK_CLAIMED_DOMAIN_ACCOUNT_CREATION,
     PolicyTypeJson.ORGANIZATION_USER_NOTIFICATION to PolicyType.ORGANIZATION_USER_NOTIFICATION,
     PolicyTypeJson.SEND_CONTROLS to PolicyType.SEND_CONTROLS,
+    PolicyTypeJson.FILL_ASSIST to PolicyType.FILL_ASSIST,
+    PolicyTypeJson.AUTOTYPE_GA_POLICY to PolicyType.AUTOTYPE_GA_POLICY,
 )

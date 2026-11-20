@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -9,7 +10,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -20,16 +21,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -38,42 +34,57 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { setOnboardingStatus(status = any()) } just runs
+        every { goToNextStep() } just runs
         every { isBiometricIntegrityValid(userId = DEFAULT_USER_ID) } returns false
         every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
-    private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
         every { isUnlockWithPinEnabled } returns false
         every { isUnlockWithBiometricsEnabled } returns false
-        every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledStateFlow
     }
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowUnlockSettingBadge(any()) } just runs
     }
-    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
+
+    private val mutableUpdatedOnboardingFlow = MutableStateFlow(true)
+    private val featureFlagManager: FeatureFlagManager = mockk {
         every {
-            browserThirdPartyAutofillStatus
-        } returns mockk { every { isAnyIsAvailableAndDisabled } returns false }
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toSetupUnlockArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toSetupUnlockArgs)
+            getFeatureFlag(key = FlagKey.UpdatedOnboardingFlow)
+        } answers { mutableUpdatedOnboardingFlow.value }
+        every {
+            getFeatureFlagFlow(key = FlagKey.UpdatedOnboardingFlow)
+        } returns mutableUpdatedOnboardingFlow
     }
 
     @Test
     fun `initial state should be correct`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when updated onboarding flow is disabled`() {
+        mutableUpdatedOnboardingFlow.value = false
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(isUpdatedOnboardingFlowEnabled = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `updated onboarding flow feature flag changes should update the state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableUpdatedOnboardingFlow.value = false
+            assertEquals(DEFAULT_STATE.copy(isUpdatedOnboardingFlowEnabled = false), awaitItem())
+            mutableUpdatedOnboardingFlow.value = true
+            assertEquals(DEFAULT_STATE, awaitItem())
+        }
     }
 
     @Test
@@ -87,12 +98,12 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
+    fun `ContinueClick should call goToNextStep if this is the initial setup and set first time value to false`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.AUTOFILL_SETUP)
+            authRepository.goToNextStep()
+            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
@@ -109,65 +120,19 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
             }
             verify(exactly = 0) {
-                authRepository.setOnboardingStatus(
-                    status = OnboardingStatus.AUTOFILL_SETUP,
-                )
+                authRepository.goToNextStep()
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
+    fun `SetUpLaterClick should call goToNextStep and set first time value to true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-        verify {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.AUTOFILL_SETUP,
-            )
+        verify(exactly = 1) {
+            authRepository.goToNextStep()
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled, browsers are setup, and set first time value to false`() {
-        mutableAutofillEnabledStateFlow.update { true }
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
-            firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ContinueClick should call setOnboardingStatus and set to BROWSER_AUTOFILL_SETUP if AutoFill is already enabled and browsers are not setup`() {
-        mutableAutofillEnabledStateFlow.update { true }
-        every {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify(exactly = 1) {
-            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-            authRepository.setOnboardingStatus(status = OnboardingStatus.BROWSER_AUTOFILL_SETUP)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and browsers are setup`() =
-        runTest {
-            mutableAutofillEnabledStateFlow.update { true }
-            val viewModel = createViewModel()
-            viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-            verify(exactly = 1) {
-                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
-                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -379,15 +344,54 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `CloseClick action should update the first time state to false if biometrics is enabled`() =
+        runTest {
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.CloseClick)
+                assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
+        }
+
     @Suppress("MaxLineLength")
     @Test
-    fun `CloseClick action should update the first time state to false if continue button is enabled`() =
+    fun `CloseClick action should update the first time state to false if PIN is enabled and updated onboarding flow is disabled`() =
         runTest {
-            val viewModel =
-                createViewModel(state = DEFAULT_STATE.copy(isUnlockWithPinEnabled = true))
-            viewModel.trySendAction(SetupUnlockAction.CloseClick)
-            verify {
+            mutableUpdatedOnboardingFlow.value = false
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    isUnlockWithPinEnabled = true,
+                    isUpdatedOnboardingFlowEnabled = false,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.CloseClick)
+                assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
                 firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CloseClick action should not update the first time state if only PIN is enabled and updated onboarding flow is enabled`() =
+        runTest {
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.CloseClick)
+                assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = any())
             }
         }
 
@@ -395,14 +399,14 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         state: SetupUnlockState? = null,
     ): SetupUnlockViewModel =
         SetupUnlockViewModel(
+            isInitialSetup = true,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toSetupUnlockArgs() } returns SetupUnlockArgs(isInitialSetup = true)
             },
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             firstTimeActionManager = firstTimeActionManager,
-            browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
+            featureFlagManager = featureFlagManager,
         )
 }
 
@@ -414,6 +418,7 @@ private val DEFAULT_STATE: SetupUnlockState = SetupUnlockState(
     isUnlockWithBiometricsEnabled = false,
     dialogState = null,
     isInitialSetup = true,
+    isUpdatedOnboardingFlowEnabled = true,
 )
 
 private val DEFAULT_USER_ACCOUNT = UserState.Account(

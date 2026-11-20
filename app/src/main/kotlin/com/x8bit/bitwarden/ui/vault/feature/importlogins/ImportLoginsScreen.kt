@@ -235,7 +235,7 @@ private fun InitialImportLoginsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = rememberVectorPainter(BitwardenDrawable.ill_import_logins),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_import),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

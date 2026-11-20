@@ -76,7 +76,7 @@ interface VaultSdkSource {
     suspend fun deriveKeyConnector(
         userId: String,
         userKeyEncrypted: String,
-        email: String,
+        salt: String,
         password: String,
         kdf: Kdf,
     ): Result<DeriveKeyConnectorResult>

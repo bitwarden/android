@@ -48,7 +48,6 @@ fun VaultData.toViewState(
     restrictItemTypesPolicyOrgIds: List<String>,
     validTotpIds: Set<String>,
     isNewItemTypesEnabled: Boolean,
-    isVfo1FoundationEnabled: Boolean = false,
 ): VaultState.ViewState {
     val allCipherViews =
         decryptCipherListResult
@@ -113,7 +112,6 @@ fun VaultData.toViewState(
                     baseIconUrl = baseIconUrl,
                     isPremiumUser = isPremium,
                     hasDecryptionError = false,
-                    isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                 )
             }
             .plus(
@@ -126,7 +124,6 @@ fun VaultData.toViewState(
                             baseIconUrl = baseIconUrl,
                             isPremiumUser = isPremium,
                             hasDecryptionError = true,
-                            isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                         )
                     },
             )
@@ -163,7 +160,6 @@ fun VaultData.toViewState(
                         baseIconUrl = baseIconUrl,
                         isPremiumUser = isPremium,
                         hasDecryptionError = false,
-                        isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                     )
                 }
                 .plus(
@@ -176,7 +172,6 @@ fun VaultData.toViewState(
                                 baseIconUrl = baseIconUrl,
                                 isPremiumUser = isPremium,
                                 hasDecryptionError = true,
-                                isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                             )
                         },
                 ),
@@ -292,7 +287,6 @@ private fun CipherListView.toVaultItemOrNull(
     baseIconUrl: String,
     isPremiumUser: Boolean,
     hasDecryptionError: Boolean,
-    isVfo1FoundationEnabled: Boolean = false,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
@@ -317,7 +311,7 @@ private fun CipherListView.toVaultItemOrNull(
                     isPremiumUser = isPremiumUser,
                 )
             },
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -330,7 +324,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -345,7 +339,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -359,7 +353,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -368,7 +362,7 @@ private fun CipherListView.toVaultItemOrNull(
         CipherListViewType.SshKey -> VaultState.ViewState.VaultItem.SshKey(
             id = id,
             name = name.asText(),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
@@ -385,7 +379,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -398,7 +392,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,
@@ -411,7 +405,7 @@ private fun CipherListView.toVaultItemOrNull(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
+            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
             hasDecryptionError = hasDecryptionError,

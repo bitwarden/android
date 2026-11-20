@@ -1,58 +1,24 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments.preview
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the preview attachment screen.
+ * Add the preview attachment screen to the navigation entries.
  */
-@Serializable
-data class PreviewAttachmentRoute(
-    val cipherId: String,
-    val attachmentId: String,
-    val fileName: String,
-    val displaySize: String,
-    val isLargeFile: Boolean,
-)
-
-/**
- * Class to retrieve arguments from the [SavedStateHandle].
- */
-data class PreviewAttachmentArgs(
-    val cipherId: String,
-    val attachmentId: String,
-    val fileName: String,
-    val displaySize: String,
-    val isLargeFile: Boolean,
-)
-
-/**
- * Constructs a [PreviewAttachmentArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toPreviewAttachmentArgs(): PreviewAttachmentArgs {
-    val route = this.toRoute<PreviewAttachmentRoute>()
-    return PreviewAttachmentArgs(
-        cipherId = route.cipherId,
-        attachmentId = route.attachmentId,
-        fileName = route.fileName,
-        displaySize = route.displaySize,
-        isLargeFile = route.isLargeFile,
-    )
-}
-
-/**
- * Add the preview attachment screen to the nav graph.
- */
-fun NavGraphBuilder.previewAttachmentDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.previewAttachmentDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<PreviewAttachmentRoute> {
+    slideUpEntry<VaultUnlockedGraph.PreviewAttachmentRoute> { route ->
         PreviewAttachmentScreen(
+            viewModel = hiltViewModel(
+                creationCallback = { factory: PreviewAttachmentViewModel.Factory ->
+                    factory.create(route = route)
+                },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }
@@ -61,12 +27,8 @@ fun NavGraphBuilder.previewAttachmentDestination(
 /**
  * Navigate to the preview attachment screen.
  */
-fun NavController.navigateToPreviewAttachment(
-    route: PreviewAttachmentRoute,
-    navOptions: NavOptions? = null,
+fun NavigationController<VaultUnlockedGraph>.navigateToPreviewAttachment(
+    route: VaultUnlockedGraph.PreviewAttachmentRoute,
 ) {
-    navigate(
-        route = route,
-        navOptions = navOptions,
-    )
+    this.navigate(route = route)
 }

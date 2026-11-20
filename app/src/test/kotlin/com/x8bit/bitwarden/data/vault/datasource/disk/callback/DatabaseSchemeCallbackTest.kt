@@ -7,6 +7,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DatabaseSchemeCallbackTest {
@@ -17,7 +18,7 @@ class DatabaseSchemeCallbackTest {
     private val callback = DatabaseSchemeCallback(databaseSchemeManager)
 
     @Test
-    fun `onDestructiveMigration calls clearSyncState`() {
+    fun `onDestructiveMigration calls clearSyncState`() = runTest {
         callback.onDestructiveMigration(mockk<SQLiteConnection>())
         verify(exactly = 1) { databaseSchemeManager.clearSyncState() }
     }

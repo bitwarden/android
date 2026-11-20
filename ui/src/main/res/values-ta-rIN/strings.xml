@@ -4,7 +4,6 @@
     <string name="add_folder">கோப்புறை சேர்</string>
     <string name="add_item">உருப்படியைச் சேர்</string>
     <string name="an_error_has_occurred">ஓரு பிழை நேர்ந்துவிட்டது</string>
-    <string name="apply">விண்ணப்பிக்கவும்</string>
     <string name="back">பின்னே</string>
     <string name="cancel">ரத்துசெய்</string>
     <string name="copy">நகலெடு</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">கோப்புறை அழிக்கப்பட்டது.</string>
     <string name="folder_none">கோப்புறையற்றவை</string>
     <string name="folder_updated">கோப்புறை சேமிக்கப்பட்டது</string>
-    <string name="folders">கோப்புறைகள்</string>
     <string name="hide">மறை</string>
     <string name="internet_connection_required_message">தொடரும் முன் இணையத்துடன் இணைக்கவும்.</string>
     <string name="internet_connection_required_title">இணைய இணைப்பு தேவை</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTP ஐ நகலெடு</string>
     <string name="copy_totp_automatically_description">ஓர் உள்நுழைவிடம் ஆங்கீகரிப்பு விசை இருந்தால், நீங்கள் உள்நுழைவை தன்னிரப்பும்போது TOTP சிரிபார்ப்புக் குறியீட்டை நகலெடுக்கவும்.</string>
     <string name="copy_totp_automatically">TOTPஐத் தானாக நகலெடு</string>
-    <string name="premium_required">இவ்வம்சத்தை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</string>
     <string name="attachment_deleted">இணைப்பு அழிக்கப்பட்டது</string>
     <string name="attachments_are_a_premium_feature">இணைப்புகள் ஒரு பிரீமியம் அம்சமாகும். உங்கள் தற்போதைய திட்டத்தில் இந்த அம்சத்திற்கான அணுகல் இல்லை.</string>
     <string name="choose_file">கோப்பைத் தேர்ந்தெடு</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">படவுரு தேக்க உரலி</string>
     <string name="vault_is_locked">பெட்டகம் பூட்டப்பட்டுள்ளது</string>
     <string name="go_to_my_vault">என் பெட்டகத்திற்குச் செல்</string>
-    <string name="collections">தொகுப்புகள்</string>
     <string name="shared_folders">பகிரப்பட்ட கோப்புறைகள்</string>
-    <string name="no_items_collection">இந்த தொகுப்பில் பொருட்கள் எதுவும் இல்லை.</string>
     <string name="there_are_no_items_in_this_shared_folder">இந்த பகிரப்பட்ட கோப்புறையில் பொருட்கள் எதுவும் இல்லை.</string>
     <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
     <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
@@ -347,16 +342,11 @@
     <string name="type">வகை</string>
     <string name="move_down">கீழே நகரவும்</string>
     <string name="move_up">மேலே நகரவும்</string>
-    <string name="owner">உரிமையாளர்</string>
-    <string name="no_collections_to_list">பட்டியலிட தொகுப்புகளில்லை.</string>
     <string name="there_are_no_shared_folders_to_list">பட்டியலிட பகிரப்பட்ட கோப்புறைகள் எதுவும் இல்லை.</string>
     <string name="moved_item_to_org">%1$s %2$s-க்கு நகர்த்தப்பட்டது.</string>
     <string name="select_one_collection">நீங்கள் ஒரு தொகுப்பாவது தேர்ந்தெடுக்க வேண்டும்.</string>
     <string name="you_must_select_at_least_one_shared_folder">குறைந்தது ஒரு பகிரப்பட்ட கோப்புறையையாவது தேர்ந்தெடுக்க வேண்டும்.</string>
     <string name="share">பகிர்</string>
-    <string name="move_to_organization">நிறுவனத்துக்கு நகர்த்து</string>
-    <string name="no_orgs_to_list">பட்டியலிட நிறுவனங்களில்லை.</string>
-    <string name="move_to_org_desc">இவ்வுருப்படியை நகர்த்த நிறுவனத்தைத் தேர்வுசெய். நிறுவனத்திற்கு நகர்த்தல் உருப்படியின் உரிமையை அந்நிறுவனத்திற்கு மாற்றும். நகர்த்தியபின் இவ்வுருப்படிக்கு நேரடி உரிமையாளராக இருக்கமாட்டீர்.</string>
     <string name="no_vaults_to_list">பட்டியலிட பாதுகாப்பு பைகள் இல்லை.</string>
     <string name="move_to_vault_desc">இந்த பொருளை நகர்த்த விரும்பும் ஒரு பாதுகாப்பு பையைத் தேர்ந்தெடுக்கவும். மற்றொரு பாதுகாப்பு பைக்கு நகர்த்துவது பொருளின் உரிமையை அந்த நிறுவனத்திற்கு மாற்றுகிறது. பொருள் நகர்த்தப்பட்டவுடன் நீங்கள் அதன் நேரடி உரிமையாளராக இருக்க மாட்டீர்கள்.</string>
     <string name="number_of_words">சொற்களின் எண்ணிக்கை</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">Send ஐ அணுகும்போது, இயல்புநிலையில் சொற்சரத்தை மறை</string>
     <string name="type_file">கோப்பு</string>
     <string name="deletion_date">அழிக்கும் தேதி</string>
-    <string name="deletion_time">அழிக்கும் நேரம்</string>
     <string name="deletion_date_info">குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் Send நிரந்தரமாக அழிக்கப்படும்.</string>
     <string name="this_date_is_enforced_by_your_organization">இந்தத் தேதி உங்கள் நிறுவனத்தால் செயல்படுத்தப்படுகிறது</string>
     <string name="who_can_view">யார் பார்க்க முடியும்</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">உங்கள் கோரிக்கையை எங்களால் செயல்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது எங்களைத் தொடர்பு கொள்ளவும்.</string>
     <string name="allow_screen_capture">திரைப்பிடிப்பை அனுமதி</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">திரைப்பிடிப்பை நிச்சயமாக இயக்கவா?</string>
-    <string name="log_in_requested">உள்நுழைவு கோரப்பட்டது</string>
-    <string name="are_you_trying_to_log_in">உள்நுழைய முயல்கிறீரா?</string>
-    <string name="log_in_attempt_by_x_on_y">%1$s ஆல் %2$s இல் உள்நுழைவு முயற்சி</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">சாதன வகை</string>
     <string name="ip_address">IP முகவரி</string>
     <string name="time">நேரம்</string>
     <string name="select_time">நேரத்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="switch_input_mode">உள்ளீட்டு பயன்முறையை மாற்றவும்</string>
-    <string name="confirm_log_in">உள்நுழைவை உறுதிபடுத்து</string>
-    <string name="deny_log_in">உள்நுழைவை மறு</string>
-    <string name="log_in_denied">உள்நுழைவு மறுக்கப்பட்டது</string>
-    <string name="approve_login_requests">உள்நுழைவு கோரிக்கைகளை ஒப்புக்கொள்</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">பரவாயில்லை வேண்டாம்</string>
-    <string name="confim_log_in_attemp_for_x">%1$s-க்கான உள்நுழைவு முயற்சியை உறுதுபடுத்து</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">பயனர்பெயர் வகை</string>
     <string name="plus_addressed_email">பிளஸ் முகவரியிடப்பட்ட மின்னஞ்சல்</string>
     <string name="catch_all_email">அனைத்தையும் பிடிக்கும் மின்னஞ்சல்</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">நான் புரிந்துகொள்கிறேன்</string>
     <string name="accept">ஏற்றுக்கொள்</string>
     <string name="decline">மறு</string>
-    <string name="login_request_has_already_expired">உள்நுழைவு கோரிக்கை ஏற்கனவே காலாவதியானது.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">இதிலிருந்து உள்நுழைவு முயற்சி:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-இக்கணக்கிற்கு மாற வேண்டுமா?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden-க்கு புதியவரா?</string>
     <string name="get_master_passwordword_hint">பிரதான கடவுச்சொல் குறிப்பைப் பெறு</string>
     <string name="logging_in_as_x_on_y">%2$s இல் %1$s ஆக உள்நுழைகிறது</string>
     <string name="not_you">நீங்கள் இல்லையா?</string>
     <string name="log_in_with_master_password">பிரதான கடவுச்சொலுடன் உள்நுழை</string>
     <string name="log_in_initiated">உள்நுழைவு துவங்கியது</string>
-    <string name="a_notification_has_been_sent_to_your_device">உமது சாதனத்திற்கு ஓரறிவிப்பு அனுப்பப்பட்டது.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">உங்கள் பெட்டகம் திறக்கப்பட்டுள்ளதா என்பதையும், கைரேகை சொற்றொடர் மற்ற சாதனத்தில் பொருந்துகிறதா என்பதையும் உறுதிசெய்யவும்.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">அறிவிப்பை மீண்டுமனுப்பு</string>
     <string name="view_all_login_options">எல்லா உள்நுழைவு விருப்பத்தையும் காண்க</string>
-    <string name="pending_log_in_requests">நிலுவையிலுள்ள உள்நுழைவு கோரிக்கைகள்</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">எல்லா கோரிக்கைகளையும் மறு</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">நிலுவையிலுள்ள எல்லா உள்நுழைவு கோரிக்கைகளையும் மறுக்க வேண்டுமா?</string>
     <string name="no_pending_requests">நிலுவையிலுள்ள கோரிக்கைகள் இல்லை</string>
     <string name="enable_camer_permission_to_use_the_scanner">வருடியைப் பயன்படுத்த படக்கருவி அனுமதியை இயக்கு</string>
     <string name="language">மொழி</string>
-    <string name="language_change_x_description">மொழி %1$s-க்கு மாற்றப்பட்டது. மாற்றத்தைக் காண செயலியை மறுதுவக்கு</string>
     <string name="default_system">இயல்புநிலை (முறைமை)</string>
     <string name="weak_master_password">வலுவற்ற பிரதான கடவுச்சொல்</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">பலவீனமான கடவுச்சொல் கண்டறியப்பட்டது. உங்கள் கணக்கைப் பாதுகாக்க ஒரு வலுவான கடவுச்சொல்லைப் பயன்படுத்தவும். ஒரு பலவீனமான கடவுச்சொல்லைப் பயன்படுத்த நீங்கள் உறுதியாக உள்ளீர்களா?</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">கிடைச்சொல் குளோன் செய்யப்பட்ட உருப்படிக்கு நகலெடுக்கப்படாது. இந்த உருப்படியை குளோன் செய்வதைத் தொடர விரும்புகிறீர்களா?</string>
     <string name="master_password_re_prompt_help">முதன்மை கடவுச்சொல் மீண்டும் தூண்டுதல் உதவி</string>
     <string name="admin_approval_requested">நிர்வாகி ஒப்புதல் கோரப்பட்டது</string>
-    <string name="your_request_has_been_sent_to_your_admin">உமது கோரிக்கை உமது நிர்வாகிக்கு அனுப்பப்பட்டது.</string>
-    <string name="you_will_be_notified_once_approved">ஏற்கப்பட்ட பின் அறிவிக்கப்படுவீர்.</string>
-    <string name="trouble_logging_in">உள்நுழைவதில் சிக்கலா?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">தன்னிரப்பலைத் தடு</string>
     <string name="no_uris_blocked">URIs எதுவும் தடுக்கப்படவில்லை</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">இந்த உரலிகளுக்கு தன்னிரப்பல் அளிக்கப்படா.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">வடிவம்: %1$s. பல URIs-களை ஒரு காற்புள்ளியால் பிரிக்கவும்.</string>
     <string name="invalid_uri">செல்லாத உரலி</string>
     <string name="the_urix_is_already_blocked">உரலி %1$s ஏற்கனவே தடுக்கப்பட்டது</string>
-    <string name="login_approved">உள்நுழைவு ஏற்கப்பட்டது</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">சாதனத்துடன் உள்நுழைவு Bitwarden பயன்பாட்டின் அமைப்புகளில் அமைக்கப்பட வேண்டும்.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">வேறு விருப்பம் தேவையா? <annotation link="viewAll">அனைத்து உள்நுழைவு விருப்பங்களையும் காண்க</annotation></string>
     <string name="log_in_with_device">சாதனத்துடன் உள்நுழை</string>
     <string name="logging_in_on">இதில் உள்நுழைகிறது</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">கோரிக்கை ஆதரிக்கப்படாததால் கிடைத்தொடர் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை என்பதால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">தேர்ந்தெடுக்கப்பட்ட பொருளில் செல்லுபடியாகும் கடவுச்சொல் இல்லாததால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">உருப்படி எதுவும் தேர்ந்தெடுக்கப்படாததால் கடவுச்சொல் செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">கோரிக்கை செல்லாததால் நற்சான்று செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">கோரிக்கை ஆதரிக்கப்படாததால் நற்சான்று செயல்பாடு தோல்வியடைந்தது.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">பயனர் சரிபார்ப்பு முயற்சிகள் அதிகமாக இருந்ததால் சான்றுகளின் செயல்பாடு தோல்வியடைந்தது.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">சலுகை பெற்ற பயன்பாடுகளைப் பற்றி மேலும் அறிக</string>
     <string name="privileged_apps">சலுகை பெற்ற பயன்பாடுகள்</string>
     <string name="unrecognized_browser">அங்கீகரிக்கப்படாத உலாவி</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden உடன் கிடைத்தொடர்களைப் பயன்படுத்துவது பற்றி மேலும் அறிக.</string>
     <string name="all_trusted_apps">அனைத்து நம்பகமான பயன்பாடுகளும்</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">நீங்கள் %s-ஐ நம்புவதை நிறுத்த விரும்புகிறீர்களா?</string>
     <string name="installed_apps">நிறுவப்பட்ட பயன்பாடுகள்</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">சரிபார்ப்புக் குறியீடு சேர்க்கப்பட்டது</string>
     <string name="refresh_period">புதுப்பித்தல் காலம்</string>
     <string name="algorithm">நெறிமுறை</string>
-    <string name="advanced">மேம்பட்ட</string>
-    <string name="collapse_advanced_options">மேம்பட்ட விருப்பங்களைச் சுருக்கு</string>
     <string name="number_of_digits">இலக்கங்களின் எண்ணிக்கை</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d வினாடி</item>
@@ -1143,6 +1127,7 @@
     <string name="save_option_as_default">விருப்பத்தை இயல்புநிலையாக சேமி</string>
     <string name="account_synced_from_bitwarden_app">கணக்கு Bitwarden செயலியிலிருந்து ஒத்திசைக்கப்பட்டது</string>
     <string name="local_codes">உள்ளூர் குறியீடுகள் (%1$d)</string>
+    <string name="local_codes_header">உள்ளூர் குறியீடுகள்</string>
     <string name="required_information_missing">தேவையான தகவல் இல்லை</string>
     <string name="required_information_missing_message">தேவையான தகவல் இல்லை (எ.கா., ‘services’ அல்லது ‘secret’). உங்கள் கோப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். ஆதரவிற்கு bitwarden.com/help-ஐப் பார்வையிடவும்</string>
     <string name="file_could_not_be_processed">கோப்பைச் செயல்படுத்த முடியவில்லை</string>
@@ -1158,7 +1143,6 @@
     <string name="select_a_card_for_x">%s-க்கு ஒரு கார்டைத் தேர்ந்தெடுக்கவும்</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">மேம்பட்ட விருப்பங்கள்</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">பொருத்தம் கண்டறிதல் பற்றி மேலும்</annotation></string>
     <string name="keep_your_credential_secure">உங்கள் நற்சான்றிதழ்களைப் பாதுகாப்பாக வைத்திருங்கள்</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">\"%1$s\"-ஐப் பயன்படுத்தும் போது நற்சான்றிதழ்களை எவ்வாறு பாதுகாப்பாக வைத்திருப்பது என்பது பற்றி மேலும் அறிக.</string>
     <string name="are_you_sure_you_want_to_use">நீங்கள் \"%1$s\"-ஐப் பயன்படுத்த விரும்புகிறீர்களா என்பது உறுதியா?</string>
@@ -1201,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">உங்கள் Bitwarden பாதுகாப்பு பையிலிருந்து கடவுச்சொற்கள், பாஸ்கிகள் மற்றும் பிற பொருள் வகைகளை இறக்குமதி செய்யவும்.</string>
     <string name="items_to_import">இறக்குமதி செய்ய வேண்டிய பொருட்கள்</string>
     <string name="exporting_items">பொருட்களை ஏற்றுமதி செய்கிறது…</string>
-    <string name="export_failed">ஏற்றுமதி தோல்வியடைந்தது</string>
     <string name="passwords">கடவுச்சொற்கள்</string>
     <string name="passkeys">கடவுவிசைகள்</string>
     <string name="why_is_this_step_required">இந்த படி ஏன் தேவை?</string>
@@ -1221,7 +1204,6 @@
     <string name="transfer_items_to_org">பொருட்களை %1$s க்கு மாற்று</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> பாதுகாப்பு மற்றும் இணக்கத்திற்காக அனைத்து பொருட்களும் நிறுவனத்திற்கு சொந்தமானதாக இருக்க வேண்டும். உங்கள் பொருட்களின் உரிமையை மாற்ற ஏற்றுக்கொள் என்பதைக் கிளிக் செய்யவும். <annotation link="learnMore">மேலும் அறிக</annotation></string>
     <string name="decline_and_leave">மறுத்து வெளியேறு</string>
-    <string name="why_am_i_seeing_this">நான் ஏன் இதைப் பார்க்கிறேன்?</string>
     <string name="migrating_items_to_x">பொருட்களை %s க்கு இடம்பெயர்க்கிறது</string>
     <string name="failed_to_migrate_items_to_x">பொருட்களை %s க்கு இடம்பெயர்க்க முடியவில்லை</string>
     <string name="search_archive">காப்பகத்தில் தேடு</string>
@@ -1239,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">பொருட்களை காப்பகப்படுத்துவது ஒரு பிரீமியம் அம்சமாகும். உங்கள் தற்போதைய திட்டத்தில் இந்த அம்சத்திற்கான அணுகல் இல்லை.</string>
     <string name="totp_is_a_premium_feature">அங்கீகரிப்பான் விசை (TOTP) ஒரு பிரீமியம் அம்சமாகும். உங்கள் தற்போதைய திட்டத்தில் இந்த அம்சத்திற்கான அணுகல் இல்லை.</string>
     <string name="upgrade_to_premium">பிரீமியத்திற்கு மேம்படுத்து</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">திட்டம்</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">உங்கள் பிரீமியம் சந்தாவை நிர்வகிக்க, நீங்கள் கணினியில் உங்கள் இணைய பாதுகாப்பு பைக்கு உள்நுழைய வேண்டும்.</string>
     <string name="unlock_advanced_security_features">மேம்பட்ட பாதுகாப்பு அம்சங்களைத் திறக்கவும்</string>
@@ -1320,7 +1303,6 @@
     <string name="archive_item">பொருளை காப்பகப்படுத்து</string>
     <string name="once_archived_this_item_will_be_excluded">காப்பகப்படுத்தப்பட்டவுடன், இந்த பொருள் தேடல் முடிவுகள் மற்றும் தானியங்கு நிரப்பு பரிந்துரைகளில் இருந்து விலக்கப்படும்.</string>
     <string name="pricing_unavailable">விலை கிடைக்கவில்லை</string>
-    <string name="current_plan">தற்போதைய திட்டம்</string>
     <string name="premium_plan_name">பிரீமியம்</string>
     <string name="billing_amount">பில்லிங் தொகை</string>
     <string name="storage_cost">சேமிப்பு செலவு</string>
@@ -1396,8 +1378,6 @@
     <string name="issuing_country">வெளியிடும் நாடு</string>
     <string name="issuing_state">வெளியிடும் மாநிலம் / மாகாணம்</string>
     <string name="license_class">உரிம வகுப்பு</string>
-    <string name="surname">குடும்பப் பெயர்</string>
-    <string name="given_name">முதல் பெயர்</string>
     <string name="date_of_birth">பிறந்த தேதி</string>
     <string name="nationality">தேசியம்</string>
     <string name="passport_type">பாஸ்போர்ட் வகை</string>
@@ -1442,6 +1422,7 @@
     <string name="use_this_passphrase">Use this passphrase</string>
     <string name="use_this_password">Use this password</string>
     <string name="use_this_username">Use this username</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

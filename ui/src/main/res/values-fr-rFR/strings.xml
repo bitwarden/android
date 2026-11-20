@@ -4,7 +4,6 @@
     <string name="add_folder">Ajouter un dossier</string>
     <string name="add_item">Ajouter un élément</string>
     <string name="an_error_has_occurred">Une erreur s\'est produite</string>
-    <string name="apply">Enregistrer</string>
     <string name="back">Retour</string>
     <string name="cancel">Annuler</string>
     <string name="copy">Copier</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Dossier supprimé.</string>
     <string name="folder_none">Aucun dossier</string>
     <string name="folder_updated">Dossier sauvegardé</string>
-    <string name="folders">Dossiers</string>
     <string name="hide">Masquer</string>
     <string name="internet_connection_required_message">Veuillez vous connecter à internet avant de continuer.</string>
     <string name="internet_connection_required_title">Connexion internet requise</string>
@@ -208,7 +206,6 @@ La numérisation se fera automatiquement.</string>
     <string name="copy_totp">Copier le TOTP</string>
     <string name="copy_totp_automatically_description">Si un identifiant possède une clé d\'authentification, copiez le code de vérification TOTP dans votre presse-papiers lorsque vous saisissez automatiquement l\'identifiant.</string>
     <string name="copy_totp_automatically">Copier le TOTP automatiquement</string>
-    <string name="premium_required">Une adhésion Premium est requise pour utiliser cette fonctionnalité.</string>
     <string name="attachment_deleted">Pièce jointe supprimée</string>
     <string name="attachments_are_a_premium_feature">Les pièces jointes sont une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="choose_file">Choisir un fichier</string>
@@ -291,9 +288,7 @@ La numérisation se fera automatiquement.</string>
     <string name="icons_url">Icônes URL du serveur</string>
     <string name="vault_is_locked">Le coffre est verrouillé</string>
     <string name="go_to_my_vault">Aller dans mon coffre</string>
-    <string name="collections">Collections</string>
     <string name="shared_folders">Dossiers partagés</string>
-    <string name="no_items_collection">Il n\'y a aucun élément dans cette collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">Il n\'y a aucun élément dans ce dossier partagé.</string>
     <string name="no_items_folder">Il n\'y a aucun élément dans ce dossier.</string>
     <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
@@ -347,16 +342,11 @@ La numérisation se fera automatiquement.</string>
     <string name="type">Type</string>
     <string name="move_down">Déplacer vers le bas</string>
     <string name="move_up">Déplacer vers le haut</string>
-    <string name="owner">Propriétaire</string>
-    <string name="no_collections_to_list">Il n\'y a aucune collection à lister.</string>
     <string name="there_are_no_shared_folders_to_list">Aucun dossier partagé à lister.</string>
     <string name="moved_item_to_org">%1$s déplacé vers %2$s</string>
     <string name="select_one_collection">Vous devez sélectionner au moins une collection.</string>
     <string name="you_must_select_at_least_one_shared_folder">Vous devez sélectionner au moins un dossier partagé.</string>
     <string name="share">Partager</string>
-    <string name="move_to_organization">Déplacer vers l\'organisation</string>
-    <string name="no_orgs_to_list">Aucune organisation à lister.</string>
-    <string name="move_to_org_desc">Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Le déplacement vers une organisation transfère le Propriétaire de l\'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu\'il aura été déplacé.</string>
     <string name="no_vaults_to_list">Aucun coffre à afficher.</string>
     <string name="move_to_vault_desc">Choisissez un coffre vers lequel vous souhaitez déplacer cet élément. Le déplacement vers un autre coffre transfère la propriété de l\'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu\'il aura été déplacé.</string>
     <string name="number_of_words">Nombre de mots</string>
@@ -471,7 +461,6 @@ La numérisation se fera automatiquement.</string>
     <string name="hide_text_by_default">Lors de l\'accès à ce Send, masquer le texte par défaut</string>
     <string name="type_file">Fichier</string>
     <string name="deletion_date">Date de suppression</string>
-    <string name="deletion_time">Heure de suppression</string>
     <string name="deletion_date_info">Le Send sera définitivement supprimé à la date et heure spécifiées.</string>
     <string name="this_date_is_enforced_by_your_organization">Cette date est imposée par votre organisation</string>
     <string name="who_can_view">Qui peut consulter</string>
@@ -603,20 +592,21 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="generic_error_message">Nous n\'avons pas pu traiter votre requête. Veuillez réessayer ou nous contacter.</string>
     <string name="allow_screen_capture">Autoriser la capture d\'écran</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Êtes-vous sûr de vouloir activer la capture d\'écran ?</string>
-    <string name="log_in_requested">Identifiant requis</string>
-    <string name="are_you_trying_to_log_in">Essayez-vous de vous connecter ?</string>
-    <string name="log_in_attempt_by_x_on_y">Tentative de connexion par %1$s le %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Type d\'appareil</string>
     <string name="ip_address">Adresse IP</string>
     <string name="time">Heure</string>
     <string name="select_time">Sélectionnez l\'heure</string>
     <string name="switch_input_mode">Changer de mode de saisie</string>
-    <string name="confirm_log_in">Confirmer la connexion</string>
-    <string name="deny_log_in">Refuser la connexion</string>
-    <string name="log_in_denied">Connexion refusée</string>
-    <string name="approve_login_requests">Approuver les demandes de connexion</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Non merci</string>
-    <string name="confim_log_in_attemp_for_x">Confirmer la tentative de connexion pour %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Type de nom d\'utilisateur</string>
     <string name="plus_addressed_email">Courriel sous-adressé</string>
     <string name="catch_all_email">Courriel \"catch-all\"</string>
@@ -643,27 +633,27 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="i_understand">Je comprends</string>
     <string name="accept">Accepter</string>
     <string name="decline">Refuser</string>
-    <string name="login_request_has_already_expired">La demande de connexion a déjà expiré.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentative de connexion depuis :
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Voulez-vous basculer vers ce compte ?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Nouveau sur Bitwarden ?</string>
     <string name="get_master_passwordword_hint">Obtenir l\'indice du mot de passe principal</string>
     <string name="logging_in_as_x_on_y">Connexion en tant que %1$s sur %2$s</string>
     <string name="not_you">Ce n\'est pas vous ?</string>
     <string name="log_in_with_master_password">Se connecter avec le mot de passe principal</string>
     <string name="log_in_initiated">Connexion initiée</string>
-    <string name="a_notification_has_been_sent_to_your_device">Une notification a été envoyée à votre appareil.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Veuillez vous assurer que votre coffre est déverrouillé et que la phrase d\'empreinte correspond à celle de l\'autre appareil.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Renvoyer la notification</string>
     <string name="view_all_login_options">Voir toutes les options de connexion</string>
-    <string name="pending_log_in_requests">Demandes de connexion en attente</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Refuser toutes les demandes</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Êtes-vous sûr de vouloir refuser toutes les demandes de connexion en attente ?</string>
     <string name="no_pending_requests">Aucune demande en attente</string>
     <string name="enable_camer_permission_to_use_the_scanner">Activer la permission de l\'appareil photo pour utiliser le scanner</string>
     <string name="language">Langue</string>
-    <string name="language_change_x_description">La langue a été changée en %1$s. Veuillez redémarrer l\'application pour voir le changement</string>
     <string name="default_system">Par défaut (système)</string>
     <string name="weak_master_password">Mot de passe principal faible</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mot de passe faible identifié. Utilisez un mot de passe fort pour protéger votre compte. Êtes-vous sûr de vouloir utiliser un mot de passe faible?</string>
@@ -690,9 +680,8 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">L\'entrée clonée ne contiendra pas la clé d\'accès. Continuer quand même ?</string>
     <string name="master_password_re_prompt_help">Aide sur la ressaisie du mot de passe principal</string>
     <string name="admin_approval_requested">Approbation de l\'administrateur demandée</string>
-    <string name="your_request_has_been_sent_to_your_admin">Votre demande a été envoyée à votre administrateur.</string>
-    <string name="you_will_be_notified_once_approved">Vous serez notifié une fois approuvé.</string>
-    <string name="trouble_logging_in">Problème pour vous connecter ?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Bloquer la saisie automatique</string>
     <string name="no_uris_blocked">Aucun URI bloqué</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">La saisie automatique ne sera pas proposée pour ces URI.</string>
@@ -703,8 +692,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format : %1$s. Séparez les URI multiples par une virgule.</string>
     <string name="invalid_uri">URI incorrect</string>
     <string name="the_urix_is_already_blocked">L\'URI %1$s est déjà bloqué</string>
-    <string name="login_approved">Connexion approuvée</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">La connexion avec l\'appareil doit être configurée dans les paramètres de l\'application Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Besoin d\'une autre option ? <annotation link="viewAll">Voir toutes les options de connexion</annotation></string>
     <string name="log_in_with_device">Se connecter avec l\'appareil</string>
     <string name="logging_in_on">Connexion sur</string>
@@ -977,7 +965,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">L\'opération de clé de passe a échoué car la demande n\'est pas prise en charge.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">L\'opération de mot de passe a échoué car l\'élément sélectionné n\'existe pas.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">L\'opération de mot de passe a échoué car l\'élément sélectionné n\'a pas de mot de passe valide.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">L\'opération de mot de passe a échoué car aucun élément n\'a été sélectionné.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Opération d\'identification échouée car la requête n\'est pas valide.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Opération d\'identification échouée car la requête n\'est pas prise en charge.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">L\'opération d\'identification a échoué car les tentatives de vérification de l\'utilisateur ont été dépassées.</string>
@@ -1058,7 +1045,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="learn_more_about_privileged_apps">En savoir plus sur les applications privilégiées</string>
     <string name="privileged_apps">Applications privilégiées</string>
     <string name="unrecognized_browser">Navigateur non reconnu</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">En savoir plus sur l\'utilisation des clés d\'accès avec Bitwarden.</string>
     <string name="all_trusted_apps">Toutes les applications de confiance</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Êtes-vous sûr de vouloir arrêter de faire confiance à %s?</string>
     <string name="installed_apps">Applications installées</string>
@@ -1075,8 +1061,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="verification_code_added">Code de vérification ajouté</string>
     <string name="refresh_period">Fréquence de mise à jour</string>
     <string name="algorithm">Algorithme</string>
-    <string name="advanced">Avancé</string>
-    <string name="collapse_advanced_options">Réduire les options avancées</string>
     <string name="number_of_digits">Nombre de chiffres</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d seconde</item>
@@ -1143,6 +1127,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="save_option_as_default">Enregistrer l\'option par défaut</string>
     <string name="account_synced_from_bitwarden_app">Compte synchronisé depuis l\'application Bitwarden</string>
     <string name="local_codes">Codes locaux (%1$d)</string>
+    <string name="local_codes_header">Codes locaux</string>
     <string name="required_information_missing">Informations requises manquantes</string>
     <string name="required_information_missing_message">Les informations requises sont manquantes (par exemple, ‘services’ ou ‘secret’). Vérifiez votre fichier et réessayez. Visitez bitwarden.com/help pour obtenir de l\'aide</string>
     <string name="file_could_not_be_processed">Le fichier n\'a pas pu être traité</string>
@@ -1158,7 +1143,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="select_a_card_for_x">Sélectionnez une carte pour %s</string>
     <string name="choose_an_identity">Choisir une identité</string>
     <string name="advanced_options">Options avancées</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">En savoir plus sur la détection de correspondance</annotation></string>
     <string name="keep_your_credential_secure">Gardez vos identifiants sécurisés</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">En savoir plus sur la façon de sécuriser les identifiants en utilisant « %1$s».</string>
     <string name="are_you_sure_you_want_to_use">Êtes-vous sûr de vouloir utiliser “%1$s”?</string>
@@ -1201,7 +1185,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importer des mots de passe, des clé d\'accès et d\'autres types d\'éléments depuis votre coffre Bitwarden.</string>
     <string name="items_to_import">Éléments à importer</string>
     <string name="exporting_items">Exportation des éléments…</string>
-    <string name="export_failed">L\'exportation a échoué</string>
     <string name="passwords">Mots de passe</string>
     <string name="passkeys">Clés d\'accès</string>
     <string name="why_is_this_step_required">Pourquoi cette étape est-elle nécessaire?</string>
@@ -1221,7 +1204,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="transfer_items_to_org">Transférer les éléments vers %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> exige que tous les éléments soient détenus par l\'organisation pour la sécurité et la conformité. Cliquez sur accepter pour transférer la propriété de vos articles. <annotation link="learnMore">En apprendre plus</annotation></string>
     <string name="decline_and_leave">Refuser et quitter</string>
-    <string name="why_am_i_seeing_this">Pourquoi vois-je ceci ?</string>
     <string name="migrating_items_to_x">Migrer des éléments vers %s</string>
     <string name="failed_to_migrate_items_to_x">Impossible de migrer des éléments vers %s</string>
     <string name="search_archive">Rechercher dans l\'archive</string>
@@ -1239,6 +1221,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="archiving_items_is_a_premium_feature">L\'archivage est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="totp_is_a_premium_feature">La clé d\'authentification (TOTP) est une fonctionnalité Premium. Votre abonnement actuel n\'inclut pas l\'accès à cette fonctionnalité.</string>
     <string name="upgrade_to_premium">Mettre à niveau vers la version Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Abonnement</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pour gérer votre abonnement Premium, vous devez vous connecter à votre coffre-fort web depuis un ordinateur.</string>
     <string name="unlock_advanced_security_features">Débloquer les fonctionnalités de sécurité avancées</string>
@@ -1320,7 +1303,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="archive_item">Archiver l\'élément</string>
     <string name="once_archived_this_item_will_be_excluded">Une fois archivé, cet élément sera exclu des résultats de recherche et des suggestions de remplissage automatique.</string>
     <string name="pricing_unavailable">Tarif indisponible</string>
-    <string name="current_plan">Abonnement actuel</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Montant facturé</string>
     <string name="storage_cost">Coût de stockage</string>
@@ -1396,8 +1378,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="issuing_country">Pays émetteur</string>
     <string name="issuing_state">État / province émetteur</string>
     <string name="license_class">Classe de permis</string>
-    <string name="surname">Nom de famille</string>
-    <string name="given_name">Prénom</string>
     <string name="date_of_birth">Date de naissance</string>
     <string name="nationality">Nationalité</string>
     <string name="passport_type">Type de passeport</string>
@@ -1442,6 +1422,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="use_this_passphrase">Utilisez cette phrase secrète</string>
     <string name="use_this_password">Utiliser ce mot de passe</string>
     <string name="use_this_username">Utiliser ce nom d\'utilisateur</string>
+    <string name="create_login">Create login</string>
     <string name="keep_unlocking_with_biometrics">Keep unlocking with biometrics</string>
     <string name="weve_made_a_security_update">We’ve made a security update. Confirm your biometrics again to keep using them to unlock Bitwarden.</string>
     <string name="turn_off">Turn off</string>

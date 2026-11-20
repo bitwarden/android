@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.handlers
 
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
@@ -54,6 +55,7 @@ data class VaultHandlers(
     val upgradeToPremiumClick: () -> Unit,
     val dismissActionCardClick: (VaultState.ActionCardState) -> Unit,
     val actionCardClick: (VaultState.ActionCardState) -> Unit,
+    val sectionHeaderClick: (VaultSection) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -157,6 +159,9 @@ data class VaultHandlers(
                     viewModel.trySendAction(VaultAction.DismissActionCardClick(it))
                 },
                 actionCardClick = { viewModel.trySendAction(VaultAction.ActionCardClick(it)) },
+                sectionHeaderClick = {
+                    viewModel.trySendAction(VaultAction.SectionHeaderClick(section = it))
+                },
             )
     }
 }

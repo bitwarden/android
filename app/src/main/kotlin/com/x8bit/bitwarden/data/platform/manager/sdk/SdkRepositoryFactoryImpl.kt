@@ -42,6 +42,7 @@ class SdkRepositoryFactoryImpl(
             localUserDataKeyState = SdkLocalUserDataKeyStateRepository(
                 authDiskSource = authDiskSource,
             ),
+            organization = null,
             organizationSharedKey = null,
             policy = null,
             send = null,

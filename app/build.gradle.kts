@@ -11,7 +11,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.androidx.room3)
     // Crashlytics is enabled for all builds initially but removed for FDroid builds in gradle and
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
@@ -49,7 +49,7 @@ base {
     archivesName.set("com.x8bit.bitwarden")
 }
 
-room {
+room3 {
     schemaDirectory("$projectDir/schemas")
 }
 
@@ -249,7 +249,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)
     implementation(libs.androidx.browser)
-    implementation(libs.androidx.biometrics)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -263,21 +262,21 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.providerevents)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    ksp(libs.androidx.room3.compiler)
+    implementation(libs.androidx.room3.runtime)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
-    implementation(libs.bumptech.glide)
-    implementation(libs.bumptech.glide.okhttp)
-    ksp(libs.bumptech.glide.compiler)
+    implementation(libs.coil.coil)
+    implementation(libs.coil.coil.network.okhttp)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)

@@ -13,18 +13,6 @@ class FlagKeyTest {
             "bitwarden-authentication-enabled",
         )
         assertEquals(
-            FlagKey.ForceUpdateKdfSettings.keyName,
-            "pm-18021-force-update-kdf-settings",
-        )
-        assertEquals(
-            FlagKey.MigrateMyVaultToMyItems.keyName,
-            "pm-20558-migrate-myvault-to-myitems",
-        )
-        assertEquals(
-            FlagKey.MobilePremiumUpgrade.keyName,
-            "pm-31697-premium-upgrade-path",
-        )
-        assertEquals(
             FlagKey.AttachmentUpdates.keyName,
             "pm-34224-mobile-attachment-updates",
         )
@@ -61,10 +49,6 @@ class FlagKeyTest {
             "fedramp-gov-region",
         )
         assertEquals(
-            FlagKey.Vfo1Foundation.keyName,
-            "vfo1-foundation",
-        )
-        assertEquals(
             FlagKey.SendControls.keyName,
             "pm-31885-send-controls",
         )
@@ -84,6 +68,10 @@ class FlagKeyTest {
             FlagKey.SdkPreLogin.keyName,
             "pm-27060-password-prelogin-from-sdk",
         )
+        assertEquals(
+            FlagKey.UpdatedOnboardingFlow.keyName,
+            "pm-44455-account-setup-onboarding-on-sign-in",
+        )
     }
 
     @Test
@@ -91,9 +79,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.ForceUpdateKdfSettings,
-                FlagKey.MigrateMyVaultToMyItems,
-                FlagKey.MobilePremiumUpgrade,
                 FlagKey.AttachmentUpdates,
                 FlagKey.V2EncryptionJitPassword,
                 FlagKey.V2EncryptionKeyConnector,
@@ -103,12 +88,12 @@ class FlagKeyTest {
                 FlagKey.FillAssistTargetingRules,
                 FlagKey.ManageDevices,
                 FlagKey.FedRamp,
-                FlagKey.Vfo1Foundation,
                 FlagKey.SendControls,
                 FlagKey.SendControlsExistingSends,
                 FlagKey.IdentityAutofill,
                 FlagKey.SdkPinUnlock,
                 FlagKey.SdkPreLogin,
+                FlagKey.UpdatedOnboardingFlow,
             ).all {
                 !it.defaultValue
             },

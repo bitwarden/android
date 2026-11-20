@@ -4,7 +4,6 @@
     <string name="add_folder">Mappa hozzáadása</string>
     <string name="add_item">Elem hozzáadása</string>
     <string name="an_error_has_occurred">Hiba történt.</string>
-    <string name="apply">Alkalmazás</string>
     <string name="back">Vissza</string>
     <string name="cancel">Mégse</string>
     <string name="copy">Másolás</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">A mappa törlése megtörtént.</string>
     <string name="folder_none">Nincs mappa</string>
     <string name="folder_updated">A mappa mentésre került.</string>
-    <string name="folders">Mappák</string>
     <string name="hide">Elrejt</string>
     <string name="internet_connection_required_message">Csatlakozzunk az internetre a folytatás előtt.</string>
     <string name="internet_connection_required_title">Internetkapcsolat szükséges</string>
@@ -207,7 +205,6 @@
     <string name="copy_totp">Egyszeri jelszó másolása</string>
     <string name="copy_totp_automatically_description">Ha a bejelentkezéshez csatolva van egy hitelesítő kulcs, a TOTP ellenőrző kód automatikusan a vágólapra kerül a bejelentkezési adatok automatikus kitöltésénél.</string>
     <string name="copy_totp_automatically">TOTP automatikus másolása</string>
-    <string name="premium_required">A funkció használatához prémium tagság szükséges.</string>
     <string name="attachment_deleted">Melléklet törölve</string>
     <string name="attachments_are_a_premium_feature">A mellékletek prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="choose_file">Fájl kiválasztása</string>
@@ -290,9 +287,7 @@
     <string name="icons_url">Ikonszerver webcím</string>
     <string name="vault_is_locked">A széf zárolva van.</string>
     <string name="go_to_my_vault">Saját széf megnyitása</string>
-    <string name="collections">Gyűjtemények</string>
     <string name="shared_folders">Megosztott mappák</string>
-    <string name="no_items_collection">Nincsenek elemek ebben a gyűjteményben.</string>
     <string name="there_are_no_items_in_this_shared_folder">Nincsenek elemek ebben a megosztott mappában.</string>
     <string name="no_items_folder">Nincsenek elemek ebben a mappában.</string>
     <string name="no_items_trash">Nincs elem a lomtárban.</string>
@@ -346,16 +341,11 @@
     <string name="type">Típus</string>
     <string name="move_down">Lefelé mozgatás</string>
     <string name="move_up">Felfelé mozgatás</string>
-    <string name="owner">Tulajdonos</string>
-    <string name="no_collections_to_list">Nincsenek megjeleníthető gyűjtemények.</string>
     <string name="there_are_no_shared_folders_to_list">Nincsenek listázható megosztott mappák.</string>
     <string name="moved_item_to_org">%1$s áthelyezésre került: %2$s.</string>
     <string name="select_one_collection">Legalább egy gyűjteményt ki kell választani.</string>
     <string name="you_must_select_at_least_one_shared_folder">Legalább egy megosztott mappát ki kell választani.</string>
     <string name="share">Megosztás</string>
-    <string name="move_to_organization">Áthelyezés szervezetbe</string>
-    <string name="no_orgs_to_list">Nincs megjeleníthető szervezet.</string>
-    <string name="move_to_org_desc">Válasszunk egy szervezetet, ahová áthelyezni szeretnénk ezt az elemet. A szervezetbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
     <string name="no_vaults_to_list">Nincsenek listázandó széfek.</string>
     <string name="move_to_vault_desc">Válasszunk egy széfet, ahová áthelyezni szeretnénk ezt az elemet. A széfbe áthelyezés átruházza az elem tulajdonjogát az adott szervezetre. Az áthelyezés után többé nem leszünk az elem közvetlen tulajdonosa.</string>
     <string name="number_of_words">Szavak száma</string>
@@ -470,7 +460,6 @@
     <string name="hide_text_by_default">A Send elérésekor alapértelmezés szerint a szöveg elrejtése</string>
     <string name="type_file">Fájl</string>
     <string name="deletion_date">Törlési dátum</string>
-    <string name="deletion_time">Törlési időpont</string>
     <string name="deletion_date_info">A Send véglegesen törlésre kerül a meghatározott időpontban.</string>
     <string name="this_date_is_enforced_by_your_organization">Ezt a dátumot a szervezet erőlteti.</string>
     <string name="who_can_view">Ki láthatja</string>
@@ -573,8 +562,8 @@
     <string name="resend_code">Újraküldési kód</string>
     <string name="a_verification_code_was_sent_to_your_email">Egy ellenőrző kód lett elküldve a saját email címre.</string>
     <string name="submit_crash_logs">Összeomlási naplózások beküldése</string>
-    <string name="expand">expand</string>
-    <string name="collapse">collapse</string>
+    <string name="expand">kinyitás</string>
+    <string name="collapse">összezárás</string>
     <string name="uppercase_ato_z">Nagybetűs (A-Z)</string>
     <string name="lowercase_ato_z">Kisbetűs (a-z)</string>
     <string name="numbers_zero_to_nine">Számok (0-9)</string>
@@ -602,20 +591,21 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
     <string name="generic_error_message">Nem lehetett feldolgozni a kérést. Próbáljuk újra vagy vegyük fel a kapcsolatot a Bitwarden szolgáltatóval.</string>
     <string name="allow_screen_capture">Képernyőrögzítés engedélyezése</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Biztosan engedélyzni szeretnénk a képernyőrögzítést?</string>
-    <string name="log_in_requested">Bejelentkezés megkérve</string>
-    <string name="are_you_trying_to_log_in">Megpróbálunk bejelentkezni?</string>
-    <string name="log_in_attempt_by_x_on_y">Bejelentlezési kísérlet %1$s - %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Eszköz típus</string>
     <string name="ip_address">IP cím</string>
     <string name="time">Időpont</string>
     <string name="select_time">Időpont kiválasztása</string>
     <string name="switch_input_mode">Beviteli mód váltás</string>
-    <string name="confirm_log_in">Bejelentkezés megerősítése</string>
-    <string name="deny_log_in">Bejelentkezés megtagadása</string>
-    <string name="log_in_denied">A bejelentkezés megtagadásra került.</string>
-    <string name="approve_login_requests">Bejelentkezési kérelmek jóváhagyása</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nem, köszönöm</string>
-    <string name="confim_log_in_attemp_for_x">Bejelentkezési kísérlet megerősítése: %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Felhasználónév típusa</string>
     <string name="plus_addressed_email">További címzési email cím</string>
     <string name="catch_all_email">Összes email cím begyűjtése</string>
@@ -642,27 +632,27 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
     <string name="i_understand">Megértettem</string>
     <string name="accept">Elfogadás</string>
     <string name="decline">Elutasítás</string>
-    <string name="login_request_has_already_expired">A bejelentkezési kérés már lejárt.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Bejelentkezési kísérlet történt:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Szeretnénk átváltani erre a fiókra?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Új vagyunk a Bitwardenben?</string>
     <string name="get_master_passwordword_hint">Mesterjelszó emlékeztető kérése</string>
     <string name="logging_in_as_x_on_y">Bejelentkezve mint %1$s :: %2$s</string>
     <string name="not_you">Ez tévedés?</string>
     <string name="log_in_with_master_password">Bejelentkezés mesterjelszóval</string>
     <string name="log_in_initiated">A bejelentkezés elindításra került.</string>
-    <string name="a_notification_has_been_sent_to_your_device">A rendszer értesítést küldött az eszközre.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Ellenőrizzük, hogy a széf feloldásra került és az Ujjlenyomat kifejezés egyezik a másik eszközön levővel.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Értesítés újraküldése</string>
     <string name="view_all_login_options">Összes bejelentkezési opció megtekintése</string>
-    <string name="pending_log_in_requests">Függő bejelentkezési kérések</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Összes kérés elutasítása</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Biztosan elutasításra kerüljön az összes függőben levő bejelentkezési kérés?</string>
     <string name="no_pending_requests">Nincs függőben levő kérés.</string>
     <string name="enable_camer_permission_to_use_the_scanner">Kamera engedélyezése a lapolvasó használatához</string>
     <string name="language">Nyelv</string>
-    <string name="language_change_x_description">A nyelv a %1$s nyelvre módosult. A változás megtekintéséhez indítsuk újra az alkalmazást.</string>
     <string name="default_system">Alapértelmezett (rendszer)</string>
     <string name="weak_master_password">Gyenge mesterjelszó</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Gyenge jelszó lett azonosítva. A fiók védelme érdekében használjunk erős jelszót. Biztos, hogy gyenge jelszót akarunk használni?</string>
@@ -689,9 +679,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">A hozzáférési kulcs nem másolódik át a klónozott elembe. Folytatjuk ennek az elemnek a klónozását?</string>
     <string name="master_password_re_prompt_help">Mesterjelszó újbóli bekérés súgó</string>
     <string name="admin_approval_requested">Adminisztrátori jóváhagyás kérés történt</string>
-    <string name="your_request_has_been_sent_to_your_admin">A kérés elküldésre került az adminisztrátornak.</string>
-    <string name="you_will_be_notified_once_approved">A jóváhagyás után értesítés érkezik.</string>
-    <string name="trouble_logging_in">Probléma van a bejelentkezéssel?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Automatikus kitöltés blokkolása</string>
     <string name="no_uris_blocked">Nincs blokkolt URI.</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Az automatikus kitöltés nem kerül felajánlásra ezeknél a webcímeknél.</string>
@@ -702,8 +691,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formátum: %1$s. A több URI elemet vesszővel válasszuk el.</string>
     <string name="invalid_uri">Az URI érvénytelen.</string>
     <string name="the_urix_is_already_blocked">%1$s URI már blokkolásra került.</string>
-    <string name="login_approved">A bejelentkezés jóváhagyásra került.</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Más opcióra van szükség? <annotation link="viewAll">Az összes bejelentkezési opció</annotation></string>
     <string name="log_in_with_device">Bejelentkezés eszközzel</string>
     <string name="logging_in_on">Bejelentkezés:</string>
@@ -976,7 +964,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">A jelszó művelet nem sikerült, mert a kiválasztott elem nem létezik.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">A jelszó művelet nem sikerült, mert a kiválasztott elem nem rendelkezik érvényes jelszóval.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">A jelszó művelet nem sikerült, mert nem lett elem kiválasztva.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">A hitelesítő művelet meghiúsult, mert a kérés érvénytelen.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">A hitelesítő művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A hitelesítő művelet nem sikerült, mert a felhasználói ellenőrzési kísérletek túllépésre kerültek.</string>
@@ -1057,7 +1044,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="learn_more_about_privileged_apps">További információ a kiváltságos alkalmazásokról</string>
     <string name="privileged_apps">Kiváltságos alkalmazások</string>
     <string name="unrecognized_browser">Felismerhetetlen böngésző</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">További információ a hozzáférési kulcsok használatáról a Bitwardenben.</string>
     <string name="all_trusted_apps">Összes megbízható alkalmazás</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Boztos leállításra kerüljön %s megbízhatósága?</string>
     <string name="installed_apps">Telepített alkalmazások</string>
@@ -1074,8 +1060,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="verification_code_added">Az ellenőrző kód hozzáadásra került.</string>
     <string name="refresh_period">Frissítési gyakoriság</string>
     <string name="algorithm">Algoritmus</string>
-    <string name="advanced">Bővített</string>
-    <string name="collapse_advanced_options">Bővített opciók összezárása</string>
     <string name="number_of_digits">Számjegyek száma</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d másodperc</item>
@@ -1142,6 +1126,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="save_option_as_default">Opció mentése alapértelmezettként</string>
     <string name="account_synced_from_bitwarden_app">A fiók szinkronizálva lett a Bitwarden alkalmazásból.</string>
     <string name="local_codes">Helyi kódok (%1$d)</string>
+    <string name="local_codes_header">Helyi kódok</string>
     <string name="required_information_missing">Hiányzik a szükséges információ.</string>
     <string name="required_information_missing_message">Hiányzik a szükséges információ (például ‘services’ vagy ‘secret’). Ellenőrizzük a fájlt és próbáljuk újra. Támogatásért látogassunk el a bitwarden.com/help oldalra</string>
     <string name="file_could_not_be_processed">A fájl nem dolgozható fel.</string>
@@ -1157,7 +1142,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="select_a_card_for_x">Válasszunk egy kártyát %s használatához</string>
     <string name="choose_an_identity">Válasszunk egy azonosítást.</string>
     <string name="advanced_options">Haladó opciók</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Bővebben az egyezés felismeréséről</annotation></string>
     <string name="keep_your_credential_secure">Tartsuk biztonságban a hitelesítő adatokat.</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">További információ arról, hogyan tarthatjuk biztonságban a hitelesítő adatokat “%1$s” használatakor.</string>
     <string name="are_you_sure_you_want_to_use">Biztosan szeretnénk használni: “%1$s”?</string>
@@ -1200,7 +1184,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Jelszavak, hozzáférési kulcsok és egyéb elemtípusokat a Bitwarden széfből.</string>
     <string name="items_to_import">Importálandó elemek</string>
     <string name="exporting_items">Elemek exportálása...</string>
-    <string name="export_failed">Az exportálás sikertelen volt.</string>
     <string name="passwords">Jelszavak</string>
     <string name="passkeys">Hozzáférési kulcsok</string>
     <string name="why_is_this_step_required">Miért szükséges ez a lépés?</string>
@@ -1220,7 +1203,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="transfer_items_to_org">Elemek átruházása: %1$s</string>
     <string name="transfer_items_description">%1$s biztonsági és megfelelőségi okokból megköveteli, hogy minden elem a szervezet tulajdonában legyen. Kattintás az Elfogadás gombra az elemek tulajdonjogának átruházásához.</string>
     <string name="decline_and_leave">Elutasítás és kilépés</string>
-    <string name="why_am_i_seeing_this">Miért látható ez?</string>
     <string name="migrating_items_to_x">Elemek átvitele: %s</string>
     <string name="failed_to_migrate_items_to_x">Nem sikerült az elemek átvitele: %s</string>
     <string name="search_archive">Archívum keresés</string>
@@ -1238,6 +1220,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="archiving_items_is_a_premium_feature">Az elemek archiválása prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="totp_is_a_premium_feature">A hitelesítési kulcs (TOTP) egy prémium funkció. A jelenlegi csomag nem tartalmazza a hozzáférést ehhez a funkcióhoz.</string>
     <string name="upgrade_to_premium">Áttérés Prémium csomagra</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Csomag</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">A Prémium előfizetés kezeléséhez jelentkezzünk be a webes széfbe a számítógépen.</string>
     <string name="unlock_advanced_security_features">Fejlett biztonsági funkciók feloldása</string>
@@ -1319,7 +1302,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="archive_item">Elem archiválása</string>
     <string name="once_archived_this_item_will_be_excluded">Az archiválás után ez az elem kizárásra kerül a keresési eredményekből és az automatikus kitöltési javaslatokból.</string>
     <string name="pricing_unavailable">Az árazás nem érhető el.</string>
-    <string name="current_plan">Jelenlegi csomag</string>
     <string name="premium_plan_name">Prémium</string>
     <string name="billing_amount">Számlázott összeg</string>
     <string name="storage_cost">Tárolási költség</string>
@@ -1395,8 +1377,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="issuing_country">Kiállító ország</string>
     <string name="issuing_state">Kiállító állam/tartomány</string>
     <string name="license_class">Engedély osztály</string>
-    <string name="surname">Családnév</string>
-    <string name="given_name">Utónév</string>
     <string name="date_of_birth">Születési dátum</string>
     <string name="nationality">Állampolgárság</string>
     <string name="passport_type">Útlevél típus</string>
@@ -1441,6 +1421,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="use_this_passphrase">Jelmondat használata</string>
     <string name="use_this_password">Jelszó használata</string>
     <string name="use_this_username">Felhasználónév használata</string>
+    <string name="create_login">Bejelentkezés létrehozása</string>
     <string name="keep_unlocking_with_biometrics">Feloldás folytatása biometrikus adatokkal</string>
     <string name="weve_made_a_security_update">Biztonsági frissítés történt. Erősítsük meg újra a biometrikus adatokat, hogy továbbra is használjuk azokat a Bitwarden feloldásához.</string>
     <string name="turn_off">Kikapcsolás</string>

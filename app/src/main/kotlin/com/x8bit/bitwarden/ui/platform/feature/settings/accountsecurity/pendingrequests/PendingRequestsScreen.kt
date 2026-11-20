@@ -128,7 +128,7 @@ fun PendingRequestsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.pending_log_in_requests),
+                title = stringResource(id = BitwardenString.pending_access_requests),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
@@ -325,7 +325,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.ill_pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ill_devices),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

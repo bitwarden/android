@@ -84,9 +84,9 @@ private fun ChromeAutofillSettingsCard_preview() {
     BitwardenTheme {
         BrowserAutofillSettingsCard(
             options = persistentListOf(
-                BrowserAutofillSettingsOption.BraveStable(enabled = true),
-                BrowserAutofillSettingsOption.ChromeStable(enabled = false),
-                BrowserAutofillSettingsOption.ChromeBeta(enabled = true),
+                BrowserAutofillSettingsOption.BraveStable(isEnabled = true, isDefault = true),
+                BrowserAutofillSettingsOption.ChromeStable(isEnabled = false, isDefault = false),
+                BrowserAutofillSettingsOption.ChromeBeta(isEnabled = true, isDefault = false),
             ),
             onOptionClicked = {},
         )

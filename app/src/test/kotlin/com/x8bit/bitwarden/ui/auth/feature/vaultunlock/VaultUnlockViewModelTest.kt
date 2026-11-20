@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
@@ -32,19 +33,15 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -82,16 +79,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val vaultLockManager: VaultLockManager = mockk(relaxed = true) {
         every { isFromLockFlow } returns false
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toVaultUnlockArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toVaultUnlockArgs)
     }
 
     @Test
@@ -1111,7 +1098,215 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on BiometricsUnlockSuccess should display error dialog on unlockVaultWithBiometrics AuthenticationError`() {
+    fun `on BiometricsUnlockSuccess should display error dialog on unlockVaultWithBiometrics AuthenticationError without clearing biometrics and allow retry`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+            )
+            val viewModel = createViewModel(state = initialState)
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+            } returns VaultUnlockResult.AuthenticationError(error = error)
+
+            viewModel.eventFlow.test {
+                assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+
+                val expectedErrorState = initialState.copy(
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        throwable = error,
+                    ),
+                )
+                assertEquals(expectedErrorState, viewModel.stateFlow.value)
+                verify(exactly = 0) {
+                    authRepository.clearBiometrics(userId = any())
+                    bitwardenCredentialManager.isUserVerified = true
+                }
+
+                viewModel.trySendAction(VaultUnlockAction.DismissDialog)
+                assertEquals(expectedErrorState.copy(dialog = null), viewModel.stateFlow.value)
+
+                val retryCipher = mockk<Cipher>()
+                every { authRepository.getOrCreateCipher(USER_ID) } returns retryCipher
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+                assertEquals(VaultUnlockEvent.PromptForBiometrics(retryCipher), awaitItem())
+
+                coEvery {
+                    vaultRepository.unlockVaultWithBiometrics(cipher = retryCipher)
+                } returns VaultUnlockResult.Success
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(retryCipher))
+                assertEquals(
+                    expectedErrorState.copy(dialog = null),
+                    viewModel.stateFlow.value,
+                )
+                verify(exactly = 0) {
+                    authRepository.clearBiometrics(userId = any())
+                    bitwardenCredentialManager.isUserVerified = true
+                }
+                coVerify(exactly = 1) {
+                    vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+                    vaultRepository.unlockVaultWithBiometrics(cipher = retryCipher)
+                }
+                verify { authRepository.getOrCreateCipher(USER_ID) }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockSuccess should preserve biometrics on the first Keystore authorization error and clear them on the second`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+            )
+            val viewModel = createViewModel(state = initialState)
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+            } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+            every { authRepository.clearBiometrics(userId = USER_ID) } just runs
+
+            viewModel.eventFlow.test {
+                assertEquals(VaultUnlockEvent.PromptForBiometrics(CIPHER), awaitItem())
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+
+                val firstFailureState = initialState.copy(
+                    keystoreAuthorizationFailureCount = 1,
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        throwable = error,
+                    ),
+                )
+                assertEquals(firstFailureState, viewModel.stateFlow.value)
+                verify(exactly = 0) {
+                    authRepository.clearBiometrics(userId = any())
+                    bitwardenCredentialManager.isUserVerified = true
+                }
+
+                viewModel.trySendAction(VaultUnlockAction.DismissDialog)
+                assertEquals(firstFailureState.copy(dialog = null), viewModel.stateFlow.value)
+
+                val retryCipher = mockk<Cipher>()
+                every { authRepository.getOrCreateCipher(USER_ID) } returns retryCipher
+                coEvery {
+                    vaultRepository.unlockVaultWithBiometrics(cipher = retryCipher)
+                } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+                assertEquals(VaultUnlockEvent.PromptForBiometrics(retryCipher), awaitItem())
+
+                viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(retryCipher))
+
+                assertEquals(
+                    initialState.copy(
+                        isBiometricsValid = false,
+                        keystoreAuthorizationFailureCount = 2,
+                        dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                            title = BitwardenString.biometrics_failed.asText(),
+                            message = BitwardenString.biometrics_decoding_failure.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                verify(exactly = 1) {
+                    authRepository.clearBiometrics(userId = USER_ID)
+                }
+                verify(exactly = 0) {
+                    bitwardenCredentialManager.isUserVerified = true
+                }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockSuccess should clear biometrics on a Keystore authorization error when the state already holds a prior failure`() {
+        val initialState = DEFAULT_STATE.copy(
+            isBiometricEnabled = true,
+            keystoreAuthorizationFailureCount = 1,
+        )
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        val error = Throwable("Fail")
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+        } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+        every { authRepository.clearBiometrics(userId = USER_ID) } just runs
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+
+        assertEquals(
+            initialState.copy(
+                isBiometricsValid = false,
+                keystoreAuthorizationFailureCount = 2,
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    title = BitwardenString.biometrics_failed.asText(),
+                    message = BitwardenString.biometrics_decoding_failure.asText(),
+                    throwable = error,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) { authRepository.clearBiometrics(userId = USER_ID) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockSuccess should not clear biometrics when a Keystore authorization error follows a successful unlock`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+            )
+            val viewModel = createViewModel(state = initialState)
+            val error = Throwable("Fail")
+            coEvery {
+                vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+            } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+            every { authRepository.clearBiometrics(userId = any()) } just runs
+
+            viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+            verify(exactly = 0) { authRepository.clearBiometrics(userId = any()) }
+            assertEquals(1, viewModel.stateFlow.value.keystoreAuthorizationFailureCount)
+
+            coEvery {
+                vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+            } returns VaultUnlockResult.Success
+            viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+            assertEquals(initialState.copy(dialog = null), viewModel.stateFlow.value)
+
+            coEvery {
+                vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+            } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+            viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+
+            assertEquals(
+                initialState.copy(
+                    keystoreAuthorizationFailureCount = 1,
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                        throwable = error,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 0) { authRepository.clearBiometrics(userId = any()) }
+        }
+
+    @Test
+    fun `keystore authorization failure count should reset when the active user changes`() {
         val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
             accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
@@ -1120,23 +1315,29 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
-        } returns VaultUnlockResult.AuthenticationError(error = error)
+        } returns VaultUnlockResult.BiometricKeystoreAuthorizationError(error = error)
+        every { authRepository.clearBiometrics(userId = any()) } just runs
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+        verify(exactly = 0) { authRepository.clearBiometrics(userId = any()) }
+        assertEquals(1, viewModel.stateFlow.value.keystoreAuthorizationFailureCount)
+
+        val updatedUserId = "updatedUserId"
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            activeUserId = updatedUserId,
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(
+                    userId = updatedUserId,
+                    isVaultUnlocked = false,
+                    isBiometricsEnabled = true,
+                ),
+            ),
+        )
+        assertEquals(0, viewModel.stateFlow.value.keystoreAuthorizationFailureCount)
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
 
-        assertEquals(
-            initialState.copy(
-                dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.generic_error_message.asText(),
-                    throwable = error,
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-        coVerify(exactly = 1) {
-            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
-        }
+        verify(exactly = 0) { authRepository.clearBiometrics(userId = any()) }
     }
 
     @Suppress("MaxLineLength")
@@ -1355,9 +1556,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         vaultRepo: VaultRepository = vaultRepository,
         lockManager: VaultLockManager = vaultLockManager,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
+        route = AuthGraph.VaultUnlockRoute(unlockType = unlockType),
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            every { toVaultUnlockArgs() } returns VaultUnlockArgs(unlockType = unlockType)
         },
         authRepository = authRepository,
         vaultRepo = vaultRepo,

@@ -24,11 +24,8 @@ fun <T : Any> FlagKey<T>.ListItemContent(
 
     FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
-    FlagKey.ForceUpdateKdfSettings,
     FlagKey.NoLogoutOnKdfChange,
-    FlagKey.MigrateMyVaultToMyItems,
     FlagKey.CardScanner,
-    FlagKey.MobilePremiumUpgrade,
     FlagKey.ManageDevices,
     FlagKey.AttachmentUpdates,
     FlagKey.V2EncryptionJitPassword,
@@ -39,12 +36,12 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
     FlagKey.FedRamp,
-    FlagKey.Vfo1Foundation,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
     FlagKey.IdentityAutofill,
     FlagKey.SdkPinUnlock,
     FlagKey.SdkPreLogin,
+    FlagKey.UpdatedOnboardingFlow,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -86,15 +83,12 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.NoLogoutOnKdfChange -> stringResource(BitwardenString.avoid_logout_on_kdf_change)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }
 
-    FlagKey.MigrateMyVaultToMyItems -> stringResource(BitwardenString.migrate_my_vault_to_my_items)
     FlagKey.CardScanner -> stringResource(BitwardenString.scan_card)
-    FlagKey.MobilePremiumUpgrade -> stringResource(BitwardenString.mobile_premium_upgrade)
     FlagKey.ManageDevices -> stringResource(BitwardenString.manage_devices)
     FlagKey.AttachmentUpdates -> stringResource(BitwardenString.attachment_updates)
     FlagKey.V2EncryptionJitPassword -> stringResource(BitwardenString.v2_encryption_jit_password)
@@ -108,7 +102,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
-    FlagKey.Vfo1Foundation -> stringResource(BitwardenString.vfo1_foundation)
     FlagKey.SendControls -> stringResource(BitwardenString.send_controls)
     FlagKey.SendControlsExistingSends -> {
         stringResource(BitwardenString.send_controls_existing_sends)
@@ -117,4 +110,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.IdentityAutofill -> stringResource(BitwardenString.identity_autofill)
     FlagKey.SdkPinUnlock -> stringResource(BitwardenString.sdk_pin_unlock)
     FlagKey.SdkPreLogin -> stringResource(BitwardenString.sdk_pre_login)
+    FlagKey.UpdatedOnboardingFlow -> stringResource(BitwardenString.updated_onboarding_flow)
 }

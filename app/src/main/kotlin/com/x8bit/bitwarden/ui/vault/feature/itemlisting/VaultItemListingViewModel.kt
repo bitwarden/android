@@ -9,7 +9,6 @@ import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
@@ -40,6 +39,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -108,10 +108,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -125,17 +129,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
  * and launches [VaultItemListingEvent] for the [VaultItemListingScreen].
  */
-@HiltViewModel
+@HiltViewModel(assistedFactory = VaultItemListingViewModel.Factory::class)
 @Suppress("MagicNumber", "TooManyFunctions", "LongParameterList", "LargeClass")
-class VaultItemListingViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class VaultItemListingViewModel @AssistedInject constructor(
+    @Assisted vaultItemListingType: VaultItemListingType,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -159,19 +162,23 @@ class VaultItemListingViewModel @Inject constructor(
     private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
-        val userState = requireNotNull(authRepository.userStateFlow.value)
-        val activeAccountSummary = userState.toActiveAccountSummary()
-        val accountSummaries = userState.toAccountSummaries()
+        val userState = authRepository.userStateFlow.value
+        val accountSummaries = userState?.toAccountSummaries().orEmpty().toImmutableList()
+        val activeAccount = userState?.activeAccount ?: run {
+            // We use this empty account to avoid a crash that can occur during a race condition.
+            // The state-based navigation brought us here but the UserState has now been set to
+            // null, we just need to wait here a short while longer and state-based navigation will
+            // get us out of here.
+            UserState.EMPTY_ACCOUNT
+        }
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val providerCreateCredentialRequest = specialCircumstance?.toCreateCredentialRequestOrNull()
         val providerGetCredentialsRequest = specialCircumstance?.toGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = specialCircumstance?.toFido2AssertionRequestOrNull()
         val passwordGetCredentialRequest = specialCircumstance?.toPasswordGetRequestOrNull()
         VaultItemListingState(
-            itemListingType = savedStateHandle
-                .toVaultItemListingArgs()
-                .vaultItemListingType
-                .toItemListingType(),
+            itemListingType = vaultItemListingType.toItemListingType(),
             activeAccountSummary = activeAccountSummary,
             accountSummaries = accountSummaries,
             viewState = VaultItemListingState.ViewState.Loading,
@@ -188,17 +195,27 @@ class VaultItemListingViewModel @Inject constructor(
             policyDisablesSend = policyManager.getEffectiveSendPolicy().disableSend,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
-            hasMasterPassword = userState.activeAccount.hasMasterPassword,
+            hasMasterPassword = activeAccount.hasMasterPassword,
             totpData = specialCircumstance?.toTotpDataOrNull(),
             createCredentialRequest = providerCreateCredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertCredentialRequest,
             providerGetPasswordCredentialRequest = passwordGetCredentialRequest,
             getCredentialsRequest = providerGetCredentialsRequest,
-            isPremium = userState.activeAccount.isPremium,
+            isPremium = activeAccount.isPremium,
             isRefreshing = false,
         )
     },
 ) {
+    /**
+     * Factory for creating a [VaultItemListingViewModel] for the given [VaultItemListingType].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [VaultItemListingViewModel] for the given [vaultItemListingType].
+         */
+        fun create(vaultItemListingType: VaultItemListingType): VaultItemListingViewModel
+    }
 
     init {
         settingsRepository
@@ -222,12 +239,6 @@ class VaultItemListingViewModel @Inject constructor(
             .getActivePoliciesFlow(type = PolicyType.RESTRICTED_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
-            .map { VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -864,7 +875,9 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun fileSendRequiresPremiumDialog(): VaultItemListingState.DialogState =
         if (premiumStateManager.isInAppUpgradeAvailable()) {
-            VaultItemListingState.DialogState.FileTypeRequiresPremium
+            VaultItemListingState.DialogState.FileTypeRequiresPremium(
+                isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+            )
         } else {
             VaultItemListingState.DialogState.Error(
                 title = BitwardenString.send.asText(),
@@ -1447,7 +1460,11 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -1767,10 +1784,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handleRestrictItemTypesPolicyUpdateReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
-                handleVfo1FoundationFlagUpdateReceive(action)
-            }
-
             is VaultItemListingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
@@ -1883,16 +1896,6 @@ class VaultItemListingViewModel @Inject constructor(
                     .toImmutableList(),
             )
         }
-
-        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateStateWithVaultData(vaultData, clearDialogState = false)
-        }
-    }
-
-    private fun handleVfo1FoundationFlagUpdateReceive(
-        action: VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
             updateStateWithVaultData(vaultData, clearDialogState = false)
@@ -2762,7 +2765,6 @@ class VaultItemListingViewModel @Inject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
-                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         )
                     }
 
@@ -2984,7 +2986,6 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
-    val isVfo1FoundationEnabled: Boolean = false,
 ) {
     /**
      * Indicates what action card to display.
@@ -3244,14 +3245,18 @@ data class VaultItemListingState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Displays a dialog to the user indicating that creating a File-type Send
          * requires a Premium account.
          */
         @Parcelize
-        data object FileTypeRequiresPremium : DialogState()
+        data class FileTypeRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
     }
 
     /**
@@ -4062,13 +4067,6 @@ sealed class VaultItemListingsAction {
          */
         data class RestrictItemTypesPolicyUpdateReceive(
             val restrictItemTypesPolicyOrdIds: List<String>,
-        ) : Internal()
-
-        /**
-         * Indicates that an update for the `vfo1-foundation` feature flag has been received.
-         */
-        data class Vfo1FoundationFlagUpdateReceive(
-            val isEnabled: Boolean,
         ) : Internal()
 
         /**

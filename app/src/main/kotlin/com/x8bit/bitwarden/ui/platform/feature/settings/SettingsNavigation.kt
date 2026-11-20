@@ -2,117 +2,55 @@
 
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
-import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.navOptions
-import androidx.navigation.navigation
-import androidx.navigation.toRoute
+import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlan
+import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.aboutDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
+import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToPreAuthAbout
+import com.x8bit.bitwarden.ui.platform.feature.settings.about.preAuthAboutDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.accountSecurityDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.navigateToAccountSecurity
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.appearanceDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.navigateToAppearance
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.navigateToPreAuthAppearance
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.preAuthAppearanceDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.blockAutoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.navigateToBlockAutoFillScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.navigateToPrivilegedAppsList
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.privilegedAppsListDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToFlightRecorder
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.navigateToRecordedLogs
-import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.recordedLogsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToPreAuthFlightRecorder
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.preAuthFlightRecorderDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.navigateToPreAuthRecordedLogs
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.preAuthRecordedLogsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
+import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToPreAuthOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.other.preAuthOtherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
-import com.x8bit.bitwarden.ui.platform.feature.premium.plan.navigateToPlan
-import com.x8bit.bitwarden.ui.platform.feature.premium.plan.planDestination
 import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsDestination
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScreen
 
 /**
- * The type-safe route for the settings graph.
- */
-@OmitFromCoverage
-@Serializable
-data object SettingsGraphRoute
-
-/**
- * The type-safe route for the settings screen.
- */
-@OmitFromCoverage
-@Parcelize
-@Serializable(with = SettingsRoute.Serializer::class)
-sealed class SettingsRoute : Parcelable {
-    /**
-     * Indicates that the settings screen should be shown as a pre-authentication.
-     */
-    abstract val isPreAuth: Boolean
-
-    /**
-     * Custom serializer to support polymorphic routes.
-     */
-    class Serializer : ParcelableRouteSerializer<SettingsRoute>(SettingsRoute::class)
-
-    /**
-     * The type-safe route for the settings screen in the settings graph.
-     */
-    @Parcelize
-    @Serializable(with = Standard.Serializer::class)
-    data object Standard : SettingsRoute() {
-        override val isPreAuth: Boolean get() = false
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
-    }
-
-    /**
-     * The type-safe route for the pre-auth settings screen.
-     */
-    @Parcelize
-    @Serializable(with = PreAuth.Serializer::class)
-    data object PreAuth : SettingsRoute() {
-        override val isPreAuth: Boolean get() = true
-
-        /**
-         * Custom serializer to support polymorphic routes.
-         */
-        class Serializer : ParcelableRouteSerializer<PreAuth>(PreAuth::class)
-    }
-}
-
-/**
- * Class to retrieve settings arguments from the [SavedStateHandle].
- */
-data class SettingsArgs(val isPreAuth: Boolean)
-
-/**
- * Constructs a [SettingsArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toSettingsArgs(): SettingsArgs {
-    val route = this.toRoute<SettingsRoute>()
-    return SettingsArgs(isPreAuth = route.isPreAuth)
-}
-
-/**
- * Add settings destinations to the nav graph.
+ * Add the settings screen and its associated screens to the settings navigation entries. The
+ * [SettingsGraph.SettingsRoute] is the root of the settings tab back stack.
  */
 @Suppress("LongMethod", "LongParameterList")
-fun NavGraphBuilder.settingsGraph(
-    navController: NavController,
+fun EntryProviderScope<SettingsGraph>.settingsDestinations(
+    navigationController: NavigationController<SettingsGraph>,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
@@ -123,145 +61,133 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
-    onNavigateToImportItems: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToManageDevices: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
 ) {
-    navigation<SettingsGraphRoute>(
-        startDestination = SettingsRoute.Standard,
-    ) {
-        composableWithRootPushTransitions<SettingsRoute.Standard> {
-            SettingsScreen(
-                onNavigateBack = {},
-                onNavigateToAbout = { navController.navigateToAbout(isPreAuth = false) },
-                onNavigateToAccountSecurity = { navController.navigateToAccountSecurity() },
-                onNavigateToAppearance = { navController.navigateToAppearance(isPreAuth = false) },
-                onNavigateToAutoFill = { navController.navigateToAutoFill() },
-                onNavigateToOther = { navController.navigateToOther(isPreAuth = false) },
-                onNavigateToVault = { navController.navigateToVaultSettings() },
-                onNavigateToPlan = { navController.navigateToPlan() },
-            )
-        }
-        aboutDestination(
-            isPreAuth = false,
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
-            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
-        )
-        accountSecurityDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDeleteAccount = onNavigateToDeleteAccount,
-            onNavigateToPendingRequests = onNavigateToPendingRequests,
-            onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
-            onNavigateToManageDevices = onNavigateToManageDevices,
-        )
-        appearanceDestination(
-            isPreAuth = false,
-            onNavigateBack = { navController.popBackStack() },
-        )
-        autoFillDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
-            onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
-            onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
-            onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedApps,
-            onNavigateToPrivilegedAppsList = { navController.navigateToPrivilegedAppsList() },
-        )
-        otherDestination(
-            isPreAuth = false,
-            onNavigateBack = { navController.popBackStack() },
-        )
-        vaultSettingsDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToExportVault = onNavigateToExportVault,
-            onNavigateToFolders = onNavigateToFolders,
-            onNavigateToImportLogins = onNavigateToImportLogins,
-            onNavigateToImportItems = onNavigateToImportItems,
-        )
-        importItemsDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToImportLogins = onNavigateToImportLogins,
-        )
-        blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
-        privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
-        planDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
-        )
-    }
-}
-
-/**
- * Add pre auth settings and associated screens to the nav graph.
- */
-fun NavGraphBuilder.preAuthSettingsDestinations(
-    navController: NavController,
-) {
-    composableWithSlideTransitions<SettingsRoute.PreAuth> {
+    rootPushEntry<SettingsGraph.SettingsRoute> {
         SettingsScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToAbout = { navController.navigateToAbout(isPreAuth = true) },
-            onNavigateToAppearance = { navController.navigateToAppearance(isPreAuth = true) },
-            onNavigateToOther = { navController.navigateToOther(isPreAuth = true) },
-            onNavigateToAccountSecurity = { /* no-op */ },
-            onNavigateToAutoFill = { /* no-op */ },
-            onNavigateToVault = { /* no-op */ },
-            onNavigateToPlan = { /* no-op */ },
+            viewModel = settingsViewModel(isPreAuth = false),
+            onNavigateBack = {},
+            onNavigateToAbout = { navigationController.navigateToAbout() },
+            onNavigateToAccountSecurity = { navigationController.navigateToAccountSecurity() },
+            onNavigateToAppearance = { navigationController.navigateToAppearance() },
+            onNavigateToAutoFill = { navigationController.navigateToAutoFill() },
+            onNavigateToOther = { navigationController.navigateToOther() },
+            onNavigateToVault = { navigationController.navigateToVaultSettings() },
+            onNavigateToPlan = { navigationController.navigateToPlan() },
         )
     }
+    aboutDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+        onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+    )
+    accountSecurityDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToDeleteAccount = onNavigateToDeleteAccount,
+        onNavigateToPendingRequests = onNavigateToPendingRequests,
+        onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
+        onNavigateToManageDevices = onNavigateToManageDevices,
+    )
     appearanceDestination(
-        isPreAuth = true,
-        onNavigateBack = { navController.popBackStack() },
+        onNavigateBack = { navigationController.navigateBack() },
+    )
+    autoFillDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToBlockAutoFillScreen = { navigationController.navigateToBlockAutoFillScreen() },
+        onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
+        onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
+        onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedApps,
+        onNavigateToPrivilegedAppsList = { navigationController.navigateToPrivilegedAppsList() },
     )
     otherDestination(
-        isPreAuth = true,
-        onNavigateBack = { navController.popBackStack() },
+        onNavigateBack = { navigationController.navigateBack() },
     )
-    aboutDestination(
-        isPreAuth = true,
-        onNavigateBack = { navController.popBackStack() },
-        onNavigateToFlightRecorder = { navController.navigateToFlightRecorder(isPreAuth = true) },
-        onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = true) },
+    vaultSettingsDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToExportVault = onNavigateToExportVault,
+        onNavigateToFolders = onNavigateToFolders,
+        onNavigateToImportLogins = onNavigateToImportLogins,
+        onNavigateToImportItems = { navigationController.navigateToImportItemsScreen() },
     )
-    flightRecorderDestination(
-        isPreAuth = true,
-        onNavigateBack = { navController.popBackStack() },
+    importItemsDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToImportLogins = onNavigateToImportLogins,
     )
-    recordedLogsDestination(
-        isPreAuth = true,
-        onNavigateBack = { navController.popBackStack() },
+    blockAutoFillDestination(onNavigateBack = { navigationController.navigateBack() })
+    privilegedAppsListDestination(onNavigateBack = { navigationController.navigateBack() })
+    planDestination(
+        onNavigateBack = { navigationController.navigateBack() },
+        onNavigateToUpgradedToPremium = onNavigateToUpgradedToPremium,
     )
 }
 
 /**
- * Navigate to the settings graph.
+ * Add the pre-authentication settings to the auth navigation entries. The
+ * [AuthGraph.PreAuthSettingsRoute] hosts the [PreAuthSettingsGraph].
  */
-fun NavController.navigateToSettingsGraph(navOptions: NavOptions? = null) {
-    this.navigate(route = SettingsGraphRoute, navOptions = navOptions)
+fun EntryProviderScope<AuthGraph>.preAuthSettingsDestination(
+    onNavigateBack: () -> Unit,
+) {
+    slideUpEntry<AuthGraph.PreAuthSettingsRoute> {
+        val navigationController = rememberNavigationController<PreAuthSettingsGraph>(
+            routes = arrayOf(PreAuthSettingsGraph.SettingsRoute),
+        )
+        BitwardenNavDisplay(
+            navigationController = navigationController,
+            entryProvider = entryProvider {
+                entry<PreAuthSettingsGraph.SettingsRoute> {
+                    SettingsScreen(
+                        viewModel = settingsViewModel(isPreAuth = true),
+                        onNavigateBack = onNavigateBack,
+                        onNavigateToAbout = { navigationController.navigateToPreAuthAbout() },
+                        onNavigateToAppearance = {
+                            navigationController.navigateToPreAuthAppearance()
+                        },
+                        onNavigateToOther = { navigationController.navigateToPreAuthOther() },
+                        onNavigateToAccountSecurity = { /* no-op */ },
+                        onNavigateToAutoFill = { /* no-op */ },
+                        onNavigateToVault = { /* no-op */ },
+                        onNavigateToPlan = { /* no-op */ },
+                    )
+                }
+                preAuthAppearanceDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                )
+                preAuthOtherDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                )
+                preAuthAboutDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                    onNavigateToFlightRecorder = {
+                        navigationController.navigateToPreAuthFlightRecorder()
+                    },
+                    onNavigateToRecordedLogs = {
+                        navigationController.navigateToPreAuthRecordedLogs()
+                    },
+                )
+                preAuthFlightRecorderDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                )
+                preAuthRecordedLogsDestination(
+                    onNavigateBack = { navigationController.navigateBack() },
+                )
+            },
+        )
+    }
 }
 
-/**
- * Navigate to the settings graph root.
- */
-fun NavController.navigateToSettingsGraphRoot() {
-    // Brings up back to the Settings graph
-    navigateToSettingsGraph(
-        navOptions = navOptions {
-            popUpTo(id = graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        },
-    )
-    // Then ensures that we are at the root
-    popBackStack(route = SettingsRoute.Standard, inclusive = false)
-}
+@Composable
+private fun settingsViewModel(
+    isPreAuth: Boolean,
+): SettingsViewModel = hiltViewModel<SettingsViewModel, SettingsViewModel.Factory>(
+    creationCallback = { factory -> factory.create(isPreAuth = isPreAuth) },
+)
 
 /**
- * Navigate to the pre-auth settings screen.
+ * Navigate to the pre-authentication settings.
  */
-fun NavController.navigateToPreAuthSettings(navOptions: NavOptions? = null) {
-    this.navigate(route = SettingsRoute.PreAuth, navOptions = navOptions)
+fun NavigationController<AuthGraph>.navigateToPreAuthSettings() {
+    this.navigate(route = AuthGraph.PreAuthSettingsRoute)
 }

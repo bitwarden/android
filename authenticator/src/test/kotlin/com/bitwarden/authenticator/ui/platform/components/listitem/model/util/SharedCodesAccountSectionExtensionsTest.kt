@@ -16,7 +16,6 @@ class SharedCodesAccountSectionExtensionsTest {
                 label = BitwardenString.shared_accounts_header.asText(
                     "John@test.com",
                     "bitwarden.com",
-                    1,
                 ),
                 codes = persistentListOf(),
                 isExpanded = true,
@@ -27,7 +26,6 @@ class SharedCodesAccountSectionExtensionsTest {
                 label = BitwardenString.shared_accounts_header.asText(
                     "Jane@test.com",
                     "bitwarden.eu",
-                    1,
                 ),
                 codes = persistentListOf(),
                 isExpanded = true,
@@ -40,7 +38,6 @@ class SharedCodesAccountSectionExtensionsTest {
                 label = BitwardenString.shared_accounts_header.asText(
                     "Jane@test.com",
                     "bitwarden.eu",
-                    1,
                 ),
                 codes = persistentListOf(),
                 isExpanded = true,
@@ -51,7 +48,6 @@ class SharedCodesAccountSectionExtensionsTest {
                 label = BitwardenString.shared_accounts_header.asText(
                     "John@test.com",
                     "bitwarden.com",
-                    1,
                 ),
                 codes = persistentListOf(),
                 isExpanded = true,
