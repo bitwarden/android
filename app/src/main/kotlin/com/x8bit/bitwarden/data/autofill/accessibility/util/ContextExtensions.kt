@@ -13,18 +13,12 @@ import com.x8bit.bitwarden.data.autofill.util.containsAnyTerms
 /**
  * Helper method to determine if the [BitwardenAccessibilityService] is enabled.
  *
- * Uses [AccessibilityManager.getEnabledAccessibilityServiceList] as the primary check,
- * falling back to [Settings.Secure] string parsing if the service is not found.
- *
- * These queries can return empty results even while the service is enabled and bound, as
- * observed in affected Android 16 builds. This value seeds the accessibility enabled state;
- * subsequent updates come from the service's connection callbacks.
+ * Platform queries can return empty on Android 16 even when bound, so this only seeds the
+ * initial state.
  */
 val Context.isAccessibilityServiceEnabled: Boolean
     get() {
         val appContext = this.applicationContext
-
-        // Primary check: AccessibilityManager API.
         val isEnabledViaManager = appContext
             .getSystemService<AccessibilityManager>()
             ?.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
@@ -44,7 +38,6 @@ val Context.isAccessibilityServiceEnabled: Boolean
 
         if (isEnabledViaManager) return true
 
-        // Fallback: legacy Settings.Secure string parsing.
         val packageName = appContext.packageName
         val accessibilityServiceName = packageName?.let {
             "$it/$LEGACY_ACCESSIBILITY_SERVICE_NAME"

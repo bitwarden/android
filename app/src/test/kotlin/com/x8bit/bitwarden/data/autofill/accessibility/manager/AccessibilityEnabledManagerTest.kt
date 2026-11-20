@@ -17,13 +17,9 @@ import org.junit.jupiter.api.Test
 class AccessibilityEnabledManagerTest {
     private val context: Context = mockk()
 
-    private lateinit var accessibilityEnabledManager: AccessibilityEnabledManager
-
     @BeforeEach
     fun setUp() {
         mockkStatic(Context::isAccessibilityServiceEnabled)
-        every { context.isAccessibilityServiceEnabled } returns false
-        accessibilityEnabledManager = AccessibilityEnabledManagerImpl(context)
     }
 
     @AfterEach
@@ -32,57 +28,23 @@ class AccessibilityEnabledManagerTest {
     }
 
     @Test
-    fun `isAccessibilityEnabled is seeded from the platform when it does not report the service`() =
-        runTest {
-            val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
+    fun `isAccessibilityEnabledStateFlow starts false and emits connection updates`() = runTest {
+        every { context.isAccessibilityServiceEnabled } returns false
+        val manager = AccessibilityEnabledManagerImpl(context)
 
-            assertFalse(result)
+        manager.isAccessibilityEnabledStateFlow.test {
+            assertFalse(awaitItem())
+
+            manager.setAccessibilityServiceConnected(isConnected = true)
+            assertTrue(awaitItem())
+
+            manager.setAccessibilityServiceConnected(isConnected = false)
+            assertFalse(awaitItem())
         }
-
-    @Test
-    fun `isAccessibilityEnabled is seeded from the platform when it reports the service`() =
-        runTest {
-            every { context.isAccessibilityServiceEnabled } returns true
-
-            val result = AccessibilityEnabledManagerImpl(context)
-                .isAccessibilityEnabledStateFlow
-                .value
-
-            assertTrue(result)
-        }
-
-    @Test
-    fun `isAccessibilityEnabled is true when the service reports it has connected`() = runTest {
-        accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
-
-        assertTrue(accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value)
     }
 
     @Test
-    fun `isAccessibilityEnabled is false when the service reports it has disconnected`() =
-        runTest {
-            accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
-            accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = false)
-
-            assertFalse(accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value)
-        }
-
-    @Test
-    fun `isAccessibilityEnabledStateFlow emits when the service connection state changes`() =
-        runTest {
-            accessibilityEnabledManager.isAccessibilityEnabledStateFlow.test {
-                assertFalse(awaitItem())
-
-                accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = true)
-                assertTrue(awaitItem())
-
-                accessibilityEnabledManager.setAccessibilityServiceConnected(isConnected = false)
-                assertFalse(awaitItem())
-            }
-        }
-
-    @Test
-    fun `service connection updates override the platform reported enabled state`() = runTest {
+    fun `isAccessibilityEnabledStateFlow starts true and emits connection updates`() = runTest {
         every { context.isAccessibilityServiceEnabled } returns true
         val manager = AccessibilityEnabledManagerImpl(context)
 
