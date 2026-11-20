@@ -139,6 +139,8 @@ class FlightRecorderManagerTest {
                     ),
                 )
                 fakeFlightRecorderDiskSource.flightRecorderData = expired
+                assertEquals(expired, awaitItem())
+                // The manager prunes the expired data, which is then emitted as empty.
                 assertEquals(FlightRecorderDataSet(data = emptySet()), awaitItem())
 
                 fakeFlightRecorderDiskSource.flightRecorderData = null

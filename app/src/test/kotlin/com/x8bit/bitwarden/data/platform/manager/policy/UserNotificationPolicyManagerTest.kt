@@ -201,11 +201,13 @@ class UserNotificationPolicyManagerTest {
     }
 
     @Test
-    fun `displayDataFlow should have an initial value matching displayData`() {
+    fun `displayDataFlow should emit a value matching displayData when collected`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE
         setPolicies(createPolicy())
 
-        assertEquals(EXPECTED_DISPLAY_DATA, userNotificationPolicyManager.displayDataFlow.value)
+        userNotificationPolicyManager.displayDataFlow.test {
+            assertEquals(EXPECTED_DISPLAY_DATA, expectMostRecentItem())
+        }
     }
 
     @Test

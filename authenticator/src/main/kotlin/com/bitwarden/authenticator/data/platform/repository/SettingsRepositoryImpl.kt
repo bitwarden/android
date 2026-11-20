@@ -50,34 +50,31 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isDynamicColorsEnabled = value
         }
 
-    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .isDynamicColorsEnabledFlow
-            .map { it ?: false }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isDynamicColorsEnabled,
-            )
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean> = settingsDiskSource
+        .isDynamicColorsEnabledFlow
+        .map { it ?: false }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isDynamicColorsEnabled,
+        )
 
-    override val appThemeStateFlow: StateFlow<AppTheme>
-        get() = settingsDiskSource
-            .appThemeFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource.appTheme,
-            )
+    override val appThemeStateFlow: StateFlow<AppTheme> = settingsDiskSource
+        .appThemeFlow
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.appTheme,
+        )
 
-    override val authenticatorAlertThresholdSecondsFlow: StateFlow<Int>
-        get() = settingsDiskSource
-            .getAlertThresholdSecondsFlow()
-            .map { it }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource.getAlertThresholdSeconds(),
-            )
+    override val authenticatorAlertThresholdSecondsFlow: StateFlow<Int> = settingsDiskSource
+        .getAlertThresholdSecondsFlow()
+        .map { it }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.getAlertThresholdSeconds(),
+        )
 
     override var hasSeenWelcomeTutorial: Boolean
         get() = settingsDiskSource.hasSeenWelcomeTutorial
@@ -85,14 +82,13 @@ class SettingsRepositoryImpl(
             settingsDiskSource.hasSeenWelcomeTutorial = value
         }
 
-    override val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .hasSeenWelcomeTutorialFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = hasSeenWelcomeTutorial,
-            )
+    override val hasSeenWelcomeTutorialFlow: StateFlow<Boolean> = settingsDiskSource
+        .hasSeenWelcomeTutorialFlow
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = hasSeenWelcomeTutorial,
+        )
 
     override var isScreenCaptureAllowed: Boolean
         get() = settingsDiskSource.getScreenCaptureAllowed()
@@ -106,15 +102,15 @@ class SettingsRepositoryImpl(
     override var previouslySyncedBitwardenAccountIds: Set<String> by
     settingsDiskSource::previouslySyncedBitwardenAccountIds
 
-    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
-        get() = settingsDiskSource.getScreenCaptureAllowedFlow()
-            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = settingsDiskSource.getScreenCaptureAllowed()
-                    ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
-            )
+    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean> = settingsDiskSource
+        .getScreenCaptureAllowedFlow()
+        .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = settingsDiskSource.getScreenCaptureAllowed()
+                ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
+        )
 
     override var isCrashLoggingEnabled: Boolean
         get() = settingsDiskSource.isCrashLoggingEnabled ?: true
@@ -122,15 +118,14 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isCrashLoggingEnabled = value
         }
 
-    override val isCrashLoggingEnabledFlow: Flow<Boolean>
-        get() = settingsDiskSource
-            .isCrashLoggingEnabledFlow
-            .map { it ?: isCrashLoggingEnabled }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isCrashLoggingEnabled,
-            )
+    override val isCrashLoggingEnabledFlow: Flow<Boolean> = settingsDiskSource
+        .isCrashLoggingEnabledFlow
+        .map { it ?: isCrashLoggingEnabled }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isCrashLoggingEnabled,
+        )
 
     override var isShowNextCodeEnabled: Boolean
         get() = settingsDiskSource.isShowNextCodeEnabled ?: false
@@ -138,15 +133,14 @@ class SettingsRepositoryImpl(
             settingsDiskSource.isShowNextCodeEnabled = value
         }
 
-    override val isShowNextCodeEnabledFlow: Flow<Boolean>
-        get() = settingsDiskSource
-            .isShowNextCodeEnabledFlow
-            .map { it ?: isShowNextCodeEnabled }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isShowNextCodeEnabled,
-            )
+    override val isShowNextCodeEnabledFlow: Flow<Boolean> = settingsDiskSource
+        .isShowNextCodeEnabledFlow
+        .map { it ?: isShowNextCodeEnabled }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isShowNextCodeEnabled,
+        )
 
     override var hasUserDismissedDownloadBitwardenCard: Boolean
         get() = settingsDiskSource.hasUserDismissedDownloadBitwardenCard ?: false

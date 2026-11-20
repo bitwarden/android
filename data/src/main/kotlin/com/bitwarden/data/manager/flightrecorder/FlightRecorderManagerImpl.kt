@@ -52,15 +52,14 @@ internal class FlightRecorderManagerImpl(
             .flightRecorderData
             ?: FlightRecorderDataSet(data = emptySet())
 
-    override val flightRecorderDataFlow: StateFlow<FlightRecorderDataSet>
-        get() = flightRecorderDiskSource
-            .flightRecorderDataFlow
-            .map { it ?: FlightRecorderDataSet(data = emptySet()) }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = flightRecorderData,
-            )
+    override val flightRecorderDataFlow: StateFlow<FlightRecorderDataSet> = flightRecorderDiskSource
+        .flightRecorderDataFlow
+        .map { it ?: FlightRecorderDataSet(data = emptySet()) }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = flightRecorderData,
+        )
 
     init {
         // Always plant the tree, it will not log anything if the flight recorder is off.

@@ -127,24 +127,25 @@ internal class VaultLockManagerImpl(
         get() = mutableVaultUnlockDataStateFlow.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val isActiveUserUnlockingFlow: StateFlow<Boolean>
-        get() = authDiskSource
-            .activeUserIdChangesFlow
-            .flatMapLatest { activeUserId ->
-                vaultUnlockDataStateFlow.map { vaultUnlockData ->
-                    vaultUnlockData.any {
-                        it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
-                    }
+    override val isActiveUserUnlockingFlow: StateFlow<Boolean> = authDiskSource
+        .activeUserIdChangesFlow
+        .flatMapLatest { activeUserId ->
+            vaultUnlockDataStateFlow.map { vaultUnlockData ->
+                vaultUnlockData.any {
+                    it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
                 }
             }
-            .distinctUntilChanged()
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = mutableVaultUnlockDataStateFlow.value.any {
-                    it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
-                },
-            )
+        }
+        .distinctUntilChanged()
+        .stateIn(
+            scope = unconfinedScope,
+            // Eagerly, because callers read `.value` without collecting (e.g. UserStateManagerImpl)
+            // and Lazily would leave that value stale until the first collector subscribes.
+            started = SharingStarted.Eagerly,
+            initialValue = mutableVaultUnlockDataStateFlow.value.any {
+                it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
+            },
+        )
 
     override val vaultStateEventFlow: Flow<VaultStateEvent>
         get() = mutableVaultStateEventSharedFlow.asSharedFlow()
