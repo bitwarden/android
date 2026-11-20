@@ -3,16 +3,16 @@ package com.x8bit.bitwarden.data.autofill.accessibility.manager
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * A container for values specifying whether the accessibility service is enabled.
+ * Tracks whether the accessibility service is enabled.
  */
 interface AccessibilityEnabledManager {
     /**
-     * Emits updates that track whether the accessibility autofill service is enabled..
+     * Emits updates tracking whether the accessibility service is enabled.
      */
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
 
     /**
-     * Gets the accessibility enabled state from the system settings.
+     * Reports whether the accessibility service is connected without changing system settings.
      */
-    fun refreshAccessibilityEnabledFromSettings()
+    fun setAccessibilityServiceConnected(isConnected: Boolean)
 }

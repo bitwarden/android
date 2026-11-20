@@ -13,8 +13,8 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.AccessibilityActivity
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
-import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,6 +28,9 @@ class BitwardenAutofillTileService : TileService() {
     @Inject
     lateinit var accessibilityAutofillManager: AccessibilityAutofillManager
 
+    @Inject
+    lateinit var accessibilityEnabledManager: AccessibilityEnabledManager
+
     override fun onClick() {
         if (isLocked) {
             unlockAndRun { launchAutofill() }
@@ -38,7 +41,7 @@ class BitwardenAutofillTileService : TileService() {
 
     @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun launchAutofill() {
-        if (!applicationContext.isAccessibilityServiceEnabled) {
+        if (!accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value) {
             showDialog(getAccessibilityServiceRequiredDialog())
             return
         }
