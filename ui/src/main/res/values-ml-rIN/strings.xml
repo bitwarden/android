@@ -294,7 +294,7 @@
     <string name="no_items_trash">ട്രാഷിൽ  ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="autofill_accessibility_summary">മറ്റ് ആപ്പുകളിലും വെബ്സൈറ്റുകളിലും ഉപയോക്തൃനാമ, പാസ്വേഡ് ഫീൽഡുകൾ പൂരിപ്പിക്കുന്നതിന് സഹായിക്കുന്നു.</string>
     <string name="autofill_service_description">നിങ്ങളുടെ ഉപകരണത്തിലെ മറ്റ് അപ്പ്ലിക്കേഷനുകളിൽ ലോഗിനുകൾ, ക്രെഡിറ്റ് കാർഡുകൾ, ഐഡന്റിറ്റി വിവരങ്ങൾ എന്നിവ പൂരിപ്പിക്കുന്നതിന് സഹായിക്കുന്നത്  ആൻഡ്രോയിഡ് ഓട്ടോഫിൽ ഫ്രെയിംവർക്ക് ഉപയോഗിക്കുന്ന Bitwarden ഓട്ടോഫിൽ സേവനം ആണ്.</string>
-    <string name="bitwarden_autofill_go_to_settings">നിങ്ങൾക്കായി ആൻഡ്രോയിഡ് ഓട്ടോഫിൽ ക്രമീകരണ മെന്യു ഓട്ടോമാറ്റിക്കായി തുറക്കാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. Android ക്രമീകരണങ്ങളിൽ നിന്ന് നിങ്ങൾക്ക് ഓട്ടോഫിൽ ക്രമീകരണ മെനുവിലേക്ക് നാവിഗേറ്റ് ചെയ്തതിനു ശേഷം &gt; സിസ്റ്റം &gt; ഭാഷകളും ഇൻപുട്ടും &gt; അഡ്വാൻസ്ഡ്  &gt; ഓട്ടോഫിൽ സേവനം.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">ഇഷ്‌ടാനുസൃത ഫീൽഡുകൾ</string>
     <string name="field_type_boolean">ബൂളിയൻ</string>
     <string name="field_type_hidden">മറച്ചത്</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">രജിസ്ട്രേഷൻ ടോക്കൺ സാധൂകരിക്കുന്നതിൽ ഒരു പ്രശ്നമുണ്ടായി.</string>
     <string name="turn_on_autofill">ഓട്ടോഫിൽ ഓണാക്കുക</string>
     <string name="autofill_setup">ഓട്ടോഫിൽ സജ്ജീകരണം</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ബ്രൗസർ ഓട്ടോഫിൽ സംയോജനം ഓണാക്കുക</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">നിങ്ങൾ ഉപയോഗിക്കുന്ന ബ്രൗസറിന് Bitwarden-ന് നിങ്ങളുടെ പാസ്വേഡുകൾ ഓട്ടോഫിൽ ചെയ്യുന്നതിന് പ്രത്യേക അനുമതികൾ ആവശ്യമാണ്.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">നിങ്ങൾ ഉപയോഗിക്കുന്ന ബ്രൗസറുകൾക്ക് Bitwarden-ന് നിങ്ങളുടെ പാസ്വേഡുകൾ ഓട്ടോഫിൽ ചെയ്യുന്നതിന് പ്രത്യേക അനുമതികൾ ആവശ്യമാണ്.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">നിങ്ങൾ ഉപയോഗിക്കുന്ന ബ്രൗസറിന് Bitwarden-ന് നിങ്ങളുടെ പാസ്വേഡുകൾ ഓട്ടോഫിൽ ചെയ്യുന്നതിന് പ്രത്യേക അനുമതികൾ ആവശ്യമാണ്. ചുവടെ നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട ഓട്ടോഫിൽ സംയോജനം പ്രവർത്തനക്ഷമമാക്കുക.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">നിങ്ങൾ ഉപയോഗിക്കുന്ന ബ്രൗസറുകൾക്ക് Bitwarden-ന് നിങ്ങളുടെ പാസ്വേഡുകൾ ഓട്ടോഫിൽ ചെയ്യുന്നതിന് പ്രത്യേക അനുമതികൾ ആവശ്യമാണ്. തുടരുന്നതിന് നിങ്ങളുടെ ഇൻസ്റ്റാൾ ചെയ്ത എല്ലാ ബ്രൗസറുകൾക്കും ഓട്ടോഫിൽ പ്രവർത്തനക്ഷമമാക്കുക.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">ഒരു ടാപ്പിൽ നിങ്ങളുടെ അക്കൗണ്ടുകളിലേക്ക് ലോഗിൻ ചെയ്യാൻ ഓട്ടോഫിൽ ഉപയോഗിക്കുക.</string>
     <string name="turn_on_later">പിന്നീട് ഓണാക്കുക</string>
     <string name="turn_on_autofill_later">പിന്നീട് ഓട്ടോഫിൽ ഓണാക്കണോ?</string>

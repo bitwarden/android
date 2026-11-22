@@ -294,7 +294,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
     <string name="autofill_accessibility_summary">Digər tətbiqlərdə və vebdə istifadəçi adı və parol xanalarının doldurulmasına kömək edin.</string>
     <string name="autofill_service_description">Bitwarden avto-doldurma xidməti, cihazınızdakı digər tətbiqlərə giriş məlumatlarını doldurmağa kömək edən Android Avto-doldurma Çərçivəsini istifadə edir.</string>
-    <string name="bitwarden_autofill_go_to_settings">Android avto-doldurma ayarları menyusunu avtomatik aça bilmədik. Bu menyunu tapmaq üçün Android Ayarları &gt; Sistem &gt; Dillər və giriş &gt; Qabaqcıl &gt; \"Avto-doldurma xidməti\"nə gedin.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Özəl sahə adı</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Gizli</string>
@@ -811,11 +811,13 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Qeydiyyat jetonu doğrulanarkən bir problem baş verdi.</string>
     <string name="turn_on_autofill">Avto-doldurmanı işə sal</string>
     <string name="autofill_setup">Avto-doldurma qurulumu</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Brauzer avto-doldurma inteqrasiyasını işə sal</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzer istifadə edirsiniz.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzerlər istifadə edirsiniz.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzer istifadə edirsiniz. Aşağıda tərcih etdiyiniz avto-doldurma inteqrasiyasını fəallaşdırın.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden-in parollarınızı avto-doldurması üçün xüsusi izinlər tələb edən brauzerlər istifadə edirsiniz. Quraşdırdığınız bütün brauzerləriniz üçün avto-doldurmanı fəallaşdırıb davam edin.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Tək toxunuşda hesablarınıza giriş etmək üçün avto-doldurmanı istifadə edin.</string>
     <string name="turn_on_later">Daha sonra işə sal</string>
     <string name="turn_on_autofill_later">Avto-doldurma daha sonra işə salınsın?</string>

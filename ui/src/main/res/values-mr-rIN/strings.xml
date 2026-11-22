@@ -294,7 +294,7 @@
     <string name="no_items_trash">कचराकुंडी रिकामी आहे.</string>
     <string name="autofill_accessibility_summary">इतर अॅप्स आणि वेबवर वापरकर्तानाव आणि संकेतशब्द फील्ड भरण्यास मदत करा.</string>
     <string name="autofill_service_description">Bitwarden स्वयंपूर्त सेवा तुमच्या डिव्हाइसवरील इतर अॅप्समध्ये लॉगिन माहिती भरण्यास मदत करण्यासाठी Android Autofill Framework वापरते.</string>
-    <string name="bitwarden_autofill_go_to_settings">आम्ही तुमच्यासाठी Android स्वयंपूर्त सेटिंग्ज मेनू स्वयंचलितपणे उघडू शकलो नाही. तुम्ही Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service वरून स्वयंपूर्त सेटिंग्ज मेनूमध्ये स्वतः नेव्हिगेट करू शकता.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">सानुकूल फील्ड नाव</string>
     <string name="field_type_boolean">बुलियन</string>
     <string name="field_type_hidden">लपविलेले</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">नोंदणी टोकन सत्यापित करताना समस्या आली.</string>
     <string name="turn_on_autofill">स्वयंपूर्त चालू करा</string>
     <string name="autofill_setup">स्वयंपूर्त सेटअप</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ब्राउझर स्वयंपूर्त एकीकरण चालू करा</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">तुम्ही एक ब्राउझर वापरत आहात ज्याला Bitwarden ला तुमचे संकेतशब्द स्वयंपूर्त करण्यासाठी विशेष परवानग्या आवश्यक आहेत.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">तुम्ही असे ब्राउझर वापरत आहात ज्यांना Bitwarden ला तुमचे संकेतशब्द स्वयंपूर्त करण्यासाठी विशेष परवानग्या आवश्यक आहेत.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">तुम्ही एक ब्राउझर वापरत आहात ज्याला Bitwarden ला तुमचे संकेतशब्द स्वयंपूर्त करण्यासाठी विशेष परवानग्या आवश्यक आहेत. खाली तुमचे पसंतीचे स्वयंपूर्त एकीकरण सक्षम करा.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">तुम्ही असे ब्राउझर वापरत आहात ज्यांना Bitwarden ला तुमचे संकेतशब्द स्वयंपूर्त करण्यासाठी विशेष परवानग्या आवश्यक आहेत. सुरू ठेवण्यासाठी तुमच्या सर्व स्थापित ब्राउझरसाठी स्वयंपूर्त सक्षम करा.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">एका टॅपने तुमच्या खात्यांमध्ये लॉग इन करण्यासाठी स्वयंपूर्त वापरा.</string>
     <string name="turn_on_later">नंतर चालू करा</string>
     <string name="turn_on_autofill_later">नंतर स्वयंपूर्त चालू करायचे?</string>

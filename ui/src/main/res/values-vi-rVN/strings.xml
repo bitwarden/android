@@ -294,7 +294,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="no_items_trash">Không có gì trong thùng rác.</string>
     <string name="autofill_accessibility_summary">Hỗ trợ điền tên đăng nhập và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
     <string name="autofill_service_description">Dịch vụ tự động điền của Bitwarden sử dụng Khung Tự động điền của Android để hỗ trợ điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác trên thiết bị của bạn.</string>
-    <string name="bitwarden_autofill_go_to_settings">Chúng tôi không thể mở cài đặt tự động điền cho bạn. Bạn có thể đi đến cài đặt tự động điền theo cách thủ công bằng cách vào Cài đặt &gt; Hệ thống &gt; Ngôn ngữ và nhập liệu &gt; Nâng cao &gt; Dịch vụ tự động điền.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Tên trường tùy chỉnh</string>
     <string name="field_type_boolean">Đúng/Sai</string>
     <string name="field_type_hidden">Bí ẩn</string>
@@ -808,11 +808,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Có vấn đề trong quá trình xác thực token đăng ký.</string>
     <string name="turn_on_autofill">Bật tự động điền</string>
     <string name="autofill_setup">Thiết lập Tự động điền</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Bật tích hợp tự động điền trình duyệt</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bạn đang sử dụng trình duyệt yêu cầu quyền đặc biệt để Bitwarden có thể tự động điền mật khẩu của bạn.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bạn đang sử dụng các trình duyệt yêu cầu quyền đặc biệt để Bitwarden tự động điền mật khẩu của bạn.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bạn đang sử dụng trình duyệt yêu cầu quyền đặc biệt để Bitwarden có thể tự động điền mật khẩu của bạn. Hãy bật phương thức tự động điền bạn muốn sử dụng bên dưới.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bạn đang sử dụng các trình duyệt yêu cầu quyền đặc biệt để Bitwarden tự động điền mật khẩu của bạn. Bật tự động điền cho tất cả trình duyệt đã cài đặt của bạn để tiếp tục.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Dùng tính năng tự động điền để đăng nhập vào tài khoản của bạn chỉ bằng một lần chạm.</string>
     <string name="turn_on_later">Bật sau</string>
     <string name="turn_on_autofill_later">Bật tự động điền sau?</string>

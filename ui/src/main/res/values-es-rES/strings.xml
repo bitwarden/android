@@ -294,7 +294,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="no_items_trash">No hay elementos en la papelera.</string>
     <string name="autofill_accessibility_summary">Ayuda a rellenar los campos de nombre de usuario y contraseña en otras aplicaciones y en la web.</string>
     <string name="autofill_service_description">El servicio de autocompletar de Bitwarden utiliza el Marco de Autocompletar de Android para ayudarte a completar información de inicios de sesión en otras aplicaciones en tu dispositivo.</string>
-    <string name="bitwarden_autofill_go_to_settings">No hemos podido abrir automáticamente las opciones de autocompletado de Android. Puedes ir al menú de opciones de autocompletado manualmente desde Ajustes de Android &gt; Sistema &gt; Idiomas y entradas &gt; Avanzado &gt; Servicio autocompletado.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Nombre del campo personalizado</string>
     <string name="field_type_boolean">Booleano</string>
     <string name="field_type_hidden">Oculto</string>
@@ -813,11 +813,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Se ha producido un problema al validar el token de registro.</string>
     <string name="turn_on_autofill">Activar autocompletado</string>
     <string name="autofill_setup">Configuración del autocompletado</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Activar la integración del autocompletado del navegador</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Estás utilizando un navegador que requiere permisos especiales para que Bitwarden pueda autocompletar tus contraseñas.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Estás utilizando navegadores que requieren permisos especiales para que Bitwarden pueda autocompletar tus contraseñas.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Estás utilizando un navegador que requiere permisos especiales para que Bitwarden pueda autocompletar tus contraseñas. Activa tu integración de autocompletado preferida a continuación.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Estás utilizando navegadores que requieren permisos especiales para que Bitwarden pueda autocompletar tus contraseñas. Activa el autocompletado en todos los navegadores instalados para continuar.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utiliza el autocompletado para iniciar sesión en tus cuentas con un solo toque.</string>
     <string name="turn_on_later">Activar más tarde</string>
     <string name="turn_on_autofill_later">¿Activar autocompletado más tarde?</string>

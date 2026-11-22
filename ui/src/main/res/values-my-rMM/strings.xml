@@ -293,7 +293,7 @@
     <string name="no_items_trash">အမှိုက်ပုံးတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="autofill_accessibility_summary">အခြားအက်ပ်များနှင့် ဝဘ်ပေါ်ရှိ အသုံးပြုသူအမည်နှင့် စကားဝှက်အကွက်များကို ဖြည့်ရန် ကူညီပါ။</string>
     <string name="autofill_service_description">Bitwarden အလိုအလျောက်ဖြည့်ခြင်း ဝန်ဆောင်မှုသည် သင့်စက်ပစ္စည်းပေါ်ရှိ အခြားအက်ပ်များသို့ ဝင်ရောက်မှုအချက်အလက်များ ဖြည့်ရန် Android Autofill Framework ကို သုံးသည်။</string>
-    <string name="bitwarden_autofill_go_to_settings">သင့်အတွက် Android အလိုအလျောက်ဖြည့်ခြင်း ဆက်တင်မီနူးကို အလိုအလျောက် မဖွင့်နိုင်ပါ။ သင်သည် Android ဆက်တင်များ &gt; စနစ် &gt; ဘာသာစကားများနှင့် ထည့်သွင်းမှု &gt; အဆင့်မြင့် &gt; အလိုအလျောက်ဖြည့်ခြင်း ဝန်ဆောင်မှုမှ အလိုအလျောက်ဖြည့်ခြင်း ဆက်တင်မီနူးသို့ ကိုယ်တိုင်သွားနိုင်သည်။</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">စိတ်ကြိုက်အကွက်အမည်</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">ဝှက်ထား</string>
@@ -807,11 +807,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">မှတ်ပုံတင်ခြင်း တိုကင်ကို အတည်ပြုရာတွင် ပြဿနာရှိခဲ့သည်။</string>
     <string name="turn_on_autofill">အလိုအလျောက်ဖြည့်ခြင်း ဖွင့်ပါ</string>
     <string name="autofill_setup">အလိုအလျောက်ဖြည့်ခြင်း သတ်မှတ်ခြင်း</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ဘရောက်ဆာ အလိုအလျောက်ဖြည့်ခြင်း ပေါင်းစပ်မှုကို ဖွင့်ပါ</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">သင်သည် Bitwarden အား သင့်စကားဝှက်များကို အလိုအလျောက်ဖြည့်ရန် အထူးခွင့်ပြုချက်များ လိုအပ်သော ဘရောက်ဆာကို သုံးနေသည်။</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">သင်သည် Bitwarden အား သင့်စကားဝှက်များကို အလိုအလျောက်ဖြည့်ရန် အထူးခွင့်ပြုချက်များ လိုအပ်သော ဘရောက်ဆာများကို သုံးနေသည်။</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">သင်သည် Bitwarden အား သင့်စကားဝှက်များကို အလိုအလျောက်ဖြည့်ရန် အထူးခွင့်ပြုချက်များ လိုအပ်သော ဘရောက်ဆာကို သုံးနေသည်။ အောက်တွင် သင့်နှစ်သက်ရာ အလိုအလျောက်ဖြည့်ခြင်း ပေါင်းစပ်မှုကို ဖွင့်ပါ။</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">သင်သည် Bitwarden အား သင့်စကားဝှက်များကို အလိုအလျောက်ဖြည့်ရန် အထူးခွင့်ပြုချက်များ လိုအပ်သော ဘရောက်ဆာများကို သုံးနေသည်။ ဆက်လက်ရန် သင့်တပ်ဆင်ထားသော ဘရောက်ဆာအားလုံးအတွက် အလိုအလျောက်ဖြည့်ခြင်းကို ဖွင့်ပါ။</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">တစ်ချက်နှိပ်ရုံဖြင့် သင့်အကောင့်များသို့ ဝင်ရောက်ရန် အလိုအလျောက်ဖြည့်ခြင်းကို သုံးပါ။</string>
     <string name="turn_on_later">နောက်မှ ဖွင့်ပါ</string>
     <string name="turn_on_autofill_later">အလိုအလျောက်ဖြည့်ခြင်းကို နောက်မှ ဖွင့်မည်လား?</string>

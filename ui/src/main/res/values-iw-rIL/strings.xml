@@ -295,7 +295,7 @@
     <string name="no_items_trash">אין פריטים בסל המחזור.</string>
     <string name="autofill_accessibility_summary">סייע במילוי שדות שם משתמש וסיסמה ביישומים אחרים וברשת.</string>
     <string name="autofill_service_description">שירות המילוי האוטומטי של Bitwarden משתמש במסגרת המילוי האוטומטי של אנדרואיד כדי לסייע במילוי פרטי כניסה אל תוך יישומים אחרים במכשיר שלך.</string>
-    <string name="bitwarden_autofill_go_to_settings">לא הצלחנו לפתוח באופן אוטומטי את תפריט הגדרות המילוי האוטומטי של אנדרואיד עבורך. אתה יכול לנווט לתפריט הגדרות המילוי האוטומטי באופן ידני מהגדרות אנדרואיד &lt; מערכת &lt; שפות &lt; מתקדם &lt; שירות מילוי אוטומטי.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">שם שדה מותאם אישית</string>
     <string name="field_type_boolean">בוליאני</string>
     <string name="field_type_hidden">מוסתר</string>
@@ -817,11 +817,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">הייתה בעיה באימות אסימון ההרשמה.</string>
     <string name="turn_on_autofill">הפעל מילוי אוטומטי</string>
     <string name="autofill_setup">הגדרת מילוי אוטומטי</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">הפעל אינטגרציית מילוי אוטומטי בדפדפן</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">אתה משתמש בדפדפן שדורש הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך. הפעל את אינטגרציית המילוי האוטומטי המועדפת שלך למטה.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">אתה משתמש בדפדפנים שדורשים הרשאות מיוחדות בשביל ש־Bitwarden ימלא אוטומטית את הסיסמאות שלך. הפעל מילוי אוטומטי עבור כל הדפדפנים המותקנים שלך כדי להמשיך.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">השתמש במילוי אוטומטי כדי להיכנס לחשבונות שלך בהקשה אחת.</string>
     <string name="turn_on_later">הפעל מאוחר יותר</string>
     <string name="turn_on_autofill_later">להפעיל מילוי אוטומטי מאוחר יותר?</string>

@@ -294,7 +294,7 @@
     <string name="no_items_trash">කුණු කූඩයේ අයිතම නොමැත.</string>
     <string name="autofill_accessibility_summary">වෙනත් යෙදුම්වල සහ වෙබයේ පරිශීලක නම සහ මුරපද ක්ෂේත්‍ර පිරවීමට සහාය වන්න.</string>
     <string name="autofill_service_description">Bitwarden ස්වයං පිරවුම් සේවාව ඔබගේ උපාංගයේ වෙනත් යෙදුම්වලට පිවිසුම් තොරතුරු පිරවීමට සහාය වීම සඳහා Android Autofill Framework භාවිතා කරයි.</string>
-    <string name="bitwarden_autofill_go_to_settings">අපට ඔබ වෙනුවෙන් Android ස්වයං පිරවුම් සැකසුම් මෙනුව ස්වයංක්‍රීයව විවෘත කිරීමට නොහැකි විය. ඔබට Android සැකසීම් &gt; පද්ධතිය &gt; භාෂා සහ ආදානය &gt; උසස් &gt; ස්වයං පිරවුම් සේවාවෙන් ස්වයං පිරවුම් සැකසුම් මෙනුව අතින් සැරිසැරීමට හැක.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">අභිරුචි ක්ෂේත්‍ර නම</string>
     <string name="field_type_boolean">බූලියන්</string>
     <string name="field_type_hidden">සැඟවුණු</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">ලියාපදිංචි ටෝකනය වලංගු කිරීමේ ගැටළුවක් ඇති විය.</string>
     <string name="turn_on_autofill">ස්වයං පිරවුම් ක්‍රියාත්මක කරන්න</string>
     <string name="autofill_setup">ස්වයං පිරවුම් සැකසුම</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">බ්‍රවුසර ස්වයං පිරවුම් ඒකාබද්ධ කිරීම ක්‍රියාත්මක කරන්න</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">ඔබ Bitwarden ට ඔබගේ මුරපද ස්වයං පිරවුම් කිරීමට විශේෂ අවසර අවශ්‍ය වන බ්‍රවුසරයක් භාවිතා කරයි.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">ඔබ Bitwarden ට ඔබගේ මුරපද ස්වයං පිරවුම් කිරීමට විශේෂ අවසර අවශ්‍ය වන බ්‍රවුසර භාවිතා කරයි.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">ඔබ Bitwarden ට ඔබගේ මුරපද ස්වයං පිරවුම් කිරීමට විශේෂ අවසර අවශ්‍ය වන බ්‍රවුසරයක් භාවිතා කරයි. පහත ඔබගේ කැමති ස්වයං පිරවුම් ඒකාබද්ධ කිරීම සක්‍රිය කරන්න.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">ඔබ Bitwarden ට ඔබගේ මුරපද ස්වයං පිරවුම් කිරීමට විශේෂ අවසර අවශ්‍ය වන බ්‍රවුසර භාවිතා කරයි. ඉදිරියට යාමට ඔබගේ ස්ථාපිත සියලු බ්‍රවුසර සඳහා ස්වයං පිරවුම් සක්‍රිය කරන්න.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">තනි තට්ටුවකින් ඔබගේ ගිණුම්වලට පිවිසීමට ස්වයං පිරවුම් භාවිතා කරන්න.</string>
     <string name="turn_on_later">පසුව ක්‍රියාත්මක කරන්න</string>
     <string name="turn_on_autofill_later">පසුව ස්වයං පිරවුම් ක්‍රියාත්මක කරන්නද?</string>

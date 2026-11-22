@@ -293,7 +293,7 @@
     <string name="no_items_trash">Não há itens na lixeira.</string>
     <string name="autofill_accessibility_summary">Ajude a preencher campos de nomes de usuário e senhas em outros aplicativos e na web.</string>
     <string name="autofill_service_description">O serviço de preenchimento automático do Bitwarden usa a Estrutura de Preenchimento Automático do Android para auxiliar no preenchimento de credenciais em outros aplicativos no seu dispositivo.</string>
-    <string name="bitwarden_autofill_go_to_settings">Não foi possível abrir automaticamente o menu de configurações de preenchimento automático do Android para você. Você pode acessar o menu manualmente indo em Configurações do Android &gt; Senhas, chaves de acesso e contas &gt; Serviço preferido &gt; Mudar.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Não foi possível abrir automaticamente o menu de configurações de preenchimento automático do Android para você. Você pode navegar para o menu manualmente a partir de Configurações do Android > Sistema > Idiomas e entrada > Avançado > Serviço de preenchimento automático.</string>
     <string name="custom_field_name">Nome do campo personalizado</string>
     <string name="field_type_boolean">Booleano</string>
     <string name="field_type_hidden">Oculto</string>
@@ -591,21 +591,21 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="generic_error_message">Não foi possível processar o seu pedido. Tente novamente ou entre em contato conosco.</string>
     <string name="allow_screen_capture">Permitir captura de tela</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Tem certeza de que deseja ativar a captura de tela?</string>
-    <string name="access_requested">Access requested</string>
-    <string name="account_access_requested">Account access requested</string>
-    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
-    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
+    <string name="access_requested">Acesso solicitado</string>
+    <string name="account_access_requested">Acesso à conta solicitado</string>
+    <string name="are_you_trying_to_access_your_account">Você está tentando acessar a sua conta?</string>
+    <string name="access_attempt_by_x_on_y">Tentativa de acesso por %1$s em %2$s</string>
     <string name="device_type">Tipo de dispositivo</string>
     <string name="ip_address">Endereço de IP</string>
     <string name="time">Horário</string>
     <string name="select_time">Selecionar horário</string>
     <string name="switch_input_mode">Trocar modo de entrada</string>
-    <string name="confirm_access">Confirm access</string>
-    <string name="deny_access">Deny access</string>
-    <string name="access_denied">Access denied</string>
-    <string name="account_access_requests">Account access requests</string>
+    <string name="confirm_access">Confirmar acesso</string>
+    <string name="deny_access">Negar acesso</string>
+    <string name="access_denied">Acesso negado</string>
+    <string name="account_access_requests">Solicitações de acesso à conta</string>
     <string name="no_thanks">Não, obrigado</string>
-    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirmar tentativa de acesso para %1$s</string>
     <string name="username_type">Tipo do nome de usuário</string>
     <string name="plus_addressed_email">E-mail endereçado com +</string>
     <string name="catch_all_email">E-mail pega-tudo</string>
@@ -632,22 +632,22 @@ toque em Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="i_understand">Entendo</string>
     <string name="accept">Aceitar</string>
     <string name="decline">Recusar</string>
-    <string name="access_request_has_already_expired">Access request has already expired.</string>
-    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
+    <string name="access_request_has_already_expired">A solicitação de acesso já expirou.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de acesso de:
 %1$s
-Do you want to switch to this account?</string>
+Você deseja alternar para esta conta?</string>
     <string name="new_to_bitwarden">Novo no Bitwarden?</string>
     <string name="get_master_passwordword_hint">Receber dica da senha principal</string>
     <string name="logging_in_as_x_on_y">Conectando-se como %1$s em %2$s</string>
     <string name="not_you">Não é você?</string>
     <string name="log_in_with_master_password">Conectar-se com senha principal</string>
     <string name="log_in_initiated">Autenticação iniciada</string>
-    <string name="request_sent_to_your_device">Request sent to your device</string>
-    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
-    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
+    <string name="request_sent_to_your_device">Solicitação enviada para o seu dispositivo</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Aprove esta solicitação na sua conta do Bitwarden em outro dispositivo desbloqueado ou no aplicativo web. As solicitações de acesso à conta devem estar ativadas nas Configurações.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Certifique-se de que a frase biométrica corresponda à mostrada abaixo antes de aprovar.</string>
     <string name="resend_notification">Reenviar notificação</string>
     <string name="view_all_login_options">Ver todas as opções de autenticação</string>
-    <string name="pending_access_requests">Pending access requests</string>
+    <string name="pending_access_requests">Solicitações de acesso pendentes</string>
     <string name="decline_all_requests">Recusar todas as solicitações</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Tem certeza de que deseja recusar todas as solicitações de acesso pendentes?</string>
     <string name="no_pending_requests">Nenhuma solicitação pendente</string>
@@ -679,8 +679,8 @@ Do you want to switch to this account?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">A chave de acesso não será copiada para o item clonado. Deseja continuar clonando este item?</string>
     <string name="master_password_re_prompt_help">Ajuda com a resolicitação da senha principal</string>
     <string name="admin_approval_requested">Aprovação do administrador solicitada</string>
-    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
-    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Sua solicitação foi enviada para o seu administrador. Você receberá um e-mail assim que for aprovada.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">O seu administrador pode pedir para você confirmar esta frase biométrica.</string>
     <string name="block_auto_fill">Bloquear preenchimento automático</string>
     <string name="no_uris_blocked">Nenhum URI bloqueado</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">O preenchimento automático não será oferecido para estes URIs.</string>
@@ -691,7 +691,7 @@ Do you want to switch to this account?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Formato: %1$s. Separe vários URIs com uma vírgula.</string>
     <string name="invalid_uri">URI inválido</string>
     <string name="the_urix_is_already_blocked">O URI %1$s já está bloqueado</string>
-    <string name="access_approved">Access approved</string>
+    <string name="access_approved">Acesso aprovado</string>
     <string name="need_another_option_view_all_login_options">Precisa de outra opção? <annotation link="viewAll">Ver todas as opções de autenticação</annotation></string>
     <string name="log_in_with_device">Conectar-se com dispositivo</string>
     <string name="logging_in_on">Acessando</string>
@@ -811,11 +811,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Houve um problema ao validar o token de cadastro.</string>
     <string name="turn_on_autofill">Ativar preenchimento automático</string>
     <string name="autofill_setup">Configuração do preenchimento automático</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Ativar integração com o preenchimento do navegador</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher suas senhas.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher suas senhas.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Você está usando um navegador que requer permissões especiais para que o Bitwarden possa preencher senhas. Ative a sua integração preferida de preenchimento automático abaixo.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Você está usando navegadores que requerem permissões especiais para que o Bitwarden possa preencher senhas. Ative o preenchimento automático para todos os seus navegadores instalados para continuar.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Use o preenchimento automático para acessar suas contas com um único toque.</string>
     <string name="turn_on_later">Ativar mais tarde</string>
     <string name="turn_on_autofill_later">Ativar preenchimento automático mais tarde?</string>
@@ -1220,7 +1222,7 @@ Do you want to switch to this account?</string>
     <string name="archiving_items_is_a_premium_feature">O arquivamento de itens é um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
     <string name="totp_is_a_premium_feature">A chave do autenticador (TOTP) é um recurso do Premium. O seu plano atual não inclui o acesso a este recurso.</string>
     <string name="upgrade_to_premium">Fazer upgrade ao Premium</string>
-    <string name="explore_premium">Explore Premium</string>
+    <string name="explore_premium">Explorar o Premium</string>
     <string name="plan">Plano</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Para gerenciar sua assinatura Premium, você precisará entrar no seu cofre web em um computador.</string>
     <string name="unlock_advanced_security_features">Desbloqueie recursos avançados de segurança</string>
@@ -1426,5 +1428,5 @@ Do you want to switch to this account?</string>
     <string name="weve_made_a_security_update">Fizemos uma atualização de segurança. Confirme seus dados biométricos novamente para continuar usando-os para desbloquear o Bitwarden.</string>
     <string name="turn_off">Desativar</string>
     <string name="turn_off_biometric_question">Desativar biometria?</string>
-    <string name="unlocking_will_require_your_master_password">O desbloqueio exigirá a sua senha mestra. Você pode ativar os dados biométricos de volta nas Configurações.</string>
+    <string name="unlocking_will_require_your_master_password">O desbloqueio exigirá a sua senha principal. Você pode ativar os dados biométricos de volta nas Configurações.</string>
 </resources>

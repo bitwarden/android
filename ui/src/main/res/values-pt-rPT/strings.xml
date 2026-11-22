@@ -294,7 +294,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="no_items_trash">Não existem itens no lixo.</string>
     <string name="autofill_accessibility_summary">Ajuda a preencher os campos de nome de utilizador e palavra-passe noutras aplicações e na web.</string>
     <string name="autofill_service_description">O serviço de preenchimento automático do Bitwarden utiliza o Android Autofill Framework para ajudar a preencher as informações de início de sessão noutras aplicações no seu dispositivo.</string>
-    <string name="bitwarden_autofill_go_to_settings">Não foi possível abrir automaticamente o menu de definições de preenchimento automático do Android. Pode navegar manualmente para o menu de definições de preenchimento automático a partir das Definições do Android &gt; Sistema &gt; Idiomas e introdução &gt; Avançado &gt; Serviço de preenchimento automático.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Não foi possível abrir automaticamente o menu de definições do preenchimento automático do Android. Pode aceder manualmente a esse menu através das Definições do Android.</string>
     <string name="custom_field_name">Nome do campo personalizado</string>
     <string name="field_type_boolean">Booleano</string>
     <string name="field_type_hidden">Oculto</string>
@@ -812,11 +812,13 @@ Pretende mudar para esta conta?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Ocorreu um problema com a validação do token de registo.</string>
     <string name="turn_on_autofill">Ativar o preenchimento automático</string>
     <string name="autofill_setup">Configuração do preenchimento automático</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Selecione «Preenchimento automático com outro serviço» no navegador</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Selecione «Preenchimento automático com outro serviço» nos navegadores</string>
     <string name="turn_on_browser_autofill_integration">Ativar a integração do preenchimento automático do navegador</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Está a utilizar um navegador que requer permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Está a utilizar navegadores que requerem permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Está a utilizar um navegador que requer permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe. Ative a sua integração de preenchimento automático preferida abaixo.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Está a utilizar navegadores que requerem permissões especiais para que o Bitwarden preencha automaticamente as suas palavras-passe. Ative o preenchimento automático para todos os navegadores instalados para continuar.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Está a utilizar um navegador que requer permissões especiais para que o Bitwarden possa preencher automaticamente as suas palavras-passe. Ative abaixo a integração de preenchimento automático que prefere.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">Está a utilizar navegadores que requerem permissões especiais para que o Bitwarden possa preencher automaticamente as suas palavras-passe. Ative abaixo a integração de preenchimento automático que prefere.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utilize o preenchimento automático para iniciar sessão nas suas contas com um simples toque.</string>
     <string name="turn_on_later">Ativar mais tarde</string>
     <string name="turn_on_autofill_later">Ativar o preenchimento automático mais tarde?</string>

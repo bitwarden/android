@@ -293,7 +293,7 @@
     <string name="no_items_trash">Nessun elemento nel cestino</string>
     <string name="autofill_accessibility_summary">Assiste con il riempimento dei campi nome utente e password in altre applicazioni e nei siti web.</string>
     <string name="autofill_service_description">Il riempimento automatico di Bitwarden usa il servizio di riempimento automatico di sistema per compilare i campi con le credenziali salvate</string>
-    <string name="bitwarden_autofill_go_to_settings">Non siamo riusciti ad aprire le impostazioni del riempimento automatico di Android per te. Puoi navigare manualmente nelle impostazioni di riempimento automatico dalle Impostazioni di Android &gt; Cerca Impostazioni &gt; Cerca \"Password e autofill\"</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Nome del campo</string>
     <string name="field_type_boolean">On/Off</string>
     <string name="field_type_hidden">Nascosto</string>
@@ -811,11 +811,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Si è verificato un errore durante la convalida del token di registrazione.</string>
     <string name="turn_on_autofill">Attiva il riempimento automatico</string>
     <string name="autofill_setup">Impostazioni riempimento automatico</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Attiva l\'integrazione di riempimento automatico nel browser</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Per attivare il riempimento automatico nel tuo browser, Bitwarden richiede dei permessi speciali.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Per attivare il riempimento automatico nei tuoi browser, Bitwarden richiede dei permessi speciali.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Per attivare il riempimento automatico nel tuo browser, Bitwarden richiede dei permessi speciali. Abilita la tua integrazione preferita qui sotto.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Per attivare il riempimento automatico nei tuoi browser, Bitwarden richiede dei permessi speciali. Abilita il riempimento automatico in tutti i tuoi browser per continuare.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Usa il riempimento automatico per accedere ai tuoi account con un solo tocco.</string>
     <string name="turn_on_later">Attiva più tardi</string>
     <string name="turn_on_autofill_later">Attivare il riempimento automatico più tardi?</string>

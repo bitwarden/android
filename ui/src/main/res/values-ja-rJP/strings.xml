@@ -293,7 +293,7 @@
     <string name="no_items_trash">ごみ箱にアイテムはありません。</string>
     <string name="autofill_accessibility_summary">他のアプリやウェブ上でのユーザー名やパスワードの入力を手助けします。</string>
     <string name="autofill_service_description">Bitwarden 自動入力サービスは、Android の自動入力フレームワークを使用して、デバイス上の他のアプリへのログイン情報の入力を補助します。</string>
-    <string name="bitwarden_autofill_go_to_settings">Android の自動入力設定を自動的に開けませんでした。Android の設定 &gt; システム &gt; 言語と入力 &gt; 詳細設定 &gt; 自動入力サービスで自動入力を設定できます。</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Android の自動入力設定メニューを自動的に開けませんでした。手動で Android の設定から自動入力設定メニューに移動してください。</string>
     <string name="custom_field_name">カスタムフィールド名</string>
     <string name="field_type_boolean">真偽値</string>
     <string name="field_type_hidden">非表示</string>
@@ -807,11 +807,13 @@
     <string name="there_was_an_issue_validating_the_registration_token">登録トークンの検証中に問題が発生しました。</string>
     <string name="turn_on_autofill">自動入力をオンにする</string>
     <string name="autofill_setup">自動入力のセットアップ</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">ブラウザーで「別のサービスを使用して自動入力」を選択してください</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">ブラウザーで「別のサービスを使用して自動入力」を選択してください</string>
     <string name="turn_on_browser_autofill_integration">ブラウザの自動入力機能との連携を有効にする</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。以下でお好みの自動入力連携機能を有効にしてください。</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">お使いのブラウザでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。続行するには、インストールされているすべてのブラウザで自動入力を有効にしてください。</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">お使いのブラウザーでは、Bitwarden がパスワードを自動入力するために特別な権限が必要です。以下で自動入力連携機能を有効にしてください。</string>
     <string name="use_autofill_to_log_into_your_accounts">自動入力を使用するとワンタップでアカウントにログインできます。</string>
     <string name="turn_on_later">後でオンにする</string>
     <string name="turn_on_autofill_later">後で自動入力をオンにしますか？</string>
@@ -1163,7 +1165,7 @@
         <item quantity="other">%1$d 個のアイテムが保管庫にインポートされました。</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">パスワード入力を続けるためにブラウザのオートフィルを有効にする</string>
-    <string name="your_browser_recently_updated_how_autofill_works_singular">お使いのブラウザが最近更新されたため、Bitwardenの自動入力機能が無効になっています。Bitwarden によるパスワードの自動入力を継続して使用するには、自動入力設定でブラウザの自動入力機能を有効にしてください。</string>
+    <string name="your_browser_recently_updated_how_autofill_works_singular">お使いのブラウザが最近更新されたため、Bitwarden の自動入力機能が無効になっています。Bitwarden によるパスワードの自動入力を継続して使用するには、自動入力設定でブラウザの自動入力機能を有効にしてください。</string>
     <string name="not_now">後で</string>
     <string name="import_from_bitwarden">Bitwarden からインポート</string>
     <string name="select_account">アカウントを選択</string>

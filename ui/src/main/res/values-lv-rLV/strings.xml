@@ -295,7 +295,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="no_items_trash">Atkritnē nav vienumu.</string>
     <string name="autofill_accessibility_summary">Palīdzēt ar lietotājvārda un paroles lauku aizpildīšanu citās lietotnēs tīmeklī.</string>
     <string name="autofill_service_description">Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pieteikšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</string>
-    <string name="bitwarden_autofill_go_to_settings">Mēs nevarējām atvērt Android automātiskās aizpildes iestatījumu izvēlni. Tai var piekļūt: Android iestatījumi &gt; Sistēma &gt; Valodas un ievade &gt; Papildu &gt; Automātiskā aizpilde.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Pielāgotā lauka nosaukums</string>
     <string name="field_type_boolean">Patiesuma vērtība</string>
     <string name="field_type_hidden">Paslēpts</string>
@@ -817,11 +817,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Bija sarežģījumi reģistrācijas koda pārbaudīšanā.</string>
     <string name="turn_on_autofill">Ieslēgt automātisko aizpildi</string>
     <string name="autofill_setup">Automātiskās aizpildes iestatīšana</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Ieslēgt pārlūka automātiskās aizpildes iekļaušanu</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Tu izmanto pārlūku, kas pieprasa Bitwarden īpašas atļaujas, lai automātiski aizpildītu paroles.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Tu izmanto pārlūkus, kas pieprasa Bitwarden īpašas atļaujas, lai automātiski aizpildītu paroles.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Tu izmanto pārlūku, kas pieprasta Bitwarden īpašas atļaujas, lai automātiski aizpildītu paroles. Zemāk jāiespējo vēlamā automātiskās aizpildes iekļaušana.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Tu izmanto pārlūkus, kas pieprasa Bitwarden īpašas atļaujas, lai automātiski aizpildītu paroles. Visos uzstādītajos pārlūkos jāiespējo automātiskā aizpilde, lai turpinātu.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Automātiskā aizpilde ir izmantojama, lai pieteiktos savos kontos ar vienu piesitienu.</string>
     <string name="turn_on_later">Ieslēgt vēlāk</string>
     <string name="turn_on_autofill_later">Ieslēgt automātisko aizpildi vēlāk?</string>

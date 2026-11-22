@@ -296,7 +296,7 @@
     <string name="no_items_trash">В корзине нет элементов.</string>
     <string name="autofill_accessibility_summary">Помощь в заполнении имени пользователя и пароля в других приложениях и в интернете.</string>
     <string name="autofill_service_description">Служба автозаполнения Bitwarden использует фреймворк автозаполнения Android для заполнения логинов, номеров карт и личной информации в других приложениях на устройстве.</string>
-    <string name="bitwarden_autofill_go_to_settings">Не удалось автоматически открыть меню настроек автозаполнения Android. Вы можете перейти в меню настроек автозаполнения вручную из настроек Android &gt; Система &gt; Языки и ввод &gt; Дополнительно &gt; Служба автозаполнения.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Не удалось автоматически открыть меню настроек автозаполнения Android. Вы можете перейти в меню настроек автозаполнения вручную из настроек Android.</string>
     <string name="custom_field_name">Название пользовательского поля</string>
     <string name="field_type_boolean">Логическое</string>
     <string name="field_type_hidden">Скрытое</string>
@@ -741,7 +741,7 @@
     <string name="launch_duo">Запустить Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш passkey будет сохранен в вашем хранилище Bitwarden для %1$s</string>
     <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Ваш пароль будет сохранен в вашем хранилище Bitwarden для %1$s</string>
-    <string name="passkeys_not_supported_for_this_app">Ключи доступа не поддерживаются для этого приложения</string>
+    <string name="passkeys_not_supported_for_this_app">Passkey не поддерживается для этого приложения</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Операция с Passkey не удалась, поскольку браузер не имеет привилегий</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операция с Passkey не удалась, поскольку подпись браузера не совпадает</string>
     <string name="passkey_operation_failed_because_of_missing_asset_links">Операция с Passkey не удалась из-за отсутствия ссылок на ресурсы</string>
@@ -822,11 +822,13 @@
     <string name="there_was_an_issue_validating_the_registration_token">Возникла проблема при проверке токена регистрации.</string>
     <string name="turn_on_autofill">Включить автозаполнение</string>
     <string name="autofill_setup">Настройка автозаполнения</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Выберите в браузере \'Автозаполнение с помощью другого сервиса\'</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Выберите в браузерах \'Автозаполнение с помощью другого сервиса\'</string>
     <string name="turn_on_browser_autofill_integration">Включить интеграцию с автозаполнением браузера</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Вы используете браузер, который требует специальных разрешений для Bitwarden для автоматического заполнения ваших паролей.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Вы используете браузеры, которые требуют специальных разрешений для Bitwarden для автоматического заполнения ваших паролей.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Для автоматического заполнения паролей вы используете браузер, для которого Bitwarden необходимы специальные разрешения. Включите интеграцию с автозаполнением ниже.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Для автоматического заполнения паролей вы используете браузер, для которого Bitwarden необходимы специальные разделения. Для продолжения работы включите автозаполнение для всех установленных вами браузеров.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">Для автоматического заполнения паролей вы используете браузеры, для которых Bitwarden необходимы специальные разрешения. Включите интеграцию с автозаполнением ниже.</string>
     <string name="use_autofill_to_log_into_your_accounts">Используйте автозаполнение для авторизации в ваших аккаунтах одним нажатием.</string>
     <string name="turn_on_later">Включить позже</string>
     <string name="turn_on_autofill_later">Включить автозаполнение позже?</string>

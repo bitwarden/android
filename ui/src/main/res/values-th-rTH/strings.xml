@@ -293,7 +293,7 @@
     <string name="no_items_trash">ไม่มีรายการในถังขยะ</string>
     <string name="autofill_accessibility_summary">ช่วยกรอกชื่อผู้ใช้และรหัสผ่านในแอปอื่นและบนเว็บ</string>
     <string name="autofill_service_description">The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</string>
-    <string name="bitwarden_autofill_go_to_settings">เราไม่สามารถเปิดเมนูการตั้งค่าการป้อนข้อมูลอัตโนมัติของ Android ให้คุณโดยอัตโนมัติ คุณสามารถไปที่เมนูการตั้งค่าได้ด้วยตัวเองจาก การตั้งค่า Android &gt; ระบบ &gt; ภาษาและการป้อนข้อมูล &gt; ขั้นสูง &gt; บริการป้อนข้อมูลอัตโนมัติ</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">ชื่อเขตข้อมูล ที่กำหนดเอง</string>
     <string name="field_type_boolean">ค่าบูลีน</string>
     <string name="field_type_hidden">ซ่อน</string>
@@ -807,11 +807,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">เกิดปัญหาในการตรวจสอบโทเค็นการลงทะเบียน</string>
     <string name="turn_on_autofill">เปิดใช้งานป้อนอัตโนมัติ</string>
     <string name="autofill_setup">การตั้งค่าการป้อนอัตโนมัติ</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">เปิดใช้งานการรวมการป้อนอัตโนมัติในเบราว์เซอร์</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">คุณกำลังใช้เบราว์เซอร์ที่ต้องใช้สิทธิ์พิเศษเพื่อให้ Bitwarden ป้อนรหัสผ่านอัตโนมัติได้</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">คุณกำลังใช้เบราว์เซอร์ที่ต้องใช้สิทธิ์พิเศษเพื่อให้  Bitwarden ป้อนรหัสผ่านอัตโนมัติได้</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">คุณกำลังใช้เบราว์เซอร์ที่ต้องใช้สิทธิ์พิเศษเพื่อให้ Bitwarden ป้อนรหัสผ่านอัตโนมัติได้ เปิดใช้งานการรวมการป้อนอัตโนมัติที่คุณต้องการด้านล่าง</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">คุณกำลังใช้เบราว์เซอร์ที่ต้องใช้สิทธิ์พิเศษเพื่อให้ Bitwarden ป้อนรหัสผ่านอัตโนมัติได้ เปิดใช้งานการป้อนอัตโนมัติสำหรับเบราว์เซอร์ที่ติดตั้งทั้งหมดเพื่อดำเนินการต่อ</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">ใช้การป้อนอัตโนมัติเพื่อเข้าสู่ระบบบัญชีของคุณด้วยการแตะเพียงครั้งเดียว</string>
     <string name="turn_on_later">เปิดใช้งานภายหลัง</string>
     <string name="turn_on_autofill_later">เปิดใช้งานป้อนอัตโนมัติภายหลังหรือไม่</string>

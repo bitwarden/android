@@ -294,7 +294,7 @@
     <string name="no_items_trash">रद्दीटोकरीमा कुनै वस्तुहरू छैनन्।</string>
     <string name="autofill_accessibility_summary">अन्य एप र वेबमा प्रयोगकर्ता नाम र पासवर्ड फिल्डहरू भर्न सहायता गर्नुहोस्।</string>
     <string name="autofill_service_description">Bitwarden स्वत: भरण सेवाले तपाईंको यन्त्रमा अन्य एपहरूमा लगइन जानकारी भर्न सहायता गर्न Android Autofill Framework प्रयोग गर्छ।</string>
-    <string name="bitwarden_autofill_go_to_settings">हामी तपाईंको लागि Android स्वत: भरण सेटिङ्स मेनु स्वचालित रूपमा खोल्न सक्षम भएनौं। तपाईं Android सेटिङ्स &gt; प्रणाली &gt; भाषा र इनपुट &gt; उन्नत &gt; स्वत: भरण सेवाबाट म्यानुअल रूपमा स्वत: भरण सेटिङ्स मेनुमा नेभिगेट गर्न सक्नुहुन्छ।</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">अनुकूल फिल्ड नाम</string>
     <string name="field_type_boolean">बुलियन</string>
     <string name="field_type_hidden">लुकाइएको</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">दर्ता टोकन प्रमाणित गर्न समस्या भयो।</string>
     <string name="turn_on_autofill">स्वत: भरण सक्रिय गर्नुहोस्</string>
     <string name="autofill_setup">स्वत: भरण सेटअप</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ब्राउजर स्वत: भरण एकीकरण सक्रिय गर्नुहोस्</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">तपाईं एउटा ब्राउजर प्रयोग गर्दै हुनुहुन्छ जसलाई Bitwarden लाई तपाईंका पासवर्डहरू स्वत: भरण गर्न विशेष अनुमतिहरू आवश्यक पर्छ।</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">तपाईं ब्राउजरहरू प्रयोग गर्दै हुनुहुन्छ जसलाई Bitwarden लाई तपाईंका पासवर्डहरू स्वत: भरण गर्न विशेष अनुमतिहरू आवश्यक पर्छ।</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">तपाईं एउटा ब्राउजर प्रयोग गर्दै हुनुहुन्छ जसलाई Bitwarden लाई तपाईंका पासवर्डहरू स्वत: भरण गर्न विशेष अनुमतिहरू आवश्यक पर्छ। तल आफ्नो मनपर्ने स्वत: भरण एकीकरण सक्षम गर्नुहोस्।</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">तपाईं ब्राउजरहरू प्रयोग गर्दै हुनुहुन्छ जसलाई Bitwarden लाई तपाईंका पासवर्डहरू स्वत: भरण गर्न विशेष अनुमतिहरू आवश्यक पर्छ। जारी राख्न आफ्ना सबै स्थापित ब्राउजरहरूको लागि स्वत: भरण सक्षम गर्नुहोस्।</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">एकै ट्यापमा आफ्ना खाताहरूमा लग इन गर्न स्वत: भरण प्रयोग गर्नुहोस्।</string>
     <string name="turn_on_later">पछि सक्रिय गर्नुहोस्</string>
     <string name="turn_on_autofill_later">पछि स्वत: भरण सक्रिय गर्ने?</string>

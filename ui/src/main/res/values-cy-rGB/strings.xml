@@ -298,7 +298,7 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="no_items_trash">Does dim eitemau yn y bin sbwriel.</string>
     <string name="autofill_accessibility_summary">Cynorthwyo gyda llenwi meysydd enw defnyddiwr a chyfrinair mewn apiau eraill ac ar y we.</string>
     <string name="autofill_service_description">Mae gwasanaeth llenwi awtomatig Bitwarden yn defnyddio Fframwaith Llenwi Awtomatig Android i gynorthwyo i lenwi gwybodaeth mewngofnodi i apiau eraill ar eich dyfais.</string>
-    <string name="bitwarden_autofill_go_to_settings">Ni allem agor dewislen gosodiadau llenwi awtomatig Android yn awtomatig i chi. Gallwch lywio i\'r ddewislen gosodiadau llenwi awtomatig â llaw o Gosodiadau Android &gt; System &gt; Ieithoedd a mewnbwn &gt; Uwch &gt; Gwasanaeth llenwi awtomatig.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Enw maes personol</string>
     <string name="field_type_boolean">Gwerth Boole</string>
     <string name="field_type_hidden">Cudd</string>
@@ -832,11 +832,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Cafwyd problem wrth ddilysu\'r tocyn cofrestru.</string>
     <string name="turn_on_autofill">Trowch llenwi awtomatig ymlaen</string>
     <string name="autofill_setup">Sefydlu llenwi awtomatig</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Troi integreiddio llenwi awtomatig porwr ymlaen</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Rydych chi\'n defnyddio porwr sy\'n gofyn am ganiatadau arbennig i Bitwarden lenwi\'ch cyfrineiriau yn awtomatig.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Rydych chi\'n defnyddio porwyr sy\'n gofyn am ganiatadau arbennig i Bitwarden lenwi\'ch cyfrineiriau yn awtomatig.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Rydych chi\'n defnyddio porwr sy\'n gofyn am ganiatadau arbennig i Bitwarden lenwi\'ch cyfrineiriau yn awtomatig. Galluogwch eich integreiddio llenwi awtomatig dewisol isod.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Rydych chi\'n defnyddio porwyr sy\'n gofyn am ganiatadau arbennig i Bitwarden lenwi\'ch cyfrineiriau yn awtomatig. Galluogwch lenwi awtomatig ar gyfer eich holl borwyr sydd wedi\'u gosod i barhau.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Defnyddiwch lenwi awtomatig i fewngofnodi i\'ch cyfrifon gydag un tapiad.</string>
     <string name="turn_on_later">Troi ymlaen yn hwyrach</string>
     <string name="turn_on_autofill_later">Troi llenwi awtomatig ymlaen yn hwyrach?</string>

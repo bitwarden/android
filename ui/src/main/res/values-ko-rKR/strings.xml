@@ -293,7 +293,7 @@
     <string name="no_items_trash">휴지통에 아무 항목도 없습니다.</string>
     <string name="autofill_accessibility_summary">다른 앱 및 웹에서 사용자 이름 및 비밀번호 필드 작성을 지원합니다.</string>
     <string name="autofill_service_description">Bitwarden 자동 완성 서비스는 기기의 다른 앱에서 로그인, 신용 카드 및 신원 정보를 입력하기 위해 Android 자동완성 프레임워크를 사용합니다.</string>
-    <string name="bitwarden_autofill_go_to_settings">Android 자동 완성 설정 메뉴를 자동으로 열지 못했습니다. Android 설정 &gt; 시스템 &gt; 언어 및 입력 &gt; 고급 &gt; 자동완성 서비스 메뉴로 직접 이동하실 수 있습니다.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">사용자 지정 필드 이름</string>
     <string name="field_type_boolean">참 / 거짓</string>
     <string name="field_type_hidden">숨김</string>
@@ -807,11 +807,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">등록 토큰을 검증하는 데 문제가 발생했습니다.</string>
     <string name="turn_on_autofill">자동 채우기 켜기</string>
     <string name="autofill_setup">자동 완성 설정</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">브라우저 자동 완성 연동 켜기</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden이 비밀번호를 자동 완성하려면 특별한 권한을 부여해야 하는 브라우저를 이용하고 계십니다.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden이 비밀번호를 자동 완성하려면 특별한 권한을 부여해야 하는 브라우저를 이용하고 계십니다.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden이 비밀번호를 자동 완성하려면 특별한 권한을 부여해야 하는 브라우저를 이용하고 계십니다. 아래에서 원하는 자동 완성 연동 기능을 켜세요.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden이 비밀번호를 자동 완성하려면 특별한 권한을 부여해야 하는 브라우저를 이용하고 계십니다. 계속하려면 설치한 모든 브라우저에서 자동 완성을 켜세요.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">자동 채우기를 사용하여 한 번의 탭으로 계정에 로그인하세요.</string>
     <string name="turn_on_later">나중에 켜기</string>
     <string name="turn_on_autofill_later">나중에 자동 채우기를 켜시겠습니까?</string>

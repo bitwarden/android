@@ -293,7 +293,7 @@
     <string name="no_items_trash">Zakarrontzian ez dago elementurik.</string>
     <string name="autofill_accessibility_summary">Lagundu erabiltzaile-izen eta pasahitz eremuak betetzen beste aplikazioetan eta webgunean.</string>
     <string name="autofill_service_description">Bitwardenen automatikoki betetzeko zerbitzuak Android Autofill Framework erabiltzen du zure gailuko beste aplikazio batzuetan saio-hasierako informazioa betetzen laguntzeko.</string>
-    <string name="bitwarden_autofill_go_to_settings">Ezin izan dugu automatikoki ireki Android-en auto-betetzerako ezarpenen menua. Auto-betetzerako ezarpenen menura eskuz nabiga dezakezu, Android-en Ezarpenak &gt; Sistema &gt; Hizkuntzak eta idazketa &gt; Hobespen aurreratuak &gt; Betetze automatikoaren zerbitzutik.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Eremu pertsonalizatuaren izena</string>
     <string name="field_type_boolean">Boolearra</string>
     <string name="field_type_hidden">Ezkutatua</string>
@@ -810,11 +810,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Arazo bat egon da erregistro-tokena balioztatzean.</string>
     <string name="turn_on_autofill">Aktibatu autobeteketa</string>
     <string name="autofill_setup">Autobeteketaren konfigurazioa</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Aktibatu nabigatzailearen autobeteketaren integrazioa</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden-ek zure pasahitzak autobetetzeko baimen bereziak behar dituen nabigatzaile bat erabiltzen ari zara.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden-ek zure pasahitzak autobetetzeko baimen bereziak behar dituzten nabigatzaileak erabiltzen ari zara.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden-ek zure pasahitzak autobetetzeko baimen bereziak behar dituen nabigatzaile bat erabiltzen ari zara. Gaitu behean zure autobeteketa-integrazio gogokoena.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden-ek zure pasahitzak autobetetzeko baimen bereziak behar dituzten nabigatzaileak erabiltzen ari zara. Gaitu autobeteketa zure instalatutako nabigatzaile guztietan jarraitzeko.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Erabili autobeteketa zure kontuetan saioa hasteko ukitu bakarrarekin.</string>
     <string name="turn_on_later">Aktibatu geroago</string>
     <string name="turn_on_autofill_later">Autobeteketa geroago aktibatu?</string>

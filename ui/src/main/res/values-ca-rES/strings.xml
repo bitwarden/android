@@ -294,7 +294,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="no_items_trash">No hi ha elements a la paperera.</string>
     <string name="autofill_accessibility_summary">Ajuda a omplir els camps de nom d\'usuari i contrasenya en altres aplicacions i al web.</string>
     <string name="autofill_service_description">El servei d\'emplenament automàtic de Bitwarden utilitza el marc d\'emplenament automàtic d\'Android per ajudar-vos a omplir la informació d\'inici de sessió a altres aplicacions del vostre dispositiu.</string>
-    <string name="bitwarden_autofill_go_to_settings">No hem pogut obrir automàticament el menú de configuració de l\'emplenament automàtic d\'Android. Podeu anar manualment des de la configuració d\'Android &gt; Sistema &gt; Idiomes i entrada &gt; Avançat &gt; Servei d\'emplenament automàtic.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Nom del camp personalitzat</string>
     <string name="field_type_boolean">Booleà</string>
     <string name="field_type_hidden">Amagat</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Hi ha hagut un problema en validar el token de registre.</string>
     <string name="turn_on_autofill">Activeu l\'emplenament automàtic</string>
     <string name="autofill_setup">Configuració d\'emplenament automàtic</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Activa la integració d\'emplenament automàtic al navegador</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Estàs utilitzant un navegador que requereix permisos especials perquè Bitwarden pugui emplenar automàticament les teves contrasenyes.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Estàs utilitzant navegadors que requereixen permisos especials perquè Bitwarden pugui emplenar automàticament les teves contrasenyes.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Estàs utilitzant un navegador que requereix permisos especials perquè Bitwarden pugui emplenar automàticament les teves contrasenyes. Activa la integració d\'emplenament automàtic que prefereixis a continuació.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Estàs utilitzant navegadors que requereixen permisos especials perquè Bitwarden pugui emplenar automàticament les teves contrasenyes. Activa l\'emplenament automàtic per a tots els teus navegadors instal·lats per continuar.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utilitza l\'emplenament automàtic per iniciar sessió als teus comptes amb un sol toc.</string>
     <string name="turn_on_later">Activa més tard</string>
     <string name="turn_on_autofill_later">Activar l\'emplenament automàtic més tard?</string>

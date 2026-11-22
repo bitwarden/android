@@ -294,7 +294,7 @@ La numérisation se fera automatiquement.</string>
     <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
     <string name="autofill_accessibility_summary">Aide à remplir les champs de nom d\'utilisateur et de mot de passe dans d\'autres applications et sur le Web.</string>
     <string name="autofill_service_description">Le service de saisie automatique Bitwarden utilise le framework de saisie automatique d\'Android pour vous aider à remplir les informations de connexion dans les autres applications de votre appareil.</string>
-    <string name="bitwarden_autofill_go_to_settings">Nous n\'avons pas pu ouvrir automatiquement le menu des paramètres de saisie automatique d\'Android. Vous pouvez manuellement naviguer vers le menu des paramètres de saisie automatique à partir des paramètres Android &gt; Système &gt; Langues et saisie &gt; Paramètres avancés &gt; Service de saisie automatique.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Nom du champ personnalisé</string>
     <string name="field_type_boolean">Booléen</string>
     <string name="field_type_hidden">Masqué</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Un problème est survenu lors de la validation du jeton d\'enregistrement.</string>
     <string name="turn_on_autofill">Activer le remplissage automatique</string>
     <string name="autofill_setup">Réglage de la saisie automatique</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Activer l\'intégration de la saisie automatique du navigateur</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Vous utilisez un navigateur qui nécessite des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Vous utilisez des navigateurs qui nécessitent des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Vous utilisez un navigateur qui nécessite des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe. Activez votre intégration de saisie automatique préférée ci-dessous.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Vous utilisez des navigateurs qui nécessitent des autorisations spéciales pour que Bitwarden saisisse automatiquement vos mots de passe. Activez la saisie automatique sur tous vos navigateurs installés.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Utilisez le remplissage automatique pour vous connecter à vos comptes en un seul clic.</string>
     <string name="turn_on_later">Activer plus tard</string>
     <string name="turn_on_autofill_later">Activer le remplissage automatique plus tard ?</string>

@@ -296,7 +296,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="no_items_trash">V koši nie sú žiadne položky.</string>
     <string name="autofill_accessibility_summary">Pomáha s vypĺňaním polí používateľského mena a hesla v iných aplikáciách a na webe.</string>
     <string name="autofill_service_description">Služba automatického vypĺňania Bitwarden používa Android Autofill Framework na zjednodušenie vypĺňania prihlasovacích údajov do iných aplikácií v zariadení.</string>
-    <string name="bitwarden_autofill_go_to_settings">Nepodarilo sa automaticky otvoriť nastavenia automatického vypĺňania pre systém Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Jazyky a vstup &gt; Rozšírené &gt; Služba automatického vypĺňania.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Nepodarilo sa automaticky otvoriť nastavenia automatického vypĺňania pre Android. Môžete otvoriť nastavenie manuálne cez nastavenia systému.</string>
     <string name="custom_field_name">Názov vlastného poľa</string>
     <string name="field_type_boolean">Áno/Nie</string>
     <string name="field_type_hidden">Skryté</string>
@@ -822,11 +822,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Vyskytol sa problém s overením registračného tokenu.</string>
     <string name="turn_on_autofill">Zapnúť automatické vypĺňanie</string>
     <string name="autofill_setup">Nastavenie automatického vypĺňania</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Vyberte v prehliadači \"Automatické dopĺňanie pomocou inej služby\"</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Vyberte v prehliadačoch \"Automatické dopĺňanie pomocou inej služby\"</string>
     <string name="turn_on_browser_autofill_integration">Zapnúť integráciu automatického vyplňovania v prehliadači</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Používate prehliadač, ktorý vyžaduje špeciálne povolenia na automatické vyplňovanie hesiel pomocou Bitwarden.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Používate prehliadače, ktoré vyžadujú špeciálne povolenia na automatické vyplňovanie hesiel pomocou Bitwarden.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Používate prehliadač, ktorý vyžaduje špeciálne povolenia na automatické vyplňovanie hesiel pomocou Bitwarden. Povoľte preferovanú integráciu automatického vyplňovania.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Používate prehliadače, ktoré vyžadujú špeciálne povolenia na automatické vyplňovanie hesiel pomocou Bitwarden.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">Používate prehliadač, ktorý vyžaduje špeciálne povolenia na automatické vypĺňanie hesiel pomocou Bitwarden. Povoľte preferovanú integráciu automatického vypĺňania.</string>
     <string name="use_autofill_to_log_into_your_accounts">Použiť automatické vypĺňanie na prihlásenie jedným ťuknutím.</string>
     <string name="turn_on_later">Zapnúť neskôr</string>
     <string name="turn_on_autofill_later">Zapnúť automatické vypĺňanie neskôr?</string>

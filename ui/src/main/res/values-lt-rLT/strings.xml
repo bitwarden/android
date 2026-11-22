@@ -296,7 +296,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="no_items_trash">Šiukšliadėžėje elementų nėra.</string>
     <string name="autofill_accessibility_summary">Padėti pildyti vartotojo vardo ir slaptažodžio laukus kitose programose ir internete.</string>
     <string name="autofill_service_description">„Bitwarden“ automatinio pildymo paslauga naudoja „Android“ automatinio pildymo sistemą, kad padėtų užpildyti prisijungimo informaciją į kitas jūsų įrenginio programas.</string>
-    <string name="bitwarden_autofill_go_to_settings">Negalėjome automatiškai atidaryti „Android“ automatinio pildymo nustatymų meniu. Automatinio pildymo nustatymų meniu galite naršyti rankiniu būdu iš „Android“ nustatymų &gt; Sistema &gt; Kalbos ir įvestis &gt; Išsamiau &gt; Automatinio pildymo paslauga.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Pasirinktinio lauko pavadinimas</string>
     <string name="field_type_boolean">Dvejetainiai veiksmai</string>
     <string name="field_type_hidden">Paslėpta</string>
@@ -822,11 +822,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Kilo problema tikrinant registracijos prieigos raktą.</string>
     <string name="turn_on_autofill">Įjungti automatinį pildymą</string>
     <string name="autofill_setup">Automatinio pildymo nustatymas</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Įjungti naršyklės automatinio pildymo integraciją</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Naudojate naršyklę, kuriai reikalingi specialūs leidimai, kad „Bitwarden“ galėtų automatiškai užpildyti jūsų slaptažodžius.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Naudojate naršykles, kurioms reikalingi specialūs leidimai, kad „Bitwarden“ galėtų automatiškai užpildyti jūsų slaptažodžius.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Naudojate naršyklę, kuriai reikalingi specialūs leidimai, kad „Bitwarden“ galėtų automatiškai užpildyti jūsų slaptažodžius. Žemiau įjunkite norimą automatinio pildymo integraciją.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Naudojate naršykles, kurioms reikalingi specialūs leidimai, kad „Bitwarden“ galėtų automatiškai užpildyti jūsų slaptažodžius. Norėdami tęsti, įjunkite automatinį pildymą visose įdiegtose naršyklėse.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Naudokite automatinį pildymą, kad vienu bakstelėjimu prisijungtumėte prie savo paskyrų.</string>
     <string name="turn_on_later">Įjungti vėliau</string>
     <string name="turn_on_autofill_later">Įjungti automatinį pildymą vėliau?</string>

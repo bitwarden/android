@@ -293,7 +293,7 @@
     <string name="no_items_trash">Nincs elem a lomtárban.</string>
     <string name="autofill_accessibility_summary">Segítségnyújtás a felhasználónév és jelszó mezők kitöltésében más alkalmazásokban és a weben.</string>
     <string name="autofill_service_description">A Bitwarden automatikus kitöltési szolgáltatása az Android automatikus kitöltő keretrendszerét használja a bejelentkezési adatok, hitelkártyaadatok és azonosítóadatok kitöltésére az eszközén telepített más alkalmazásokban.</string>
-    <string name="bitwarden_autofill_go_to_settings">Nem sikerült automatikusan megnyitni az Android automatikus kitöltés beállításai menüt. A beállítás megnyitásához nyitssuk meg a Beállítások &gt; Rendszer &gt; Nyelv és bevitel &gt; Speciális &gt; Automatikus kitöltés menüpontot.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Egyedi mezőnév</string>
     <string name="field_type_boolean">Logikai</string>
     <string name="field_type_hidden">Rejtett</string>
@@ -811,11 +811,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Hiba történt a regisztrációs vezérkód érvényesítése során.</string>
     <string name="turn_on_autofill">Automat kitöltés bekapcsolása</string>
     <string name="autofill_setup">Automatikus kitöltés beüzemelés</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">A böngésző automatikus kitöltési integrációjának bekapcsolása</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Olyan böngészőt használunk, amely speciális engedélyeket igényel a Bitwarden számára a jelszavak automatikus kitöltéséhez.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Olyan böngészőket használunk, amely speciális engedélyeket igényelnek a Bitwarden számára a jelszavak automatikus kitöltéséhez.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Olyan böngészőt használunk, amely speciális engedélyeket igényel a Bitwarden számára a jelszavak automatikus kitöltéséhez. Engedélyezzük a preferált automatikus kitöltési integrációt lentebb.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Olyan böngészőket használunk, amelyek speciális engedélyeket igényelnek a Bitwarden számára a jelszavak automatikus kitöltéséhez. Engedélyezzük az automatikus kitöltést az összes telepített böngészőhöz a folytatásához.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Lépjen be a fiókjába egy koppintással az automatikus kitöltés segítségével.</string>
     <string name="turn_on_later">Bekapcsolás később</string>
     <string name="turn_on_autofill_later">Automatikus kitöltés betöltése később?</string>

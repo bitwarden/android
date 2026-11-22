@@ -298,7 +298,7 @@
     <string name="no_items_trash">لا توجد عناصر في سلة المهملات.</string>
     <string name="autofill_accessibility_summary">المساعدة في ملء اسم المستخدم وحقول كلمة المرور في التطبيقات الأخرى وعلى الويب.</string>
     <string name="autofill_service_description">تستخدم خدمة Bitwarden للتعبئة التلقائية إطار التشغيل التلقائي لأندرويد للمساعدة في ملء معلومات تسجيل الدخول في تطبيقات أخرى على جهازك.</string>
-    <string name="bitwarden_autofill_go_to_settings">لم نتمكن من فتح قائمة إعداداتالملء التلقائي لـAndroid تلقائياً. يمكنك الانتقال إلى قائمة إعداداتالملء التلقائي يدويًا من إعدادات أندرويد &gt; النظام &gt; اللغات و الإدخال &gt; الخدمة المتقدمة &gt; خدمةالملء التلقائي.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">اسم الحقل المخصص</string>
     <string name="field_type_boolean">قيمة منطقية</string>
     <string name="field_type_hidden">مخفي</string>
@@ -832,11 +832,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">حدثت مشكلة أثناء التحقق من صحة رمز التسجيل.</string>
     <string name="turn_on_autofill">تشغيلالملء التلقائي</string>
     <string name="autofill_setup">إعداد الملء التلقائي</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">تفعيل دمج الملء التلقائي للمتصفح</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">أنت تستخدم متصفحًا يتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">أنت تستخدم المتصفحات التي تتطلب أذونات خاصة لـ Bitwarden لملء كلمات المرور الخاصة بك تلقائياً.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات مرورك. يرجى تفعيل الملء التلقائي المفضل لديك أدناه.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">أنت تستخدم المتصفحات التي تتطلب صلاحيات خاصة لـ Bitwarden لملء كلمات مرورك. يرجى تفعيل الملء التلقائي لجميع المتصفحات المثبتة للمتابعة.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">استخدمالملء التلقائي لتسجيل الدخول إلى حساباتك بنقرة واحدة.</string>
     <string name="turn_on_later">التفعيل في وقت لاحق</string>
     <string name="turn_on_autofill_later">هل تريد تفعيل الملء التلقائي في وقت لاحق؟</string>

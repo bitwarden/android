@@ -294,7 +294,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="no_items_trash">Çöp kutusunda hiç kayıt yok.</string>
     <string name="autofill_accessibility_summary">Diğer uygulamalarda ve web\'de kullanıcı adlarını ve parolaları doldurmaya yardımcı ol.</string>
     <string name="autofill_service_description">Bitwarden otomatik doldurma hizmeti, cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi\'ni kullanır.</string>
-    <string name="bitwarden_autofill_go_to_settings">Android otomatik doldurma ayarları menüsünü otomatik olarak açamadık. Lütfen şu yolu izleyerek otomatik doldurma ayarları menüsüne gidin: Android ayarları &gt; Sistem&gt; Dil ve giriş &gt; Gelişmiş &gt; Otomatik doldurma hizmeti.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Özel alan adı</string>
     <string name="field_type_boolean">Boole</string>
     <string name="field_type_hidden">Gizli</string>
@@ -811,11 +811,13 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Kayıt erişim anahtarını doğrulamada bir sorun oluştu.</string>
     <string name="turn_on_autofill">Otomatik doldurmayı etkinleştir</string>
     <string name="autofill_setup">Otomatik doldurma kurulumu</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Tarayıcıda otomatik doldurma entegrasyonunu etkinleştirin</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izinler gerektiren tarayıcılar kullanıyorsunuz.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izinler gerektiren tarayıcılar kullanıyorsunuz.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izin gerektiren bir tarayıcı kullanıyorsunuz. Tercih ettiğiniz otomatik doldurma entegrasyonunu aşağıdan etkinleştirin.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden\'ın parolalarınızı otomatik olarak doldurması için özel izin gerektiren tarayıcılar kullanıyorsunuz. Devam etmek için yüklü tarayıcılarınızda otomatik doldurma entegrasyonunu etkinleştirin.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Hesaplarınıza tek dokunuşla giriş yapmak için otomatik doldurmayı kullanabilirsiniz.</string>
     <string name="turn_on_later">Daha sonra etkinleştir</string>
     <string name="turn_on_autofill_later">Otomatik doldurma daha sonra mı etkinleştirilsin?</string>

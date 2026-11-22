@@ -294,7 +294,7 @@
     <string name="no_items_trash">Себетте эч кандай элементтер жок.</string>
     <string name="autofill_accessibility_summary">Башка колдонмолордо жана вебде колдонуучу аты жана сырсөз талааларын толтурууга жардам берүү.</string>
     <string name="autofill_service_description">Bitwarden автолуктоо кызматы түзмөгүңүздөгү башка колдонмолорго кирүү маалыматтарын толтурууга жардам берүү үчүн Android Автолуктоо рамкасын колдонот.</string>
-    <string name="bitwarden_autofill_go_to_settings">Биз сиз үчүн Android автолуктоо орнотуулар менюсун автоматтык түрдө ача албай калдык. Сиз Android Орнотуулар &gt; Система &gt; Тилдер жана киргизүү &gt; Кошумча &gt; Автолуктоо кызматы аркылуу автолуктоо орнотуулар менюсуна кол менен өтө аласыз.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Ыңгайлаштырылган талаанын аты</string>
     <string name="field_type_boolean">Логикалык</string>
     <string name="field_type_hidden">Жашыруун</string>
@@ -812,11 +812,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Каттоо токенин текшерүүдө көйгөй чыкты.</string>
     <string name="turn_on_autofill">Автолуктоону күйгүзүү</string>
     <string name="autofill_setup">Автолуктоо орнотуу</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Браузер автолуктоо интеграциясын күйгүзүү</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Сиз Bitwardenдин сырсөздөрүңүздү автолуктоосу үчүн атайын уруксаттарды талап кылган браузерди колдонуп жатасыз.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Сиз Bitwardenдин сырсөздөрүңүздү автолуктоосу үчүн атайын уруксаттарды талап кылган браузерлерди колдонуп жатасыз.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Сиз Bitwardenдин сырсөздөрүңүздү автолуктоосу үчүн атайын уруксаттарды талап кылган браузерди колдонуп жатасыз. Төмөндө каалаган автолуктоо интеграцияңызды иштетиңиз.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Сиз Bitwardenдин сырсөздөрүңүздү автолуктоосу үчүн атайын уруксаттарды талап кылган браузерлерди колдонуп жатасыз. Улантуу үчүн бардык орнотулган браузерлериңиз үчүн автолуктоону иштетиңиз.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Бир басуу менен эсептериңизге кирүү үчүн автолуктоону колдонуңуз.</string>
     <string name="turn_on_later">Кийин күйгүзүү</string>
     <string name="turn_on_autofill_later">Автолуктоону кийин күйгүзүү?</string>
