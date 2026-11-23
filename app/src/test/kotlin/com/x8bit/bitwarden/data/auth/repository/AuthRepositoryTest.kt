@@ -5230,6 +5230,87 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `register should send a trimmed and lowercased salt`() = runTest {
+        val email = "  Test@Bitwarden.com "
+        coEvery {
+            authSdkSource.postKeysForUserPasswordRegistration(
+                email = email,
+                salt = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            )
+        } returns mockk<UserMasterPasswordRegistrationResponse>().asSuccess()
+
+        val result = repository.register(
+            email = email,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
+        )
+
+        assertEquals(RegisterResult.Success, result)
+        coVerify(exactly = 1) {
+            authSdkSource.postKeysForUserPasswordRegistration(
+                email = email,
+                salt = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            )
+        }
+    }
+
+    @Test
+    fun `register should send a trimmed and lowercased salt with v1 encryption`() = runTest {
+        every { featureFlagManager.getFeatureFlag(FlagKey.V2EncryptionPassword) } returns false
+        val email = "  Test@Bitwarden.com "
+        val kdf = Kdf.Pbkdf2(DEFAULT_KDF_ITERATIONS.toUInt())
+        coEvery {
+            authSdkSource.makeRegisterKeys(email = email, password = PASSWORD, kdf = kdf)
+        } returns RegisterKeyResponse(
+            masterPasswordHash = PASSWORD_HASH,
+            encryptedUserKey = ENCRYPTED_USER_KEY,
+            keys = RsaKeyPair(public = PUBLIC_KEY, private = PRIVATE_KEY),
+        ).asSuccess()
+        val request = RegisterFinishRequestJson(
+            email = email,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            masterPasswordHint = null,
+            userAsymmetricKeys = KeysJson(
+                publicKey = PUBLIC_KEY,
+                encryptedPrivateKey = PRIVATE_KEY,
+            ),
+            kdf = KdfJson(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = DEFAULT_KDF_ITERATIONS,
+                memory = null,
+                parallelism = null,
+            ),
+            salt = EMAIL,
+            masterPasswordAuthenticationHash = PASSWORD_HASH,
+            masterKeyWrappedUserKey = ENCRYPTED_USER_KEY,
+        )
+        coEvery {
+            identityService.registerFinish(body = request)
+        } returns RegisterResponseJson.Success.asSuccess()
+
+        val result = repository.register(
+            email = email,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
+        )
+
+        assertEquals(RegisterResult.Success, result)
+        coVerify(exactly = 1) { identityService.registerFinish(body = request) }
+    }
+
+    @Test
     fun `removePassword with no active account should return error`() = runTest {
         fakeAuthDiskSource.userState = null
 
