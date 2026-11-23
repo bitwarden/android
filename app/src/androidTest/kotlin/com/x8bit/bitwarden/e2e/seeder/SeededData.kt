@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.e2e.seeder
 
 import java.util.UUID
 
+// Matches the C# suite's production-realistic default; lower values trigger the app's KDF prompt.
+private const val KDF_ITERATIONS = 600_000
+
 /**
  * A user created through the Seeder.
  *
@@ -83,6 +86,3 @@ fun SeederClient.addLoginItem(account: SeededAccount, item: LoginItem) {
         resultSerializer = UserLoginCipherSceneResult.serializer(),
     )
 }
-
-// Matches the C# suite's production-realistic default; lower values trigger the app's KDF prompt.
-private const val KDF_ITERATIONS = 600_000

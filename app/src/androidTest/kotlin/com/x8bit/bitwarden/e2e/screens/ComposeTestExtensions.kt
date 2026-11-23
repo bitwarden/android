@@ -14,6 +14,12 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.test.platform.app.InstrumentationRegistry
 
 /**
+ * Upper bound for waits that depend on the network (login, sync), which Compose idling
+ * doesn't track.
+ */
+private const val NETWORK_TIMEOUT_MS = 30_000L
+
+/**
  * Waits until at least one node matches [matcher] and returns it; actions on the result require
  * the match to be unique. Fails with a timeout naming [matcher] if nothing matches.
  */
@@ -95,9 +101,3 @@ private fun SemanticsNodeInteraction.clicked(): Boolean =
         // The node was gone before the touch was injected, so nothing was clicked.
         false
     }
-
-/**
- * Upper bound for waits that depend on the network (login, sync), which Compose idling
- * doesn't track.
- */
-private const val NETWORK_TIMEOUT_MS = 30_000L

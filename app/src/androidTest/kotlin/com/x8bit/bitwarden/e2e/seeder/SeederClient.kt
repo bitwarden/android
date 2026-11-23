@@ -15,6 +15,20 @@ import java.io.IOException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
+// The app's own Json, so the tests parse with exactly the rules the app uses.
+private val json = CoreModule.providesJson(buildInfoManager = BitwardenBuildInfoManagerImpl())
+
+// Shared so tests don't each create their own connection pool. Seeding can be slow on a cold
+// server, so the read timeout is longer than OkHttp's default.
+private val httpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(60, TimeUnit.SECONDS)
+    .build()
+
+private val JSON_MEDIA_TYPE = "application/json".toMediaType()
+
+private const val MAX_ERROR_BODY = 500
+
 /**
  * Minimal SeederApi client: `POST /seed` to create data and `DELETE /seed/{playId}` to remove it.
  * Every request carries this client's [playId], so one call deletes everything it seeded.
@@ -73,17 +87,3 @@ class SeederClient(private val config: E2eConfig) {
             .header("Authorization", "Basic ${config.seederToken.value}")
             .header("x-play-id", playId)
 }
-
-// The app's own Json, so the tests parse with exactly the rules the app uses.
-private val json = CoreModule.providesJson(buildInfoManager = BitwardenBuildInfoManagerImpl())
-
-// Shared so tests don't each create their own connection pool. Seeding can be slow on a cold
-// server, so the read timeout is longer than OkHttp's default.
-private val httpClient = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(60, TimeUnit.SECONDS)
-    .build()
-
-private val JSON_MEDIA_TYPE = "application/json".toMediaType()
-
-private const val MAX_ERROR_BODY = 500

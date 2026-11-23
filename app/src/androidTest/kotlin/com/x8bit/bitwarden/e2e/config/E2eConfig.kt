@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.e2e.config
 import android.net.Uri
 import androidx.test.platform.app.InstrumentationRegistry
 
+private val PRODUCTION_DOMAINS = listOf("bitwarden.com", "bitwarden.eu")
+
 /**
  * Environment settings for end-to-end tests, read from instrumentation arguments
  * (`-e BW_TEST_SERVER_URL <url>`). Nothing is hard-coded.
@@ -60,5 +62,3 @@ data class E2eConfig(
 value class SeederToken(val value: String) {
     override fun toString(): String = "SeederToken(***)"
 }
-
-private val PRODUCTION_DOMAINS = listOf("bitwarden.com", "bitwarden.eu")
