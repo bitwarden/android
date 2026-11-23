@@ -76,6 +76,12 @@ class SdkRepositoryFactoryImpl(
         )
     }
 
+    override fun getServerCommunicationConfigRepository(): ServerCommunicationConfigRepository =
+        ServerCommunicationConfigRepositoryImpl(
+            cookieDiskSource = cookieDiskSource,
+            configDiskSource = configDiskSource,
+        )
+
     private fun createClientSettings(
         identityUrl: String,
         apiUrl: String,
@@ -88,12 +94,6 @@ class SdkRepositoryFactoryImpl(
             deviceIdentifier = serviceClientConfig.appIdProvider.uniqueAppId,
             bitwardenClientVersion = serviceClientConfig.clientData.clientVersion,
             bitwardenPackageType = null,
-        )
-
-    override fun getServerCommunicationConfigRepository(): ServerCommunicationConfigRepository =
-        ServerCommunicationConfigRepositoryImpl(
-            cookieDiskSource = cookieDiskSource,
-            configDiskSource = configDiskSource,
         )
 
     private fun getSdkCipherRepository(
