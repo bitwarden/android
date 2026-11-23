@@ -32,9 +32,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -42,7 +44,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
+@Suppress("LargeClass")
 class AutofillProcessorTest {
     private lateinit var autofillProcessor: AutofillProcessor
 
@@ -66,6 +70,7 @@ class AutofillProcessorTest {
 
     @BeforeEach
     fun setup() {
+        mockkObject(Timber.Forest)
         mockkStatic(::createAutofillSavedItemIntentSender)
         mockkStatic(AutofillRequest.Fillable::toAutofillSaveItem)
 
@@ -82,8 +87,13 @@ class AutofillProcessorTest {
 
     @AfterEach
     fun teardown() {
+        unmockkObject(Timber.Forest)
         unmockkStatic(::createAutofillSavedItemIntentSender)
         unmockkStatic(AutofillRequest.Fillable::toAutofillSaveItem)
+    }
+
+    private fun verifyLogged(reason: String) {
+        verify(exactly = 1) { Timber.d(match<String> { it.contains(reason) }) }
     }
 
     @Test
@@ -300,6 +310,26 @@ class AutofillProcessorTest {
     }
 
     @Test
+    fun `processSaveRequest should log SAVE_PROMPT_DISABLED when prompt disabled`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val saveRequest: SaveRequest = mockk()
+        every { settingsRepository.isAutofillSavePromptDisabled } returns true
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verifyLogged("SAVE_PROMPT_DISABLED")
+    }
+
+    @Test
     fun `processSaveRequest should invoke empty callback when personal ownership applies`() {
         // Setup
         val saveCallback: SaveCallback = mockk {
@@ -325,6 +355,30 @@ class AutofillProcessorTest {
             policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             saveCallback.onSuccess()
         }
+    }
+
+    @Test
+    fun `processSaveRequest should log ORG_DATA_OWNERSHIP_POLICY when policy applies`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val saveRequest: SaveRequest = mockk()
+        val policies: List<Policy> = listOf(mockk())
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns policies
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verifyLogged("ORG_DATA_OWNERSHIP_POLICY")
     }
 
     @Test
@@ -354,6 +408,31 @@ class AutofillProcessorTest {
             policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
             saveCallback.onSuccess()
         }
+    }
+
+    @Test
+    fun `processSaveRequest should log SAVE_NO_FILL_CONTEXT when no fill contexts`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val saveRequest: SaveRequest = mockk {
+            every { fillContexts } returns emptyList()
+        }
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns emptyList()
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verifyLogged("SAVE_NO_FILL_CONTEXT")
     }
 
     @Suppress("MaxLineLength")
@@ -471,6 +550,47 @@ class AutofillProcessorTest {
         }
     }
 
+    @Test
+    fun `processSaveRequest should log NO_SAVE_ITEM when no save item`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val assistStructure: AssistStructure = mockk()
+        val fillContext: FillContext = mockk {
+            every { structure } returns assistStructure
+        }
+        val saveRequest: SaveRequest = mockk {
+            every { fillContexts } returns listOf(fillContext)
+        }
+        val autofillPartition: AutofillPartition = mockk()
+        val autofillRequest: AutofillRequest.Fillable = mockk {
+            every { packageName } returns PACKAGE_NAME
+            every { partition } returns autofillPartition
+            every { toAutofillSaveItem() } returns null
+        }
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns emptyList()
+        every {
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+        } returns autofillRequest
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verifyLogged("NO_SAVE_ITEM")
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `processSaveRequest should invoke empty callback when autofill enabled, has fill contexts, and parser returns Unfillable`() {
@@ -514,6 +634,42 @@ class AutofillProcessorTest {
             )
             saveCallback.onSuccess()
         }
+    }
+
+    @Test
+    fun `processSaveRequest should log SAVE_UNFILLABLE when parser returns Unfillable`() {
+        // Setup
+        val saveCallback: SaveCallback = mockk {
+            every { onSuccess() } just runs
+        }
+        val assistStructure: AssistStructure = mockk()
+        val fillContext: FillContext = mockk {
+            every { structure } returns assistStructure
+        }
+        val saveRequest: SaveRequest = mockk {
+            every { fillContexts } returns listOf(fillContext)
+        }
+        val autofillRequest = AutofillRequest.Unfillable
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every {
+            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
+        } returns emptyList()
+        every {
+            parser.parse(
+                autofillAppInfo = appInfo,
+                assistStructure = assistStructure,
+            )
+        } returns autofillRequest
+
+        // Test
+        autofillProcessor.processSaveRequest(
+            autofillAppInfo = appInfo,
+            request = saveRequest,
+            saveCallback = saveCallback,
+        )
+
+        // Verify
+        verifyLogged("SAVE_UNFILLABLE")
     }
 
     @Suppress("MaxLineLength")

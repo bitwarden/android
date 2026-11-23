@@ -76,11 +76,13 @@ class AutofillProcessorImpl(
         saveCallback: SaveCallback,
     ) {
         if (settingsRepository.isAutofillSavePromptDisabled) {
+            Timber.d("Autofill save skipped: SAVE_PROMPT_DISABLED")
             saveCallback.onSuccess()
             return
         }
 
         if (policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any()) {
+            Timber.d("Autofill save skipped: ORG_DATA_OWNERSHIP_POLICY")
             saveCallback.onSuccess()
             return
         }
@@ -106,13 +108,28 @@ class AutofillProcessorImpl(
                                 )
                             }
                             ?.let { saveCallback.onSuccess(it) }
-                            ?: saveCallback.onSuccess()
+                            ?: run {
+                                val partitionType = autofillRequest
+                                    .partition::class
+                                    .java
+                                    .simpleName
+                                Timber.d(
+                                    "Autofill save skipped: NO_SAVE_ITEM partition=$partitionType",
+                                )
+                                saveCallback.onSuccess()
+                            }
                     }
 
-                    AutofillRequest.Unfillable -> saveCallback.onSuccess()
+                    AutofillRequest.Unfillable -> {
+                        Timber.d("Autofill save skipped: SAVE_UNFILLABLE")
+                        saveCallback.onSuccess()
+                    }
                 }
             }
-            ?: saveCallback.onSuccess()
+            ?: run {
+                Timber.d("Autofill save skipped: SAVE_NO_FILL_CONTEXT")
+                saveCallback.onSuccess()
+            }
     }
 
     /**

@@ -11,13 +11,16 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.unmockkConstructor
+import io.mockk.unmockkObject
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
 class SaveInfoBuilderTest {
     private lateinit var saveInfoBuilder: SaveInfoBuilder
@@ -71,6 +74,7 @@ class SaveInfoBuilderTest {
 
     @BeforeEach
     fun setup() {
+        mockkObject(Timber.Forest)
         mockkConstructor(SaveInfo.Builder::class)
         saveInfoBuilder = SaveInfoBuilderImpl(
             settingsRepository = settingsRepository,
@@ -81,6 +85,11 @@ class SaveInfoBuilderTest {
     @AfterEach
     fun teardown() {
         unmockkConstructor(SaveInfo.Builder::class)
+        unmockkObject(Timber.Forest)
+    }
+
+    private fun verifyLogged(reason: String) {
+        verify(exactly = 1) { Timber.d(match<String> { it.contains(reason) }) }
     }
 
     @Test
@@ -97,6 +106,22 @@ class SaveInfoBuilderTest {
 
         // Verify
         assertNull(actual)
+    }
+
+    @Test
+    fun `build should log SAVE_INFO_DISABLED when save prompt disabled`() {
+        // Setup
+        every { settingsRepository.isAutofillSavePromptDisabled } returns true
+
+        // Test
+        val actual = saveInfoBuilder.build(
+            autofillPartition = autofillPartitionCard,
+            fillRequest = fillRequest,
+            packageName = PACKAGE_NAME,
+        )
+
+        // Verify
+        verifyLogged("SAVE_INFO_DISABLED")
     }
 
     @Suppress("MaxLineLength")
@@ -139,6 +164,22 @@ class SaveInfoBuilderTest {
         assertNull(actual)
     }
 
+    @Test
+    fun `build should log SAVE_INFO_NO_PASSWORD_FIELD when no required save ids`() {
+        // Setup
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+
+        // Test
+        val actual = saveInfoBuilder.build(
+            autofillPartition = AUTOFILL_PARTITION_LOGIN_EMPTY,
+            fillRequest = fillRequest,
+            packageName = PACKAGE_NAME,
+        )
+
+        // Verify
+        verifyLogged("SAVE_INFO_NO_PASSWORD_FIELD")
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `build should return null if autofill possible but flags indicate compat mode and is login`() {
@@ -155,6 +196,23 @@ class SaveInfoBuilderTest {
 
         // Verify
         assertNull(actual)
+    }
+
+    @Test
+    fun `build should log SAVE_INFO_COMPAT_LOGIN when compat mode and login`() {
+        // Setup
+        every { settingsRepository.isAutofillSavePromptDisabled } returns false
+        every { fillRequest.flags } returns FillRequest.FLAG_COMPATIBILITY_MODE_REQUEST
+
+        // Test
+        val actual = saveInfoBuilder.build(
+            autofillPartition = autofillPartitionLogin,
+            fillRequest = fillRequest,
+            packageName = PACKAGE_NAME,
+        )
+
+        // Verify
+        verifyLogged("SAVE_INFO_COMPAT_LOGIN")
     }
 
     @Suppress("MaxLineLength")

@@ -21,8 +21,21 @@ class SaveInfoBuilderImpl(
     ): SaveInfo? {
         Timber.d("Autofill request constructing SaveInfo -- ${fillRequest.id}")
         // Make sure that the save prompt is possible.
-        val canPerformSaveRequest = autofillPartition.canPerformSaveRequest
-        if (settingsRepository.isAutofillSavePromptDisabled || !canPerformSaveRequest) return null
+        val partitionType = autofillPartition::class.java.simpleName
+        if (settingsRepository.isAutofillSavePromptDisabled) {
+            Timber.d(
+                "Autofill save skipped: SAVE_INFO_DISABLED partition=$partitionType " +
+                    "-- ${fillRequest.id}",
+            )
+            return null
+        }
+        if (!autofillPartition.canPerformSaveRequest) {
+            Timber.d(
+                "Autofill save skipped: SAVE_INFO_NO_PASSWORD_FIELD partition=$partitionType " +
+                    "-- ${fillRequest.id}",
+            )
+            return null
+        }
 
         // Docs state that password fields cannot be reliably saved
         // in Compat mode since they show as masked values.
@@ -33,6 +46,7 @@ class SaveInfoBuilderImpl(
         // If login and compat mode, the password might be obfuscated,
         // in which case we should skip the save request.
         return if (autofillPartition is AutofillPartition.Login && isInCompatMode) {
+            Timber.d("Autofill save skipped: SAVE_INFO_COMPAT_LOGIN -- ${fillRequest.id}")
             null
         } else {
             SaveInfo

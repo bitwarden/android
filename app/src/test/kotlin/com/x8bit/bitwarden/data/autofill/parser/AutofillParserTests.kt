@@ -29,7 +29,9 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +39,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
 @Suppress("LargeClass")
 class AutofillParserTests {
@@ -124,6 +127,7 @@ class AutofillParserTests {
 
     @BeforeEach
     fun setup() {
+        mockkObject(Timber.Forest)
         mockIsFillAssistEnabled = false
         // toAutofillView, website, and toAutofillViewData all compile into the same
         // ViewNodeExtensionsKt class, so one mockkStatic call covers all three.
@@ -209,6 +213,7 @@ class AutofillParserTests {
 
     @AfterEach
     fun teardown() {
+        unmockkObject(Timber.Forest)
         unmockkStatic(AssistStructure.ViewNode::toAutofillView)
         unmockkStatic(Uri::parse)
         unmockkStatic(HtmlInfo::matchesSelectorClause)
@@ -218,6 +223,12 @@ class AutofillParserTests {
             AutofillView::buildUriOrNull,
             List<ViewNodeTraversalData>::buildPackageNameOrNull,
         )
+    }
+
+    private fun verifyLogged(reason: String, times: Int = 1) {
+        verify(exactly = times) {
+            Timber.d(match<String> { it.startsWith("Autofill unfillable: $reason") })
+        }
     }
 
     @Test
@@ -237,6 +248,22 @@ class AutofillParserTests {
     }
 
     @Test
+    fun `parse should log NO_FILL_CONTEXT when no contexts`() {
+        // Setup
+        val expected = AutofillRequest.Unfillable
+        every { fillRequest.fillContexts } returns emptyList()
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        verifyLogged("NO_FILL_CONTEXT")
+    }
+
+    @Test
     fun `parse should return Unfillable when windowNodeCount is 0`() {
         // Setup
         val expected = AutofillRequest.Unfillable
@@ -250,6 +277,22 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `parse should log NO_CANDIDATE_VIEWS when windowNodeCount is 0`() {
+        // Setup
+        val expected = AutofillRequest.Unfillable
+        every { assistStructure.windowNodeCount } returns 0
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        verifyLogged("NO_CANDIDATE_VIEWS")
     }
 
     @Suppress("MaxLineLength")
@@ -647,6 +690,44 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(AutofillRequest.Unfillable, actual)
+    }
+
+    @Test
+    fun `parse should log IDENTITY_FLAG_OFF when Identity focused and flag off`() {
+        // Setup
+        every { featureFlagManager.getFeatureFlag(FlagKey.IdentityAutofill) } returns false
+        val identityAutofillView: AutofillView.Identity = AutofillView.Identity.PersonNameGiven(
+            data = AutofillView.Data(
+                autofillId = identityAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        setupAssistStructure(login = loginAutofillView, identity = identityAutofillView)
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        verifyLogged("IDENTITY_FLAG_OFF")
     }
 
     @Suppress("MaxLineLength")
@@ -1319,6 +1400,30 @@ class AutofillParserTests {
         }
     }
 
+    @Test
+    fun `parse should log BLOCKED_URI when the focused view's URI is block listed`() {
+        // Setup
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        setupAssistStructure(login = loginAutofillView)
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns BLOCK_LISTED_URIS.first()
+
+        // Test
+        parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify
+        verifyLogged("BLOCKED_URI")
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `parse should fall back to heuristics when fill-assist rules exist but only cover login and a card view is focused`() {
@@ -1966,6 +2071,61 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(AutofillRequest.Unfillable, actual)
+    }
+
+    @Test
+    fun `parse should log NO_FOCUSED_VIEW_AFTER_FILL_ASSIST when fill-assist matches nothing`() {
+        // Fill-assist takes over the attempt but matches no fields, and the Unused rescue path has
+        // no heuristic views to fall back to -- so the request ends up Unfillable.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-login",
+                        fields = mapOf(
+                            "username" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "user",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val unusedLoginView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        // matchesSelectorClause defaults to false per setup -- fill-assist matches nothing.
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify
+        verifyLogged("NO_FOCUSED_VIEW_AFTER_FILL_ASSIST")
     }
 
     @Suppress("MaxLineLength")

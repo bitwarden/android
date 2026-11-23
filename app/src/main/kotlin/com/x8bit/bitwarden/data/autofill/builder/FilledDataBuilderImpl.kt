@@ -69,10 +69,19 @@ class FilledDataBuilderImpl(
             .inlinePresentationSpecs
             ?.getOrLastOrNull(inlineSuggestionsAdded)
 
+        val nonEmptyFilledPartitions = filledPartitions
+            .filter { it.filledItems.isNotEmpty() }
+            .take(n = MAX_FILLED_PARTITIONS_COUNT)
+        Timber.d(
+            "Autofill filled data: " +
+                "partition=${autofillRequest.partition::class.java.simpleName} " +
+                "ciphers=${nonEmptyFilledPartitions.size} " +
+                "vaultLocked=$isVaultLocked " +
+                "inline=${autofillRequest.inlinePresentationSpecs != null}",
+        )
+
         return FilledData(
-            filledPartitions = filledPartitions
-                .filter { it.filledItems.isNotEmpty() }
-                .take(n = MAX_FILLED_PARTITIONS_COUNT),
+            filledPartitions = nonEmptyFilledPartitions,
             ignoreAutofillIds = autofillRequest.ignoreAutofillIds,
             originalPartition = autofillRequest.partition,
             uri = autofillRequest.uri,
