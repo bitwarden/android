@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -16,6 +18,7 @@ import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
 import com.bitwarden.ui.platform.navigation.BottomNavigationController
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 
 /**
  * Top level composable for the Vault Unlocked Screen.
@@ -73,6 +76,7 @@ private fun VaultUnlockedNavBarScaffold(
         VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
     )
     BitwardenScaffold(
+        modifier = Modifier.testTag(tag = ScreenTags.VAULT_UNLOCKED_NAV_BAR),
         contentWindowInsets = WindowInsets(0.dp),
         navigationData = ScaffoldNavigationData(
             navigationItems = navigationItems,

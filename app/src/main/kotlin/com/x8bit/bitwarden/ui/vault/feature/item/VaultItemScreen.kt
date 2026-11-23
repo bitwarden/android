@@ -42,6 +42,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultBankAccountItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -161,7 +162,8 @@ fun VaultItemScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .testTag(tag = ScreenTags.VAULT_ITEM),
         topBar = {
             BitwardenTopAppBar(
                 title = state.title(),

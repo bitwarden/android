@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
+import com.x8bit.bitwarden.ui.platform.util.ScreenTags
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
@@ -326,7 +327,9 @@ private fun VaultScreenScaffold(
             )
         },
         pullToRefreshState = pullToRefreshState,
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .testTag(tag = ScreenTags.VAULT),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
