@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.data.autofill.parser.util.logViewNode
 import com.x8bit.bitwarden.data.autofill.parser.util.logWindowNodeEnd
@@ -151,6 +152,33 @@ internal class AutofillParserImpl(
     }
 
     /**
+     * Returns the fill-assist rules for the host of the [uri], or `null` if there are none.
+     */
+    private fun getFillAssistHostRulesOrNull(uri: String?): List<FillAssistRules.HostRule>? =
+        uri
+            ?.takeUnless { it.startsWith("androidapp://") }
+            ?.toUri()
+            ?.host
+            ?.let { host ->
+                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
+            }
+
+    /**
+     * Builds a log-safe description (counts and booleans only) of why no focused view remained.
+     */
+    private fun noFocusedViewContext(
+        effectiveViews: List<AutofillView>,
+        heuristicViews: List<AutofillView>,
+        traversalDataList: List<ViewNodeTraversalData>,
+        uri: String?,
+    ): String =
+        "effectiveViews=${effectiveViews.size} " +
+            "heuristicViews=${heuristicViews.size} " +
+            "traversalViews=${traversalDataList.sumOf { it.autofillViews.size }} " +
+            "hasHostRules=${getFillAssistHostRulesOrNull(uri = uri) != null} " +
+            "focusFromFillAssistRescue=${heuristicViews.firstFocusedOrNull() == null}"
+
+    /**
      * Builds a log-safe description of where the blocked [uri] came from. Never includes the URI.
      */
     private fun blockedUriContext(
@@ -254,7 +282,12 @@ internal class AutofillParserImpl(
             ?: return unfillable(
                 reason = UnfillableReason.NO_FOCUSED_VIEW_AFTER_FILL_ASSIST,
                 requestId = fillRequest?.id,
-                context = "effectiveViews=${effectiveViews.size}",
+                context = noFocusedViewContext(
+                    effectiveViews = effectiveViews,
+                    heuristicViews = autofillViews,
+                    traversalDataList = traversalDataList,
+                    uri = uri,
+                ),
             )
 
         // Choose the first focused partition of data for fulfillment.
@@ -334,14 +367,7 @@ internal class AutofillParserImpl(
         urlBarWebsite: String?,
         isIdentityAutofillEnabled: Boolean,
     ): List<AutofillView> {
-        val hostRules = uri
-            ?.takeUnless { it.startsWith("androidapp://") }
-            ?.toUri()
-            ?.host
-            ?.let { host ->
-                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
-            }
-            ?: return this
+        val hostRules = getFillAssistHostRulesOrNull(uri = uri) ?: return this
 
         // Identity categories were Login categories before identity autofill, so with the flag
         // off they must stay Login's to keep fill-assist coverage unchanged on those hosts.

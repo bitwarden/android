@@ -231,6 +231,17 @@ class AutofillParserTests {
         }
     }
 
+    private fun verifyLoggedContext(vararg expected: String) {
+        verify(exactly = 1) {
+            Timber.d(
+                match<String> { message ->
+                    message.startsWith("Autofill unfillable: NO_FOCUSED_VIEW_AFTER_FILL_ASSIST") &&
+                        expected.all { message.contains(it) }
+                },
+            )
+        }
+    }
+
     @Test
     fun `parse should return Unfillable when no contexts`() {
         // Setup
@@ -2126,6 +2137,107 @@ class AutofillParserTests {
 
         // Verify
         verifyLogged("NO_FOCUSED_VIEW_AFTER_FILL_ASSIST")
+    }
+
+    @Test
+    fun `parse should log rescue and host rules context when fill-assist matches nothing`() {
+        // Fill-assist takes over the attempt but matches no fields, and the Unused rescue path has
+        // no heuristic views to fall back to -- so the request ends up Unfillable.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = mapOf(
+                FILL_ASSIST_URI to listOf(
+                    FillAssistRules.HostRule(
+                        category = "account-login",
+                        fields = mapOf(
+                            "username" to listOf(
+                                FillAssistRules.SelectorClause(
+                                    tag = "input",
+                                    id = "user",
+                                    name = null,
+                                    type = null,
+                                    role = null,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val unusedLoginView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        // matchesSelectorClause defaults to false per setup -- fill-assist matches nothing.
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify
+        verifyLoggedContext(
+            "heuristicViews=0",
+            "hasHostRules=true",
+            "focusFromFillAssistRescue=true",
+        )
+    }
+
+    @Test
+    fun `parse should log no host rules context when fill-assist has no rules for the host`() {
+        // Fill-assist takes over the attempt but matches no fields, and the Unused rescue path has
+        // no heuristic views to fall back to -- so the request ends up Unfillable.
+        mutableFillAssistFlagFlow.value = true
+        mockIsFillAssistEnabled = true
+        every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
+                every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+            hostRules = emptyMap(),
+        )
+        val unusedLoginView = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = null,
+            ),
+        )
+        // matchesSelectorClause defaults to false per setup -- fill-assist matches nothing.
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        every {
+            loginViewNode.toAutofillView(
+                parentWebsite = any(),
+                isIdentityAutofillEnabled = any(),
+            )
+        } returns unusedLoginView
+
+        // Test
+        val actual = parser.parse(autofillAppInfo = autofillAppInfo, fillRequest = fillRequest)
+
+        // Verify
+        verifyLoggedContext(
+            "heuristicViews=0",
+            "hasHostRules=false",
+            "focusFromFillAssistRescue=true",
+        )
     }
 
     @Suppress("MaxLineLength")
