@@ -300,6 +300,7 @@
                 android:value="true" />
         </service>
 
+        <!-- Allow OEM tile binds that omit the QS_TILE action under Android 16 strict matching. -->
         <!--
         The AutofillTileService name below refers to the legacy Xamarin app's service name.
         This must always match in order for the app to properly query if it is providing autofill
@@ -310,6 +311,7 @@
             android:name="com.x8bit.bitwarden.AutofillTileService"
             android:exported="true"
             android:icon="@drawable/ic_notification"
+            android:intentMatchingFlags="none"
             android:label="@string/autofill_verb"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">
@@ -328,6 +330,7 @@
             android:name="com.x8bit.bitwarden.GeneratorTileService"
             android:exported="true"
             android:icon="@drawable/ic_generator"
+            android:intentMatchingFlags="none"
             android:label="@string/password_generator"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">
@@ -346,6 +349,7 @@
             android:name="com.x8bit.bitwarden.MyVaultTileService"
             android:exported="true"
             android:icon="@drawable/ic_vault"
+            android:intentMatchingFlags="none"
             android:label="@string/my_vault"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:ignore="MissingClass">
