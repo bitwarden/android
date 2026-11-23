@@ -24,6 +24,8 @@ import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentEncryptResult
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherCreateRequest
+import com.bitwarden.vault.CipherEditRequest
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
@@ -206,6 +208,24 @@ interface VaultSdkSource {
         userId: String,
         cipherView: CipherView,
     ): Result<EncryptionContext>
+
+    /**
+     * Creates the cipher described by [request] for the user with the given [userId], returning
+     * the created [CipherView] wrapped in a [Result].
+     */
+    suspend fun createCipher(
+        userId: String,
+        request: CipherCreateRequest,
+    ): Result<CipherView>
+
+    /**
+     * Edits the cipher described by [request] for the user with the given [userId], returning
+     * the updated [CipherView] wrapped in a [Result].
+     */
+    suspend fun editCipher(
+        userId: String,
+        request: CipherEditRequest,
+    ): Result<CipherView>
 
     /**
      * Decrypts a [Cipher] for the user with the given [userId], returning a [CipherView] wrapped

@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -104,6 +105,7 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        featureFlagManager: FeatureFlagManager,
         fileManager: FileManager,
         clock: Clock,
         reviewPromptManager: ReviewPromptManager,
@@ -117,6 +119,7 @@ object VaultManagerModule {
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
+        featureFlagManager = featureFlagManager,
         clock = clock,
         reviewPromptManager = reviewPromptManager,
         dispatcherManager = dispatcherManager,
