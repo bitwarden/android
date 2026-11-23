@@ -2,8 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
-import com.bitwarden.core.data.util.asFailure
-import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
@@ -13,7 +12,7 @@ import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ManagedSettingsBindingClient
 import com.bitwarden.sdk.initLogger
 import com.bitwarden.sdk.validateClientSettings as sdkValidateClientSettings
-import com.x8bit.bitwarden.data.platform.error.MutualTlsCertificateUnavailableException
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
@@ -113,12 +112,12 @@ internal class SdkClientManagerImpl(
 
     override suspend fun validateClientSettings(
         environmentUrlData: EnvironmentUrlDataJson,
-    ): Result<Unit> = withContext(dispatcherManager.io) {
+    ): ValidateClientSettingsResult = withContext(dispatcherManager.io) {
         val clientCertificate = environmentUrlData.keyUri?.let { keyUri ->
             certificateManager
                 .getMutualTlsCertificate(keyUri = keyUri)
                 ?.toClientCertificateOrNull()
-                ?: return@withContext MutualTlsCertificateUnavailableException().asFailure()
+                ?: return@withContext ValidateClientSettingsResult.Error.CertificateUnavailable
         }
         val settings = sdkRepoFactory.getClientSettings(environmentUrlData = environmentUrlData)
         try {
@@ -126,9 +125,22 @@ internal class SdkClientManagerImpl(
                 settings = settings,
                 clientCertificate = clientCertificate,
             )
-            Unit.asSuccess()
+            ValidateClientSettingsResult.Success
         } catch (e: BitwardenException.ValidateClientSettings) {
-            e.v1.asFailure()
+            e.v1.toValidateClientSettingsResult()
         }
     }
 }
+
+private fun ValidateClientSettingsException.toValidateClientSettingsResult():
+    ValidateClientSettingsResult = when (this) {
+        is ValidateClientSettingsException.IdentityUrl,
+        is ValidateClientSettingsException.ApiUrl,
+            -> ValidateClientSettingsResult.Error.InvalidUrls(throwable = this)
+
+        is ValidateClientSettingsException.ClientCertificate,
+            -> ValidateClientSettingsResult.Error.UnsupportedCertificate(throwable = this)
+
+        // Proxy and timeout settings have no UI on Android.
+        else -> ValidateClientSettingsResult.Error.Other(throwable = this)
+    }

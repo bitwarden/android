@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.file.FileManager
@@ -21,10 +20,10 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
-import com.x8bit.bitwarden.data.platform.error.MutualTlsCertificateUnavailableException
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -179,11 +178,15 @@ class EnvironmentViewModel @Inject constructor(
     private fun handleValidateClientSettingsResultReceive(
         action: EnvironmentAction.Internal.ValidateClientSettingsResultReceive,
     ) {
-        action.result.fold(
-            onFailure = { error ->
-                showErrorDialog(message = error.toValidationErrorMessage(), throwable = error)
-            },
-            onSuccess = {
+        when (val result = action.result) {
+            is ValidateClientSettingsResult.Error -> {
+                showErrorDialog(
+                    message = result.toErrorMessage(),
+                    throwable = result.throwable,
+                )
+            }
+
+            ValidateClientSettingsResult.Success -> {
                 environmentRepository.environment = Environment.SelfHosted(
                     environmentUrlData = action.environmentUrlData,
                 )
@@ -194,8 +197,8 @@ class EnvironmentViewModel @Inject constructor(
                     relay = SnackbarRelay.ENVIRONMENT_SAVED,
                 )
                 sendEvent(EnvironmentEvent.NavigateBack)
-            },
-        )
+            }
+        }
     }
 
     private fun handleDialogDismiss() {
@@ -469,19 +472,20 @@ class EnvironmentViewModel @Inject constructor(
     }
 }
 
-private fun Throwable.toValidationErrorMessage(): Text = when (this) {
-    is ValidateClientSettingsException.IdentityUrl,
-    is ValidateClientSettingsException.ApiUrl,
-        -> BitwardenString.environment_page_urls_error.asText()
+private fun ValidateClientSettingsResult.Error.toErrorMessage(): Text = when (this) {
+    is ValidateClientSettingsResult.Error.InvalidUrls -> {
+        BitwardenString.environment_page_urls_error.asText()
+    }
 
-    is ValidateClientSettingsException.ClientCertificate,
-        -> BitwardenString.unsupported_certificate_type.asText()
+    is ValidateClientSettingsResult.Error.UnsupportedCertificate -> {
+        BitwardenString.unsupported_certificate_type.asText()
+    }
 
-    is MutualTlsCertificateUnavailableException,
-        -> BitwardenString.error_loading_certificate.asText()
+    ValidateClientSettingsResult.Error.CertificateUnavailable -> {
+        BitwardenString.error_loading_certificate.asText()
+    }
 
-    // Proxy and timeout settings have no UI on this screen.
-    else -> BitwardenString.generic_error_message.asText()
+    is ValidateClientSettingsResult.Error.Other -> BitwardenString.generic_error_message.asText()
 }
 
 /**
@@ -731,7 +735,7 @@ sealed class EnvironmentAction {
          */
         data class ValidateClientSettingsResultReceive(
             val environmentUrlData: EnvironmentUrlDataJson,
-            val result: Result<Unit>,
+            val result: ValidateClientSettingsResult,
         ) : Internal()
     }
 }

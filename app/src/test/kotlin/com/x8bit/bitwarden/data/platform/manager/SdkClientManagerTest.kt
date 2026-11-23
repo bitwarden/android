@@ -4,8 +4,6 @@ import com.bitwarden.api.base.ClientCertificate
 import com.bitwarden.core.ClientSettings
 import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
-import com.bitwarden.core.data.util.asFailure
-import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.NativeLibraryManager
@@ -14,7 +12,7 @@ import com.bitwarden.sdk.LogLevel
 import com.bitwarden.sdk.initLogger
 import com.bitwarden.sdk.validateClientSettings
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
-import com.x8bit.bitwarden.data.platform.error.MutualTlsCertificateUnavailableException
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
@@ -30,7 +28,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -145,7 +142,7 @@ class SdkClientManagerTest {
                 environmentUrlData = ENVIRONMENT_URL_DATA,
             )
 
-            assertEquals(Unit.asSuccess(), result)
+            assertEquals(ValidateClientSettingsResult.Success, result)
             verify(exactly = 1) {
                 validateClientSettings(settings = settings, clientCertificate = clientCertificate)
             }
@@ -164,7 +161,7 @@ class SdkClientManagerTest {
             environmentUrlData = environmentUrlData,
         )
 
-        assertEquals(Unit.asSuccess(), result)
+        assertEquals(ValidateClientSettingsResult.Success, result)
         verify(exactly = 0) { certificateManager.getMutualTlsCertificate(keyUri = any()) }
     }
 
@@ -178,12 +175,12 @@ class SdkClientManagerTest {
                 environmentUrlData = ENVIRONMENT_URL_DATA,
             )
 
-            assertTrue(result.exceptionOrNull() is MutualTlsCertificateUnavailableException)
+            assertEquals(ValidateClientSettingsResult.Error.CertificateUnavailable, result)
             verify(exactly = 0) { validateClientSettings(settings = any(), clientCertificate = any()) }
         }
 
     @Test
-    fun `validateClientSettings should return the validation error as a failure`() = runTest {
+    fun `validateClientSettings should map invalid URL errors to InvalidUrls`() = runTest {
         val error = ValidateClientSettingsException.IdentityUrl("invalid identity URL")
         every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
         every {
@@ -194,7 +191,42 @@ class SdkClientManagerTest {
             environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
         )
 
-        assertEquals(error.asFailure(), result)
+        assertEquals(ValidateClientSettingsResult.Error.InvalidUrls(throwable = error), result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateClientSettings should map client certificate errors to UnsupportedCertificate`() =
+        runTest {
+            val error = ValidateClientSettingsException.ClientCertificate("unsupported key")
+            every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
+            every {
+                validateClientSettings(settings = any(), clientCertificate = null)
+            } throws BitwardenException.ValidateClientSettings(v1 = error)
+
+            val result = createSdkClientManager().validateClientSettings(
+                environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
+            )
+
+            assertEquals(
+                ValidateClientSettingsResult.Error.UnsupportedCertificate(throwable = error),
+                result,
+            )
+        }
+
+    @Test
+    fun `validateClientSettings should map other errors to Other`() = runTest {
+        val error = ValidateClientSettingsException.ProxyUrl("invalid proxy URL")
+        every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
+        every {
+            validateClientSettings(settings = any(), clientCertificate = null)
+        } throws BitwardenException.ValidateClientSettings(v1 = error)
+
+        val result = createSdkClientManager().validateClientSettings(
+            environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
+        )
+
+        assertEquals(ValidateClientSettingsResult.Error.Other(throwable = error), result)
     }
 
     private fun createSdkClientManager(): SdkClientManagerImpl = SdkClientManagerImpl(

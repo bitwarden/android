@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.manager.BuildInfoManager
-import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.file.FileManager
@@ -18,10 +17,10 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
-import com.x8bit.bitwarden.data.platform.error.MutualTlsCertificateUnavailableException
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -45,7 +44,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
     private val mockFileManager = mockk<FileManager>()
     private val mockSdkClientManager = mockk<SdkClientManager> {
-        coEvery { validateClientSettings(environmentUrlData = any()) } returns Unit.asSuccess()
+        coEvery {
+            validateClientSettings(environmentUrlData = any())
+        } returns ValidateClientSettingsResult.Success
     }
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
@@ -176,7 +177,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should show the URLs error dialog and not save when the SDK rejects the identity URL`() =
         assertSaveClickShowsValidationError(
-            error = ValidateClientSettingsException.IdentityUrl("invalid identity URL"),
+            error = ValidateClientSettingsResult.Error.InvalidUrls(
+                throwable = ValidateClientSettingsException.IdentityUrl("invalid identity URL"),
+            ),
             expectedMessage = BitwardenString.environment_page_urls_error.asText(),
         )
 
@@ -184,7 +187,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should show the unsupported certificate dialog and not save when the SDK rejects the client certificate`() =
         assertSaveClickShowsValidationError(
-            error = ValidateClientSettingsException.ClientCertificate("unsupported key"),
+            error = ValidateClientSettingsResult.Error.UnsupportedCertificate(
+                throwable = ValidateClientSettingsException.ClientCertificate("unsupported key"),
+            ),
             expectedMessage = BitwardenString.unsupported_certificate_type.asText(),
         )
 
@@ -192,14 +197,16 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should show the error loading certificate dialog and not save when the certificate cannot be loaded`() =
         assertSaveClickShowsValidationError(
-            error = MutualTlsCertificateUnavailableException(),
+            error = ValidateClientSettingsResult.Error.CertificateUnavailable,
             expectedMessage = BitwardenString.error_loading_certificate.asText(),
         )
 
     @Test
     fun `SaveClick should show the generic error dialog and not save for other SDK errors`() =
         assertSaveClickShowsValidationError(
-            error = ValidateClientSettingsException.ProxyUrl("invalid proxy URL"),
+            error = ValidateClientSettingsResult.Error.Other(
+                throwable = ValidateClientSettingsException.ProxyUrl("invalid proxy URL"),
+            ),
             expectedMessage = BitwardenString.generic_error_message.asText(),
         )
 
@@ -866,12 +873,12 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     //region Helper methods
 
     private fun assertSaveClickShowsValidationError(
-        error: Throwable,
+        error: ValidateClientSettingsResult.Error,
         expectedMessage: Text,
     ) = runTest {
         coEvery {
             mockSdkClientManager.validateClientSettings(environmentUrlData = any())
-        } returns error.asFailure()
+        } returns error
         val viewModel = createViewModel()
         viewModel.trySendAction(EnvironmentAction.ServerUrlChange(serverUrl = "server-url"))
 
@@ -885,7 +892,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 serverUrl = "server-url",
                 dialog = EnvironmentState.DialogState.Error(
                     message = expectedMessage,
-                    throwable = error,
+                    throwable = error.throwable,
                 ),
             ),
             viewModel.stateFlow.value,
