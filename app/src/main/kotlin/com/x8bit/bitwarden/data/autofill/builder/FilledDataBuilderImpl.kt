@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUri
+import com.x8bit.bitwarden.data.autofill.util.logName
 import timber.log.Timber
 
 /**
@@ -74,7 +75,7 @@ class FilledDataBuilderImpl(
             .take(n = MAX_FILLED_PARTITIONS_COUNT)
         Timber.d(
             "Autofill filled data: " +
-                "partition=${autofillRequest.partition::class.java.simpleName} " +
+                "partition=${autofillRequest.partition.logName} " +
                 "ciphersMatched=${nonEmptyFilledPartitions.isNotEmpty()} " +
                 "vaultLocked=$isVaultLocked " +
                 "inline=${autofillRequest.inlinePresentationSpecs != null}",

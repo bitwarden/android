@@ -83,3 +83,14 @@ private fun AutofillPartition.extractNonNullTextValueOrNull(
         .firstOrNull { condition(it) && it.data.textValue != null }
         ?.data
         ?.textValue
+
+/**
+ * A constant, log-safe name for the type of this [AutofillPartition]. Avoids reflection so it is
+ * cheap to call on the autofill path.
+ */
+val AutofillPartition.logName: String
+    get() = when (this) {
+        is AutofillPartition.Card -> "Card"
+        is AutofillPartition.Identity -> "Identity"
+        is AutofillPartition.Login -> "Login"
+    }

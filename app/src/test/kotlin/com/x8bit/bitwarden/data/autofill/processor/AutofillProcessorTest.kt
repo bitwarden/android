@@ -511,7 +511,7 @@ class AutofillProcessorTest {
         val saveRequest: SaveRequest = mockk {
             every { fillContexts } returns listOf(fillContext)
         }
-        val autofillPartition: AutofillPartition = mockk()
+        val autofillPartition: AutofillPartition = AutofillPartition.Login(views = emptyList())
         val autofillRequest: AutofillRequest.Fillable = mockk {
             every { packageName } returns PACKAGE_NAME
             every { partition } returns autofillPartition
@@ -563,7 +563,7 @@ class AutofillProcessorTest {
         val saveRequest: SaveRequest = mockk {
             every { fillContexts } returns listOf(fillContext)
         }
-        val autofillPartition: AutofillPartition = mockk()
+        val autofillPartition: AutofillPartition = AutofillPartition.Login(views = emptyList())
         val autofillRequest: AutofillRequest.Fillable = mockk {
             every { packageName } returns PACKAGE_NAME
             every { partition } returns autofillPartition
@@ -634,42 +634,6 @@ class AutofillProcessorTest {
             )
             saveCallback.onSuccess()
         }
-    }
-
-    @Test
-    fun `processSaveRequest should log SAVE_UNFILLABLE when parser returns Unfillable`() {
-        // Setup
-        val saveCallback: SaveCallback = mockk {
-            every { onSuccess() } just runs
-        }
-        val assistStructure: AssistStructure = mockk()
-        val fillContext: FillContext = mockk {
-            every { structure } returns assistStructure
-        }
-        val saveRequest: SaveRequest = mockk {
-            every { fillContexts } returns listOf(fillContext)
-        }
-        val autofillRequest = AutofillRequest.Unfillable
-        every { settingsRepository.isAutofillSavePromptDisabled } returns false
-        every {
-            policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP)
-        } returns emptyList()
-        every {
-            parser.parse(
-                autofillAppInfo = appInfo,
-                assistStructure = assistStructure,
-            )
-        } returns autofillRequest
-
-        // Test
-        autofillProcessor.processSaveRequest(
-            autofillAppInfo = appInfo,
-            request = saveRequest,
-            saveCallback = saveCallback,
-        )
-
-        // Verify
-        verifyLogged("SAVE_UNFILLABLE")
     }
 
     @Suppress("MaxLineLength")

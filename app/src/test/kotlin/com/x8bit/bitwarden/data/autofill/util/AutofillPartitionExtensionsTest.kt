@@ -519,6 +519,15 @@ class AutofillPartitionExtensionsTest {
         assertNull(actual)
     }
     //endregion Login tests
+
+    //region logName tests
+    @Test
+    fun `logName should return a constant name for each partition type`() {
+        assertEquals("Card", AutofillPartition.Card(views = emptyList()).logName)
+        assertEquals("Identity", AutofillPartition.Identity(views = emptyList()).logName)
+        assertEquals("Login", AutofillPartition.Login(views = emptyList()).logName)
+    }
+    //endregion logName tests
 }
 
 private const val TEXT_VALUE: String = "TEXT_VALUE"

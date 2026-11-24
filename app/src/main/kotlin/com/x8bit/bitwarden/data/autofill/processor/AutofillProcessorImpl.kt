@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
+import com.x8bit.bitwarden.data.autofill.util.logName
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -109,21 +110,15 @@ class AutofillProcessorImpl(
                             }
                             ?.let { saveCallback.onSuccess(it) }
                             ?: run {
-                                val partitionType = autofillRequest
-                                    .partition::class
-                                    .java
-                                    .simpleName
                                 Timber.d(
-                                    "Autofill save skipped: NO_SAVE_ITEM partition=$partitionType",
+                                    "Autofill save skipped: NO_SAVE_ITEM " +
+                                        "partition=${autofillRequest.partition.logName}",
                                 )
                                 saveCallback.onSuccess()
                             }
                     }
 
-                    AutofillRequest.Unfillable -> {
-                        Timber.d("Autofill save skipped: SAVE_UNFILLABLE")
-                        saveCallback.onSuccess()
-                    }
+                    AutofillRequest.Unfillable -> saveCallback.onSuccess()
                 }
             }
             ?: run {

@@ -144,9 +144,11 @@ internal class AutofillParserImpl(
         requestId: Int?,
         context: String = "",
     ): AutofillRequest.Unfillable {
-        val message = "Autofill unfillable: $reason" +
-            context.takeUnless { it.isEmpty() }?.let { " $it" }.orEmpty() +
-            " -- $requestId"
+        val contextSuffix = context
+            .takeUnless { it.isEmpty() }
+            ?.let { " $it" }
+            .orEmpty()
+        val message = "Autofill unfillable: $reason" + contextSuffix + " -- $requestId"
         Timber.d(message)
         return AutofillRequest.Unfillable
     }

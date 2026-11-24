@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.builder
 import android.service.autofill.FillRequest
 import android.service.autofill.SaveInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
+import com.x8bit.bitwarden.data.autofill.util.logName
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import timber.log.Timber
 
@@ -21,18 +22,17 @@ class SaveInfoBuilderImpl(
     ): SaveInfo? {
         Timber.d("Autofill request constructing SaveInfo -- ${fillRequest.id}")
         // Make sure that the save prompt is possible.
-        val partitionType = autofillPartition::class.java.simpleName
         if (settingsRepository.isAutofillSavePromptDisabled) {
             Timber.d(
-                "Autofill save skipped: SAVE_INFO_DISABLED partition=$partitionType " +
-                    "-- ${fillRequest.id}",
+                "Autofill save skipped: SAVE_INFO_DISABLED " +
+                    "partition=${autofillPartition.logName} -- ${fillRequest.id}",
             )
             return null
         }
         if (!autofillPartition.canPerformSaveRequest) {
             Timber.d(
-                "Autofill save skipped: SAVE_INFO_NO_PASSWORD_FIELD partition=$partitionType " +
-                    "-- ${fillRequest.id}",
+                "Autofill save skipped: SAVE_INFO_NO_PASSWORD_FIELD " +
+                    "partition=${autofillPartition.logName} -- ${fillRequest.id}",
             )
             return null
         }
