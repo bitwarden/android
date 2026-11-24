@@ -3,9 +3,6 @@ package com.x8bit.bitwarden.e2e
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.e2e.config.E2eConfig
-import com.x8bit.bitwarden.e2e.screens.AccessibilityDisclosureScreen
-import com.x8bit.bitwarden.e2e.screens.VaultScreen
-import com.x8bit.bitwarden.e2e.seeder.SeededAccount
 import com.x8bit.bitwarden.e2e.seeder.SeederClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -47,16 +44,4 @@ abstract class BaseE2eTest {
     fun deleteSeededData() {
         seeder.deleteSeededData()
     }
-
-    /**
-     * Points the app at the server under test and logs in as [account].
-     */
-    protected fun logIn(account: SeededAccount): VaultScreen =
-        AccessibilityDisclosureScreen(composeRule)
-            .acknowledge()
-            .chooseLogIn()
-            .selectSelfHosted()
-            .setServerUrl(config.serverUrl)
-            .continueWithEmail(account.email)
-            .logIn(account.password)
 }

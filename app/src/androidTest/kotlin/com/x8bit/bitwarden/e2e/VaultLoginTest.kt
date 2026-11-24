@@ -1,18 +1,25 @@
 package com.x8bit.bitwarden.e2e
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.x8bit.bitwarden.e2e.robots.goToLoginScreen
+import com.x8bit.bitwarden.e2e.robots.logInWithMasterPassword
+import com.x8bit.bitwarden.e2e.robots.login
+import com.x8bit.bitwarden.e2e.robots.navBar
+import com.x8bit.bitwarden.e2e.robots.vault
+import com.x8bit.bitwarden.e2e.robots.vaultItem
 import com.x8bit.bitwarden.e2e.seeder.LoginItem
 import com.x8bit.bitwarden.e2e.seeder.addLoginItem
 import com.x8bit.bitwarden.e2e.seeder.createFreeUser
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Native ports of the Appium/C# login and vault smoke tests. Test names carry the Testmo case ID
- * (backtick names with spaces can't be dexed below API 30, and minSdk is 29).
+ * Native ports of the Appium/C# login and vault smoke tests, written with robots (`robots/`).
+ * Test names carry the Testmo case ID (backtick names with spaces can't be dexed below API 30, and
+ * minSdk is 29).
+ *
+ * Robots don't return the next screen; each test opens the robot for the screen it expects, so the
+ * same actions can lead to different screens without a method per outcome.
  */
 @RunWith(AndroidJUnit4::class)
 class VaultLoginTest : BaseE2eTest() {
@@ -23,9 +30,21 @@ class VaultLoginTest : BaseE2eTest() {
     fun test_22270_logIn() {
         val account = seeder.createFreeUser()
 
-        val vault = logIn(account)
+        with(composeRule) {
+            goToLoginScreen(serverUrl = config.serverUrl, email = account.email)
 
-        vault.settingsTab.assertIsDisplayed()
+            login {
+                enterMasterPassword(password = account.password)
+                tapLogInWithMasterPassword()
+
+                vault {
+                    assertVaultIsDisplayed()
+                }
+                navBar {
+                    assertSettingsTabIsDisplayed()
+                }
+            }
+        }
     }
 
     /**
@@ -42,11 +61,21 @@ class VaultLoginTest : BaseE2eTest() {
         )
         seeder.addLoginItem(account, item)
 
-        val itemScreen = logIn(account).openItem(item.name)
+        with(composeRule) {
+            logInWithMasterPassword(serverUrl = config.serverUrl, account = account)
 
-        assertEquals(item.username, itemScreen.username())
-        assertNotEquals(item.password, itemScreen.displayedPassword())
-        assertEquals(item.password, itemScreen.revealPassword().displayedPassword())
-        assertEquals(item.uri, itemScreen.uri())
+            vault {
+                openItem(name = item.name)
+
+                vaultItem {
+                    assertUsername(expected = item.username)
+                    assertPasswordIsHidden(password = item.password)
+
+                    tapShowPassword()
+                    assertPasswordIsShown(expected = item.password)
+                    assertUri(expected = item.uri)
+                }
+            }
+        }
     }
 }

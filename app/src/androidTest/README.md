@@ -4,8 +4,11 @@ Instrumented tests that drive the real app against a real self-hosted server, wi
 created by the [SeederApi](https://github.com/bitwarden/server/tree/main/util/SeederApi). They
 live in `kotlin/com/x8bit/bitwarden/e2e/`:
 
-- `screens/`: one screen object per app screen, with intent-level methods.
+- `robots/`: one robot per app screen (actions and checks), plus `RobotFlows` for shared journeys
+  such as logging in. A robot never decides which screen comes next; the test opens the robot for
+  the screen it expects.
 - `seeder/`: a minimal SeederApi client and the data it seeds.
+- `util/`: Compose test helpers shared by the robots.
 - `BaseE2eTest`: launches the app, seeds data, and deletes it after each test.
 
 These are a proof of concept (QA-1407). Test method names carry the Testmo case ID.
@@ -18,6 +21,12 @@ nodes by `testTag` (`hasTestTag`), the same stable IDs the Appium suite in bitwa
 already relies on. Matching by text (`hasText`) is the fallback only where a node has no tag
 yet. Add new tags for these tests the same way as for the Appium suite, and don't use them in
 unit UI tests.
+
+Each screen a robot opens also has a root tag from `ScreenTags` on its root composable (for
+example `Modifier.testTag(ScreenTags.LOGIN)` on its `BitwardenScaffold`). Opening a robot waits
+for that tag (up to the 30-second network timeout), so a test fails with a clear message naming the
+expected screen when the app isn't on it, and the robot only matches nodes inside that screen. A new screen needs a `ScreenTags` entry and the tag
+on its root before a robot can use it.
 
 ## Requirements
 
