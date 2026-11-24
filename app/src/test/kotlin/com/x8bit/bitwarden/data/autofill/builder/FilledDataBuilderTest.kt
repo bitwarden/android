@@ -379,7 +379,7 @@ class FilledDataBuilderTest {
                 Timber.d(
                     match<String> {
                         it.startsWith("Autofill filled data:") &&
-                            it.contains("partition=Login ciphers=0")
+                            it.contains("partition=Login ciphersMatched=false")
                     },
                 )
             }

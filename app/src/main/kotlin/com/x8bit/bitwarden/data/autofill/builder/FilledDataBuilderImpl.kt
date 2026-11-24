@@ -75,7 +75,7 @@ class FilledDataBuilderImpl(
         Timber.d(
             "Autofill filled data: " +
                 "partition=${autofillRequest.partition::class.java.simpleName} " +
-                "ciphers=${nonEmptyFilledPartitions.size} " +
+                "ciphersMatched=${nonEmptyFilledPartitions.isNotEmpty()} " +
                 "vaultLocked=$isVaultLocked " +
                 "inline=${autofillRequest.inlinePresentationSpecs != null}",
         )
