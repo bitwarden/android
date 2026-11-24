@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.e2e
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.x8bit.bitwarden.e2e.robots.goToLoginScreen
-import com.x8bit.bitwarden.e2e.robots.logInWithMasterPassword
+import com.x8bit.bitwarden.e2e.flows.goToLoginScreen
+import com.x8bit.bitwarden.e2e.flows.logInWithMasterPassword
 import com.x8bit.bitwarden.e2e.robots.login
 import com.x8bit.bitwarden.e2e.robots.navBar
 import com.x8bit.bitwarden.e2e.robots.vault

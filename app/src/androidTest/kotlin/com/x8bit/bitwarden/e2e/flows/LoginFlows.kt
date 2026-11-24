@@ -1,7 +1,13 @@
-package com.x8bit.bitwarden.e2e.robots
+package com.x8bit.bitwarden.e2e.flows
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.e2e.robots.accessibilityDisclosure
+import com.x8bit.bitwarden.e2e.robots.alertDialog
+import com.x8bit.bitwarden.e2e.robots.environment
+import com.x8bit.bitwarden.e2e.robots.landing
+import com.x8bit.bitwarden.e2e.robots.login
+import com.x8bit.bitwarden.e2e.robots.welcome
 import com.x8bit.bitwarden.e2e.seeder.SeededAccount
 import com.x8bit.bitwarden.e2e.util.appString
 
