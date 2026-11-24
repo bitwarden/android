@@ -858,11 +858,14 @@ internal class AuthRepositoryImpl(
         if (!isMasterPasswordStrong) {
             return RegisterResult.WeakPassword
         }
+        // The salt must be trimmed and lowercased to match the other clients and the SDK's KDF;
+        // the server compares the stored salt against future requests as an exact text match.
+        val salt = email.trim().lowercase()
         if (featureFlagManager.getFeatureFlag(key = FlagKey.V2EncryptionPassword)) {
             return authSdkSource
                 .postKeysForUserPasswordRegistration(
                     email = email,
-                    salt = email,
+                    salt = salt,
                     masterPassword = masterPassword,
                     masterPasswordHint = masterPasswordHint,
                     emailVerificationToken = emailVerificationToken,
@@ -891,7 +894,7 @@ internal class AuthRepositoryImpl(
                             encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
                         kdf = kdf.toKdfRequestModel(),
-                        salt = email,
+                        salt = salt,
                         masterPasswordAuthenticationHash = registerKeyResponse.masterPasswordHash,
                         masterKeyWrappedUserKey = registerKeyResponse.encryptedUserKey,
                     ),
