@@ -20,6 +20,16 @@ plugins {
 }
 
 /**
+ * Loads local user-specific build properties that are not checked into source control.
+ */
+val userProperties = Properties().apply {
+    val buildPropertiesFile = File(rootDir, "user.properties")
+    if (buildPropertiesFile.exists()) {
+        FileInputStream(buildPropertiesFile).use { load(it) }
+    }
+}
+
+/**
  * Loads CI-specific build properties that are not checked into source control.
  */
 val ciProperties = Properties().apply {
@@ -77,10 +87,19 @@ configure<ApplicationExtension> {
 
     signingConfigs {
         getByName("debug") {
+            // If `devKeystorePassword` is set in user.properties, sign with the dev keystore.
+            // Otherwise, fall back to the shared debug keystore.
+            val devKeystorePassword = userProperties["devKeystorePassword"] as String?
             keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            storeFile = file("../keystores/debug-bwa.keystore")
-            storePassword = "android"
+            keyPassword = devKeystorePassword ?: "android"
+            storeFile = file(
+                if (devKeystorePassword != null) {
+                    "../keystores/dev-bwa.keystore"
+                } else {
+                    "../keystores/debug-bwa.keystore"
+                },
+            )
+            storePassword = devKeystorePassword ?: "android"
         }
     }
 

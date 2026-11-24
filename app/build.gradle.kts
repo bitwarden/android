@@ -93,10 +93,17 @@ configure<ApplicationExtension> {
 
     signingConfigs {
         getByName("debug") {
+            val devKeystorePassword = userProperties["devKeystorePassword"] as String?
             keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            storeFile = file("../keystores/debug.keystore")
-            storePassword = "android"
+            keyPassword = devKeystorePassword ?: "android"
+            storeFile = file(
+                if (devKeystorePassword != null) {
+                    "../keystores/dev.keystore"
+                } else {
+                    "../keystores/debug.keystore"
+                },
+            )
+            storePassword = devKeystorePassword ?: "android"
         }
     }
 
