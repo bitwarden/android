@@ -1310,6 +1310,48 @@ class VaultDataExtensionsTest {
     }
 
     @Test
+    fun `toViewState should use the SDK subtitle as the card supporting label`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Card(
+                            v1 = createMockCardListView(number = 1, brand = "Mastercard"),
+                        ),
+                        folderId = null,
+                        favorite = true,
+                        subtitle = "Mastercard, *8412",
+                    ),
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
+            isNewItemTypesEnabled = false,
+        ) as VaultState.ViewState.Content
+
+        assertEquals(
+            "Mastercard, *8412".asText(),
+            actual.favoriteItems.single().supportingLabel,
+        )
+        assertEquals(
+            "Mastercard, *8412".asText(),
+            actual.noFolderItems.single().supportingLabel,
+        )
+    }
+
+    @Test
     fun `toViewState should transform SSH key vault items into correct vault item`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(

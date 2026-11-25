@@ -24,7 +24,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -76,10 +75,8 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
-import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -2212,8 +2209,7 @@ data class VaultState(
             /**
              * Represents a card item within the vault, storing details about a user's payment card.
              *
-             * @property brand The brand of the card, e.g., Visa, MasterCard.
-             * @property lastFourDigits The last four digits of the card number.
+             * @property subtitle The card summary from the SDK, e.g. "Visa, *4242".
              */
             @Parcelize
             data class Card(
@@ -2227,18 +2223,9 @@ data class VaultState(
                 override val overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 override val hasDecryptionError: Boolean,
-                private val brand: VaultCardBrand? = null,
-                val lastFourDigits: Text? = null,
+                val subtitle: Text? = null,
             ) : VaultItem() {
-                override val supportingLabel: Text?
-                    get() = when {
-                        brand != null && lastFourDigits != null ->
-                            brand.shortName.concat(", *".asText(), lastFourDigits)
-
-                        brand != null -> brand.shortName
-                        lastFourDigits != null -> "*".asText().concat(lastFourDigits)
-                        else -> null
-                    }
+                override val supportingLabel: Text? get() = subtitle
 
                 override val type: VaultItemCipherType get() = VaultItemCipherType.CARD
             }
