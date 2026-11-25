@@ -49,6 +49,7 @@ sealed class FlagKey<out T : Any> {
                 SdkPreLogin,
                 SdkCipherOperations,
                 UpdatedOnboardingFlow,
+                AutofillOffBanner,
             )
         }
     }
@@ -216,6 +217,16 @@ sealed class FlagKey<out T : Any> {
      */
     data object UpdatedOnboardingFlow : FlagKey<Boolean>() {
         override val keyName: String = "pm-44455-account-setup-onboarding-on-sign-in"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key for the autofill off banner, which prompts the
+     * user on the vault and in Settings > Autofill when autofill or browser autofill is off.
+     * When disabled, the previous flag-based autofill prompts and badges are used instead.
+     */
+    data object AutofillOffBanner : FlagKey<Boolean>() {
+        override val keyName: String = "pm-42672-autofill-off-banner"
         override val defaultValue: Boolean = false
     }
 

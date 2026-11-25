@@ -52,6 +52,8 @@ private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMa
 private const val RESUME_SCREEN = "resumeScreen"
 private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
 private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
+private const val AUTOFILL_BANNER_OPTED_OUT = "autofillBannerOptedOut"
+private const val AUTOFILL_BANNER_RESHOW_TIME = "autofillBannerReshowTime"
 private const val INTRODUCING_ARCHIVE_ACTION_CARD_DISMISSED =
     "introducingArchiveActionCardDismissed"
 private const val PREMIUM_UPGRADE_BANNER_DISMISSED = "premiumUpgradeBannerDismissed"
@@ -131,6 +133,10 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableIsAutofillBannerOptedOutFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableAutofillBannerReshowTimeFlow = bufferedMutableSharedFlow<Instant?>()
 
     private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
@@ -270,6 +276,28 @@ class SettingsDiskSourceImpl(
         set(value) {
             putLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME, value = value?.toEpochMilli())
         }
+
+    override var isAutofillBannerOptedOut: Boolean?
+        get() = getBoolean(key = AUTOFILL_BANNER_OPTED_OUT)
+        set(value) {
+            putBoolean(key = AUTOFILL_BANNER_OPTED_OUT, value = value)
+            mutableIsAutofillBannerOptedOutFlow.tryEmit(value)
+        }
+
+    override val isAutofillBannerOptedOutFlow: Flow<Boolean?>
+        get() = mutableIsAutofillBannerOptedOutFlow
+            .onSubscription { emit(isAutofillBannerOptedOut) }
+
+    override var autofillBannerReshowTime: Instant?
+        get() = getLong(key = AUTOFILL_BANNER_RESHOW_TIME)?.let { Instant.ofEpochMilli(it) }
+        set(value) {
+            putLong(key = AUTOFILL_BANNER_RESHOW_TIME, value = value?.toEpochMilli())
+            mutableAutofillBannerReshowTimeFlow.tryEmit(value)
+        }
+
+    override val autofillBannerReshowTimeFlow: Flow<Instant?>
+        get() = mutableAutofillBannerReshowTimeFlow
+            .onSubscription { emit(autofillBannerReshowTime) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)

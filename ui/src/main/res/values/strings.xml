@@ -1430,4 +1430,11 @@ Do you want to switch to this account?</string>
     <string name="turn_off">Turn off</string>
     <string name="turn_off_biometric_question">Turn off biometrics?</string>
     <string name="unlocking_will_require_your_master_password">Unlocking will require your master password. You can turn biometrics back on in Settings.</string>
+    <string name="set_up_autofill">Set up autofill</string>
+    <string name="bitwarden_can_suggest_your_passwords_and_other_credentials">Bitwarden can suggest your passwords and other credentials when you sign in to apps and websites.</string>
+    <string name="dont_remind_me_again">Don’t remind me again</string>
+    <string name="turn_on_autofill_in_x">Turn on autofill in %1$s</string>
+    <string name="x_needs_one_more_setting_before_bitwarden_can_fill_your_passwords">%1$s needs one more setting before Bitwarden can fill your passwords.</string>
+    <string name="turn_on_in_x">Turn on in %1$s</string>
+    <string name="having_trouble_get_help">Having trouble? Get help</string>
 </resources>

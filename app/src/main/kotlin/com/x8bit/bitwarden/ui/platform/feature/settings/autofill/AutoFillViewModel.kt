@@ -11,8 +11,10 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -40,6 +42,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
+    autofillPromptManager: AutofillPromptManager,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     featureFlagManager: FeatureFlagManager,
     private val fillAssistManager: FillAssistManager,
@@ -73,6 +76,9 @@ class AutoFillViewModel @Inject constructor(
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = firstTimeState.showSetupAutofillCard,
                 showBrowserAutofillActionCard = firstTimeState.showSetupBrowserAutofillCard,
+                isAutofillOffBannerEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.AutofillOffBanner),
+                autofillPromptStatus = autofillPromptManager.autofillPromptStatusFlow.value,
                 activeUserId = userId,
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
@@ -106,6 +112,18 @@ class AutoFillViewModel @Inject constructor(
         firstTimeActionManager
             .firstTimeStateFlow
             .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        autofillPromptManager
+            .autofillPromptStatusFlow
+            .map { AutoFillAction.Internal.AutofillPromptStatusReceive(autofillPromptStatus = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.AutofillOffBanner)
+            .map { AutoFillAction.Internal.AutofillOffBannerFlagUpdateReceive(isEnabled = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -186,6 +204,14 @@ class AutoFillViewModel @Inject constructor(
                 handleUpdateShowAutofillActionCard(action)
             }
 
+            is AutoFillAction.Internal.AutofillPromptStatusReceive -> {
+                handleAutofillPromptStatusReceive(action)
+            }
+
+            is AutoFillAction.Internal.AutofillOffBannerFlagUpdateReceive -> {
+                handleAutofillOffBannerFlagUpdateReceive(action)
+            }
+
             is AutoFillAction.Internal.BrowserAutofillStatusReceive -> {
                 handleBrowserAutofillStatusReceive(action)
             }
@@ -247,6 +273,18 @@ class AutoFillViewModel @Inject constructor(
         }
     }
 
+    private fun handleAutofillPromptStatusReceive(
+        action: AutoFillAction.Internal.AutofillPromptStatusReceive,
+    ) {
+        mutableStateFlow.update { it.copy(autofillPromptStatus = action.autofillPromptStatus) }
+    }
+
+    private fun handleAutofillOffBannerFlagUpdateReceive(
+        action: AutoFillAction.Internal.AutofillOffBannerFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isAutofillOffBannerEnabled = action.isEnabled) }
+    }
+
     private fun handleFillAssistTargetingRulesFlagUpdateReceive(
         action: AutoFillAction.Internal.FillAssistTargetingRulesFlagUpdateReceive,
     ) {
@@ -281,7 +319,7 @@ class AutoFillViewModel @Inject constructor(
         } else {
             settingsRepository.disableAutofill()
         }
-        dismissShowAutofillActionCard()
+        if (!state.isAutofillOffBannerEnabled) dismissShowAutofillActionCard()
     }
 
     private fun handleBackClick() {
@@ -360,6 +398,8 @@ data class AutoFillState(
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
     val showBrowserAutofillActionCard: Boolean,
+    val isAutofillOffBannerEnabled: Boolean,
+    val autofillPromptStatus: AutofillPromptStatus,
     val activeUserId: String,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
@@ -624,6 +664,20 @@ sealed class AutoFillAction {
          * An update for changes in the [firstTimeState] value from the settings repository.
          */
         data class UpdateShowAutofillActionCard(val firstTimeState: FirstTimeState) : Internal()
+
+        /**
+         * An update for changes in the [FlagKey.AutofillOffBanner] value.
+         */
+        data class AutofillOffBannerFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * An update for changes in the autofill prompt status.
+         */
+        data class AutofillPromptStatusReceive(
+            val autofillPromptStatus: AutofillPromptStatus,
+        ) : Internal()
 
         /**
          * Received updated [BrowserThirdPartyAutofillStatus] data.

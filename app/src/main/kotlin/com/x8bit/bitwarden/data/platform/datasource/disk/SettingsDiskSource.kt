@@ -113,6 +113,28 @@ interface SettingsDiskSource : FlightRecorderDiskSource {
     var browserAutofillDialogReshowTime: Instant?
 
     /**
+     * Whether the user has opted out of the autofill banner on the vault ("Don't remind me
+     * again"). This applies to every account on the device.
+     */
+    var isAutofillBannerOptedOut: Boolean?
+
+    /**
+     * Emits updates that track [isAutofillBannerOptedOut].
+     */
+    val isAutofillBannerOptedOutFlow: Flow<Boolean?>
+
+    /**
+     * The time at which the autofill banner on the vault is allowed to be shown again after
+     * being dismissed. This applies to every account on the device.
+     */
+    var autofillBannerReshowTime: Instant?
+
+    /**
+     * Emits updates that track [autofillBannerReshowTime].
+     */
+    val autofillBannerReshowTimeFlow: Flow<Instant?>
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)

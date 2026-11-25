@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.di
 import android.content.Context
 import android.view.autofill.AutofillManager
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.appstate.AppStateManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
@@ -14,6 +15,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillPromptManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
@@ -66,6 +69,24 @@ object AutofillModule {
     @Provides
     fun providesBrowserAutofillEnabledManager(): BrowserThirdPartyAutofillEnabledManager =
         BrowserThirdPartyAutofillEnabledManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesAutofillPromptManager(
+        autofillEnabledManager: AutofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        appStateManager: AppStateManager,
+        settingsDiskSource: SettingsDiskSource,
+        clock: Clock,
+        dispatcherManager: DispatcherManager,
+    ): AutofillPromptManager = AutofillPromptManagerImpl(
+        autofillEnabledManager = autofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        appStateManager = appStateManager,
+        settingsDiskSource = settingsDiskSource,
+        clock = clock,
+        dispatcherManager = dispatcherManager,
+    )
 
     @Singleton
     @Provides

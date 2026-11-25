@@ -384,6 +384,7 @@ object PlatformManagerModule {
         dispatcherManager: DispatcherManager,
         autofillEnabledManager: AutofillEnabledManager,
         thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+        featureFlagManager: FeatureFlagManager,
     ): FirstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
@@ -391,6 +392,7 @@ object PlatformManagerModule {
         dispatcherManager = dispatcherManager,
         autofillEnabledManager = autofillEnabledManager,
         thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
+        featureFlagManager = featureFlagManager,
     )
 
     @Provides

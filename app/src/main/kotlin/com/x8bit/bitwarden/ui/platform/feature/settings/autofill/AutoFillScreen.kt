@@ -69,7 +69,10 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.autofill.model.AutofillPromptStatus
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.ui.platform.components.card.SetUpAutofillActionCard
+import com.x8bit.bitwarden.ui.platform.components.card.TurnOnBrowserAutofillActionCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
@@ -195,13 +198,23 @@ private fun AutoFillScreenContent(
 ) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(height = 12.dp))
-        AutofillCallToActionCard(
-            state = state,
-            autoFillHandlers = autoFillHandlers,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
+        if (state.isAutofillOffBannerEnabled) {
+            AutofillPromptCallToActionCard(
+                autofillPromptStatus = state.autofillPromptStatus,
+                autoFillHandlers = autoFillHandlers,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        } else {
+            AutofillCallToActionCard(
+                state = state,
+                autoFillHandlers = autoFillHandlers,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = BitwardenString.autofill_noun),
@@ -434,6 +447,65 @@ private fun AutofillCallToActionCard(
             }
 
             CtaState.DEFAULT -> {
+                BitwardenActionCardSmall(
+                    actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
+                    actionText = stringResource(id = BitwardenString.having_trouble_with_autofill),
+                    callToActionText = stringResource(
+                        id = BitwardenString.access_help_and_troubleshooting_documentation_here,
+                    ),
+                    onCardClicked = autoFillHandlers.onHelpCardClick,
+                    trailingContent = {
+                        Icon(
+                            painter = rememberVectorPainter(BitwardenDrawable.ic_chevron_right),
+                            contentDescription = stringResource(id = BitwardenString.external_link),
+                            tint = BitwardenTheme.colorScheme.icon.primary,
+                        )
+                    },
+                )
+            }
+        }
+    }
+}
+
+/**
+ * The call-to-action card shown while the autofill off banner flag is on: a banner when autofill
+ * or the default browser's autofill is off, and the autofill help card otherwise.
+ */
+@Composable
+private fun AutofillPromptCallToActionCard(
+    autofillPromptStatus: AutofillPromptStatus,
+    autoFillHandlers: AutoFillHandlers,
+    modifier: Modifier,
+) {
+    AnimatedContent(
+        targetState = autofillPromptStatus,
+        label = "AutofillPromptActionCard",
+        transitionSpec = { EnterTransition.None.togetherWith(actionCardExitAnimation()) },
+        modifier = modifier,
+    ) {
+        when (it) {
+            AutofillPromptStatus.AutofillOff -> {
+                SetUpAutofillActionCard(
+                    onTurnOnClick = autoFillHandlers.onAutofillActionCardClick,
+                    secondaryButton = BitwardenButtonData(
+                        label = BitwardenString.having_trouble_get_help.asText(),
+                        onClick = autoFillHandlers.onHelpCardClick,
+                    ),
+                )
+            }
+
+            is AutofillPromptStatus.BrowserOff -> {
+                TurnOnBrowserAutofillActionCard(
+                    browserPackage = it.browserPackage,
+                    onTurnOnClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                    secondaryButton = BitwardenButtonData(
+                        label = BitwardenString.having_trouble_get_help.asText(),
+                        onClick = autoFillHandlers.onHelpCardClick,
+                    ),
+                )
+            }
+
+            AutofillPromptStatus.On -> {
                 BitwardenActionCardSmall(
                     actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
                     actionText = stringResource(id = BitwardenString.having_trouble_with_autofill),

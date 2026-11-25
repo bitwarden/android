@@ -76,6 +76,10 @@ class FlagKeyTest {
             FlagKey.UpdatedOnboardingFlow.keyName,
             "pm-44455-account-setup-onboarding-on-sign-in",
         )
+        assertEquals(
+            FlagKey.AutofillOffBanner.keyName,
+            "pm-42672-autofill-off-banner",
+        )
     }
 
     @Test
@@ -99,6 +103,7 @@ class FlagKeyTest {
                 FlagKey.SdkPreLogin,
                 FlagKey.SdkCipherOperations,
                 FlagKey.UpdatedOnboardingFlow,
+                FlagKey.AutofillOffBanner,
             ).all {
                 !it.defaultValue
             },

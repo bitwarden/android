@@ -56,6 +56,10 @@ class FakeSettingsDiskSource(
     private val mutableHasUserLoggedInOrCreatedAccount =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableIsAutofillBannerOptedOut = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableAutofillBannerReshowTime = bufferedMutableSharedFlow<Instant?>()
+
     private val mutableShouldShowAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableShouldShowGeneratorCoachMarkFlow =
@@ -104,6 +108,8 @@ class FakeSettingsDiskSource(
     private var storedIsDynamicColorsEnabled: Boolean? = null
     private var storedHasShownAccessibilityDisclaimer: Boolean? = null
     private var storedBrowserAutofillDialogReshowTime: Instant? = null
+    private var storedIsAutofillBannerOptedOut: Boolean? = null
+    private var storedAutofillBannerReshowTime: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -257,6 +263,26 @@ class FakeSettingsDiskSource(
         set(value) {
             storedBrowserAutofillDialogReshowTime = value
         }
+
+    override var isAutofillBannerOptedOut: Boolean?
+        get() = storedIsAutofillBannerOptedOut
+        set(value) {
+            storedIsAutofillBannerOptedOut = value
+            mutableIsAutofillBannerOptedOut.tryEmit(value)
+        }
+
+    override val isAutofillBannerOptedOutFlow: Flow<Boolean?>
+        get() = mutableIsAutofillBannerOptedOut.onSubscription { emit(isAutofillBannerOptedOut) }
+
+    override var autofillBannerReshowTime: Instant?
+        get() = storedAutofillBannerReshowTime
+        set(value) {
+            storedAutofillBannerReshowTime = value
+            mutableAutofillBannerReshowTime.tryEmit(value)
+        }
+
+    override val autofillBannerReshowTimeFlow: Flow<Instant?>
+        get() = mutableAutofillBannerReshowTime.onSubscription { emit(autofillBannerReshowTime) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,

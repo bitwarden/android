@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
@@ -27,7 +28,7 @@ import javax.inject.Inject
 /**
  * Implementation of [FirstTimeActionManager]
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 class FirstTimeActionManagerImpl @Inject constructor(
     dispatcherManager: DispatcherManager,
     private val authDiskSource: AuthDiskSource,
@@ -35,6 +36,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
     private val vaultDiskSource: VaultDiskSource,
     private val autofillEnabledManager: AutofillEnabledManager,
     private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : FirstTimeActionManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -77,8 +79,9 @@ class FirstTimeActionManagerImpl @Inject constructor(
             )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int>
-        get() = authDiskSource
+    override val allAutofillSettingsBadgeCountFlow: StateFlow<Int> = combine(
+        featureFlagManager.getFeatureFlagFlow(FlagKey.AutofillOffBanner),
+        authDiskSource
             .activeUserIdChangesFlow
             .filterNotNull()
             .flatMapLatest {
@@ -91,12 +94,16 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     .map { list ->
                         list.count { showBadge -> showBadge }
                     }
-            }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Lazily,
-                initialValue = 0,
-            )
+            },
+    ) { isAutofillOffBannerEnabled, badgeCount ->
+        // The autofill off banner replaces these badges, so hide them while the flag is on.
+        if (isAutofillOffBannerEnabled) 0 else badgeCount
+    }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Lazily,
+            initialValue = 0,
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val allVaultSettingsBadgeCountFlow: StateFlow<Int>

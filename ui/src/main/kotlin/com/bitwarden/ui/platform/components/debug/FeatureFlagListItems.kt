@@ -43,6 +43,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.SdkPreLogin,
     FlagKey.SdkCipherOperations,
     FlagKey.UpdatedOnboardingFlow,
+    FlagKey.AutofillOffBanner,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -113,4 +114,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SdkPreLogin -> stringResource(BitwardenString.sdk_pre_login)
     FlagKey.SdkCipherOperations -> stringResource(BitwardenString.sdk_cipher_operations)
     FlagKey.UpdatedOnboardingFlow -> stringResource(BitwardenString.updated_onboarding_flow)
+    FlagKey.AutofillOffBanner -> stringResource(BitwardenString.autofill_off_banner)
 }
