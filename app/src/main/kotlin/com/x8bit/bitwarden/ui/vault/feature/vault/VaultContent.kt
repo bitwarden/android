@@ -28,6 +28,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.VaultSection
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.ImmutableSet
@@ -117,6 +118,14 @@ fun VaultContent(
             vaultHandlers.overflowOptionClick(action)
         }
     }
+    val foldersLabelRes = vfo1Foundation(
+        new = BitwardenString.my_folders,
+        old = BitwardenString.folders,
+    )
+    val collectionsLabelRes = vfo1Foundation(
+        new = BitwardenString.shared_folders,
+        old = BitwardenString.collections,
+    )
     LazyColumn(
         modifier = modifier,
     ) {
@@ -158,7 +167,7 @@ fun VaultContent(
             state = state,
             collapsedSections = collapsedSections,
             vaultHandlers = vaultHandlers,
-            labelRes = BitwardenString.my_folders,
+            labelRes = foldersLabelRes,
         )
 
         noFolderSection(
@@ -173,7 +182,7 @@ fun VaultContent(
             state = state,
             collapsedSections = collapsedSections,
             vaultHandlers = vaultHandlers,
-            labelRes = BitwardenString.shared_folders,
+            labelRes = collectionsLabelRes,
         )
 
         hiddenItemsSection(
@@ -552,7 +561,12 @@ private fun LazyListScope.collectionsSection(
         key = { _, collection -> "collection_${collection.id}" },
     ) { index, collection ->
         BitwardenGroupItem(
-            startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_shared_folder),
+            startIcon = IconData.Local(
+                iconRes = vfo1Foundation(
+                    new = BitwardenDrawable.ic_shared_folder,
+                    old = BitwardenDrawable.ic_collections,
+                ),
+            ),
             label = collection.name,
             supportingLabel = collection.itemCount.toString(),
             onClick = { vaultHandlers.collectionClick(collection) },

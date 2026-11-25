@@ -179,6 +179,7 @@ fun List<CipherListView>.toViewState(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isVfo1FoundationEnabled: Boolean = false,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -190,6 +191,7 @@ fun List<CipherListView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
+                    isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                 ),
             )
         }
@@ -208,6 +210,7 @@ private fun List<CipherListView>.toDisplayItemList(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isVfo1FoundationEnabled: Boolean = false,
 ): ImmutableList<SearchState.DisplayItem> =
     this
         .map {
@@ -217,6 +220,7 @@ private fun List<CipherListView>.toDisplayItemList(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = isAutofill,
                 isPremiumUser = isPremiumUser,
+                isVfo1FoundationEnabled = isVfo1FoundationEnabled,
             )
         }
         .sortAlphabetically()
@@ -229,6 +233,7 @@ private fun CipherListView.toDisplayItem(
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isPremiumUser: Boolean,
+    isVfo1FoundationEnabled: Boolean = false,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -240,7 +245,7 @@ private fun CipherListView.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
-        extraIconList = toLabelIcons(),
+        extraIconList = toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
         overflowOptions = toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,

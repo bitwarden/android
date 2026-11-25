@@ -35,7 +35,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
     @Suppress("LongParameterList")
     protected fun setContent(
         theme: AppTheme = AppTheme.DEFAULT,
-        featureFlagsState: FeatureFlagsState = FeatureFlagsState,
+        featureFlagsState: FeatureFlagsState = FeatureFlagsState(),
         authTabLaunchers: AuthTabLaunchers = mockk(),
         appResumeStateManager: AppResumeStateManager = mockk(),
         appReviewManager: AppReviewManager = mockk(),

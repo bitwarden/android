@@ -131,6 +131,7 @@ fun VaultData.toViewState(
     totpData: TotpData?,
     isPremiumUser: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = decryptCipherListResult
         .successes
@@ -185,7 +186,7 @@ fun VaultData.toViewState(
     ) {
         VaultItemListingState.ViewState.Content(
             displayItemList = filteredFailuresCipherViewList
-                .toDisplayItemListDecryptionError()
+                .toDisplayItemListDecryptionError(isVfo1FoundationEnabled = isVfo1FoundationEnabled)
                 .plus(
                     filteredCipherViewList.toDisplayItemList(
                         baseIconUrl = baseIconUrl,
@@ -194,6 +195,7 @@ fun VaultData.toViewState(
                         isAutofill = autofillSelectionData != null,
                         isFido2Creation = createCredentialRequestData != null,
                         isPremiumUser = isPremiumUser,
+                        isVfo1FoundationEnabled = isVfo1FoundationEnabled,
                     ),
                 ),
             displayFolderList = folderList.map { folderView ->
@@ -236,7 +238,11 @@ fun VaultData.toViewState(
                     }
 
                     is VaultItemListingState.ItemListingType.Vault.Collection -> {
-                        BitwardenString.there_are_no_items_in_this_shared_folder
+                        if (isVfo1FoundationEnabled) {
+                            BitwardenString.there_are_no_items_in_this_shared_folder
+                        } else {
+                            BitwardenString.no_items_collection
+                        }
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Trash -> {
@@ -464,6 +470,7 @@ private fun List<CipherListView>.toDisplayItemList(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
+    isVfo1FoundationEnabled: Boolean = false,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -473,6 +480,7 @@ private fun List<CipherListView>.toDisplayItemList(
             isAutofill = isAutofill,
             isFido2Creation = isFido2Creation,
             isPremiumUser = isPremiumUser,
+            isVfo1FoundationEnabled = isVfo1FoundationEnabled,
         )
     }
 
@@ -495,6 +503,7 @@ private fun CipherListView.toDisplayItem(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     isPremiumUser: Boolean,
+    isVfo1FoundationEnabled: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -516,7 +525,7 @@ private fun CipherListView.toDisplayItem(
                 this.isActiveWithFido2Credentials,
         ),
         iconTestTag = this.toIconTestTag(),
-        extraIconList = this.toLabelIcons(),
+        extraIconList = this.toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
         overflowOptions = this.toOverflowActions(
             hasMasterPassword = hasMasterPassword,
             isPremiumUser = isPremiumUser,
@@ -535,10 +544,16 @@ private fun CipherListView.toDisplayItem(
     )
 
 @Suppress("MaxLineLength")
-private fun List<CipherListView>.toDisplayItemListDecryptionError(): List<VaultItemListingState.DisplayItem> =
-    this.map { it.toDisplayItemDecryptionError() }
+private fun List<CipherListView>.toDisplayItemListDecryptionError(
+    isVfo1FoundationEnabled: Boolean = false,
+): List<VaultItemListingState.DisplayItem> =
+    this.map {
+        it.toDisplayItemDecryptionError(isVfo1FoundationEnabled = isVfo1FoundationEnabled)
+    }
 
-private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState.DisplayItem =
+private fun CipherListView.toDisplayItemDecryptionError(
+    isVfo1FoundationEnabled: Boolean = false,
+): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = BitwardenString.error_cannot_decrypt.asText(),
@@ -549,7 +564,7 @@ private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState
         subtitleTestTag = "",
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         iconTestTag = this.toIconTestTag(),
-        extraIconList = this.toLabelIcons(),
+        extraIconList = this.toLabelIcons(isVfo1FoundationEnabled = isVfo1FoundationEnabled),
         overflowOptions = emptyList(),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = false,

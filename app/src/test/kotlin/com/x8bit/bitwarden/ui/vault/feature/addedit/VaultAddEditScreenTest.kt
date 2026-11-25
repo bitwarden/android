@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionMa
 import com.x8bit.bitwarden.ui.credentials.manager.model.CreateCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -139,6 +140,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -5609,6 +5611,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -5625,6 +5628,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -5641,6 +5645,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -5657,6 +5662,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_BANK_ACCOUNT = VaultAddEditState(
@@ -5673,6 +5679,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_LICENSE = VaultAddEditState(
@@ -5689,6 +5696,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_PASSPORT = VaultAddEditState(
@@ -5705,6 +5713,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -5731,6 +5740,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -5747,6 +5757,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -5763,6 +5774,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = false,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

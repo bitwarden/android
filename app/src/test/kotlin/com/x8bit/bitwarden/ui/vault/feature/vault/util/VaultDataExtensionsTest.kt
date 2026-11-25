@@ -1347,6 +1347,7 @@ class VaultDataExtensionsTest {
             restrictItemTypesPolicyOrgIds = emptyList(),
             validTotpIds = emptySet(),
             isNewItemTypesEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -1436,6 +1437,7 @@ class VaultDataExtensionsTest {
             restrictItemTypesPolicyOrgIds = emptyList(),
             validTotpIds = emptySet(),
             isNewItemTypesEnabled = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -1510,6 +1512,7 @@ class VaultDataExtensionsTest {
             restrictItemTypesPolicyOrgIds = emptyList(),
             validTotpIds = emptySet(),
             isNewItemTypesEnabled = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(
@@ -1584,6 +1587,7 @@ class VaultDataExtensionsTest {
             restrictItemTypesPolicyOrgIds = emptyList(),
             validTotpIds = emptySet(),
             isNewItemTypesEnabled = true,
+            isVfo1FoundationEnabled = true,
         )
 
         assertEquals(

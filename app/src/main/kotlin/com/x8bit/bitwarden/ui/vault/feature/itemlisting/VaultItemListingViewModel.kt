@@ -242,6 +242,12 @@ class VaultItemListingViewModel @AssistedInject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         snackbarRelayManager
             .getSnackbarDataFlow(
                 SnackbarRelay.CIPHER_ARCHIVED,
@@ -1784,6 +1790,10 @@ class VaultItemListingViewModel @AssistedInject constructor(
                 handleRestrictItemTypesPolicyUpdateReceive(action)
             }
 
+            is VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
+                handleVfo1FoundationFlagUpdateReceive(action)
+            }
+
             is VaultItemListingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
@@ -1896,6 +1906,16 @@ class VaultItemListingViewModel @AssistedInject constructor(
                     .toImmutableList(),
             )
         }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateStateWithVaultData(vaultData, clearDialogState = false)
+        }
+    }
+
+    private fun handleVfo1FoundationFlagUpdateReceive(
+        action: VaultItemListingsAction.Internal.Vfo1FoundationFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
             updateStateWithVaultData(vaultData, clearDialogState = false)
@@ -2765,6 +2785,7 @@ class VaultItemListingViewModel @AssistedInject constructor(
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
+                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         )
                     }
 
@@ -2986,6 +3007,7 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
+    val isVfo1FoundationEnabled: Boolean = false,
 ) {
     /**
      * Indicates what action card to display.
@@ -4067,6 +4089,13 @@ sealed class VaultItemListingsAction {
          */
         data class RestrictItemTypesPolicyUpdateReceive(
             val restrictItemTypesPolicyOrdIds: List<String>,
+        ) : Internal()
+
+        /**
+         * Indicates that an update for the `vfo1-foundation` feature flag has been received.
+         */
+        data class Vfo1FoundationFlagUpdateReceive(
+            val isEnabled: Boolean,
         ) : Internal()
 
         /**

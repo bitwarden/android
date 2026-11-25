@@ -196,6 +196,8 @@ class VaultAddEditViewModel @AssistedInject constructor(
             VaultAddEditState(
                 isCardScannerEnabled = featureFlagManager
                     .getFeatureFlag(FlagKey.CardScanner) && !buildInfoManager.isFdroid,
+                isVfo1FoundationEnabled = featureFlagManager
+                    .getFeatureFlag(FlagKey.Vfo1Foundation),
                 vaultAddEditType = vaultAddEditType,
                 cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
@@ -307,6 +309,12 @@ class VaultAddEditViewModel @AssistedInject constructor(
         featureFlagManager
             .getFeatureFlagFlow(FlagKey.CardScanner)
             .map { VaultAddEditAction.Internal.CardScannerFlagUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -533,7 +541,11 @@ class VaultAddEditViewModel @AssistedInject constructor(
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
             showGenericErrorDialog(
-                message = BitwardenString.you_must_select_at_least_one_shared_folder.asText(),
+                message = if (state.isVfo1FoundationEnabled) {
+                    BitwardenString.you_must_select_at_least_one_shared_folder.asText()
+                } else {
+                    BitwardenString.select_one_collection.asText()
+                },
             )
             true
         } else if (
@@ -1911,6 +1923,10 @@ class VaultAddEditViewModel @AssistedInject constructor(
                 handleCardScannerFlagUpdateReceive(action)
             }
 
+            is VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
+                handleVfo1FoundationFlagUpdateReceive(action)
+            }
+
             is VaultAddEditAction.Internal.CardScanResultReceive -> {
                 handleCardScanResultReceive(action)
             }
@@ -2148,6 +2164,25 @@ class VaultAddEditViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleVfo1FoundationFlagUpdateReceive(
+        action: VaultAddEditAction.Internal.Vfo1FoundationFlagUpdateReceive,
+    ) {
+        if (action.isEnabled == state.isVfo1FoundationEnabled) return
+        mutableStateFlow.update { it.copy(isVfo1FoundationEnabled = action.isEnabled) }
+
+        val vaultData = vaultRepository.vaultDataStateFlow.value.data ?: return
+        viewModelScope.launch {
+            sendAction(
+                VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                    vaultAddEditState = state.determineContentState(
+                        vaultData = vaultData,
+                        userData = authRepository.userStateFlow.value,
+                    ),
+                ),
+            )
+        }
+    }
+
     private fun handleCardScanResultReceive(
         action: VaultAddEditAction.Internal.CardScanResultReceive,
     ) {
@@ -2339,6 +2374,7 @@ class VaultAddEditViewModel @AssistedInject constructor(
                             activeAccount = currentAccount,
                             isIndividualVaultDisabled = isIndividualVaultDisabled,
                             resourceManager = resourceManager,
+                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         )
                 },
         )
@@ -2772,6 +2808,7 @@ data class VaultAddEditState(
     val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
     val isCardScannerEnabled: Boolean,
+    val isVfo1FoundationEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -4527,6 +4564,13 @@ sealed class VaultAddEditAction {
          * Indicates that the Card Scanner flag has been updated.
          */
         data class CardScannerFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the VFO-1 foundation flag has been updated.
+         */
+        data class Vfo1FoundationFlagUpdateReceive(
             val isEnabled: Boolean,
         ) : Internal()
 

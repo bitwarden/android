@@ -18,6 +18,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.every
@@ -43,7 +44,9 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
+        ) {
             VaultMoveToOrganizationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -74,6 +77,35 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
             .assertIsNotDisplayed()
         composeTestRule
             .onNodeWithText(text = "Shared folders")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `the app bar title should display the old text when the flag is off`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = VaultMoveToOrganizationState.ViewState.Loading,
+                isVfo1FoundationEnabled = false,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Collections")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Move to Organization")
+            .filterToOne(!hasClickAction())
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Move to Organization")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Collections")
             .assertIsDisplayed()
     }
 
@@ -324,4 +356,5 @@ private fun createVaultMoveToOrganizationState(): VaultMoveToOrganizationState =
         ),
         dialogState = null,
         onlyShowCollections = false,
+        isVfo1FoundationEnabled = true,
     )
