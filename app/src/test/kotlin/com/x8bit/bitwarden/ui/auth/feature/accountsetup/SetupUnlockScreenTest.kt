@@ -745,7 +745,7 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
 
 private const val BIOMETRICS_ONLY_MESSAGE: String =
     "Set up biometrics to quickly access your vault and autofill your logins. " +
-        "Other unlock options are in Settings > Account security."
+        "Go to Settings for additional unlock options."
 private const val BIOMETRICS_OR_PIN_MESSAGE: String =
     "Set up biometrics or choose a PIN code to quickly access your vault and Autofill your " +
         "logins."
