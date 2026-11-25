@@ -329,6 +329,7 @@ private fun AssistStructure.traverse(
                 )
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
+                ?.updateForUsernameFieldsClassifiedAsPassword()
                 .also { windowNode.logWindowNodeEnd() }
         }
 
@@ -408,6 +409,42 @@ private fun ViewNodeTraversalData.updateForMissingUsernameFields(): ViewNodeTrav
         // We already have username fields available or there are no password fields, so no need
         // to search for them.
         this
+    }
+}
+
+/**
+ * This helper function updates the [ViewNodeTraversalData] when a username field was wrongly
+ * classified as a password field. Some apps give their user ID field a password input type (for
+ * example, `inputType=128`) without any username term in its hint or id, so it classifies as
+ * [AutofillView.Login.Password] and the password gets filled into it as well.
+ *
+ * If there are no username or email fields, a [AutofillView.Login.Password] without any password
+ * terms that sits directly above a [AutofillView.Login.Password] that does have password terms is
+ * demoted to [AutofillView.Login.Username]. Fields without password terms that are not directly
+ * above a field with password terms (for example, a "confirm" field after a new password) are left
+ * alone.
+ */
+private fun ViewNodeTraversalData.updateForUsernameFieldsClassifiedAsPassword():
+    ViewNodeTraversalData {
+    val hasUsernameOrEmail = this.autofillViews.any {
+        it is AutofillView.Login.Username || it is AutofillView.Login.Email
+    }
+    if (hasUsernameOrEmail) return this
+    val confirmedPasswordPositions = this.autofillViews.mapIndexedNotNull { index, autofillView ->
+        (autofillView as? AutofillView.Login.Password)
+            ?.takeIf { it.data.hasPasswordTerms }
+            ?.let { index }
+    }
+    if (confirmedPasswordPositions.isEmpty()) return this
+    return this.copyAndMapAutofillViews { index, autofillView ->
+        if (autofillView is AutofillView.Login.Password &&
+            !autofillView.data.hasPasswordTerms &&
+            confirmedPasswordPositions.contains(index + 1)
+        ) {
+            AutofillView.Login.Username(data = autofillView.data)
+        } else {
+            autofillView
+        }
     }
 }
 
