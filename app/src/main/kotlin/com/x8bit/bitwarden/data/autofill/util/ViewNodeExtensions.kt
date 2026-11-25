@@ -99,10 +99,15 @@ fun AssistStructure.ViewNode.toAutofillView(
     // buildFilledItemOrNull to return null and drop the field from the fill dataset entirely.
     val autofillableChild =
         if (hint != null && autofillType == View.AUTOFILL_TYPE_NONE) {
-            findFirstAutofillableChild()
+            findFirstAutofillableChild(isIdentityAutofillEnabled = isIdentityAutofillEnabled)
         } else {
             null
         }
+    // If that child classifies itself, let it. A container's classification usually comes from a
+    // loose id or hint match (for example, an id like `username_password_ll`), so redirecting would
+    // claim the child's autofillId for the container's classification and the child's own, more
+    // specific classification would be dropped as a duplicate.
+    if (autofillableChild?.hasOwnHint == true) return null
     val effectiveAutofillId = autofillableChild?.autofillId ?: nonNullAutofillId
     val effectiveAutofillType = autofillableChild?.autofillType ?: autofillType
 
@@ -126,16 +131,30 @@ fun AssistStructure.ViewNode.toAutofillView(
     )
 }
 
-private data class AutofillableChild(val autofillId: AutofillId, val autofillType: Int)
+private data class AutofillableChild(
+    val autofillId: AutofillId,
+    val autofillType: Int,
+    val hasOwnHint: Boolean,
+)
 
-private fun AssistStructure.ViewNode.findFirstAutofillableChild(): AutofillableChild? {
+private fun AssistStructure.ViewNode.findFirstAutofillableChild(
+    isIdentityAutofillEnabled: Boolean,
+): AutofillableChild? {
     for (i in 0 until childCount) {
         val child = getChildAt(i)
         if (child.autofillType == View.AUTOFILL_TYPE_TEXT) {
             val id = child.autofillId ?: continue
-            return AutofillableChild(autofillId = id, autofillType = child.autofillType)
+            return AutofillableChild(
+                autofillId = id,
+                autofillType = child.autofillType,
+                hasOwnHint = child.supportedAutofillHint(
+                    isIdentityAutofillEnabled = isIdentityAutofillEnabled,
+                ) != null,
+            )
         }
-        child.findFirstAutofillableChild()?.let { return it }
+        child
+            .findFirstAutofillableChild(isIdentityAutofillEnabled = isIdentityAutofillEnabled)
+            ?.let { return it }
     }
     return null
 }

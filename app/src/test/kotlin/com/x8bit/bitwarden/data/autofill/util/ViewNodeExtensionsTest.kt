@@ -1343,6 +1343,10 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            every { autofillHints } returns null
+            every { idEntry } returns null
+            every { hint } returns null
+            every { inputType } returns 1
         }
         every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
         every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
@@ -1377,6 +1381,10 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            every { autofillHints } returns null
+            every { idEntry } returns null
+            every { hint } returns null
+            every { inputType } returns 1
         }
         val intermediateChildNode: AssistStructure.ViewNode = mockk {
             every { autofillId } returns mockk()
@@ -1405,6 +1413,35 @@ class ViewNodeExtensionsTest {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return null for a container with a hint when its first autofillable child has its own hint`() {
+        // Setup: a container like `username_password_ll` that matches a username term, wrapping a
+        // password field. The password field must keep its own classification, so the container
+        // must not claim its autofillId.
+        val childNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns mockk()
+            every { autofillType } returns View.AUTOFILL_TYPE_TEXT
+            every { childCount } returns 0
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+            every { autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
+        }
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_USERNAME)
+        every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
+        every { viewNode.childCount } returns 1
+        every { viewNode.getChildAt(0) } returns childNode
+
+        // Test
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        // Verify
+        assertNull(actual)
     }
 
     @Suppress("MaxLineLength")
