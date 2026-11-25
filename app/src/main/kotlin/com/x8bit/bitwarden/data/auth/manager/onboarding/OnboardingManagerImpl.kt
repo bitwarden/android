@@ -75,21 +75,32 @@ internal class OnboardingManagerImpl(
         userId: String,
         current: OnboardingStatus?,
     ): Boolean = when (this) {
-        OnboardingStatus.ACCOUNT_LOCK_SETUP -> {
-            biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false) &&
-                authDiskSource.getUserBiometricUnlockKey(userId = userId) == null
+        OnboardingStatus.ACCOUNT_LOCK_SETUP -> isAccountLockSetupNeeded(userId = userId)
+        OnboardingStatus.AUTOFILL_SETUP -> isAutofillSetupNeeded()
+        OnboardingStatus.BROWSER_AUTOFILL_SETUP -> isBrowserAutofillSetupNeeded()
+
+        // Only show the final step after a real step was shown and every setup step is now done.
+        // If the user skipped a step that is still needed, go straight to complete.
+        OnboardingStatus.FINAL_STEP -> {
+            current != null &&
+                !isAccountLockSetupNeeded(userId = userId) &&
+                !isAutofillSetupNeeded() &&
+                !isBrowserAutofillSetupNeeded()
         }
 
-        OnboardingStatus.AUTOFILL_SETUP -> !settingsRepository.isAutofillEnabledStateFlow.value
-        OnboardingStatus.BROWSER_AUTOFILL_SETUP -> {
-            settingsRepository.isAutofillEnabledStateFlow.value &&
-                browserThirdPartyAutofillEnabledManager
-                    .browserThirdPartyAutofillStatus
-                    .isDefaultBrowserAvailableAndDisabled
-        }
-
-        // Only show the final step after a real step, not when nothing needed setup.
-        OnboardingStatus.FINAL_STEP -> current != null
         OnboardingStatus.COMPLETE -> true
     }
+
+    private fun isAccountLockSetupNeeded(userId: String): Boolean =
+        biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false) &&
+            authDiskSource.getUserBiometricUnlockKey(userId = userId) == null
+
+    private fun isAutofillSetupNeeded(): Boolean =
+        !settingsRepository.isAutofillEnabledStateFlow.value
+
+    private fun isBrowserAutofillSetupNeeded(): Boolean =
+        settingsRepository.isAutofillEnabledStateFlow.value &&
+            browserThirdPartyAutofillEnabledManager
+                .browserThirdPartyAutofillStatus
+                .isDefaultBrowserAvailableAndDisabled
 }
