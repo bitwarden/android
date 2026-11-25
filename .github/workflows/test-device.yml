@@ -115,10 +115,11 @@ jobs:
           disable-animations: true
           # The runner splits the script on newlines and runs each line on its own. The first line
           # waits for system_server to settle after the first boot; the last shows whether it
-          # restarted during the test run.
+          # restarted during the test run. The harness is the "other app" for cross-app tests.
           script: |
             grep -H '^target' "$HOME/.android/avd/test.ini" || true
             ./scripts/wait-for-stable-emulator.sh
+            ./gradlew :testharness:installDebug
             ./gradlew :app:connectedStandardDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=com.x8bit.bitwarden.e2e -Pandroid.testInstrumentationRunnerArguments.BW_TEST_SERVER_URL="$BW_TEST_SERVER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_URL="$BW_SEEDER_URL" -Pandroid.testInstrumentationRunnerArguments.BW_SEEDER_TOKEN="$BW_SEEDER_TOKEN"
             adb shell pidof system_server || echo "system_server not running after the tests"
 
