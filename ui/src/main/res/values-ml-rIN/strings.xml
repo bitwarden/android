@@ -24,6 +24,7 @@
     <string name="folder_deleted">ഫോൾഡർ നീക്കംചെയ്തു.</string>
     <string name="folder_none">ഫോൾഡറിൽ ഉൾപ്പെടാത്ത</string>
     <string name="folder_updated">ഫോൾഡർ പുതുക്കി.</string>
+    <string name="folders">ഫോൾഡറുകൾ</string>
     <string name="hide">മറയ്ക്കുക</string>
     <string name="internet_connection_required_message">തുടരുന്നതിന് മുമ്പ് ദയവായി ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്യുക.</string>
     <string name="internet_connection_required_title">ഇന്റർനെറ്റ് കണക്ഷൻ നിർബന്ധമാണ്</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">ഐക്കണുകളുടെ സെർവർ URL</string>
     <string name="vault_is_locked">വാൾട് പൂട്ടിയിരിക്കുന്നു</string>
     <string name="go_to_my_vault">എൻ്റെ  വാൾട്ടിലേക്ക് പോകുക</string>
+    <string name="collections">കളക്ഷൻസ്</string>
     <string name="shared_folders">പങ്കിട്ട ഫോൾഡറുകൾ</string>
+    <string name="no_items_collection">ഈ ശേഖരത്തിൽ ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="there_are_no_items_in_this_shared_folder">ഈ പങ്കിട്ട ഫോൾഡറിൽ ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="no_items_folder">ഈ ഫോൾഡറിൽ ഇനങ്ങളൊന്നുമില്ല.</string>
     <string name="no_items_trash">ട്രാഷിൽ  ഇനങ്ങളൊന്നുമില്ല.</string>
@@ -342,11 +345,16 @@
     <string name="type">തരം</string>
     <string name="move_down">താഴേക്കു നീക്കുക</string>
     <string name="move_up">മുകളിലൊട്ടു നീക്കുക</string>
+    <string name="owner">ഉടമ</string>
+    <string name="no_collections_to_list">പ്രദർശിപ്പിക്കാൻ കളക്ഷനുകൾ  ഒന്നും ഇല്ല.</string>
     <string name="there_are_no_shared_folders_to_list">ലിസ്റ്റ് ചെയ്യാൻ പങ്കിട്ട ഫോൾഡറുകളൊന്നുമില്ല.</string>
     <string name="moved_item_to_org">%1$s %2$s-ലേക്ക് മാറ്റി</string>
     <string name="select_one_collection">നിങ്ങൾ ഒരു  കളക്ഷനെങ്കിലും  തിരഞ്ഞെടുക്കണം.</string>
     <string name="you_must_select_at_least_one_shared_folder">നിങ്ങൾ കുറഞ്ഞത് ഒരു പങ്കിട്ട ഫോൾഡറെങ്കിലും തിരഞ്ഞെടുക്കണം.</string>
     <string name="share">പങ്കിടുക</string>
+    <string name="move_to_organization">സംഘടനയിലേക്ക് മാറ്റുക</string>
+    <string name="no_orgs_to_list">പ്രദർശിപ്പിക്കാൻ സംഘടനകൾ  ഒന്നും ഇല്ല.</string>
+    <string name="move_to_org_desc">ഈ ഇനം മാറ്റാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്ന ഒരു സംഘടന തിരഞ്ഞെടുക്കുക. ഒരു സംഘടനയിലേക്ക് മാറ്റുന്നത് ഇനത്തിന്റെ ഉടമസ്ഥാവകാശം ആ സംഘടനയിലേക്ക് കൈമാറുന്നു. ഇനം മാറ്റിയ ശേഷം നിങ്ങൾ ഇനത്തിന്റെ നേരിട്ടുള്ള ഉടമയായിരിക്കില്ല.</string>
     <string name="no_vaults_to_list">ലിസ്റ്റ് ചെയ്യാൻ വോൾട്ടുകളൊന്നുമില്ല.</string>
     <string name="move_to_vault_desc">ഈ ഇനം മാറ്റാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്ന ഒരു വോൾട്ട് തിരഞ്ഞെടുക്കുക. മറ്റൊരു വോൾട്ടിലേക്ക് മാറ്റുന്നത് ഇനത്തിന്റെ ഉടമസ്ഥാവകാശം ആ സംഘടനയിലേക്ക് കൈമാറുന്നു. ഇനം മാറ്റിയ ശേഷം നിങ്ങൾ ഇനത്തിന്റെ നേരിട്ടുള്ള ഉടമയായിരിക്കില്ല.</string>
     <string name="number_of_words">വാക്കുകളുടെ എണ്ണം</string>

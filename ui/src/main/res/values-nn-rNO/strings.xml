@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mappa vart fjerna.</string>
     <string name="folder_none">Inga mappe</string>
     <string name="folder_updated">Retta mappa.</string>
+    <string name="folders">Mapper</string>
     <string name="hide">Gøym</string>
     <string name="internet_connection_required_message">Ver venleg og kopla til nettet før du held fram.</string>
     <string name="internet_connection_required_title">Ei nettilkopling er påkravd</string>
@@ -288,7 +289,9 @@ Skanning skjer automatisk.</string>
     <string name="icons_url">Ikon-tenar-URL</string>
     <string name="vault_is_locked">Kvelvet er låst</string>
     <string name="go_to_my_vault">Gå til kvelvet mitt</string>
+    <string name="collections">Samlingar</string>
     <string name="shared_folders">Delte mapper</string>
+    <string name="no_items_collection">Det finst ingen element i denne samlinga.</string>
     <string name="there_are_no_items_in_this_shared_folder">Det finst ingen element i denne delte mappa.</string>
     <string name="no_items_folder">Det er ingen oppføringar i denne mappa.</string>
     <string name="no_items_trash">Det er ingen oppføringar i papirkorga.</string>
@@ -342,11 +345,16 @@ Skanning skjer automatisk.</string>
     <string name="type">Slag</string>
     <string name="move_down">Flytta ned</string>
     <string name="move_up">Flytta opp</string>
+    <string name="owner">Eigar</string>
+    <string name="no_collections_to_list">Det finst ingen samlingar å liste.</string>
     <string name="there_are_no_shared_folders_to_list">Det finst ingen delte mapper å liste.</string>
     <string name="moved_item_to_org">%1$s er flytta til %2$s.</string>
     <string name="select_one_collection">Du må velje minst éi samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du må velje minst éi delt mappe.</string>
     <string name="share">Del</string>
+    <string name="move_to_organization">Flytta til samskipnad</string>
+    <string name="no_orgs_to_list">Det er ingen samskipnader å syna.</string>
+    <string name="move_to_org_desc">Vel ei samskipnad du ynskjer å flytta denne oppføringa til. Ved å flytta ei oppføring til ei samskipnad fører ein eigarskapen til oppføringa til den samskipnaden. Du vil ikkje lenger ha bein eigarskap til denne oppføringa etter ho er flytta.</string>
     <string name="no_vaults_to_list">Ingen kvelv å liste.</string>
     <string name="move_to_vault_desc">Vel eit kvelv du ønskjer å flytte dette elementet til. Å flytte til eit anna kvelv overfører eigarskap av elementet til den organisasjonen. Du vil ikkje lenger vere direkte eigar av dette elementet når det er flytta.</string>
     <string name="number_of_words">Antal ord</string>

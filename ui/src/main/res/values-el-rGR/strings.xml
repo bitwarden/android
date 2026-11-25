@@ -24,6 +24,7 @@
     <string name="folder_deleted">Ο φάκελος διαγράφηκε</string>
     <string name="folder_none">Δεν υπάρχει φάκελος</string>
     <string name="folder_updated">Ο φάκελος ενημερώθηκε</string>
+    <string name="folders">Φάκελοι</string>
     <string name="hide">Απόκρυψη</string>
     <string name="internet_connection_required_message">Συνδεθείτε στο διαδίκτυο πριν συνεχίσετε.</string>
     <string name="internet_connection_required_title">Απαιτείται σύνδεση στο διαδίκτυο</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">URL διακομιστή εικονιδίων</string>
     <string name="vault_is_locked">Το θυσαυ/κιο είναι κλειδωμένο</string>
     <string name="go_to_my_vault">Μετάβαση στην κρύπτη μου</string>
+    <string name="collections">Συλλογές</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Δεν υπάρχουν αντικείμενα σε αυτήν τη συλλογή.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</string>
     <string name="no_items_trash">Δεν υπάρχουν αντικείμενα στον κάδο απορριμμάτων.</string>
@@ -342,11 +345,16 @@
     <string name="type">Τύπος</string>
     <string name="move_down">Μετακίνηση κάτω</string>
     <string name="move_up">Μετακίνηση πάνω</string>
+    <string name="owner">Ιδιοκτήτης</string>
+    <string name="no_collections_to_list">Δεν υπάρχουν επιλογές στη λίστα.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s μετακινήθηκε στο %2$s.</string>
     <string name="select_one_collection">Πρέπει να επιλέξετε τουλάχιστον μία συλλογή.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Κοινοποίηση</string>
+    <string name="move_to_organization">Μετακίνηση στον Οργανισμό</string>
+    <string name="no_orgs_to_list">Δεν υπάρχουν οργανισμοί προς εμφάνιση.</string>
+    <string name="move_to_org_desc">Επιλέξτε έναν οργανισμό στον οποίο θέλετε να μετακινήσετε αυτό το στοιχείο. Η μετακίνηση σε έναν οργανισμό μεταβιβάζει την ιδιοκτησία του στοιχείου σε αυτό τον οργανισμό. Δεν θα είστε πλέον ο άμεσος ιδιοκτήτης αυτού του στοιχείου μόλις το μετακινήσετε.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Αριθμός λέξεων</string>

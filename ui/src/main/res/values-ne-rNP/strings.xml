@@ -24,6 +24,7 @@
     <string name="folder_deleted">फोल्डर मेटाइयो।</string>
     <string name="folder_none">कुनै फोल्डरमा हैन</string>
     <string name="folder_updated">फोल्डर सेभ गरियो</string>
+    <string name="folders">फोल्डरहरू</string>
     <string name="hide">लुकाउनुहोस्</string>
     <string name="internet_connection_required_message">कृपया जारी राख्नु अघि इन्टरनेटमा जडान गर्नुहोस्।</string>
     <string name="internet_connection_required_title">इन्टरनेट जडान आवश्यक छ</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">आइकन सर्भर URL</string>
     <string name="vault_is_locked">भल्ट लक गरिएको छ</string>
     <string name="go_to_my_vault">मेरो भल्टमा जानुहोस्</string>
+    <string name="collections">संग्रहहरू</string>
     <string name="shared_folders">साझा फोल्डरहरू</string>
+    <string name="no_items_collection">यस संग्रहमा कुनै वस्तुहरू छैनन्।</string>
     <string name="there_are_no_items_in_this_shared_folder">यस साझा फोल्डरमा कुनै वस्तुहरू छैनन्।</string>
     <string name="no_items_folder">यस फोल्डरमा कुनै वस्तुहरू छैनन्।</string>
     <string name="no_items_trash">रद्दीटोकरीमा कुनै वस्तुहरू छैनन्।</string>
@@ -342,11 +345,16 @@
     <string name="type">प्रकार</string>
     <string name="move_down">तल सार्नुहोस्</string>
     <string name="move_up">माथि सार्नुहोस्</string>
+    <string name="owner">मालिक</string>
+    <string name="no_collections_to_list">सूचीकरण गर्न कुनै संग्रहहरू छैनन्।</string>
     <string name="there_are_no_shared_folders_to_list">सूचीकरण गर्न कुनै साझा फोल्डरहरू छैनन्।</string>
     <string name="moved_item_to_org">%1$s %2$s मा सारियो।</string>
     <string name="select_one_collection">तपाईंले कम्तीमा एउटा संग्रह चयन गर्नुपर्छ।</string>
     <string name="you_must_select_at_least_one_shared_folder">तपाईंले कम्तीमा एउटा साझा फोल्डर चयन गर्नुपर्छ।</string>
     <string name="share">साझेदारी गर्नुहोस्</string>
+    <string name="move_to_organization">संगठनमा सार्नुहोस्</string>
+    <string name="no_orgs_to_list">सूचीकरण गर्न कुनै संगठनहरू छैनन्।</string>
+    <string name="move_to_org_desc">तपाईं यो वस्तु सार्न चाहनुहुने संगठन छान्नुहोस्। संगठनमा सार्दा वस्तुको स्वामित्व त्यो संगठनमा स्थानान्तरण हुन्छ। सारिएपछि तपाईं यस वस्तुको प्रत्यक्ष मालिक हुनुहुने छैन।</string>
     <string name="no_vaults_to_list">सूचीकरण गर्न कुनै भल्टहरू छैनन्।</string>
     <string name="move_to_vault_desc">तपाईं यो वस्तु सार्न चाहनुहुने भल्ट छान्नुहोस्। अर्को भल्टमा सार्दा वस्तुको स्वामित्व त्यो संगठनमा स्थानान्तरण हुन्छ। सारिएपछि तपाईं यस वस्तुको प्रत्यक्ष मालिक हुनुहुने छैन।</string>
     <string name="number_of_words">शब्दहरूको संख्या</string>

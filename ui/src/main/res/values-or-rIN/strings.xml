@@ -24,6 +24,7 @@
     <string name="folder_deleted">ଫୋଲ୍ଡର ଲିଭାଗଲା।</string>
     <string name="folder_none">କୌଣସି ଫୋଲ୍ଡର ନାହିଁ</string>
     <string name="folder_updated">ଫୋଲ୍ଡର ସଞ୍ଚୟ</string>
+    <string name="folders">ଫୋଲ୍ଡରଗୁଡ଼ିକ</string>
     <string name="hide">ଲୁଚାନ୍ତୁ</string>
     <string name="internet_connection_required_message">ଜାରି ରଖିବା ପୂର୍ବରୁ ଇଣ୍ଟରନେଟ୍ ସହ ଯୋଡ଼ନ୍ତୁ।</string>
     <string name="internet_connection_required_title">ଇଣ୍ଟରନେଟ୍ ଯୋଗାଯୋଗ ଆବଶ୍ୟକ</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">ଆଇକନ୍ ସର୍ଭର URL</string>
     <string name="vault_is_locked">ତିଜୋରି ଲକ୍</string>
     <string name="go_to_my_vault">ମୋ ତିଜୋରିକୁ ଯାଆନ୍ତୁ</string>
+    <string name="collections">ସଂଗ୍ରହ</string>
     <string name="shared_folders">ବାଣ୍ଟିତ ଫୋଲ୍ଡର</string>
+    <string name="no_items_collection">ଏହି ସଂଗ୍ରହରେ କୌଣସି ଆଇଟମ୍ ନାହିଁ।</string>
     <string name="there_are_no_items_in_this_shared_folder">ଏହି ବାଣ୍ଟିତ ଫୋଲ୍ଡରରେ କୌଣସି ଆଇଟମ୍ ନାହିଁ।</string>
     <string name="no_items_folder">ଏହି ଫୋଲ୍ଡରରେ କୌଣସି ଆଇଟମ୍ ନାହିଁ।</string>
     <string name="no_items_trash">ଆବର୍ଜନାରେ କୌଣସି ଆଇଟମ୍ ନାହିଁ।</string>
@@ -342,11 +345,16 @@
     <string name="type">ପ୍ରକାର</string>
     <string name="move_down">ତଳକୁ ସ୍ଥାନାନ୍ତର</string>
     <string name="move_up">ଉପରକୁ ସ୍ଥାନାନ୍ତର</string>
+    <string name="owner">ମାଲିକ</string>
+    <string name="no_collections_to_list">ତାଲିକା କରିବାକୁ କୌଣସି ସଂଗ୍ରହ ନାହିଁ।</string>
     <string name="there_are_no_shared_folders_to_list">ତାଲିକା କରିବାକୁ କୌଣସି ବାଣ୍ଟିତ ଫୋଲ୍ଡର ନାହିଁ।</string>
     <string name="moved_item_to_org">%1$s %2$s କୁ ସ୍ଥାନାନ୍ତରିତ</string>
     <string name="select_one_collection">ଆପଣଙ୍କୁ ଅତି କମରେ ଗୋଟିଏ ସଂଗ୍ରହ ବାଛିବାକୁ ପଡ଼ିବ।</string>
     <string name="you_must_select_at_least_one_shared_folder">ଆପଣଙ୍କୁ ଅତି କମରେ ଗୋଟିଏ ବାଣ୍ଟିତ ଫୋଲ୍ଡର ବାଛିବାକୁ ପଡ଼ିବ।</string>
     <string name="share">ବାଣ୍ଟନ୍ତୁ</string>
+    <string name="move_to_organization">ସଂଗଠନକୁ ସ୍ଥାନାନ୍ତର</string>
+    <string name="no_orgs_to_list">ତାଲିକା କରିବାକୁ କୌଣସି ସଂଗଠନ ନାହିଁ।</string>
+    <string name="move_to_org_desc">ଆପଣ ଏହି ଆଇଟମ୍‌କୁ ଯେଉଁ ସଂଗଠନକୁ ସ୍ଥାନାନ୍ତର କରିବାକୁ ଚାହୁଁଛନ୍ତି ତାହା ବାଛନ୍ତୁ। ସଂଗଠନକୁ ସ୍ଥାନାନ୍ତର କଲେ ଆଇଟମର ମାଲିକାନା ସେହି ସଂଗଠନକୁ ସ୍ଥାନାନ୍ତରିତ ହୁଏ। ଏକଥା ସ୍ଥାନାନ୍ତରିତ ହେବା ପରେ ଆପଣ ଏହାର ସିଧାସଳଖ ମାଲିକ ହେବେ ନାହିଁ।</string>
     <string name="no_vaults_to_list">ତାଲିକା କରିବାକୁ କୌଣସି ତିଜୋରି ନାହିଁ।</string>
     <string name="move_to_vault_desc">ଆପଣ ଏହି ଆଇଟମ୍‌କୁ ଯେଉଁ ତିଜୋରିକୁ ସ୍ଥାନାନ୍ତର କରିବାକୁ ଚାହୁଁଛନ୍ତି ତାହା ବାଛନ୍ତୁ। ଅନ୍ୟ ତିଜୋରିକୁ ସ୍ଥାନାନ୍ତର କଲେ ଆଇଟମର ମାଲିକାନା ସେହି ସଂଗଠନକୁ ସ୍ଥାନାନ୍ତରିତ ହୁଏ। ଏକଥା ସ୍ଥାନାନ୍ତରିତ ହେବା ପରେ ଆପଣ ଏହାର ସିଧାସଳଖ ମାଲିକ ହେବେ ନାହିଁ।</string>
     <string name="number_of_words">ଶବ୍ଦ ସଂଖ୍ୟା</string>

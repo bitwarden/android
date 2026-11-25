@@ -24,6 +24,7 @@
     <string name="folder_deleted">Folder dihapus.</string>
     <string name="folder_none">Tidak Ada Folder</string>
     <string name="folder_updated">Folder diperbarui.</string>
+    <string name="folders">Folder</string>
     <string name="hide">Sembunyikan</string>
     <string name="internet_connection_required_message">Pastikan Anda tersambung ke internet sebelum melanjutkan.</string>
     <string name="internet_connection_required_title">Sambungan Internet Dibutuhkan</string>
@@ -287,7 +288,9 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="icons_url">URL Server Ikon</string>
     <string name="vault_is_locked">Brankas terkunci</string>
     <string name="go_to_my_vault">Buka brankas saya</string>
+    <string name="collections">Koleksi</string>
     <string name="shared_folders">Folder bersama</string>
+    <string name="no_items_collection">Tidak ada item di koleksi ini.</string>
     <string name="there_are_no_items_in_this_shared_folder">Tidak ada item di folder bersama ini.</string>
     <string name="no_items_folder">Tidak ada item di folder ini.</string>
     <string name="no_items_trash">Tidak ada item di sampah.</string>
@@ -340,11 +343,16 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="type">Jenis</string>
     <string name="move_down">Pindah ke bawah</string>
     <string name="move_up">Naik ke Atas</string>
+    <string name="owner">Pemilik</string>
+    <string name="no_collections_to_list">Tidak ada koleksi yang akan ditampilkan.</string>
     <string name="there_are_no_shared_folders_to_list">Tidak ada folder bersama untuk ditampilkan.</string>
     <string name="moved_item_to_org">%1$s dipindahkan ke %2$s.</string>
     <string name="select_one_collection">Anda harus memilih setidaknya satu koleksi.</string>
     <string name="you_must_select_at_least_one_shared_folder">Anda harus memilih setidaknya satu folder bersama.</string>
     <string name="share">Bagikan</string>
+    <string name="move_to_organization">Pindah ke Organisasi</string>
+    <string name="no_orgs_to_list">Tidak ada organisasi untuk dicantumkan.</string>
+    <string name="move_to_org_desc">Pilih sebuah organisasi yang Anda inginkan untuk memindahkan item ini. Memindahkan berarti menyerahkan kepemilikan item kepada organisasi tersebut. Anda tidak akan lagi menjadi pemilik item ini.</string>
     <string name="no_vaults_to_list">Tidak ada brankas untuk ditampilkan.</string>
     <string name="move_to_vault_desc">Pilih brankas yang ingin Anda pindahkan item ini. Memindahkan ke brankas lain akan mentransfer kepemilikan item ke organisasi tersebut. Anda tidak akan lagi menjadi pemilik langsung item ini setelah dipindahkan.</string>
     <string name="number_of_words">Jumlah kata</string>

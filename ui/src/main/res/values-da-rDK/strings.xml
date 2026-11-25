@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mappe slettet.</string>
     <string name="folder_none">Ingen mappe</string>
     <string name="folder_updated">Mappe gemt</string>
+    <string name="folders">Mapper</string>
     <string name="hide">Skjul</string>
     <string name="internet_connection_required_message">Opret forbindelse til internet for at fortsætte.</string>
     <string name="internet_connection_required_title">Internetforbindelse kræves</string>
@@ -288,7 +289,9 @@ Skanning vil ske automatisk.</string>
     <string name="icons_url">Ikonserver-URL</string>
     <string name="vault_is_locked">Boksen er låst</string>
     <string name="go_to_my_vault">Gå til min boks</string>
+    <string name="collections">Samlinger</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Der er ingen elementer i denne samling.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Der er ingen emner i denne mappe.</string>
     <string name="no_items_trash">Der er ingen emner i papirkurven.</string>
@@ -342,11 +345,16 @@ Skanning vil ske automatisk.</string>
     <string name="type">Type</string>
     <string name="move_down">Flyt ned</string>
     <string name="move_up">Flyt op</string>
+    <string name="owner">Ejer</string>
+    <string name="no_collections_to_list">Der er ingen samlinger at vise.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s flyttet til %2$s.</string>
     <string name="select_one_collection">Du skal vælge minimum én samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Del</string>
+    <string name="move_to_organization">Flyt til organisation</string>
+    <string name="no_orgs_to_list">Ingen organisationer at vise.</string>
+    <string name="move_to_org_desc">Vælg en organisation, som du ønsker at flytte dette emne til. Flytning til en organisation overfører ejerskabet af emnet til den pågældende organisation. Du vil efter flytningen ikke længere være den direkte ejer af emnet.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Antal ord</string>

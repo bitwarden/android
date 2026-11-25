@@ -24,6 +24,7 @@
     <string name="folder_deleted">Map is verwijderd.</string>
     <string name="folder_none">Geen map</string>
     <string name="folder_updated">Map opgeslagen</string>
+    <string name="folders">Mappen</string>
     <string name="hide">Verbergen</string>
     <string name="internet_connection_required_message">Maak verbinding met internet voordat u doorgaat.</string>
     <string name="internet_connection_required_title">Internetverbinding is vereist</string>
@@ -288,7 +289,9 @@ Het scannen gebeurt automatisch.</string>
     <string name="icons_url">Pictogrammenserver-URL</string>
     <string name="vault_is_locked">Kluis is vergrendeld</string>
     <string name="go_to_my_vault">Ga naar mijn kluis</string>
+    <string name="collections">Verzamelingen</string>
     <string name="shared_folders">Gedeelde mappen</string>
+    <string name="no_items_collection">Er zijn geen items in deze verzameling.</string>
     <string name="there_are_no_items_in_this_shared_folder">Er zijn geen items in deze gedeelde map.</string>
     <string name="no_items_folder">Er zijn geen items in deze map.</string>
     <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
@@ -342,11 +345,16 @@ Het scannen gebeurt automatisch.</string>
     <string name="type">Categorie</string>
     <string name="move_down">Omlaag</string>
     <string name="move_up">Omhoog</string>
+    <string name="owner">Eigenaar</string>
+    <string name="no_collections_to_list">Er zijn geen verzamelingen om weer te geven.</string>
     <string name="there_are_no_shared_folders_to_list">Er zijn geen gedeelde mappen om weer te geven.</string>
     <string name="moved_item_to_org">%1$s is verplaatst naar %2$s.</string>
     <string name="select_one_collection">Je moet tenminste één verzameling selecteren.</string>
     <string name="you_must_select_at_least_one_shared_folder">Je moet tenminste één gedeelde map selecteren.</string>
     <string name="share">Delen</string>
+    <string name="move_to_organization">Naar organisatie verplaatsen</string>
+    <string name="no_orgs_to_list">Geen organisaties om weer te geven.</string>
+    <string name="move_to_org_desc">Kies een organisatie waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="no_vaults_to_list">Geen kluizen om weer te geven.</string>
     <string name="move_to_vault_desc">Kies een kluis waarnaar je dit item wilt verplaatsen. Door het verplaatsen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer de directe eigenaar meer van het item als het is verplaatst.</string>
     <string name="number_of_words">Aantal woorden</string>

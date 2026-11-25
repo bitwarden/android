@@ -24,6 +24,7 @@
     <string name="folder_deleted">ෆෝල්ඩරය මකා ඇත.</string>
     <string name="folder_none">බහාලුමක් නැත</string>
     <string name="folder_updated">ෆෝල්ඩරය සුරකින ලදී</string>
+    <string name="folders">බහාලුම්</string>
     <string name="hide">සඟවන්න</string>
     <string name="internet_connection_required_message">කරුණාකර ඉදිරියට යාමට පෙර අන්තර්ජාලයට සම්බන්ධ වන්න.</string>
     <string name="internet_connection_required_title">අන්තර්ජාල සම්බන්ධතාවය අවශ්‍යයි</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">නිරූපක සේවාදායක URL</string>
     <string name="vault_is_locked">සුරක්ෂිතාගාරය අගුළු ලා ඇත</string>
     <string name="go_to_my_vault">මගේ සුරක්ෂිතාගාරය වෙත යන්න</string>
+    <string name="collections">එකතු කිරීම්</string>
     <string name="shared_folders">බෙදාගත් ෆෝල්ඩර</string>
+    <string name="no_items_collection">මෙම එකතුවෙහි අයිතම නොමැත.</string>
     <string name="there_are_no_items_in_this_shared_folder">මෙම බෙදාගත් ෆෝල්ඩරයේ අයිතම නොමැත.</string>
     <string name="no_items_folder">මෙම ෆෝල්ඩරයේ අයිතම නොමැත.</string>
     <string name="no_items_trash">කුණු කූඩයේ අයිතම නොමැත.</string>
@@ -342,11 +345,16 @@
     <string name="type">වර්ගය</string>
     <string name="move_down">පහළට ගෙනයන්න</string>
     <string name="move_up">ඉහළට ගෙනයන්න</string>
+    <string name="owner">හිමිකරු</string>
+    <string name="no_collections_to_list">ලැයිස්තුගත කිරීමට එකතු කිරීම් නොමැත.</string>
     <string name="there_are_no_shared_folders_to_list">ලැයිස්තුගත කිරීමට බෙදාගත් ෆෝල්ඩර නොමැත.</string>
     <string name="moved_item_to_org">%1$s %2$s වෙත ගෙන යන ලදී.</string>
     <string name="select_one_collection">ඔබ අවම වශයෙන් එක් එකතුවක් තෝරා ගත යුතුය.</string>
     <string name="you_must_select_at_least_one_shared_folder">ඔබ අවම වශයෙන් එක් බෙදාගත් ෆෝල්ඩරයක් තෝරා ගත යුතුය.</string>
     <string name="share">බෙදාගන්න</string>
+    <string name="move_to_organization">සංවිධානය වෙත ගෙනයන්න</string>
+    <string name="no_orgs_to_list">ලැයිස්තුගත කිරීමට සංවිධාන නොමැත.</string>
+    <string name="move_to_org_desc">මෙම අයිතමය ගෙන යාමට ඔබ කැමති සංවිධානයක් තෝරන්න. සංවිධානයකට ගෙන යාමෙන් අයිතමයේ හිමිකාරිත්වය එම සංවිධානයට පැවරේ. එය ගෙන ගිය පසු ඔබ තවදුරටත් මෙම අයිතමයේ සෘජු හිමිකරු නොවනු ඇත.</string>
     <string name="no_vaults_to_list">ලැයිස්තුගත කිරීමට සුරක්ෂිතාගාර නොමැත.</string>
     <string name="move_to_vault_desc">මෙම අයිතමය ගෙන යාමට ඔබ කැමති සුරක්ෂිතාගාරයක් තෝරන්න. වෙනත් සුරක්ෂිතාගාරයකට ගෙන යාමෙන් අයිතමයේ හිමිකාරිත්වය එම සංවිධානයට පැවරේ. එය ගෙන ගිය පසු ඔබ තවදුරටත් මෙම අයිතමයේ සෘජු හිමිකරු නොවනු ඇත.</string>
     <string name="number_of_words">වචන ගණන</string>

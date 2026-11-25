@@ -24,6 +24,7 @@
     <string name="folder_deleted">Ffolder wedi\'i dileu.</string>
     <string name="folder_none">Dim ffolder</string>
     <string name="folder_updated">Ffolder wedi\'i chadw</string>
+    <string name="folders">Ffolderi</string>
     <string name="hide">Cuddio</string>
     <string name="internet_connection_required_message">Cysylltwch â\'r rhyngrwyd cyn parhau.</string>
     <string name="internet_connection_required_title">Mae angen cysylltiad â\'r we</string>
@@ -292,7 +293,9 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="icons_url">URL gweinydd eiconau</string>
     <string name="vault_is_locked">Mae\'r cwpwrdd wedi\'i gloi</string>
     <string name="go_to_my_vault">Ewch i fy nghwpwrdd</string>
+    <string name="collections">Casgliadau</string>
     <string name="shared_folders">Ffolderi a rennir</string>
+    <string name="no_items_collection">Nid oes eitemau yn y casgliad hwn.</string>
     <string name="there_are_no_items_in_this_shared_folder">Nid oes eitemau yn y ffolder a rennir hon.</string>
     <string name="no_items_folder">Does dim eitemau yn y ffolder hon.</string>
     <string name="no_items_trash">Does dim eitemau yn y bin sbwriel.</string>
@@ -350,11 +353,16 @@ Bydd sganio yn digwydd yn awtomatig.</string>
     <string name="type">Math</string>
     <string name="move_down">Symud i lawr</string>
     <string name="move_up">Symud i fyny</string>
+    <string name="owner">Perchennog</string>
+    <string name="no_collections_to_list">Nid oes casgliadau i\'w rhestru.</string>
     <string name="there_are_no_shared_folders_to_list">Nid oes ffolderi a rennir i\'w rhestru.</string>
     <string name="moved_item_to_org">Symudwyd %1$s i %2$s.</string>
     <string name="select_one_collection">Rhaid i chi ddewis o leiaf un casgliad.</string>
     <string name="you_must_select_at_least_one_shared_folder">Rhaid i chi ddewis o leiaf un ffolder a rennir.</string>
     <string name="share">Rhannu</string>
+    <string name="move_to_organization">Symud i Sefydliad</string>
+    <string name="no_orgs_to_list">Dim sefydliadau i\'w rhestru.</string>
+    <string name="move_to_org_desc">Dewiswch sefydliad yr hoffech symud yr eitem hon iddo. Mae symud i sefydliad yn trosglwyddo perchnogaeth yr eitem i\'r sefydliad hwnnw. Ni fyddwch mwyach yn berchennog uniongyrchol yr eitem hon ar ôl iddi gael ei symud.</string>
     <string name="no_vaults_to_list">Dim cypyrddau i\'w rhestru.</string>
     <string name="move_to_vault_desc">Dewiswch gwpwrdd yr hoffech symud yr eitem hon iddo. Mae symud i gwpwrdd arall yn trosglwyddo perchnogaeth yr eitem i\'r sefydliad hwnnw. Ni fyddwch mwyach yn berchennog uniongyrchol yr eitem hon ar ôl iddi gael ei symud.</string>
     <string name="number_of_words">Nifer o eiriau</string>

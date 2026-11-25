@@ -24,6 +24,7 @@
     <string name="folder_deleted">ফোল্ডারটি মুছে ফেলা হয়েছে।</string>
     <string name="folder_none">কোন ফোল্ডার নেই</string>
     <string name="folder_updated">ফোল্ডার হালনাগাদকৃত।</string>
+    <string name="folders">ফোল্ডারসমূহ</string>
     <string name="hide">লুকান</string>
     <string name="internet_connection_required_message">চালিয়ে যাওয়ার আগে দয়া করে ইন্টারনেটে সংযোগ করুন।</string>
     <string name="internet_connection_required_title">ইন্টারনেট সংযোগ প্রয়োজন</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">আইকন সার্ভার URL</string>
     <string name="vault_is_locked">ভল্ট লক করা আছে</string>
     <string name="go_to_my_vault">আমার ভল্টে যান</string>
+    <string name="collections">সংগ্রহ</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">এই সংগ্রহে কোনও আইটেম নেই।</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">এই ফোল্ডারে কোনও আইটেম নেই।</string>
     <string name="no_items_trash">ট্র্যাশে কোনও আইটেম নেই।</string>
@@ -342,11 +345,16 @@
     <string name="type">ধরন</string>
     <string name="move_down">নিচে নামান</string>
     <string name="move_up">উপরে উঠান</string>
+    <string name="owner">মালিক</string>
+    <string name="no_collections_to_list">তালিকার জন্য কোনও সংগ্রহ নেই।</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s কে %2$s-এ সরানো হয়েছে।</string>
     <string name="select_one_collection">আপনাকে কমপক্ষে একটি সংগ্রহ নির্বাচন করতে হবে।</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">শেয়ার করুন</string>
+    <string name="move_to_organization">সংগঠনে সরান</string>
+    <string name="no_orgs_to_list">তালিকাভুক্ত করার মতো কোনও সংগঠন নেই।</string>
+    <string name="move_to_org_desc">আপনি এই আইটেমটি যে সংগঠনে সরাতে চান তা নির্বাচন করুন। একটি সংগঠনে সরানো আইটেমটির মালিকানা সেই সংগঠনে স্থানান্তর করে। একবার সরানোর পরে আপনি আর এই আইটেমটির প্রত্যক্ষ মালিক থাকবেন না।</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">শব্দসংখ্যা</string>

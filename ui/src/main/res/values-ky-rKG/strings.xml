@@ -24,6 +24,7 @@
     <string name="folder_deleted">Папка өчүрүлдү.</string>
     <string name="folder_none">Папка жок</string>
     <string name="folder_updated">Папка сакталды</string>
+    <string name="folders">Папкалар</string>
     <string name="hide">Жашыруу</string>
     <string name="internet_connection_required_message">Улантуудан мурун интернетке туташыңыз.</string>
     <string name="internet_connection_required_title">Интернет байланышы талап кылынат</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">Сөлөкөт серверинин URL дареги</string>
     <string name="vault_is_locked">Купчул кулпуланган</string>
     <string name="go_to_my_vault">Менин купчулума өтүү</string>
+    <string name="collections">Жыйындылар</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Бул жыйындыда эч кандай элементтер жок.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Бул папкада эч кандай элементтер жок.</string>
     <string name="no_items_trash">Себетте эч кандай элементтер жок.</string>
@@ -342,11 +345,16 @@
     <string name="type">Түрү</string>
     <string name="move_down">Төмөн жылдыруу</string>
     <string name="move_up">Өйдө жылдыруу</string>
+    <string name="owner">Ээси</string>
+    <string name="no_collections_to_list">Тизмеге алынуучу жыйындылар жок.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s өткөрүлдү.</string>
     <string name="select_one_collection">Кеминде бир жыйындыны тандооңуз керек.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Бөлүшүү</string>
+    <string name="move_to_organization">Уюмга өткөрүү</string>
+    <string name="no_orgs_to_list">Тизмеге алынуучу уюмдар жок.</string>
+    <string name="move_to_org_desc">Бул элементти өткөргүңүз келген уюмду тандаңыз. Уюмга өткөрүү элементтин ээлик укугун ошол уюмга берет. Элемент өткөрүлгөндөн кийин сиз анын түз ээси болбой каласыз.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Сөздөрдүн саны</string>

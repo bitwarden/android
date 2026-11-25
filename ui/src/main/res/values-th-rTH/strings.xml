@@ -24,6 +24,7 @@
     <string name="folder_deleted">ลบโฟลเดอร์แล้ว.</string>
     <string name="folder_none">ไม่มีโฟลเดอร์</string>
     <string name="folder_updated">ปรับปรุงโฟลเดอร์แล้ว</string>
+    <string name="folders">โฟลเดอร์</string>
     <string name="hide">ซ่อน</string>
     <string name="internet_connection_required_message">โปรดเชื่อมต่ออินเทอร์เน็ตก่อนดำเนินการต่อ</string>
     <string name="internet_connection_required_title">ต้องการการเชื่อมต่ออินเทอร์เน็ต</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">URL ของเซิร์ฟเวอร์ไอคอน</string>
     <string name="vault_is_locked">ห้องนิรภัยถูกล็อก</string>
     <string name="go_to_my_vault">ไปที่ห้องนิรภัยของฉัน</string>
+    <string name="collections">คอลเลกชัน</string>
     <string name="shared_folders">โฟลเดอร์ที่แชร์</string>
+    <string name="no_items_collection">ไม่มีรายการในคอลเลกชันนี้</string>
     <string name="there_are_no_items_in_this_shared_folder">ไม่มีรายการในโฟลเดอร์ที่แชร์นี้</string>
     <string name="no_items_folder">ไม่มีรายการในโฟลเดอร์นี้</string>
     <string name="no_items_trash">ไม่มีรายการในถังขยะ</string>
@@ -340,11 +343,16 @@
     <string name="type">ชนิด</string>
     <string name="move_down">เลื่อนลง</string>
     <string name="move_up">เลื่อนขึ้น</string>
+    <string name="owner">เจ้าของ</string>
+    <string name="no_collections_to_list">ไม่มีคอลเลกชันที่จะแสดง</string>
     <string name="there_are_no_shared_folders_to_list">ไม่มีโฟลเดอร์ที่แชร์ที่จะแสดง</string>
     <string name="moved_item_to_org">%1$s ย้ายไปที่ %2$s.</string>
     <string name="select_one_collection">คุณต้องเลือกอย่างน้อยหนึ่งคอลเลกชัน</string>
     <string name="you_must_select_at_least_one_shared_folder">คุณต้องเลือกโฟลเดอร์ที่แชร์อย่างน้อยหนึ่งโฟลเดอร์</string>
     <string name="share">แบ่งปัน</string>
+    <string name="move_to_organization">ย้ายไปองค์กร</string>
+    <string name="no_orgs_to_list">ไม่มีองค์กรที่จะแสดง</string>
+    <string name="move_to_org_desc">เลือกองค์กรที่คุณต้องการย้ายรายการนี้ไป การย้ายไปองค์กรจะเป็นการโอนสิทธิ์ความเป็นเจ้าของรายการไปยังองค์กรนั้น คุณจะไม่ใช่เจ้าของโดยตรงของรายการนี้อีกต่อไปหลังจากย้ายแล้ว</string>
     <string name="no_vaults_to_list">ไม่มีคลังข้อมูลที่จะแสดง</string>
     <string name="move_to_vault_desc">เลือกคลังข้อมูลที่คุณต้องการย้ายรายการนี้ไป การย้ายไปยังคลังข้อมูลอื่นจะโอนความเป็นเจ้าของรายการไปยังองค์กรนั้น คุณจะไม่ใช่เจ้าของโดยตรงของรายการนี้อีกต่อไปเมื่อถูกย้ายแล้ว</string>
     <string name="number_of_words">จำนวนคำ</string>

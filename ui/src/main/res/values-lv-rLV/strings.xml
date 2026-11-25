@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mape izdzēsta.</string>
     <string name="folder_none">Nav mapes</string>
     <string name="folder_updated">Mape atjaunota.</string>
+    <string name="folders">Mapes</string>
     <string name="hide">Paslēpt</string>
     <string name="internet_connection_required_message">Lūgums izveidot savienojumu ar internetu, lai varētu turpināt.</string>
     <string name="internet_connection_required_title">Nepieciešams interneta savienojums</string>
@@ -289,7 +290,9 @@ Nolasīšana notiks automātiski.</string>
     <string name="icons_url">Ikonu servera URL</string>
     <string name="vault_is_locked">Glabātava ir aizslēgta</string>
     <string name="go_to_my_vault">Doties uz manu glabātavu</string>
+    <string name="collections">Krājumi</string>
     <string name="shared_folders">Kopīgotās mapes</string>
+    <string name="no_items_collection">Šajā krājumā nav vienumu.</string>
     <string name="there_are_no_items_in_this_shared_folder">Šajā kopīgotajā mapē nav vienumu.</string>
     <string name="no_items_folder">Šajā mapē nav vienumu.</string>
     <string name="no_items_trash">Atkritnē nav vienumu.</string>
@@ -344,11 +347,16 @@ Nolasīšana notiks automātiski.</string>
     <string name="type">Veids</string>
     <string name="move_down">Pārvietot uz leju</string>
     <string name="move_up">Pārvietot uz augšu</string>
+    <string name="owner">Īpašnieks</string>
+    <string name="no_collections_to_list">Nav krājumu, ko parādīt.</string>
     <string name="there_are_no_shared_folders_to_list">Nav kopīgotu mapju, ko uzskaitīt.</string>
     <string name="moved_item_to_org">%1$s pārvietots uz %2$s.</string>
     <string name="select_one_collection">Ir jāizvēlas vismaz viens krājums.</string>
     <string name="you_must_select_at_least_one_shared_folder">Jāizvēlas vismaz viena kopīgotā mape.</string>
     <string name="share">Kopīgot</string>
+    <string name="move_to_organization">Pārvietot uz apvienību</string>
+    <string name="no_orgs_to_list">Nav apvienību, ko parādīt</string>
+    <string name="move_to_org_desc">Izvēlies apvienību, uz kuru pārvietot šo vienumu. Pārvietošana nodod šī vienuma piederību apvienībai. Tu vairs nebūsi šī vienuma tiešais īpašnieks pēc tā pārvietošanas.</string>
     <string name="no_vaults_to_list">Nav glabātavu, ko uzskaitīt.</string>
     <string name="move_to_vault_desc">Jāizvēlas glabātava, uz kuru ir vēlēšanās pārvietot šo vienumu. Pārvietošana uz citu glabātavu nodod vienuma īpašumtiesības tai apvienībai. Tiklīdz vienums būs pārvietots, Tu vairs nebūsi šī vienuma tiešais īpašnieks.</string>
     <string name="number_of_words">Vārdu skaits</string>

@@ -24,6 +24,7 @@
     <string name="folder_deleted">حذفت المجلد.</string>
     <string name="folder_none">لا مجلد</string>
     <string name="folder_updated">حُفظ المجلد</string>
+    <string name="folders">المجلدات</string>
     <string name="hide">إخفاء</string>
     <string name="internet_connection_required_message">عليك الاتصال بالإنترنت قبل المواصلة.</string>
     <string name="internet_connection_required_title">الاتصال بالإنترنت مطلوب</string>
@@ -292,7 +293,9 @@
     <string name="icons_url">رابط ملقم الأيقونات</string>
     <string name="vault_is_locked">الخزنة مقفلة</string>
     <string name="go_to_my_vault">الانتقال إلى خزنتي</string>
+    <string name="collections">المختارات</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">لا توجد عناصر في هذا المجلد.</string>
     <string name="no_items_trash">لا توجد عناصر في سلة المهملات.</string>
@@ -350,11 +353,16 @@
     <string name="type">نوع</string>
     <string name="move_down">تحريك للأسفل</string>
     <string name="move_up">التحريك للاعلى</string>
+    <string name="owner">المالك</string>
+    <string name="no_collections_to_list">لا توجد مجموعات لعرضها.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s نقل إلى %2$s.</string>
     <string name="select_one_collection">يجب اختيار مجموعة واحدة على الأقل.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">مشاركة</string>
+    <string name="move_to_organization">الانتقال إلى المنظمة</string>
+    <string name="no_orgs_to_list">لا توجد منظمات لعرضها.</string>
+    <string name="move_to_org_desc">اختر منظمة تود نقل هذا العنصر إليها. النقل إلى منظمة ينقل ملكية العنصر إليها. لن تعود المالك المباشر لهذا العنصر بمجرد نقله.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">عدد الكلمات</string>

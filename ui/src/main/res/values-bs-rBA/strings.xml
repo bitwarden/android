@@ -24,6 +24,7 @@
     <string name="folder_deleted">Folder je izbrisan.</string>
     <string name="folder_none">Nema foldera</string>
     <string name="folder_updated">Folder ažuriran.</string>
+    <string name="folders">Folderi</string>
     <string name="hide">Sakrij</string>
     <string name="internet_connection_required_message">Molimo da se povežete na internet prije nego što nastavite.</string>
     <string name="internet_connection_required_title">Neophodna je internet veza</string>
@@ -289,7 +290,9 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="icons_url">URL adresa servera ikona</string>
     <string name="vault_is_locked">Trezor je zaključan</string>
     <string name="go_to_my_vault">Idi na moj trezor</string>
+    <string name="collections">Zbirke</string>
     <string name="shared_folders">Dijeljene fascikle</string>
+    <string name="no_items_collection">Nema stavki u ovoj kolekciji.</string>
     <string name="there_are_no_items_in_this_shared_folder">Nema stavki u ovoj dijeljenoj fascikli.</string>
     <string name="no_items_folder">U ovom folderu nema stavki.</string>
     <string name="no_items_trash">U smeću nema predmeta.</string>
@@ -344,11 +347,16 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="type">Vrsta</string>
     <string name="move_down">Pomjeri dole</string>
     <string name="move_up">Pomjeri gore</string>
+    <string name="owner">Vlasnik</string>
+    <string name="no_collections_to_list">Nema kolekcija za prikazati.</string>
     <string name="there_are_no_shared_folders_to_list">Nema dijeljenih fascikli za prikaz.</string>
     <string name="moved_item_to_org">%1$s premješteno u %2$s.</string>
     <string name="select_one_collection">Morate odabrati barem jednu kategoriju</string>
     <string name="you_must_select_at_least_one_shared_folder">Morate odabrati barem jednu dijeljenu fasciklu.</string>
     <string name="share">Podijeli</string>
+    <string name="move_to_organization">Premjesti u organizaciju</string>
+    <string name="no_orgs_to_list">Nema organizacija za prikaz.</string>
+    <string name="move_to_org_desc">Odaberi organizaciju u koju želiš premjestiti ovu stavku. Premještanje prenosi vlasništvo stavke na organizaciju. Nakon premještanja više nećeš biti izravni vlasnik ove stavke.</string>
     <string name="no_vaults_to_list">Nema trezora za prikaz.</string>
     <string name="move_to_vault_desc">Odaberite trezor u koji želite premjestiti ovu stavku. Premještanje u drugi trezor prenosi vlasništvo nad stavkom na tu organizaciju. Nakon što se premjesti, više nećete biti izravni vlasnik ove stavke.</string>
     <string name="number_of_words">Broj riječi</string>

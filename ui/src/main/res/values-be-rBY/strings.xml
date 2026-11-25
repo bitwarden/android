@@ -24,6 +24,7 @@
     <string name="folder_deleted">Папка выдалена.</string>
     <string name="folder_none">Без папкі</string>
     <string name="folder_updated">Папка абноўлена.</string>
+    <string name="folders">Папкі</string>
     <string name="hide">Схаваць</string>
     <string name="internet_connection_required_message">Калі ласка, спачатку падлучыце інтэрнэт.</string>
     <string name="internet_connection_required_title">Патрабуецца доступ да інтэрнэту</string>
@@ -289,7 +290,9 @@
     <string name="icons_url">URL-адрас сервера значкоў</string>
     <string name="vault_is_locked">Сховішча заблакіравана</string>
     <string name="go_to_my_vault">Перайсці ў сховішча</string>
+    <string name="collections">Калекцыі</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">У гэтай калекцыі няма элементаў.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">У гэтай папцы адсутнічаюць элементы.</string>
     <string name="no_items_trash">У сметніцы адсутнічаюць элементы.</string>
@@ -345,11 +348,16 @@
     <string name="type">Тып</string>
     <string name="move_down">Перамясціць уніз</string>
     <string name="move_up">Перамясціць уверх</string>
+    <string name="owner">Уладальнік</string>
+    <string name="no_collections_to_list">У спісе адсутнічаюць калекцыі.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s перамешчана ў %2$s.</string>
     <string name="select_one_collection">Вы павінны выбраць прынамсі адну калекцыю.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Абагуліць</string>
+    <string name="move_to_organization">Перамясціць у арганізацыю</string>
+    <string name="no_orgs_to_list">Няма арганізацый для паказу.</string>
+    <string name="move_to_org_desc">Выберыце арганізацыю, у якую вы хочаце перамясціць гэты элемент. Пры перамяшчэнні ў арганізацыю ўсе правы ўласнасці на дадзены элемент пяройдуць да гэтай арганізацыі. Вы больш не будзеце адзіным уласнікам гэтага элемента пасля яго перамяшчэння.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Колькасць слоў</string>

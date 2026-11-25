@@ -24,6 +24,7 @@
     <string name="folder_deleted">Ordner wurde gelöscht.</string>
     <string name="folder_none">Kein Ordner</string>
     <string name="folder_updated">Ordner gespeichert</string>
+    <string name="folders">Ordner</string>
     <string name="hide">Verstecken</string>
     <string name="internet_connection_required_message">Bitte verbinde dich mit dem Internet um fortzufahren.</string>
     <string name="internet_connection_required_title">Internetverbindung erforderlich</string>
@@ -288,7 +289,9 @@ Das Scannen erfolgt automatisch.</string>
     <string name="icons_url">URL des Icons-Servers</string>
     <string name="vault_is_locked">Tresor ist gesperrt</string>
     <string name="go_to_my_vault">Zum Tresor gehen</string>
+    <string name="collections">Sammlungen</string>
     <string name="shared_folders">Geteilte Ordner</string>
+    <string name="no_items_collection">Diese Sammlung enthält keine Einträge.</string>
     <string name="there_are_no_items_in_this_shared_folder">Es gibt keine Einträge in diesem geteiltem Ordner.</string>
     <string name="no_items_folder">Es sind keine Objekte in diesem Ordner.</string>
     <string name="no_items_trash">Es sind keine Einträge im Papierkorb.</string>
@@ -342,11 +345,16 @@ Das Scannen erfolgt automatisch.</string>
     <string name="type">Typ</string>
     <string name="move_down">Nach unten bewegen</string>
     <string name="move_up">Nach oben bewegen</string>
+    <string name="owner">Besitzer</string>
+    <string name="no_collections_to_list">Keine Sammlungen vorhanden.</string>
     <string name="there_are_no_shared_folders_to_list">Es gibt keine geteilten Ordner zum Anzeigen.</string>
     <string name="moved_item_to_org">%1$s verschoben nach %2$s.</string>
     <string name="select_one_collection">Es muss mindestens eine Sammlung ausgewählt sein.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du musst mindestens einen geteilten Ordner auswählen.</string>
     <string name="share">Teilen</string>
+    <string name="move_to_organization">In Organisation verschieben</string>
+    <string name="no_orgs_to_list">Keine Organisationen vorhanden.</string>
+    <string name="move_to_org_desc">Wähle eine Organisation aus, in die du diesen Eintrag verschieben möchtest. Das Verschieben in eine Organisation überträgt das Eigentum an diese Organisation. Du bist nicht mehr der direkte Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="no_vaults_to_list">Keine Tresore zum Anzeigen.</string>
     <string name="move_to_vault_desc">Wähle einen Tresor aus, in den du diesen Eintrag verschieben möchtest. Das Verschieben in einen anderen Tresor übertragt das Eigentum an diese Organisation. Du bist nicht länger der Eigentümer dieses Eintrags, sobald er verschoben wurde.</string>
     <string name="number_of_words">Anzahl der Wörter</string>

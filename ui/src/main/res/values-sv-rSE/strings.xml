@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mapp borttagen.</string>
     <string name="folder_none">Ingen mapp</string>
     <string name="folder_updated">Mappen sparades</string>
+    <string name="folders">Mappar</string>
     <string name="hide">Dölj</string>
     <string name="internet_connection_required_message">Anslut till internet innan du fortsätter.</string>
     <string name="internet_connection_required_title">Internetanslutning krävs</string>
@@ -288,7 +289,9 @@ Skanningen sker automatiskt.</string>
     <string name="icons_url">Ikonserver-URL</string>
     <string name="vault_is_locked">Valvet är låst</string>
     <string name="go_to_my_vault">Gå till mitt valv</string>
+    <string name="collections">Samlingar</string>
     <string name="shared_folders">Delade mappar</string>
+    <string name="no_items_collection">Det finns inga objekt i denna samling.</string>
     <string name="there_are_no_items_in_this_shared_folder">Det finns inga objekt i den här delade mappen.</string>
     <string name="no_items_folder">Det finns inga objekt i den här mappen.</string>
     <string name="no_items_trash">Det finns inga objekt i papperskorgen.</string>
@@ -342,11 +345,16 @@ Skanningen sker automatiskt.</string>
     <string name="type">Typ</string>
     <string name="move_down">Flytta ner</string>
     <string name="move_up">Flytta upp</string>
+    <string name="owner">Ägare</string>
+    <string name="no_collections_to_list">Det finns inga samlingar att visa.</string>
     <string name="there_are_no_shared_folders_to_list">Det finns inga delade mappar att lista.</string>
     <string name="moved_item_to_org">%1$s flyttades till %2$s.</string>
     <string name="select_one_collection">Du måste markera minst en samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du måste välja minst en delad mapp.</string>
     <string name="share">Dela</string>
+    <string name="move_to_organization">Flytta till organisation</string>
+    <string name="no_orgs_to_list">Inga organisationer att lista.</string>
+    <string name="move_to_org_desc">Välj en organisation som du vill flytta detta objektet till. Flytt till en organisation överför ägandet av objektet till den organisationen. Du kommer inte längre att vara direkt ägare till detta objekt när det har flyttats.</string>
     <string name="no_vaults_to_list">Det finns inga valv att lista.</string>
     <string name="move_to_vault_desc">Välj ett valv som du vill flytta objektet till. När objektet flyttas till ett annat valv överförs ägarskapet till den organisationen. Du är inte längre direkt ägare till objektet när det har flyttats.</string>
     <string name="number_of_words">Antal ord</string>

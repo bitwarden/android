@@ -24,6 +24,7 @@
     <string name="folder_deleted">پوشه حذف شد.</string>
     <string name="folder_none">بدون پوشه</string>
     <string name="folder_updated">پوشه ذخیره شد</string>
+    <string name="folders">پوشه‌ها</string>
     <string name="hide">پنهان‌سازی</string>
     <string name="internet_connection_required_message">لطفاً قبل از ادامه به اینترنت متصل شوید.</string>
     <string name="internet_connection_required_title">اتصال به اینترنت لازم است</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">نشانی اینترنتی سرور نمادها</string>
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
     <string name="go_to_my_vault">برو به گاوصندوق من</string>
+    <string name="collections">مجموعه‌ها</string>
     <string name="shared_folders">پوشه‌های مشترک</string>
+    <string name="no_items_collection">در این مجموعه موردی برای نمایش نیست.</string>
     <string name="there_are_no_items_in_this_shared_folder">در این پوشه‌ی اشتراک گذاری شده موردی برای نمایش نیست.</string>
     <string name="no_items_folder">در این پوشه موردی برای نمایش نیست.</string>
     <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
@@ -342,11 +345,16 @@
     <string name="type">نوع</string>
     <string name="move_down">انتقال به پایین</string>
     <string name="move_up">انتقال به بالا</string>
+    <string name="owner">مالک</string>
+    <string name="no_collections_to_list">هیچ مجموعه‌ای برای لیست کردن وجود ندارد.</string>
     <string name="there_are_no_shared_folders_to_list">هیچ موردی اشتراک گذاری شده برای نمایش وجود ندارد.</string>
     <string name="moved_item_to_org">%1$s منتقل شد به %2$s.</string>
     <string name="select_one_collection">شما باید حداقل یک مجموعه را انتخاب کنید.</string>
     <string name="you_must_select_at_least_one_shared_folder">شما باید حداقل یک پوشه اشتراک گذاری شده را انتخاب کنید.</string>
     <string name="share">اشتراک گذاری</string>
+    <string name="move_to_organization">انتقال به سازمان</string>
+    <string name="no_orgs_to_list">هیچ سازمانی برای نمایش وجود ندارد.</string>
+    <string name="move_to_org_desc">سازمانی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به یک سازمان، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
     <string name="no_vaults_to_list">هیچ گاوصندوقی برای فهرست کردن وجود ندارد.</string>
     <string name="move_to_vault_desc">گاوصندوقی را انتخاب کنید که می‌خواهید این مورد را به آن منتقل کنید. انتقال به گاوصندوق دیگر، مالکیت مورد را به آن سازمان منتقل می‌کند. پس از انتقال این مورد، دیگر مالک مستقیم آن نخواهید بود.</string>
     <string name="number_of_words">تعداد کلمات</string>

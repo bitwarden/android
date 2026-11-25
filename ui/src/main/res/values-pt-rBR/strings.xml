@@ -24,6 +24,7 @@
     <string name="folder_deleted">Pasta apagada.</string>
     <string name="folder_none">Sem pasta</string>
     <string name="folder_updated">Pasta salva</string>
+    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Conecte-se à internet antes de continuar.</string>
     <string name="internet_connection_required_title">É necessária uma conexão com a internet</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">URL do servidor de ícones</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir ao meu cofre</string>
+    <string name="collections">Conjuntos</string>
     <string name="shared_folders">Pastas compartilhadas</string>
+    <string name="no_items_collection">Não há itens neste conjunto.</string>
     <string name="there_are_no_items_in_this_shared_folder">Não há itens nesta pasta compartilhada.</string>
     <string name="no_items_folder">Não há itens nesta pasta.</string>
     <string name="no_items_trash">Não há itens na lixeira.</string>
@@ -341,11 +344,16 @@
     <string name="type">Tipo</string>
     <string name="move_down">Mover para baixo</string>
     <string name="move_up">Mover para cima</string>
+    <string name="owner">Proprietário</string>
+    <string name="no_collections_to_list">Não há conjuntos para listar.</string>
     <string name="there_are_no_shared_folders_to_list">Não há pastas para listar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Você deve selecionar pelo menos um conjunto.</string>
     <string name="you_must_select_at_least_one_shared_folder">Você deve selecionar pelo menos uma pasta compartilhada.</string>
     <string name="share">Compartilhar</string>
+    <string name="move_to_organization">Mover para organização</string>
+    <string name="no_orgs_to_list">Nenhuma organização para listar.</string>
+    <string name="move_to_org_desc">Escolha uma organização para a qual deseja mover este item. Mover para uma organização transfere a propriedade do item para essa organização. Você não será mais o proprietário direto deste item depois que ele for movido.</string>
     <string name="no_vaults_to_list">Nenhum cofre para listar.</string>
     <string name="move_to_vault_desc">Escolha um cofre para o qual você deseja mover este item. Mover para outro cofre transfere a propriedade do item para aquela organização. Você não será mais o proprietário direto deste item depois que ele for movido.</string>
     <string name="number_of_words">Número de palavras</string>

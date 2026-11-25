@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mappen er slettet.</string>
     <string name="folder_none">Ingen mappe</string>
     <string name="folder_updated">Mappen er lagret</string>
+    <string name="folders">Mapper</string>
     <string name="hide">Skjul</string>
     <string name="internet_connection_required_message">Vennligst koble deg til internett før du fortsetter.</string>
     <string name="internet_connection_required_title">Internettilkobling nødvendig</string>
@@ -288,7 +289,9 @@ Skanning skjer automatisk.</string>
     <string name="icons_url">Ikonenes tjenernettadresse</string>
     <string name="vault_is_locked">Hvelvet er låst</string>
     <string name="go_to_my_vault">Gå til hvelvet mitt</string>
+    <string name="collections">Samlinger</string>
     <string name="shared_folders">Delte mapper</string>
+    <string name="no_items_collection">Det er ingen gjenstander i denne samlingen.</string>
     <string name="there_are_no_items_in_this_shared_folder">Det er ingen elementer i denne delte mappen.</string>
     <string name="no_items_folder">Det er ingen gjenstander i denne mappen.</string>
     <string name="no_items_trash">Det er ingen elementer i papirkurven.</string>
@@ -342,11 +345,16 @@ Skanning skjer automatisk.</string>
     <string name="type">Type</string>
     <string name="move_down">Flytt ned</string>
     <string name="move_up">Flytt opp</string>
+    <string name="owner">Eier</string>
+    <string name="no_collections_to_list">Det er ingen samlinger å vise.</string>
     <string name="there_are_no_shared_folders_to_list">Det er ingen delte mapper å liste.</string>
     <string name="moved_item_to_org">%1$s flyttet til %2$s.</string>
     <string name="select_one_collection">Du må velge minst én samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du må velge minst én delt mappe.</string>
     <string name="share">Del</string>
+    <string name="move_to_organization">Flytt til organisasjon</string>
+    <string name="no_orgs_to_list">Det er ingen organisasjoner å vise.</string>
+    <string name="move_to_org_desc">Velg en organisasjon som du ønsker å flytte dette elementet til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være eier av dette elementet etter det er flyttet.</string>
     <string name="no_vaults_to_list">Ingen hvelv å liste.</string>
     <string name="move_to_vault_desc">Velg et hvelv du ønsker å flytte dette elementet til. Flytting til et annet hvelv overfører eierskapet av elementet til den organisasjonen. Du vil ikke lenger være direkte eier av dette elementet etter at det er flyttet.</string>
     <string name="number_of_words">Antall ord</string>

@@ -24,6 +24,7 @@
     <string name="folder_deleted">Dosar șters.</string>
     <string name="folder_none">Fără dosar</string>
     <string name="folder_updated">Dosar salvat</string>
+    <string name="folders">Dosare</string>
     <string name="hide">Ascundere</string>
     <string name="internet_connection_required_message">Conectează-te la internet înainte de a continua.</string>
     <string name="internet_connection_required_title">Conexiune la internet necesară</string>
@@ -289,7 +290,9 @@ Scanarea se va face automat.</string>
     <string name="icons_url">URL server de pictograme</string>
     <string name="vault_is_locked">Seiful este blocat</string>
     <string name="go_to_my_vault">Deschidere seif personal</string>
+    <string name="collections">Colecții</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Nu există elemente în această colecție.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nu există elemente în acest dosar.</string>
     <string name="no_items_trash">Nu există articole în coșul de reciclare.</string>
@@ -344,11 +347,16 @@ Scanarea se va face automat.</string>
     <string name="type">Tip</string>
     <string name="move_down">Mutare în jos</string>
     <string name="move_up">Mutare în sus</string>
+    <string name="owner">Proprietar</string>
+    <string name="no_collections_to_list">Nu există colecții de afișat.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s s-a mutat la %2$s.</string>
     <string name="select_one_collection">Trebuie să selectați cel puțin o colecție.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partajare</string>
+    <string name="move_to_organization">Mutare la organizație</string>
+    <string name="no_orgs_to_list">Nicio organizație de afișat.</string>
+    <string name="move_to_org_desc">Alegeți o organizație la care doriți să mutați acest articol. Mutarea într-o organizație, transferă proprietatea asupra articolului către organizația respectivă. Nu veți mai fi proprietarul direct al acestui articol odată ce a fost mutat.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Număr de cuvinte</string>

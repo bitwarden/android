@@ -24,6 +24,7 @@
     <string name="folder_deleted">Složka byla smazána.</string>
     <string name="folder_none">Žádná složka</string>
     <string name="folder_updated">Složka byla uložena</string>
+    <string name="folders">Složky</string>
     <string name="hide">Skrýt</string>
     <string name="internet_connection_required_message">Před pokračováním se připojte k internetu.</string>
     <string name="internet_connection_required_title">Je vyžadováno připojení k internetu</string>
@@ -290,7 +291,9 @@ Načtení proběhne automaticky.</string>
     <string name="icons_url">URL serveru ikon</string>
     <string name="vault_is_locked">Trezor je uzamčený</string>
     <string name="go_to_my_vault">Přejít do trezoru</string>
+    <string name="collections">Sbírky</string>
     <string name="shared_folders">Sdílené složky</string>
+    <string name="no_items_collection">V této sbírce nejsou žádné položky.</string>
     <string name="there_are_no_items_in_this_shared_folder">V této sdílené složce nejsou žádné položky.</string>
     <string name="no_items_folder">V této složce nejsou žádné položky.</string>
     <string name="no_items_trash">V koši nejsou žádné položky.</string>
@@ -346,11 +349,16 @@ Načtení proběhne automaticky.</string>
     <string name="type">Typ</string>
     <string name="move_down">Přesunout dolů</string>
     <string name="move_up">Přesunout nahoru</string>
+    <string name="owner">Vlastník</string>
+    <string name="no_collections_to_list">Žádné sbírky k zobrazení.</string>
     <string name="there_are_no_shared_folders_to_list">Nejsou k dispozici žádné sdílené složky.</string>
     <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
     <string name="select_one_collection">Musíte vybrat alespoň jednu sbírku.</string>
     <string name="you_must_select_at_least_one_shared_folder">Musíte vybrat alespoň jednu sdílenou složku.</string>
     <string name="share">Sdílet</string>
+    <string name="move_to_organization">Přesunout do organizace</string>
+    <string name="no_orgs_to_list">Žádné organizace k zobrazení.</string>
+    <string name="move_to_org_desc">Vyberte organizaci, do které chcete tuto položku přesunout. Přesun do organizace převede vlastnictví položky této organizaci. Po přesunutí této položky již nebudete přímým vlastníkem této položky.</string>
     <string name="no_vaults_to_list">Žádné trezory k zobrazení.</string>
     <string name="move_to_vault_desc">Vyberte trezor, do kterého chcete tuto položku přesunout. Přesunutím do jiného trezoru se vlastnictví položky převede na danou organizaci. Jakmile bude položka přesunuta, přestanete být jejím přímým vlastníkem.</string>
     <string name="number_of_words">Počet slov</string>

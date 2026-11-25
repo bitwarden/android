@@ -24,6 +24,7 @@
     <string name="folder_deleted">ಫೋಲ್ಡರ್ ಅಳಿಸಲಾಗಿದೆ.</string>
     <string name="folder_none">ಫೋಲ್ಡರ್ ಇಲ್ಲ</string>
     <string name="folder_updated">ಫೋಲ್ಡರ್ ನವೀಕರಿಸಲಾಗಿದೆ.</string>
+    <string name="folders">ಫೋಲ್ಡರ್‌ಗಳು</string>
     <string name="hide">ಮರೆಮಾಡಿ</string>
     <string name="internet_connection_required_message">ಮುಂದುವರಿಯುವ ಮೊದಲು ದಯವಿಟ್ಟು ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಪಡಿಸಿ.</string>
     <string name="internet_connection_required_title">ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕ ಅಗತ್ಯವಿದೆ</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">ಚಿಹ್ನೆಗಳು ಸರ್ವರ್ URL</string>
     <string name="vault_is_locked">ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ</string>
     <string name="go_to_my_vault">ನನ್ನ ವಾಲ್ಟ್ಗೆ ಹೋಗಿ</string>
+    <string name="collections">ಸಂಗ್ರಹಣೆಗಳು</string>
     <string name="shared_folders">ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ಗಳು</string>
+    <string name="no_items_collection">ಈ ಸಂಗ್ರಹದಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="there_are_no_items_in_this_shared_folder">ಈ ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="no_items_folder">ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</string>
     <string name="no_items_trash">ಅನುಪಯುಕ್ತದಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</string>
@@ -342,11 +345,16 @@
     <string name="type">ಪ್ರಕಾರ</string>
     <string name="move_down">ಕೆಳಕ್ಕೆ ಸರಿಸು</string>
     <string name="move_up">ಮೇಲಕ್ಕೆ ಸರಿಸಿ</string>
+    <string name="owner">ಮಾಲೀಕರು</string>
+    <string name="no_collections_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಗ್ರಹಗಳಿಲ್ಲ.</string>
     <string name="there_are_no_shared_folders_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ಗಳಿಲ್ಲ.</string>
     <string name="moved_item_to_org">%1$s ಅನ್ನು %2$s ಗೆ ಸರಿಸಲಾಗಿದೆ.</string>
     <string name="select_one_collection">ನೀವು ಕನಿಷ್ಠ ಒಂದು ಸಂಗ್ರಹವನ್ನು ಆರಿಸಬೇಕು.</string>
     <string name="you_must_select_at_least_one_shared_folder">ನೀವು ಕನಿಷ್ಟ ಒಂದು ಹಂಚಿಕೊಂಡ ಫೋಲ್ಡರ್ ಅನ್ನು ಆಯ್ಕೆ ಮಾಡಬೇಕು.</string>
     <string name="share">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="move_to_organization">ಸಂಸ್ಥೆಗೆ ಸರಿಸು</string>
+    <string name="no_orgs_to_list">ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಸ್ಥೆಗಳು ಇಲ್ಲ.</string>
+    <string name="move_to_org_desc">ಈ ಐಟಂ ಅನ್ನು ಸರಿಸಲು ನೀವು ಬಯಸುವ ಸಂಸ್ಥೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಸಂಸ್ಥೆಗೆ ಸರಿಸುವುದು ಐಟಂನ ಮಾಲೀಕತ್ವವನ್ನು ಆ ಸಂಸ್ಥೆಗೆ ವರ್ಗಾಯಿಸುತ್ತದೆ. ಐಟಂ ಅನ್ನು ಸರಿಸಿದ ನಂತರ ನೀವು ಇನ್ನು ಮುಂದೆ ಅದರ ನೇರ ಮಾಲೀಕರಾಗಿರುವುದಿಲ್ಲ.</string>
     <string name="no_vaults_to_list">ಪಟ್ಟಿ ಮಾಡಲು ವಾಲ್ಟ್ಗಳಿಲ್ಲ.</string>
     <string name="move_to_vault_desc">ಈ ಐಟಂ ಅನ್ನು ಸರಿಸಲು ನೀವು ಬಯಸುವ ವಾಲ್ಟ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಇನ್ನೊಂದು ವಾಲ್ಟ್ಗೆ ಸರಿಸುವುದು ಐಟಂನ ಮಾಲೀಕತ್ವವನ್ನು ಆ ಸಂಸ್ಥೆಗೆ ವರ್ಗಾಯಿಸುತ್ತದೆ. ಐಟಂ ಅನ್ನು ಸರಿಸಿದ ನಂತರ ನೀವು ಇನ್ನು ಮುಂದೆ ಅದರ ನೇರ ಮಾಲೀಕರಾಗಿರುವುದಿಲ್ಲ.</string>
     <string name="number_of_words">ಪದಗಳ ಸಂಖ್ಯೆ</string>

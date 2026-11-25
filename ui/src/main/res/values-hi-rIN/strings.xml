@@ -24,6 +24,7 @@
     <string name="folder_deleted">फोल्डर हटाया गया।</string>
     <string name="folder_none">कोई फोल्डर नहीं है</string>
     <string name="folder_updated">फोल्डर सेव हुआ</string>
+    <string name="folders">फोल्डर</string>
     <string name="hide">छुपाएं</string>
     <string name="internet_connection_required_message">आगे बढ़ने से पहले इंटरनेट से कनेक्ट करें।</string>
     <string name="internet_connection_required_title">इंटरनेट कनेक्शन चाहिए</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">आइकन सर्वर यूआरएल</string>
     <string name="vault_is_locked">तिजोरी पर लॉक है</string>
     <string name="go_to_my_vault">मेरे तिजोरी में जाएं</string>
+    <string name="collections">कलेक्शन</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">इस संग्रह में कोई आइटम नहीं हैं।</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">इस फोल्डर में कोई आइटम नहीं है।</string>
     <string name="no_items_trash">कचरे में कोई आइटम नहीं है।</string>
@@ -341,11 +344,16 @@
     <string name="type">टाइप</string>
     <string name="move_down">नीचे ले जाएं</string>
     <string name="move_up">ऊपर ले जाएं</string>
+    <string name="owner">स्वामी</string>
+    <string name="no_collections_to_list">सूचीबद्ध करने के लिए कोई संग्रह नहीं हैं।</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s पर ट्रांस्फर किया गया।</string>
     <string name="select_one_collection">आपको कम से कम एक संग्रह का चयन करना होगा।</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">शेयर करें</string>
+    <string name="move_to_organization">संगठन में ले जाएँ</string>
+    <string name="no_orgs_to_list">सूचीबद्ध करने के लिए कोई संगठन नहीं।</string>
+    <string name="move_to_org_desc">उस संगठन का चयन करें जिसमें आप इस आइटम को ले जाना चाहते हैं। किसी संगठन में ले जाने पर आइटम का स्वामित्व उस संगठन को स्थानांतरित हो जाता है। एक बार स्थानांतरित होने के बाद आप इस आइटम के प्रत्यक्ष स्वामी नहीं रहेंगे।</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">टोटल शब्द</string>

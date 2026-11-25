@@ -24,6 +24,7 @@
     <string name="folder_deleted">S\'ha eliminat la carpeta.</string>
     <string name="folder_none">Cap carpeta</string>
     <string name="folder_updated">Carpeta guardada</string>
+    <string name="folders">Carpetes</string>
     <string name="hide">Amaga</string>
     <string name="internet_connection_required_message">Connecteu-vos a Internet abans de continuar.</string>
     <string name="internet_connection_required_title">Es requereix connexió a Internet</string>
@@ -288,7 +289,9 @@ L\'escaneig es farà automàticament.</string>
     <string name="icons_url">URL del servidor d\'icones</string>
     <string name="vault_is_locked">La caixa forta està bloquejada</string>
     <string name="go_to_my_vault">Vés a la meua caixa forta</string>
+    <string name="collections">Col·leccions</string>
     <string name="shared_folders">Carpetes compartides</string>
+    <string name="no_items_collection">No hi ha elements en aquesta col·lecció.</string>
     <string name="there_are_no_items_in_this_shared_folder">No hi ha elements en aquesta carpeta compartida.</string>
     <string name="no_items_folder">No hi ha elements en aquesta carpeta.</string>
     <string name="no_items_trash">No hi ha elements a la paperera.</string>
@@ -342,11 +345,16 @@ L\'escaneig es farà automàticament.</string>
     <string name="type">Tipus</string>
     <string name="move_down">Desplaça cap avall</string>
     <string name="move_up">Desplaça cap amunt</string>
+    <string name="owner">Propietari</string>
+    <string name="no_collections_to_list">No hi ha cap col·lecció per llistar.</string>
     <string name="there_are_no_shared_folders_to_list">No hi ha carpetes compartides per llistar.</string>
     <string name="moved_item_to_org">%1$s desplaçat a %2$s.</string>
     <string name="select_one_collection">Heu d\'escollir com a mínim una col·lecció.</string>
     <string name="you_must_select_at_least_one_shared_folder">Has de seleccionar almenys una carpeta compartida.</string>
     <string name="share">Comparteix</string>
+    <string name="move_to_organization">Desplaça a l\'organització</string>
+    <string name="no_orgs_to_list">No hi ha cap organització per llistar.</string>
+    <string name="move_to_org_desc">Trieu una organització a la qual vulgueu desplaçar aquest element. El trasllat a una organització transfereix la propietat de l\'element a aquesta organització. Ja no sereu el propietari directe d\'aquest element una vegada s\'haja mogut.</string>
     <string name="no_vaults_to_list">No hi ha cofres per llistar.</string>
     <string name="move_to_vault_desc">Tria un cofre al qual vulguis moure aquest element. Moure a un altre cofre transfereix la propietat de l\'element a aquesta organització. Ja no seràs el propietari directe d\'aquest element un cop s\'hagi mogut.</string>
     <string name="number_of_words">Nombre de paraules</string>

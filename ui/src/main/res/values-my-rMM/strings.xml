@@ -24,6 +24,7 @@
     <string name="folder_deleted">ဖိုလ်ဒါ ဖျက်ပြီးပါပြီ။</string>
     <string name="folder_none">ဖိုလ်ဒါမရှိ</string>
     <string name="folder_updated">ဖိုလ်ဒါ သိမ်းဆည်းပြီးပါပြီ</string>
+    <string name="folders">ဖိုလ်ဒါများ</string>
     <string name="hide">ဝှက်ပါ</string>
     <string name="internet_connection_required_message">ဆက်လက်မလုပ်ဆောင်မီ အင်တာနက်သို့ ချိတ်ဆက်ပါ။</string>
     <string name="internet_connection_required_title">အင်တာနက်ချိတ်ဆက်မှု လိုအပ်သည်</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">အိုင်ကွန်ဆာဗာ URL</string>
     <string name="vault_is_locked">ဗော်လ်တ် သော့ခတ်ထားသည်</string>
     <string name="go_to_my_vault">ကျွန်ုပ်၏ ဗော်လ်တ်သို့ သွားပါ</string>
+    <string name="collections">စုစည်းမှုများ</string>
     <string name="shared_folders">မျှဝေထားသော ဖိုလ်ဒါများ</string>
+    <string name="no_items_collection">ဤစုစည်းမှုတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="there_are_no_items_in_this_shared_folder">ဤမျှဝေထားသော ဖိုလ်ဒါတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="no_items_folder">ဤဖိုလ်ဒါတွင် ပစ္စည်းများ မရှိပါ။</string>
     <string name="no_items_trash">အမှိုက်ပုံးတွင် ပစ္စည်းများ မရှိပါ။</string>
@@ -340,11 +343,16 @@
     <string name="type">အမျိုးအစား</string>
     <string name="move_down">အောက်သို့ရွှေ့ပါ</string>
     <string name="move_up">အပေါ်သို့ရွှေ့ပါ</string>
+    <string name="owner">ပိုင်ရှင်</string>
+    <string name="no_collections_to_list">စာရင်းပြုရန် စုစည်းမှုများ မရှိပါ။</string>
     <string name="there_are_no_shared_folders_to_list">စာရင်းပြုရန် မျှဝေထားသော ဖိုလ်ဒါများ မရှိပါ။</string>
     <string name="moved_item_to_org">%1$s ကို %2$s သို့ ရွှေ့ပြီးပါပြီ။</string>
     <string name="select_one_collection">အနည်းဆုံး စုစည်းမှုတစ်ခု ရွေးရပါမည်။</string>
     <string name="you_must_select_at_least_one_shared_folder">အနည်းဆုံး မျှဝေထားသော ဖိုလ်ဒါတစ်ခု ရွေးရပါမည်။</string>
     <string name="share">မျှဝေပါ</string>
+    <string name="move_to_organization">အဖွဲ့အစည်းသို့ ရွှေ့ပါ</string>
+    <string name="no_orgs_to_list">စာရင်းပြုရန် အဖွဲ့အစည်းများ မရှိပါ။</string>
+    <string name="move_to_org_desc">ဤပစ္စည်းကို ရွှေ့လိုသော အဖွဲ့အစည်းတစ်ခုကို ရွေးပါ။ အဖွဲ့အစည်းသို့ ရွှေ့ခြင်းသည် ပစ္စည်း၏ပိုင်ဆိုင်မှုကို ထိုအဖွဲ့အစည်းသို့ လွှဲပြောင်းပေးသည်။ ပစ္စည်းကို ရွှေ့ပြီးသည်နှင့် သင်သည် ထိုပစ္စည်း၏ တိုက်ရိုက်ပိုင်ရှင် မဖြစ်တော့ပါ။</string>
     <string name="no_vaults_to_list">စာရင်းပြုရန် ဗော်လ်တ်များ မရှိပါ။</string>
     <string name="move_to_vault_desc">ဤပစ္စည်းကို ရွှေ့လိုသော ဗော်လ်တ်တစ်ခုကို ရွေးပါ။ အခြားဗော်လ်တ်သို့ ရွှေ့ခြင်းသည် ပစ္စည်း၏ပိုင်ဆိုင်မှုကို ထိုအဖွဲ့အစည်းသို့ လွှဲပြောင်းပေးသည်။ ပစ္စည်းကို ရွှေ့ပြီးသည်နှင့် သင်သည် ထိုပစ္စည်း၏ တိုက်ရိုက်ပိုင်ရှင် မဖြစ်တော့ပါ။</string>
     <string name="number_of_words">စကားလုံးအရေအတွက်</string>
