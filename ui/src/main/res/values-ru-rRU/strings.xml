@@ -24,6 +24,7 @@
     <string name="folder_deleted">Папка удалена.</string>
     <string name="folder_none">Без папки</string>
     <string name="folder_updated">Папка сохранена</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скрыть</string>
     <string name="internet_connection_required_message">Подключитесь к интернету чтобы продолжить.</string>
     <string name="internet_connection_required_title">Требуется подключение к интернету</string>
@@ -290,7 +291,9 @@
     <string name="icons_url">URL сервера значков</string>
     <string name="vault_is_locked">Хранилище заблокировано</string>
     <string name="go_to_my_vault">Перейти в мое хранилище</string>
+    <string name="collections">Коллекции</string>
     <string name="shared_folders">Общие папки</string>
+    <string name="no_items_collection">В этой коллекции нет элементов.</string>
     <string name="there_are_no_items_in_this_shared_folder">В этой общей папке нет элементов.</string>
     <string name="no_items_folder">В этой папке нет элементов.</string>
     <string name="no_items_trash">В корзине нет элементов.</string>
@@ -346,11 +349,16 @@
     <string name="type">Тип</string>
     <string name="move_down">Переместить ниже</string>
     <string name="move_up">Переместить выше</string>
+    <string name="owner">Владелец</string>
+    <string name="no_collections_to_list">Нет коллекций для отображения.</string>
     <string name="there_are_no_shared_folders_to_list">Нет общих папок для отображения.</string>
     <string name="moved_item_to_org">%1$s перемещено в %2$s.</string>
     <string name="select_one_collection">Необходимо выбрать хотя бы одну коллекцию.</string>
     <string name="you_must_select_at_least_one_shared_folder">Необходимо выбрать хотя бы одну общую папку.</string>
     <string name="share">Поделиться</string>
+    <string name="move_to_organization">Переместить в организацию</string>
+    <string name="no_orgs_to_list">Нет организаций для отображения.</string>
+    <string name="move_to_org_desc">Выберите организацию, в которую вы хотите переместить этот элемент. При перемещении в организацию право собственности на элемент переходит к этой организации. Вы больше не будете прямым владельцем этого элемента после его перемещения.</string>
     <string name="no_vaults_to_list">Нет хранилища для отображения.</string>
     <string name="move_to_vault_desc">Выберите хранилище, в которое вы хотите переместить этот элемент. Перемещение в хранилище передает права на элемент этой организации. Вы больше не будете непосредственным владельцем этого элемента после его перемещения.</string>
     <string name="number_of_words">Количество слов</string>

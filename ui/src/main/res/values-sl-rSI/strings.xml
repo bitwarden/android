@@ -24,6 +24,7 @@
     <string name="folder_deleted">Mapa odstranjena.</string>
     <string name="folder_none">Brez mape</string>
     <string name="folder_updated">Mapa posodobljena.</string>
+    <string name="folders">Mape</string>
     <string name="hide">Skrij</string>
     <string name="internet_connection_required_message">Pred nadaljevanjem prosimo, da se povežete z internetom.</string>
     <string name="internet_connection_required_title">Potrebna je povezava z internetom</string>
@@ -290,7 +291,9 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="icons_url">Ikone URL strežnikov</string>
     <string name="vault_is_locked">Trezor je zaklenjen.</string>
     <string name="go_to_my_vault">Pojdi v moj trezor.</string>
+    <string name="collections">Zbirke</string>
     <string name="shared_folders">Deljene mape</string>
+    <string name="no_items_collection">V tej zbirki ni predmetov.</string>
     <string name="there_are_no_items_in_this_shared_folder">V tej deljeni mapi ni predmetov.</string>
     <string name="no_items_folder">V tej mapi ni predmetov.</string>
     <string name="no_items_trash">Koš je prazen.</string>
@@ -346,11 +349,16 @@ Skeniranje bo potekalo samodejno.</string>
     <string name="type">Vrsta</string>
     <string name="move_down">Premakni navzdol</string>
     <string name="move_up">Premakni navzgor</string>
+    <string name="owner">Lastnik</string>
+    <string name="no_collections_to_list">Ni zbirk za prikazat.</string>
     <string name="there_are_no_shared_folders_to_list">Ni deljenih map za prikaz.</string>
     <string name="moved_item_to_org">%1$s premaknjeno v %2$s.</string>
     <string name="select_one_collection">Izbrati moraš vsaj eno zbirko.</string>
     <string name="you_must_select_at_least_one_shared_folder">Izbrati moraš vsaj eno deljeno mapo.</string>
     <string name="share">Deli</string>
+    <string name="move_to_organization">Premakni v organizacijo</string>
+    <string name="no_orgs_to_list">Ni organizacij za prikazat.</string>
+    <string name="move_to_org_desc">Izberite organizacijo, v katero želite premakniti ta predmet. S premikom v organizacijo se lastništvo predmeta prenese na to organizacijo. Ko bo predmet premaknjen, ne boste več neposredni lastnik tega predmeta.</string>
     <string name="no_vaults_to_list">Ni trezorjev za prikaz.</string>
     <string name="move_to_vault_desc">Izberi trezor, v katerega želiš premakniti ta element. Premik v trezor prenese lastništvo elementa na to organizacijo. Ko je element premaknjen, ne boš več njegov neposredni lastnik.</string>
     <string name="number_of_words">Število besed</string>

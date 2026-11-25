@@ -24,6 +24,7 @@
     <string name="folder_deleted">ఫోల్డర్ తొలగించబడింది.</string>
     <string name="folder_none">ఫోల్డర్ లేదు</string>
     <string name="folder_updated">ఫోల్డర్ భద్రపరచబడింది</string>
+    <string name="folders">ఫోల్డర్‌లు</string>
     <string name="hide">దాచు</string>
     <string name="internet_connection_required_message">కొనసాగించే ముందు దయచేసి ఇంటర్నెట్‌కు కనెక్ట్ అవ్వండి.</string>
     <string name="internet_connection_required_title">ఇంటర్నెట్ కనెక్షన్ అవసరం</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">చిహ్నాల సర్వర్ URL</string>
     <string name="vault_is_locked">ఖజానా లాక్ చేయబడింది</string>
     <string name="go_to_my_vault">నా ఖజానాకు వెళ్ళు</string>
+    <string name="collections">సేకరణలు</string>
     <string name="shared_folders">భాగస్వామ్య ఫోల్డర్‌లు</string>
+    <string name="no_items_collection">ఈ సేకరణలో అంశాలు లేవు.</string>
     <string name="there_are_no_items_in_this_shared_folder">ఈ భాగస్వామ్య ఫోల్డర్‌లో అంశాలు లేవు.</string>
     <string name="no_items_folder">ఈ ఫోల్డర్‌లో అంశాలు లేవు.</string>
     <string name="no_items_trash">ట్రాష్‌లో అంశాలు లేవు.</string>
@@ -342,11 +345,16 @@
     <string name="type">రకం</string>
     <string name="move_down">క్రిందికి తరలించు</string>
     <string name="move_up">పైకి తరలించు</string>
+    <string name="owner">యజమాని</string>
+    <string name="no_collections_to_list">జాబితా చేయడానికి సేకరణలు లేవు.</string>
     <string name="there_are_no_shared_folders_to_list">జాబితా చేయడానికి భాగస్వామ్య ఫోల్డర్‌లు లేవు.</string>
     <string name="moved_item_to_org">%1$s %2$sకి తరలించబడింది.</string>
     <string name="select_one_collection">మీరు కనీసం ఒక సేకరణను ఎంచుకోవాలి.</string>
     <string name="you_must_select_at_least_one_shared_folder">మీరు కనీసం ఒక భాగస్వామ్య ఫోల్డర్‌ను ఎంచుకోవాలి.</string>
     <string name="share">భాగస్వామ్యం చేయి</string>
+    <string name="move_to_organization">సంస్థకు తరలించు</string>
+    <string name="no_orgs_to_list">జాబితా చేయడానికి సంస్థలు లేవు.</string>
+    <string name="move_to_org_desc">మీరు ఈ అంశాన్ని తరలించాలనుకుంటున్న సంస్థను ఎంచుకోండి. సంస్థకు తరలించడం అంశం యొక్క యాజమాన్యాన్ని ఆ సంస్థకు బదిలీ చేస్తుంది. ఇది తరలించబడిన తర్వాత మీరు ఈ అంశానికి ప్రత్యక్ష యజమానిగా ఉండరు.</string>
     <string name="no_vaults_to_list">జాబితా చేయడానికి ఖజానాలు లేవు.</string>
     <string name="move_to_vault_desc">మీరు ఈ అంశాన్ని తరలించాలనుకుంటున్న ఖజానాను ఎంచుకోండి. మరొక ఖజానాకు తరలించడం అంశం యొక్క యాజమాన్యాన్ని ఆ సంస్థకు బదిలీ చేస్తుంది. ఇది తరలించబడిన తర్వాత మీరు ఈ అంశానికి ప్రత్యక్ష యజమానిగా ఉండరు.</string>
     <string name="number_of_words">పదాల సంఖ్య</string>

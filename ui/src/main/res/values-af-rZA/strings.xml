@@ -24,6 +24,7 @@
     <string name="folder_deleted">Vouer geskrap.</string>
     <string name="folder_none">Geen vouer</string>
     <string name="folder_updated">Vouer bygewerk.</string>
+    <string name="folders">Vouers</string>
     <string name="hide">Versteek</string>
     <string name="internet_connection_required_message">Koppel asb. aan die internet voor u voortgaan.</string>
     <string name="internet_connection_required_title">Internetverbinding word vereis</string>
@@ -288,7 +289,9 @@ Skandering gebeur outomaties.</string>
     <string name="icons_url">Ikoonbedienerbronadres</string>
     <string name="vault_is_locked">Kluis is vergrendel</string>
     <string name="go_to_my_vault">Gaan na my kluis</string>
+    <string name="collections">Versamelings</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">There are no items in this collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Daar is geen items in hierdie vouer.</string>
     <string name="no_items_trash">Daar is geen items in die asblik.</string>
@@ -342,11 +345,16 @@ Skandering gebeur outomaties.</string>
     <string name="type">Tipe</string>
     <string name="move_down">Skuif af</string>
     <string name="move_up">Skuif op</string>
+    <string name="owner">Eienaar</string>
+    <string name="no_collections_to_list">Daar is geen versamelings om te lys nie.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s geskuif na %2$s.</string>
     <string name="select_one_collection">U moet ten minste een versameling kies.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Deel</string>
+    <string name="move_to_organization">Skuif na organisasie</string>
+    <string name="no_orgs_to_list">Geen organisasies om te lys nie.</string>
+    <string name="move_to_org_desc">Kies ’n organisasie waarheen u hierdie item wil skuif. Deur te skuif kry die organisasie die einaarskap van die item. U is dan nie meer die direkte eienaar van die item wanneer dit geskuif is nie.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Aantal woorde</string>

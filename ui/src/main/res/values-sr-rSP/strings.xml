@@ -24,6 +24,7 @@
     <string name="folder_deleted">Фасцикла је избрисана.</string>
     <string name="folder_none">Без фасцикле</string>
     <string name="folder_updated">Фасцикла ажурирана.</string>
+    <string name="folders">Фасцикле</string>
     <string name="hide">Сакриј</string>
     <string name="internet_connection_required_message">Повежите се на Интернет пре него што наставите.</string>
     <string name="internet_connection_required_title">Неопходна је веза са интернетом</string>
@@ -289,7 +290,9 @@
     <string name="icons_url">УРЛ сервера иконице</string>
     <string name="vault_is_locked">Сеф је закључан</string>
     <string name="go_to_my_vault">Иди у мој Сеф</string>
+    <string name="collections">Колекције</string>
     <string name="shared_folders">Дељене фасцикле</string>
+    <string name="no_items_collection">Нема ставки у овој колекцији.</string>
     <string name="there_are_no_items_in_this_shared_folder">Нема ставки у овој дељеној фасцикли.</string>
     <string name="no_items_folder">Нема ставке у овој фасцикли.</string>
     <string name="no_items_trash">У отпад нема ставке.</string>
@@ -344,11 +347,16 @@
     <string name="type">Тип</string>
     <string name="move_down">Помери доле</string>
     <string name="move_up">Помери горе</string>
+    <string name="owner">Власник</string>
+    <string name="no_collections_to_list">Нема колекције у листи.</string>
     <string name="there_are_no_shared_folders_to_list">Нема дељених фасцикли за приказ.</string>
     <string name="moved_item_to_org">%1$s премештено у %2$s.</string>
     <string name="select_one_collection">Морате одабрати макар једну колекцију.</string>
     <string name="you_must_select_at_least_one_shared_folder">Морате изабрати бар једну дељену фасциклу.</string>
     <string name="share">Подели</string>
+    <string name="move_to_organization">Премести у организацију</string>
+    <string name="no_orgs_to_list">Ниједна организација у листу.</string>
+    <string name="move_to_org_desc">Изаберите организацију коју желите да преместите овај предмет. Прелазак на организацију преноси власништво над ставком у ту организацију. Више нећете бити директни власник ове ставке након што је премештена.</string>
     <string name="no_vaults_to_list">Нема трезора за приказ.</string>
     <string name="move_to_vault_desc">Изаберите трезор у који желите да преместите ову ставку. Премештање у други трезор преноси власништво над ставком на ту организацију. Више нећете бити директни власник ове ставке након што је премештена.</string>
     <string name="number_of_words">Број речи</string>

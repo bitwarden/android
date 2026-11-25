@@ -24,6 +24,7 @@
     <string name="folder_deleted">Kansio poistettiin.</string>
     <string name="folder_none">Ei kansiota</string>
     <string name="folder_updated">Kansio tallennettiin.</string>
+    <string name="folders">Kansiot</string>
     <string name="hide">Piilota</string>
     <string name="internet_connection_required_message">Jatka muodostamalla yhteys Internetiin.</string>
     <string name="internet_connection_required_title">Internet-yhteys vaaditaan</string>
@@ -288,7 +289,9 @@ Koodi skannataan automaattisesti.</string>
     <string name="icons_url">Kuvakepalvelimen URL</string>
     <string name="vault_is_locked">Holvi on lukittu</string>
     <string name="go_to_my_vault">Mene holviin</string>
+    <string name="collections">Kokoelmat</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Tässä kokoelmassa ei ole kohteita.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Kansiossa ei ole kohteita.</string>
     <string name="no_items_trash">Roskakorissa ei ole kohteita.</string>
@@ -342,11 +345,16 @@ Koodi skannataan automaattisesti.</string>
     <string name="type">Tyyppi</string>
     <string name="move_down">Siirrä alas</string>
     <string name="move_up">Siirrä ylös</string>
+    <string name="owner">Omistaja</string>
+    <string name="no_collections_to_list">Ei näytettäviä kokoelmia.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s siirrettiin organisaatiolle %2$s.</string>
     <string name="select_one_collection">Valitse ainakin yksi kokoelma.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Jaa</string>
+    <string name="move_to_organization">Siirrä organisaatiolle</string>
+    <string name="no_orgs_to_list">Ei näytettäviä organisaatioita.</string>
+    <string name="move_to_org_desc">Valitse organisaatio, jolle haluat siirtää kohteen. Tämä siirtää kohteen organisaation omistukseen, etkä tämän jälkeen ole enää sen suora omistaja.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Sanojen määrä</string>

@@ -798,7 +798,7 @@ class CipherListViewExtensionsTest {
             )
         }
 
-        val result = cipher.toLabelIcons()
+        val result = cipher.toLabelIcons(isVfo1FoundationEnabled = true)
 
         assertEquals(expected, result)
     }
@@ -819,7 +819,7 @@ class CipherListViewExtensionsTest {
             )
         }
 
-        val result = cipher.toLabelIcons()
+        val result = cipher.toLabelIcons(isVfo1FoundationEnabled = true)
 
         assertEquals(expected, result)
     }
@@ -860,7 +860,7 @@ class CipherListViewExtensionsTest {
             )
         }
 
-        val result = cipher.toLabelIcons()
+        val result = cipher.toLabelIcons(isVfo1FoundationEnabled = true)
 
         assertEquals(expected, result)
     }

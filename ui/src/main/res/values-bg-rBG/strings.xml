@@ -24,6 +24,7 @@
     <string name="folder_deleted">Папката е изтрита.</string>
     <string name="folder_none">Няма папка</string>
     <string name="folder_updated">Папката е обновена.</string>
+    <string name="folders">Папки</string>
     <string name="hide">Скриване</string>
     <string name="internet_connection_required_message">Свържете се с Интернет, за да продължите.</string>
     <string name="internet_connection_required_title">Необходима е връзка към Интернет</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">Адрес на сървъра с иконки</string>
     <string name="vault_is_locked">Трезорът е заключен</string>
     <string name="go_to_my_vault">Към трезора</string>
+    <string name="collections">Колекции</string>
     <string name="shared_folders">Споделени папки</string>
+    <string name="no_items_collection">Няма елементи в тази колекция.</string>
     <string name="there_are_no_items_in_this_shared_folder">Няма елементи в тази споделена папка.</string>
     <string name="no_items_folder">Няма елементи в тази папка.</string>
     <string name="no_items_trash">Няма записи в кошчето.</string>
@@ -342,11 +345,16 @@
     <string name="type">Вид</string>
     <string name="move_down">Преместване надолу</string>
     <string name="move_up">Преместване нагоре</string>
+    <string name="owner">Собственик</string>
+    <string name="no_collections_to_list">Няма колекции за показване.</string>
     <string name="there_are_no_shared_folders_to_list">Няма споделени папки за показване.</string>
     <string name="moved_item_to_org">%1$s се премести в %2$s.</string>
     <string name="select_one_collection">Изберете поне една колекция.</string>
     <string name="you_must_select_at_least_one_shared_folder">Изберете поне една споделена папка.</string>
     <string name="share">Споделяне</string>
+    <string name="move_to_organization">Преместване в организация</string>
+    <string name="no_orgs_to_list">Няма организации за показване.</string>
+    <string name="move_to_org_desc">Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</string>
     <string name="no_vaults_to_list">Няма трезори за показване.</string>
     <string name="move_to_vault_desc">Изберете трезор, в която искате да преместите записа. Преместването към друг трезор прехвърля собствеността му към съответната организация. След това няма вече директно да го притежавате.</string>
     <string name="number_of_words">Брой думи</string>

@@ -24,6 +24,7 @@
     <string name="folder_deleted">პაპკა წაიშალა.</string>
     <string name="folder_none">პაპკის გარეშე</string>
     <string name="folder_updated">პაპკა შენახულია</string>
+    <string name="folders">პაპკები</string>
     <string name="hide">დამალვა</string>
     <string name="internet_connection_required_message">გაგრძელებამდე, გთხოვთ, დაუკავშირდეთ ინტერნეტს.</string>
     <string name="internet_connection_required_title">საჭიროა ინტერნეტთან კავშირი</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">ხატულების სერვერის URL</string>
     <string name="vault_is_locked">სეიფი დაბლოკილია</string>
     <string name="go_to_my_vault">ჩემს სეიფში გადასვლა</string>
+    <string name="collections">კოლექციები</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">ამ კოლექციაში ჩანაწერები არ არის.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">ამ პაპკაში ჩანაწერები არ არის.</string>
     <string name="no_items_trash">ნაგავში ჩანაწერები არ არის.</string>
@@ -342,11 +345,16 @@
     <string name="type">ტიპი</string>
     <string name="move_down">ქვემოთ გადატანა</string>
     <string name="move_up">ზემოთ გადატანა</string>
+    <string name="owner">მფლობელი</string>
+    <string name="no_collections_to_list">გამოსატანი კოლექციები არ არის.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s გადატანილია %2$s-ში.</string>
     <string name="select_one_collection">უნდა აირჩიოთ მინიმუმ ერთი კოლექცია.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">გაზიარება</string>
+    <string name="move_to_organization">ორგანიზაციაში გადატანა</string>
+    <string name="no_orgs_to_list">გამოსატანი ორგანიზაციები არ არის.</string>
+    <string name="move_to_org_desc">აირჩიეთ ორგანიზაცია, რომელშიც გსურთ ამ ჩანაწერის გადატანა. ორგანიზაციაში გადატანა გადასცემს ჩანაწერის საკუთრებას ამ ორგანიზაციას. გადატანის შემდეგ, თქვენ აღარ იქნებით ამ ჩანაწერის პირდაპირი მფლობელი.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">სიტყვების რაოდენობა</string>

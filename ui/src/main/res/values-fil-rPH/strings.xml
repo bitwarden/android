@@ -24,6 +24,7 @@
     <string name="folder_deleted">Binura ang folder.</string>
     <string name="folder_none">Walang Folder</string>
     <string name="folder_updated">Sinave ang folder</string>
+    <string name="folders">Mga Folder</string>
     <string name="hide">Itago</string>
     <string name="internet_connection_required_message">Mangyaring kumonekta sa internet bago magpatuloy.</string>
     <string name="internet_connection_required_title">Kailangang kumonekta sa internet</string>
@@ -288,7 +289,9 @@ Awtomatikong itong magsa-scan.</string>
     <string name="icons_url">URL ng server ng mga icon</string>
     <string name="vault_is_locked">Naka-lock ang vault</string>
     <string name="go_to_my_vault">Pumunta sa vault ko</string>
+    <string name="collections">Mga Koleksyon</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Walang mga item sa koleksyong ito.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Walang mga item sa folder na ito.</string>
     <string name="no_items_trash">Walang mga item sa basurahan.</string>
@@ -342,11 +345,16 @@ Awtomatikong itong magsa-scan.</string>
     <string name="type">Uri</string>
     <string name="move_down">Ilipat pababa</string>
     <string name="move_up">Ilipat Pataas</string>
+    <string name="owner">May-ari</string>
+    <string name="no_collections_to_list">Walang maililistang koleksyon.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">Nilipat ang %1$s sa %2$s.</string>
     <string name="select_one_collection">Kailangan mong pumili ng isa man lang na koleksyon.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Ibahagi</string>
+    <string name="move_to_organization">Ilipat sa Organisasyon</string>
+    <string name="no_orgs_to_list">Walang maililistang organisasyon.</string>
+    <string name="move_to_org_desc">Piliin kung saang organisasyon mo ililipat ang item na ito. Magiging pag-aari ng organisasyon ang anumang item na ililipat mo rito. Hindi ka na ang direktang may-ari ng item na ito pagkalipat.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Bilang ng mga salita</string>

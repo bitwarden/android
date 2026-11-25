@@ -24,6 +24,7 @@
     <string name="folder_deleted">フォルダーを削除しました。</string>
     <string name="folder_none">フォルダーなし</string>
     <string name="folder_updated">フォルダーを更新しました。</string>
+    <string name="folders">フォルダー</string>
     <string name="hide">隠す</string>
     <string name="internet_connection_required_message">続行する前に、インターネットに接続してください。</string>
     <string name="internet_connection_required_title">インターネット接続が必要です</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">アイコンのサーバー URL</string>
     <string name="vault_is_locked">保管庫はロックされています</string>
     <string name="go_to_my_vault">保管庫を表示</string>
+    <string name="collections">コレクション</string>
     <string name="shared_folders">共有フォルダー</string>
+    <string name="no_items_collection">このコレクションにはアイテムがありません。</string>
     <string name="there_are_no_items_in_this_shared_folder">この共有フォルダーにはアイテムがありません。</string>
     <string name="no_items_folder">このフォルダーにはアイテムがありません。</string>
     <string name="no_items_trash">ごみ箱にアイテムはありません。</string>
@@ -340,11 +343,16 @@
     <string name="type">タイプ</string>
     <string name="move_down">下へ</string>
     <string name="move_up">上へ</string>
+    <string name="owner">所有者</string>
+    <string name="no_collections_to_list">表示するコレクションがありません</string>
     <string name="there_are_no_shared_folders_to_list">表示できる共有フォルダーがありません。</string>
     <string name="moved_item_to_org">%1$s を %2$s に移動しました。</string>
     <string name="select_one_collection">コレクションを最低１つは選んでください。</string>
     <string name="you_must_select_at_least_one_shared_folder">共有フォルダーを少なくとも一つ選択してください。</string>
     <string name="share">共有</string>
+    <string name="move_to_organization">組織に移動</string>
+    <string name="no_orgs_to_list">表示する組織がありません。</string>
+    <string name="move_to_org_desc">このアイテムを移動する組織を選択してください。組織に移動すると、アイテムの所有権がその組織に移行します。 このアイテムが移動された後、あなたはこのアイテムの直接の所有者にはなりません。</string>
     <string name="no_vaults_to_list">表示できる保管庫がありません。</string>
     <string name="move_to_vault_desc">このアイテムを移動する保管庫を選択してください。別の保管庫に移動すると、アイテムの所有権はその組織に移ります。移動した後、あなたはこのアイテムの直接の所有者ではなくなります。</string>
     <string name="number_of_words">単語数</string>

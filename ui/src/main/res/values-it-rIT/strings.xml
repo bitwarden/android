@@ -24,6 +24,7 @@
     <string name="folder_deleted">Cartella eliminata</string>
     <string name="folder_none">Nessuna cartella</string>
     <string name="folder_updated">Cartella salvata</string>
+    <string name="folders">Cartelle</string>
     <string name="hide">Nascondi</string>
     <string name="internet_connection_required_message">Verifica la connessione a internet prima di continuare</string>
     <string name="internet_connection_required_title">Connessione a internet necessaria</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">URL del server di icone</string>
     <string name="vault_is_locked">La cassaforte è bloccata</string>
     <string name="go_to_my_vault">Vai alla cassaforte</string>
+    <string name="collections">Collezioni</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Non ci sono elementi in questa raccolta.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nessun elemento in questa cartella</string>
     <string name="no_items_trash">Nessun elemento nel cestino</string>
@@ -341,11 +344,16 @@
     <string name="type">Scegli il tipo di elemento</string>
     <string name="move_down">Sposta in basso</string>
     <string name="move_up">Sposta in alto</string>
+    <string name="owner">Propriet.</string>
+    <string name="no_collections_to_list">Nessuna raccolta da mostrare.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s spostato in %2$s</string>
     <string name="select_one_collection">Devi selezionare almeno una raccolta.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Condividi</string>
+    <string name="move_to_organization">Sposta in organizzazione</string>
+    <string name="no_orgs_to_list">Nessuna organizzazione da mostrare.</string>
+    <string name="move_to_org_desc">Scegli un\'organizzazione in cui vuoi spostare questo elemento. Spostarlo in un\'organizzazione trasferisce la proprietà dell\'elemento all\'organizzazione. Una volta spostato, non sarai più il proprietario diretto di questo elemento.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Numero di parole</string>

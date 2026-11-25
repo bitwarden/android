@@ -24,6 +24,7 @@
     <string name="folder_deleted">תיקייה נמחקה.</string>
     <string name="folder_none">ללא תיקייה</string>
     <string name="folder_updated">התיקייה נשמרה</string>
+    <string name="folders">תיקיות</string>
     <string name="hide">הסתר</string>
     <string name="internet_connection_required_message">אנא התחבר לאינטרנט לפני שתמשיך.</string>
     <string name="internet_connection_required_title">נדרש חיבור לאינטרנט</string>
@@ -289,7 +290,9 @@
     <string name="icons_url">URL של שרת הסמלים</string>
     <string name="vault_is_locked">הכספת נעולה</string>
     <string name="go_to_my_vault">עבור לכספת שלי</string>
+    <string name="collections">אוספים</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">אין פריטים באוסף זה.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">אין פריטים בתיקייה זו.</string>
     <string name="no_items_trash">אין פריטים בסל המחזור.</string>
@@ -344,11 +347,16 @@
     <string name="type">סוג</string>
     <string name="move_down">הזז למטה</string>
     <string name="move_up">הזז למעלה</string>
+    <string name="owner">בעלים</string>
+    <string name="no_collections_to_list">אין אוספים להציג ברשימה.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s הועבר אל %2$s.</string>
     <string name="select_one_collection">עליך לבחור לפחות אוסף אחד.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">שיתוף</string>
+    <string name="move_to_organization">העבר לארגון</string>
+    <string name="no_orgs_to_list">אין ארגונים להצגה ברשימה.</string>
+    <string name="move_to_org_desc">בחר ארגון שאליו ברצונך להעביר פריט זה. ההעברה לארגון מעבירה את הבעלות על הפריט לאותו ארגון. לאחר העברת פריט זה לא תהיה יותר הבעלים הישיר.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">מספר המילים</string>

@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialRes
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -129,6 +130,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
+            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultItemListingScreen(
                 viewModel = viewModel,

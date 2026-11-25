@@ -33,6 +33,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.ui.platform.composition.util.vfo1Foundation
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBankAccountTypeHandlers
@@ -190,7 +191,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextSelectionButton(
-                label = stringResource(id = BitwardenString.my_folder),
+                label = stringResource(
+                    id = vfo1Foundation(BitwardenString.my_folder, BitwardenString.folder),
+                ),
                 selectedOption = state.common.selectedFolder?.name,
                 onClick = {
                     // Clear any current focused item, such as an unrelated text field, so the
@@ -214,7 +217,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             val collections = state.common.selectedOwner?.collections.orEmpty()
             item {
                 BitwardenTextSelectionButton(
-                    label = stringResource(id = BitwardenString.vault),
+                    label = stringResource(
+                        id = vfo1Foundation(BitwardenString.vault, BitwardenString.owner),
+                    ),
                     selectedOption = state.common.selectedOwner?.name?.invoke(),
                     onClick = {
                         // Clear any current focused item, such as an unrelated text field, so the

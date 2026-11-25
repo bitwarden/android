@@ -24,6 +24,7 @@
     <string name="folder_deleted">Kaust on kustutatud.</string>
     <string name="folder_none">Kaust puudub</string>
     <string name="folder_updated">Kaust on uuendatud.</string>
+    <string name="folders">Kaustad</string>
     <string name="hide">Peida</string>
     <string name="internet_connection_required_message">Jätkamiseks on vajalik internetiühendus.</string>
     <string name="internet_connection_required_title">Vajalik on internetiühendus</string>
@@ -288,7 +289,9 @@ Skaneerimine toimub automaatselt.</string>
     <string name="icons_url">Ikoonide serveri URL</string>
     <string name="vault_is_locked">Hoidla on lukus</string>
     <string name="go_to_my_vault">Ava hoidla</string>
+    <string name="collections">Kogumikud</string>
     <string name="shared_folders">Shared folders</string>
+    <string name="no_items_collection">Selles kogus pole ühtegi üksust.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Selles kaustas ei ole kirjeid.</string>
     <string name="no_items_trash">Prügikast on tühi.</string>
@@ -342,11 +345,16 @@ Skaneerimine toimub automaatselt.</string>
     <string name="type">Tüüp</string>
     <string name="move_down">Nihuta alla</string>
     <string name="move_up">Nihuta üles</string>
+    <string name="owner">Omanik</string>
+    <string name="no_collections_to_list">Puuduvad kollektsioonid, mida kuvada.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s teisaldati %2$s\'sse.</string>
     <string name="select_one_collection">Pead valima vähemalt ühe kogumiku.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Jaga</string>
+    <string name="move_to_organization">Teisalda organisatsiooni</string>
+    <string name="no_orgs_to_list">Puuduvad organisatsioonid, mida kuvada.</string>
+    <string name="move_to_org_desc">Vali organisatsioon, kuhu soovid seda kirjet teisaldada. Teisaldamisega saab kirje omanikuks organisatsioon. Pärast kirje teisaldamist ei ole sa enam selle otsene omanik.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Sõnade arv</string>

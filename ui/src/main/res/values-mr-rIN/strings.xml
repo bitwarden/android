@@ -24,6 +24,7 @@
     <string name="folder_deleted">फोल्डर खोडून टाकले.</string>
     <string name="folder_none">विना फोल्डर</string>
     <string name="folder_updated">फोल्डर साठवले</string>
+    <string name="folders">फोल्डर</string>
     <string name="hide">लपवा</string>
     <string name="internet_connection_required_message">पुढे जाण्यापूर्वी इंटरनेट जोडा.</string>
     <string name="internet_connection_required_title">इंटरनेट जोडणी आवश्यक आहे</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">चिन्ह सर्व्हर URL</string>
     <string name="vault_is_locked">तिजोरी लॉक आहे</string>
     <string name="go_to_my_vault">माझ्या तिजोरीवर जा</string>
+    <string name="collections">संग्रह</string>
     <string name="shared_folders">सामायिक फोल्डर्स</string>
+    <string name="no_items_collection">या संग्रहामध्ये कोणतेही आयटम नाहीत.</string>
     <string name="there_are_no_items_in_this_shared_folder">या सामायिक फोल्डरमध्ये कोणतेही आयटम नाहीत.</string>
     <string name="no_items_folder">या फोल्डरमध्ये कोणतेही आयटम नाहीत.</string>
     <string name="no_items_trash">कचराकुंडी रिकामी आहे.</string>
@@ -342,11 +345,16 @@
     <string name="type">प्रकार</string>
     <string name="move_down">खाली हलवा</string>
     <string name="move_up">वर हलवा</string>
+    <string name="owner">मालक</string>
+    <string name="no_collections_to_list">यादी करण्यासाठी कोणतेही संग्रह नाहीत.</string>
     <string name="there_are_no_shared_folders_to_list">यादी करण्यासाठी कोणतीही सामायिक फोल्डर्स नाहीत.</string>
     <string name="moved_item_to_org">%1$s %2$s वर हलवले.</string>
     <string name="select_one_collection">किमान एक संग्रह तरी निवडला पाहिजे.</string>
     <string name="you_must_select_at_least_one_shared_folder">तुम्ही किमान एक सामायिक फोल्डर निवडणे आवश्यक आहे.</string>
     <string name="share">सामायिक करा</string>
+    <string name="move_to_organization">संस्थेत हलवा</string>
+    <string name="no_orgs_to_list">यादी करण्यासाठी कोणत्याही संस्था नाहीत.</string>
+    <string name="move_to_org_desc">तुम्ही हा आयटम हलवू इच्छित असलेली संस्था निवडा. संस्थेत हलवल्याने आयटमची मालकी त्या संस्थेकडे हस्तांतरित होते. एकदा हलवल्यानंतर तुम्ही या आयटमचे थेट मालक राहणार नाही.</string>
     <string name="no_vaults_to_list">यादी करण्यासाठी कोणतीही तिजोरी नाहीत.</string>
     <string name="move_to_vault_desc">तुम्ही हा आयटम हलवू इच्छित असलेली तिजोरी निवडा. दुसऱ्या तिजोरीत हलवल्याने आयटमची मालकी त्या संस्थेकडे हस्तांतरित होते. एकदा हलवल्यानंतर तुम्ही या आयटमचे थेट मालक राहणार नाही.</string>
     <string name="number_of_words">शब्दांची संख्या</string>

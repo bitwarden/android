@@ -24,6 +24,7 @@
     <string name="folder_deleted">Priečinok bol odstránený.</string>
     <string name="folder_none">Žiadny priečinok</string>
     <string name="folder_updated">Priečinok aktualizovaný.</string>
+    <string name="folders">Priečinky</string>
     <string name="hide">Skryť</string>
     <string name="internet_connection_required_message">Pripojte sa k internetu pred pokračovaním.</string>
     <string name="internet_connection_required_title">Vyžaduje sa internetové pripojenie</string>
@@ -290,7 +291,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="icons_url">URL servera ikôn</string>
     <string name="vault_is_locked">Trezor je uzamknutý</string>
     <string name="go_to_my_vault">Prejsť do môjho trezora</string>
+    <string name="collections">Zbierky</string>
     <string name="shared_folders">Zdieľané priečinky</string>
+    <string name="no_items_collection">V tejto zbierke sa nenachádzajú žiadne položky.</string>
     <string name="there_are_no_items_in_this_shared_folder">V tomto zdieľanom priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_folder">V tomto priečinku sa nenachádzajú žiadne položky.</string>
     <string name="no_items_trash">V koši nie sú žiadne položky.</string>
@@ -346,11 +349,16 @@ Skenovanie prebehne automaticky.</string>
     <string name="type">Typ</string>
     <string name="move_down">Posunúť nižšie</string>
     <string name="move_up">Posunúť vyššie</string>
+    <string name="owner">Vlastník</string>
+    <string name="no_collections_to_list">Neexistujú žiadne zbierky na zobrazenie.</string>
     <string name="there_are_no_shared_folders_to_list">Na zobrazenie nie sú žiadne zdieľané priečinky.</string>
     <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
     <string name="select_one_collection">Musíte vybrať aspoň jednu zbierku.</string>
     <string name="you_must_select_at_least_one_shared_folder">Musíte vybrať aspoň jeden zdieľaný priečinok.</string>
     <string name="share">Zdieľať</string>
+    <string name="move_to_organization">Presunúť do Organizácie</string>
+    <string name="no_orgs_to_list">Nenašli sa žiadne organizácie.</string>
+    <string name="move_to_org_desc">Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</string>
     <string name="no_vaults_to_list">Nie sú žiadne trezory na zobrazenie.</string>
     <string name="move_to_vault_desc">Vyberte trezor, do ktorého chcete túto položku presunúť. Presunutím do iného trezoru sa vlastníctvo položky prevedie na danú organizáciu. Po presunutí už nebudete priamym vlastníkom tejto položky.</string>
     <string name="number_of_words">Počet slov</string>

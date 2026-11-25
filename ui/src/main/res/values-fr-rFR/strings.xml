@@ -24,6 +24,7 @@
     <string name="folder_deleted">Dossier supprimé.</string>
     <string name="folder_none">Aucun dossier</string>
     <string name="folder_updated">Dossier sauvegardé</string>
+    <string name="folders">Dossiers</string>
     <string name="hide">Masquer</string>
     <string name="internet_connection_required_message">Veuillez vous connecter à internet avant de continuer.</string>
     <string name="internet_connection_required_title">Connexion internet requise</string>
@@ -288,7 +289,9 @@ La numérisation se fera automatiquement.</string>
     <string name="icons_url">Icônes URL du serveur</string>
     <string name="vault_is_locked">Le coffre est verrouillé</string>
     <string name="go_to_my_vault">Aller dans mon coffre</string>
+    <string name="collections">Collections</string>
     <string name="shared_folders">Dossiers partagés</string>
+    <string name="no_items_collection">Il n\'y a aucun élément dans cette collection.</string>
     <string name="there_are_no_items_in_this_shared_folder">Il n\'y a aucun élément dans ce dossier partagé.</string>
     <string name="no_items_folder">Il n\'y a aucun élément dans ce dossier.</string>
     <string name="no_items_trash">Il n\'y a aucun élément dans la corbeille.</string>
@@ -342,11 +345,16 @@ La numérisation se fera automatiquement.</string>
     <string name="type">Type</string>
     <string name="move_down">Déplacer vers le bas</string>
     <string name="move_up">Déplacer vers le haut</string>
+    <string name="owner">Propriétaire</string>
+    <string name="no_collections_to_list">Il n\'y a aucune collection à lister.</string>
     <string name="there_are_no_shared_folders_to_list">Aucun dossier partagé à lister.</string>
     <string name="moved_item_to_org">%1$s déplacé vers %2$s</string>
     <string name="select_one_collection">Vous devez sélectionner au moins une collection.</string>
     <string name="you_must_select_at_least_one_shared_folder">Vous devez sélectionner au moins un dossier partagé.</string>
     <string name="share">Partager</string>
+    <string name="move_to_organization">Déplacer vers l\'organisation</string>
+    <string name="no_orgs_to_list">Aucune organisation à lister.</string>
+    <string name="move_to_org_desc">Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Le déplacement vers une organisation transfère le Propriétaire de l\'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu\'il aura été déplacé.</string>
     <string name="no_vaults_to_list">Aucun coffre à afficher.</string>
     <string name="move_to_vault_desc">Choisissez un coffre vers lequel vous souhaitez déplacer cet élément. Le déplacement vers un autre coffre transfère la propriété de l\'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu\'il aura été déplacé.</string>
     <string name="number_of_words">Nombre de mots</string>

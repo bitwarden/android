@@ -24,6 +24,7 @@
     <string name="folder_deleted">Pasta eliminada.</string>
     <string name="folder_none">Sem pasta</string>
     <string name="folder_updated">Pasta guardada</string>
+    <string name="folders">Pastas</string>
     <string name="hide">Ocultar</string>
     <string name="internet_connection_required_message">Estabeleça uma ligação à Internet antes de continuar.</string>
     <string name="internet_connection_required_title">Ligação à Internet necessária</string>
@@ -288,7 +289,9 @@ A leitura será efetuada automaticamente.</string>
     <string name="icons_url">URL do servidor de ícones</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
     <string name="go_to_my_vault">Ir para o meu cofre</string>
+    <string name="collections">Coleções</string>
     <string name="shared_folders">Pastas partilhadas</string>
+    <string name="no_items_collection">Não existem itens nesta coleção.</string>
     <string name="there_are_no_items_in_this_shared_folder">Não existem itens nesta pasta partilhada.</string>
     <string name="no_items_folder">Não existem itens nesta pasta.</string>
     <string name="no_items_trash">Não existem itens no lixo.</string>
@@ -342,11 +345,16 @@ A leitura será efetuada automaticamente.</string>
     <string name="type">Tipo</string>
     <string name="move_down">Mover para baixo</string>
     <string name="move_up">Mover para cima</string>
+    <string name="owner">Proprietário</string>
+    <string name="no_collections_to_list">Não existem coleções para apresentar.</string>
     <string name="there_are_no_shared_folders_to_list">Não existem pastas partilhadas para apresentar.</string>
     <string name="moved_item_to_org">%1$s movido para %2$s.</string>
     <string name="select_one_collection">Deve selecionar pelo menos uma coleção.</string>
     <string name="you_must_select_at_least_one_shared_folder">Tem de selecionar pelo menos uma pasta partilhada.</string>
     <string name="share">Partilhar</string>
+    <string name="move_to_organization">Mover para organização</string>
+    <string name="no_orgs_to_list">Não existem organizações para apresentar.</string>
+    <string name="move_to_org_desc">Escolha a organização para a qual pretende mover este item. Ao movê-lo para uma organização, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="no_vaults_to_list">Não existem cofres para apresentar.</string>
     <string name="move_to_vault_desc">Escolha o cofre para o qual pretende mover este item. Ao movê-lo para outro cofre, a propriedade do item será transferida para essa organização. Deixará de ser o proprietário direto deste item após a transferência.</string>
     <string name="number_of_words">Número de palavras</string>

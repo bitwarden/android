@@ -24,6 +24,7 @@
     <string name="folder_deleted">Теку видалено.</string>
     <string name="folder_none">Без теки</string>
     <string name="folder_updated">Теку збережено</string>
+    <string name="folders">Теки</string>
     <string name="hide">Приховати</string>
     <string name="internet_connection_required_message">Щоб продовжити, під\'єднайтеся до інтернету.</string>
     <string name="internet_connection_required_title">Необхідно під\'єднатися до інтернету</string>
@@ -290,7 +291,9 @@
     <string name="icons_url">URL-адреса сервера піктограм</string>
     <string name="vault_is_locked">Сховище заблоковано</string>
     <string name="go_to_my_vault">Перейти в моє сховище</string>
+    <string name="collections">Збірки</string>
     <string name="shared_folders">Спільні теки</string>
+    <string name="no_items_collection">У цій збірці немає записів.</string>
     <string name="there_are_no_items_in_this_shared_folder">У цій спільній теці немає записів.</string>
     <string name="no_items_folder">У цій теці немає записів.</string>
     <string name="no_items_trash">У смітнику немає записів.</string>
@@ -346,11 +349,16 @@
     <string name="type">Тип</string>
     <string name="move_down">Перемістити вниз</string>
     <string name="move_up">Перемістити вгору</string>
+    <string name="owner">Власник</string>
+    <string name="no_collections_to_list">Немає збірок.</string>
     <string name="there_are_no_shared_folders_to_list">Немає спільних тек для показу.</string>
     <string name="moved_item_to_org">%1$s переміщено до %2$s.</string>
     <string name="select_one_collection">Необхідно вибрати принаймні одну збірку.</string>
     <string name="you_must_select_at_least_one_shared_folder">Необхідно вибрати принаймні одну спільну теку.</string>
     <string name="share">Поділитися</string>
+    <string name="move_to_organization">Перемістити до організації</string>
+    <string name="no_orgs_to_list">Немає організацій.</string>
+    <string name="move_to_org_desc">Виберіть організацію, до якої ви бажаєте перемістити цей запис. Власність запису передається організації, до якої він переміщується. Ви більше не володітимете безпосередньо цим записом після переміщення.</string>
     <string name="no_vaults_to_list">Немає сховищ для показу.</string>
     <string name="move_to_vault_desc">Виберіть сховище, до якого ви бажаєте перемістити цей запис. Власність запису передається організації, до сховища якої він переміщується. Ви більше не володітимете безпосередньо цим записом після переміщення.</string>
     <string name="number_of_words">Кількість слів</string>

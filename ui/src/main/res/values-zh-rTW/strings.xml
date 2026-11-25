@@ -24,6 +24,7 @@
     <string name="folder_deleted">已刪除資料夾。</string>
     <string name="folder_none">（未分類）</string>
     <string name="folder_updated">已更新資料夾。</string>
+    <string name="folders">資料夾</string>
     <string name="hide">隱藏</string>
     <string name="internet_connection_required_message">請先連線至網際網路再繼續。</string>
     <string name="internet_connection_required_title">需要網際網路連線</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">圖示伺服器 URL</string>
     <string name="vault_is_locked">密碼庫已鎖定</string>
     <string name="go_to_my_vault">前往我的密碼庫</string>
+    <string name="collections">集合</string>
     <string name="shared_folders">共享資料夾</string>
+    <string name="no_items_collection">此集合中沒有項目。</string>
     <string name="there_are_no_items_in_this_shared_folder">此共享資料夾中沒有項目。</string>
     <string name="no_items_folder">此資料夾中沒有項目。</string>
     <string name="no_items_trash">垃圾桶中沒有項目。</string>
@@ -340,11 +343,16 @@
     <string name="type">類型</string>
     <string name="move_down">下移</string>
     <string name="move_up">上移</string>
+    <string name="owner">擁有者</string>
+    <string name="no_collections_to_list">沒有可顯示的集合。</string>
     <string name="there_are_no_shared_folders_to_list">沒有可列出的共享資料夾。</string>
     <string name="moved_item_to_org">%1$s 已移動至 %2$s。</string>
     <string name="select_one_collection">您必須至少選擇一個集合。</string>
     <string name="you_must_select_at_least_one_shared_folder">您必須至少選擇一個共享資料夾。</string>
     <string name="share">共用</string>
+    <string name="move_to_organization">移動至組織</string>
+    <string name="no_orgs_to_list">沒有可列出的組織。</string>
+    <string name="move_to_org_desc">選擇您希望將這個項目移動至哪個組織。項目的擁有權將會轉移至該組織。轉移之後，您將不再是此項目的直接擁有者。</string>
     <string name="no_vaults_to_list">沒有可列出的保管庫。</string>
     <string name="move_to_vault_desc">選擇您要將此項目移至的保管庫。移至另一個保管庫後，此項目的擁有權將移轉給該組織。項目移動後，您將不再是此項目的直接擁有者。</string>
     <string name="number_of_words">單字數量</string>

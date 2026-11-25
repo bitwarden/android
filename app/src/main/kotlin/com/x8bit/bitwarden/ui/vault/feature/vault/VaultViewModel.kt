@@ -321,6 +321,11 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager.getFeatureFlagFlow(FlagKey.Vfo1Foundation)
+            .map { VaultAction.Internal.Vfo1FoundationFlagUpdateReceive(isEnabled = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         if (!buildInfoManager.isFdroid) {
             viewModelScope.launch {
                 credentialExchangeRegistryManager.register()
@@ -1204,6 +1209,10 @@ class VaultViewModel @Inject constructor(
                 handleNewItemTypesFlagUpdateReceive(action)
             }
 
+            is VaultAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
+                handleVfo1FoundationFlagUpdateReceive(action)
+            }
+
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
@@ -1322,6 +1331,22 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isNewItemTypesEnabled = action.isEnabled)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateVaultState(
+                vaultData = vaultData,
+                dialog = state.dialog,
+                validTotpIds = state.validTotpIds,
+            )
+        }
+    }
+
+    private fun handleVfo1FoundationFlagUpdateReceive(
+        action: VaultAction.Internal.Vfo1FoundationFlagUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isVfo1FoundationEnabled = action.isEnabled)
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
@@ -1601,6 +1626,7 @@ class VaultViewModel @Inject constructor(
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                             validTotpIds = validTotpIds,
                             isNewItemTypesEnabled = state.isNewItemTypesEnabled,
+                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         ),
                         dialog = VaultState.DialogState.SyncError(
                             title = BitwardenString.vault_sync_unsuccessful.asText(),
@@ -1685,6 +1711,7 @@ class VaultViewModel @Inject constructor(
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
                     isNewItemTypesEnabled = state.isNewItemTypesEnabled,
+                    isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1744,6 +1771,7 @@ class VaultViewModel @Inject constructor(
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
                     isNewItemTypesEnabled = state.isNewItemTypesEnabled,
+                    isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                 ),
                 validTotpIds = validTotpIds.toImmutableSet(),
             )
@@ -1925,6 +1953,7 @@ data class VaultState(
     val validTotpIds: ImmutableSet<String>,
     val collapsedSections: ImmutableSet<VaultSection> = persistentSetOf(),
     val isNewItemTypesEnabled: Boolean = false,
+    val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
 ) : Parcelable {
 
@@ -2977,6 +3006,13 @@ sealed class VaultAction {
          * Indicates that the New Item Types feature flag has been updated.
          */
         data class NewItemTypesFlagUpdateReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the VFO-1 foundation feature flag has been updated.
+         */
+        data class Vfo1FoundationFlagUpdateReceive(
             val isEnabled: Boolean,
         ) : Internal()
 

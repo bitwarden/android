@@ -236,9 +236,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val cardScanManager: CardScanManager = mockk {
         every { cardScanResultFlow } returns mutableCardScanResultFlow
     }
+    private val mutableVfo1FoundationFlow = MutableStateFlow(true)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(FlagKey.CardScanner) } answers { mutableCardScannerFlow.value }
         every { getFeatureFlagFlow(FlagKey.CardScanner) } returns mutableCardScannerFlow
+        every { getFeatureFlag(FlagKey.Vfo1Foundation) } answers { mutableVfo1FoundationFlow.value }
+        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlow
     }
     private val buildInfoManager: BuildInfoManager = mockk {
         every { isFdroid } returns false
@@ -282,6 +285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = true,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(state = null),
@@ -366,6 +370,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 defaultUriMatchType = UriMatchTypeModel.EXACT,
                 hasPremium = true,
                 isCardScannerEnabled = false,
+                isVfo1FoundationEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -376,6 +381,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             policyManager.getActivePolicies(type = PolicyType.ORGANIZATION_DATA_OWNERSHIP)
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `Vfo1FoundationFlagUpdateReceive should re-derive the content state using the latest vault data`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.AddItem()
+            val vaultItemCipherType = VaultItemCipherType.LOGIN
+            mutableVaultDataFlow.value = DataState.Loaded(data = createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(state = null),
+                route = VaultUnlockedGraph.VaultAddEditRoute(
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = vaultItemCipherType,
+                ),
+            )
+
+            assertEquals(
+                BitwardenString.my_vault.asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+
+            mutableVfo1FoundationFlow.value = false
+
+            assertEquals(
+                "activeEmail".asText(),
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    .common
+                    .availableOwners
+                    .first()
+                    .name,
+            )
+        }
 
     @Test
     fun `initial add state should be correct when autofill selection`() = runTest {
@@ -392,6 +433,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             isIndividualVaultDisabled = false,
         )
         val vaultAddEditType = VaultAddEditType.AddItem()
+        val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = autofillContentState.common,
@@ -421,6 +463,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         val autofillContentState = autofillSaveItem.toDefaultAddTypeContent(false)
         val vaultAddEditType = VaultAddEditType.AddItem()
+        val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = autofillContentState.common,
@@ -457,6 +500,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             isIndividualVaultDisabled = false,
         )
         val vaultAddEditType = VaultAddEditType.AddItem()
+        val vaultItemCipherType = VaultItemCipherType.LOGIN
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = fido2ContentState.common,
@@ -2116,6 +2160,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
             val mockFido2CredentialRequest = createMockCreateCredentialRequest(number = 1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
                 commonContentViewState = createCommonContentViewState(
                     name = cipherView.name,
@@ -6229,6 +6274,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             defaultUriMatchType = UriMatchTypeModel.EXACT,
             hasPremium = hasPremium,
             isCardScannerEnabled = false,
+            isVfo1FoundationEnabled = true,
         )
 
     @Suppress("LongParameterList")

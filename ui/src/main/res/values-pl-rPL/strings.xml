@@ -24,6 +24,7 @@
     <string name="folder_deleted">Folder został usunięty.</string>
     <string name="folder_none">Nieprzypisane</string>
     <string name="folder_updated">Folder został zapisany</string>
+    <string name="folders">Foldery</string>
     <string name="hide">Ukryj</string>
     <string name="internet_connection_required_message">Najpierw połącz się z Internetem.</string>
     <string name="internet_connection_required_title">Połączenie internetowe jest wymagane</string>
@@ -290,7 +291,9 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="icons_url">Adres URL serwera ikon</string>
     <string name="vault_is_locked">Sejf jest zablokowany</string>
     <string name="go_to_my_vault">Przejdź do sejfu</string>
+    <string name="collections">Kolekcje</string>
     <string name="shared_folders">Udostępnione foldery</string>
+    <string name="no_items_collection">Brak elementów w kolekcji.</string>
     <string name="there_are_no_items_in_this_shared_folder">Brak elementów w udostępnionym folderze.</string>
     <string name="no_items_folder">Brak elementów w folderze.</string>
     <string name="no_items_trash">Brak elementów w koszu.</string>
@@ -346,11 +349,16 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="type">Rodzaj</string>
     <string name="move_down">Przenieś w dół</string>
     <string name="move_up">Przenieś w górę</string>
+    <string name="owner">Właściciel</string>
+    <string name="no_collections_to_list">Brak kolekcji do wyświetlenia.</string>
     <string name="there_are_no_shared_folders_to_list">Brak udostępnionych folderów do wyświetlenia.</string>
     <string name="moved_item_to_org">Przeniesiono %1$s do %2$s.</string>
     <string name="select_one_collection">Musisz wybrać co najmniej jedną kolekcję.</string>
     <string name="you_must_select_at_least_one_shared_folder">Musisz wybrać co najmniej jeden udostępniony folder.</string>
     <string name="share">Udostępnij</string>
+    <string name="move_to_organization">Przenieś do organizacji</string>
+    <string name="no_orgs_to_list">Brak organizacji do wyświetlenia.</string>
+    <string name="move_to_org_desc">Wybierz organizację, do której chcesz przenieść ten element. Ta czynność spowoduje utratę własności elementu i przenosi te uprawnienia do organizacji.</string>
     <string name="no_vaults_to_list">Brak sejfów do wyświetlenia.</string>
     <string name="move_to_vault_desc">Wybierz sejf, do którego chcesz przenieść element. Przeniesienie spowoduje zmianę własności elementu na organizację.</string>
     <string name="number_of_words">Liczba słów</string>

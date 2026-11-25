@@ -24,6 +24,7 @@
     <string name="folder_deleted">文件夹已删除。</string>
     <string name="folder_none">无文件夹</string>
     <string name="folder_updated">文件夹已保存</string>
+    <string name="folders">文件夹</string>
     <string name="hide">隐藏</string>
     <string name="internet_connection_required_message">请连接因特网后再继续。</string>
     <string name="internet_connection_required_title">需要互联网连接</string>
@@ -287,7 +288,9 @@
     <string name="icons_url">图标服务器 URL</string>
     <string name="vault_is_locked">密码库已锁定</string>
     <string name="go_to_my_vault">前往我的密码库</string>
+    <string name="collections">集合</string>
     <string name="shared_folders">共享文件夹</string>
+    <string name="no_items_collection">此集合中没有项目。</string>
     <string name="there_are_no_items_in_this_shared_folder">此共享文件夹中没有项目。</string>
     <string name="no_items_folder">此文件夹中没有项目。</string>
     <string name="no_items_trash">回收站中没有项目。</string>
@@ -340,11 +343,16 @@
     <string name="type">类型</string>
     <string name="move_down">下移</string>
     <string name="move_up">上移</string>
+    <string name="owner">所有者</string>
+    <string name="no_collections_to_list">没有可列出的集合。</string>
     <string name="there_are_no_shared_folders_to_list">没有可列出的共享文件夹。</string>
     <string name="moved_item_to_org">%1$s 已移动到 %2$s。</string>
     <string name="select_one_collection">您必须至少选择一个集合。</string>
     <string name="you_must_select_at_least_one_shared_folder">您必须至少选择一个共享文件夹。</string>
     <string name="share">共享</string>
+    <string name="move_to_organization">移动到组织</string>
+    <string name="no_orgs_to_list">没有可列出的组织。</string>
+    <string name="move_to_org_desc">选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转移给该组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="no_vaults_to_list">没有可列出的密码库。</string>
     <string name="move_to_vault_desc">选择一个您想将此项目移至的密码库。移动到其他密码库会将该项目的所有权转移给对应组织。移动后，您将不再是此项目的直接所有者。</string>
     <string name="number_of_words">单词个数</string>

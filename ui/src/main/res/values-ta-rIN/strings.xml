@@ -24,6 +24,7 @@
     <string name="folder_deleted">கோப்புறை அழிக்கப்பட்டது.</string>
     <string name="folder_none">கோப்புறையற்றவை</string>
     <string name="folder_updated">கோப்புறை சேமிக்கப்பட்டது</string>
+    <string name="folders">கோப்புறைகள்</string>
     <string name="hide">மறை</string>
     <string name="internet_connection_required_message">தொடரும் முன் இணையத்துடன் இணைக்கவும்.</string>
     <string name="internet_connection_required_title">இணைய இணைப்பு தேவை</string>
@@ -288,7 +289,9 @@
     <string name="icons_url">படவுரு தேக்க உரலி</string>
     <string name="vault_is_locked">பெட்டகம் பூட்டப்பட்டுள்ளது</string>
     <string name="go_to_my_vault">என் பெட்டகத்திற்குச் செல்</string>
+    <string name="collections">தொகுப்புகள்</string>
     <string name="shared_folders">பகிரப்பட்ட கோப்புறைகள்</string>
+    <string name="no_items_collection">இந்த தொகுப்பில் பொருட்கள் எதுவும் இல்லை.</string>
     <string name="there_are_no_items_in_this_shared_folder">இந்த பகிரப்பட்ட கோப்புறையில் பொருட்கள் எதுவும் இல்லை.</string>
     <string name="no_items_folder">இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</string>
     <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
@@ -342,11 +345,16 @@
     <string name="type">வகை</string>
     <string name="move_down">கீழே நகரவும்</string>
     <string name="move_up">மேலே நகரவும்</string>
+    <string name="owner">உரிமையாளர்</string>
+    <string name="no_collections_to_list">பட்டியலிட தொகுப்புகளில்லை.</string>
     <string name="there_are_no_shared_folders_to_list">பட்டியலிட பகிரப்பட்ட கோப்புறைகள் எதுவும் இல்லை.</string>
     <string name="moved_item_to_org">%1$s %2$s-க்கு நகர்த்தப்பட்டது.</string>
     <string name="select_one_collection">நீங்கள் ஒரு தொகுப்பாவது தேர்ந்தெடுக்க வேண்டும்.</string>
     <string name="you_must_select_at_least_one_shared_folder">குறைந்தது ஒரு பகிரப்பட்ட கோப்புறையையாவது தேர்ந்தெடுக்க வேண்டும்.</string>
     <string name="share">பகிர்</string>
+    <string name="move_to_organization">நிறுவனத்துக்கு நகர்த்து</string>
+    <string name="no_orgs_to_list">பட்டியலிட நிறுவனங்களில்லை.</string>
+    <string name="move_to_org_desc">இவ்வுருப்படியை நகர்த்த நிறுவனத்தைத் தேர்வுசெய். நிறுவனத்திற்கு நகர்த்தல் உருப்படியின் உரிமையை அந்நிறுவனத்திற்கு மாற்றும். நகர்த்தியபின் இவ்வுருப்படிக்கு நேரடி உரிமையாளராக இருக்கமாட்டீர்.</string>
     <string name="no_vaults_to_list">பட்டியலிட பாதுகாப்பு பைகள் இல்லை.</string>
     <string name="move_to_vault_desc">இந்த பொருளை நகர்த்த விரும்பும் ஒரு பாதுகாப்பு பையைத் தேர்ந்தெடுக்கவும். மற்றொரு பாதுகாப்பு பைக்கு நகர்த்துவது பொருளின் உரிமையை அந்த நிறுவனத்திற்கு மாற்றுகிறது. பொருள் நகர்த்தப்பட்டவுடன் நீங்கள் அதன் நேரடி உரிமையாளராக இருக்க மாட்டீர்கள்.</string>
     <string name="number_of_words">சொற்களின் எண்ணிக்கை</string>

@@ -24,6 +24,7 @@
     <string name="folder_deleted">Qovluq silindi.</string>
     <string name="folder_none">Qovluq yoxdur</string>
     <string name="folder_updated">Qovluq güncəlləndi.</string>
+    <string name="folders">Qovluqlar</string>
     <string name="hide">Gizlət</string>
     <string name="internet_connection_required_message">Davam etməzdən əvvəl lütfən internetə bağlanın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı tələb olunur</string>
@@ -288,7 +289,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="icons_url">İkon server URL-si</string>
     <string name="vault_is_locked">Seyf kilidlənib</string>
     <string name="go_to_my_vault">Seyfimə get</string>
+    <string name="collections">Kolleksiyalar</string>
     <string name="shared_folders">Paylaşılan qovluqlar</string>
+    <string name="no_items_collection">Bu kolleksiyada heç bir element yoxdur.</string>
     <string name="there_are_no_items_in_this_shared_folder">Bu paylaşılan qovluqda heç bir element yoxdur.</string>
     <string name="no_items_folder">Bu qovluqda heç bir element yoxdur.</string>
     <string name="no_items_trash">Tullantı qutusunda heç bir element yoxdur.</string>
@@ -342,11 +345,16 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="type">Növ</string>
     <string name="move_down">Aşağı daşı</string>
     <string name="move_up">Yuxarı daşı</string>
+    <string name="owner">Sahibi</string>
+    <string name="no_collections_to_list">Sadalanacaq heç bir kolleksiya yoxdur.</string>
     <string name="there_are_no_shared_folders_to_list">Sadalanacaq heç bir paylaşılan qovluq yoxdur.</string>
     <string name="moved_item_to_org">%1$s, bura daşındı: %2$s.</string>
     <string name="select_one_collection">Ən azı bir kolleksiya seçməlisiniz.</string>
     <string name="you_must_select_at_least_one_shared_folder">Ən azı bir paylaşılan qovluq seçməlisiniz.</string>
     <string name="share">Paylaş</string>
+    <string name="move_to_organization">Təşkilata daşı</string>
+    <string name="no_orgs_to_list">Sadalanacaq heç bir təşkilat yoxdur.</string>
+    <string name="move_to_org_desc">Bu elementi daşımaq istədiyiniz təşkilatı seçin. Bir təşkilata daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
     <string name="no_vaults_to_list">Sadalanacaq seyf yoxdur.</string>
     <string name="move_to_vault_desc">Bu elementi daşımaq istədiyiniz seyfi seçin. Başqa bir seyfə daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</string>
     <string name="number_of_words">Söz sayı</string>
