@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
-import com.bitwarden.ui.R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins as BiometricsOrPinMessage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -292,10 +291,11 @@ private fun ColumnScope.SetupUnlockHeaderCompact(
  * The header message to display. The biometrics-only message is used when the PIN option is not
  * shown on the screen.
  */
+@Suppress("MaxLineLength")
 @StringRes
 private fun headerMessageRes(shouldShowUnlockWithPin: Boolean): Int =
     if (shouldShowUnlockWithPin) {
-        BiometricsOrPinMessage
+        BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins
     } else {
         BitwardenString.set_up_biometrics_to_quickly_access_your_vault
     }
