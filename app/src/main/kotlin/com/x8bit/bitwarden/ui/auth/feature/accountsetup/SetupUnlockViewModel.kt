@@ -249,11 +249,19 @@ data class SetupUnlockState(
     val isUpdatedOnboardingFlowEnabled: Boolean,
 ) : Parcelable {
     /**
+     * Indicates whether the unlock with PIN option should be shown. It is only hidden during the
+     * onboarding flow; it is still shown when opened from Settings. This is about visibility, not
+     * about whether the user is able to set a PIN.
+     */
+    val shouldShowUnlockWithPin: Boolean
+        get() = !isUpdatedOnboardingFlowEnabled || !isInitialSetup
+
+    /**
      * Indicates whether the continue button should be enabled or disabled.
      */
     val isContinueButtonEnabled: Boolean
         get() = isUnlockWithBiometricsEnabled ||
-            (!isUpdatedOnboardingFlowEnabled && isUnlockWithPinEnabled)
+            (shouldShowUnlockWithPin && isUnlockWithPinEnabled)
 
     /**
      * Represents the dialog UI state for the setup unlock screen.

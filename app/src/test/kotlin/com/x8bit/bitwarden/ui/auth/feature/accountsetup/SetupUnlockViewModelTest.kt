@@ -395,6 +395,25 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CloseClick action should update the first time state if only PIN is enabled and not in initial setup`() =
+        runTest {
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    isUnlockWithPinEnabled = true,
+                    isInitialSetup = false,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupUnlockAction.CloseClick)
+                assertEquals(SetupUnlockEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
+            }
+        }
+
     private fun createViewModel(
         state: SetupUnlockState? = null,
     ): SetupUnlockViewModel =

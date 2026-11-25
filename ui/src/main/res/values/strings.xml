@@ -778,6 +778,7 @@ Do you want to switch to this account?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
     <string name="confirm">Confirm</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
+    <string name="set_up_biometrics_to_quickly_access_your_vault_and_autofill_your_logins_other_unlock_options_are_in_settings_account_security">Set up biometrics to quickly access your vault and autofill your logins. Other unlock options are in Settings &gt; Account security.</string>
     <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
     <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
