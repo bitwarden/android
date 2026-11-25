@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.e2e.screens
+package com.x8bit.bitwarden.e2e.util
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -38,11 +38,15 @@ fun ComposeTestRule.waitForTag(testTag: String): SemanticsNodeInteraction =
 
 /**
  * Like [waitForNode] for content inside a lazy list, which only composes visible items: scrolls
- * the screen's list to [matcher] on each attempt, so the node is found on any screen size.
+ * the first list matching [list] to [matcher] on each attempt, so the node is found on any
+ * screen size.
  */
-fun ComposeTestRule.scrollToNode(matcher: SemanticsMatcher): SemanticsNodeInteraction {
+fun ComposeTestRule.scrollToNode(
+    matcher: SemanticsMatcher,
+    list: SemanticsMatcher = hasScrollToNodeAction(),
+): SemanticsNodeInteraction {
     waitUntil(conditionDescription = matcher.description, timeoutMillis = NETWORK_TIMEOUT_MS) {
-        val lists = onAllNodes(hasScrollToNodeAction(), useUnmergedTree = true)
+        val lists = onAllNodes(list, useUnmergedTree = true)
         lists.fetchSemanticsNodes().isNotEmpty() && lists.onFirst().scrolledTo(matcher)
     }
     return onNode(matcher, useUnmergedTree = true)
@@ -52,9 +56,12 @@ fun ComposeTestRule.scrollToNode(matcher: SemanticsMatcher): SemanticsNodeIntera
  * Like [scrollToNode], then clicks the node. Scroll and click are retried together because the
  * list can recompose between them and briefly drop the node (seen on the vault after login).
  */
-fun ComposeTestRule.scrollToAndClick(matcher: SemanticsMatcher) {
+fun ComposeTestRule.scrollToAndClick(
+    matcher: SemanticsMatcher,
+    list: SemanticsMatcher = hasScrollToNodeAction(),
+) {
     waitUntil(conditionDescription = matcher.description, timeoutMillis = NETWORK_TIMEOUT_MS) {
-        val lists = onAllNodes(hasScrollToNodeAction(), useUnmergedTree = true)
+        val lists = onAllNodes(list, useUnmergedTree = true)
         lists.fetchSemanticsNodes().isNotEmpty() &&
             lists.onFirst().scrolledTo(matcher) &&
             onNode(matcher, useUnmergedTree = true).clicked()
