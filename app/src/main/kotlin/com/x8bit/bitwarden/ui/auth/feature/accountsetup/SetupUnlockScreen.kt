@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -149,8 +150,13 @@ private fun SetupUnlockScreenContent(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
         when (rememberWindowSize()) {
-            WindowSize.Compact -> SetupUnlockHeaderCompact()
-            WindowSize.Medium -> SetupUnlockHeaderMedium()
+            WindowSize.Compact -> SetupUnlockHeaderCompact(
+                shouldShowUnlockWithPin = state.shouldShowUnlockWithPin,
+            )
+
+            WindowSize.Medium -> SetupUnlockHeaderMedium(
+                shouldShowUnlockWithPin = state.shouldShowUnlockWithPin,
+            )
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
@@ -160,17 +166,17 @@ private fun SetupUnlockScreenContent(
             isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
             onDisableBiometrics = handler.onDisableBiometrics,
             onEnableBiometrics = handler.onEnableBiometrics,
-            cardStyle = if (state.isUpdatedOnboardingFlowEnabled) {
-                CardStyle.Full
-            } else {
+            cardStyle = if (state.shouldShowUnlockWithPin) {
                 CardStyle.Top()
+            } else {
+                CardStyle.Full
             },
             modifier = Modifier
                 .testTag(tag = "UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-        if (!state.isUpdatedOnboardingFlowEnabled) {
+        if (state.shouldShowUnlockWithPin) {
             BitwardenUnlockWithPinSwitch(
                 isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                 isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
@@ -245,7 +251,9 @@ private fun SetUpLaterButton(
 }
 
 @Composable
-private fun ColumnScope.SetupUnlockHeaderCompact() {
+private fun ColumnScope.SetupUnlockHeaderCompact(
+    shouldShowUnlockWithPin: Boolean,
+) {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
         painter = rememberVectorPainter(id = BitwardenDrawable.ill_fingerprint_unlock),
@@ -268,11 +276,8 @@ private fun ColumnScope.SetupUnlockHeaderCompact() {
     )
 
     Spacer(modifier = Modifier.height(height = 8.dp))
-    @Suppress("MaxLineLength")
     Text(
-        text = stringResource(
-            id = BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
-        ),
+        text = stringResource(id = headerMessageRes(shouldShowUnlockWithPin)),
         style = BitwardenTheme.typography.bodyMedium,
         color = BitwardenTheme.colorScheme.text.primary,
         textAlign = TextAlign.Center,
@@ -282,8 +287,22 @@ private fun ColumnScope.SetupUnlockHeaderCompact() {
     )
 }
 
+/**
+ * The header message to display. The biometrics-only message is used when the PIN option is not
+ * shown on the screen.
+ */
+@Suppress("MaxLineLength")
+@StringRes
+private fun headerMessageRes(shouldShowUnlockWithPin: Boolean): Int =
+    if (shouldShowUnlockWithPin) {
+        BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins
+    } else {
+        BitwardenString.set_up_biometrics_to_quickly_access_your_vault
+    }
+
 @Composable
 private fun SetupUnlockHeaderMedium(
+    shouldShowUnlockWithPin: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -312,11 +331,8 @@ private fun SetupUnlockHeaderMedium(
             )
 
             Spacer(modifier = Modifier.height(height = 8.dp))
-            @Suppress("MaxLineLength")
             Text(
-                text = stringResource(
-                    id = BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
-                ),
+                text = stringResource(id = headerMessageRes(shouldShowUnlockWithPin)),
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center,

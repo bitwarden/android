@@ -248,7 +248,7 @@ class OnboardingManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `goToNextStep from AUTOFILL_SETUP when autofill is disabled should set status to FINAL_STEP`() {
+    fun `goToNextStep from AUTOFILL_SETUP when autofill is disabled should set status to COMPLETE`() {
         fakeAuthDiskSource.storeOnboardingStatus(
             userId = USER_ID,
             onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
@@ -260,7 +260,7 @@ class OnboardingManagerTest {
 
         fakeAuthDiskSource.assertOnboardingStatus(
             userId = USER_ID,
-            onboardingStatus = OnboardingStatus.FINAL_STEP,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         )
     }
 
@@ -281,7 +281,7 @@ class OnboardingManagerTest {
     }
 
     @Test
-    fun `goToNextStep from BROWSER_AUTOFILL_SETUP should set status to FINAL_STEP`() {
+    fun `goToNextStep from BROWSER_AUTOFILL_SETUP should set status to COMPLETE`() {
         fakeAuthDiskSource.storeOnboardingStatus(
             userId = USER_ID,
             onboardingStatus = OnboardingStatus.BROWSER_AUTOFILL_SETUP,
@@ -293,7 +293,26 @@ class OnboardingManagerTest {
 
         fakeAuthDiskSource.assertOnboardingStatus(
             userId = USER_ID,
-            onboardingStatus = OnboardingStatus.FINAL_STEP,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `goToNextStep from AUTOFILL_SETUP when account lock setup is still needed should set status to COMPLETE`() {
+        every {
+            biometricsSupportManager.isBiometricsSupported(isDeviceCredentialAllowed = false)
+        } returns true
+        fakeAuthDiskSource.storeOnboardingStatus(
+            userId = USER_ID,
+            onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
+        )
+
+        onboardingManager.goToNextStep()
+
+        fakeAuthDiskSource.assertOnboardingStatus(
+            userId = USER_ID,
+            onboardingStatus = OnboardingStatus.COMPLETE,
         )
     }
 

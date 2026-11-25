@@ -84,14 +84,29 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
             .assertExists()
             .assertIsDisplayed()
 
-        @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithText(
-                text = "Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.",
-            )
+            .onNodeWithText(text = BIOMETRICS_ONLY_MESSAGE)
             .performScrollTo()
             .assertExists()
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `header should display the biometrics only message during onboarding`() {
+        composeTestRule
+            .onNodeWithText(text = BIOMETRICS_ONLY_MESSAGE)
+            .assertExists()
+    }
+
+    @Test
+    fun `header should display the PIN message when not in initial setup`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule
+            .onNodeWithText(text = BIOMETRICS_ONLY_MESSAGE)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = BIOMETRICS_OR_PIN_MESSAGE)
+            .assertExists()
     }
 
     @Test
@@ -218,6 +233,23 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertDoesNotExist()
         mutableStateFlow.update { it.copy(isUpdatedOnboardingFlowEnabled = false) }
         composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertExists()
+    }
+
+    @Test
+    fun `on unlock with pin code should be displayed when not in initial setup`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertExists()
+    }
+
+    @Test
+    fun `Continue button should be enabled with only PIN when not in initial setup`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = true, isInitialSetup = false)
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .performScrollTo()
+            .assertIsEnabled()
     }
 
     @Test
@@ -711,6 +743,12 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     }
 }
 
+private const val BIOMETRICS_ONLY_MESSAGE: String =
+    "Set up biometrics to quickly access your vault and autofill your logins. " +
+        "Other unlock options are in Settings > Account security."
+private const val BIOMETRICS_OR_PIN_MESSAGE: String =
+    "Set up biometrics or choose a PIN code to quickly access your vault and Autofill your " +
+        "logins."
 private const val DEFAULT_USER_ID: String = "user_id"
 private val DEFAULT_STATE: SetupUnlockState = SetupUnlockState(
     userId = DEFAULT_USER_ID,
