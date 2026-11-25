@@ -4,45 +4,51 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the Auto-fill setup screen.
  */
-@HiltViewModel
-class SetupAutoFillViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SetupAutoFillViewModel.Factory::class)
+class SetupAutoFillViewModel @AssistedInject constructor(
+    @Assisted isInitialSetup: Boolean,
     savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val authRepository: AuthRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
-) :
-    BaseViewModel<SetupAutoFillState, SetupAutoFillEvent, SetupAutoFillAction>(
-        // We load the state from the savedStateHandle for testing purposes.
-        initialState = savedStateHandle[KEY_STATE] ?: run {
-            val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
-            val isInitialSetup = savedStateHandle.toSetupAutoFillArgs().isInitialSetup
-            SetupAutoFillState(
-                userId = userId,
-                dialogState = null,
-                autofillEnabled = false,
-                isInitialSetup = isInitialSetup,
-            )
-        },
-    ) {
+) : BaseViewModel<SetupAutoFillState, SetupAutoFillEvent, SetupAutoFillAction>(
+    // We load the state from the savedStateHandle for testing purposes.
+    initialState = savedStateHandle[KEY_STATE] ?: SetupAutoFillState(
+        dialogState = null,
+        autofillEnabled = false,
+        isInitialSetup = isInitialSetup,
+    ),
+) {
+    /**
+     * Factory for creating a [SetupAutoFillViewModel] for the given `isInitialSetup` value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SetupAutoFillViewModel] for the given [isInitialSetup].
+         */
+        fun create(isInitialSetup: Boolean): SetupAutoFillViewModel
+    }
 
     init {
         settingsRepository
@@ -102,17 +108,17 @@ class SetupAutoFillViewModel @Inject constructor(
 
     private fun handleTurnOnLaterConfirmClick() {
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
-        updateOnboardingStatusToNextStep()
+        authRepository.goToNextStep()
     }
 
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            updateOnboardingStatusToNextStep()
+            authRepository.goToNextStep()
         } else {
             val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
                 .browserThirdPartyAutofillStatus
-                .isAnyIsAvailableAndDisabled
+                .isDefaultBrowserAvailableAndDisabled
             if (isBrowserAutofillUnconfigured) {
                 sendEvent(SetupAutoFillEvent.NavigateToBrowserAutofill)
             } else {
@@ -128,19 +134,6 @@ class SetupAutoFillViewModel @Inject constructor(
             settingsRepository.disableAutofill()
         }
     }
-
-    private fun updateOnboardingStatusToNextStep() {
-        val isAutofillEnabled = settingsRepository.isAutofillEnabledStateFlow.value
-        val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
-            .browserThirdPartyAutofillStatus
-            .isAnyIsAvailableAndDisabled
-        val nextStep = when {
-            !isAutofillEnabled -> OnboardingStatus.FINAL_STEP
-            isBrowserAutofillUnconfigured -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
-            else -> OnboardingStatus.FINAL_STEP
-        }
-        authRepository.setOnboardingStatus(status = nextStep)
-    }
 }
 
 /**
@@ -148,7 +141,6 @@ class SetupAutoFillViewModel @Inject constructor(
  */
 @Parcelize
 data class SetupAutoFillState(
-    val userId: String,
     val dialogState: SetupAutoFillDialogState?,
     val autofillEnabled: Boolean,
     val isInitialSetup: Boolean,

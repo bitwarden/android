@@ -23,11 +23,15 @@ import com.x8bit.bitwarden.data.platform.manager.model.EffectiveSendPolicy
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -37,7 +41,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
@@ -45,8 +48,9 @@ private const val KEY_STATE = "state"
  * View model for the view send screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList")
-@HiltViewModel
-class ViewSendViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ViewSendViewModel.Factory::class)
+class ViewSendViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.ViewSendRoute,
     private val clipboardManager: BitwardenClipboardManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val clock: Clock,
@@ -57,21 +61,29 @@ class ViewSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ViewSendState, ViewSendEvent, ViewSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = savedStateHandle.toViewSendArgs()
-        ViewSendState(
-            sendType = args.sendType,
-            sendId = args.sendId,
-            viewState = ViewSendState.ViewState.Loading,
-            dialogState = null,
-            baseWebSendUrl = environmentRepository.environment.baseWebSendUrl,
-            allowedSendTypes = null,
-            isSendDisabled = false,
-            isSendControlsEnabled = false,
-            isSendControlsExistingSendsEnabled = false,
-        )
-    },
+    initialState = savedStateHandle[KEY_STATE] ?: ViewSendState(
+        sendType = route.sendType,
+        sendId = route.sendId,
+        viewState = ViewSendState.ViewState.Loading,
+        dialogState = null,
+        baseWebSendUrl = environmentRepository.environment.baseWebSendUrl,
+        allowedSendTypes = null,
+        isSendDisabled = false,
+        isSendControlsEnabled = false,
+        isSendControlsExistingSendsEnabled = false,
+    ),
 ) {
+    /**
+     * Factory for creating a [ViewSendViewModel] for a specific [VaultUnlockedGraph.ViewSendRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [ViewSendViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.ViewSendRoute): ViewSendViewModel
+    }
+
     init {
         vaultRepository
             .getSendStateFlow(sendId = state.sendId)

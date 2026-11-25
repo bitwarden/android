@@ -71,6 +71,8 @@ configure<ApplicationExtension> {
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Each instrumented test starts from a freshly cleared app (requires the orchestrator).
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
 
         buildConfigField(
             type = "String",
@@ -163,6 +165,9 @@ configure<ApplicationExtension> {
         }
     }
     testOptions {
+        // Instrumented tests: isolates each test in its own process (enables clearPackageData).
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
@@ -249,7 +254,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)
     implementation(libs.androidx.browser)
-    implementation(libs.androidx.biometrics)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -263,11 +267,13 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.providerevents)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     ksp(libs.androidx.room3.compiler)
     implementation(libs.androidx.room3.runtime)
     implementation(libs.androidx.security.crypto)
@@ -313,6 +319,16 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    // Compose pulls in Espresso 3.5.0, which crashes on API 37 (InputManager.getInstance removed).
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestUtil(libs.androidx.test.services)
 }
 
 afterEvaluate {

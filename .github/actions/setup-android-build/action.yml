@@ -1,5 +1,5 @@
 name: 'Setup Android Build'
-description: 'Setup Android build environment with Gradle, Ruby, and Fastlane'
+description: 'Setup Android build environment with Gradle, Ruby, JDK, Android NDK, and Fastlane'
 inputs:
   java-version:
     description: 'Java version to use'
@@ -21,6 +21,85 @@ runs:
       with:
         distribution: "temurin"
         java-version: ${{ inputs.java-version }}
+
+    - name: Determine Android NDK versions
+      id: ndk
+      shell: bash
+      run: |
+        # AGP strips native libraries with the NDK reported by printNdkVersion (AGP's default
+        # unless a module sets ndkVersion). Install it so stripping doesn't depend on the runner image.
+        NDK_VERSIONS=$(./gradlew -q printNdkVersion | sed -n 's/^ndkVersion=//p' | sort -u)
+        if [ -z "$NDK_VERSIONS" ]; then
+          echo "::error::Unable to determine the NDK version from ./gradlew printNdkVersion"
+          exit 1
+        fi
+        MISSING_NDK_VERSIONS=""
+        for NDK_VERSION in $NDK_VERSIONS; do
+          if [ -f "$ANDROID_HOME/ndk/$NDK_VERSION/source.properties" ]; then
+            echo "NDK $NDK_VERSION is already installed"
+          else
+            MISSING_NDK_VERSIONS="$MISSING_NDK_VERSIONS $NDK_VERSION"
+          fi
+        done
+        if [ -z "$MISSING_NDK_VERSIONS" ]; then
+          echo "No missing NDK versions found"
+          exit 0
+        fi
+
+        # Flag installs so it's visible when the runner image no longer ships the NDK AGP expects.
+        echo "::warning title=Android NDK not on runner image::Installing NDK$MISSING_NDK_VERSIONS"
+        {
+          echo "### :warning: Android NDK not on runner image"
+          echo "The following NDK versions were not preinstalled on the runner and were installed by \`setup-android-build\`:"
+          for NDK_VERSION in $MISSING_NDK_VERSIONS; do
+            echo "- \`$NDK_VERSION\`"
+          done
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        {
+          echo "missing=${MISSING_NDK_VERSIONS# }"
+          echo "cache-key=android-ndk-${RUNNER_OS}-$(echo $MISSING_NDK_VERSIONS | tr ' ' '-')"
+          echo "paths<<EOF"
+          for NDK_VERSION in $MISSING_NDK_VERSIONS; do
+            echo "$ANDROID_HOME/ndk/$NDK_VERSION"
+          done
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Restore Android NDK from cache
+      if: ${{ steps.ndk.outputs.missing != '' }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.ndk.outputs.paths }}
+        key: ${{ steps.ndk.outputs.cache-key }}
+
+    - name: Install Android NDK
+      if: ${{ steps.ndk.outputs.missing != '' }}
+      shell: bash
+      env:
+        NDK_VERSIONS: ${{ steps.ndk.outputs.missing }}
+      run: |
+        for NDK_VERSION in $NDK_VERSIONS; do
+          NDK_DIR="$ANDROID_HOME/ndk/$NDK_VERSION"
+          if [ -f "$NDK_DIR/source.properties" ]; then
+            echo "NDK $NDK_VERSION restored from cache"
+            continue
+          fi
+          # Downloads occasionally fail or stall with a corrupt archive, so retry with a timeout.
+          for ATTEMPT in 1 2 3; do
+            echo "Installing NDK $NDK_VERSION (attempt $ATTEMPT of 3)"
+            if timeout 10m "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION" > /dev/null \
+              && [ -f "$NDK_DIR/source.properties" ]; then
+              break
+            fi
+            rm -rf "$NDK_DIR"
+            if [ "$ATTEMPT" -eq 3 ]; then
+              echo "::error::Failed to install NDK $NDK_VERSION after 3 attempts"
+              exit 1
+            fi
+            sleep 15
+          done
+        done
 
     - name: Install Fastlane
       shell: bash

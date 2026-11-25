@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.UpdateKdfResponse
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfTypeJson
@@ -14,7 +13,6 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonKdfUpdatedMinimums
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import timber.log.Timber
 
@@ -25,20 +23,15 @@ class KdfManagerImpl(
     private val authDiskSource: AuthDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val accountsService: AccountsService,
-    private val featureFlagManager: FeatureFlagManager,
 ) : KdfManager {
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    override fun needsKdfUpdateToMinimums(): Boolean {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)) {
-            return false
-        }
-
+    override fun needsKdfUpdateToMinimums(userId: String): Boolean {
         val account = authDiskSource
             .userState
             ?.accounts
-            ?.get(activeUserId)
+            ?.get(userId)
             ?: return false
 
         if (account.profile.userDecryptionOptions != null &&
@@ -52,10 +45,16 @@ class KdfManagerImpl(
             account.profile.kdfIterations < DEFAULT_PBKDF2_ITERATIONS
     }
 
-    override suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult {
-        val userId = activeUserId ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
+    override suspend fun updateKdfToMinimumsIfNeeded(
+        userId: String,
+        password: String,
+    ): UpdateKdfMinimumsResult {
+        // The update request is authenticated as the active user, so only update the KDF when
+        // the given user is the active user. This prevents updating the KDF of a user that is not
+        // active yet, such as when logging in to an additional account.
+        if (userId != activeUserId) return UpdateKdfMinimumsResult.ActiveAccountNotFound
 
-        if (!needsKdfUpdateToMinimums()) {
+        if (!needsKdfUpdateToMinimums(userId = userId)) {
             return UpdateKdfMinimumsResult.Success
         }
         return vaultSdkSource
@@ -70,7 +69,7 @@ class KdfManagerImpl(
             .fold(
                 onSuccess = {
                     authDiskSource.userState = authDiskSource.userState
-                        ?.toUserStateJsonKdfUpdatedMinimums()
+                        ?.toUserStateJsonKdfUpdatedMinimums(userId = userId)
                     Timber.d("[Auth] Upgraded user's KDF to minimums")
                     UpdateKdfMinimumsResult.Success
                 },

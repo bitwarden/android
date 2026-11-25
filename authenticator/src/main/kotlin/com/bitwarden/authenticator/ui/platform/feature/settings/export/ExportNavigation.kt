@@ -1,33 +1,24 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.export
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraph
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.pushEntry
 
 /**
- * The type-safe route for the export screen.
+ * Add the export data destination to the navigation entries.
  */
-@Serializable
-data object ExportRoute
-
-/**
- * Add the export data destination to the nav graph.
- */
-fun NavGraphBuilder.exportDestination(
+fun EntryProviderScope<SettingsGraph>.exportDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions<ExportRoute> {
-        ExportScreen(
-            onNavigateBack = onNavigateBack,
-        )
+    pushEntry<SettingsGraph.ExportRoute> {
+        ExportScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
  * Navigate to the export data screen.
  */
-fun NavController.navigateToExport(navOptions: NavOptions? = null) {
-    navigate(route = ExportRoute, navOptions = navOptions)
+fun NavigationController<SettingsGraph>.navigateToExport() {
+    this.navigate(route = SettingsGraph.ExportRoute)
 }

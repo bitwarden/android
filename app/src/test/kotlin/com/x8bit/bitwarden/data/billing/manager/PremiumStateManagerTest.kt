@@ -30,6 +30,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -443,18 +444,50 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `isPlanRowEligibleFlow emits true when user is a free user`() = runTest {
-        fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+    fun `isPlanRowEligibleFlow emits false while the subscription is loading`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
+        )
+        val subscriptionResult = CompletableDeferred<SubscriptionResult>()
+        coEvery { billingRepository.getSubscription() } coAnswers { subscriptionResult.await() }
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
+            assertFalse(awaitItem())
+            subscriptionResult.complete(
+                SubscriptionResult.Success(
+                    subscription = createSubscriptionInfo(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                ),
+            )
             assertTrue(awaitItem())
         }
     }
 
     @Test
+    fun `isPlanRowEligibleFlow emits true when user is a free user with a subscription`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.EXPIRED),
+            )
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
     fun `isPlanRowEligibleFlow emits true for a personal Premium user`() = runTest {
         fakeAuthDiskSource.userState = userStateJsonWith(
             account = createAccountJson(hasPremiumPersonally = true),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
         )
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
@@ -463,11 +496,110 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `isPlanRowEligibleFlow emits false for a user with only org-granted Premium`() =
+    fun `isPlanRowEligibleFlow emits false for a Premium user when the fetch fails`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Error(error = IllegalStateException("Fail"))
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits true for a free user when the fetch fails`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Error(error = IllegalStateException("Fail"))
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false for a Premium user with no subscription`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumPersonally = true),
+            )
+            coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits true for a free user with no subscription`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow does not trigger an additional subscription fetch`() = runTest {
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertTrue(awaitItem())
+        }
+        coVerify(exactly = 1) { billingRepository.getSubscription() }
+    }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false for org-only Premium with a subscription`() =
         runTest {
             fakeAuthDiskSource.userState = userStateJsonWith(
                 account = createAccountJson(hasPremiumFromOrganization = true),
             )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+            )
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits true for personal and org Premium with a subscription`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(
+                    hasPremiumPersonally = true,
+                    hasPremiumFromOrganization = true,
+                ),
+            )
+            coEvery {
+                billingRepository.getSubscription()
+            } returns SubscriptionResult.Success(
+                subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+            )
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `isPlanRowEligibleFlow emits false for org-granted Premium with no subscription`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(
+                account = createAccountJson(hasPremiumFromOrganization = true),
+            )
+            coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
             val manager = createManager()
             manager.isPlanRowEligibleFlow.test {
                 assertFalse(awaitItem())
@@ -477,6 +609,11 @@ class PremiumStateManagerTest {
     @Test
     fun `isPlanRowEligibleFlow emits false when userState is null`() = runTest {
         fakeAuthDiskSource.userState = null
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+        )
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
             assertFalse(awaitItem())
@@ -484,19 +621,69 @@ class PremiumStateManagerTest {
     }
 
     @Test
-    fun `isPlanRowEligibleFlow updates as the user gains and loses org-only Premium`() = runTest {
-        fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+    fun `isPlanRowEligibleFlow updates as the subscription result changes`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+        )
+        val manager = createManager()
+        manager.isPlanRowEligibleFlow.test {
+            assertTrue(awaitItem())
+            // A getSubscription() call from elsewhere re-emits through the shared flow.
+            mutableSubscriptionResultFlow.emit(SubscriptionResult.NotFound)
+            assertFalse(awaitItem())
+            mutableSubscriptionResultFlow.emit(
+                SubscriptionResult.Success(
+                    subscription = createSubscriptionInfo(
+                        status = PremiumSubscriptionStatus.ACTIVE,
+                    ),
+                ),
+            )
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `isPlanRowEligibleFlow updates when the active user changes`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
+        )
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.ACTIVE),
+        ) andThen SubscriptionResult.NotFound
         val manager = createManager()
         manager.isPlanRowEligibleFlow.test {
             assertTrue(awaitItem())
             fakeAuthDiskSource.userState = userStateJsonWith(
-                account = createAccountJson(hasPremiumFromOrganization = true),
+                account = createAccountJson(userId = "otherUserId", hasPremiumPersonally = true),
             )
             assertFalse(awaitItem())
-            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
-            assertTrue(awaitItem())
         }
+        coVerify(exactly = 2) { billingRepository.getSubscription() }
     }
+
+    @Test
+    fun `isPlanRowEligibleFlow updates as a user with no subscription gains and loses Premium`() =
+        runTest {
+            fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+            coEvery { billingRepository.getSubscription() } returns SubscriptionResult.NotFound
+            val manager = createManager()
+            manager.isPlanRowEligibleFlow.test {
+                assertTrue(awaitItem())
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumFromOrganization = true),
+                )
+                assertFalse(awaitItem())
+                fakeAuthDiskSource.userState = userStateJsonWith(account = createAccountJson())
+                assertTrue(awaitItem())
+            }
+        }
 
     @Test
     fun `isUpgradedToPremiumCardEligibleFlow emits false when nothing has been observed`() =
@@ -684,6 +871,141 @@ class PremiumStateManagerTest {
             expected = null,
         )
         fakeSettingsDiskSource.assertUpgradedToPremiumCardPending(
+            userId = ACTIVE_USER_ID,
+            expected = null,
+        )
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits true for a free user when nothing has been stored`() =
+        runTest {
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when there is no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when the badge has been dismissed`() = runTest {
+        fakeSettingsDiskSource.storeShouldShowPlanBadge(
+            userId = ACTIVE_USER_ID,
+            shouldShow = false,
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for a personal Premium user`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumPersonally = true),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for an organization Premium user`() = runTest {
+        fakeAuthDiskSource.userState = userStateJsonWith(
+            account = createAccountJson(hasPremiumFromOrganization = true),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false for a free user with a subscription`() = runTest {
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Success(
+            subscription = createSubscriptionInfo(status = PremiumSubscriptionStatus.EXPIRED),
+        )
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits true for a free user when the fetch fails`() = runTest {
+        coEvery {
+            billingRepository.getSubscription()
+        } returns SubscriptionResult.Error(error = IllegalStateException("Fail"))
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false once a subscription loads for a free user`() =
+        runTest {
+            val subscriptionResult = CompletableDeferred<SubscriptionResult>()
+            coEvery {
+                billingRepository.getSubscription()
+            } coAnswers { subscriptionResult.await() }
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+                subscriptionResult.complete(
+                    SubscriptionResult.Success(
+                        subscription = createSubscriptionInfo(
+                            status = PremiumSubscriptionStatus.EXPIRED,
+                        ),
+                    ),
+                )
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `shouldShowPlanBadgeFlow emits false when the active user upgrades to Premium`() =
+        runTest {
+            val manager = createManager()
+            manager.shouldShowPlanBadgeFlow.test {
+                assertTrue(awaitItem())
+                fakeAuthDiskSource.userState = userStateJsonWith(
+                    account = createAccountJson(hasPremiumPersonally = true),
+                )
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `dismissPlanBadge stores false and updates shouldShowPlanBadgeFlow`() = runTest {
+        val manager = createManager()
+        manager.shouldShowPlanBadgeFlow.test {
+            assertTrue(awaitItem())
+            manager.dismissPlanBadge()
+            assertFalse(awaitItem())
+        }
+        fakeSettingsDiskSource.assertShouldShowPlanBadge(
+            userId = ACTIVE_USER_ID,
+            expected = false,
+        )
+    }
+
+    @Test
+    fun `dismissPlanBadge with no active user is a no-op`() {
+        fakeAuthDiskSource.userState = null
+        val manager = createManager()
+        manager.dismissPlanBadge()
+        fakeSettingsDiskSource.assertShouldShowPlanBadge(
             userId = ACTIVE_USER_ID,
             expected = null,
         )

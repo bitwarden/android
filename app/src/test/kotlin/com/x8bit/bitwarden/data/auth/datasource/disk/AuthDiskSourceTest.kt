@@ -318,6 +318,7 @@ class AuthDiskSourceTest {
             biometricsKey = "1234-9876-0192",
         )
         authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
+        authDiskSource.storePinLength(userId = userId, pinLength = 4)
         authDiskSource.storePinProtectedUserKey(
             userId = userId,
             pinProtectedUserKey = "pinProtectedUserKey",
@@ -415,6 +416,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId))
         assertNull(authDiskSource.getShowImportLogins(userId = userId))
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
+        assertNull(authDiskSource.getPinLength(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId))
         assertNull(authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId))
@@ -1067,6 +1069,45 @@ class AuthDiskSourceTest {
             )
         assertEquals(
             mockEncryptedPin,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getPinLength should pull from SharedPreferences`() {
+        val pinLengthBaseKey = "bwPreferencesStorage:pinLength"
+        val mockUserId = "mockUserId"
+        val mockPinLength = 4
+        fakeSharedPreferences
+            .edit {
+                putInt(
+                    "${pinLengthBaseKey}_$mockUserId",
+                    mockPinLength,
+                )
+            }
+        val actual = authDiskSource.getPinLength(userId = mockUserId)
+        assertEquals(
+            mockPinLength,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePinLength should update SharedPreferences`() {
+        val pinLengthBaseKey = "bwPreferencesStorage:pinLength"
+        val mockUserId = "mockUserId"
+        val mockPinLength = 6
+        authDiskSource.storePinLength(
+            userId = mockUserId,
+            pinLength = mockPinLength,
+        )
+        val actual = fakeSharedPreferences
+            .getInt(
+                "${pinLengthBaseKey}_$mockUserId",
+                0,
+            )
+        assertEquals(
+            mockPinLength,
             actual,
         )
     }

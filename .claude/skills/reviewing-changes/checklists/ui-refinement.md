@@ -189,7 +189,7 @@ Would using the existing component maintain consistency?
 **app/auth/LoginScreen.kt:123** - Add contentDescription
 ```kotlin
 Icon(
-    painter = painterResource(R.drawable.ic_visibility),
+    painter = painterResource(R.drawable.ic_eye),
     contentDescription = "Show password",  // Add for accessibility
     modifier = Modifier.clickable { onToggleVisibility() }
 )

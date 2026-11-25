@@ -4,7 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -12,6 +14,9 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofill
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.util.toBrowserAutoFillSettingsOptions
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -19,15 +24,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the Setup Browser Autofill screen.
  */
-@HiltViewModel
-class SetupBrowserAutofillViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SetupBrowserAutofillViewModel.Factory::class)
+class SetupBrowserAutofillViewModel @AssistedInject constructor(
+    @Assisted isInitialSetup: Boolean,
     private val authRepository: AuthRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
@@ -36,12 +41,24 @@ class SetupBrowserAutofillViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: SetupBrowserAutofillState(
         dialogState = null,
-        isInitialSetup = savedStateHandle.toSetupBrowserAutofillArgs().isInitialSetup,
+        isInitialSetup = isInitialSetup,
         browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatus
             .toBrowserAutoFillSettingsOptions(),
     ),
 ) {
+    /**
+     * Factory for creating a [SetupBrowserAutofillViewModel] for the given `isInitialSetup`
+     * value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SetupBrowserAutofillViewModel] for the given [isInitialSetup].
+         */
+        fun create(isInitialSetup: Boolean): SetupBrowserAutofillViewModel
+    }
+
     init {
         browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatusFlow
@@ -100,7 +117,7 @@ class SetupBrowserAutofillViewModel @Inject constructor(
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            authRepository.goToNextStep()
         } else {
             sendEvent(SetupBrowserAutofillEvent.NavigateBack)
         }
@@ -115,7 +132,7 @@ class SetupBrowserAutofillViewModel @Inject constructor(
     private fun handleTurnOnLaterConfirmClick() {
         firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
         mutableStateFlow.update { it.copy(dialogState = null) }
-        authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+        authRepository.goToNextStep()
     }
 
     private fun handleBrowserAutofillStatusReceive(
@@ -139,6 +156,28 @@ data class SetupBrowserAutofillState(
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
     /**
+     * The heading to be displayed to the user.
+     */
+    val heading: Text
+        get() = if (browserCount > 1) {
+            BitwardenString.choose_autofill_using_another_service_in_your_browsers.asText()
+        } else {
+            BitwardenString.choose_autofill_using_another_service_in_your_browser.asText()
+        }
+
+    /**
+     * The description to be displayed to the user.
+     */
+    val description: Text
+        get() = if (browserCount > 1) {
+            BitwardenString.youre_using_browsers_that_require_special_permissions_plural.asText()
+        } else {
+            BitwardenString
+                .youre_using_a_browser_that_requires_special_permissions_singular
+                .asText()
+        }
+
+    /**
      * The number of browsers that can be configured.
      */
     val browserCount: Int get() = browserAutofillSettingsOptions.size
@@ -146,7 +185,9 @@ data class SetupBrowserAutofillState(
     /**
      * Indicates if the Continue button should be enabled or not.
      */
-    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.all { it.isEnabled }
+    val isContinueEnabled: Boolean
+        get() = browserAutofillSettingsOptions.any { it.isDefault && it.isEnabled } ||
+            browserAutofillSettingsOptions.none { it.isDefault }
 
     /**
      * Models dialogs that can be shown on the Setup Browser Autofill screen.

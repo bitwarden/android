@@ -814,10 +814,14 @@ class SettingsRepositoryTest {
             settingsRepository.isAccessibilityEnabledStateFlow.test {
                 assertFalse(awaitItem())
 
-                fakeAccessibilityEnabledManager.isAccessibilityEnabled = true
+                fakeAccessibilityEnabledManager.setAccessibilityServiceConnected(
+                    isConnected = true,
+                )
                 assertTrue(awaitItem())
 
-                fakeAccessibilityEnabledManager.isAccessibilityEnabled = false
+                fakeAccessibilityEnabledManager.setAccessibilityServiceConnected(
+                    isConnected = false,
+                )
                 assertFalse(awaitItem())
             }
         }
@@ -1212,6 +1216,7 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
+            storePinLength(userId = USER_ID, pinLength = 4)
         }
 
         settingsRepository.clearUnlockPin()
@@ -1229,6 +1234,7 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 pinProtectedUserKeyEnvelope = null,
             )
+            assertPinLength(userId = USER_ID, pinLength = null)
         }
     }
 

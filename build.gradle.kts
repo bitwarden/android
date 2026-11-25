@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApplicationExtension
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.detekt) apply true
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlinx.kover) apply true
     alias(libs.plugins.ksp) apply false
@@ -34,6 +36,7 @@ configurations.configureEach {
 dependencies {
     detektPlugins(libs.detekt.detekt.formatting)
     detektPlugins(libs.detekt.detekt.rules)
+    detektPlugins(project(":detekt-rules"))
 
     kover(project(":annotation"))
     kover(project(":app"))
@@ -58,6 +61,7 @@ detekt {
         "core/src",
         "cxf/src",
         "data/src",
+        "detekt-rules/src",
         "network/src",
         "testharness/src",
         "ui/src",
@@ -180,6 +184,16 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
 }
 
 subprojects {
+    // Prints the NDK version AGP uses to strip native libraries (its default unless a module sets
+    // ndkVersion) so CI can install it without hardcoding a version.
+    plugins.withId("com.android.application") {
+        val android = extensions.getByType<ApplicationExtension>()
+        tasks.register("printNdkVersion") {
+            description = "Prints the NDK version AGP uses to strip native libraries."
+            val ndkVersion = android.ndkVersion
+            doLast { println("ndkVersion=$ndkVersion") }
+        }
+    }
     tasks.withType<JavaCompile>().configureEach {
         options.isFork = true
     }

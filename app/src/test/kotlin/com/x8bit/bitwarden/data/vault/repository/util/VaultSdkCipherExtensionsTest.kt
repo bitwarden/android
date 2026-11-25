@@ -141,6 +141,45 @@ class VaultSdkCipherExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSdkLogin should convert the httpAuthenticationEnabled of a SyncResponseJson Cipher Login`() {
+        val syncLogin = createMockLogin(number = 1, httpAuthenticationEnabled = true)
+
+        val sdkLogin = syncLogin.toSdkLogin()
+
+        assertEquals(
+            createMockSdkLogin(number = 1, clock = FIXED_CLOCK)
+                .copy(httpAuthenticationEnabled = true),
+            sdkLogin,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toEncryptedNetworkCipher should convert the httpAuthenticationEnabled of an Sdk Cipher Login`() {
+        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
+            .let { it.copy(login = it.login?.copy(httpAuthenticationEnabled = true)) }
+
+        val syncCipher = sdkCipher.toEncryptedNetworkCipher(
+            encryptedFor = "mockEncryptedFor-1",
+            encryptedByKeyId = "mockEncryptedByKeyId-1",
+        )
+
+        assertEquals(
+            createMockCipherJsonRequest(
+                number = 1,
+                login = createMockLogin(
+                    number = 1,
+                    uri = null,
+                    httpAuthenticationEnabled = true,
+                ),
+                archivedDate = FIXED_CLOCK.instant(),
+            ),
+            syncCipher,
+        )
+    }
+
     @Test
     fun `toSdkIdentity should convert a SyncResponseJson Cipher Identity to a Identity`() {
         val syncIdentity = createMockIdentity(number = 1)

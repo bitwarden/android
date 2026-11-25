@@ -14,17 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.authenticator.ui.main.MainGraph
 import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.debugMenuDestination
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavigationRoute
 import com.bitwarden.authenticator.ui.platform.feature.rootnav.rootNavDestination
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.components.BitwardenNavDisplay
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.bitwarden.ui.platform.util.validate
@@ -63,8 +64,10 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
-            val navController = rememberNavController()
-            SetupEventsEffect(navController = navController)
+            val navigationController = rememberNavigationController<MainGraph>(
+                routes = arrayOf(MainGraph.RootNavigationRoute),
+            )
+            SetupEventsEffect(navigationController = navigationController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider {
@@ -72,19 +75,21 @@ class MainActivity : AppCompatActivity() {
                     theme = state.theme,
                     dynamicColor = state.isDynamicColorsEnabled,
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = RootNavigationRoute,
-                    ) {
-                        // Both root navigation and debug menu exist at this top level.
-                        // The debug menu can appear on top of the rest of the app without
-                        // interacting with the state-based navigation used by RootNavScreen.
-                        rootNavDestination { shouldShowSplashScreen = false }
-                        debugMenuDestination(
-                            onNavigateBack = { navController.popBackStack() },
-                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                        )
-                    }
+                    BitwardenNavDisplay(
+                        navigationController = navigationController,
+                        entryProvider = entryProvider {
+                            // Both root navigation and debug menu exist at this top level.
+                            // The debug menu can appear on top of the rest of the app without
+                            // interacting with the state-based navigation used by RootNavScreen.
+                            rootNavDestination(
+                                onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                            )
+                            debugMenuDestination(
+                                onNavigateBack = { navigationController.navigateBack() },
+                                onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                            )
+                        },
+                    )
                 }
             }
         }
@@ -103,10 +108,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun SetupEventsEffect(navController: NavHostController) {
+    private fun SetupEventsEffect(navigationController: NavigationController<MainGraph>) {
         EventsEffect(viewModel = mainViewModel) { event ->
             when (event) {
-                MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                MainEvent.NavigateToDebugMenu -> navigationController.navigateToDebugMenuScreen()
                 is MainEvent.UpdateAppTheme -> {
                     AppCompatDelegate.setDefaultNightMode(event.osTheme)
                 }

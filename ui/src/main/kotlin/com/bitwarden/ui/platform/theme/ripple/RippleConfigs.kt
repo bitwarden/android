@@ -13,7 +13,7 @@ internal val NoFocusRippleConfig: RippleConfiguration = RippleConfiguration(
     rippleAlpha = RippleAlpha(
         draggedAlpha = RippleDefaults.RippleAlpha.draggedAlpha,
         focusedAlpha = 0f,
-        hoveredAlpha = RippleDefaults.RippleAlpha.hoveredAlpha,
+        hoveredAlpha = 0f,
         pressedAlpha = RippleDefaults.RippleAlpha.pressedAlpha,
     ),
 )

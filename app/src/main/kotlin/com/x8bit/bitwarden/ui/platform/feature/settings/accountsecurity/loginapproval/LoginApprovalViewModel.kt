@@ -19,7 +19,11 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -29,15 +33,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.format.FormatStyle
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * View model for the login approval screen.
  */
-@HiltViewModel
-class LoginApprovalViewModel @Inject constructor(
+@Suppress("LongParameterList")
+@HiltViewModel(assistedFactory = LoginApprovalViewModel.Factory::class)
+class LoginApprovalViewModel @AssistedInject constructor(
+    @Assisted route: VaultUnlockedGraph.LoginApprovalRoute,
     private val clock: Clock,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -53,7 +58,7 @@ class LoginApprovalViewModel @Inject constructor(
                 specialCircumstance = specialCircumstance,
                 fingerprint = specialCircumstance
                     ?.let { "" }
-                    ?: requireNotNull(savedStateHandle.toLoginApprovalArgs().fingerprint),
+                    ?: requireNotNull(route.fingerprint),
                 masterPasswordHash = null,
                 publicKey = "",
                 requestId = "",
@@ -62,6 +67,18 @@ class LoginApprovalViewModel @Inject constructor(
             )
         },
 ) {
+    /**
+     * Factory for creating a [LoginApprovalViewModel] for a specific
+     * [VaultUnlockedGraph.LoginApprovalRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [LoginApprovalViewModel] for the given [route].
+         */
+        fun create(route: VaultUnlockedGraph.LoginApprovalRoute): LoginApprovalViewModel
+    }
+
     init {
         state
             .specialCircumstance
@@ -72,7 +89,7 @@ class LoginApprovalViewModel @Inject constructor(
                         it.copy(
                             dialogState = LoginApprovalState.DialogState.ChangeAccount(
                                 message = BitwardenString
-                                    .login_attempt_from_x_do_you_want_to_switch_to_this_account
+                                    .access_attempt_from_x_do_you_want_to_switch_to_this_account
                                     .asText(
                                         authRepository
                                             .userStateFlow
@@ -189,7 +206,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = BitwardenString.login_approved)
+                sendClosingEvent(messageId = BitwardenString.access_approved)
             }
 
             is AuthRequestResult.Error -> {
@@ -252,7 +269,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = BitwardenString.log_in_denied)
+                sendClosingEvent(messageId = BitwardenString.access_denied)
             }
 
             is AuthRequestResult.Error -> {

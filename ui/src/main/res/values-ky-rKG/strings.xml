@@ -4,7 +4,6 @@
     <string name="add_folder">Папка кошуу</string>
     <string name="add_item">Элемент кошуу</string>
     <string name="an_error_has_occurred">Ката кетти</string>
-    <string name="apply">Колдонуу</string>
     <string name="back">Артка</string>
     <string name="cancel">Жокко чыгаруу</string>
     <string name="copy">Көчүрүү</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Папка өчүрүлдү.</string>
     <string name="folder_none">Папка жок</string>
     <string name="folder_updated">Папка сакталды</string>
-    <string name="folders">Папкалар</string>
     <string name="hide">Жашыруу</string>
     <string name="internet_connection_required_message">Улантуудан мурун интернетке туташыңыз.</string>
     <string name="internet_connection_required_title">Интернет байланышы талап кылынат</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">TOTPди көчүрүү</string>
     <string name="copy_totp_automatically_description">Эгерде кирүүдө аутентификатор ачкычы болсо, сиз кирүүнү автолуктоодо TOTP текшерүү кодун буферге көчүрүңүз.</string>
     <string name="copy_totp_automatically">TOTPди автоматтык түрдө көчүрүү</string>
-    <string name="premium_required">Бул функцияны колдонуу үчүн Premium мүчөлүгү талап кылынат.</string>
     <string name="attachment_deleted">Тиркеме өчүрүлдү</string>
     <string name="attachments_are_a_premium_feature">Тиркемелер - Premium функциясы. Учурдагы планыңыз бул функцияга кирүү мүмкүнчүлүгүн камтыбайт.</string>
     <string name="choose_file">Файлды тандоо</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">Сөлөкөт серверинин URL дареги</string>
     <string name="vault_is_locked">Купчул кулпуланган</string>
     <string name="go_to_my_vault">Менин купчулума өтүү</string>
-    <string name="collections">Жыйындылар</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Бул жыйындыда эч кандай элементтер жок.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Бул папкада эч кандай элементтер жок.</string>
     <string name="no_items_trash">Себетте эч кандай элементтер жок.</string>
@@ -347,16 +342,11 @@
     <string name="type">Түрү</string>
     <string name="move_down">Төмөн жылдыруу</string>
     <string name="move_up">Өйдө жылдыруу</string>
-    <string name="owner">Ээси</string>
-    <string name="no_collections_to_list">Тизмеге алынуучу жыйындылар жок.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s %2$s өткөрүлдү.</string>
     <string name="select_one_collection">Кеминде бир жыйындыны тандооңуз керек.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Бөлүшүү</string>
-    <string name="move_to_organization">Уюмга өткөрүү</string>
-    <string name="no_orgs_to_list">Тизмеге алынуучу уюмдар жок.</string>
-    <string name="move_to_org_desc">Бул элементти өткөргүңүз келген уюмду тандаңыз. Уюмга өткөрүү элементтин ээлик укугун ошол уюмга берет. Элемент өткөрүлгөндөн кийин сиз анын түз ээси болбой каласыз.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Сөздөрдүн саны</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">Sendге кирүүдө, текстти баштапкы түрдө жашыруу</string>
     <string name="type_file">Файл</string>
     <string name="deletion_date">Өчүрүү датасы</string>
-    <string name="deletion_time">Өчүрүү убактысы</string>
     <string name="deletion_date_info">Send көрсөтүлгөн күнү жана убактысында түбөлүккө өчүрүлөт.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Ким көрө алат</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">Биз сиздин сурамыңызды иштеп чыга албайбыз. Кайра аракет кылыңыз же биз менен байланышыңыз.</string>
     <string name="allow_screen_capture">Экранды кармоого уруксат берүү</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Экранды кармоону күйгүзгүңүз келгенине ишенесизби?</string>
-    <string name="log_in_requested">Кирүү суралды</string>
-    <string name="are_you_trying_to_log_in">Кирүүгө аракет кылып жатасызбы?</string>
-    <string name="log_in_attempt_by_x_on_y">%2$s түзмөгүндө %1$s тарабынан кирүү аракети</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Түзмөктүн түрү</string>
     <string name="ip_address">IP дарек</string>
     <string name="time">Убакыт</string>
     <string name="select_time">Убакытты тандоо</string>
     <string name="switch_input_mode">Киргизүү режимин өзгөртүү</string>
-    <string name="confirm_log_in">Кирүүнү ырастоо</string>
-    <string name="deny_log_in">Кирүүдөн баш тартуу</string>
-    <string name="log_in_denied">Кирүүдөн баш тартылды</string>
-    <string name="approve_login_requests">Кирүү сурамдарын бекитүү</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Жок, рахмат</string>
-    <string name="confim_log_in_attemp_for_x">%1$s үчүн кирүү аракетин ырастоо</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Колдонуучу атынын түрү</string>
     <string name="plus_addressed_email">Плюс даректуу электрондук почта</string>
     <string name="catch_all_email">Бардык каттарды кабыл алуучу электрондук почта</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">Түшүндүм</string>
     <string name="accept">Кабыл алуу</string>
     <string name="decline">Баш тартуу</string>
-    <string name="login_request_has_already_expired">Кирүү сурамынын мөөнөтү өтүп калган.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Кирүү аракети:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Бул аккаунтка өткүңүз келеби?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Bitwarden жаңыбы?</string>
     <string name="get_master_passwordword_hint">Башкы сырсөз боюнча кеңеш алуу</string>
     <string name="logging_in_as_x_on_y">%2$s түзмөгүндө %1$s катары кирүү</string>
     <string name="not_you">Сиз эмессизби?</string>
     <string name="log_in_with_master_password">Башкы сырсөз менен кирүү</string>
     <string name="log_in_initiated">Кирүү башталды</string>
-    <string name="a_notification_has_been_sent_to_your_device">Билдирүү түзмөгүңүзгө жөнөтүлдү.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Купчулуңуздун ачык экенин жана Манжа изи фразасынын башка түзмөктө дал келгенин текшериңиз.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Билдирүүнү кайра жөнөтүү</string>
     <string name="view_all_login_options">Бардык кирүү варианттарын көрүү</string>
-    <string name="pending_log_in_requests">Күтүп турган кирүү сурамдары</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Бардык сурамдардан баш тартуу</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Бардык күтүп турган кирүү сурамдарынан баш тарткыңыз келгенине ишенесизби?</string>
     <string name="no_pending_requests">Күтүп турган сурамдар жок</string>
     <string name="enable_camer_permission_to_use_the_scanner">Сканерди колдонуу үчүн камера уруксатын иштетиңиз</string>
     <string name="language">Тил</string>
-    <string name="language_change_x_description">Тил %1$s өзгөртүлдү. Өзгөртүүнү көрүү үчүн колдонмону кайра ишке киргизиңиз</string>
     <string name="default_system">Баштапкы (Система)</string>
     <string name="weak_master_password">Алсыз Башкы Сырсөз</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Алсыз сырсөз аныкталды. Аккаунтуңузду коргоо үчүн күчтүү сырсөздү колдонуңуз. Алсыз сырсөздү колдонгуңуз келгенине ишенесизби?</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Өтүү ачкычы клондолгон элементке көчүрүлбөйт. Бул элементти клондоону уланткыңыз келеби?</string>
     <string name="master_password_re_prompt_help">Башкы сырсөздү кайра суроого жардам</string>
     <string name="admin_approval_requested">Администратордун бекитүүсү суралды</string>
-    <string name="your_request_has_been_sent_to_your_admin">Сиздин сурамыңыз администраторуңузга жөнөтүлдү.</string>
-    <string name="you_will_be_notified_once_approved">Бекитилгенден кийин сизге билдирүү келет.</string>
-    <string name="trouble_logging_in">Кирүүдө көйгөй барбы?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Автолуктоону бөгөттөө</string>
     <string name="no_uris_blocked">Эч кандай URI бөгөттөлгөн жок</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Бул URIлер үчүн автолуктоо сунушталбайт.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Формат: %1$s. Бир нече URIди үтүр менен бөлүңүз.</string>
     <string name="invalid_uri">URI туура эмес</string>
     <string name="the_urix_is_already_blocked">%1$s URI мурун эле бөгөттөлгөн</string>
-    <string name="login_approved">Кирүү бекитилди</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Түзмөк менен кирүү Bitwarden колдонмосунун орнотууларында орнотулушу керек.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Башка вариант керекпи? <annotation link="viewAll">Бардык кирүү варианттарын көрүү</annotation></string>
     <string name="log_in_with_device">Түзмөк менен кирүү</string>
     <string name="logging_in_on">Кирүүдө</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Өтүү ачкычы операциясы сурам колдоого алынбагандыктан ишке ашпай калды.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Сырсөз операциясы тандалган элемент жок болгондуктан ишке ашпай калды.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Сырсөз операциясы тандалган элементте туура сырсөз жок болгондуктан ишке ашпай калды.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Эч кандай элемент тандалбагандыктан сырсөз операциясы ишке ашпай калды.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Маалымат операциясы сурам туура эмес болгондуктан ишке ашпай калды.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Маалымат операциясы сурам колдоого алынбагандыктан ишке ашпай калды.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Колдонуучуну текшерүү аракеттери ашкандыктан маалымат операциясы ишке ашпай калды.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">Артыкчылыктуу тиркемелер тууралуу көбүрөөк билүү</string>
     <string name="privileged_apps">Артыкчылыктуу тиркемелер</string>
     <string name="unrecognized_browser">Таанылбаган браузер</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden менен өтмө ачкычтарды колдонуу жөнүндө көбүрөөк билүү.</string>
     <string name="all_trusted_apps">Бардык ишенимдүү тиркемелер</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s ге ишенүүнү токтоткуңуз келерине ишенесизби?</string>
     <string name="installed_apps">Орнотулган тиркемелер</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">Текшерүү коду кошулду</string>
     <string name="refresh_period">Жаңыртуу мезгили</string>
     <string name="algorithm">Алгоритм</string>
-    <string name="advanced">Кеңейтилген</string>
-    <string name="collapse_advanced_options">Кеңейтилген параметрлерди жыйруу</string>
     <string name="number_of_digits">Сандардын саны</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d секунд</item>
@@ -1143,6 +1127,7 @@
     <string name="save_option_as_default">Сактоо опциясын дөөлөттүү кылып коюу</string>
     <string name="account_synced_from_bitwarden_app">Bitwarden колдонмосунан синхрондоштурулган каттоо эсеби</string>
     <string name="local_codes">Жергиликтүү коддор (%1$d)</string>
+    <string name="local_codes_header">Жергиликтүү коддор</string>
     <string name="required_information_missing">Талап кылынган маалымат жок</string>
     <string name="required_information_missing_message">Талап кылынган маалымат жок (мисалы, ‘services’ же ‘secret’). Файлыңызды текшерип, кайра аракет кылыңыз. Жардам алуу үчүн bitwarden.com/help сайтына кириңиз</string>
     <string name="file_could_not_be_processed">Файлды иштетүү мүмкүн болбой калды</string>
@@ -1158,7 +1143,6 @@
     <string name="select_a_card_for_x">%s үчүн картаны тандаңыз</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Кеңейтилген параметрлер</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Дал келүүнү аныктоо жөнүндө көбүрөөк</annotation></string>
     <string name="keep_your_credential_secure">Кыйгам укук маалыматтарыңызды коопсуз сактаңыз</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” колдонгондо кыйгам укук маалыматтарын кантип коопсуз сактоо керектиги жөнүндө көбүрөөк билүү.</string>
     <string name="are_you_sure_you_want_to_use">“%1$s” колдонгуңуз келерине ишенесизби?</string>
@@ -1201,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Bitwarden сейфиңизден сырсөздөрдү, өтмө ачкычтарды жана башка буюм түрлөрүн импорттоо.</string>
     <string name="items_to_import">Импорттоо үчүн буюмдар</string>
     <string name="exporting_items">Буюмдарды экспорттоо…</string>
-    <string name="export_failed">Экспорт ишке ашпай калды</string>
     <string name="passwords">Сырсөздөр</string>
     <string name="passkeys">Өтүү ачкычтары</string>
     <string name="why_is_this_step_required">Эмне үчүн бул кадам талап кылынат?</string>
@@ -1221,7 +1204,6 @@
     <string name="transfer_items_to_org">%1$s уюмуна буюмдарды өткөрүү</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> коопсуздук жана шайкештик үчүн бардык буюмдар уюмга таандык болушун талап кылат. Буюмдарыңыздын ээлик укугун өткөрүү үчүн кабыл алуу баскычын чыкылдатыңыз. <annotation link="learnMore">Көбүрөөк билүү</annotation></string>
     <string name="decline_and_leave">Баш тартып, чыгуу</string>
-    <string name="why_am_i_seeing_this">Эмне үчүн мен муну көрүп жатам?</string>
     <string name="migrating_items_to_x">Буюмдарды %s уюмуна көчүрүү</string>
     <string name="failed_to_migrate_items_to_x">Буюмдарды %s уюмуна көчүрүү мүмкүн болбой калды</string>
     <string name="search_archive">Архивди издөө</string>
@@ -1239,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">Буюмдарды архивдөө Premium функциясы. Учурдагы планыңыз бул функцияга кирүү мүмкүнчүлүгүн камтыбайт.</string>
     <string name="totp_is_a_premium_feature">Аутентификатор ачкычы (TOTP) Premium функциясы. Учурдагы планыңыз бул функцияга кирүү мүмкүнчүлүгүн камтыбайт.</string>
     <string name="upgrade_to_premium">Premium абонементине өтүү</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">План</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Premium жазылууңузду башкаруу үчүн, компьютериңиздеги веб-сейфиңизге киришиңиз керек.</string>
     <string name="unlock_advanced_security_features">Кеңейтилген коопсуздук функцияларын ачуу</string>
@@ -1320,7 +1303,6 @@
     <string name="archive_item">Буюмду архивдөө</string>
     <string name="once_archived_this_item_will_be_excluded">Архивделгенден кийин, бул буюм издөө натыйжаларынан жана автотолтуруу сунуштарынан алынып салынат.</string>
     <string name="pricing_unavailable">Баасы жеткиликтүү эмес</string>
-    <string name="current_plan">Учурдагы план</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Төлөм суммасы</string>
     <string name="storage_cost">Сактоо наркы</string>
@@ -1396,8 +1378,6 @@
     <string name="issuing_country">Берүүчү өлкө</string>
     <string name="issuing_state">Берүүчү штат / провинция</string>
     <string name="license_class">Лицензия классы</string>
-    <string name="surname">Теке</string>
-    <string name="given_name">Аты</string>
     <string name="date_of_birth">Туулган күнү</string>
     <string name="nationality">Улуту</string>
     <string name="passport_type">Паспорттун түрү</string>

@@ -46,6 +46,8 @@ class UserLogoutManagerTest {
         every { storeVaultTimeoutAction(any(), any()) } just runs
         every { storeAppRegisteredForExport(any()) } just runs
         every { getVaultPolicyBannerDismissedDate(userId = any()) } returns null
+        every { getShouldShowPlanBadge(userId = any()) } returns null
+        every { storeShouldShowPlanBadge(userId = any(), shouldShow = any()) } just runs
         every {
             storeVaultPolicyBannerDismissedDate(userId = any(), dismissalRevisionDate = any())
         } just runs
@@ -153,6 +155,7 @@ class UserLogoutManagerTest {
         val pinProtectedUserKey = "pinProtectedUserKey"
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
+        val pinLength = 4
 
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -160,6 +163,7 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every { settingsDiskSource.getShouldShowPlanBadge(userId = userId) } returns true
         every {
             authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
@@ -189,6 +193,8 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         } just runs
+        every { authDiskSource.getPinLength(userId = userId) } returns pinLength
+        every { authDiskSource.storePinLength(userId = userId, pinLength = pinLength) } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
@@ -211,6 +217,7 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            settingsDiskSource.storeShouldShowPlanBadge(userId = userId, shouldShow = true)
             authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
@@ -224,6 +231,7 @@ class UserLogoutManagerTest {
                 pinProtectedUserKey = pinProtectedUserKey,
             )
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            authDiskSource.storePinLength(userId = userId, pinLength = pinLength)
         }
     }
 
@@ -235,6 +243,7 @@ class UserLogoutManagerTest {
         val pinProtectedUserKey = "pinProtectedUserKey"
         val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
         val encryptedPin = "encryptedPin"
+        val pinLength = 4
 
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -242,6 +251,7 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every { settingsDiskSource.getShouldShowPlanBadge(userId = userId) } returns true
         every {
             authDiskSource.getEphemeralPinProtectedUserKeyEnvelope(userId = userId)
         } returns pinProtectedUserKeyEnvelope
@@ -271,6 +281,8 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
         } just runs
+        every { authDiskSource.getPinLength(userId = userId) } returns pinLength
+        every { authDiskSource.storePinLength(userId = userId, pinLength = pinLength) } just runs
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
@@ -283,6 +295,7 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+            settingsDiskSource.storeShouldShowPlanBadge(userId = userId, shouldShow = true)
             authDiskSource.storeEphemeralPinProtectedUserKeyEnvelope(
                 userId = userId,
                 pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
@@ -296,6 +309,7 @@ class UserLogoutManagerTest {
                 pinProtectedUserKey = pinProtectedUserKey,
             )
             authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+            authDiskSource.storePinLength(userId = userId, pinLength = pinLength)
         }
     }
 
@@ -385,6 +399,20 @@ class UserLogoutManagerTest {
         }
     }
 
+    @Test
+    fun `logout should not restore the should show plan badge value`() {
+        val userId = USER_ID_1
+        every { authDiskSource.userState } returns SINGLE_USER_STATE_1
+
+        userLogoutManager.logout(userId = userId, reason = LogoutReason.Timeout)
+
+        assertDataCleared(userId = userId)
+        verify(exactly = 0) {
+            settingsDiskSource.getShouldShowPlanBadge(userId = any())
+            settingsDiskSource.storeShouldShowPlanBadge(userId = any(), shouldShow = any())
+        }
+    }
+
     private fun setupSoftLogoutStubs(userId: String) {
         every { settingsDiskSource.getVaultTimeoutInMinutes(userId = userId) } returns 360
         every {
@@ -400,7 +428,9 @@ class UserLogoutManagerTest {
         every {
             authDiskSource.getPersistentPinProtectedUserKeyEnvelope(userId = userId)
         } returns "pinProtectedUserKeyEnvelope"
+        every { authDiskSource.getPinLength(userId = userId) } returns 4
         every { authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = any()) } just runs
+        every { authDiskSource.storePinLength(userId = userId, pinLength = any()) } just runs
         every {
             authDiskSource.storePinProtectedUserKey(userId = userId, pinProtectedUserKey = any())
         } just runs

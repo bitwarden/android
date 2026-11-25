@@ -190,6 +190,10 @@ jobs:
         run: |
           bundle exec fastlane assembleDebugApks
 
+      - name: Verify native libraries are stripped
+        if: ${{ (matrix.variant == 'prod') || (matrix.artifact == 'apk') }}
+        run: ./.github/scripts/verify-native-libs-stripped.sh app/build/outputs
+
       - name: Upload to GitHub Artifacts - prod.aab
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -443,6 +447,9 @@ jobs:
           storePassword:$FDROID_BETA_KEYSTORE_PASSWORD \
           keyAlias:bitwarden-beta \
           keyPassword:$FDROID_BETA_KEY_PASSWORD
+
+      - name: Verify native libraries are stripped
+        run: ./.github/scripts/verify-native-libs-stripped.sh app/build/outputs
 
       - name: Upload to GitHub Artifacts - fdroid.apk
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

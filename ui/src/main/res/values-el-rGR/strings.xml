@@ -4,7 +4,6 @@
     <string name="add_folder">Προσθήκη Φακέλου</string>
     <string name="add_item">Προσθήκη στοιχείου</string>
     <string name="an_error_has_occurred">Παρουσιάστηκε σφάλμα.</string>
-    <string name="apply">Εφαρμογή</string>
     <string name="back">Πίσω</string>
     <string name="cancel">Ακύρωση</string>
     <string name="copy">Αντιγραφή</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Ο φάκελος διαγράφηκε</string>
     <string name="folder_none">Δεν υπάρχει φάκελος</string>
     <string name="folder_updated">Ο φάκελος ενημερώθηκε</string>
-    <string name="folders">Φάκελοι</string>
     <string name="hide">Απόκρυψη</string>
     <string name="internet_connection_required_message">Συνδεθείτε στο διαδίκτυο πριν συνεχίσετε.</string>
     <string name="internet_connection_required_title">Απαιτείται σύνδεση στο διαδίκτυο</string>
@@ -208,7 +206,6 @@
     <string name="copy_totp">Αντιγραφή TOTP</string>
     <string name="copy_totp_automatically_description">Εάν η σύνδεση έχει κάποιο κλειδί αυθεντικοποίησης, αντιγράψτε τον κωδικό επαλήθευσης TOTP στο πρόχειρο σας όταν κάνετε με αυτόματη συμπλήρωση τη συνδεση.</string>
     <string name="copy_totp_automatically">Αυτόματη αντιγραφή TOTP</string>
-    <string name="premium_required">Για να χρησιμοποιήσετε αυτό το χαρακτηριστικό, απαιτείται η έκδοση premium.</string>
     <string name="attachment_deleted">Το συνημμένο διαγράφηκε</string>
     <string name="attachments_are_a_premium_feature">Τα συνημμένα είναι δυνατότητα Premium. Το τρέχον πρόγραμμά σας δεν περιλαμβάνει πρόσβαση σε αυτήν τη δυνατότητα.</string>
     <string name="choose_file">Επιλογή αρχείου</string>
@@ -291,9 +288,7 @@
     <string name="icons_url">URL διακομιστή εικονιδίων</string>
     <string name="vault_is_locked">Το θυσαυ/κιο είναι κλειδωμένο</string>
     <string name="go_to_my_vault">Μετάβαση στην κρύπτη μου</string>
-    <string name="collections">Συλλογές</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Δεν υπάρχουν αντικείμενα σε αυτήν τη συλλογή.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</string>
     <string name="no_items_trash">Δεν υπάρχουν αντικείμενα στον κάδο απορριμμάτων.</string>
@@ -347,16 +342,11 @@
     <string name="type">Τύπος</string>
     <string name="move_down">Μετακίνηση κάτω</string>
     <string name="move_up">Μετακίνηση πάνω</string>
-    <string name="owner">Ιδιοκτήτης</string>
-    <string name="no_collections_to_list">Δεν υπάρχουν επιλογές στη λίστα.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s μετακινήθηκε στο %2$s.</string>
     <string name="select_one_collection">Πρέπει να επιλέξετε τουλάχιστον μία συλλογή.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Κοινοποίηση</string>
-    <string name="move_to_organization">Μετακίνηση στον Οργανισμό</string>
-    <string name="no_orgs_to_list">Δεν υπάρχουν οργανισμοί προς εμφάνιση.</string>
-    <string name="move_to_org_desc">Επιλέξτε έναν οργανισμό στον οποίο θέλετε να μετακινήσετε αυτό το στοιχείο. Η μετακίνηση σε έναν οργανισμό μεταβιβάζει την ιδιοκτησία του στοιχείου σε αυτό τον οργανισμό. Δεν θα είστε πλέον ο άμεσος ιδιοκτήτης αυτού του στοιχείου μόλις το μετακινήσετε.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Αριθμός λέξεων</string>
@@ -471,7 +461,6 @@
     <string name="hide_text_by_default">Κατά την πρόσβαση σε αυτό το Send, αποκρύψτε το κείμενο από προεπιλογή</string>
     <string name="type_file">Αρχείο</string>
     <string name="deletion_date">Ημερομηνία διαγραφής</string>
-    <string name="deletion_time">Χρόνος διαγραφής</string>
     <string name="deletion_date_info">Το Send θα διαγραφεί οριστικά την καθορισμένη ημερομηνία και ώρα.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Ποιος μπορεί να δει</string>
@@ -603,20 +592,21 @@
     <string name="generic_error_message">Δεν μπορούμε να επεξεργαστούμε το αίτημά σας τώρα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με την υποστήριξη.</string>
     <string name="allow_screen_capture">Να επιτρέπεται η καταγραφή οθόνης</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε την καταγραφή οθόνης;</string>
-    <string name="log_in_requested">Απαιτείται σύνδεση</string>
-    <string name="are_you_trying_to_log_in">Προσπαθείτε να συνδεθείτε;</string>
-    <string name="log_in_attempt_by_x_on_y">Προσπάθεια σύνδεσης από τον/την %1$s στο %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Τύπος συσκευής</string>
     <string name="ip_address">Διεύθυνση IP</string>
     <string name="time">Ώρα</string>
     <string name="select_time">Επιλογή ώρας</string>
     <string name="switch_input_mode">Εναλλαγή λειτουργίας εισαγωγής</string>
-    <string name="confirm_log_in">Επιβεβαίωση σύνδεσης</string>
-    <string name="deny_log_in">Άρνηση σύνδεσης</string>
-    <string name="log_in_denied">Η σύνδεση απορρίφθηκε</string>
-    <string name="approve_login_requests">Έγκριση αιτήσεων σύνδεσης</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Όχι ευχαριστώ</string>
-    <string name="confim_log_in_attemp_for_x">Επιβεβαίωση προσπάθειας σύνδεσης για %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Τύπος Ονόματος Χρήστη</string>
     <string name="plus_addressed_email">Συν διεύθυνση ηλ. ταχυδρομείου</string>
     <string name="catch_all_email">Διεύθυνση ηλ. ταχυδρομείου κάθε σκοπού</string>
@@ -643,27 +633,27 @@
     <string name="i_understand">Κατανοώ</string>
     <string name="accept">Αποδοχή</string>
     <string name="decline">Απόρριψη</string>
-    <string name="login_request_has_already_expired">Το αίτημα σύνδεσης έχει ήδη λήξει.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Προσπάθεια σύνδεσης από:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Θέλετε να μεταβείτε σε αυτόν τον λογαριασμό;</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Νέος χρήστης του Bitwarden;</string>
     <string name="get_master_passwordword_hint">Λάβετε υπόδειξη κύριου κωδικού</string>
     <string name="logging_in_as_x_on_y">Σύνδεση ως %1$s στις %2$s</string>
     <string name="not_you">Δεν είστε εσείς;</string>
     <string name="log_in_with_master_password">Σύνδεση με κύριο κωδικό</string>
     <string name="log_in_initiated">Η σύνδεση ξεκίνησε</string>
-    <string name="a_notification_has_been_sent_to_your_device">Μια ειδοποίηση έχει σταλεί στη συσκευή σας.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Βεβαιωθείτε ότι το vault σας είναι ξεκλείδωτο και ότι η Φράση δακτυλικών αποτυπωμάτων ταιριάζει στην άλλη συσκευή.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Επαναποστολή ειδοποίησης</string>
     <string name="view_all_login_options">Δείτε όλες τις επιλογές σύνδεσης</string>
-    <string name="pending_log_in_requests">Εκκρεμούν αιτήματα σύνδεσης</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Απόρριψη όλων των αιτημάτων</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Είστε σίγουροι ότι θέλετε να απορρίψετε όλα τα εκκρεμή αιτήματα σύνδεσης;</string>
     <string name="no_pending_requests">Δεν υπάρχουν εκκρεμή αιτήματα</string>
     <string name="enable_camer_permission_to_use_the_scanner">Ενεργοποιήστε την άδεια της κάμερας για χρήση του σαρωτή</string>
     <string name="language">Γλώσσα</string>
-    <string name="language_change_x_description">Η γλώσσα έχει αλλάξει σε %1$s. Παρακαλούμε επανεκκινήστε την εφαρμογή για να δείτε την αλλαγή</string>
     <string name="default_system">Προεπιλογή (σύστημα)</string>
     <string name="weak_master_password">Αδύναμος Κύριος Κωδικός</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Αδύναμος κωδικός. Χρησιμοποιήστε έναν ισχυρό κωδικό για την προστασία του λογαριασμού σας. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε έναν αδύναμο κωδικό πρόσβασης;</string>
@@ -690,9 +680,8 @@
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Το κλειδί πρόσβασης δεν θα αντιγραφεί στο κλωνοποιημένο στοιχείο. Θέλετε να συνεχίσετε την κλωνοποίηση αυτού του στοιχείου;</string>
     <string name="master_password_re_prompt_help">Βοήθεια για την απαίτηση κύριου κωδικού πρόσβασης</string>
     <string name="admin_approval_requested">Ζητήθηκε έγκριση διαχειριστή</string>
-    <string name="your_request_has_been_sent_to_your_admin">Το αίτημά σας έχει σταλεί στον διαχειριστή σας.</string>
-    <string name="you_will_be_notified_once_approved">Θα ειδοποιηθείτε μόλις εγκριθεί.</string>
-    <string name="trouble_logging_in">Δεν μπορείτε να συνδεθείτε;</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Αποκλείστε την αυτόματη συμπλήρωση</string>
     <string name="no_uris_blocked">Δεν υπάρχουν αποκλεισμένα URI</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Η αυτόματη συμπλήρωση δε θα προσφέρεται για αυτά τα URI.</string>
@@ -703,8 +692,7 @@
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Μορφή: %1$s. Διαχωρίστε τα πολλαπλά URI με κόμμα.</string>
     <string name="invalid_uri">Μη έγκυρο URI</string>
     <string name="the_urix_is_already_blocked">Το URI %1$s είναι ήδη αποκλεισμένο</string>
-    <string name="login_approved">Η σύνδεση εγκρίθηκε</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Η σύνδεση με συσκευή πρέπει να ρυθμιστεί στις ρυθμίσεις της εφαρμογής Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Χρειάζεστε άλλη επιλογή; <annotation link="viewAll">Προβολή όλων των επιλογών σύνδεσης</annotation></string>
     <string name="log_in_with_device">Σύνδεση με χρήση συσκευής</string>
     <string name="logging_in_on">Σύνδεση στο</string>
@@ -977,7 +965,6 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Η λειτουργία κλειδιού πρόσβασης απέτυχε επειδή το αίτημα δεν υποστηρίζεται.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Η λειτουργία κωδικού πρόσβασης απέτυχε επειδή το επιλεγμένο αντικείμενο δεν υπάρχει.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Η λειτουργία κωδικού πρόσβασης απέτυχε επειδή το επιλεγμένο αντικείμενο δεν έχει έγκυρο κωδικό πρόσβασης.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Η λειτουργία κωδικού πρόσβασης απέτυχε επειδή δεν επιλέχθηκε κανένα αντικείμενο.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Η λειτουργία διαπιστευτηρίων απέτυχε επειδή το αίτημα είναι άκυρο.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Η λειτουργία διαπιστευτηρίων απέτυχε επειδή το αίτημα δεν υποστηρίζεται.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Η λειτουργία διαπιστευτηρίων απέτυχε επειδή ξεπεράστηκαν οι προσπάθειες επαλήθευσης χρήστη.</string>
@@ -1058,7 +1045,6 @@
     <string name="learn_more_about_privileged_apps">Μάθετε περισσότερα για τις προνομιούχες εφαρμογές</string>
     <string name="privileged_apps">Προνομιούχες εφαρμογές</string>
     <string name="unrecognized_browser">Μη αναγνωρίσιμο πρόγραμμα περιήγησης</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Μάθετε περισσότερα σχετικά με τη χρήση κλειδιών πρόσβασης με το Bitwarden.</string>
     <string name="all_trusted_apps">Όλες οι αξιόπιστες εφαρμογές</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Είστε βέβαιοι ότι θέλετε να σταματήσετε να εμπιστεύεστε το %s;</string>
     <string name="installed_apps">Εγκατεστημένες εφαρμογές</string>
@@ -1075,8 +1061,6 @@
     <string name="verification_code_added">Προστέθηκε κωδικός επαλήθευσης</string>
     <string name="refresh_period">Περίοδος ανανέωσης</string>
     <string name="algorithm">Αλγόριθμος</string>
-    <string name="advanced">Σύνθετα</string>
-    <string name="collapse_advanced_options">Σύμπτυξη σύνθετων επιλογών</string>
     <string name="number_of_digits">Αριθμός ψηφίων</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d δευτερόλεπτο</item>
@@ -1143,6 +1127,7 @@
     <string name="save_option_as_default">Αποθήκευση ως προεπιλογή</string>
     <string name="account_synced_from_bitwarden_app">Ο λογαριασμός συγχρονίστηκε από το Bitwarden</string>
     <string name="local_codes">Τοπικοί κωδικοί (%1$d)</string>
+    <string name="local_codes_header">Τοπικοί κωδικοί</string>
     <string name="required_information_missing">Λείπουν απαιτούμενες πληροφορίες</string>
     <string name="required_information_missing_message">Λείπουν απαιτούμενες πληροφορίες (π.χ. «υπηρεσίες» ή «μυστικό»). Ελέγξτε το αρχείο σας και δοκιμάστε ξανά. Επισκεφτείτε το bitwarden.com/help για υποστήριξη</string>
     <string name="file_could_not_be_processed">Το αρχείο δεν ήταν δυνατό να υποβληθεί σε επεξεργασία</string>
@@ -1158,7 +1143,6 @@
     <string name="select_a_card_for_x">Επιλέξτε μια κάρτα για %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Σύνθετες επιλογές</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Περισσότερα για την ανίχνευση αντιστοίχισης</annotation></string>
     <string name="keep_your_credential_secure">Διατηρήστε τα διαπιστευτήριά σας ασφαλή</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Μάθετε περισσότερα σχετικά με το πώς να διατηρείτε τα διαπιστευτήρια ασφαλή όταν χρησιμοποιείτε το «%1$s».</string>
     <string name="are_you_sure_you_want_to_use">Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε το «%1$s»;</string>
@@ -1201,7 +1185,6 @@
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Εισαγωγή κωδικών πρόσβασης, κλειδιών πρόσβασης και άλλων τύπων αντικειμένων από το θησαυροφυλάκιο Bitwarden.</string>
     <string name="items_to_import">Στοιχεία προς εισαγωγή</string>
     <string name="exporting_items">Εξαγωγή στοιχείων…</string>
-    <string name="export_failed">Αποτυχία εξαγωγής</string>
     <string name="passwords">Κωδικοί</string>
     <string name="passkeys">Κλειδιά πρόσβασης</string>
     <string name="why_is_this_step_required">Γιατί απαιτείται αυτό το βήμα;</string>
@@ -1221,7 +1204,6 @@
     <string name="transfer_items_to_org">Μεταφορά αντικειμένων στο %1$s</string>
     <string name="transfer_items_description">Ο <annotation arg="0">%1$s</annotation> απαιτεί όλα τα αντικείμενα να ανήκουν στον οργανισμό για λόγους ασφάλειας και συμμόρφωσης. Κάντε κλικ στην αποδοχή για να μεταφέρετε την κυριότητα των αντικειμένων σας. <annotation link="learnMore">Μάθετε περισσότερα</annotation></string>
     <string name="decline_and_leave">Απόρριψη και αποχώρηση</string>
-    <string name="why_am_i_seeing_this">Γιατί το βλέπω αυτό;</string>
     <string name="migrating_items_to_x">Μετεγκατάσταση αντικειμένων στο %s</string>
     <string name="failed_to_migrate_items_to_x">Αποτυχία μετεγκατάστασης αντικειμένων στο %s</string>
     <string name="search_archive">Αναζήτηση στο αρχείο</string>
@@ -1239,6 +1221,7 @@
     <string name="archiving_items_is_a_premium_feature">Η αρχειοθέτηση αντικειμένων είναι δυνατότητα Premium. Το τρέχον πρόγραμμά σας δεν περιλαμβάνει πρόσβαση σε αυτήν τη δυνατότητα.</string>
     <string name="totp_is_a_premium_feature">Το κλειδί εφαρμογής ελέγχου ταυτότητας (TOTP) είναι δυνατότητα Premium. Το τρέχον πρόγραμμά σας δεν περιλαμβάνει πρόσβαση σε αυτήν τη δυνατότητα.</string>
     <string name="upgrade_to_premium">Αναβάθμιση σε Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Πακέτο</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Για να διαχειριστείτε τη συνδρομή σας Premium, θα χρειαστεί να συνδεθείτε στο web vault σας από έναν υπολογιστή.</string>
     <string name="unlock_advanced_security_features">Ξεκλειδώστε προηγμένες δυνατότητες ασφαλείας</string>
@@ -1320,7 +1303,6 @@
     <string name="archive_item">Αρχειοθέτηση στοιχείου</string>
     <string name="once_archived_this_item_will_be_excluded">Μόλις αρχειοθετηθεί, αυτό το αντικείμενο θα εξαιρεθεί από τα αποτελέσματα αναζήτησης και τις προτάσεις αυτόματης συμπλήρωσης.</string>
     <string name="pricing_unavailable">Μη διαθέσιμη τιμολόγηση</string>
-    <string name="current_plan">Τρέχον πακέτο</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Ποσό χρέωσης</string>
     <string name="storage_cost">Κόστος αποθήκευσης</string>
@@ -1396,8 +1378,6 @@
     <string name="issuing_country">Χώρα έκδοσης</string>
     <string name="issuing_state">Πολιτεία / επαρχία έκδοσης</string>
     <string name="license_class">Κατηγορία άδειας</string>
-    <string name="surname">Επώνυμο</string>
-    <string name="given_name">Όνομα</string>
     <string name="date_of_birth">Ημερομηνία γέννησης</string>
     <string name="nationality">Εθνικότητα</string>
     <string name="passport_type">Τύπος διαβατηρίου</string>

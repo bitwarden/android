@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
@@ -349,6 +350,7 @@ fun BitwardenTextField(
                     interactionSource = interactionSource,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
+                        .hoverable(interactionSource = interactionSource)
                         .menuAnchor(
                             type = ExposedDropdownMenuAnchorType.PrimaryEditable,
                             enabled = false,

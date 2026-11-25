@@ -4,7 +4,6 @@
     <string name="add_folder">Legg til ei mappe</string>
     <string name="add_item">Legg til ei oppføring</string>
     <string name="an_error_has_occurred">Noko gjekk gale.</string>
-    <string name="apply">Bruk</string>
     <string name="back">Attende</string>
     <string name="cancel">Avbryt</string>
     <string name="copy">Skriv av</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Mappa vart fjerna.</string>
     <string name="folder_none">Inga mappe</string>
     <string name="folder_updated">Retta mappa.</string>
-    <string name="folders">Mapper</string>
     <string name="hide">Gøym</string>
     <string name="internet_connection_required_message">Ver venleg og kopla til nettet før du held fram.</string>
     <string name="internet_connection_required_title">Ei nettilkopling er påkravd</string>
@@ -208,7 +206,6 @@ Skanning skjer automatisk.</string>
     <string name="copy_totp">Skriv av TOTP</string>
     <string name="copy_totp_automatically_description">Viss ein pålogging har ein autentiseringsnøkkel, kopier TOTP-verifiseringskoden til utklippstavla når du autoutfyller påloggingen.</string>
     <string name="copy_totp_automatically">Kopier TOTP-en automatisk</string>
-    <string name="premium_required">Ei Premium-tinging er påkravd for å bruka denne funksjonen.</string>
     <string name="attachment_deleted">Vedlegg sletta</string>
     <string name="attachments_are_a_premium_feature">Vedlegg er ein Premium-funksjon. Den noverande planen din gir ikkje tilgang til denne funksjonen.</string>
     <string name="choose_file">Vel fil</string>
@@ -291,9 +288,7 @@ Skanning skjer automatisk.</string>
     <string name="icons_url">Ikon-tenar-URL</string>
     <string name="vault_is_locked">Kvelvet er låst</string>
     <string name="go_to_my_vault">Gå til kvelvet mitt</string>
-    <string name="collections">Samlingar</string>
     <string name="shared_folders">Delte mapper</string>
-    <string name="no_items_collection">Det finst ingen element i denne samlinga.</string>
     <string name="there_are_no_items_in_this_shared_folder">Det finst ingen element i denne delte mappa.</string>
     <string name="no_items_folder">Det er ingen oppføringar i denne mappa.</string>
     <string name="no_items_trash">Det er ingen oppføringar i papirkorga.</string>
@@ -347,16 +342,11 @@ Skanning skjer automatisk.</string>
     <string name="type">Slag</string>
     <string name="move_down">Flytta ned</string>
     <string name="move_up">Flytta opp</string>
-    <string name="owner">Eigar</string>
-    <string name="no_collections_to_list">Det finst ingen samlingar å liste.</string>
     <string name="there_are_no_shared_folders_to_list">Det finst ingen delte mapper å liste.</string>
     <string name="moved_item_to_org">%1$s er flytta til %2$s.</string>
     <string name="select_one_collection">Du må velje minst éi samling.</string>
     <string name="you_must_select_at_least_one_shared_folder">Du må velje minst éi delt mappe.</string>
     <string name="share">Del</string>
-    <string name="move_to_organization">Flytta til samskipnad</string>
-    <string name="no_orgs_to_list">Det er ingen samskipnader å syna.</string>
-    <string name="move_to_org_desc">Vel ei samskipnad du ynskjer å flytta denne oppføringa til. Ved å flytta ei oppføring til ei samskipnad fører ein eigarskapen til oppføringa til den samskipnaden. Du vil ikkje lenger ha bein eigarskap til denne oppføringa etter ho er flytta.</string>
     <string name="no_vaults_to_list">Ingen kvelv å liste.</string>
     <string name="move_to_vault_desc">Vel eit kvelv du ønskjer å flytte dette elementet til. Å flytte til eit anna kvelv overfører eigarskap av elementet til den organisasjonen. Du vil ikkje lenger vere direkte eigar av dette elementet når det er flytta.</string>
     <string name="number_of_words">Antal ord</string>
@@ -471,7 +461,6 @@ Skanning skjer automatisk.</string>
     <string name="hide_text_by_default">Gøym teksten til vanleg ved bruk av denne Send-en</string>
     <string name="type_file">Fil</string>
     <string name="deletion_date">Dato for sletting</string>
-    <string name="deletion_time">Slettetidspunkt</string>
     <string name="deletion_date_info">Send-en vil vera fullstendig sletta på den fastsette datoen og det fastsette klokkeslettet.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Kven kan sjå</string>
@@ -603,20 +592,21 @@ vel Legg til TOTP for å lagre nøkkelen trygt</string>
     <string name="generic_error_message">Vi kunne ikkje handsame førespurnaden din. Prøv igjen eller kontakt oss.</string>
     <string name="allow_screen_capture">Tillat skjermopptak</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Er du sikker på at du vil slå på skjermopptak?</string>
-    <string name="log_in_requested">Pålogging førespeurd</string>
-    <string name="are_you_trying_to_log_in">Prøver du å logge inn?</string>
-    <string name="log_in_attempt_by_x_on_y">Påloggingsforsøk av %1$s på %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Einingstype</string>
     <string name="ip_address">IP-adresse</string>
     <string name="time">Tid</string>
     <string name="select_time">Vel tid</string>
     <string name="switch_input_mode">Bytt inntastingsmodus</string>
-    <string name="confirm_log_in">Stadfest pålogging</string>
-    <string name="deny_log_in">Avvis pålogging</string>
-    <string name="log_in_denied">Pålogging avvist</string>
-    <string name="approve_login_requests">Godkjenn påloggingsførespurnader</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nei takk</string>
-    <string name="confim_log_in_attemp_for_x">Stadfest påloggingsforsøk for %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Brukarnamntype</string>
     <string name="plus_addressed_email">Pluss-adressert e-post</string>
     <string name="catch_all_email">Fang-opp-e-post</string>
@@ -643,27 +633,27 @@ vel Legg til TOTP for å lagre nøkkelen trygt</string>
     <string name="i_understand">Eg forstår</string>
     <string name="accept">Godta</string>
     <string name="decline">Avvis</string>
-    <string name="login_request_has_already_expired">Påloggingsførespurnaden har allereie utløpt.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Påloggingsforsøk frå:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Vil du bytte til denne kontoen?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Ny hos Bitwarden?</string>
     <string name="get_master_passwordword_hint">Få hovudpassordhint</string>
     <string name="logging_in_as_x_on_y">Loggar inn som %1$s på %2$s</string>
     <string name="not_you">Ikkje deg?</string>
     <string name="log_in_with_master_password">Logg inn med hovudpassord</string>
     <string name="log_in_initiated">Pålogging starta</string>
-    <string name="a_notification_has_been_sent_to_your_device">Eit varsel er sendt til eininga di.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Sørg for at kvelvet er opplåst og at fingeravtrykksfrasen stemmer overeins på den andre eininga.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Send varsel på nytt</string>
     <string name="view_all_login_options">Sjå alle innloggingsalternativ</string>
-    <string name="pending_log_in_requests">Ventande påloggingsførespurnader</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Avvis alle førespurnader</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Er du sikker på at du vil avvise alle ventande påloggingsførespurnader?</string>
     <string name="no_pending_requests">Ingen ventande førespurnader</string>
     <string name="enable_camer_permission_to_use_the_scanner">Aktiver kameratillating for å bruke skannaren</string>
     <string name="language">Språk</string>
-    <string name="language_change_x_description">Språket er endra til %1$s. Start appen på nytt for å sjå endringa</string>
     <string name="default_system">Standard (System)</string>
     <string name="weak_master_password">Svakt hovudpassord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Svakt passord identifisert. Bruk eit sterkt passord for å beskytte kontoen din. Er du sikker på at du vil bruke eit svakt passord?</string>
@@ -690,9 +680,8 @@ Vil du bytte til denne kontoen?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Krypteringsnøkkelen vert ikkje kopiert til det klona elementet. Vil du halde fram med kloninga av denne gjenstanden?</string>
     <string name="master_password_re_prompt_help">Hovudpassord-attpåminning</string>
     <string name="admin_approval_requested">Godkjenning frå administrator forespurt</string>
-    <string name="your_request_has_been_sent_to_your_admin">Førespurnaden din er sendt til administratoren.</string>
-    <string name="you_will_be_notified_once_approved">Du vil få varsel når det er godkjent.</string>
-    <string name="trouble_logging_in">Problem med å logge inn?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blokker autoutfyll</string>
     <string name="no_uris_blocked">Ingen URI-ar blokkerte</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Autoutfyll vil ikkje bli tilbydd for desse URI-ane.</string>
@@ -703,8 +692,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Skil fleire URI-ar med komma.</string>
     <string name="invalid_uri">Ugyldig URI</string>
     <string name="the_urix_is_already_blocked">URI-en %1$s er allereie blokkert</string>
-    <string name="login_approved">Pålogging godkjend</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Pålogging med eining må setjast opp i innstillingane til Bitwarden-appen.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Treng du eit anna alternativ? <annotation link="viewAll">Sjå alle innloggingsalternativ</annotation></string>
     <string name="log_in_with_device">Logg inn med eining</string>
     <string name="logging_in_on">Loggar inn på</string>
@@ -977,7 +965,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passnøkkeloperasjon mislukkast fordi førespurnaden ikkje er støtta.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Passordoperasjon mislukkast fordi det valde elementet ikkje finst.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Passordoperasjon mislukkast fordi det valde elementet ikkje har eit gyldig passord.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Passordoperasjon mislukkast fordi ingen element vart valde.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Legitimasjonsoperasjon mislukkast fordi førespurnaden er ugyldig.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Legitimasjonsoperasjon mislukkast fordi førespurnaden ikkje er støtta.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Legitimasjonsoperasjon mislukkast fordi brukarverifiseringsforsøk overskred.</string>
@@ -1058,7 +1045,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="learn_more_about_privileged_apps">Lær meir om privilegerte appar</string>
     <string name="privileged_apps">Privilegerte appar</string>
     <string name="unrecognized_browser">Ukjend nettlesar</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Lær meir om bruk av passnøklar med Bitwarden.</string>
     <string name="all_trusted_apps">Alle pålitelege appar</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Er du sikker på at du vil slutte å stole på %s?</string>
     <string name="installed_apps">Installerte appar</string>
@@ -1075,8 +1061,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="verification_code_added">Verifiseringskode lagt til</string>
     <string name="refresh_period">Oppdateringsperiode</string>
     <string name="algorithm">Algoritme</string>
-    <string name="advanced">Avansert</string>
-    <string name="collapse_advanced_options">Skjul avanserte alternativ</string>
     <string name="number_of_digits">Tal siffer</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d sekund</item>
@@ -1143,6 +1127,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="save_option_as_default">Lagre alternativ som standard</string>
     <string name="account_synced_from_bitwarden_app">Konto synkronisert frå Bitwarden-appen</string>
     <string name="local_codes">Lokale kode (%1$d)</string>
+    <string name="local_codes_header">Lokale kode</string>
     <string name="required_information_missing">Påkravd informasjon manglar</string>
     <string name="required_information_missing_message">Påkravd informasjon manglar (t.d. «services» eller «secret»). Sjekk fila og prøv igjen. Besøk bitwarden.com/help for støtte</string>
     <string name="file_could_not_be_processed">Fila kunne ikkje behandlast</string>
@@ -1158,7 +1143,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="select_a_card_for_x">Vel eit kort for %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Avanserte alternativ</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Meir om samsvarsregistrering</annotation></string>
     <string name="keep_your_credential_secure">Hald legitimasjonen din trygg</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Lær meir om korleis du held legitimasjon trygg når du brukar «%1$s».</string>
     <string name="are_you_sure_you_want_to_use">Er du sikker på at du vil bruke «%1$s»?</string>
@@ -1201,7 +1185,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importer passord, passnøklar og andre elementtypar frå Bitwarden-kvelvet ditt.</string>
     <string name="items_to_import">Element å importere</string>
     <string name="exporting_items">Eksporterer element…</string>
-    <string name="export_failed">Eksport mislukkast</string>
     <string name="passwords">Passord</string>
     <string name="passkeys">Passnøklar</string>
     <string name="why_is_this_step_required">Kvifor er dette steget påkravd?</string>
@@ -1221,7 +1204,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="transfer_items_to_org">Overfør element til %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> krev at alle element eigast av organisasjonen av omsyn til tryggleik og etterleving. Klikk aksepter for å overføre eigarskap av elementa dine. <annotation link="learnMore">Lær meir</annotation></string>
     <string name="decline_and_leave">Avvis og forlat</string>
-    <string name="why_am_i_seeing_this">Kvifor ser eg dette?</string>
     <string name="migrating_items_to_x">Migrerer element til %s</string>
     <string name="failed_to_migrate_items_to_x">Klarte ikkje å migrere element til %s</string>
     <string name="search_archive">Søk i arkiv</string>
@@ -1239,6 +1221,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="archiving_items_is_a_premium_feature">Å arkivere element er ein Premium-funksjon. Den noverande planen din gir ikkje tilgang til denne funksjonen.</string>
     <string name="totp_is_a_premium_feature">Autentiseringsnøkkel (TOTP) er ein Premium-funksjon. Den noverande planen din gir ikkje tilgang til denne funksjonen.</string>
     <string name="upgrade_to_premium">Oppgrader til Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">For å handtere Premium-abonnementet ditt, må du logge inn på nett-kvelvet på ein datamaskin.</string>
     <string name="unlock_advanced_security_features">Lås opp avanserte sikkerheitsfunksjonar</string>
@@ -1320,7 +1303,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="archive_item">Arkiver element</string>
     <string name="once_archived_this_item_will_be_excluded">Når det er arkivert, vil dette elementet bli ekskludert frå søkeresultat og autoutfyllforslag.</string>
     <string name="pricing_unavailable">Prisinformasjon ikkje tilgjengeleg</string>
-    <string name="current_plan">Noverande plan</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Fakturabeløp</string>
     <string name="storage_cost">Lagerkostnad</string>
@@ -1396,8 +1378,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="issuing_country">Utstaden land</string>
     <string name="issuing_state">Utstaden delstat / provins</string>
     <string name="license_class">Løyveklasse</string>
-    <string name="surname">Etternamn</string>
-    <string name="given_name">Fornamn</string>
     <string name="date_of_birth">Fødselsdato</string>
     <string name="nationality">Nasjonalitet</string>
     <string name="passport_type">Passtype</string>

@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
@@ -190,6 +191,63 @@ class CipherViewExtensionsTest {
                 ),
                 isIndividualVaultDisabled = true,
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                    firstName = "John",
+                    middleName = "Richard",
+                    lastName = "Smith",
+                    username = "Dr. JSR",
+                    company = "Bitwarden",
+                    email = "placeholde@email.com",
+                    phone = "555-555-5555",
+                    city = "Minneapolis",
+                    state = "MN",
+                    country = "USA",
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState should select the identity title when the stored value differs in case`() {
+        val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW.copy(
+            identity = DEFAULT_IDENTITY_CIPHER_VIEW.identity?.copy(title = "mr"),
+        )
+
+        val result = cipherView.toViewState(
+            isClone = false,
+            isPremium = false,
+            isIndividualVaultDisabled = true,
+            totpData = null,
+            resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
+            canDelete = true,
+            canAssignToCollections = true,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = persistentListOf(),
+                ),
+                isIndividualVaultDisabled = true,
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                    selectedTitle = VaultIdentityTitle.MR,
                     firstName = "John",
                     middleName = "Richard",
                     lastName = "Smith",
@@ -655,7 +713,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -700,7 +757,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -735,7 +791,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(
@@ -769,7 +824,6 @@ class CipherViewExtensionsTest {
             activeAccount = account,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
-            isVfo1FoundationEnabled = true,
         )
 
         val expected = createSecureNoteViewState(

@@ -4,7 +4,6 @@
     <string name="add_folder">Adăugare dosar</string>
     <string name="add_item">Adăugare articol</string>
     <string name="an_error_has_occurred">S-a produs o eroare.</string>
-    <string name="apply">Aplică</string>
     <string name="back">Înapoi</string>
     <string name="cancel">Anulare</string>
     <string name="copy">Copiere</string>
@@ -25,7 +24,6 @@
     <string name="folder_deleted">Dosar șters.</string>
     <string name="folder_none">Fără dosar</string>
     <string name="folder_updated">Dosar salvat</string>
-    <string name="folders">Dosare</string>
     <string name="hide">Ascundere</string>
     <string name="internet_connection_required_message">Conectează-te la internet înainte de a continua.</string>
     <string name="internet_connection_required_title">Conexiune la internet necesară</string>
@@ -209,7 +207,6 @@ Scanarea se va face automat.</string>
     <string name="copy_totp">Copiere TOTP</string>
     <string name="copy_totp_automatically_description">Dacă o autentificare are o cheie de autentificare, copiați codul de verificare TOTP în clipboard când completați automat autentificarea.</string>
     <string name="copy_totp_automatically">Copiați automat TOTP</string>
-    <string name="premium_required">Este necesar statutul de membru Premium pentru a utiliza această caracteristică.</string>
     <string name="attachment_deleted">Atașamentul s-a șters</string>
     <string name="attachments_are_a_premium_feature">Atașamentele sunt o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="choose_file">Alegere fișier</string>
@@ -292,9 +289,7 @@ Scanarea se va face automat.</string>
     <string name="icons_url">URL server de pictograme</string>
     <string name="vault_is_locked">Seiful este blocat</string>
     <string name="go_to_my_vault">Deschidere seif personal</string>
-    <string name="collections">Colecții</string>
     <string name="shared_folders">Shared folders</string>
-    <string name="no_items_collection">Nu există elemente în această colecție.</string>
     <string name="there_are_no_items_in_this_shared_folder">There are no items in this shared folder.</string>
     <string name="no_items_folder">Nu există elemente în acest dosar.</string>
     <string name="no_items_trash">Nu există articole în coșul de reciclare.</string>
@@ -349,16 +344,11 @@ Scanarea se va face automat.</string>
     <string name="type">Tip</string>
     <string name="move_down">Mutare în jos</string>
     <string name="move_up">Mutare în sus</string>
-    <string name="owner">Proprietar</string>
-    <string name="no_collections_to_list">Nu există colecții de afișat.</string>
     <string name="there_are_no_shared_folders_to_list">There are no shared folders to list.</string>
     <string name="moved_item_to_org">%1$s s-a mutat la %2$s.</string>
     <string name="select_one_collection">Trebuie să selectați cel puțin o colecție.</string>
     <string name="you_must_select_at_least_one_shared_folder">You must select at least one shared folder.</string>
     <string name="share">Partajare</string>
-    <string name="move_to_organization">Mutare la organizație</string>
-    <string name="no_orgs_to_list">Nicio organizație de afișat.</string>
-    <string name="move_to_org_desc">Alegeți o organizație la care doriți să mutați acest articol. Mutarea într-o organizație, transferă proprietatea asupra articolului către organizația respectivă. Nu veți mai fi proprietarul direct al acestui articol odată ce a fost mutat.</string>
     <string name="no_vaults_to_list">No vaults to list.</string>
     <string name="move_to_vault_desc">Choose a vault that you wish to move this item to. Moving to another vault transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</string>
     <string name="number_of_words">Număr de cuvinte</string>
@@ -473,7 +463,6 @@ Scanarea se va face automat.</string>
     <string name="hide_text_by_default">Când Send-ul este accesat, ascundeți textul în mod implicit</string>
     <string name="type_file">Fişier</string>
     <string name="deletion_date">Data ștergerii</string>
-    <string name="deletion_time">Ora ștergerii</string>
     <string name="deletion_date_info">Send-ul va fi șters definitiv la data și ora specificate.</string>
     <string name="this_date_is_enforced_by_your_organization">This date is enforced by your organization</string>
     <string name="who_can_view">Cine poate vizualiza</string>
@@ -607,20 +596,21 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</string>
     <string name="generic_error_message">Nu am reușit procesarea solicitării dumneavoastră. Vă rugăm să încercați din nou sau să ne contactați.</string>
     <string name="allow_screen_capture">Permitere captură de ecran</string>
     <string name="are_you_sure_you_want_to_enable_screen_capture">Sunteți sigur că doriți să activați captura de ecran?</string>
-    <string name="log_in_requested">Autentificare solicitată</string>
-    <string name="are_you_trying_to_log_in">Încercați să vă conectați?</string>
-    <string name="log_in_attempt_by_x_on_y">Încercare de autentificare de %1$s pe %2$s</string>
+    <string name="access_requested">Access requested</string>
+    <string name="account_access_requested">Account access requested</string>
+    <string name="are_you_trying_to_access_your_account">Are you trying to access your account?</string>
+    <string name="access_attempt_by_x_on_y">Access attempt by %1$s on %2$s</string>
     <string name="device_type">Tip dispozitiv</string>
     <string name="ip_address">Adresă IP</string>
     <string name="time">Timp</string>
     <string name="select_time">Selectează ora</string>
     <string name="switch_input_mode">Comută modul de intrare</string>
-    <string name="confirm_log_in">Confirmare autentificare</string>
-    <string name="deny_log_in">Refuz autentificare</string>
-    <string name="log_in_denied">Autentificare refuzată</string>
-    <string name="approve_login_requests">Aprobare solicitări de autentificare</string>
+    <string name="confirm_access">Confirm access</string>
+    <string name="deny_access">Deny access</string>
+    <string name="access_denied">Access denied</string>
+    <string name="account_access_requests">Account access requests</string>
     <string name="no_thanks">Nu, mulțumesc</string>
-    <string name="confim_log_in_attemp_for_x">Confirmați încercarea de autentificare pentru %1$s</string>
+    <string name="confirm_access_attempt_for_x">Confirm access attempt for %1$s</string>
     <string name="username_type">Tip de nume de utilizator</string>
     <string name="plus_addressed_email">E-mail Plus adresat</string>
     <string name="catch_all_email">E-mail Catch-all</string>
@@ -647,27 +637,27 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</string>
     <string name="i_understand">Am înțeles</string>
     <string name="accept">Acceptare</string>
     <string name="decline">Refuz</string>
-    <string name="login_request_has_already_expired">Solicitarea de autentificare a expirat deja.</string>
-    <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Încercare de autentificare de la:
+    <string name="access_request_has_already_expired">Access request has already expired.</string>
+    <string name="access_attempt_from_x_do_you_want_to_switch_to_this_account">Access attempt from:
 %1$s
-Doriți să comutați la acest cont?</string>
+Do you want to switch to this account?</string>
     <string name="new_to_bitwarden">Nou în Bitwarden?</string>
     <string name="get_master_passwordword_hint">Obțineți indiciul parolei principale</string>
     <string name="logging_in_as_x_on_y">Autentificare ca %1$s pe %2$s</string>
     <string name="not_you">Nu sunteți dvs.?</string>
     <string name="log_in_with_master_password">Autentificați-vă cu parola principală</string>
     <string name="log_in_initiated">Autentificare inițiată</string>
-    <string name="a_notification_has_been_sent_to_your_device">O notificare a fost trimisă pe dispozitivul dvs.</string>
-    <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Asigurați-vă că seiful dvs. este deblocat și că fraza amprentă corespunde cu cea a celuilalt dispozitiv.</string>
+    <string name="request_sent_to_your_device">Request sent to your device</string>
+    <string name="approve_this_request_in_your_bitwarden_account_on_another_unlocked_device_or_in_the_web_app">Approve this request in your Bitwarden account on another unlocked device or in the web app. Account access requests must be turned on in Settings.</string>
+    <string name="make_sure_the_fingerprint_phrase_matches_the_one_below_before_approving">Make sure the Fingerprint phrase matches the one below before approving.</string>
     <string name="resend_notification">Retrimitere notificare</string>
     <string name="view_all_login_options">Vedeți toate opțiunile de autentificare</string>
-    <string name="pending_log_in_requests">Cereri de conectare în așteptare</string>
+    <string name="pending_access_requests">Pending access requests</string>
     <string name="decline_all_requests">Refuză toate cererile</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Sunteţi sigur că doriţi să refuzaţi toate solicitările de conectare în aşteptare?</string>
     <string name="no_pending_requests">Nicio cerere în așteptare</string>
     <string name="enable_camer_permission_to_use_the_scanner">Permite accesul camerei foto pentru a utiliza scanerul</string>
     <string name="language">Limbă</string>
-    <string name="language_change_x_description">Limba a fost schimbată în %1$s. Vă rugăm să reporniți aplicația pentru a vedea schimbarea</string>
     <string name="default_system">Implicit (sistem)</string>
     <string name="weak_master_password">Parolă principală slabă</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Parola slabă identificată. Utilizați o parolă puternică pentru a vă proteja contul. Sigur doriți să utilizați o parolă slabă?</string>
@@ -694,9 +684,8 @@ Doriți să comutați la acest cont?</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Cheia de acces nu va fi copiată la articolul clonat. Dorești să continui să clonezi acest articol?</string>
     <string name="master_password_re_prompt_help">Ajutor re-introducere parolă principală</string>
     <string name="admin_approval_requested">Se solicită aprobarea administratorului</string>
-    <string name="your_request_has_been_sent_to_your_admin">Cererea dvs. a fost trimisă administratorului dvs.</string>
-    <string name="you_will_be_notified_once_approved">Veți fi notificat după aprobare.</string>
-    <string name="trouble_logging_in">Probleme la conectare?</string>
+    <string name="your_request_has_been_sent_to_your_admin_you_will_receive_an_email_once_approved">Your request has been sent to your admin. You will receive an email once approved.</string>
+    <string name="your_admin_may_ask_you_to_confirm_this_fingerprint_phrase">Your admin may ask you to confirm this Fingerprint phrase.</string>
     <string name="block_auto_fill">Blocați completarea automată</string>
     <string name="no_uris_blocked">Nu există URI-uri blocate</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">Completarea automată nu va fi oferită pentru aceste URI-uri.</string>
@@ -707,8 +696,7 @@ Doriți să comutați la acest cont?</string>
     <string name="format_x_separate_multiple_ur_is_with_a_comma">Format: %1$s. Separați mai multe URI-uri cu o virgulă.</string>
     <string name="invalid_uri">URI invalid</string>
     <string name="the_urix_is_already_blocked">URI %1$s este deja blocat</string>
-    <string name="login_approved">Autentificare aprobată</string>
-    <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app">Autentificarea cu dispozitivul trebuie configurată în setările aplicației Bitwarden.</string>
+    <string name="access_approved">Access approved</string>
     <string name="need_another_option_view_all_login_options">Ai nevoie de o altă opțiune? <annotation link="viewAll">Vezi toate opțiunile de autentificare</annotation></string>
     <string name="log_in_with_device">Conectați-vă cu dispozitivul</string>
     <string name="logging_in_on">Conectare la</string>
@@ -983,7 +971,6 @@ Doriți să comutați la acest cont?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operațiunea cu cheia de acces a eșuat deoarece cererea nu este acceptată.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operațiunea cu parola a eșuat deoarece elementul selectat nu există.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_have_a_valid_password">Operațiunea cu parola a eșuat deoarece elementul selectat nu are o parolă validă.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Operațiunea cu parola a eșuat deoarece nu a fost selectat niciun element.</string>
     <string name="credential_operation_failed_because_the_request_is_invalid">Operațiunea cu acreditări a eșuat deoarece cererea este invalidă.</string>
     <string name="credential_operation_failed_because_the_request_is_unsupported">Operațiunea cu acreditări a eșuat deoarece cererea nu este acceptată.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operațiunea cu acreditări a eșuat deoarece încercările de verificare a utilizatorului au fost depășite.</string>
@@ -1064,7 +1051,6 @@ Doriți să comutați la acest cont?</string>
     <string name="learn_more_about_privileged_apps">Află mai multe despre aplicațiile privilegiate</string>
     <string name="privileged_apps">Aplicații privilegiate</string>
     <string name="unrecognized_browser">Browser nerecunoscut</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Află mai multe despre utilizarea cheilor de acces cu Bitwarden.</string>
     <string name="all_trusted_apps">Toate aplicațiile de încredere</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ești sigur că nu mai ai încredere în %s?</string>
     <string name="installed_apps">Aplicații instalate</string>
@@ -1081,8 +1067,6 @@ Doriți să comutați la acest cont?</string>
     <string name="verification_code_added">Cod de verificare adăugat</string>
     <string name="refresh_period">Perioadă de reîmprospătare</string>
     <string name="algorithm">Algoritm</string>
-    <string name="advanced">Avansat</string>
-    <string name="collapse_advanced_options">Restrânge opțiunile avansate</string>
     <string name="number_of_digits">Număr de cifre</string>
     <plurals name="refresh_period_seconds">
         <item quantity="one">%d secundă</item>
@@ -1150,6 +1134,7 @@ Doriți să comutați la acest cont?</string>
     <string name="save_option_as_default">Salvează opțiunea ca implicită</string>
     <string name="account_synced_from_bitwarden_app">Cont sincronizat din aplicația Bitwarden</string>
     <string name="local_codes">Coduri locale (%1$d)</string>
+    <string name="local_codes_header">Coduri locale</string>
     <string name="required_information_missing">Lipsesc informații obligatorii</string>
     <string name="required_information_missing_message">Lipsesc informații obligatorii (de ex., „services” sau „secret”). Verifică fișierul și încearcă din nou. Vizitează bitwarden.com/help pentru asistență</string>
     <string name="file_could_not_be_processed">Fișierul nu a putut fi procesat</string>
@@ -1166,7 +1151,6 @@ Doriți să comutați la acest cont?</string>
     <string name="select_a_card_for_x">Selectează un card pentru %s</string>
     <string name="choose_an_identity">Choose an identity</string>
     <string name="advanced_options">Opțiuni avansate</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mai multe despre detectarea potrivirilor</annotation></string>
     <string name="keep_your_credential_secure">Menține-ți acreditările în siguranță</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Află mai multe despre cum să menții acreditările în siguranță atunci când folosești „%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Ești sigur că vrei să folosești „%1$s”?</string>
@@ -1210,7 +1194,6 @@ Doriți să comutați la acest cont?</string>
     <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importă parole, chei de acces și alte tipuri de elemente din seiful Bitwarden.</string>
     <string name="items_to_import">Elemente de importat</string>
     <string name="exporting_items">Se exportă elementele…</string>
-    <string name="export_failed">Exportul a eșuat</string>
     <string name="passwords">Parole</string>
     <string name="passkeys">Chei de acces</string>
     <string name="why_is_this_step_required">De ce este necesar acest pas?</string>
@@ -1230,7 +1213,6 @@ Doriți să comutați la acest cont?</string>
     <string name="transfer_items_to_org">Transferă elemente către %1$s</string>
     <string name="transfer_items_description"><annotation arg="0">%1$s</annotation> necesită ca toate elementele să fie deținute de organizație pentru securitate și conformitate. Faceți clic pe Accept pentru a transfera proprietatea elementelor dvs. <annotation link="learnMore">Află mai multe</annotation></string>
     <string name="decline_and_leave">Refuză și părăsește</string>
-    <string name="why_am_i_seeing_this">De ce văd acest lucru?</string>
     <string name="migrating_items_to_x">Se migrează elementele către %s</string>
     <string name="failed_to_migrate_items_to_x">Migrarea elementelor către %s a eșuat</string>
     <string name="search_archive">Caută în arhivă</string>
@@ -1248,6 +1230,7 @@ Doriți să comutați la acest cont?</string>
     <string name="archiving_items_is_a_premium_feature">Arhivarea elementelor este o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="totp_is_a_premium_feature">Cheia Authenticator (TOTP) este o funcție Premium. Planul tău actual nu include acces la această funcție.</string>
     <string name="upgrade_to_premium">Actualizează la Premium</string>
+    <string name="explore_premium">Explore Premium</string>
     <string name="plan">Plan</string>
     <string name="to_manage_your_premium_subscription_youll_need_to_login_to_your_web_vault_on_a_computer">Pentru a gestiona abonamentul Premium, va trebui să te autentifici în seiful web de pe un computer.</string>
     <string name="unlock_advanced_security_features">Deblochează funcții avansate de securitate</string>
@@ -1329,7 +1312,6 @@ Doriți să comutați la acest cont?</string>
     <string name="archive_item">Arhivează elementul</string>
     <string name="once_archived_this_item_will_be_excluded">Odată arhivat, acest element va fi exclus din rezultatele căutării și din sugestiile de completare automată.</string>
     <string name="pricing_unavailable">Prețuri indisponibile</string>
-    <string name="current_plan">Planul curent</string>
     <string name="premium_plan_name">Premium</string>
     <string name="billing_amount">Suma de facturare</string>
     <string name="storage_cost">Costul stocării</string>
@@ -1406,8 +1388,6 @@ Doriți să comutați la acest cont?</string>
     <string name="issuing_country">Țara emitentă</string>
     <string name="issuing_state">Stat / provincie emitent</string>
     <string name="license_class">Clasă licență</string>
-    <string name="surname">Nume de familie</string>
-    <string name="given_name">Prenume</string>
     <string name="date_of_birth">Data nașterii</string>
     <string name="nationality">Naționalitate</string>
     <string name="passport_type">Tip pașaport</string>

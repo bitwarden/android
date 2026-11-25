@@ -18,7 +18,11 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -26,40 +30,46 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 private const val KEY_STATE = "state"
 
 /**
  * Manages application state for the initial login screen.
  */
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = LoginViewModel.Factory::class)
+class LoginViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.LoginRoute,
     savedStateHandle: SavedStateHandle,
     private val environmentRepository: EnvironmentRepository,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE]
-        ?: run {
-            val args = savedStateHandle.toLoginArgs()
-            LoginState(
-                emailAddress = args.emailAddress,
-                isLoginButtonEnabled = false,
-                passwordInput = "",
-                environmentLabel = environmentRepository.environment.label,
-                dialogState = LoginState.DialogState.Loading(BitwardenString.loading.asText()),
-                accountSummaries = authRepository
-                    .userStateFlow
-                    .value
-                    ?.toAccountSummaries()
-                    .orEmpty()
-                    .toImmutableList(),
-                shouldShowLoginWithDevice = false,
-            )
-        },
+    initialState = savedStateHandle[KEY_STATE] ?: LoginState(
+        emailAddress = route.emailAddress,
+        isLoginButtonEnabled = false,
+        passwordInput = "",
+        environmentLabel = environmentRepository.environment.label,
+        dialogState = LoginState.DialogState.Loading(BitwardenString.loading.asText()),
+        accountSummaries = authRepository
+            .userStateFlow
+            .value
+            ?.toAccountSummaries()
+            .orEmpty()
+            .toImmutableList(),
+        shouldShowLoginWithDevice = false,
+    ),
 ) {
+    /**
+     * Factory for creating a [LoginViewModel] for a specific [AuthGraph.LoginRoute].
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [LoginViewModel] for the given [route].
+         */
+        fun create(route: AuthGraph.LoginRoute): LoginViewModel
+    }
 
     init {
         viewModelScope.launch {

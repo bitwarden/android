@@ -1,21 +1,22 @@
 package com.x8bit.bitwarden.ui.platform.feature.overlaynav
 
+import androidx.compose.material3.Text
+import androidx.compose.ui.test.onNodeWithText
+import androidx.navigation3.runtime.NavEntry
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.ui.platform.base.createMockNavHostController
+import com.bitwarden.ui.platform.navigation.util.navigationControllerOf
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.feature.accessibilitydisclosure.AccessibilityDisclosureRoute
-import com.x8bit.bitwarden.ui.platform.feature.biometrics.UpdateBiometricsRoute
-import com.x8bit.bitwarden.ui.platform.feature.cookieacquisition.CookieAcquisitionRoute
-import com.x8bit.bitwarden.ui.platform.feature.localnetworkaccess.LocalNetworkAccessRoute
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class OverlayNavScreenTest : BitwardenComposeTest() {
-    private val mockNavHostController = createMockNavHostController()
+    private val navigationController = navigationControllerOf<OverlayNavGraph>(
+        routes = arrayOf(OverlayNavGraph.RootNavigationRoute),
+    )
     private val mutableEventFlow = bufferedMutableSharedFlow<OverlayNavEvent>()
     private val viewModel = mockk<OverlayNavViewModel> {
         every { eventFlow } returns mutableEventFlow
@@ -27,8 +28,22 @@ class OverlayNavScreenTest : BitwardenComposeTest() {
         setContent {
             OverlayNavScreen(
                 viewModel = viewModel,
-                navController = mockNavHostController,
+                navigationController = navigationController,
                 onSplashScreenRemoved = {},
+                entryProvider = { key -> NavEntry(key = key) { Text(text = key.toString()) } },
+            )
+        }
+    }
+
+    @Test
+    fun `initial back stack should display the root navigation screen`() {
+        composeTestRule
+            .onNodeWithText(text = OverlayNavGraph.RootNavigationRoute.toString())
+            .assertExists()
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(OverlayNavGraph.RootNavigationRoute),
+                navigationController.backStack.toList(),
             )
         }
     }
@@ -37,9 +52,10 @@ class OverlayNavScreenTest : BitwardenComposeTest() {
     fun `on NavigateToUpdateBiometrics should navigate to the update biometrics screen`() {
         mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToUpdateBiometrics)
         composeTestRule.runOnIdle {
-            verify(exactly = 1) {
-                mockNavHostController.navigate(route = UpdateBiometricsRoute, builder = any())
-            }
+            assertEquals(
+                listOf(OverlayNavGraph.RootNavigationRoute, OverlayNavGraph.UpdateBiometricsRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -47,9 +63,22 @@ class OverlayNavScreenTest : BitwardenComposeTest() {
     fun `on NavigateToCookieAcquisition should navigate to the cookie acquisition screen`() {
         mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
         composeTestRule.runOnIdle {
-            verify(exactly = 1) {
-                mockNavHostController.navigate(route = CookieAcquisitionRoute, builder = any())
-            }
+            assertEquals(
+                listOf(OverlayNavGraph.RootNavigationRoute, OverlayNavGraph.CookieAcquisitionRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToCookieAcquisition should not navigate again when already displayed`() {
+        mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
+        mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(OverlayNavGraph.RootNavigationRoute, OverlayNavGraph.CookieAcquisitionRoute),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -57,9 +86,13 @@ class OverlayNavScreenTest : BitwardenComposeTest() {
     fun `on NavigateToLocalNetworkAccess should navigate to the local network access screen`() {
         mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToLocalNetworkAccess)
         composeTestRule.runOnIdle {
-            verify(exactly = 1) {
-                mockNavHostController.navigate(route = LocalNetworkAccessRoute, builder = any())
-            }
+            assertEquals(
+                listOf(
+                    OverlayNavGraph.RootNavigationRoute,
+                    OverlayNavGraph.LocalNetworkAccessRoute,
+                ),
+                navigationController.backStack.toList(),
+            )
         }
     }
 
@@ -68,12 +101,13 @@ class OverlayNavScreenTest : BitwardenComposeTest() {
     fun `on NavigateToAccessibilityDisclosure should navigate to the accessibility disclosure screen`() {
         mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToAccessibilityDisclosure)
         composeTestRule.runOnIdle {
-            verify(exactly = 1) {
-                mockNavHostController.navigate(
-                    route = AccessibilityDisclosureRoute,
-                    builder = any(),
-                )
-            }
+            assertEquals(
+                listOf(
+                    OverlayNavGraph.RootNavigationRoute,
+                    OverlayNavGraph.AccessibilityDisclosureRoute,
+                ),
+                navigationController.backStack.toList(),
+            )
         }
     }
 }

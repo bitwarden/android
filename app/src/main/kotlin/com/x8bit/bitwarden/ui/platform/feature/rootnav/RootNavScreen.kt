@@ -1,90 +1,56 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.navOptions
-import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
-import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
-import com.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.bitwarden.ui.platform.util.toObjectNavigationRoute
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupBrowserAutofillRoute
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillAsRootScreen
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutoFillAsRootScreen
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupCompleteScreen
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreenAsRoot
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestinationAsRoot
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestinationAsRoot
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupCompleteDestination
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestinationAsRoot
-import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraphRoute
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.rememberNavEntries
+import com.bitwarden.ui.platform.navigation.util.rememberNavigationController
+import com.bitwarden.ui.platform.theme.NavDisplayTransitions
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.AccountSetupGraph
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.accountSetupGraph
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
-import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
-import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
-import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.navigateToExpiredRegistrationLinkScreen
-import com.x8bit.bitwarden.ui.auth.feature.removepassword.RemovePasswordRoute
-import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordGraphRoute
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.passwordResetGraph
-import com.x8bit.bitwarden.ui.auth.feature.setpassword.SetPasswordRoute
-import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
-import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.TrustedDeviceGraphRoute
-import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.navigateToTrustedDeviceGraph
-import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceGraph
-import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VaultUnlockRoute
-import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
-import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
-import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
-import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordGraph
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
-import com.x8bit.bitwarden.ui.platform.feature.splash.SplashRoute
-import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraphRoute
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
-import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraphRoute
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
-import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
-import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
-import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.MigrateToMyItemsGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.migrateToMyItemsGraph
-import com.x8bit.bitwarden.ui.vault.feature.migratetomyitems.navigateToMigrateToMyItemsGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * Controls root level [NavHost] for the app.
+ * Controls the root level [NavDisplay] for the app.
+ *
+ * The root back stack is driven entirely by the [RootNavState]: whenever the state changes, the
+ * entire back stack is replaced with the back stack for the new state. Each route in the
+ * [RootNavGraph] represents a top-level section of the app, which may host its own nested
+ * navigation graph.
  */
-@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
-    navController: NavHostController = rememberBitwardenNavController(name = "RootNavScreen"),
+    navigationController: NavigationController<RootNavGraph> = rememberNavigationController(
+        routes = arrayOf(RootNavGraph.SplashRoute),
+    ),
+    entryProvider: (RootNavGraph) -> NavEntry<RootNavGraph> = entryProvider(),
     onSplashScreenRemoved: () -> Unit = {},
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -95,75 +61,25 @@ fun RootNavScreen(
         if (isNotSplashScreen) onSplashScreenRemoved()
     }
 
-    NavHost(
-        navController = navController,
-        startDestination = SplashRoute,
-        enterTransition = { toEnterTransition()(this) },
-        exitTransition = { toExitTransition()(this) },
-        popEnterTransition = { toEnterTransition()(this) },
-        popExitTransition = { toExitTransition()(this) },
-    ) {
-        splashDestination()
-        authGraph(navController)
-        removePasswordDestination()
-        passwordResetGraph(navController)
-        trustedDeviceGraph(navController)
-        vaultUnlockDestination()
-        vaultUnlockedGraph(navController)
-        setupUnlockDestinationAsRoot()
-        setupBrowserAutofillDestinationAsRoot()
-        setupAutoFillDestinationAsRoot()
-        setupCompleteDestination()
-        exportItemsGraph(navController)
-        migrateToMyItemsGraph(navController)
-    }
+    NavDisplay(
+        entries = navigationController.rememberNavEntries(entryProvider = entryProvider),
+        onBack = navigationController::navigateBack,
+        transitionSpec = NavDisplayTransitions.root(),
+        popTransitionSpec = NavDisplayTransitions.root(),
+        predictivePopTransitionSpec = NavDisplayTransitions.predictive(
+            provider = NavDisplayTransitions.root(),
+        ),
+    )
 
-    val targetRoute = when (state) {
-        RootNavState.Auth,
-        is RootNavState.CompleteOngoingRegistration,
-        RootNavState.AuthWithWelcome,
-        RootNavState.ExpiredRegistrationLink,
-            -> AuthGraphRoute
-
-        RootNavState.ResetPassword -> ResetPasswordGraphRoute
-        RootNavState.SetPassword -> SetPasswordRoute
-        RootNavState.RemovePassword -> RemovePasswordRoute
-        RootNavState.Splash -> SplashRoute
-        RootNavState.TrustedDevice -> TrustedDeviceGraphRoute
-        RootNavState.VaultLocked -> VaultUnlockRoute.Standard
-        is RootNavState.VaultUnlocked,
-        is RootNavState.VaultUnlockedForAutofillSave,
-        is RootNavState.VaultUnlockedForAutofillSelection,
-        is RootNavState.VaultUnlockedForNewSend,
-        is RootNavState.VaultUnlockedForNewTotp,
-        is RootNavState.VaultUnlockedForAuthRequest,
-        is RootNavState.VaultUnlockedForFido2Save,
-        is RootNavState.VaultUnlockedForFido2Assertion,
-        is RootNavState.VaultUnlockedForPasswordGet,
-        is RootNavState.VaultUnlockedForProviderGetCredentials,
-        is RootNavState.VaultUnlockedForCreatePasswordRequest,
-            -> VaultUnlockedGraphRoute
-
-        is RootNavState.CredentialExchangeExport,
-        is RootNavState.CredentialExchangeExportSkipAccountSelection,
-            -> ExportItemsGraphRoute
-
-        RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
-        RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
-        RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
-        RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
-        is RootNavState.MigrateToMyItems -> MigrateToMyItemsGraphRoute
-    }
-    val currentRoute = navController.currentDestination?.rootLevelRoute()
+    val targetRoute = state.toRoute()
 
     // Don't navigate if we are already at the correct root. This notably happens during process
-    // death. In this case, the NavHost already restores state, so we don't have to navigate.
-    // However, if the route is correct but the underlying state is different, we should still
-    // proceed in order to get a fresh version of that route.
-    if (currentRoute == targetRoute.toObjectNavigationRoute() &&
+    // death. In this case, the backstack has already been restored, so we don't have to navigate.
+    // However, if the root is correct but the underlying state is different, we should still
+    // proceed in order to get a fresh version of that root.
+    if (navigationController.backStack.firstOrNull() == targetRoute &&
         previousStateReference.get() == state
     ) {
-        previousStateReference.set(state)
         return
     }
     previousStateReference.set(state)
@@ -172,226 +88,180 @@ fun RootNavScreen(
     // if we don't first clear focus anytime we change the root destination.
     LocalActivity.current?.currentFocus?.clearFocus()
 
-    // When state changes, navigate to different root navigation state
-    val rootNavOptions = navOptions {
-        // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(navController.graph.id) {
-            inclusive = false
-            saveState = false
-        }
-        launchSingleTop = true
-        restoreState = false
+    navigationController.replaceAll(routes = listOf(targetRoute))
+}
+
+/**
+ * Returns the [RootNavGraph] route of the top-level section that should be displayed for the given
+ * [RootNavState].
+ */
+@Suppress("CyclomaticComplexMethod", "LongMethod")
+@VisibleForTesting
+internal fun RootNavState.toRoute(): RootNavGraph = when (this) {
+    RootNavState.Auth -> RootNavGraph.AuthRoute(backStack = listOf(AuthGraph.LandingRoute))
+    RootNavState.AuthWithWelcome -> {
+        RootNavGraph.AuthRoute(backStack = listOf(AuthGraph.WelcomeRoute))
     }
 
-    // Use a LaunchedEffect to ensure we don't navigate too soon when the app first opens. This
-    // avoids a bug that first appeared in Compose Material3 1.2.0-rc01 that causes the initial
-    // transition to appear corrupted.
-    LaunchedEffect(state) {
-        when (val currentState = state) {
-            RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
-            RootNavState.AuthWithWelcome -> navController.navigateToWelcome(rootNavOptions)
-            is RootNavState.CompleteOngoingRegistration -> {
-                navController.navigateToAuthGraph(rootNavOptions)
-                navController.navigateToCompleteRegistration(
-                    emailAddress = currentState.email,
-                    verificationToken = currentState.verificationToken,
-                    fromEmail = currentState.fromEmail,
-                )
-            }
+    is RootNavState.CompleteOngoingRegistration -> {
+        RootNavGraph.AuthRoute(
+            backStack = listOf(
+                AuthGraph.LandingRoute,
+                AuthGraph.CompleteRegistrationRoute(
+                    emailAddress = this.email,
+                    verificationToken = this.verificationToken,
+                    fromEmail = this.fromEmail,
+                ),
+            ),
+        )
+    }
 
-            RootNavState.ExpiredRegistrationLink -> {
-                navController.navigateToAuthGraph(rootNavOptions)
-                navController.navigateToExpiredRegistrationLinkScreen()
-            }
+    RootNavState.ExpiredRegistrationLink -> {
+        RootNavGraph.AuthRoute(
+            backStack = listOf(
+                AuthGraph.LandingRoute,
+                AuthGraph.ExpiredRegistrationLinkRoute,
+            ),
+        )
+    }
 
-            is RootNavState.MigrateToMyItems -> {
-                navController.navigateToMigrateToMyItemsGraph(rootNavOptions)
-            }
+    RootNavState.SetPassword -> {
+        RootNavGraph.AuthRoute(backStack = listOf(AuthGraph.SetPasswordRoute))
+    }
 
-            RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
-            RootNavState.ResetPassword -> {
-                navController.navigateToResetPasswordGraph(rootNavOptions)
-            }
+    RootNavState.TrustedDevice -> {
+        RootNavGraph.AuthRoute(backStack = listOf(AuthGraph.TrustedDeviceRoute))
+    }
 
-            RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
-            RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
-            RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
-            RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
-            is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
-                navOptions = rootNavOptions,
-            )
+    RootNavState.VaultLocked -> {
+        RootNavGraph.AuthRoute(
+            backStack = listOf(AuthGraph.VaultUnlockRoute(unlockType = UnlockType.STANDARD)),
+        )
+    }
 
-            is RootNavState.VaultUnlockedForNewSend -> {
-                navController.navigateToVaultUnlock(rootNavOptions)
-                navController.navigateToAddEditSend(
-                    route = AddEditSendRoute(
-                        sendType = currentState.sendType,
-                        modeType = ModeType.ADD,
-                    ),
-                    navOptions = rootNavOptions,
-                )
-            }
+    is RootNavState.MigrateToMyItems -> RootNavGraph.MigrateToMyItemsRoute
+    RootNavState.RemovePassword -> RootNavGraph.RemovePasswordRoute
+    RootNavState.ResetPassword -> RootNavGraph.ResetPasswordRoute
+    RootNavState.Splash -> RootNavGraph.SplashRoute
+    is RootNavState.VaultUnlocked -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(VaultUnlockedGraph.NavBarRoute),
+        )
+    }
 
-            is RootNavState.VaultUnlockedForNewTotp -> {
-                navController.navigateToVaultUnlock(rootNavOptions)
-                navController.navigateToVaultItemListingAsRoot(
+    is RootNavState.VaultUnlockedForNewSend -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(
+                VaultUnlockedGraph.AddEditSendRoute(
+                    sendType = this.sendType,
+                    modeType = ModeType.ADD,
+                ),
+            ),
+        )
+    }
+
+    is RootNavState.VaultUnlockedForAutofillSave -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(
+                VaultUnlockedGraph.VaultAddEditRoute(
+                    vaultAddEditType = VaultAddEditType.AddItem(),
+                    vaultItemCipherType = this.autofillSaveItem.toVaultItemCipherType(),
+                ),
+            ),
+        )
+    }
+
+    is RootNavState.VaultUnlockedForCreatePasswordRequest -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(
+                VaultUnlockedGraph.VaultAddEditRoute(
+                    vaultAddEditType = VaultAddEditType.AddItem(),
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            ),
+        )
+    }
+
+    is RootNavState.VaultUnlockedForAutofillSelection -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(
+                VaultUnlockedGraph.VaultItemListingRoute(
+                    vaultItemListingType = this.type.toVaultItemListingType(),
+                ),
+            ),
+        )
+    }
+
+    is RootNavState.VaultUnlockedForAuthRequest -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(VaultUnlockedGraph.LoginApprovalRoute(fingerprint = null)),
+        )
+    }
+
+    is RootNavState.VaultUnlockedForNewTotp,
+    is RootNavState.VaultUnlockedForFido2Save,
+    is RootNavState.VaultUnlockedForFido2Assertion,
+    is RootNavState.VaultUnlockedForPasswordGet,
+    is RootNavState.VaultUnlockedForProviderGetCredentials,
+        -> {
+        RootNavGraph.VaultUnlockedRoute(
+            activeUserId = this.activeUserId,
+            backStack = listOf(
+                VaultUnlockedGraph.VaultItemListingRoute(
                     vaultItemListingType = VaultItemListingType.Login,
-                    navOptions = rootNavOptions,
-                )
-            }
+                ),
+            ),
+        )
+    }
 
-            is RootNavState.VaultUnlockedForAutofillSave -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToVaultAddEdit(
-                    args = VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem(),
-                        vaultItemCipherType = currentState.autofillSaveItem.toVaultItemCipherType(),
-                    ),
-                    navOptions = rootNavOptions,
-                )
-            }
+    RootNavState.OnboardingAccountLockSetup -> {
+        RootNavGraph.AccountSetupRoute(backStack = listOf(AccountSetupGraph.SetupUnlockRoute))
+    }
 
-            is RootNavState.VaultUnlockedForCreatePasswordRequest -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToVaultAddEdit(
-                    args = VaultAddEditArgs(
-                        vaultAddEditType = VaultAddEditType.AddItem(),
-                        vaultItemCipherType = VaultItemCipherType.LOGIN,
-                    ),
-                    navOptions = rootNavOptions,
-                )
-            }
+    RootNavState.OnboardingAutoFillSetup -> {
+        RootNavGraph.AccountSetupRoute(backStack = listOf(AccountSetupGraph.SetupAutofillRoute))
+    }
 
-            is RootNavState.VaultUnlockedForAutofillSelection -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToVaultItemListingAsRoot(
-                    vaultItemListingType = currentState.type.toVaultItemListingType(),
-                    navOptions = rootNavOptions,
-                )
-            }
+    RootNavState.OnboardingBrowserAutofillSetup -> {
+        RootNavGraph.AccountSetupRoute(
+            backStack = listOf(AccountSetupGraph.SetupBrowserAutofillRoute),
+        )
+    }
 
-            RootNavState.VaultUnlockedForAuthRequest -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToLoginApproval(
-                    fingerprint = null,
-                    navOptions = rootNavOptions,
-                )
-            }
+    RootNavState.OnboardingStepsComplete -> {
+        RootNavGraph.AccountSetupRoute(backStack = listOf(AccountSetupGraph.SetupCompleteRoute))
+    }
 
-            is RootNavState.VaultUnlockedForFido2Save,
-            is RootNavState.VaultUnlockedForFido2Assertion,
-            is RootNavState.VaultUnlockedForPasswordGet,
-            is RootNavState.VaultUnlockedForProviderGetCredentials,
-                -> {
-                navController.navigateToVaultUnlockedGraph(rootNavOptions)
-                navController.navigateToVaultItemListingAsRoot(
-                    vaultItemListingType = VaultItemListingType.Login,
-                    navOptions = rootNavOptions,
-                )
-            }
+    RootNavState.CredentialExchangeExport -> {
+        RootNavGraph.ExportItemsRoute(backStack = listOf(ExportItemsGraph.SelectAccountRoute))
+    }
 
-            RootNavState.OnboardingAccountLockSetup -> {
-                navController.navigateToSetupUnlockScreenAsRoot(rootNavOptions)
-            }
-
-            RootNavState.OnboardingAutoFillSetup -> {
-                navController.navigateToSetupAutoFillAsRootScreen(rootNavOptions)
-            }
-
-            RootNavState.OnboardingBrowserAutofillSetup -> {
-                navController.navigateToSetupBrowserAutoFillAsRootScreen(rootNavOptions)
-            }
-
-            RootNavState.OnboardingStepsComplete -> {
-                navController.navigateToSetupCompleteScreen(rootNavOptions)
-            }
-
-            is RootNavState.CredentialExchangeExport -> {
-                navController.navigateToExportItemsGraph(rootNavOptions)
-            }
-
-            is RootNavState.CredentialExchangeExportSkipAccountSelection -> {
-                navController.navigateToVerifyPassword(
-                    userId = currentState.userId,
-                    navOptions = rootNavOptions,
+    is RootNavState.CredentialExchangeExportSkipAccountSelection -> {
+        RootNavGraph.ExportItemsRoute(
+            backStack = listOf(
+                ExportItemsGraph.VerifyPasswordRoute(
+                    userId = this.userId,
                     hasOtherAccounts = false,
-                )
-            }
-        }
+                ),
+            ),
+        )
     }
 }
 
-/**
- * Helper method that returns the highest level route for the given [NavDestination].
- *
- * As noted above, this can be removed after upgrading to latest compose navigation, since
- * the nav args can prevent us from having to do this check.
- */
-private fun NavDestination?.rootLevelRoute(): String? {
-    if (this == null) {
-        return null
+private fun entryProvider(): (RootNavGraph) -> NavEntry<RootNavGraph> =
+    entryProvider {
+        splashDestination()
+        authGraph()
+        removePasswordDestination()
+        resetPasswordGraph()
+        accountSetupGraph()
+        vaultUnlockedGraph()
+        exportItemsGraph()
+        migrateToMyItemsGraph()
     }
-    if (parent?.route == null) {
-        return route
-    }
-    return parent.rootLevelRoute()
-}
-
-/**
- * Define the enter transition for each route.
- */
-@Suppress("MaxLineLength")
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(): NonNullEnterTransitionProvider {
-    val initialRoute = initialState.destination.rootLevelRoute()
-    val targetRoute = targetState.destination.rootLevelRoute()
-    return if (initialRoute == targetRoute) {
-        RootTransitionProviders.Enter.none
-    } else {
-        when (targetState.destination.rootLevelRoute()) {
-            MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
-            ResetPasswordGraphRoute.toObjectNavigationRoute(),
-                -> RootTransitionProviders.Enter.slideUp
-
-            else -> when (initialState.destination.rootLevelRoute()) {
-                // Disable transitions when coming from the splash screen
-                SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
-                // The MigrateToMyItemsGraphRoute and ResetPasswordRoute animation
-                // should stay but due to an issue when combining certain animations,
-                // we are just using a fadeIn instead.
-                MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
-                ResetPasswordGraphRoute.toObjectNavigationRoute(),
-                    -> RootTransitionProviders.Enter.fadeIn
-
-                else -> RootTransitionProviders.Enter.fadeIn
-            }
-        }
-    }
-}
-
-/**
- * Define the exit transition for each route.
- */
-@Suppress("MaxLineLength")
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition(): NonNullExitTransitionProvider {
-    val initialRoute = initialState.destination.rootLevelRoute()
-    val targetRoute = targetState.destination.rootLevelRoute()
-    return if (initialRoute == targetRoute) {
-        RootTransitionProviders.Exit.none
-    } else {
-        when (initialRoute) {
-            // Disable transitions when coming from the splash screen
-            SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.none
-            MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
-            ResetPasswordGraphRoute.toObjectNavigationRoute(),
-                -> RootTransitionProviders.Exit.slideDown
-
-            else -> when (targetRoute) {
-                MigrateToMyItemsGraphRoute.toObjectNavigationRoute(),
-                ResetPasswordGraphRoute.toObjectNavigationRoute(),
-                    -> RootTransitionProviders.Exit.stay
-
-                else -> RootTransitionProviders.Exit.fadeOut
-            }
-        }
-    }
-}

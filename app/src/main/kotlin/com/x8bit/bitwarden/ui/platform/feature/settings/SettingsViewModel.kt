@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material3.Text
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.DeferredBackgroundEvent
@@ -15,6 +13,9 @@ import com.x8bit.bitwarden.data.billing.manager.UPGRADED_TO_PREMIUM_LEARN_MORE_U
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -23,23 +24,23 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 /**
  * View model for the settings screen.
  */
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = SettingsViewModel.Factory::class)
+class SettingsViewModel @AssistedInject constructor(
+    @Assisted isPreAuth: Boolean,
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
     private val premiumStateManager: PremiumStateManager,
-    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
-        isPreAuth = savedStateHandle.toSettingsArgs().isPreAuth,
+        isPreAuth = isPreAuth,
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
+        showPlanBadge = premiumStateManager.shouldShowPlanBadgeFlow.value,
         isPlanRowEligible = premiumStateManager.isPlanRowEligibleFlow.value,
         isSelfHosted = premiumStateManager.isSelfHostedFlow.value,
         isUpgradedToPremiumCardEligible = premiumStateManager
@@ -47,17 +48,29 @@ class SettingsViewModel @Inject constructor(
             .value,
     ),
 ) {
+    /**
+     * Factory for creating a [SettingsViewModel] for the given `isPreAuth` value.
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * Creates a [SettingsViewModel] for the given [isPreAuth].
+         */
+        fun create(isPreAuth: Boolean): SettingsViewModel
+    }
 
     init {
         combine(
             firstTimeActionManager.allSecuritySettingsBadgeCountFlow,
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow,
             firstTimeActionManager.allVaultSettingsBadgeCountFlow,
-        ) { securityCount, autofillCount, vaultCount ->
+            premiumStateManager.shouldShowPlanBadgeFlow,
+        ) { securityCount, autofillCount, vaultCount, showPlanBadge ->
             SettingsAction.Internal.SettingsNotificationCountUpdate(
                 securityCount = securityCount,
                 autoFillCount = autofillCount,
                 vaultCount = vaultCount,
+                showPlanBadge = showPlanBadge,
             )
         }
             .onEach(::sendAction)
@@ -152,6 +165,7 @@ class SettingsViewModel @Inject constructor(
                 autoFillCount = action.autoFillCount,
                 securityCount = action.securityCount,
                 vaultCount = action.vaultCount,
+                showPlanBadge = action.showPlanBadge,
             )
         }
     }
@@ -203,6 +217,7 @@ data class SettingsState(
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
+    private val showPlanBadge: Boolean,
     private val isPlanRowEligible: Boolean,
     private val isSelfHosted: Boolean = false,
     private val isUpgradedToPremiumCardEligible: Boolean = false,
@@ -216,11 +231,11 @@ data class SettingsState(
     val shouldShowUpgradedToPremiumCard: Boolean = !isPreAuth && isUpgradedToPremiumCardEligible
 
     /**
-     * Whether the plan row should be shown. The row is visible post-authentication when the user
-     * is eligible per [PremiumStateManager.isPlanRowEligibleFlow] — currently, when the in-app
-     * upgrade feature is enabled and the user is not relying solely on organization-granted
-     * Premium — and the account is on a cloud-hosted environment. Self-hosted users manage their
-     * subscription on the web vault.
+     * Whether the plan row should be shown.
+     * The row is visible when all are true:
+     * * In a post-authentication state.
+     * * The user is eligible per [PremiumStateManager.isPlanRowEligibleFlow].
+     * * Not a Self-hosted users as they manage their subscription on the web vault.
      */
     private val shouldShowPlanRow: Boolean = !isPreAuth && isPlanRowEligible && !isSelfHosted
 
@@ -243,6 +258,7 @@ data class SettingsState(
         Settings.ACCOUNT_SECURITY to securityCount,
         Settings.AUTO_FILL to autoFillCount,
         Settings.VAULT to vaultCount,
+        Settings.PLAN to if (showPlanBadge) 1 else 0,
     )
 }
 
@@ -340,6 +356,7 @@ sealed class SettingsAction {
             val autoFillCount: Int,
             val securityCount: Int,
             val vaultCount: Int,
+            val showPlanBadge: Boolean,
         ) : Internal()
 
         /**

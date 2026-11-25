@@ -193,7 +193,7 @@ class VaultViewModel @Inject constructor(
         // Force a sync if a KDF update is detected as necessary to ensure we have the latest KDF
         // settings from the server. This handles the case where the user updated their KDF
         // settings on another device. Otherwise, attempt a sync based on the normal criteria.
-        if (authRepository.needsKdfUpdateToMinimums()) {
+        if (needsKdfUpdateToMinimums()) {
             mutableStateFlow.update { it.copy(isAwaitingKdfSync = true) }
             viewModelScope.launch {
                 vaultRepository.syncForResult(forced = true)
@@ -321,11 +321,6 @@ class VaultViewModel @Inject constructor(
 
         featureFlagManager.getFeatureFlagFlow(FlagKey.NewItemTypes)
             .map { VaultAction.Internal.NewItemTypesFlagUpdateReceive(isEnabled = it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.Vfo1Foundation)
-            .map { VaultAction.Internal.Vfo1FoundationFlagUpdateReceive(isEnabled = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -739,7 +734,11 @@ class VaultViewModel @Inject constructor(
             sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
         } else {
             mutableStateFlow.update {
-                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
         }
     }
@@ -1087,7 +1086,11 @@ class VaultViewModel @Inject constructor(
     private fun handleArchiveClick(action: ListingItemOverflowAction.VaultAction.ArchiveClick) {
         if (!state.isPremium) {
             mutableStateFlow.update {
-                it.copy(dialog = VaultState.DialogState.ArchiveRequiresPremium)
+                it.copy(
+                    dialog = VaultState.DialogState.ArchiveRequiresPremium(
+                        isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                    ),
+                )
             }
             return
         }
@@ -1204,10 +1207,6 @@ class VaultViewModel @Inject constructor(
                 handleNewItemTypesFlagUpdateReceive(action)
             }
 
-            is VaultAction.Internal.Vfo1FoundationFlagUpdateReceive -> {
-                handleVfo1FoundationFlagUpdateReceive(action)
-            }
-
             is VaultAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
             is VaultAction.Internal.UnarchiveCipherReceive -> handleUnarchiveCipherReceive(action)
             is VaultAction.Internal.IntroducingArchiveActionCardDismissedFlowReceive -> {
@@ -1269,7 +1268,7 @@ class VaultViewModel @Inject constructor(
 
     private fun handleKdfSyncCompletedReceive() {
         mutableStateFlow.update { it.copy(isAwaitingKdfSync = false) }
-        if (authRepository.needsKdfUpdateToMinimums()) {
+        if (needsKdfUpdateToMinimums()) {
             mutableStateFlow.update {
                 @Suppress("MaxLineLength")
                 it.copy(
@@ -1326,22 +1325,6 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isNewItemTypesEnabled = action.isEnabled)
-        }
-
-        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateVaultState(
-                vaultData = vaultData,
-                dialog = state.dialog,
-                validTotpIds = state.validTotpIds,
-            )
-        }
-    }
-
-    private fun handleVfo1FoundationFlagUpdateReceive(
-        action: VaultAction.Internal.Vfo1FoundationFlagUpdateReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(isVfo1FoundationEnabled = action.isEnabled)
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
@@ -1621,7 +1604,6 @@ class VaultViewModel @Inject constructor(
                             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                             validTotpIds = validTotpIds,
                             isNewItemTypesEnabled = state.isNewItemTypesEnabled,
-                            isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                         ),
                         dialog = VaultState.DialogState.SyncError(
                             title = BitwardenString.vault_sync_unsuccessful.asText(),
@@ -1669,7 +1651,7 @@ class VaultViewModel @Inject constructor(
         shouldShowDecryptionAlert: Boolean,
         vaultData: DataState.Loaded<VaultData>,
     ): VaultState.DialogState? =
-        if (!state.isAwaitingKdfSync && authRepository.needsKdfUpdateToMinimums()) {
+        if (!state.isAwaitingKdfSync && needsKdfUpdateToMinimums()) {
             VaultState.DialogState.VaultLoadKdfUpdateRequired(
                 title = BitwardenString.update_your_encryption_settings.asText(),
                 message = BitwardenString
@@ -1706,7 +1688,6 @@ class VaultViewModel @Inject constructor(
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
                     isNewItemTypesEnabled = state.isNewItemTypesEnabled,
-                    isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                 ),
                 dialog = dialog,
                 isRefreshing = false,
@@ -1766,7 +1747,6 @@ class VaultViewModel @Inject constructor(
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                     validTotpIds = validTotpIds,
                     isNewItemTypesEnabled = state.isNewItemTypesEnabled,
-                    isVfo1FoundationEnabled = state.isVfo1FoundationEnabled,
                 ),
                 validTotpIds = validTotpIds.toImmutableSet(),
             )
@@ -1873,10 +1853,24 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.KdfUpdatePasswordRepromptSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.updateKdfToMinimumsIfNeeded(password = action.password)
+            val result = authRepository
+                .activeUserId
+                ?.let { userId ->
+                    authRepository.updateKdfToMinimumsIfNeeded(
+                        userId = userId,
+                        password = action.password,
+                    )
+                }
+                ?: UpdateKdfMinimumsResult.ActiveAccountNotFound
             sendAction(action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(result))
         }
     }
+
+    private fun needsKdfUpdateToMinimums(): Boolean =
+        authRepository
+            .activeUserId
+            ?.let { authRepository.needsKdfUpdateToMinimums(userId = it) }
+            ?: false
 
     private fun showGenericError(
         message: Text = BitwardenString.generic_error_message.asText(),
@@ -1934,7 +1928,6 @@ data class VaultState(
     val validTotpIds: ImmutableSet<String>,
     val collapsedSections: ImmutableSet<VaultSection> = persistentSetOf(),
     val isNewItemTypesEnabled: Boolean = false,
-    val isVfo1FoundationEnabled: Boolean = false,
     val policyBanner: PolicyBanner?,
 ) : Parcelable {
 
@@ -2422,7 +2415,9 @@ data class VaultState(
          * Displays a dialog to the user indicating that archiving requires a Premium account.
          */
         @Parcelize
-        data object ArchiveRequiresPremium : DialogState()
+        data class ArchiveRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
 
         /**
          * Displays a dialog with a loading indicator.
@@ -2995,13 +2990,6 @@ sealed class VaultAction {
          * Indicates that the New Item Types feature flag has been updated.
          */
         data class NewItemTypesFlagUpdateReceive(
-            val isEnabled: Boolean,
-        ) : Internal()
-
-        /**
-         * Indicates that the VFO-1 foundation feature flag has been updated.
-         */
-        data class Vfo1FoundationFlagUpdateReceive(
             val isEnabled: Boolean,
         ) : Internal()
 

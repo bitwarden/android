@@ -43,9 +43,7 @@ import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
-import com.x8bit.bitwarden.ui.vault.feature.attachments.preview.PreviewAttachmentRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -71,11 +69,11 @@ import java.time.Instant
 class VaultItemScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
+    private var onNavigateToVaultEditItemArgs: VaultUnlockedGraph.VaultAddEditRoute? = null
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
     private var onNavigateToPasswordHistoryId: String? = null
-    private var onNavigateToPreviewAttachment: PreviewAttachmentRoute? = null
+    private var onNavigateToPreviewAttachment: VaultUnlockedGraph.PreviewAttachmentRoute? = null
     private var onNavigateToPlanCalled = false
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
@@ -91,7 +89,6 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent(
             intentManager = intentManager,
-            featureFlagsState = FeatureFlagsState(isVfo1FoundationEnabled = true),
         ) {
             VaultItemScreen(
                 viewModel = viewModel,
@@ -120,7 +117,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             ),
         )
         assertEquals(
-            VaultAddEditArgs(
+            VaultUnlockedGraph.VaultAddEditRoute(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
                 vaultItemCipherType = VaultItemCipherType.LOGIN,
             ),
@@ -151,7 +148,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToPreviewAttachment event should invoke onNavigateToPreviewAttachment`() {
-        val route = PreviewAttachmentRoute(
+        val route = VaultUnlockedGraph.PreviewAttachmentRoute(
             cipherId = "cipherId1234",
             attachmentId = "attachmentId4321",
             fileName = "fileName",
@@ -276,6 +273,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = "You need Premium".asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
@@ -297,12 +295,13 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialog = VaultItemState.DialogState.RequiresPremium(
                     message = "You need Premium".asText(),
+                    isInAppUpgradeAvailable = true,
                 ),
             )
         }
 
         composeTestRule
-            .onNodeWithText(text = "Upgrade to Premium")
+            .onNodeWithText(text = "Explore Premium")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -806,6 +805,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
                                 title = "test.mp4",
                             ),
                         ),
+                        isInAppUpgradeAvailable = true,
                     ),
                 ),
             )
@@ -823,6 +823,45 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Explore Premium")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemAction.Common.UpgradeToPremiumClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `attachment download click for non-Premium users without in-app upgrade should show Explore Premium dialog`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = persistentListOf(
+                            VaultItemState.ViewState.Content.Common.AttachmentItem(
+                                id = "attachment-id",
+                                displaySize = "11 MB",
+                                isLargeFile = true,
+                                isDownloadAllowed = false,
+                                url = "https://example.com",
+                                title = "test.mp4",
+                            ),
+                        ),
+                        isInAppUpgradeAvailable = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Download, External link")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithText(text = "Upgrade to Premium")
@@ -4262,6 +4301,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
         hasOrganizations = true,
+        isInAppUpgradeAvailable = false,
     )
 
 private val DEFAULT_PASSKEY = BitwardenString.created_x.asText("Mar 13, 2024, 3:56 PM")
@@ -4363,6 +4403,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
         hasOrganizations = true,
+        isInAppUpgradeAvailable = false,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

@@ -402,17 +402,17 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertExists()
 
         composeTestRule
-            .onNodeWithText("A—Z")
+            .onNodeWithText("A\u2013Z")
             .performScrollTo()
             .assertIsOn()
 
         composeTestRule
-            .onNodeWithText("a—z")
+            .onNodeWithText("a\u2013z")
             .performScrollTo()
             .assertIsOn()
 
         composeTestRule
-            .onNodeWithText("0-9")
+            .onNodeWithText("0\u20139")
             .performScrollTo()
             .assertIsOn()
 
@@ -489,7 +489,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
-        composeTestRule.onNodeWithText("A—Z")
+        composeTestRule.onNodeWithText("A\u2013Z")
             .performScrollTo()
             .performClick()
 
@@ -505,7 +505,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
-        composeTestRule.onNodeWithText("a—z")
+        composeTestRule.onNodeWithText("a\u2013z")
             .performScrollTo()
             .performClick()
 
@@ -521,7 +521,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
-        composeTestRule.onNodeWithText("0-9")
+        composeTestRule.onNodeWithText("0\u20139")
             .performScrollTo()
             .performClick()
 
@@ -742,13 +742,13 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithText("A—Z")
+        composeTestRule.onNodeWithText("A\u2013Z")
             .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText("a—z")
+        composeTestRule.onNodeWithText("a\u2013z")
             .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText("0-9")
+        composeTestRule.onNodeWithText("0\u20139")
             .performScrollTo()
             .performClick()
         composeTestRule.onNodeWithText("!@#$%^&*")

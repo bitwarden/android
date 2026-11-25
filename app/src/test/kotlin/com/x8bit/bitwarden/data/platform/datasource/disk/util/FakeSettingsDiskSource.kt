@@ -78,6 +78,7 @@ class FakeSettingsDiskSource(
     private val storedUpgradedToPremiumCardConsumed = mutableMapOf<String, Boolean?>()
     private val storedUpgradedToPremiumCardPending = mutableMapOf<String, Boolean?>()
     private val storedPremiumUpgradePending = mutableMapOf<String, Boolean?>()
+    private val storedShouldShowPlanBadge = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedFillAssistEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
@@ -144,6 +145,8 @@ class FakeSettingsDiskSource(
 
     private val mutablePremiumUpgradePendingFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShouldShowPlanBadgeFlow = mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = storedAppLanguage
@@ -281,10 +284,12 @@ class FakeSettingsDiskSource(
         storedClearClipboardFrequency.remove(userId)
         storedVaultPolicyBannerDismissedDate.remove(userId)
         storedCollapsedVaultSections.remove(userId)
+        storedShouldShowPlanBadge.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
         mutableLastSyncCallFlowMap.remove(userId)
+        mutableShouldShowPlanBadgeFlow.remove(userId)
     }
 
     override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]
@@ -468,6 +473,19 @@ class FakeSettingsDiskSource(
     override fun getPremiumUpgradePendingFlow(userId: String): Flow<Boolean?> =
         getMutablePremiumUpgradePendingFlow(userId = userId)
             .onSubscription { emit(getPremiumUpgradePending(userId = userId)) }
+
+    override fun getShouldShowPlanBadge(
+        userId: String,
+    ): Boolean? = storedShouldShowPlanBadge[userId]
+
+    override fun storeShouldShowPlanBadge(userId: String, shouldShow: Boolean?) {
+        storedShouldShowPlanBadge[userId] = shouldShow
+        getMutableShouldShowPlanBadgeFlow(userId = userId).tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowPlanBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShouldShowPlanBadgeFlow(userId = userId)
+            .onSubscription { emit(getShouldShowPlanBadge(userId = userId)) }
 
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
         storedInlineAutofillEnabled[userId]
@@ -681,6 +699,13 @@ class FakeSettingsDiskSource(
     }
 
     /**
+     * Asserts that the stored "should show plan badge" value matches the [expected] one.
+     */
+    fun assertShouldShowPlanBadge(userId: String, expected: Boolean?) {
+        assertEquals(expected, storedShouldShowPlanBadge[userId])
+    }
+
+    /**
      * Asserts that the stored last sync time matches the [expected] one.
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
@@ -790,6 +815,13 @@ class FakeSettingsDiskSource(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePremiumUpgradePendingFlow.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShouldShowPlanBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShouldShowPlanBadgeFlow.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

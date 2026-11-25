@@ -5,7 +5,7 @@ package com.x8bit.bitwarden.data.auth.repository.model
  */
 sealed class UpdateKdfMinimumsResult {
     /**
-     * Active account was not found
+     * Active account was not found, or the requested user is not the active account.
      */
     object ActiveAccountNotFound : UpdateKdfMinimumsResult()
 

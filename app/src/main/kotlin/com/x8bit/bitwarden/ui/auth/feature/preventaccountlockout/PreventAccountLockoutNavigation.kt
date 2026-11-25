@@ -1,60 +1,43 @@
 package com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordGraph
 
 /**
- * The type-safe route for the prevent account lockout screen.
+ * Navigate to the Prevent Account Lockout screen.
  */
-@Serializable
-sealed class PreventAccountLockoutRoute {
-    /**
-     * The type-safe route for the prevent account lockout screen.
-     */
-    @Serializable
-    data object Standard : PreventAccountLockoutRoute()
-
-    /**
-     * The type-safe route for the password reset prevent account lockout screen.
-     */
-    @Serializable
-    data object PasswordReset : PreventAccountLockoutRoute()
+fun NavigationController<AuthGraph>.navigateToPreventAccountLockout() {
+    this.navigate(route = AuthGraph.PreventAccountLockoutRoute)
 }
 
 /**
- * Navigate to prevent account lockout screen.
+ * Navigate to the Prevent Account Lockout screen while resetting the password.
  */
-fun NavController.navigateToPreventAccountLockout(
-    isPasswordReset: Boolean,
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(
-        route = if (isPasswordReset) {
-            PreventAccountLockoutRoute.PasswordReset
-        } else {
-            PreventAccountLockoutRoute.Standard
-        },
-        navOptions = navOptions,
-    )
+fun NavigationController<ResetPasswordGraph>.navigateToResetPasswordPreventAccountLockout() {
+    this.navigate(route = ResetPasswordGraph.PreventAccountLockoutRoute)
 }
 
 /**
- * Add the prevent account lockout screen to the nav graph.
+ * Add the Prevent Account Lockout screen to the auth navigation entries.
  */
-fun NavGraphBuilder.preventAccountLockoutDestination(
-    isPasswordReset: Boolean,
+fun EntryProviderScope<AuthGraph>.preventAccountLockoutDestination(
     onNavigateBack: () -> Unit,
 ) {
-    if (isPasswordReset) {
-        composableWithSlideTransitions<PreventAccountLockoutRoute.PasswordReset> {
-            PreventAccountLockoutScreen(onNavigateBack = onNavigateBack)
-        }
-    } else {
-        composableWithSlideTransitions<PreventAccountLockoutRoute.Standard> {
-            PreventAccountLockoutScreen(onNavigateBack = onNavigateBack)
-        }
+    slideUpEntry<AuthGraph.PreventAccountLockoutRoute> {
+        PreventAccountLockoutScreen(onNavigateBack = onNavigateBack)
+    }
+}
+
+/**
+ * Add the Prevent Account Lockout screen to the reset password navigation entries.
+ */
+fun EntryProviderScope<ResetPasswordGraph>.resetPasswordPreventAccountLockoutDestination(
+    onNavigateBack: () -> Unit,
+) {
+    slideUpEntry<ResetPasswordGraph.PreventAccountLockoutRoute> {
+        PreventAccountLockoutScreen(onNavigateBack = onNavigateBack)
     }
 }

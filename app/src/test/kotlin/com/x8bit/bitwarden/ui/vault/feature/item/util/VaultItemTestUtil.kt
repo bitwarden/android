@@ -192,6 +192,7 @@ fun createCommonContent(
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -257,6 +258,7 @@ fun createCommonContent(
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
             hasOrganizations = true,
+            isInAppUpgradeAvailable = false,
         )
     }
 

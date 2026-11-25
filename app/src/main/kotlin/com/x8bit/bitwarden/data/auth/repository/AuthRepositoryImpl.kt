@@ -57,7 +57,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdf
@@ -71,6 +70,7 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
+import com.x8bit.bitwarden.data.auth.manager.onboarding.OnboardingManager
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
@@ -170,6 +170,7 @@ internal class AuthRepositoryImpl(
     private val toastManager: ToastManager,
     private val featureFlagManager: FeatureFlagManager,
     authStateManager: AuthStateManager,
+    onboardingManager: OnboardingManager,
     organizationManager: OrganizationManager,
     passwordPolicyManager: PasswordPolicyManager,
     logsManager: LogsManager,
@@ -180,6 +181,7 @@ internal class AuthRepositoryImpl(
     AuthStateManager by authStateManager,
     BiometricsEncryptionManager by biometricsEncryptionManager,
     KdfManager by kdfManager,
+    OnboardingManager by onboardingManager,
     OrganizationManager by organizationManager,
     PasswordPolicyManager by passwordPolicyManager,
     UserStateManager by userStateManager {
@@ -522,7 +524,8 @@ internal class AuthRepositoryImpl(
                 ),
             )
         }
-        settingsRepository.storeUserHasLoggedInValue(userId)
+        settingsRepository.storeUserHasLoggedInValue(userId = userId)
+        initializeOnboardingFlow(userId = userId)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
@@ -855,11 +858,14 @@ internal class AuthRepositoryImpl(
         if (!isMasterPasswordStrong) {
             return RegisterResult.WeakPassword
         }
+        // The salt must be trimmed and lowercased to match the other clients and the SDK's KDF;
+        // the server compares the stored salt against future requests as an exact text match.
+        val salt = email.trim().lowercase()
         if (featureFlagManager.getFeatureFlag(key = FlagKey.V2EncryptionPassword)) {
             return authSdkSource
                 .postKeysForUserPasswordRegistration(
                     email = email,
-                    salt = email,
+                    salt = salt,
                     masterPassword = masterPassword,
                     masterPasswordHint = masterPasswordHint,
                     emailVerificationToken = emailVerificationToken,
@@ -888,7 +894,7 @@ internal class AuthRepositoryImpl(
                             encryptedPrivateKey = registerKeyResponse.keys.private,
                         ),
                         kdf = kdf.toKdfRequestModel(),
-                        salt = email,
+                        salt = salt,
                         masterPasswordAuthenticationHash = registerKeyResponse.masterPasswordHash,
                         masterKeyWrappedUserKey = registerKeyResponse.encryptedUserKey,
                     ),
@@ -1501,15 +1507,6 @@ internal class AuthRepositoryImpl(
             )
     }
 
-    override fun setOnboardingStatus(status: OnboardingStatus) {
-        activeUserId?.let { userId ->
-            authDiskSource.storeOnboardingStatus(
-                userId = userId,
-                onboardingStatus = status,
-            )
-        }
-    }
-
     /**
      * Enrolls the active user in password reset if their organization requires it.
      */
@@ -1722,10 +1719,13 @@ internal class AuthRepositoryImpl(
         password?.let {
             // Automatically update kdf to minimums after password unlock and userState update
             kdfManager
-                .updateKdfToMinimumsIfNeeded(password = password)
+                .updateKdfToMinimumsIfNeeded(userId = userId, password = password)
                 .also { result ->
                     if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                        Timber.e(
+                            t = result.error,
+                            message = "Failed to silent update KDF settings on login.",
+                        )
                     }
                 }
         }
@@ -1751,6 +1751,8 @@ internal class AuthRepositoryImpl(
         if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
             organizationIdentifier = orgIdentifier
         }
+
+        initializeOnboardingFlow(userId = userId)
 
         // Remove any cached data after successfully logging in.
         identityTokenAuthModel = null

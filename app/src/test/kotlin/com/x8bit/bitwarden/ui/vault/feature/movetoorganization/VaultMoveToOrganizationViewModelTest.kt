@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -17,12 +16,12 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.createMockOrganization
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -31,15 +30,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
@@ -66,21 +61,6 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
 
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay> = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
-    }
-    private val mutableVfo1FoundationFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.Vfo1Foundation) } answers { mutableVfo1FoundationFlow.value }
-        every { getFeatureFlagFlow(FlagKey.Vfo1Foundation) } returns mutableVfo1FoundationFlow
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SavedStateHandle::toVaultMoveToOrganizationArgs)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(SavedStateHandle::toVaultMoveToOrganizationArgs)
     }
 
     @Test
@@ -548,24 +528,23 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         savedStateHandle: SavedStateHandle = initialSavedStateHandle,
         vaultRepo: VaultRepository = vaultRepository,
         authRepo: AuthRepository = authRepository,
+        vaultItemId: String = "mockCipherId",
+        showOnlyCollections: Boolean = false,
     ): VaultMoveToOrganizationViewModel = VaultMoveToOrganizationViewModel(
+        route = VaultUnlockedGraph.VaultMoveToOrganizationRoute(
+            vaultItemId = vaultItemId,
+            showOnlyCollections = showOnlyCollections,
+        ),
         savedStateHandle = savedStateHandle,
         authRepository = authRepo,
-        featureFlagManager = featureFlagManager,
         vaultRepository = vaultRepo,
         snackbarRelayManager = snackbarRelayManager,
     )
 
     private fun createSavedStateHandleWithState(
         state: VaultMoveToOrganizationState? = null,
-        vaultItemId: String = "mockCipherId",
-        showOnlyCollections: Boolean = false,
     ) = SavedStateHandle().apply {
         set("state", state)
-        every { toVaultMoveToOrganizationArgs() } returns VaultMoveToOrganizationArgs(
-            vaultItemId = vaultItemId,
-            showOnlyCollections = showOnlyCollections,
-        )
     }
 
     @Suppress("MaxLineLength")
@@ -574,13 +553,11 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         vaultItemId: String = "mockCipherId",
         dialogState: VaultMoveToOrganizationState.DialogState? = null,
         onlyShowCollections: Boolean = false,
-        isVfo1FoundationEnabled: Boolean = false,
     ): VaultMoveToOrganizationState = VaultMoveToOrganizationState(
         vaultItemId = vaultItemId,
         viewState = viewState,
         dialogState = dialogState,
         onlyShowCollections = onlyShowCollections,
-        isVfo1FoundationEnabled = isVfo1FoundationEnabled,
     )
 }
 

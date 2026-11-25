@@ -297,6 +297,10 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
             uris = it.uriList.toLoginUriView(),
             totp = it.totp.orNullIfBlank(),
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
+            // Not modeled in the UI; preserved so saving does not clear a value set elsewhere.
+            httpAuthenticationEnabled = common.originalCipher
+                ?.login
+                ?.httpAuthenticationEnabled,
             fido2Credentials = common.originalCipher?.login?.fido2Credentials
                 .takeIf { _ -> it.fido2CredentialCreationDateTime != null },
         )

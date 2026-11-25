@@ -2,25 +2,19 @@
 
 package com.bitwarden.testharness.ui.platform.feature.landing
 
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
-import kotlinx.serialization.Serializable
+import com.bitwarden.testharness.ui.platform.feature.rootnav.RootNavGraph
+import com.bitwarden.ui.platform.navigation.util.rootPushEntry
 
 /**
- * Landing screen - main entry point showing test category options.
+ * Add Landing destination to the navigation entries.
  */
-@Serializable
-data object LandingRoute
-
-/**
- * Add Landing destination to the nav graph.
- */
-fun NavGraphBuilder.landingDestination(
+fun EntryProviderScope<RootNavGraph>.landingDestination(
     onNavigateToAutofill: () -> Unit,
     onNavigateToCredentialManager: () -> Unit,
 ) {
-    composableWithRootPushTransitions<LandingRoute> {
+    rootPushEntry<RootNavGraph.LandingRoute> {
         LandingScreen(
             onNavigateToAutofill = onNavigateToAutofill,
             onNavigateToCredentialManager = onNavigateToCredentialManager,

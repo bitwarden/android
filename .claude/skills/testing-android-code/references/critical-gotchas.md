@@ -400,6 +400,152 @@ fun `action should update state correctly`() = runTest {
 
 ---
 
+## ❌ Don't mock SavedStateHandle extensions for navigation arguments
+
+### The Problem
+
+With Navigation3, a ViewModel receives its route through Hilt assisted injection
+(`@Assisted route: XGraph.XRoute`), not by parsing arguments out of `SavedStateHandle`. The
+Navigation2-era pattern of statically mocking `SavedStateHandle.toXArgs()` extensions no longer
+applies: those extensions don't exist, and mocking them hides the real route the ViewModel is built
+from.
+
+### Wrong
+
+```kotlin
+@BeforeEach
+fun setup() {
+    mockkStatic(SavedStateHandle::toSetupUnlockArgs)  // Navigation2 pattern
+}
+
+@AfterEach
+fun tearDown() {
+    unmockkStatic(SavedStateHandle::toSetupUnlockArgs)
+}
+
+private fun createViewModel(): SetupUnlockViewModel {
+    every { savedStateHandle.toSetupUnlockArgs() } returns SetupUnlockArgs(isInitialSetup = true)
+    return SetupUnlockViewModel(savedStateHandle = savedStateHandle, /* ... */)
+}
+```
+
+### Correct
+
+Pass a real route instance directly to the constructor:
+
+```kotlin
+// Production code
+@HiltViewModel(assistedFactory = MasterPasswordHintViewModel.Factory::class)
+class MasterPasswordHintViewModel @AssistedInject constructor(
+    @Assisted route: AuthGraph.MasterPasswordHintRoute,
+    private val savedStateHandle: SavedStateHandle,
+    // ...
+)
+
+// Test code
+private fun createViewModel(
+    state: MasterPasswordHintState? = DEFAULT_STATE,
+): MasterPasswordHintViewModel = MasterPasswordHintViewModel(
+    route = AuthGraph.MasterPasswordHintRoute(emailAddress = "email"),
+    savedStateHandle = SavedStateHandle().apply { set("state", state) },
+    authRepository = authRepository,
+    networkConnectionManager = networkConnectionManager,
+)
+```
+
+If a test needs different route values, expose the route (or its fields) as a factory method
+parameter with a sensible default, just like `initialState`.
+
+### Key Points
+
+- Routes are plain `@Serializable` data classes/objects, so construct them; never mock them
+- Bypass the `@AssistedFactory` in unit tests and call the constructor directly
+- `SavedStateHandle` is still used for persisting state, so keep passing
+  `SavedStateHandle().apply { set("state", state) }` for that
+- No `mockkStatic` means no `unmockkStatic` cleanup to forget
+
+---
+
+## ❌ Don't mock navigation when testing NavDisplay hosts
+
+### The Problem
+
+Composables that host a `NavDisplay` (e.g. `RootNavScreen`, `OverlayNavScreen`,
+`VaultUnlockedNavBarScreen`) navigate by mutating a `NavigationController`. Mocking the controller
+and verifying individual calls (`navigate`, `addSingleTop`, `replaceAll`, ...) couples the test to
+implementation details and misses the actual resulting backstack. Rendering the real destinations
+also drags every screen's ViewModel and dependencies into the test.
+
+### Wrong
+
+```kotlin
+private val navigationController = mockk<NavigationController<OverlayNavGraph>>(relaxed = true)
+
+@Test
+fun `on NavigateToCookieAcquisition should navigate`() {
+    mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
+    verify { navigationController.addSingleTop(OverlayNavGraph.CookieAcquisitionRoute) }
+}
+```
+
+### Correct
+
+Use a real controller from `navigationControllerOf(...)` and a fake `entryProvider` that renders
+each key as simple text, then assert on the resulting `backStack`:
+
+```kotlin
+class OverlayNavScreenTest : BitwardenComposeTest() {
+    private val navigationController = navigationControllerOf<OverlayNavGraph>(
+        routes = arrayOf(OverlayNavGraph.RootNavigationRoute),
+    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<OverlayNavEvent>()
+    private val viewModel = mockk<OverlayNavViewModel> {
+        every { eventFlow } returns mutableEventFlow
+        every { stateFlow } returns MutableStateFlow(Unit)
+    }
+
+    @Before
+    fun setup() {
+        setContent {
+            OverlayNavScreen(
+                viewModel = viewModel,
+                navigationController = navigationController,
+                onSplashScreenRemoved = {},
+                entryProvider = { key -> NavEntry(key = key) { Text(text = key.toString()) } },
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToCookieAcquisition should not navigate again when already displayed`() {
+        mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
+        mutableEventFlow.tryEmit(OverlayNavEvent.NavigateToCookieAcquisition)
+        composeTestRule.runOnIdle {
+            assertEquals(
+                listOf(OverlayNavGraph.RootNavigationRoute, OverlayNavGraph.CookieAcquisitionRoute),
+                navigationController.backStack.toList(),
+            )
+        }
+    }
+}
+```
+
+When tests need different starting backstacks, accept the controller in a setup helper (see
+`RootNavScreenTest.setRootNavScreenContent(navigationController = ...)`).
+
+### Key Points
+
+- `navigationControllerOf(...)` is `@VisibleForTesting` and unsaved; never use
+  `rememberNavigationController` in tests
+- Hosts must take `navigationController` and `entryProvider` as parameters so tests can inject them
+- Read `backStack` inside `composeTestRule.runOnIdle { }` so pending recompositions and
+  `LaunchedEffect`s have run, and compare with `.toList()` against a full expected list
+- Assert the complete backstack, not just the top entry, to catch unintended pops or duplicates
+- Logic that only manipulates controllers (e.g. `VaultUnlockedNavBarNavigationControllers`) needs no
+  Compose at all: build it from `navigationControllerOf(...)` instances in a plain JUnit 5 test
+
+---
+
 ## ❌ Don't use static mocking when DI pattern is available
 
 ### The Problem
@@ -683,6 +829,8 @@ Before submitting tests, verify:
 
 **Test Design:**
 - [ ] Test factory methods accept domain types, not SavedStateHandle
+- [ ] ViewModels are constructed with a real `route = XGraph.XRoute(...)`, not mocked args
+- [ ] NavDisplay hosts use `navigationControllerOf(...)` + fake `entryProvider` and assert `backStack`
 - [ ] Use Fakes for happy paths, Mocks for error paths
 - [ ] Prefer DI patterns over static mocking
 - [ ] Test null returns from Android APIs (streams, files)

@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
@@ -85,18 +86,12 @@ class ViewSendViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(
-            SavedStateHandle::toViewSendArgs,
-            SendView::toViewSendViewStateContent,
-        )
+        mockkStatic(SendView::toViewSendViewStateContent)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toViewSendArgs,
-            SendView::toViewSendViewStateContent,
-        )
+        unmockkStatic(SendView::toViewSendViewStateContent)
     }
 
     @Test
@@ -619,6 +614,10 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: ViewSendState? = null,
     ): ViewSendViewModel = ViewSendViewModel(
+        route = VaultUnlockedGraph.ViewSendRoute(
+            sendId = (state ?: DEFAULT_STATE).sendId,
+            sendType = (state ?: DEFAULT_STATE).sendType,
+        ),
         clipboardManager = clipboardManager,
         clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
@@ -628,10 +627,6 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)
-            every { toViewSendArgs() } returns ViewSendArgs(
-                sendId = (state ?: DEFAULT_STATE).sendId,
-                sendType = (state ?: DEFAULT_STATE).sendType,
-            )
         },
     )
 }

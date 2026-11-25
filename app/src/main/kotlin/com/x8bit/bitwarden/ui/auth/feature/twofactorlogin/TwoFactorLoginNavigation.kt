@@ -1,76 +1,41 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
-
-/**
- * The type-safe route for the two-factor login screen.
- */
-@Serializable
-data class TwoFactorLoginRoute(
-    val emailAddress: String,
-    val password: String?,
-    val orgIdentifier: String?,
-    val isNewDeviceVerification: Boolean,
-)
-
-/**
- * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
- */
-data class TwoFactorLoginArgs(
-    val emailAddress: String,
-    val password: String?,
-    val orgIdentifier: String?,
-    val isNewDeviceVerification: Boolean,
-)
-
-/**
- * Constructs a [TwoFactorLoginArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toTwoFactorLoginArgs(): TwoFactorLoginArgs {
-    val route = this.toRoute<TwoFactorLoginRoute>()
-    return TwoFactorLoginArgs(
-        emailAddress = route.emailAddress,
-        password = route.password,
-        orgIdentifier = route.orgIdentifier,
-        isNewDeviceVerification = route.isNewDeviceVerification,
-    )
-}
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraph
 
 /**
  * Navigate to the Two-Factor Login screen.
  */
-fun NavController.navigateToTwoFactorLogin(
+fun NavigationController<AuthGraph>.navigateToTwoFactorLogin(
     emailAddress: String,
     password: String?,
     orgIdentifier: String?,
     isNewDeviceVerification: Boolean = false,
-    navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = TwoFactorLoginRoute(
+        route = AuthGraph.TwoFactorLoginRoute(
             emailAddress = emailAddress,
             password = password,
             orgIdentifier = orgIdentifier,
             isNewDeviceVerification = isNewDeviceVerification,
         ),
-        navOptions = navOptions,
     )
 }
 
 /**
- * Add the Two-Factor Login screen to the nav graph.
+ * Add the Two-Factor Login screen to the navigation entries.
  */
-fun NavGraphBuilder.twoFactorLoginDestination(
+fun EntryProviderScope<AuthGraph>.twoFactorLoginDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<TwoFactorLoginRoute> {
+    slideUpEntry<AuthGraph.TwoFactorLoginRoute> { route ->
         TwoFactorLoginScreen(
+            viewModel = hiltViewModel<TwoFactorLoginViewModel, TwoFactorLoginViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }

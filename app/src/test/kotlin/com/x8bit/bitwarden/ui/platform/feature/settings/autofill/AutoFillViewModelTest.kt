@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.FillAssistManager
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
@@ -463,7 +463,10 @@ class AutoFillViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         browserAutofillSettingsOptions = persistentListOf(
-                            BrowserAutofillSettingsOption.ChromeStable(enabled = false),
+                            BrowserAutofillSettingsOption.ChromeStable(
+                                isEnabled = false,
+                                isDefault = false,
+                            ),
                         ),
                     ),
                     awaitItem(),

@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -106,7 +105,7 @@ private const val PLACEHOLDER_TEXT: String = "--"
 fun PlanScreen(
     onNavigateBack: () -> Unit,
     onNavigateToUpgradedToPremium: () -> Unit,
-    viewModel: PlanViewModel = hiltViewModel(),
+    viewModel: PlanViewModel,
     intentManager: IntentManager = LocalIntentManager.current,
     authTabLaunchers: AuthTabLaunchers = LocalAuthTabLaunchers.current,
 ) {

@@ -362,7 +362,11 @@ class SendViewModel @Inject constructor(
             }
             if (!state.isPremiumUser) {
                 mutableStateFlow.update {
-                    it.copy(dialogState = SendState.DialogState.FileTypeRequiresPremium)
+                    it.copy(
+                        dialogState = SendState.DialogState.FileTypeRequiresPremium(
+                            isInAppUpgradeAvailable = premiumStateManager.isInAppUpgradeAvailable(),
+                        ),
+                    )
                 }
                 return
             }
@@ -654,7 +658,9 @@ data class SendState(
          * requires a Premium account.
          */
         @Parcelize
-        data object FileTypeRequiresPremium : DialogState()
+        data class FileTypeRequiresPremium(
+            val isInAppUpgradeAvailable: Boolean,
+        ) : DialogState()
     }
 }
 

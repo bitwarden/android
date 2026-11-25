@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -75,7 +74,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestriction
 
@@ -86,9 +85,9 @@ import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.model.SendPolicyRestri
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewSendScreen(
-    viewModel: ViewSendViewModel = hiltViewModel(),
+    viewModel: ViewSendViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
+    onNavigateToAddEditSend: (route: VaultUnlockedGraph.AddEditSendRoute) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -99,7 +98,7 @@ fun ViewSendScreen(
             is ViewSendEvent.NavigateBack -> onNavigateBack()
             is ViewSendEvent.NavigateToCopy -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         sendType = event.sendType,
                         modeType = ModeType.COPY,
                         sendId = event.sendId,
@@ -109,7 +108,7 @@ fun ViewSendScreen(
 
             is ViewSendEvent.NavigateToEdit -> {
                 onNavigateToAddEditSend(
-                    AddEditSendRoute(
+                    VaultUnlockedGraph.AddEditSendRoute(
                         sendType = event.sendType,
                         modeType = ModeType.EDIT,
                         sendId = event.sendId,

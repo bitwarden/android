@@ -63,10 +63,10 @@ class BrowserThirdPartyAutofillStatusExtensionsTest {
 
         assertEquals(
             persistentListOf(
-                BrowserAutofillSettingsOption.BraveStable(enabled = false),
-                BrowserAutofillSettingsOption.ChromeStable(enabled = true),
-                BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
-                BrowserAutofillSettingsOption.VivaldiStable(enabled = false),
+                BrowserAutofillSettingsOption.BraveStable(isEnabled = false, isDefault = false),
+                BrowserAutofillSettingsOption.ChromeStable(isEnabled = true, isDefault = false),
+                BrowserAutofillSettingsOption.ChromeBeta(isEnabled = false, isDefault = false),
+                BrowserAutofillSettingsOption.VivaldiStable(isEnabled = false, isDefault = false),
             ),
             result,
         )

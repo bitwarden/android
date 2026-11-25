@@ -1,60 +1,43 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.settings.PreAuthSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the flight recorder screen.
+ * Add the flight recorder screen to the vault unlocked navigation entries.
  */
-@Serializable
-sealed class FlightRecorderRoute {
-    /**
-     * The type-safe route for the flight recorder screen.
-     */
-    @Serializable
-    data object Standard : FlightRecorderRoute()
-
-    /**
-     * The type-safe route for the pre-auth flight recorder screen.
-     */
-    @Serializable
-    data object PreAuth : FlightRecorderRoute()
+fun EntryProviderScope<VaultUnlockedGraph>.flightRecorderDestination(
+    onNavigateBack: () -> Unit,
+) {
+    slideUpEntry<VaultUnlockedGraph.FlightRecorderRoute> {
+        FlightRecorderScreen(onNavigateBack = onNavigateBack)
+    }
 }
 
 /**
- * Add flight recorder destination to the nav graph.
+ * Add the flight recorder screen to the pre-authentication settings navigation entries.
  */
-fun NavGraphBuilder.flightRecorderDestination(
-    isPreAuth: Boolean,
+fun EntryProviderScope<PreAuthSettingsGraph>.preAuthFlightRecorderDestination(
     onNavigateBack: () -> Unit,
 ) {
-    if (isPreAuth) {
-        composableWithSlideTransitions<FlightRecorderRoute.PreAuth> {
-            FlightRecorderScreen(
-                onNavigateBack = onNavigateBack,
-            )
-        }
-    } else {
-        composableWithSlideTransitions<FlightRecorderRoute.Standard> {
-            FlightRecorderScreen(
-                onNavigateBack = onNavigateBack,
-            )
-        }
+    slideUpEntry<PreAuthSettingsGraph.FlightRecorderRoute> {
+        FlightRecorderScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
  * Navigate to the flight recorder screen.
  */
-fun NavController.navigateToFlightRecorder(
-    isPreAuth: Boolean,
-    navOptions: NavOptions? = null,
-) {
-    navigate(
-        route = if (isPreAuth) FlightRecorderRoute.PreAuth else FlightRecorderRoute.Standard,
-        navOptions = navOptions,
-    )
+fun NavigationController<VaultUnlockedGraph>.navigateToFlightRecorder() {
+    this.navigate(route = VaultUnlockedGraph.FlightRecorderRoute)
+}
+
+/**
+ * Navigate to the pre-authentication flight recorder screen.
+ */
+fun NavigationController<PreAuthSettingsGraph>.navigateToPreAuthFlightRecorder() {
+    this.navigate(route = PreAuthSettingsGraph.FlightRecorderRoute)
 }

@@ -1,42 +1,22 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.toRoute
-import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import kotlinx.serialization.Serializable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation3.runtime.EntryProviderScope
+import com.bitwarden.ui.platform.navigation.NavigationController
+import com.bitwarden.ui.platform.navigation.util.slideUpEntry
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraph
 
 /**
- * The type-safe route for the login approval screen.
+ * Add the login approval screen to the navigation entries.
  */
-@Serializable
-data class LoginApprovalRoute(
-    val fingerprint: String?,
-)
-
-/**
- * Class to retrieve login approval arguments from the [SavedStateHandle].
- */
-data class LoginApprovalArgs(val fingerprint: String?)
-
-/**
- * Constructs a [LoginApprovalArgs] from the [SavedStateHandle] and internal route data.
- */
-fun SavedStateHandle.toLoginApprovalArgs(): LoginApprovalArgs {
-    val route = this.toRoute<LoginApprovalRoute>()
-    return LoginApprovalArgs(fingerprint = route.fingerprint)
-}
-
-/**
- * Add login approval destinations to the nav graph.
- */
-fun NavGraphBuilder.loginApprovalDestination(
+fun EntryProviderScope<VaultUnlockedGraph>.loginApprovalDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions<LoginApprovalRoute> {
+    slideUpEntry<VaultUnlockedGraph.LoginApprovalRoute> { route ->
         LoginApprovalScreen(
+            viewModel = hiltViewModel<LoginApprovalViewModel, LoginApprovalViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route = route) },
+            ),
             onNavigateBack = onNavigateBack,
         )
     }
@@ -45,9 +25,6 @@ fun NavGraphBuilder.loginApprovalDestination(
 /**
  * Navigate to the Login Approval screen.
  */
-fun NavController.navigateToLoginApproval(
-    fingerprint: String?,
-    navOptions: NavOptions? = null,
-) {
-    this.navigate(route = LoginApprovalRoute(fingerprint = fingerprint), navOptions = navOptions)
+fun NavigationController<VaultUnlockedGraph>.navigateToLoginApproval(fingerprint: String?) {
+    this.navigate(route = VaultUnlockedGraph.LoginApprovalRoute(fingerprint = fingerprint))
 }

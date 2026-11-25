@@ -14,13 +14,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import com.bitwarden.core.data.manager.biometrics.model.BiometricSupportStatus
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -35,6 +35,7 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 import javax.crypto.Cipher
 
+@Suppress("LargeClass")
 class SetupUnlockScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
@@ -211,8 +212,17 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on unlock with pin code should not be displayed when updated onboarding flow is enabled`() {
+        composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertDoesNotExist()
+        mutableStateFlow.update { it.copy(isUpdatedOnboardingFlowEnabled = false) }
+        composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertExists()
+    }
+
     @Test
     fun `on unlock with pin code should be toggled on or off according to state`() {
+        mutableStateFlow.update { it.copy(isUpdatedOnboardingFlowEnabled = false) }
         composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertIsOff()
         mutableStateFlow.update { it.copy(isUnlockWithPinEnabled = true) }
         composeTestRule.onNodeWithText(text = "Unlock with PIN code").assertIsOn()
@@ -221,7 +231,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `on unlock with pin toggle when enabled should send UnlockWithPinToggle Disabled`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = true)
+            it.copy(
+                isUnlockWithPinEnabled = true,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
 
         composeTestRule
@@ -240,7 +253,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `on unlock with pin toggle when disabled should show the PIN input dialog and send UnlockWithPinToggle PendingEnabled`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
 
         composeTestRule.assertNoDialogExists()
@@ -285,7 +301,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `PIN input dialog Cancel click should clear the dialog and send UnlockWithPinToggle Disabled`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Unlock with PIN code")
@@ -308,7 +327,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `PIN input dialog with empty pin should disable submit button`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Unlock with PIN code")
@@ -325,7 +347,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `PIN input dialog Submit click with non-empty pin and isUnlockWithPasswordEnabled true should show a confirmation dialog and send UnlockWithPinToggle PendingEnabled`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Unlock with PIN code")
@@ -375,6 +400,7 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
             it.copy(
                 isUnlockWithPinEnabled = false,
                 isUnlockWithPasswordEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
             )
         }
         composeTestRule
@@ -409,7 +435,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `PIN confirmation dialog No click should send UnlockWithPinToggle Enabled and close the dialog`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Unlock with PIN code")
@@ -446,7 +475,10 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     @Test
     fun `PIN confirmation dialog Yes click should send UnlockWithPinToggle Enabled and close the dialog`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = false)
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Unlock with PIN code")
@@ -493,9 +525,9 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on Continue click should send ContinueClick when enabled`() {
+    fun `on Continue click should send ContinueClick when enabled with biometrics`() {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = true)
+            it.copy(isUnlockWithBiometricsEnabled = true)
         }
         composeTestRule
             .onNodeWithText(text = "Continue")
@@ -506,6 +538,41 @@ class SetupUnlockScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Continue click should send ContinueClick when enabled with PIN and updated onboarding flow is disabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithPinEnabled = true,
+                isUpdatedOnboardingFlowEnabled = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SetupUnlockAction.ContinueClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Continue button should be disabled when only PIN is enabled and updated onboarding flow is enabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithPinEnabled = true,
+                isUpdatedOnboardingFlowEnabled = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "Continue")
+            .performScrollTo()
+            .assertIsNotEnabled()
     }
 
     @Test
@@ -652,6 +719,7 @@ private val DEFAULT_STATE: SetupUnlockState = SetupUnlockState(
     isUnlockWithBiometricsEnabled = false,
     dialogState = null,
     isInitialSetup = true,
+    isUpdatedOnboardingFlowEnabled = true,
 )
 
 private val CIPHER = mockk<Cipher>()

@@ -22,6 +22,7 @@ import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
+import com.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.ui.platform.composition.LocalCardTextAnalyzer
 import com.bitwarden.ui.platform.composition.LocalClock
 import com.bitwarden.ui.platform.composition.LocalExitManager
@@ -34,8 +35,11 @@ import com.bitwarden.ui.platform.feature.cardscanner.util.CardTextAnalyzerImpl
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.ui.platform.manager.biometrics.model.BiometricsConfig
 import com.bitwarden.ui.platform.manager.exit.ExitManager
 import com.bitwarden.ui.platform.manager.exit.ExitManagerImpl
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
@@ -43,8 +47,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionMa
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerUnsupportedApiImpl
 import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
@@ -66,7 +68,14 @@ fun LocalManagerProvider(
     activity: Activity = requireNotNull(LocalActivity.current),
     appResumeStateManager: AppResumeStateManager = AppResumeStateManagerImpl(),
     appReviewManager: AppReviewManager = AppReviewManagerImpl(activity = activity),
-    biometricsManager: BiometricsManager = BiometricsManagerImpl(activity = activity),
+    biometricsManager: BiometricsManager = BiometricsManager.create(
+        activity = activity,
+        config = BiometricsConfig(
+            promptTitleRes = BitwardenString.bitwarden,
+            biometricsPromptDescriptionRes = BitwardenString.biometrics_direction,
+            isDeviceCredentialAllowedForBiometrics = false,
+        ),
+    ),
     clock: Clock = Clock.systemDefaultZone(),
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
     buildInfoManager: BuildInfoManager = BitwardenBuildInfoManagerImpl(),
@@ -127,13 +136,6 @@ private fun createCredentialProviderCompletionManager(
     } else {
         CredentialProviderCompletionManagerImpl(activity)
     }
-
-/**
- * Provides access to the biometrics manager throughout the app.
- */
-val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
-    error("CompositionLocal BiometricsManager not present")
-}
 
 /**
  * Provides access to the Auth Tab launchers throughout the app.
