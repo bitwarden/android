@@ -106,7 +106,8 @@ fun AssistStructure.ViewNode.toAutofillView(
     // If that child classifies itself, let it. A container's classification usually comes from a
     // loose id or hint match (for example, an id like `username_password_ll`), so redirecting would
     // claim the child's autofillId for the container's classification and the child's own, more
-    // specific classification would be dropped as a duplicate.
+    // specific classification would be dropped as a duplicate. Returning null is safe because a
+    // container cannot be filled anyway, and its id is then simply ignored.
     if (autofillableChild?.hasOwnHint == true) return null
     val effectiveAutofillId = autofillableChild?.autofillId ?: nonNullAutofillId
     val effectiveAutofillType = autofillableChild?.autofillType ?: autofillType
@@ -131,12 +132,23 @@ fun AssistStructure.ViewNode.toAutofillView(
     )
 }
 
+/**
+ * The first autofillable descendant of a container.
+ *
+ * @property hasOwnHint Whether the descendant classifies itself with a supported hint. When it
+ * does, the container must not take over its [autofillId], see [toAutofillView].
+ */
 private data class AutofillableChild(
     val autofillId: AutofillId,
     val autofillType: Int,
     val hasOwnHint: Boolean,
 )
 
+/**
+ * Find the first descendant of this container that can receive an autofill value, and whether that
+ * descendant classifies itself. [isIdentityAutofillEnabled] is needed because the descendant's
+ * own classification depends on it, the same as it does for any other node.
+ */
 private fun AssistStructure.ViewNode.findFirstAutofillableChild(
     isIdentityAutofillEnabled: Boolean,
 ): AutofillableChild? {
@@ -147,6 +159,8 @@ private fun AssistStructure.ViewNode.findFirstAutofillableChild(
             return AutofillableChild(
                 autofillId = id,
                 autofillType = child.autofillType,
+                // A non-null hint means the child will be classified on its own when it is
+                // traversed, so the container does not need to redirect to it.
                 hasOwnHint = child.supportedAutofillHint(
                     isIdentityAutofillEnabled = isIdentityAutofillEnabled,
                 ) != null,
@@ -359,13 +373,18 @@ internal val AssistStructure.ViewNode.isUsernameField: Boolean
         idEntry?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         htmlInfo.isUsernameField() ||
-        // Some apps label an input only through its content description (for example
-        // `contentDescription=Username`). Only input fields are considered so that a plain
-        // `TextView` label is not mistaken for the field itself.
-        (
-            isInputField &&
-                contentDescription?.toString()?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true
-            )
+        hasUsernameContentDescription
+
+/**
+ * Check whether this [AssistStructure.ViewNode] is an input that is labelled as a username only
+ * through its content description. Some apps (for example Mazda Financial Services) leave the hint
+ * and id empty, so without this the field has no signal and no suggestion is offered when it is the
+ * only login field in the structure. Only input fields are considered so that a plain `TextView`
+ * label with the same description is not mistaken for the field itself.
+ */
+private val AssistStructure.ViewNode.hasUsernameContentDescription: Boolean
+    get() = isInputField &&
+        contentDescription?.toString()?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true
 
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card expiration month field.

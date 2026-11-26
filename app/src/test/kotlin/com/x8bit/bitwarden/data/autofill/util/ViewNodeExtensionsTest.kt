@@ -43,6 +43,7 @@ class ViewNodeExtensionsTest {
         every { className } returns null
         every { idEntry } returns null
         every { hint } returns null
+        // isUsernameField reads the content description of input fields
         every { contentDescription } returns null
         every { autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
         every { autofillType } returns AUTOFILL_TYPE
@@ -1376,6 +1377,7 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            // A redirect now checks whether the child classifies itself, which reads these
             every { autofillHints } returns null
             every { idEntry } returns null
             every { hint } returns null
@@ -1414,6 +1416,7 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            // A redirect now checks whether the child classifies itself, which reads these
             every { autofillHints } returns null
             every { idEntry } returns null
             every { hint } returns null

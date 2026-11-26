@@ -938,7 +938,10 @@ class AutofillParserTests {
     @Suppress("MaxLineLength")
     @Test
     fun `parse should demote a Password view without password terms directly above a Password view with password terms to Username`() {
-        // Setup
+        // Setup: a user ID field that reports a password input type (for example
+        // `textVisiblePassword`, used to turn off suggestions) and has no username term. It is a
+        // Login.Password with no password terms, directly above the real password field, so the
+        // password must not be filled into it.
         val passwordAutofillId = mockk<AutofillId>()
         val userIdPasswordView = AutofillView.Login.Password(
             data = AutofillView.Data(
@@ -995,7 +998,9 @@ class AutofillParserTests {
     @Suppress("MaxLineLength")
     @Test
     fun `parse should not demote a Password view without password terms that is below a Password view with password terms`() {
-        // Setup
+        // Setup: a field below the password field that has no password terms of its own, like a
+        // confirm-password field. It is a real password, so demoting it to a username would stop it
+        // from being filled.
         val confirmAutofillId = mockk<AutofillId>()
         val passwordView = AutofillView.Login.Password(
             data = AutofillView.Data(

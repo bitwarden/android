@@ -99,7 +99,7 @@ class IntExtensionsTest {
 
     @Test
     fun `isPasswordInputType returns false when TYPE_TEXT_VARIATION_FILTER`() {
-        // Setup
+        // Setup: FILTER (0xb0) contains the password bit (0x80), so a bit test used to match it
         val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_FILTER
 
         // Test
@@ -111,7 +111,7 @@ class IntExtensionsTest {
 
     @Test
     fun `isPasswordInputType returns false when TYPE_TEXT_VARIATION_PHONETIC`() {
-        // Setup
+        // Setup: PHONETIC (0xc0) contains the password bit (0x80), so a bit test used to match it
         val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PHONETIC
 
         // Test
@@ -123,7 +123,8 @@ class IntExtensionsTest {
 
     @Test
     fun `isPasswordInputType returns false when TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS`() {
-        // Setup
+        // Setup: WEB_EMAIL_ADDRESS (0xd0) contains the password bit (0x80), so a bit test used to
+        // match it. It is a username input type, never a password.
         val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
 
         // Test
@@ -135,7 +136,7 @@ class IntExtensionsTest {
 
     @Test
     fun `isPasswordInputType returns false when plain TYPE_CLASS_TEXT`() {
-        // Setup
+        // Setup: the text class on its own has no variation, so it must not be a password
         val int = InputType.TYPE_CLASS_TEXT
 
         // Test
