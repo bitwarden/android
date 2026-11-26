@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.text.InputType
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -9,7 +10,9 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns false when is multiline`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        val int = InputType.TYPE_CLASS_TEXT or
+            InputType.TYPE_TEXT_VARIATION_PASSWORD or
+            InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
         // Test
         val actual = int.isPasswordInputType
@@ -33,7 +36,7 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_PASSWORD`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_PASSWORD
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         // Test
         val actual = int.isPasswordInputType
@@ -46,7 +49,7 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_VISIBLE_PASSWORD`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 
         // Test
         val actual = int.isPasswordInputType
@@ -59,7 +62,7 @@ class IntExtensionsTest {
     @Test
     fun `isPasswordInputType returns true when not multiline and TYPE_TEXT_VARIATION_WEB_PASSWORD`() {
         // Setup
-        val int = InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
+        val int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
 
         // Test
         val actual = int.isPasswordInputType
@@ -157,9 +160,37 @@ class IntExtensionsTest {
     }
 
     @Test
-    fun `isPasswordInputType returns true for the password variation without a text class`() {
-        // Setup: some apps report only the variation bits (for example `inputType=128`)
-        val int = 128
+    fun `isPasswordInputType returns false for the password variation without a text class`() {
+        // Setup: some apps report only the variation bits on a user ID field (Truist reports
+        // `inputType=128`). Without TYPE_CLASS_TEXT it is not a password.
+        val int = InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+        // Test
+        val actual = int.isPasswordInputType
+
+        // Verify
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isPasswordInputType returns false for NO_SUGGESTIONS and VISIBLE_PASSWORD without a class`() {
+        // Setup: the common snippet for turning off suggestions on a username field. Mazda
+        // Financial Services reports this as `inputType=524432`.
+        val int = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
+        // Test
+        val actual = int.isPasswordInputType
+
+        // Verify
+        assertEquals(524432, int)
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isPasswordInputType returns true for the text class with NO_SUGGESTIONS and PASSWORD`() {
+        // Setup: the password field in Truist and Mazda Financial Services (`inputType=524417`)
+        val int = 524417
 
         // Test
         val actual = int.isPasswordInputType
