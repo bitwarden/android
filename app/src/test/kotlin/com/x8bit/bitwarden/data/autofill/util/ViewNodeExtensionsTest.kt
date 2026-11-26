@@ -43,6 +43,7 @@ class ViewNodeExtensionsTest {
         every { className } returns null
         every { idEntry } returns null
         every { hint } returns null
+        every { contentDescription } returns null
         every { autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
         every { autofillType } returns AUTOFILL_TYPE
         every { autofillValue } returns testAutofillValue
@@ -796,6 +797,38 @@ class ViewNodeExtensionsTest {
 
         // Verify
         assertTrue(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns true for an input field whose content description is a username term`() {
+        // Setup: Mazda Financial Services labels its username field only with `contentDescription`
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns ""
+        every { viewNode.htmlInfo.isUsernameField() } returns false
+        every { viewNode.htmlInfo.isInputField } returns true
+        every { viewNode.contentDescription } returns "Username"
+
+        // Test
+        val actual = viewNode.isUsernameField
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns false for a non-input view whose content description is a username term`() {
+        // Setup: a label such as `TextView contentDescription=Username` is not the field
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isUsernameField() } returns false
+        every { viewNode.htmlInfo.isInputField } returns false
+        every { viewNode.contentDescription } returns "Username"
+
+        // Test
+        val actual = viewNode.isUsernameField
+
+        // Verify
+        assertFalse(actual)
     }
 
     @Test

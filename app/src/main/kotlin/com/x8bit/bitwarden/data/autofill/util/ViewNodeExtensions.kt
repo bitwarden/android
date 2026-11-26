@@ -358,7 +358,14 @@ internal val AssistStructure.ViewNode.isUsernameField: Boolean
     get() = inputType.isUsernameInputType ||
         idEntry?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
-        htmlInfo.isUsernameField()
+        htmlInfo.isUsernameField() ||
+        // Some apps label an input only through its content description (for example
+        // `contentDescription=Username`). Only input fields are considered so that a plain
+        // `TextView` label is not mistaken for the field itself.
+        (
+            isInputField &&
+                contentDescription?.toString()?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true
+            )
 
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card expiration month field.
