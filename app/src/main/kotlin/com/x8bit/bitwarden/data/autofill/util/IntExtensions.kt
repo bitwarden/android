@@ -7,16 +7,20 @@ import android.text.InputType
  */
 val Int.isPasswordInputType: Boolean
     get() {
+        // The variation is a multi-bit field, not a set of independent flags. Testing it with a
+        // bit mask matches other variations that share the password bit (for example
+        // TYPE_TEXT_VARIATION_WEB_EDIT_TEXT, which is what WebView text inputs report), so the
+        // variation must be compared for equality.
+        val variation = this and InputType.TYPE_MASK_VARIATION
+        val isPasswordVariation = variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
+
         // The legacy xamarin app mentions that multi-line input types are coming through with
         // TYPE_TEXT_VARIATION_PASSWORD flags. We have no other context to this.
-        val isMultiline = this.hasFlag(InputType.TYPE_TEXT_VARIATION_PASSWORD) &&
-            this.hasFlag(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+        val isMultiline = this.hasFlag(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
 
-        val isPasswordInputType = this.hasFlag(InputType.TYPE_TEXT_VARIATION_PASSWORD) ||
-            this.hasFlag(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) ||
-            this.hasFlag(InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD)
-
-        return !isMultiline && isPasswordInputType
+        return isPasswordVariation && !isMultiline
     }
 
 /**
