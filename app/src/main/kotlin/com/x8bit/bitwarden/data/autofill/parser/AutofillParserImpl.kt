@@ -172,12 +172,12 @@ internal class AutofillParserImpl(
         effectiveViews: List<AutofillView>,
         heuristicViews: List<AutofillView>,
         traversalDataList: List<ViewNodeTraversalData>,
-        uri: String?,
+        hasHostRules: Boolean,
     ): String =
         "effectiveViews=${effectiveViews.size} " +
             "heuristicViews=${heuristicViews.size} " +
             "traversalViews=${traversalDataList.sumOf { it.autofillViews.size }} " +
-            "hasHostRules=${getFillAssistHostRulesOrNull(uri = uri) != null} " +
+            "hasHostRules=$hasHostRules " +
             "focusFromFillAssistRescue=${heuristicViews.firstFocusedOrNull() == null}"
 
     /**
@@ -268,10 +268,12 @@ internal class AutofillParserImpl(
             )
         }
 
-        val effectiveViews = if (isFillAssistEnabled) {
+        // Looked up once: reading the rules decodes them from disk.
+        val hostRules = if (isFillAssistEnabled) getFillAssistHostRulesOrNull(uri = uri) else null
+        val effectiveViews = if (hostRules != null) {
             autofillViews.toEffectiveViews(
                 assistStructure = assistStructure,
-                uri = uri,
+                hostRules = hostRules,
                 focusedView = focusedView,
                 urlBarWebsite = urlBarWebsite,
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
@@ -288,7 +290,7 @@ internal class AutofillParserImpl(
                     effectiveViews = effectiveViews,
                     heuristicViews = autofillViews,
                     traversalDataList = traversalDataList,
-                    uri = uri,
+                    hasHostRules = hostRules != null,
                 ),
             )
 
@@ -364,13 +366,11 @@ internal class AutofillParserImpl(
      */
     private fun List<AutofillView>.toEffectiveViews(
         assistStructure: AssistStructure,
-        uri: String?,
+        hostRules: List<FillAssistRules.HostRule>,
         focusedView: AutofillView,
         urlBarWebsite: String?,
         isIdentityAutofillEnabled: Boolean,
     ): List<AutofillView> {
-        val hostRules = getFillAssistHostRulesOrNull(uri = uri) ?: return this
-
         // Identity categories were Login categories before identity autofill, so with the flag
         // off they must stay Login's to keep fill-assist coverage unchanged on those hosts.
         val fillAssistCategories = if (isIdentityAutofillEnabled) {

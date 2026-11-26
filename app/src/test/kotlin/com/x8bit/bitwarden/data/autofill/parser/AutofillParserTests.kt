@@ -2196,6 +2196,7 @@ class AutofillParserTests {
             "hasHostRules=true",
             "focusFromFillAssistRescue=true",
         )
+        verify(exactly = 1) { fillAssistManager.getFillAssistRules() }
     }
 
     @Test
@@ -2205,7 +2206,7 @@ class AutofillParserTests {
         mutableFillAssistFlagFlow.value = true
         mockIsFillAssistEnabled = true
         every { any<AutofillView>().buildUriOrNull(PACKAGE_NAME) } returns FILL_ASSIST_URI
-                every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
+        every { fillAssistManager.getFillAssistRules() } returns FillAssistRules(
             hostRules = emptyMap(),
         )
         val unusedLoginView = AutofillView.Unused(
@@ -2238,6 +2239,7 @@ class AutofillParserTests {
             "hasHostRules=false",
             "focusFromFillAssistRescue=true",
         )
+        verify(exactly = 1) { fillAssistManager.getFillAssistRules() }
     }
 
     @Suppress("MaxLineLength")
