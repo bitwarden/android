@@ -3,9 +3,17 @@ package com.x8bit.bitwarden.data.platform.util
 import android.os.Build
 import android.security.KeyStoreException
 import androidx.annotation.RequiresApi
+import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.exception.LocalNetworkAccessException
+import com.bitwarden.network.model.SdkInvalidJsonResponse
+import kotlinx.serialization.json.Json
+
+/**
+ * Reads SDK error bodies, which have fields that [SdkInvalidJsonResponse] does not model.
+ */
+private val sdkErrorBodyJson = Json { ignoreUnknownKeys = true }
 
 /**
  * Returns a user-friendly error message if this [Throwable] is an allow-listed
@@ -17,6 +25,21 @@ val Throwable.userFriendlyMessage: String?
         is CookieRedirectException -> message
         else -> null
     }
+
+/**
+ * Attempts to read the server error body at the end of this SDK [Throwable]'s message, as the
+ * SDK reports a failed API request. Returns `null` when there is no readable body or it has no
+ * message to show.
+ *
+ * This is only meant for [Throwable]s thrown by the SDK.
+ */
+fun Throwable.parseSdkErrorBodyOrNull(): SdkInvalidJsonResponse? {
+    val rawMessage = message ?: return null
+    val bodyStart = rawMessage.indexOf('{').takeIf { it >= 0 } ?: return null
+    return sdkErrorBodyJson
+        .decodeFromStringOrNull<SdkInvalidJsonResponse>(string = rawMessage.substring(bodyStart))
+        ?.takeIf { it.firstValidationErrorMessage.isNotBlank() }
+}
 
 /**
  * Returns true when this [Throwable] or one of its causes is an Android Keystore exception that

@@ -357,6 +357,33 @@ class CipherManagerTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `updateCipher with SdkCipherOperations enabled and a server error body should return the server message`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = EditCipherException.Api(
+                message = """[400 Bad Request] {"message":"The cipher is out of date."}""",
+            )
+            coEvery {
+                vaultSdkSource.editCipher(userId = "mockId-1", request = any())
+            } returns error.asFailure()
+
+            val result = cipherManager.updateCipher(
+                cipherId = "mockId-1",
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(
+                UpdateCipherResult.Error(
+                    error = error,
+                    errorMessage = "The cipher is out of date.",
+                ),
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `createCipherInOrganization with SdkCipherOperations enabled should create through the SDK with the collections`() =
         runTest {
             every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true

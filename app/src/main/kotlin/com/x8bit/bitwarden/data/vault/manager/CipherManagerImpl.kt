@@ -30,6 +30,8 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.util.parseSdkErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -686,7 +688,13 @@ class CipherManagerImpl(
         return vaultSdkSource
             .createCipher(userId = userId, request = request)
             .fold(
-                onFailure = { CreateCipherResult.Error(error = it) },
+                onFailure = {
+                    CreateCipherResult.Error(
+                        error = it,
+                        errorMessage = it.parseSdkErrorBodyOrNull()?.firstValidationErrorMessage
+                            ?: it.userFriendlyMessage,
+                    )
+                },
                 onSuccess = { createdCipher ->
                     val cipherId = createdCipher.id
                         ?: return IllegalStateException("Created cipher is missing its ID.")
@@ -715,7 +723,13 @@ class CipherManagerImpl(
         return vaultSdkSource
             .editCipher(userId = userId, request = request)
             .fold(
-                onFailure = { UpdateCipherResult.Error(error = it) },
+                onFailure = {
+                    UpdateCipherResult.Error(
+                        error = it,
+                        errorMessage = it.parseSdkErrorBodyOrNull()?.firstValidationErrorMessage
+                            ?: it.userFriendlyMessage,
+                    )
+                },
                 onSuccess = { UpdateCipherResult.Success },
             )
     }

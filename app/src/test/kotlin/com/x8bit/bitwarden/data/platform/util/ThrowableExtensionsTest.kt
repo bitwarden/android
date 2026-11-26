@@ -5,6 +5,7 @@ import android.security.KeyStoreException
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.network.exception.CookieRedirectException
 import com.bitwarden.network.exception.LocalNetworkAccessException
+import com.bitwarden.network.model.SdkInvalidJsonResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -30,6 +31,49 @@ class ThrowableExtensionsTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(::isBuildVersionAtLeast)
+    }
+
+    @Test
+    fun `parseSdkErrorBodyOrNull should read the body at the end of the message`() {
+        val exception = IllegalStateException(
+            "error in response: status code 400 Bad Request: " +
+                """{"message":"Invalid.","validationErrors":{"":["Name is too long."]},""" +
+                """"object":"error"}""",
+        )
+
+        assertEquals(
+            SdkInvalidJsonResponse(
+                message = "Invalid.",
+                validationErrors = mapOf("" to listOf("Name is too long.")),
+            ),
+            exception.parseSdkErrorBodyOrNull(),
+        )
+    }
+
+    @Test
+    fun `parseSdkErrorBodyOrNull should read a body without validation errors`() {
+        val exception = IllegalStateException(
+            """[400 Bad Request] {"message":"The cipher is out of date."}""",
+        )
+
+        assertEquals(
+            SdkInvalidJsonResponse(
+                message = "The cipher is out of date.",
+                validationErrors = null,
+            ),
+            exception.parseSdkErrorBodyOrNull(),
+        )
+    }
+
+    @Test
+    fun `parseSdkErrorBodyOrNull should return null when there is no readable body or message`() {
+        listOf(
+            IllegalStateException("something went wrong"),
+            IllegalStateException(),
+            IllegalStateException("failed: {not json"),
+            IllegalStateException("failed: {}"),
+        )
+            .forEach { assertNull(it.parseSdkErrorBodyOrNull()) }
     }
 
     @Test
