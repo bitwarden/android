@@ -147,9 +147,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `isDynamicColorsEnabledFlow should match SettingsDiskSource`() = runTest {
-        // Reading from repository should read from disk source:
-        every { settingsDiskSource.isDynamicColorsEnabled } returns null
-
         settingsRepository.isDynamicColorsEnabledFlow.test {
             assertFalse(awaitItem())
             mutableDynamicColorsFlow.emit(true)

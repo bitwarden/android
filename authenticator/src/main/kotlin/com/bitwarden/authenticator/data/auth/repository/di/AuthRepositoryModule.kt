@@ -13,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 /**
  * Provides repositories in the auth package.
@@ -22,6 +23,7 @@ import dagger.hilt.components.SingletonComponent
 object AuthRepositoryModule {
 
     @Provides
+    @Singleton
     fun provideAuthRepository(
         authDiskSource: AuthDiskSource,
         settingsRepository: SettingsRepository,

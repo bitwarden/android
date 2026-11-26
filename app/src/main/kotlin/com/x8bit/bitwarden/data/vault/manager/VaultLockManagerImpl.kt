@@ -139,12 +139,8 @@ internal class VaultLockManagerImpl(
         .distinctUntilChanged()
         .stateIn(
             scope = unconfinedScope,
-            // Eagerly, because callers read `.value` without collecting (e.g. UserStateManagerImpl)
-            // and Lazily would leave that value stale until the first collector subscribes.
             started = SharingStarted.Eagerly,
-            initialValue = mutableVaultUnlockDataStateFlow.value.any {
-                it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
-            },
+            initialValue = false,
         )
 
     override val vaultStateEventFlow: Flow<VaultStateEvent>

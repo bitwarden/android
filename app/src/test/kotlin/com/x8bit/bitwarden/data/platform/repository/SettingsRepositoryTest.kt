@@ -82,18 +82,7 @@ class SettingsRepositoryTest {
         every { isFdroid } returns false
     }
 
-    private val settingsRepository = SettingsRepositoryImpl(
-        autofillManager = autofillManager,
-        autofillEnabledManager = autofillEnabledManager,
-        authDiskSource = fakeAuthDiskSource,
-        settingsDiskSource = fakeSettingsDiskSource,
-        vaultSdkSource = vaultSdkSource,
-        accessibilityEnabledManager = fakeAccessibilityEnabledManager,
-        dispatcherManager = FakeDispatcherManager(),
-        policyManager = policyManager,
-        flightRecorderManager = flightRecorderManager,
-        buildInfoManager = buildInfoManager,
-    )
+    private val settingsRepository = createSettingsRepository()
 
     @BeforeEach
     fun setup() {
@@ -107,6 +96,19 @@ class SettingsRepositoryTest {
     fun tearDown() {
         unmockkConstructor(NoActiveUserException::class)
     }
+
+    private fun createSettingsRepository(): SettingsRepositoryImpl = SettingsRepositoryImpl(
+        autofillManager = autofillManager,
+        autofillEnabledManager = autofillEnabledManager,
+        authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = fakeSettingsDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        accessibilityEnabledManager = fakeAccessibilityEnabledManager,
+        dispatcherManager = FakeDispatcherManager(),
+        policyManager = policyManager,
+        flightRecorderManager = flightRecorderManager,
+        buildInfoManager = buildInfoManager,
+    )
 
     @Test
     fun `setDefaultsIfNecessary should set LOCK default values for the given user if necessary`() {
@@ -1349,7 +1351,8 @@ class SettingsRepositoryTest {
         runTest {
             every { buildInfoManager.isFdroid } returns true
             fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
-            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+            val fdroidSettingsRepository = createSettingsRepository()
+            fdroidSettingsRepository.hasShownAccessibilityDisclaimerFlow.test {
                 assertTrue(awaitItem())
 
                 fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true

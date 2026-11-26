@@ -55,7 +55,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         }
         .stateIn(
             scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.Lazily,
             initialValue = 0,
         )
 
@@ -76,7 +76,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         }
         .stateIn(
             scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.Lazily,
             initialValue = 0,
         )
 
@@ -91,7 +91,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         }
         .stateIn(
             scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.Lazily,
             initialValue = 0,
         )
 
@@ -106,7 +106,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
     }
         .stateIn(
             scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.Lazily,
             initialValue = 0,
         )
 

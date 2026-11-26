@@ -208,6 +208,10 @@ class UserNotificationPolicyManagerTest {
         userNotificationPolicyManager.displayDataFlow.test {
             assertEquals(EXPECTED_DISPLAY_DATA, expectMostRecentItem())
         }
+        assertEquals(
+            EXPECTED_DISPLAY_DATA,
+            userNotificationPolicyManager.displayDataFlow.value,
+        )
     }
 
     @Test

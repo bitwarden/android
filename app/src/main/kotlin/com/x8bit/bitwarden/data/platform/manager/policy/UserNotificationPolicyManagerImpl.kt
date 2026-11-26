@@ -67,7 +67,7 @@ internal class UserNotificationPolicyManagerImpl(
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,
-            initialValue = displayData,
+            initialValue = null,
         )
 
     override fun dismissBanner() {
