@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.manager
 import android.net.Uri
 import androidx.core.net.toUri
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -31,6 +32,7 @@ import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.EditCipherException
 import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -38,6 +40,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -60,6 +63,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.util.toCipherCreateRequest
+import com.x8bit.bitwarden.data.vault.repository.util.toCipherEditRequest
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
@@ -105,6 +110,9 @@ class CipherManagerTest {
     private val ciphersService: CiphersService = mockk()
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.SdkCipherOperations) } returns false
+    }
     private val reviewPromptManager: ReviewPromptManager = mockk {
         every { registerAddCipherAction() } just runs
     }
@@ -122,6 +130,7 @@ class CipherManagerTest {
         settingsDiskSource = fakeSettingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
+        featureFlagManager = featureFlagManager,
         authDiskSource = fakeAuthDiskSource,
         fileManager = fileManager,
         clock = clock,
@@ -294,6 +303,166 @@ class CipherManagerTest {
             coVerify(ordering = Ordering.ORDERED) {
                 vaultDiskSource.saveCipher(userId, mockCipher)
                 reviewPromptManager.registerAddCipherAction()
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipher with SdkCipherOperations enabled should create through the SDK without writing to disk`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            val request = requireNotNull(
+                mockCipherView.toCipherCreateRequest(collectionIds = emptyList()),
+            )
+            coEvery {
+                vaultSdkSource.createCipher(userId = userId, request = request)
+            } returns mockCipherView.asSuccess()
+
+            val result = cipherManager.createCipher(cipherView = mockCipherView)
+
+            assertEquals(CreateCipherResult.Success(cipherId = "mockId-1"), result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.createCipher(userId = userId, request = request)
+                reviewPromptManager.registerAddCipherAction()
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.encryptCipher(any(), any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
+        }
+
+    @Test
+    fun `createCipher with SdkCipherOperations enabled and SDK failure should return Error`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException("SDK failure")
+            coEvery {
+                vaultSdkSource.createCipher(userId = userId, request = any())
+            } returns error.asFailure()
+
+            val result = cipherManager.createCipher(cipherView = mockCipherView)
+
+            assertEquals(CreateCipherResult.Error(error = error), result)
+            coVerify(exactly = 0) {
+                reviewPromptManager.registerAddCipherAction()
+                vaultDiskSource.saveCipher(any(), any())
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateCipher with SdkCipherOperations enabled and a server error body should return the server message`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = EditCipherException.Api(
+                message = """[400 Bad Request] {"message":"The cipher is out of date."}""",
+            )
+            coEvery {
+                vaultSdkSource.editCipher(userId = "mockId-1", request = any())
+            } returns error.asFailure()
+
+            val result = cipherManager.updateCipher(
+                cipherId = "mockId-1",
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(
+                UpdateCipherResult.Error(
+                    error = error,
+                    errorMessage = "The cipher is out of date.",
+                ),
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipherInOrganization with SdkCipherOperations enabled should create through the SDK with the collections`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val collectionIds = listOf("mockCollectionId-1", "mockCollectionId-2")
+            val mockCipherView = createMockCipherView(number = 1)
+            val request = requireNotNull(
+                mockCipherView.toCipherCreateRequest(collectionIds = collectionIds),
+            )
+            coEvery {
+                vaultSdkSource.createCipher(userId = userId, request = request)
+            } returns mockCipherView.asSuccess()
+
+            val result = cipherManager.createCipherInOrganization(
+                cipherView = mockCipherView,
+                collectionIds = collectionIds,
+            )
+
+            assertEquals(CreateCipherResult.Success(cipherId = "mockId-1"), result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.createCipher(userId = userId, request = request)
+                reviewPromptManager.registerAddCipherAction()
+            }
+            coVerify(exactly = 0) {
+                ciphersService.createCipherInOrganization(any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateCipher with SdkCipherOperations enabled should edit through the SDK without writing to disk`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            val request = requireNotNull(mockCipherView.toCipherEditRequest(cipherId = cipherId))
+            coEvery {
+                vaultSdkSource.editCipher(userId = userId, request = request)
+            } returns mockCipherView.asSuccess()
+
+            val result = cipherManager.updateCipher(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+            )
+
+            assertEquals(UpdateCipherResult.Success, result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.editCipher(userId = userId, request = request)
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.encryptCipher(any(), any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
+        }
+
+    @Test
+    fun `updateCipher with SdkCipherOperations enabled and SDK failure should return Error`() =
+        runTest {
+            every { featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations) } returns true
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val error = EditCipherException.ItemNotFound(message = "Item not found")
+            coEvery {
+                vaultSdkSource.editCipher(userId = userId, request = any())
+            } returns error.asFailure()
+
+            val result = cipherManager.updateCipher(
+                cipherId = cipherId,
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(UpdateCipherResult.Error(error = error), result)
+            coVerify(exactly = 0) {
+                vaultDiskSource.saveCipher(any(), any())
             }
         }
 

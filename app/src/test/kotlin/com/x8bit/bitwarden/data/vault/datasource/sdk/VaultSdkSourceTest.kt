@@ -48,6 +48,8 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherCreateRequest
+import com.bitwarden.vault.CipherEditRequest
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.DecryptException
@@ -775,6 +777,38 @@ class VaultSdkSourceTest {
             }
             coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
+
+    @Test
+    fun `createCipher should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
+        val request = mockk<CipherCreateRequest>()
+        val expectedResult = mockk<CipherView>()
+        coEvery { ciphersClient.create(request = request) } returns expectedResult
+
+        val result = vaultSdkSource.createCipher(userId = userId, request = request)
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify {
+            ciphersClient.create(request = request)
+            sdkClientManager.getOrCreateClient(userId = userId)
+        }
+    }
+
+    @Test
+    fun `editCipher should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
+        val request = mockk<CipherEditRequest>()
+        val expectedResult = mockk<CipherView>()
+        coEvery { ciphersClient.edit(request = request) } returns expectedResult
+
+        val result = vaultSdkSource.editCipher(userId = userId, request = request)
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify {
+            ciphersClient.edit(request = request)
+            sdkClientManager.getOrCreateClient(userId = userId)
+        }
+    }
 
     @Test
     fun `decryptCipher should call SDK and return a Result with correct data`() = runBlocking {

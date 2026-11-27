@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.manager
 import android.net.Uri
 import androidx.core.net.toUri
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
@@ -24,10 +25,13 @@ import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.util.parseSdkErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.util.userFriendlyMessage
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -41,6 +45,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.util.toCipherCreateRequest
+import com.x8bit.bitwarden.data.vault.repository.util.toCipherEditRequest
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
@@ -49,6 +55,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import java.io.File
 import java.time.Clock
 
@@ -64,6 +71,7 @@ class CipherManagerImpl(
     private val ciphersService: CiphersService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    private val featureFlagManager: FeatureFlagManager,
     private val clock: Clock,
     private val reviewPromptManager: ReviewPromptManager,
     dispatcherManager: DispatcherManager,
@@ -87,6 +95,13 @@ class CipherManagerImpl(
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
             ?: return CreateCipherResult.Error(error = NoActiveUserException())
+        if (featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations)) {
+            return createCipherWithSdk(
+                userId = userId,
+                cipherView = cipherView,
+                collectionIds = emptyList(),
+            )
+        }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -123,6 +138,13 @@ class CipherManagerImpl(
     ): CreateCipherResult {
         val userId = activeUserId
             ?: return CreateCipherResult.Error(error = NoActiveUserException())
+        if (featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations)) {
+            return createCipherWithSdk(
+                userId = userId,
+                cipherView = cipherView,
+                collectionIds = collectionIds,
+            )
+        }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -369,6 +391,13 @@ class CipherManagerImpl(
     ): UpdateCipherResult {
         val userId = activeUserId
             ?: return UpdateCipherResult.Error(error = NoActiveUserException())
+        if (featureFlagManager.getFeatureFlag(FlagKey.SdkCipherOperations)) {
+            return updateCipherWithSdk(
+                userId = userId,
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+        }
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -642,6 +671,67 @@ class CipherManagerImpl(
             .onSuccess { fileManager.delete(encryptedFile) }
             .onFailure { fileManager.delete(encryptedFile) }
             .map { decryptedFile }
+    }
+
+    /**
+     * Creates the cipher through the SDK, which sends the request and updates local storage.
+     */
+    private suspend fun createCipherWithSdk(
+        userId: String,
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): CreateCipherResult {
+        val request = cipherView.toCipherCreateRequest(collectionIds = collectionIds)
+            ?: return CreateCipherResult.Error(
+                error = IllegalStateException("Cipher is missing its type data."),
+            )
+        return vaultSdkSource
+            .createCipher(userId = userId, request = request)
+            .fold(
+                onFailure = {
+                    CreateCipherResult.Error(
+                        error = it,
+                        errorMessage = it.parseSdkErrorBodyOrNull()?.firstValidationErrorMessage
+                            ?: it.userFriendlyMessage,
+                    )
+                },
+                onSuccess = { createdCipher ->
+                    val cipherId = createdCipher.id
+                        ?: return IllegalStateException("Created cipher is missing its ID.")
+                            .let {
+                                Timber.w(it)
+                                CreateCipherResult.Error(error = it)
+                            }
+                    reviewPromptManager.registerAddCipherAction()
+                    CreateCipherResult.Success(cipherId = cipherId)
+                },
+            )
+    }
+
+    /**
+     * Edits the cipher through the SDK, which sends the request and updates local storage.
+     */
+    private suspend fun updateCipherWithSdk(
+        userId: String,
+        cipherId: String,
+        cipherView: CipherView,
+    ): UpdateCipherResult {
+        val request = cipherView.toCipherEditRequest(cipherId = cipherId)
+            ?: return UpdateCipherResult.Error(
+                error = IllegalStateException("Cipher is missing its type data."),
+            )
+        return vaultSdkSource
+            .editCipher(userId = userId, request = request)
+            .fold(
+                onFailure = {
+                    UpdateCipherResult.Error(
+                        error = it,
+                        errorMessage = it.parseSdkErrorBodyOrNull()?.firstValidationErrorMessage
+                            ?: it.userFriendlyMessage,
+                    )
+                },
+                onSuccess = { UpdateCipherResult.Success },
+            )
     }
 
     /**
