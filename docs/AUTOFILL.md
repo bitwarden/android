@@ -97,7 +97,7 @@ To see more per node, extend `logViewNode` locally with attributes such as `auto
 ### Other tools
 
 - **Flight Recorder.** Records all log priorities to a file in the app's private storage, shareable from Recorded Logs.
-- **`adb shell dumpsys autofill`.** Shows the current autofill service, the compatibility packages the system loaded, and recent requests. A request's system **session id** appears here and as the `@<number>` suffix on each node's `autofillId`. It is not the same number as the `-- <id>` request id in the app's own log lines.
+- **`adb shell dumpsys autofill`.** Shows the current autofill service, the compatibility packages the system loaded, and recent requests. The `req=` value in a session's log is the fill request id, the same number as the `-- <id>` suffix in the app's own log lines. The `@<number>` suffix on each node's `autofillId` is the system **session id**, which is a different number. Useful fields include `mCompatMode`, `mUrlBar` and `mSaveOnAllViewsInvisible`.
 - **Compat state.** The `Autofill Compat State` section of that dump shows which browsers the system treats as compat-mode and which URL-bar resource id it reads for each.
 
 ## Known limitations
@@ -106,9 +106,15 @@ To see more per node, extend `logViewNode` locally with attributes such as `auto
 
 Observed on Firefox 160.0.1; this may change with newer releases.
 
-- Android only treats Firefox as a compat-mode browser up to the version code in `autofill_service_configuration.xml`. A newer Firefox is outside that range. After widening the range locally, Firefox had to be force-stopped before the system picked up the change. This suggests Android reads the compat options when the app process starts, but that has not been confirmed.
-- With Firefox running in the full browser layout, the web-content node reports a blank `webDomain` and Firefox's toolbar does not expose a `url_bar` node. No web address reaches the app, so the URI falls back to `androidapp://org.mozilla.firefox` and logins for the site are not matched.
-- There is no fix on our side today. Widening the compat range alone does not solve it. A fix probably needs Firefox to supply the address.
+- Firefox sends the full web structure on some pages and only an empty root node on others. A full structure has a `webDomain`, an `html` or `form` node and `EditText` children. An empty one is a single focused `View` with a blank `webDomain` and no children. Google's and Facebook's login pages and the password step on Walmart send the full structure. The email step on Walmart and on Rippling send the empty root, and so does Reddit's login (likely shadow DOM).
+- When the structure is empty there is no field to fill, and with no web address the URI falls back to `androidapp://org.mozilla.firefox`. This happens even when the page is loaded for a while or the field is tapped again.
+- The compat-mode version cap in `autofill_service_configuration.xml` is not the cause. Raising it did not change the result.
+- Firefox sessions run in compat mode, so a login save is skipped by design.
+- There is no fix on our side. The accessibility fallback is the only Bitwarden-side route. Making Firefox send the field is a Firefox/GeckoView change.
+
+### Save prompt for native apps with no finish signal
+
+The save-on-all-views-invisible flag is only set in compat mode. A native app that never signals that the login finished may not trigger the save prompt. Setting the flag for such an app made the prompt appear in local testing. Whether to set it more widely is still being evaluated.
 
 ## Where to go next
 
