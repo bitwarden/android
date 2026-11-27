@@ -106,15 +106,14 @@ To see more per node, extend `logViewNode` locally with attributes such as `auto
 
 Observed on Firefox 160.0.1; this may change with newer releases.
 
-- Firefox sends the full web structure on some pages and only an empty root node on others. A full structure has a `webDomain`, an `html` or `form` node and `EditText` children. An empty one is a single focused `View` with a blank `webDomain` and no children. Google's and Facebook's login pages and the password step on Walmart send the full structure. The email step on Walmart and on Rippling send the empty root, and so does Reddit's login (likely shadow DOM).
-- When the structure is empty there is no field to fill, and with no web address the URI falls back to `androidapp://org.mozilla.firefox`. This happens even when the page is loaded for a while or the field is tapped again.
-- The compat-mode version cap in `autofill_service_configuration.xml` is not the cause. Raising it did not change the result.
-- Firefox sessions run in compat mode, so a login save is skipped by design.
-- There is no fix on our side. The accessibility fallback is the only Bitwarden-side route. Making Firefox send the field is a Firefox/GeckoView change.
+- On some pages Firefox sends the full web structure: a `webDomain`, an `html` or `form` node and `EditText` children. On other pages it sends only an empty root node: a single focused `View` with a blank `webDomain` and no children. The same site can do both, for example on different steps of a login. Forms inside a shadow DOM do not appear in the structure.
+- When the structure is empty there is no field to fill, and with no web address the URI falls back to `androidapp://org.mozilla.firefox`. This is the same after the page has been loaded for a while or the field is tapped again.
+- The compat-mode version cap in `autofill_service_configuration.xml` does not change this. Raising it did not change the result.
+- Firefox sessions run in compat mode, so a login save is not offered.
 
 ### Save prompt for native apps with no finish signal
 
-The save-on-all-views-invisible flag is only set in compat mode. A native app that never signals that the login finished may not trigger the save prompt. Setting the flag for such an app made the prompt appear in local testing. Whether to set it more widely is still being evaluated.
+The save-on-all-views-invisible flag is only set in compat mode. A native app that never signals that the login finished may not trigger the save prompt. Setting the flag for such an app made the prompt appear in local testing.
 
 ## Where to go next
 
