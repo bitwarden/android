@@ -23,6 +23,7 @@ import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
+import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
@@ -34,10 +35,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.util.toAuthenticationActions
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Clock
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.crypto.Cipher
 
 /**
@@ -101,47 +105,52 @@ class CredentialProviderProcessorImpl(
             return
         }
 
-        // Return an unlock action if the current account is locked.
-        if (!userState.activeAccount.isVaultUnlocked) {
-            Timber.d("Vault is locked. Requesting unlock.")
-            val authenticationAction = AuthenticationAction(
-                title = context.getString(BitwardenString.unlock),
-                pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
-                    userId = userState.activeUserId,
-                ),
-            )
+        val authenticationActions = getAuthenticationActions(request, userState)
 
+        // Locked vaults must only expose account actions, never credential entries.
+        if (!userState.activeAccount.isVaultUnlocked) {
             callback.onResult(
                 BeginGetCredentialResponse(
-                    authenticationActions = listOf(authenticationAction),
+                    authenticationActions = authenticationActions,
                 ),
             )
             return
         }
 
         // Otherwise, find all matching credentials from the current vault.
-        val getCredentialJob = ioScope.launch {
-            bitwardenCredentialManager
+        val hasCompleted = AtomicBoolean(false)
+        val getCredentialJob = ioScope.launch(start = CoroutineStart.LAZY) {
+            val result = bitwardenCredentialManager
                 .getCredentialEntries(
                     getCredentialsRequest = GetCredentialsRequest(
                         userId = userState.activeUserId,
                         BeginGetCredentialRequest.asBundle(request),
                     ),
                 )
-                .onSuccess {
-                    Timber.d("Credentials retrieved.")
-                    callback.onResult(BeginGetCredentialResponse(credentialEntries = it))
-                }
-                .onFailure {
-                    Timber.w("Error getting credentials.")
+            if (!hasCompleted.compareAndSet(false, true)) return@launch
+            val credentialEntries = result.getOrElse {
+                Timber.w("Error getting credentials.")
+                if (authenticationActions.isEmpty()) {
                     callback.onError(GetCredentialUnknownException(it.message))
+                    return@launch
                 }
+                emptyList()
+            }
+            callback.onResult(
+                BeginGetCredentialResponse(
+                    credentialEntries = credentialEntries,
+                    authenticationActions = authenticationActions,
+                ),
+            )
         }
         cancellationSignal.setOnCancelListener {
             Timber.d("Get credential request cancelled by system.")
-            callback.onError(GetCredentialCancellationException())
-            getCredentialJob.cancel()
+            if (hasCompleted.compareAndSet(false, true)) {
+                getCredentialJob.cancel()
+                callback.onError(GetCredentialCancellationException())
+            }
         }
+        getCredentialJob.start()
     }
 
     override fun processClearCredentialStateRequest(
@@ -152,6 +161,35 @@ class CredentialProviderProcessorImpl(
         // no-op: RFU
         Timber.w("Unsupported clear credential state request received.")
         callback.onError(ClearCredentialUnsupportedException())
+    }
+
+    private fun getAuthenticationActions(
+        request: BeginGetCredentialRequest,
+        userState: UserState,
+    ): List<AuthenticationAction> {
+        val isPasskeyRequest = request
+            .beginGetCredentialOptions
+            .any { it is BeginGetPublicKeyCredentialOption }
+        val isActiveVaultUnlocked = userState.activeAccount.isVaultUnlocked
+        return when {
+            // Passkey requests offer every account so the user can pick another one.
+            isPasskeyRequest -> userState.accounts.toAuthenticationActions(
+                context = context,
+                pendingIntentManager = pendingIntentManager,
+                userIdWithEntries = userState.activeUserId.takeIf { isActiveVaultUnlocked },
+            )
+
+            !isActiveVaultUnlocked -> listOf(
+                AuthenticationAction(
+                    title = context.getString(BitwardenString.unlock),
+                    pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
+                        userId = userState.activeUserId,
+                    ),
+                ),
+            )
+
+            else -> emptyList()
+        }
     }
 
     private fun handleCreatePasskeyQuery(

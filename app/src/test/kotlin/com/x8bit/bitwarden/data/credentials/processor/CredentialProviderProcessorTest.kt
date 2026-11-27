@@ -9,6 +9,7 @@ import android.os.OutcomeReceiver
 import androidx.biometric.BiometricManager
 import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
@@ -34,6 +35,7 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -42,6 +44,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -49,6 +52,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -535,14 +541,27 @@ class CredentialProviderProcessorTest {
     }
 
     @Suppress("MaxLineLength")
-    @Test
-    fun `processGetCredentialRequest should invoke callback with authentication action when vault is locked`() {
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `processGetCredentialRequest should offer an unlock action for a single locked vault`(
+        isPasskeyRequest: Boolean,
+    ) {
         val request: BeginGetCredentialRequest = mockk {
-            every { beginGetCredentialOptions } returns listOf(
-                mockk<BeginGetPasswordOption> {
-                    every { candidateQueryData } returns Bundle()
-                },
-            )
+            every { beginGetCredentialOptions } returns if (isPasskeyRequest) {
+                listOf(
+                    BeginGetPublicKeyCredentialOption(
+                        candidateQueryData = Bundle(),
+                        id = "id",
+                        requestJson = "{}",
+                    ),
+                )
+            } else {
+                listOf(
+                    mockk<BeginGetPasswordOption> {
+                        every { candidateQueryData } returns Bundle()
+                    },
+                )
+            }
             every { callingAppInfo } returns mockk(relaxed = true)
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
@@ -608,7 +627,9 @@ class CredentialProviderProcessorTest {
             val callback =
                 mockk<OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>>()
             val captureSlot = slot<GetCredentialException>()
-            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_USER_STATE.activeAccount),
+            )
             every { cancellationSignal.setOnCancelListener(any()) } just runs
             every { callback.onError(capture(captureSlot)) } just runs
             coEvery {
@@ -637,8 +658,18 @@ class CredentialProviderProcessorTest {
         }
 
     @Suppress("MaxLineLength")
-    @Test
-    fun `processGetCredentialRequest should invoke callback with filtered and discovered passkeys`() =
+    @ParameterizedTest
+    @CsvSource(
+        "true, false, false",
+        "false, false, false",
+        "true, true, false",
+        "true, false, true",
+    )
+    fun `passkey discovery should retain other account actions alongside entries`(
+        isOtherVaultUnlocked: Boolean,
+        hasNoMatches: Boolean,
+        discoveryFails: Boolean,
+    ) =
         runTest {
             val mockOption = BeginGetPublicKeyCredentialOption(
                 candidateQueryData = Bundle(),
@@ -652,9 +683,34 @@ class CredentialProviderProcessorTest {
             val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> =
                 mockk()
             val captureSlot = slot<BeginGetCredentialResponse>()
-            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = DEFAULT_USER_STATE.accounts.map {
+                    if (it.userId == DEFAULT_USER_STATE.activeUserId) {
+                        it
+                    } else {
+                        it.copy(isVaultUnlocked = isOtherVaultUnlocked)
+                    }
+                },
+            )
+            val otherAccount = requireNotNull(mutableUserStateFlow.value).accounts.first()
+            val otherAccountIntent = mockk<PendingIntent>()
+            every {
+                pendingIntentManager.createFido2UnlockPendingIntent(otherAccount.userId)
+            } returns otherAccountIntent
+            val expectedEntries = if (hasNoMatches || discoveryFails) {
+                emptyList()
+            } else {
+                credentialEntries
+            }
+            coEvery { bitwardenCredentialManager.getCredentialEntries(any()) } returns
+                if (discoveryFails) {
+                    Result.failure(IllegalStateException())
+                } else {
+                    expectedEntries.asSuccess()
+                }
 
-            every { cancellationSignal.setOnCancelListener(any()) } just runs
+            val cancelListener = slot<CancellationSignal.OnCancelListener>()
+            every { cancellationSignal.setOnCancelListener(capture(cancelListener)) } just runs
             every { callback.onResult(capture(captureSlot)) } just runs
 
             credentialProviderProcessor.processGetCredentialRequest(
@@ -663,12 +719,148 @@ class CredentialProviderProcessorTest {
                 callback = callback,
             )
 
-            assertEquals(1, captureSlot.captured.credentialEntries.size)
+            cancelListener.captured.onCancel()
+            verify(exactly = 1) { callback.onResult(any()) }
+            verify(exactly = 0) { callback.onError(any()) }
+            coVerify(exactly = 1) {
+                bitwardenCredentialManager.getCredentialEntries(
+                    match { it.userId == DEFAULT_USER_STATE.activeUserId },
+                )
+            }
             assertEquals(
-                credentialEntries,
+                expectedEntries,
                 captureSlot.captured.credentialEntries,
             )
+            val action = captureSlot.captured.authenticationActions.single()
+            assertEquals(otherAccountIntent, action.pendingIntent)
+            assertEquals("${otherAccount.email} (${otherAccount.environment.label})", action.title)
         }
+
+    @Test
+    fun `processGetCredentialRequest should offer both locked accounts without discovery`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = DEFAULT_USER_STATE.accounts.map { it.copy(isVaultUnlocked = false) },
+        )
+        val request = BeginGetCredentialRequest(
+            beginGetCredentialOptions = listOf(
+                BeginGetPublicKeyCredentialOption(
+                    candidateQueryData = Bundle(),
+                    id = "id",
+                    requestJson = "{}",
+                ),
+            ),
+        )
+        val pendingIntents = DEFAULT_USER_STATE.accounts.associate {
+            it.userId to mockk<PendingIntent>()
+        }
+        every { pendingIntentManager.createFido2UnlockPendingIntent(any()) } answers {
+            pendingIntents.getValue(firstArg())
+        }
+        val response = slot<BeginGetCredentialResponse>()
+        val callback = mockk<OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>>()
+        every { callback.onResult(capture(response)) } just runs
+
+        credentialProviderProcessor.processGetCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        assertTrue(response.captured.credentialEntries.isEmpty())
+        assertEquals(
+            DEFAULT_USER_STATE.accounts.map { "${it.email} (${it.environment.label})" },
+            response.captured.authenticationActions.map { it.title },
+        )
+        assertEquals(
+            pendingIntents.values.toList(),
+            response.captured.authenticationActions.map { it.pendingIntent },
+        )
+        coVerify(exactly = 0) { bitwardenCredentialManager.getCredentialEntries(any()) }
+        verify(exactly = 1) { callback.onResult(any()) }
+        verify(exactly = 0) { callback.onError(any()) }
+    }
+
+    @Test
+    fun `processGetCredentialRequest should return cancellation only once during discovery`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_USER_STATE.activeAccount),
+            )
+            val request = BeginGetCredentialRequest(
+                beginGetCredentialOptions = listOf(
+                    BeginGetPublicKeyCredentialOption(
+                        candidateQueryData = Bundle(),
+                        id = "id",
+                        requestJson = "{}",
+                    ),
+                ),
+            )
+            coEvery { bitwardenCredentialManager.getCredentialEntries(any()) } coAnswers {
+                awaitCancellation()
+            }
+            val cancelListener = slot<CancellationSignal.OnCancelListener>()
+            every { cancellationSignal.setOnCancelListener(capture(cancelListener)) } just runs
+            val callback =
+                mockk<OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>>()
+            every { callback.onError(any()) } just runs
+
+            credentialProviderProcessor.processGetCredentialRequest(
+                request,
+                cancellationSignal,
+                callback,
+            )
+            cancelListener.captured.onCancel()
+            cancelListener.captured.onCancel()
+
+            verify(exactly = 1) { callback.onError(any<GetCredentialCancellationException>()) }
+            verify(exactly = 0) { callback.onResult(any()) }
+        }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `unlocked single account and password queries should not add account actions`(
+        isPasskeyRequest: Boolean,
+    ) = runTest {
+        mutableUserStateFlow.value = if (isPasskeyRequest) {
+            DEFAULT_USER_STATE.copy(accounts = listOf(DEFAULT_USER_STATE.activeAccount))
+        } else {
+            DEFAULT_USER_STATE
+        }
+        val request = BeginGetCredentialRequest(
+            beginGetCredentialOptions = if (isPasskeyRequest) {
+                listOf(
+                    BeginGetPublicKeyCredentialOption(
+                        candidateQueryData = Bundle(),
+                        id = "id",
+                        requestJson = "{}",
+                    ),
+                )
+            } else {
+                listOf(
+                    BeginGetPasswordOption(
+                        allowedUserIds = emptySet(),
+                        candidateQueryData = Bundle(),
+                        id = "id",
+                    ),
+                )
+            },
+        )
+        val response = slot<BeginGetCredentialResponse>()
+        val callback = mockk<OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>>()
+        every { cancellationSignal.setOnCancelListener(any()) } just runs
+        every { callback.onResult(capture(response)) } just runs
+
+        credentialProviderProcessor.processGetCredentialRequest(
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
+        )
+
+        assertEquals(credentialEntries, response.captured.credentialEntries)
+        assertTrue(response.captured.authenticationActions.isEmpty())
+        verify(exactly = 1) { callback.onResult(any()) }
+        verify(exactly = 0) { callback.onError(any()) }
+    }
 }
 
 private val DEFAULT_USER_STATE = UserState(
