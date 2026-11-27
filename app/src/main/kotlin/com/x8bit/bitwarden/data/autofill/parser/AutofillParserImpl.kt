@@ -329,6 +329,10 @@ private fun AssistStructure.traverse(
                 )
                 ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
+                // Runs after the steps above because it should only act when they did not find a
+                // username field. It undoes the case where a username field was classified as a
+                // password field, which those steps do not look for.
+                ?.updateForUsernameFieldsClassifiedAsPassword()
                 .also { windowNode.logWindowNodeEnd() }
         }
 
@@ -408,6 +412,52 @@ private fun ViewNodeTraversalData.updateForMissingUsernameFields(): ViewNodeTrav
         // We already have username fields available or there are no password fields, so no need
         // to search for them.
         this
+    }
+}
+
+/**
+ * This helper function updates the [ViewNodeTraversalData] when a username field was wrongly
+ * classified as a password field. Some apps give their user ID field a password input type with
+ * the text class (for example, `android:inputType="textVisiblePassword"`, which is a common way to
+ * turn off suggestions) and no username term in its hint or id. It then classifies as
+ * [AutofillView.Login.Password], so the password gets filled into it as well as into the real
+ * password field.
+ *
+ * If there are no username or email fields, a [AutofillView.Login.Password] without any password
+ * terms that sits directly above a [AutofillView.Login.Password] that does have password terms is
+ * demoted to [AutofillView.Login.Username]. Fields without password terms that are not directly
+ * above a field with password terms (for example, a "confirm" field after a new password) are left
+ * alone, because demoting those would stop the confirm field from being filled.
+ */
+private fun ViewNodeTraversalData.updateForUsernameFieldsClassifiedAsPassword():
+    ViewNodeTraversalData {
+    // If a username or email field was already found, the form already has one and nothing here
+    // needs to be reclassified.
+    val hasUsernameOrEmail = this.autofillViews.any {
+        it is AutofillView.Login.Username || it is AutofillView.Login.Email
+    }
+    if (hasUsernameOrEmail) return this
+    // Only a password field with a password term in its hint or id is trusted to be a real
+    // password. A field with no terms is the only kind that can be a misclassified username.
+    val confirmedPasswordPositions = this.autofillViews.mapIndexedNotNull { index, autofillView ->
+        (autofillView as? AutofillView.Login.Password)
+            ?.takeIf { it.data.hasPasswordTerms }
+            ?.let { index }
+    }
+    // Without a trusted password field there is nothing to tell which field is the username, so
+    // leave the views as they are.
+    if (confirmedPasswordPositions.isEmpty()) return this
+    return this.copyAndMapAutofillViews { index, autofillView ->
+        // `index + 1` limits this to a field directly above a trusted password field, which is
+        // where a username sits, the same position updateForMissingUsernameFields relies on.
+        if (autofillView is AutofillView.Login.Password &&
+            !autofillView.data.hasPasswordTerms &&
+            confirmedPasswordPositions.contains(index + 1)
+        ) {
+            AutofillView.Login.Username(data = autofillView.data)
+        } else {
+            autofillView
+        }
     }
 }
 

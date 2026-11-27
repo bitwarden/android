@@ -43,6 +43,8 @@ class ViewNodeExtensionsTest {
         every { className } returns null
         every { idEntry } returns null
         every { hint } returns null
+        // isUsernameField reads the content description of input fields
+        every { contentDescription } returns null
         every { autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
         every { autofillType } returns AUTOFILL_TYPE
         every { autofillValue } returns testAutofillValue
@@ -799,6 +801,38 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
+    fun `isUsernameField returns true for an input field whose content description is a username term`() {
+        // Setup: Mazda Financial Services labels its username field only with `contentDescription`
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns ""
+        every { viewNode.htmlInfo.isUsernameField() } returns false
+        every { viewNode.htmlInfo.isInputField } returns true
+        every { viewNode.contentDescription } returns "Username"
+
+        // Test
+        val actual = viewNode.isUsernameField
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns false for a non-input view whose content description is a username term`() {
+        // Setup: a label such as `TextView contentDescription=Username` is not the field
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isUsernameField() } returns false
+        every { viewNode.htmlInfo.isInputField } returns false
+        every { viewNode.contentDescription } returns "Username"
+
+        // Test
+        val actual = viewNode.isUsernameField
+
+        // Verify
+        assertFalse(actual)
+    }
+
+    @Test
     fun `hasPasswordTerms returns true when idEntry contains a raw password term`() {
         every { viewNode.idEntry } returns null
         every { viewNode.hint } returns null
@@ -1343,6 +1377,11 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            // A redirect now checks whether the child classifies itself, which reads these
+            every { autofillHints } returns null
+            every { idEntry } returns null
+            every { hint } returns null
+            every { inputType } returns 1
         }
         every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
         every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
@@ -1377,6 +1416,11 @@ class ViewNodeExtensionsTest {
             every { childCount } returns 0
             every { className } returns null
             every { htmlInfo } returns mockHtmlInfo
+            // A redirect now checks whether the child classifies itself, which reads these
+            every { autofillHints } returns null
+            every { idEntry } returns null
+            every { hint } returns null
+            every { inputType } returns 1
         }
         val intermediateChildNode: AssistStructure.ViewNode = mockk {
             every { autofillId } returns mockk()
@@ -1405,6 +1449,35 @@ class ViewNodeExtensionsTest {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return null for a container with a hint when its first autofillable child has its own hint`() {
+        // Setup: a container like `username_password_ll` that matches a username term, wrapping a
+        // password field. The password field must keep its own classification, so the container
+        // must not claim its autofillId.
+        val childNode: AssistStructure.ViewNode = mockk {
+            every { autofillId } returns mockk()
+            every { autofillType } returns View.AUTOFILL_TYPE_TEXT
+            every { childCount } returns 0
+            every { className } returns null
+            every { htmlInfo } returns mockHtmlInfo
+            every { autofillHints } returns arrayOf(View.AUTOFILL_HINT_PASSWORD)
+        }
+        every { viewNode.autofillHints } returns arrayOf(View.AUTOFILL_HINT_USERNAME)
+        every { viewNode.autofillType } returns View.AUTOFILL_TYPE_NONE
+        every { viewNode.childCount } returns 1
+        every { viewNode.getChildAt(0) } returns childNode
+
+        // Test
+        val actual = viewNode.toAutofillView(
+            parentWebsite = null,
+            isIdentityAutofillEnabled = true,
+        )
+
+        // Verify
+        assertNull(actual)
     }
 
     @Suppress("MaxLineLength")

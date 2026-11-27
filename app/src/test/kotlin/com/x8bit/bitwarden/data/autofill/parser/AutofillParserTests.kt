@@ -935,6 +935,171 @@ class AutofillParserTests {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should demote a Password view without password terms directly above a Password view with password terms to Username`() {
+        // Setup: a user ID field that reports a password input type (for example
+        // `textVisiblePassword`, used to turn off suggestions) and has no username term. It is a
+        // Login.Password with no password terms, directly above the real password field, so the
+        // password must not be filled into it.
+        val passwordAutofillId = mockk<AutofillId>()
+        val userIdPasswordView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        val passwordView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = passwordAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = true,
+                website = URI,
+            ),
+        )
+        val rootAutofillId = setupRootWithTwoViews(
+            firstAutofillId = loginAutofillId,
+            firstView = userIdPasswordView,
+            secondAutofillId = passwordAutofillId,
+            secondView = passwordView,
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = listOf(rootAutofillId),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(
+                views = listOf(
+                    AutofillView.Login.Username(data = userIdPasswordView.data),
+                    passwordView,
+                ),
+            ),
+            uri = URI,
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should not demote a Password view without password terms that is below a Password view with password terms`() {
+        // Setup: a field below the password field that has no password terms of its own, like a
+        // confirm-password field. It is a real password, so demoting it to a username would stop it
+        // from being filled.
+        val confirmAutofillId = mockk<AutofillId>()
+        val passwordView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = true,
+                website = URI,
+            ),
+        )
+        val confirmView = AutofillView.Login.Password(
+            data = AutofillView.Data(
+                autofillId = confirmAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+                hasPasswordTerms = false,
+                website = URI,
+            ),
+        )
+        val rootAutofillId = setupRootWithTwoViews(
+            firstAutofillId = loginAutofillId,
+            firstView = passwordView,
+            secondAutofillId = confirmAutofillId,
+            secondView = confirmView,
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = listOf(rootAutofillId),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = AutofillPartition.Login(views = listOf(passwordView, confirmView)),
+            uri = URI,
+        )
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    /**
+     * Sets up an [AssistStructure] with a root node and two child nodes that convert to the given
+     * [AutofillView]s. Returns the root's [AutofillId].
+     */
+    private fun setupRootWithTwoViews(
+        firstAutofillId: AutofillId,
+        firstView: AutofillView,
+        secondAutofillId: AutofillId,
+        secondView: AutofillView,
+    ): AutofillId {
+        val firstViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns firstAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+        }
+        val secondViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns secondAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+        }
+        val rootAutofillId = mockk<AutofillId>()
+        val rootViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns emptyArray()
+            every { this@mockk.autofillId } returns rootAutofillId
+            every { this@mockk.childCount } returns 2
+            every { this@mockk.idPackage } returns ID_PACKAGE
+            every { this@mockk.website } returns WEBSITE
+            every { this@mockk.getChildAt(0) } returns firstViewNode
+            every { this@mockk.getChildAt(1) } returns secondViewNode
+        }
+        val windowNode: AssistStructure.WindowNode = mockk {
+            every { this@mockk.rootViewNode } returns rootViewNode
+        }
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns windowNode
+        every {
+            rootViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns null
+        every {
+            firstViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns firstView
+        every {
+            secondViewNode.toAutofillView(parentWebsite = any(), isIdentityAutofillEnabled = any())
+        } returns secondView
+        return rootAutofillId
+    }
+
     @Test
     fun `parse should choose first focused AutofillView for partition when there are multiple`() {
         // Setup
