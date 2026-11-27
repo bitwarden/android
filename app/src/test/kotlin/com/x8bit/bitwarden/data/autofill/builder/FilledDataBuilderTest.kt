@@ -16,7 +16,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
 @Suppress("LargeClass")
 class FilledDataBuilderTest {
@@ -35,6 +38,7 @@ class FilledDataBuilderTest {
 
     @BeforeEach
     fun setup() {
+        mockkObject(Timber.Forest)
         mockkStatic(AutofillValue::forText)
         mockkStatic(AutofillView::buildFilledItemOrNull)
         filledDataBuilder = FilledDataBuilderImpl(
@@ -44,6 +48,7 @@ class FilledDataBuilderTest {
 
     @AfterEach
     fun teardown() {
+        unmockkObject(Timber.Forest)
         unmockkStatic(AutofillValue::forText)
         unmockkStatic(AutofillView::buildFilledItemOrNull)
     }
@@ -332,6 +337,52 @@ class FilledDataBuilderTest {
 
             // Verify
             assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `build should log a summary line when Login and no URI`() =
+        runTest {
+            // Setup
+            val autofillViewPassword: AutofillView.Login.Password = mockk()
+            val autofillViewUsername: AutofillView.Login.Username = mockk()
+            val autofillPartition = AutofillPartition.Login(
+                views = listOf(
+                    autofillViewPassword,
+                    autofillViewUsername,
+                ),
+            )
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = null,
+            )
+            val expected = FilledData(
+                filledPartitions = emptyList(),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = null,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            verify(exactly = 1) {
+                Timber.d(
+                    match<String> {
+                        it.startsWith("Autofill filled data:") &&
+                            it.contains("partition=Login ciphersMatched=false")
+                    },
+                )
+            }
         }
 
     @Suppress("MaxLineLength")

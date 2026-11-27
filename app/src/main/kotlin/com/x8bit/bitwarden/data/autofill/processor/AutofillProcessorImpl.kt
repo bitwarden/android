@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
+import com.x8bit.bitwarden.data.autofill.util.logName
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -76,11 +77,13 @@ class AutofillProcessorImpl(
         saveCallback: SaveCallback,
     ) {
         if (settingsRepository.isAutofillSavePromptDisabled) {
+            Timber.d("Autofill save skipped: SAVE_PROMPT_DISABLED")
             saveCallback.onSuccess()
             return
         }
 
         if (policyManager.getActivePolicies(PolicyType.ORGANIZATION_DATA_OWNERSHIP).any()) {
+            Timber.d("Autofill save skipped: ORG_DATA_OWNERSHIP_POLICY")
             saveCallback.onSuccess()
             return
         }
@@ -106,13 +109,22 @@ class AutofillProcessorImpl(
                                 )
                             }
                             ?.let { saveCallback.onSuccess(it) }
-                            ?: saveCallback.onSuccess()
+                            ?: run {
+                                Timber.d(
+                                    "Autofill save skipped: NO_SAVE_ITEM " +
+                                        "partition=${autofillRequest.partition.logName}",
+                                )
+                                saveCallback.onSuccess()
+                            }
                     }
 
                     AutofillRequest.Unfillable -> saveCallback.onSuccess()
                 }
             }
-            ?: saveCallback.onSuccess()
+            ?: run {
+                Timber.d("Autofill save skipped: SAVE_NO_FILL_CONTEXT")
+                saveCallback.onSuccess()
+            }
     }
 
     /**

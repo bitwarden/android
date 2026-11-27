@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.FillAssistRules
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.data.autofill.parser.util.logViewNode
 import com.x8bit.bitwarden.data.autofill.parser.util.logWindowNodeEnd
@@ -86,6 +87,18 @@ private val IDENTITY_FILL_ASSIST_CATEGORIES: List<String> = listOf(
 )
 
 /**
+ * The reasons a request can be deemed unfillable. Only these codes are ever logged.
+ */
+private enum class UnfillableReason {
+    NO_FILL_CONTEXT,
+    NO_CANDIDATE_VIEWS,
+    BLOCKED_URI,
+    NO_FOCUSED_VIEW_AFTER_FILL_ASSIST,
+    IDENTITY_FLAG_OFF,
+    UNEXPECTED_UNUSED_VIEW,
+}
+
+/**
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
@@ -110,7 +123,7 @@ internal class AutofillParserImpl(
                     fillRequest = fillRequest,
                 )
             }
-            ?: AutofillRequest.Unfillable
+            ?: unfillable(reason = UnfillableReason.NO_FILL_CONTEXT, requestId = fillRequest.id)
 
     override fun parse(
         autofillAppInfo: AutofillAppInfo,
@@ -121,6 +134,69 @@ internal class AutofillParserImpl(
             autofillAppInfo = autofillAppInfo,
             fillRequest = null,
         )
+
+    /**
+     * Logs the [reason] (plus any [context], which must contain only counts, booleans and types)
+     * and returns [AutofillRequest.Unfillable].
+     */
+    private fun unfillable(
+        reason: UnfillableReason,
+        requestId: Int?,
+        context: String = "",
+    ): AutofillRequest.Unfillable {
+        val contextSuffix = context
+            .takeUnless { it.isEmpty() }
+            ?.let { " $it" }
+            .orEmpty()
+        val message = "Autofill unfillable: $reason" + contextSuffix + " -- $requestId"
+        Timber.d(message)
+        return AutofillRequest.Unfillable
+    }
+
+    /**
+     * Returns the fill-assist rules for the host of the [uri], or `null` if there are none.
+     */
+    private fun getFillAssistHostRulesOrNull(uri: String?): List<FillAssistRules.HostRule>? =
+        uri
+            ?.takeUnless { it.startsWith("androidapp://") }
+            ?.toUri()
+            ?.host
+            ?.let { host ->
+                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
+            }
+
+    /**
+     * Builds a log-safe description (counts and booleans only) of why no focused view remained.
+     */
+    private fun noFocusedViewContext(
+        effectiveViews: List<AutofillView>,
+        heuristicViews: List<AutofillView>,
+        traversalDataList: List<ViewNodeTraversalData>,
+        hasHostRules: Boolean,
+    ): String =
+        "effectiveViews=${effectiveViews.size} " +
+            "heuristicViews=${heuristicViews.size} " +
+            "traversalViews=${traversalDataList.sumOf { it.autofillViews.size }} " +
+            "hasHostRules=$hasHostRules " +
+            "focusFromFillAssistRescue=${heuristicViews.firstFocusedOrNull() == null}"
+
+    /**
+     * Builds a log-safe description of where the blocked [uri] came from. Never includes the URI.
+     */
+    private fun blockedUriContext(
+        focusedView: AutofillView,
+        urlBarWebsite: String?,
+        uri: String?,
+    ): String {
+        val website = focusedView.data.website
+        val uriSource = when {
+            website == null -> "package fallback"
+            website == urlBarWebsite -> "URL bar"
+            else -> "web"
+        }
+        val list = if (settingsRepository.blockedAutofillUris.contains(uri)) "user" else "built-in"
+        return "uriSource=$uriSource list=$list"
+    }
 
     /**
      * Parse the [AssistStructure] into an [AutofillRequest].
@@ -166,7 +242,13 @@ internal class AutofillParserImpl(
             } else {
                 null
             }
-            ?: return AutofillRequest.Unfillable
+            ?: return unfillable(
+                reason = UnfillableReason.NO_CANDIDATE_VIEWS,
+                requestId = fillRequest?.id,
+                context = "views=${traversalDataList.sumOf { it.autofillViews.size }} " +
+                    "fillableViews=${autofillViews.size} " +
+                    "fillAssist=$isFillAssistEnabled",
+            )
 
         val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
@@ -175,13 +257,23 @@ internal class AutofillParserImpl(
 
         // The view is unfillable if the URI is block listed.
         if ((settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS).contains(uri)) {
-            return AutofillRequest.Unfillable
+            return unfillable(
+                reason = UnfillableReason.BLOCKED_URI,
+                requestId = fillRequest?.id,
+                context = blockedUriContext(
+                    focusedView = focusedView,
+                    urlBarWebsite = urlBarWebsite,
+                    uri = uri,
+                ),
+            )
         }
 
-        val effectiveViews = if (isFillAssistEnabled) {
+        // Looked up once: reading the rules decodes them from disk.
+        val hostRules = if (isFillAssistEnabled) getFillAssistHostRulesOrNull(uri = uri) else null
+        val effectiveViews = if (hostRules != null) {
             autofillViews.toEffectiveViews(
                 assistStructure = assistStructure,
-                uri = uri,
+                hostRules = hostRules,
                 focusedView = focusedView,
                 urlBarWebsite = urlBarWebsite,
                 isIdentityAutofillEnabled = isIdentityAutofillEnabled,
@@ -191,7 +283,16 @@ internal class AutofillParserImpl(
         }
 
         val effectiveFocusedView = effectiveViews.firstFocusedOrNull()
-            ?: return AutofillRequest.Unfillable
+            ?: return unfillable(
+                reason = UnfillableReason.NO_FOCUSED_VIEW_AFTER_FILL_ASSIST,
+                requestId = fillRequest?.id,
+                context = noFocusedViewContext(
+                    effectiveViews = effectiveViews,
+                    heuristicViews = autofillViews,
+                    traversalDataList = traversalDataList,
+                    hasHostRules = hostRules != null,
+                ),
+            )
 
         // Choose the first focused partition of data for fulfillment.
         val partition = when (effectiveFocusedView) {
@@ -210,7 +311,12 @@ internal class AutofillParserImpl(
             is AutofillView.Identity -> {
                 // Gated behind FlagKey.IdentityAutofill until the feature is ready for
                 // production; disabled matches this partition's pre-feature behavior.
-                if (!isIdentityAutofillEnabled) return AutofillRequest.Unfillable
+                if (!isIdentityAutofillEnabled) {
+                    return unfillable(
+                        reason = UnfillableReason.IDENTITY_FLAG_OFF,
+                        requestId = fillRequest?.id,
+                    )
+                }
                 AutofillPartition.Identity(
                     views = effectiveViews.filterIsInstance<AutofillView.Identity>(),
                 )
@@ -220,7 +326,10 @@ internal class AutofillParserImpl(
                 // This will never happen: the heuristic path filters out Unused views, and the
                 // fill-assist path never constructs one (toAutofillViewForFieldKey has no Unused
                 // case).
-                return AutofillRequest.Unfillable
+                return unfillable(
+                    reason = UnfillableReason.UNEXPECTED_UNUSED_VIEW,
+                    requestId = fillRequest?.id,
+                )
             }
         }
         // Flatten the ignorable autofill ids.
@@ -257,20 +366,11 @@ internal class AutofillParserImpl(
      */
     private fun List<AutofillView>.toEffectiveViews(
         assistStructure: AssistStructure,
-        uri: String?,
+        hostRules: List<FillAssistRules.HostRule>,
         focusedView: AutofillView,
         urlBarWebsite: String?,
         isIdentityAutofillEnabled: Boolean,
     ): List<AutofillView> {
-        val hostRules = uri
-            ?.takeUnless { it.startsWith("androidapp://") }
-            ?.toUri()
-            ?.host
-            ?.let { host ->
-                fillAssistManager.getFillAssistRules()?.hostRules?.get(host.removePrefix("www."))
-            }
-            ?: return this
-
         // Identity categories were Login categories before identity autofill, so with the flag
         // off they must stay Login's to keep fill-assist coverage unchanged on those hosts.
         val fillAssistCategories = if (isIdentityAutofillEnabled) {

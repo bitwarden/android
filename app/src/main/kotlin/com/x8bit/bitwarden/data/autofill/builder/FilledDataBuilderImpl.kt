@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUri
+import com.x8bit.bitwarden.data.autofill.util.logName
 import timber.log.Timber
 
 /**
@@ -69,10 +70,19 @@ class FilledDataBuilderImpl(
             .inlinePresentationSpecs
             ?.getOrLastOrNull(inlineSuggestionsAdded)
 
+        val nonEmptyFilledPartitions = filledPartitions
+            .filter { it.filledItems.isNotEmpty() }
+            .take(n = MAX_FILLED_PARTITIONS_COUNT)
+        Timber.d(
+            "Autofill filled data: " +
+                "partition=${autofillRequest.partition.logName} " +
+                "ciphersMatched=${nonEmptyFilledPartitions.isNotEmpty()} " +
+                "vaultLocked=$isVaultLocked " +
+                "inline=${autofillRequest.inlinePresentationSpecs != null}",
+        )
+
         return FilledData(
-            filledPartitions = filledPartitions
-                .filter { it.filledItems.isNotEmpty() }
-                .take(n = MAX_FILLED_PARTITIONS_COUNT),
+            filledPartitions = nonEmptyFilledPartitions,
             ignoreAutofillIds = autofillRequest.ignoreAutofillIds,
             originalPartition = autofillRequest.partition,
             uri = autofillRequest.uri,

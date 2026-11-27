@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.builder
 import android.service.autofill.FillRequest
 import android.service.autofill.SaveInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
+import com.x8bit.bitwarden.data.autofill.util.logName
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import timber.log.Timber
 
@@ -21,8 +22,20 @@ class SaveInfoBuilderImpl(
     ): SaveInfo? {
         Timber.d("Autofill request constructing SaveInfo -- ${fillRequest.id}")
         // Make sure that the save prompt is possible.
-        val canPerformSaveRequest = autofillPartition.canPerformSaveRequest
-        if (settingsRepository.isAutofillSavePromptDisabled || !canPerformSaveRequest) return null
+        if (settingsRepository.isAutofillSavePromptDisabled) {
+            Timber.d(
+                "Autofill save skipped: SAVE_INFO_DISABLED " +
+                    "partition=${autofillPartition.logName} -- ${fillRequest.id}",
+            )
+            return null
+        }
+        if (!autofillPartition.canPerformSaveRequest) {
+            Timber.d(
+                "Autofill save skipped: SAVE_INFO_NO_PASSWORD_FIELD " +
+                    "partition=${autofillPartition.logName} -- ${fillRequest.id}",
+            )
+            return null
+        }
 
         // Docs state that password fields cannot be reliably saved
         // in Compat mode since they show as masked values.
@@ -33,6 +46,7 @@ class SaveInfoBuilderImpl(
         // If login and compat mode, the password might be obfuscated,
         // in which case we should skip the save request.
         return if (autofillPartition is AutofillPartition.Login && isInCompatMode) {
+            Timber.d("Autofill save skipped: SAVE_INFO_COMPAT_LOGIN -- ${fillRequest.id}")
             null
         } else {
             SaveInfo
