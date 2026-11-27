@@ -7,6 +7,7 @@ Developer documentation for the Bitwarden Android project. For build setup and p
 | Document | Description |
 |----------|-------------|
 | [Architecture](ARCHITECTURE.md) | Module structure, the data layer (data sources, managers, repositories), and the UI layer (ViewModels, Compose screens, navigation). |
+| [Autofill](AUTOFILL.md) | How autofill works at a high level: the fill and save flow, main components, URI matching, browsers and fill assist, and how to debug it. |
 | [Code Style Guidelines](STYLE_AND_BEST_PRACTICES.md) | Kotlin and ViewModel style rules, plus best practices for Kotlin, Jetpack Compose, and time and clock handling. |
 | [Troubleshooting](TROUBLESHOOTING.md) | Fixes for common build, test, and preview issues, plus debugging tips. |
 | [`bitwarden-style.xml`](bitwarden-style.xml) | Code style scheme for IntelliJ / Android Studio. See [Setup](../README.md#setup) for how to apply it. |
