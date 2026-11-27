@@ -1,6 +1,6 @@
 # Autofill
 
-A short overview of how autofill works in the Password Manager app: enough to find your way around and start debugging, without a deep dive into every heuristic. Paths below are relative to `app/src/main/kotlin/com/x8bit/bitwarden/data/autofill/` unless noted.
+A short overview of how autofill works in the Password Manager app: High level overview and helpful debugging steps. Paths below are relative to `app/src/main/kotlin/com/x8bit/bitwarden/data/autofill/` unless noted.
 
 ## Scope
 
