@@ -25,4 +25,8 @@ val ImportFileFormat.displayLabel: Text
         ImportFileFormat.AEGIS -> {
             BitwardenString.import_format_label_aegis_json.asText()
         }
+
+        ImportFileFormat.PROTON_AUTHENTICATOR_JSON -> {
+            BitwardenString.import_format_label_proton_authenticator_json.asText()
+        }
     }
