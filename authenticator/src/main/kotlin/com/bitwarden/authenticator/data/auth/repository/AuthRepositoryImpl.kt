@@ -41,15 +41,14 @@ class AuthRepositoryImpl @Inject constructor(
     override val isUnlockWithBiometricsEnabled: Boolean
         get() = authDiskSource.getUserBiometricUnlockKey() != null
 
-    override val isUnlockWithBiometricsEnabledFlow: StateFlow<Boolean>
-        get() = authDiskSource
-            .userBiometricUnlockKeyFlow
-            .map { it != null }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = isUnlockWithBiometricsEnabled,
-            )
+    override val isUnlockWithBiometricsEnabledFlow: StateFlow<Boolean> = authDiskSource
+        .userBiometricUnlockKeyFlow
+        .map { it != null }
+        .stateIn(
+            scope = unconfinedScope,
+            started = SharingStarted.Eagerly,
+            initialValue = isUnlockWithBiometricsEnabled,
+        )
 
     override val appLockStateFlow: StateFlow<AppLockState> = appLockManager.appLockStateFlow
 

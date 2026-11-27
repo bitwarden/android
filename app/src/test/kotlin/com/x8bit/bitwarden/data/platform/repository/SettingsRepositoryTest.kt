@@ -54,6 +54,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -81,18 +82,7 @@ class SettingsRepositoryTest {
         every { isFdroid } returns false
     }
 
-    private val settingsRepository = SettingsRepositoryImpl(
-        autofillManager = autofillManager,
-        autofillEnabledManager = autofillEnabledManager,
-        authDiskSource = fakeAuthDiskSource,
-        settingsDiskSource = fakeSettingsDiskSource,
-        vaultSdkSource = vaultSdkSource,
-        accessibilityEnabledManager = fakeAccessibilityEnabledManager,
-        dispatcherManager = FakeDispatcherManager(),
-        policyManager = policyManager,
-        flightRecorderManager = flightRecorderManager,
-        buildInfoManager = buildInfoManager,
-    )
+    private val settingsRepository = createSettingsRepository()
 
     @BeforeEach
     fun setup() {
@@ -106,6 +96,19 @@ class SettingsRepositoryTest {
     fun tearDown() {
         unmockkConstructor(NoActiveUserException::class)
     }
+
+    private fun createSettingsRepository(): SettingsRepositoryImpl = SettingsRepositoryImpl(
+        autofillManager = autofillManager,
+        autofillEnabledManager = autofillEnabledManager,
+        authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = fakeSettingsDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        accessibilityEnabledManager = fakeAccessibilityEnabledManager,
+        dispatcherManager = FakeDispatcherManager(),
+        policyManager = policyManager,
+        flightRecorderManager = flightRecorderManager,
+        buildInfoManager = buildInfoManager,
+    )
 
     @Test
     fun `setDefaultsIfNecessary should set LOCK default values for the given user if necessary`() {
@@ -330,6 +333,79 @@ class SettingsRepositoryTest {
                 )
                 assertEquals(instant, awaitItem())
             }
+    }
+
+    @Test
+    fun `vaultLastSyncStateFlow should follow the active user when it changes`() = runTest {
+        val secondUserId = "secondUserId"
+        val firstInstant = Instant.ofEpochMilli(1_698_408_000_000L)
+        val secondInstant = Instant.ofEpochMilli(1_698_494_400_000L)
+        fakeSettingsDiskSource.storeLastSyncTime(userId = USER_ID, lastSyncTime = firstInstant)
+        fakeSettingsDiskSource.storeLastSyncTime(
+            userId = secondUserId,
+            lastSyncTime = secondInstant,
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        settingsRepository
+            .vaultLastSyncStateFlow
+            .test {
+                assertEquals(firstInstant, expectMostRecentItem())
+
+                // Switch the active user without re-reading the property.
+                fakeAuthDiskSource.userState = MOCK_USER_STATE.copy(
+                    activeUserId = secondUserId,
+                    accounts = MOCK_USER_STATE.accounts + (secondUserId to MOCK_ACCOUNT),
+                )
+                assertEquals(secondInstant, awaitItem())
+
+                // Updates for the previous user no longer affect the flow.
+                fakeSettingsDiskSource.storeLastSyncTime(
+                    userId = USER_ID,
+                    lastSyncTime = firstInstant.plusSeconds(60),
+                )
+                expectNoEvents()
+            }
+    }
+
+    @Test
+    fun `shared flow properties should return the same instance on every access`() {
+        assertSame(
+            settingsRepository.appLanguageStateFlow,
+            settingsRepository.appLanguageStateFlow,
+        )
+        assertSame(
+            settingsRepository.appThemeStateFlow,
+            settingsRepository.appThemeStateFlow,
+        )
+        assertSame(
+            settingsRepository.isDynamicColorsEnabledFlow,
+            settingsRepository.isDynamicColorsEnabledFlow,
+        )
+        assertSame(
+            settingsRepository.vaultLastSyncStateFlow,
+            settingsRepository.vaultLastSyncStateFlow,
+        )
+        assertSame(
+            settingsRepository.isIconLoadingDisabledFlow,
+            settingsRepository.isIconLoadingDisabledFlow,
+        )
+        assertSame(
+            settingsRepository.isCrashLoggingEnabledFlow,
+            settingsRepository.isCrashLoggingEnabledFlow,
+        )
+        assertSame(
+            settingsRepository.hasUserLoggedInOrCreatedAccountFlow,
+            settingsRepository.hasUserLoggedInOrCreatedAccountFlow,
+        )
+        assertSame(
+            settingsRepository.isScreenCaptureAllowedStateFlow,
+            settingsRepository.isScreenCaptureAllowedStateFlow,
+        )
+        assertSame(
+            settingsRepository.hasShownAccessibilityDisclaimerFlow,
+            settingsRepository.hasShownAccessibilityDisclaimerFlow,
+        )
     }
 
     @Test
@@ -1279,7 +1355,8 @@ class SettingsRepositoryTest {
         runTest {
             every { buildInfoManager.isFdroid } returns true
             fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = null
-            settingsRepository.hasShownAccessibilityDisclaimerFlow.test {
+            val fdroidSettingsRepository = createSettingsRepository()
+            fdroidSettingsRepository.hasShownAccessibilityDisclaimerFlow.test {
                 assertTrue(awaitItem())
 
                 fakeSettingsDiskSource.hasShownAccessibilityDisclaimer = true
