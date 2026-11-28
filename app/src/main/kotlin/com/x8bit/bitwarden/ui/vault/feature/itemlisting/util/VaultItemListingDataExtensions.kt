@@ -70,6 +70,10 @@ fun CipherListView.determineListingPredicate(
             type is CipherListViewType.Login && isActive
         }
 
+        is VaultItemListingState.ItemListingType.Vault.Passkey -> {
+            type is CipherListViewType.Login && isActive && login?.hasFido2 == true
+        }
+
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
             type is CipherListViewType.SecureNote && isActive
         }
@@ -261,6 +265,10 @@ fun VaultData.toViewState(
                         BitwardenString.no_logins
                     }
 
+                    VaultItemListingState.ItemListingType.Vault.Passkey -> {
+                        BitwardenString.no_passkeys
+                    }
+
                     VaultItemListingState.ItemListingType.Vault.SecureNote -> {
                         BitwardenString.no_notes
                     }
@@ -307,6 +315,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.Card,
                         VaultItemListingState.ItemListingType.Vault.Identity,
                         VaultItemListingState.ItemListingType.Vault.Login,
+                        VaultItemListingState.ItemListingType.Vault.Passkey,
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
@@ -371,6 +380,7 @@ fun VaultData.toViewState(
                         VaultItemListingState.ItemListingType.Vault.Card,
                         VaultItemListingState.ItemListingType.Vault.Identity,
                         VaultItemListingState.ItemListingType.Vault.Login,
+                        VaultItemListingState.ItemListingType.Vault.Passkey,
                         VaultItemListingState.ItemListingType.Vault.SecureNote,
                         VaultItemListingState.ItemListingType.Vault.SshKey,
                         VaultItemListingState.ItemListingType.Vault.BankAccount,
@@ -451,6 +461,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> this
         is VaultItemListingState.ItemListingType.Vault.Login -> this
+        is VaultItemListingState.ItemListingType.Vault.Passkey -> this
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> this
         is VaultItemListingState.ItemListingType.Vault.Trash -> this
         is VaultItemListingState.ItemListingType.Send.SendFile -> this

@@ -1185,6 +1185,74 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toViewState should count logins with a FIDO2 credential as passkeyItemsCount and set showPasskeyGroup to true`() {
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Login(
+                            v1 = createMockLoginListView(number = 1, hasFido2 = true),
+                        ),
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.Login(
+                            v1 = createMockLoginListView(number = 2, hasFido2 = false),
+                        ),
+                    ),
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+            validTotpIds = emptySet(),
+            isNewItemTypesEnabled = false,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 2,
+                passkeyItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                bankAccountItemsCount = 0,
+                licenseItemsCount = 0,
+                passportItemsCount = 0,
+                favoriteItems = listOf(),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+                itemTypesCount = CipherType.entries.size,
+                archivedItemsCount = 0,
+                archiveSubText = null,
+                archiveEndIcon = null,
+                showCardGroup = true,
+                showPasskeyGroup = true,
+                showBankAccountGroup = false,
+                showLicenseGroup = false,
+                showPassportGroup = false,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `toViewState should excluded card vault items for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to false if there are no remaining cards`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(

@@ -20,6 +20,7 @@ fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> SearchType.Vault.Identities
         is VaultItemListingState.ItemListingType.Vault.Login -> SearchType.Vault.Logins
+        is VaultItemListingState.ItemListingType.Vault.Passkey -> SearchType.Vault.Logins
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> SearchType.Vault.SecureNotes
         is VaultItemListingState.ItemListingType.Vault.SshKey -> SearchType.Vault.SshKeys
         is VaultItemListingState.ItemListingType.Vault.BankAccount -> {
@@ -74,6 +75,7 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> VaultItemCipherType.LOGIN
+        is VaultItemListingState.ItemListingType.Vault.Passkey -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Folder -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Archive,

@@ -28,6 +28,7 @@ data class VaultHandlers(
     val collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
     val verificationCodesClick: () -> Unit,
     val loginGroupClick: () -> Unit,
+    val passkeyGroupClick: () -> Unit,
     val cardGroupClick: () -> Unit,
     val identityGroupClick: () -> Unit,
     val secureNoteGroupClick: () -> Unit,
@@ -93,6 +94,7 @@ data class VaultHandlers(
                     viewModel.trySendAction(VaultAction.VerificationCodesClick)
                 },
                 loginGroupClick = { viewModel.trySendAction(VaultAction.LoginGroupClick) },
+                passkeyGroupClick = { viewModel.trySendAction(VaultAction.PasskeyGroupClick) },
                 cardGroupClick = { viewModel.trySendAction(VaultAction.CardGroupClick) },
                 identityGroupClick = { viewModel.trySendAction(VaultAction.IdentityGroupClick) },
                 secureNoteGroupClick = {
