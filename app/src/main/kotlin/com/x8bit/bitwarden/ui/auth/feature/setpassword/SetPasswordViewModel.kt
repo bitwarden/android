@@ -226,6 +226,21 @@ class SetPasswordViewModel @Inject constructor(
                     ),
                 )
             }
+            return
+        }
+
+        // Check that the re-typed password matches before setting the password.
+        if (state.passwordInput == state.retypePasswordInput) {
+            setPassword()
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SetPasswordState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_confirmation_val_message.asText(),
+                    ),
+                )
+            }
         }
     }
 

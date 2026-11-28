@@ -171,6 +171,100 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `SubmitClicked with policies and password meeting requirements sets password`() =
+        runTest {
+            val password = "TestPassword123!"
+            val policies = listOf(BitwardenString.policy_in_effect_uppercase.asText())
+            coEvery {
+                authRepository.validatePasswordAgainstPolicies(password)
+            } returns true
+            coEvery {
+                authRepository.setPassword(
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                    password = password,
+                    passwordHint = "",
+                )
+            } returns SetPasswordResult.Success
+
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(policies = policies))
+            viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(password))
+            viewModel.trySendAction(SetPasswordAction.RetypePasswordInputChanged(password))
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = null,
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        policies = policies,
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(SetPasswordAction.SubmitClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SetPasswordState.DialogState.Loading(
+                            message = BitwardenString.updating_password.asText(),
+                        ),
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        policies = policies,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = null,
+                        passwordInput = password,
+                        retypePasswordInput = password,
+                        policies = policies,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify {
+                authRepository.validatePasswordAgainstPolicies(password)
+                authRepository.setPassword(
+                    organizationIdentifier = ORGANIZATION_IDENTIFIER,
+                    password = password,
+                    passwordHint = "",
+                )
+            }
+        }
+
+    @Test
+    fun `SubmitClicked with policies met and non-matching retyped password shows error alert`() =
+        runTest {
+            val password = "TestPassword123!"
+            val policies = listOf(BitwardenString.policy_in_effect_uppercase.asText())
+            coEvery {
+                authRepository.validatePasswordAgainstPolicies(password)
+            } returns true
+
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(policies = policies))
+            viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(password))
+            viewModel.trySendAction(SetPasswordAction.RetypePasswordInputChanged("different"))
+            viewModel.trySendAction(SetPasswordAction.SubmitClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = SetPasswordState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_confirmation_val_message.asText(),
+                    ),
+                    passwordInput = password,
+                    retypePasswordInput = "different",
+                    policies = policies,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `SubmitClicked with all valid inputs sets password`() = runTest {
         val password = "TestPassword123"
         coEvery {
