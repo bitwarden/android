@@ -19,6 +19,7 @@ import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
+import com.x8bit.bitwarden.data.platform.util.isDesktopAppUri
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.isLargeFile
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -140,7 +141,7 @@ fun CipherView.toViewState(
                             canViewPassword = viewPassword,
                         )
                     },
-                    uris = loginValues.uris.orEmpty().map { it.toUriData() },
+                    uris = loginValues.uris.orEmpty().mapNotNull { it.toUriData() },
                     passwordRevisionDate = loginValues
                         .passwordRevisionDate
                         ?.toFormattedDateTimeStyle(
@@ -313,12 +314,16 @@ private fun LocalDate.toFormattedDate(
     clock: Clock,
 ): String = this.toFormattedDateStyle(dateStyle = FormatStyle.LONG, clock = clock)
 
-private fun LoginUriView.toUriData() =
-    VaultItemState.ViewState.Content.ItemType.Login.UriData(
-        uri = uri.orZeroWidthSpace(),
-        isCopyable = !uri.isNullOrBlank(),
-        isLaunchable = !uri.isNullOrBlank(),
-    )
+private fun LoginUriView.toUriData(): VaultItemState.ViewState.Content.ItemType.Login.UriData? =
+    if (this.isDesktopAppUri) {
+        null
+    } else {
+        VaultItemState.ViewState.Content.ItemType.Login.UriData(
+            uri = uri.orZeroWidthSpace(),
+            isCopyable = !uri.isNullOrBlank(),
+            isLaunchable = !uri.isNullOrBlank(),
+        )
+    }
 
 private fun Fido2CredentialView.getCreationDateText(clock: Clock): Text =
     BitwardenString.created_x.asText(

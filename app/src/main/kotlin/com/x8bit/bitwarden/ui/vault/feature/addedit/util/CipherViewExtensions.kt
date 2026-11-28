@@ -18,6 +18,7 @@ import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.util.isDesktopAppUri
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -412,13 +413,17 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
             ),
         )
     } else {
-        this.map { loginUriView ->
-            UriItem(
-                id = UUID.randomUUID().toString(),
-                uri = loginUriView.uri,
-                match = loginUriView.match,
-                checksum = loginUriView.uriChecksum,
-            )
+        this.mapNotNull { loginUriView ->
+            if (loginUriView.isDesktopAppUri) {
+                null
+            } else {
+                UriItem(
+                    id = UUID.randomUUID().toString(),
+                    uri = loginUriView.uri,
+                    match = loginUriView.match,
+                    checksum = loginUriView.uriChecksum,
+                )
+            }
         }
     }
 
