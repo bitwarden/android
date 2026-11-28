@@ -14,10 +14,12 @@ val VaultCardBrand.longName: Text
         VaultCardBrand.VISA -> "Visa".asText()
         VaultCardBrand.MASTERCARD -> "Mastercard".asText()
         VaultCardBrand.AMEX -> "American Express".asText()
+        VaultCardBrand.DINA_CARD -> "DinaCard".asText()
         VaultCardBrand.DISCOVER -> "Discover".asText()
         VaultCardBrand.DINERS_CLUB -> "Diners Club".asText()
         VaultCardBrand.JCB -> "JCB".asText()
         VaultCardBrand.MAESTRO -> "Maestro".asText()
+        VaultCardBrand.MIR -> "Mir".asText()
         VaultCardBrand.UNIONPAY -> "UnionPay".asText()
         VaultCardBrand.RUPAY -> "RuPay".asText()
         VaultCardBrand.OTHER -> BitwardenString.other.asText()
@@ -32,10 +34,12 @@ val VaultCardBrand.shortName: Text
         VaultCardBrand.VISA -> "Visa".asText()
         VaultCardBrand.MASTERCARD -> "Mastercard".asText()
         VaultCardBrand.AMEX -> "Amex".asText()
+        VaultCardBrand.DINA_CARD -> "DinaCard".asText()
         VaultCardBrand.DISCOVER -> "Discover".asText()
         VaultCardBrand.DINERS_CLUB -> "Diners Club".asText()
         VaultCardBrand.JCB -> "JCB".asText()
         VaultCardBrand.MAESTRO -> "Maestro".asText()
+        VaultCardBrand.MIR -> "Mir".asText()
         VaultCardBrand.UNIONPAY -> "UnionPay".asText()
         VaultCardBrand.RUPAY -> "RuPay".asText()
         VaultCardBrand.OTHER -> BitwardenString.other.asText()
@@ -50,10 +54,12 @@ val VaultCardBrand.stringLongNameOrNull: String?
         VaultCardBrand.VISA -> "Visa"
         VaultCardBrand.MASTERCARD -> "Mastercard"
         VaultCardBrand.AMEX -> "Amex"
+        VaultCardBrand.DINA_CARD -> "DinaCard"
         VaultCardBrand.DISCOVER -> "Discover"
         VaultCardBrand.DINERS_CLUB -> "Diners Club"
         VaultCardBrand.JCB -> "JCB"
         VaultCardBrand.MAESTRO -> "Maestro"
+        VaultCardBrand.MIR -> "Mir"
         VaultCardBrand.UNIONPAY -> "UnionPay"
         VaultCardBrand.RUPAY -> "RuPay"
         VaultCardBrand.OTHER -> "Other"
