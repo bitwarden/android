@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
@@ -19,7 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -56,13 +54,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
         } returns mutableSnackbarSharedFlow
-    }
-    private val mutableFedRampFlagStateFlow = MutableStateFlow(true)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlagFlow(key = FlagKey.FedRamp) } returns mutableFedRampFlagStateFlow
-        every {
-            getFeatureFlag(key = FlagKey.FedRamp)
-        } answers { mutableFedRampFlagStateFlow.value }
     }
 
     @Test
@@ -164,19 +155,6 @@ class LandingViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE.copy(disableCreateAccount = true), awaitItem())
             mutableServerConfigFlow.value = null
             assertEquals(DEFAULT_STATE.copy(disableCreateAccount = false), awaitItem())
-        }
-    }
-
-    @Test
-    fun `FedRAMP flag changes should update state`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            mutableFedRampFlagStateFlow.value = false
-            assertEquals(DEFAULT_STATE.copy(isFedRampEnabled = false), awaitItem())
-            mutableFedRampFlagStateFlow.value = true
-            assertEquals(DEFAULT_STATE.copy(isFedRampEnabled = true), awaitItem())
         }
     }
 
@@ -682,7 +660,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         environmentRepository = fakeEnvironmentRepository,
         serverConfigRepository = serverConfigRepository,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
         savedStateHandle = savedStateHandle,
     )
 
@@ -698,7 +675,6 @@ private val DEFAULT_STATE = LandingState(
     isSelectedEnvironmentFedRamp = false,
     dialog = null,
     accountSummaries = persistentListOf(),
-    isFedRampEnabled = true,
     disableCreateAccount = false,
 )
 

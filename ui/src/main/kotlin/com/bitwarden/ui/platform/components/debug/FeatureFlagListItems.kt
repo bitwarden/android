@@ -35,7 +35,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.NewItemTypes,
     FlagKey.FillAssistTargetingRules,
     FlagKey.DebugDisableSelfHostPremiumCheck,
-    FlagKey.FedRamp,
     FlagKey.Vfo1Foundation,
     FlagKey.SendControls,
     FlagKey.SendControlsExistingSends,
@@ -103,7 +102,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         stringResource(BitwardenString.debug_disable_self_host_premium_check)
     }
 
-    FlagKey.FedRamp -> stringResource(BitwardenString.fed_ramp)
     FlagKey.Vfo1Foundation -> stringResource(BitwardenString.vfo1_foundation)
     FlagKey.SendControls -> stringResource(BitwardenString.send_controls)
     FlagKey.SendControlsExistingSends -> {
