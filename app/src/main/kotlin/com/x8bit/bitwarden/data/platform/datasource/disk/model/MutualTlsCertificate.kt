@@ -12,10 +12,10 @@ data class MutualTlsCertificate(
     val certificateChain: List<X509Certificate>,
 ) {
     /**
-     * Leaf certificate of the chain.
+     * Leaf certificate of the chain, which KeyStore and KeyChain both return first.
      */
     val leafCertificate: X509Certificate?
-        get() = certificateChain.lastOrNull()
+        get() = certificateChain.firstOrNull()
 
     override fun toString(): String = leafCertificate
         ?.let {

@@ -21,7 +21,9 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -41,12 +43,13 @@ private const val KEY_STATE = "state"
 /**
  * View model for the self-hosted/custom environment screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
     private val certificateManager: CertificateManager,
+    private val sdkClientManager: SdkClientManager,
     private val snackbarRelayManager: SnackbarRelayManager<SnackbarRelay>,
     private val savedStateHandle: SavedStateHandle,
     buildInfoManager: BuildInfoManager,
@@ -152,22 +155,50 @@ class EnvironmentViewModel @Inject constructor(
         val updatedApiServerUrl = state.apiServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIdentityServerUrl = state.identityServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIconsServerUrl = state.iconsServerUrl.prefixHttpsIfNecessaryOrNull()
-        environmentRepository.environment = Environment.SelfHosted(
-            environmentUrlData = EnvironmentUrlDataJson(
-                base = updatedServerUrl,
-                api = updatedApiServerUrl,
-                identity = updatedIdentityServerUrl,
-                icon = updatedIconsServerUrl,
-                webVault = updatedWebVaultServerUrl,
-                keyUri = state.keyUri,
-            ),
+        val environmentUrlData = EnvironmentUrlDataJson(
+            base = updatedServerUrl,
+            api = updatedApiServerUrl,
+            identity = updatedIdentityServerUrl,
+            icon = updatedIconsServerUrl,
+            webVault = updatedWebVaultServerUrl,
+            keyUri = state.keyUri,
         )
+        viewModelScope.launch {
+            sendAction(
+                EnvironmentAction.Internal.ValidateClientSettingsResultReceive(
+                    environmentUrlData = environmentUrlData,
+                    result = sdkClientManager.validateClientSettings(
+                        environmentUrlData = environmentUrlData,
+                    ),
+                ),
+            )
+        }
+    }
 
-        snackbarRelayManager.sendSnackbarData(
-            data = BitwardenSnackbarData(message = BitwardenString.environment_saved.asText()),
-            relay = SnackbarRelay.ENVIRONMENT_SAVED,
-        )
-        sendEvent(EnvironmentEvent.NavigateBack)
+    private fun handleValidateClientSettingsResultReceive(
+        action: EnvironmentAction.Internal.ValidateClientSettingsResultReceive,
+    ) {
+        when (val result = action.result) {
+            is ValidateClientSettingsResult.Error -> {
+                showErrorDialog(
+                    message = result.toErrorMessage(),
+                    throwable = result.throwable,
+                )
+            }
+
+            ValidateClientSettingsResult.Success -> {
+                environmentRepository.environment = Environment.SelfHosted(
+                    environmentUrlData = action.environmentUrlData,
+                )
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(
+                        message = BitwardenString.environment_saved.asText(),
+                    ),
+                    relay = SnackbarRelay.ENVIRONMENT_SAVED,
+                )
+                sendEvent(EnvironmentEvent.NavigateBack)
+            }
+        }
     }
 
     private fun handleDialogDismiss() {
@@ -265,6 +296,10 @@ class EnvironmentViewModel @Inject constructor(
 
             is EnvironmentAction.Internal.ImportKeyResultReceive -> {
                 handleSaveKeyResultReceive(action)
+            }
+
+            is EnvironmentAction.Internal.ValidateClientSettingsResultReceive -> {
+                handleValidateClientSettingsResultReceive(action)
             }
         }
     }
@@ -435,6 +470,22 @@ class EnvironmentViewModel @Inject constructor(
                 ),
         )
     }
+}
+
+private fun ValidateClientSettingsResult.Error.toErrorMessage(): Text = when (this) {
+    is ValidateClientSettingsResult.Error.InvalidUrls -> {
+        BitwardenString.environment_page_urls_error.asText()
+    }
+
+    is ValidateClientSettingsResult.Error.UnsupportedCertificate -> {
+        BitwardenString.unsupported_certificate_type.asText()
+    }
+
+    ValidateClientSettingsResult.Error.CertificateUnavailable -> {
+        BitwardenString.error_loading_certificate.asText()
+    }
+
+    is ValidateClientSettingsResult.Error.Other -> BitwardenString.generic_error_message.asText()
 }
 
 /**
@@ -677,6 +728,14 @@ sealed class EnvironmentAction {
          */
         data class ImportKeyResultReceive(
             val result: ImportPrivateKeyResult,
+        ) : Internal()
+
+        /**
+         * Indicates the result of validating the client settings was received.
+         */
+        data class ValidateClientSettingsResultReceive(
+            val environmentUrlData: EnvironmentUrlDataJson,
+            val result: ValidateClientSettingsResult,
         ) : Internal()
     }
 }

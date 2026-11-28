@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.sdk
 import com.bitwarden.core.ClientSettings
 import com.bitwarden.core.DeviceType
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.provider.AppIdProvider
@@ -125,6 +126,27 @@ class SdkRepositoryFactoryTests {
                 bitwardenPackageType = null,
             ),
             sdkRepoFactory.getClientSettings(),
+        )
+    }
+
+    @Test
+    fun `getClientSettings with URL data should derive the server URLs from it`() {
+        assertEquals(
+            ClientSettings(
+                identityUrl = "https://vault.example.com/identity",
+                apiUrl = "https://api.example.com",
+                userAgent = USER_AGENT,
+                deviceType = DeviceType.ANDROID,
+                deviceIdentifier = UNIQUE_APP_ID,
+                bitwardenClientVersion = CLIENT_VERSION,
+                bitwardenPackageType = null,
+            ),
+            sdkRepoFactory.getClientSettings(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "https://vault.example.com",
+                    api = "https://api.example.com",
+                ),
+            ),
         )
     }
 

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.environment
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
@@ -13,10 +14,13 @@ import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.model.SnackbarRelay
@@ -39,6 +43,11 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         every { getMutualTlsKeyAliases() } returns emptyList()
     }
     private val mockFileManager = mockk<FileManager>()
+    private val mockSdkClientManager = mockk<SdkClientManager> {
+        coEvery {
+            validateClientSettings(environmentUrlData = any())
+        } returns ValidateClientSettingsResult.Success
+    }
     private val snackbarRelayManager = mockk<SnackbarRelayManager<SnackbarRelay>> {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
@@ -161,7 +170,45 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             Environment.Prod.Us,
             fakeEnvironmentRepository.environment,
         )
+        coVerify(exactly = 0) { mockSdkClientManager.validateClientSettings(any()) }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveClick should show the URLs error dialog and not save when the SDK rejects the identity URL`() =
+        assertSaveClickShowsValidationError(
+            error = ValidateClientSettingsResult.Error.InvalidUrls(
+                throwable = ValidateClientSettingsException.IdentityUrl("invalid identity URL"),
+            ),
+            expectedMessage = BitwardenString.environment_page_urls_error.asText(),
+        )
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveClick should show the unsupported certificate dialog and not save when the SDK rejects the client certificate`() =
+        assertSaveClickShowsValidationError(
+            error = ValidateClientSettingsResult.Error.UnsupportedCertificate(
+                throwable = ValidateClientSettingsException.ClientCertificate("unsupported key"),
+            ),
+            expectedMessage = BitwardenString.unsupported_certificate_type.asText(),
+        )
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SaveClick should show the error loading certificate dialog and not save when the certificate cannot be loaded`() =
+        assertSaveClickShowsValidationError(
+            error = ValidateClientSettingsResult.Error.CertificateUnavailable,
+            expectedMessage = BitwardenString.error_loading_certificate.asText(),
+        )
+
+    @Test
+    fun `SaveClick should show the generic error dialog and not save for other SDK errors`() =
+        assertSaveClickShowsValidationError(
+            error = ValidateClientSettingsResult.Error.Other(
+                throwable = ValidateClientSettingsException.ProxyUrl("invalid proxy URL"),
+            ),
+            expectedMessage = BitwardenString.generic_error_message.asText(),
+        )
 
     @Suppress("MaxLineLength")
     @Test
@@ -219,6 +266,18 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                     fakeEnvironmentRepository.environment,
+                )
+            }
+            coVerify(exactly = 1) {
+                mockSdkClientManager.validateClientSettings(
+                    environmentUrlData = EnvironmentUrlDataJson(
+                        base = "https://server-url",
+                        api = "https://api-url",
+                        identity = "https://identity-url",
+                        icon = "https://icons-url",
+                        webVault = "http://web-vault-url",
+                        keyUri = "cert://KEY_CHAIN/mockAlias",
+                    ),
                 )
             }
             verify(exactly = 1) {
@@ -813,12 +872,42 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
     //region Helper methods
 
+    private fun assertSaveClickShowsValidationError(
+        error: ValidateClientSettingsResult.Error,
+        expectedMessage: Text,
+    ) = runTest {
+        coEvery {
+            mockSdkClientManager.validateClientSettings(environmentUrlData = any())
+        } returns error
+        val viewModel = createViewModel()
+        viewModel.trySendAction(EnvironmentAction.ServerUrlChange(serverUrl = "server-url"))
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(EnvironmentAction.SaveClick)
+            expectNoEvents()
+        }
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                serverUrl = "server-url",
+                dialog = EnvironmentState.DialogState.Error(
+                    message = expectedMessage,
+                    throwable = error.throwable,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        assertEquals(Environment.Prod.Us, fakeEnvironmentRepository.environment)
+        verify(exactly = 0) { snackbarRelayManager.sendSnackbarData(data = any(), relay = any()) }
+    }
+
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
     ): EnvironmentViewModel =
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
             certificateManager = mockCertificateManager,
+            sdkClientManager = mockSdkClientManager,
             fileManager = mockFileManager,
             snackbarRelayManager = snackbarRelayManager,
             buildInfoManager = buildInfoManager,

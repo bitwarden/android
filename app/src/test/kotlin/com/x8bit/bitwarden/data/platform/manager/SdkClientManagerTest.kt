@@ -1,13 +1,22 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.api.base.ClientCertificate
+import com.bitwarden.core.ClientSettings
+import com.bitwarden.core.ValidateClientSettingsException
 import com.bitwarden.core.data.manager.dispatcher.FakeDispatcherManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.manager.NativeLibraryManager
+import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.LogLevel
 import com.bitwarden.sdk.initLogger
+import com.bitwarden.sdk.validateClientSettings
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import com.x8bit.bitwarden.data.platform.manager.sdk.log.SdkLoggerFactory
+import com.x8bit.bitwarden.data.platform.manager.util.toClientCertificateOrNull
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -33,6 +42,7 @@ class SdkClientManagerTest {
     private val sdkPlatformApiFactory: SdkPlatformApiFactory = mockk {
         every { getServerCommunicationConfigPlatformApi() } returns mockk()
     }
+    private val certificateManager: CertificateManager = mockk()
     private val sdkLoggerFactory: SdkLoggerFactory = mockk {
         every { logLevel } returns LogLevel.INFO
         every { getLogCallback() } returns mockk()
@@ -40,14 +50,16 @@ class SdkClientManagerTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::isBuildVersionAtLeast, ::initLogger)
+        mockkStatic(::isBuildVersionAtLeast, ::initLogger, ::validateClientSettings)
+        mockkStatic(MutualTlsCertificate::toClientCertificateOrNull)
         every { isBuildVersionAtLeast(version = any()) } returns true
         every { initLogger(callback = any(), level = any(), platformLogger = any()) } just runs
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionAtLeast, ::initLogger)
+        unmockkStatic(::isBuildVersionAtLeast, ::initLogger, ::validateClientSettings)
+        unmockkStatic(MutualTlsCertificate::toClientCertificateOrNull)
     }
 
     @Test
@@ -109,6 +121,114 @@ class SdkClientManagerTest {
         assertNotEquals(firstClient, secondClient)
     }
 
+    @Test
+    fun `validateClientSettings should pass the settings and certificate for the given URLs`() =
+        runTest {
+            val settings = mockk<ClientSettings>()
+            val mutualTlsCertificate = mockk<MutualTlsCertificate>()
+            val clientCertificate = mockk<ClientCertificate>()
+            every {
+                sdkRepoFactory.getClientSettings(environmentUrlData = ENVIRONMENT_URL_DATA)
+            } returns settings
+            every {
+                certificateManager.getMutualTlsCertificate(keyUri = KEY_URI)
+            } returns mutualTlsCertificate
+            every { mutualTlsCertificate.toClientCertificateOrNull() } returns clientCertificate
+            every {
+                validateClientSettings(settings = settings, clientCertificate = clientCertificate)
+            } just runs
+
+            val result = createSdkClientManager().validateClientSettings(
+                environmentUrlData = ENVIRONMENT_URL_DATA,
+            )
+
+            assertEquals(ValidateClientSettingsResult.Success, result)
+            verify(exactly = 1) {
+                validateClientSettings(settings = settings, clientCertificate = clientCertificate)
+            }
+        }
+
+    @Test
+    fun `validateClientSettings should pass no certificate when there is no key URI`() = runTest {
+        val environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null)
+        val settings = mockk<ClientSettings>()
+        every {
+            sdkRepoFactory.getClientSettings(environmentUrlData = environmentUrlData)
+        } returns settings
+        every { validateClientSettings(settings = settings, clientCertificate = null) } just runs
+
+        val result = createSdkClientManager().validateClientSettings(
+            environmentUrlData = environmentUrlData,
+        )
+
+        assertEquals(ValidateClientSettingsResult.Success, result)
+        verify(exactly = 0) { certificateManager.getMutualTlsCertificate(keyUri = any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateClientSettings should fail without calling the SDK when the certificate cannot be loaded`() =
+        runTest {
+            every { certificateManager.getMutualTlsCertificate(keyUri = KEY_URI) } returns null
+
+            val result = createSdkClientManager().validateClientSettings(
+                environmentUrlData = ENVIRONMENT_URL_DATA,
+            )
+
+            assertEquals(ValidateClientSettingsResult.Error.CertificateUnavailable, result)
+            verify(exactly = 0) { validateClientSettings(settings = any(), clientCertificate = any()) }
+        }
+
+    @Test
+    fun `validateClientSettings should map invalid URL errors to InvalidUrls`() = runTest {
+        val error = ValidateClientSettingsException.IdentityUrl("invalid identity URL")
+        every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
+        every {
+            validateClientSettings(settings = any(), clientCertificate = null)
+        } throws BitwardenException.ValidateClientSettings(v1 = error)
+
+        val result = createSdkClientManager().validateClientSettings(
+            environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
+        )
+
+        assertEquals(ValidateClientSettingsResult.Error.InvalidUrls(throwable = error), result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateClientSettings should map client certificate errors to UnsupportedCertificate`() =
+        runTest {
+            val error = ValidateClientSettingsException.ClientCertificate("unsupported key")
+            every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
+            every {
+                validateClientSettings(settings = any(), clientCertificate = null)
+            } throws BitwardenException.ValidateClientSettings(v1 = error)
+
+            val result = createSdkClientManager().validateClientSettings(
+                environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
+            )
+
+            assertEquals(
+                ValidateClientSettingsResult.Error.UnsupportedCertificate(throwable = error),
+                result,
+            )
+        }
+
+    @Test
+    fun `validateClientSettings should map other errors to Other`() = runTest {
+        val error = ValidateClientSettingsException.ProxyUrl("invalid proxy URL")
+        every { sdkRepoFactory.getClientSettings(environmentUrlData = any()) } returns mockk()
+        every {
+            validateClientSettings(settings = any(), clientCertificate = null)
+        } throws BitwardenException.ValidateClientSettings(v1 = error)
+
+        val result = createSdkClientManager().validateClientSettings(
+            environmentUrlData = ENVIRONMENT_URL_DATA.copy(keyUri = null),
+        )
+
+        assertEquals(ValidateClientSettingsResult.Error.Other(throwable = error), result)
+    }
+
     private fun createSdkClientManager(): SdkClientManagerImpl = SdkClientManagerImpl(
         dispatcherManager = FakeDispatcherManager(),
         clientProvider = { _, _ -> mockk(relaxed = true) },
@@ -117,5 +237,13 @@ class SdkClientManagerTest {
         sdkRepoFactory = sdkRepoFactory,
         sdkPlatformApiFactory = sdkPlatformApiFactory,
         sdkLoggerFactory = sdkLoggerFactory,
+        certificateManager = certificateManager,
     )
 }
+
+private const val KEY_URI: String = "cert://ANDROID_KEY_STORE/alias"
+
+private val ENVIRONMENT_URL_DATA: EnvironmentUrlDataJson = EnvironmentUrlDataJson(
+    base = "https://vault.example.com",
+    keyUri = KEY_URI,
+)

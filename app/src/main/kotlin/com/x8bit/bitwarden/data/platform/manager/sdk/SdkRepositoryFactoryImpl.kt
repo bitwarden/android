@@ -5,6 +5,10 @@ import com.bitwarden.core.ClientSettings
 import com.bitwarden.core.DeviceType
 import com.bitwarden.core.StateBridgeForeignImpl
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.util.baseApiUrl
+import com.bitwarden.data.repository.util.baseIdentityUrl
+import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.sdk.Repositories
 import com.bitwarden.sdk.ServerCommunicationConfigRepository
@@ -59,20 +63,37 @@ class SdkRepositoryFactoryImpl(
         )
 
     override fun getClientSettings(): ClientSettings =
-        ClientSettings(
+        createClientSettings(
             identityUrl = serviceClientConfig.baseUrlsProvider.getBaseIdentityUrl(),
             apiUrl = serviceClientConfig.baseUrlsProvider.getBaseApiUrl(),
-            userAgent = serviceClientConfig.clientData.userAgent,
-            deviceType = DeviceType.ANDROID,
-            deviceIdentifier = serviceClientConfig.appIdProvider.uniqueAppId,
-            bitwardenClientVersion = serviceClientConfig.clientData.clientVersion,
-            bitwardenPackageType = null,
         )
+
+    override fun getClientSettings(environmentUrlData: EnvironmentUrlDataJson): ClientSettings {
+        val environment = environmentUrlData.toEnvironmentUrls()
+        return createClientSettings(
+            identityUrl = environment.baseIdentityUrl,
+            apiUrl = environment.baseApiUrl,
+        )
+    }
 
     override fun getServerCommunicationConfigRepository(): ServerCommunicationConfigRepository =
         ServerCommunicationConfigRepositoryImpl(
             cookieDiskSource = cookieDiskSource,
             configDiskSource = configDiskSource,
+        )
+
+    private fun createClientSettings(
+        identityUrl: String,
+        apiUrl: String,
+    ): ClientSettings =
+        ClientSettings(
+            identityUrl = identityUrl,
+            apiUrl = apiUrl,
+            userAgent = serviceClientConfig.clientData.userAgent,
+            deviceType = DeviceType.ANDROID,
+            deviceIdentifier = serviceClientConfig.appIdProvider.uniqueAppId,
+            bitwardenClientVersion = serviceClientConfig.clientData.clientVersion,
+            bitwardenPackageType = null,
         )
 
     private fun getSdkCipherRepository(

@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.platform.manager.model.ValidateClientSettingsResult
 
 /**
  * Manages the creation, caching, and destruction of SDK [Client] instances on a per-user basis.
@@ -38,4 +40,12 @@ interface SdkClientManager {
      * from the internal cache.
      */
     fun destroyClient(userId: String?)
+
+    /**
+     * Validates that a [Client] could be built for [environmentUrlData] and the mTLS certificate
+     * its `keyUri` references.
+     */
+    suspend fun validateClientSettings(
+        environmentUrlData: EnvironmentUrlDataJson,
+    ): ValidateClientSettingsResult
 }

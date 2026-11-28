@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 import com.bitwarden.core.data.manager.dispatcher.DispatcherManager
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkPlatformApiFactory
@@ -45,6 +46,7 @@ object VaultSdkModule {
         sdkRepositoryFactory: SdkRepositoryFactory,
         sdkPlatformApiFactory: SdkPlatformApiFactory,
         sdkLoggerFactory: SdkLoggerFactory,
+        certificateManager: CertificateManager,
     ): ScopedVaultSdkSource =
         ScopedVaultSdkSourceImpl(
             dispatcherManager = dispatcherManager,
@@ -52,6 +54,7 @@ object VaultSdkModule {
             sdkRepositoryFactory = sdkRepositoryFactory,
             sdkPlatformApiFactory = sdkPlatformApiFactory,
             sdkLoggerFactory = sdkLoggerFactory,
+            certificateManager = certificateManager,
         )
 
     @Provides
