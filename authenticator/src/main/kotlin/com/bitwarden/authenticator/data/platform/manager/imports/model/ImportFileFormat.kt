@@ -10,4 +10,5 @@ enum class ImportFileFormat(
     TWO_FAS_JSON("*/*"),
     LAST_PASS_JSON("application/json"),
     AEGIS("application/json"),
+    PROTON_AUTHENTICATOR_JSON("*/*"),
 }

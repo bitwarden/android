@@ -118,9 +118,11 @@ object PlatformManagerModule {
     fun provideImportManager(
         authenticatorDiskSource: AuthenticatorDiskSource,
         uuidManager: UuidManager,
+        encodingManager: BitwardenEncodingManager,
     ): ImportManager = ImportManagerImpl(
         authenticatorDiskSource = authenticatorDiskSource,
         uuidManager = uuidManager,
+        encodingManager = encodingManager,
     )
 
     @Provides

@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.imports
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
@@ -8,6 +9,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.parsers.AegisEx
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.BitwardenExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.ExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.LastPassExportParser
+import com.bitwarden.authenticator.data.platform.manager.imports.parsers.ProtonAuthenticatorExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.TwoFasExportParser
 import com.bitwarden.core.data.manager.UuidManager
 
@@ -18,6 +20,7 @@ import com.bitwarden.core.data.manager.UuidManager
 class ImportManagerImpl(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
     private val uuidManager: UuidManager,
+    private val encodingManager: BitwardenEncodingManager,
 ) : ImportManager {
     override suspend fun import(
         importFileFormat: ImportFileFormat,
@@ -34,6 +37,12 @@ class ImportManagerImpl(
         ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser(uuidManager)
         ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser(uuidManager)
         ImportFileFormat.AEGIS -> AegisExportParser(uuidManager)
+        ImportFileFormat.PROTON_AUTHENTICATOR_JSON -> {
+            ProtonAuthenticatorExportParser(
+                uuidManager = uuidManager,
+                encodingManager = encodingManager,
+            )
+        }
     }
 
     private suspend fun processParseResult(
