@@ -181,6 +181,28 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ImportCredentialSelectionReceive and NoExportOptions result updates state`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            ImportItemsAction.ImportCredentialSelectionReceive(
+                selectionResult = ImportCredentialsSelectionResult.NoExportOptions,
+            ),
+        )
+
+        val expectedState = ImportItemsState(
+            dialog = ImportItemsState.DialogState.General(
+                title = BitwardenString.no_apps_available_to_import_from.asText(),
+                message = BitwardenString
+                    .no_apps_on_your_device_support_exporting_items
+                    .asText(),
+                throwable = null,
+            ),
+        )
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `ImportCredentialSelectionReceive and Success result updates state and triggers import`() =
         runTest {
             val cxfPayload = "{\"credentials\":[]}"

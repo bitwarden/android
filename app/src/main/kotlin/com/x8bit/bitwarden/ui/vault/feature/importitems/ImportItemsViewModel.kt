@@ -163,6 +163,16 @@ class ImportItemsViewModel @Inject constructor(
                 )
             }
 
+            ImportCredentialsSelectionResult.NoExportOptions -> {
+                showGeneralDialog(
+                    title = BitwardenString.no_apps_available_to_import_from.asText(),
+                    message = BitwardenString
+                        .no_apps_on_your_device_support_exporting_items
+                        .asText(),
+                    throwable = null,
+                )
+            }
+
             is ImportCredentialsSelectionResult.Failure -> {
                 showGeneralDialog(
                     title = BitwardenString.unable_to_import_your_items.asText(),
