@@ -38,7 +38,7 @@ permissions:
 jobs:
   version:
     name: Calculate Version Name and Number
-    uses: bitwarden/android/.github/workflows/_version.yml@main
+    uses: ./.github/workflows/_version.yml
     with:
       app_codename: "bwpm"
       base_version_number: 0
@@ -55,7 +55,7 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
-        uses: bitwarden/android/.github/actions/log-inputs@main
+        uses: bitwarden/gh-actions/log-inputs@main
         with:
           inputs: "${{ toJson(inputs) }}"
 
