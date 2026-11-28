@@ -4,15 +4,17 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Models FIDO 2 credential creation request options received from a Relying Party (RP).
+ * Models FIDO 2 credential creation request options received from a Relying Party (RP),
+ * based off the spec found at:
+ * https://www.w3.org/TR/webauthn-2/#dictionary-makecredentialoptions
  */
 @Serializable
 data class PasskeyAttestationOptions(
     @SerialName("authenticatorSelection")
-    val authenticatorSelection: AuthenticatorSelectionCriteria,
+    val authenticatorSelection: AuthenticatorSelectionCriteria? = null,
     @SerialName("challenge")
     val challenge: String,
-    @SerialName("excludedCredentials")
+    @SerialName("excludeCredentials")
     val excludeCredentials: List<PublicKeyCredentialDescriptor> = emptyList(),
     @SerialName("pubKeyCredParams")
     val pubKeyCredParams: List<PublicKeyCredentialParameters>,
@@ -42,7 +44,7 @@ data class PasskeyAttestationOptions(
             @SerialName("platform")
             PLATFORM,
 
-            @SerialName("cross_platform")
+            @SerialName("cross-platform")
             CROSS_PLATFORM,
         }
 
@@ -51,6 +53,12 @@ data class PasskeyAttestationOptions(
          */
         @Serializable
         enum class ResidentKeyRequirement {
+            /**
+             * Resident keys are not preferred during selection.
+             */
+            @SerialName("discouraged")
+            DISCOURAGED,
+
             /**
              * Resident keys are preferred during selection, if supported.
              */
