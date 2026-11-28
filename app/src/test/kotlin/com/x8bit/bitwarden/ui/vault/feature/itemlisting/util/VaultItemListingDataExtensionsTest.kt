@@ -1517,6 +1517,53 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
+    fun `toViewState should not return empty subfolders for an organization vault`() {
+        val organizationId = "mockOrganizationId-1"
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        organizationId = organizationId,
+                        folderId = "2",
+                    ),
+                ),
+            ),
+            collectionViewList = emptyList(),
+            folderViewList = listOf(
+                FolderView("1", "test", clock.instant()),
+                FolderView("2", "test/withItem", clock.instant()),
+                FolderView("3", "test/empty", clock.instant()),
+            ),
+            sendViewList = emptyList(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
+            vaultFilterType = VaultFilterType.OrganizationVault(
+                organizationId = organizationId,
+                organizationName = "mockOrganizationName-1",
+            ),
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Prod.Us.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
+        )
+
+        assertEquals(
+            listOf("2"),
+            (actual as VaultItemListingState.ViewState.Content)
+                .displayFolderList
+                .map { it.id },
+        )
+    }
+
+    @Test
     fun `toViewState should properly filter and return the correct collections`() {
         val vaultData = VaultData(
             decryptCipherListResult = createMockDecryptCipherListResult(
