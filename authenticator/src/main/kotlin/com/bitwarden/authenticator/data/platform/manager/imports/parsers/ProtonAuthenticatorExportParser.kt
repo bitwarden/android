@@ -155,7 +155,7 @@ class ProtonAuthenticatorExportParser(
             digits = TotpCodeManager.STEAM_DIGITS_DEFAULT,
             issuer = STEAM_ISSUER,
             userId = null,
-            accountName = content.name?.trim()?.takeUnless { it.isEmpty() },
+            accountName = content.name?.trim()?.takeUnless { it.isEmpty() || it == STEAM_ISSUER },
             favorite = false,
         )
     }

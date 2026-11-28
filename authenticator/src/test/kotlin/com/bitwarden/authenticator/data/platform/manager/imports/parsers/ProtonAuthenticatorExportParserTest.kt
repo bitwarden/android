@@ -309,9 +309,58 @@ class ProtonAuthenticatorExportParserTest {
     }
 
     @Test
-    fun `parseForResult with an invalid URI should return Error`() {
+    fun `parseForResult with an invalid percent escape in the URI should return Error`() {
         val result = parser.parseForResult(
-            exportJson(totpEntry(uri = "otpauth://totp/Acc ount?secret=%ZZ")).toByteArray(),
+            exportJson(totpEntry(uri = "otpauth://totp/Account?secret=%ZZ&issuer=Issuer"))
+                .toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
+    }
+
+    @Test
+    fun `parseForResult with TOTP entry without a query should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(totpEntry(uri = "otpauth://totp/Account")).toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
+    }
+
+    @Test
+    fun `parseForResult with TOTP entry with a secret of only separators should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(totpEntry(uri = "otpauth://totp/Account?secret=--__&issuer=Issuer"))
+                .toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
+    }
+
+    @Test
+    fun `parseForResult with TOTP entry with a Steam URI should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(totpEntry(uri = "steam://$SECRET")).toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
+    }
+
+    @Test
+    fun `parseForResult with TOTP entry with non-numeric digits should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(totpEntry(uri = "otpauth://totp/Account?secret=$SECRET&digits=six"))
+                .toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
+    }
+
+    @Test
+    fun `parseForResult with TOTP entry with a non-numeric period should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(totpEntry(uri = "otpauth://totp/Account?secret=$SECRET&period=thirty"))
+                .toByteArray(),
         )
 
         assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
@@ -327,6 +376,33 @@ class ProtonAuthenticatorExportParserTest {
             ExportParseResult.Success(items = listOf(steamItem(accountName = "steam-user"))),
             result,
         )
+    }
+
+    @Test
+    fun `parseForResult with Steam entry named Steam should drop the account name`() {
+        val result = parser.parseForResult(
+            exportJson(steamEntry(uri = "steam://$SECRET", name = "Steam")).toByteArray(),
+        )
+
+        assertEquals(
+            ExportParseResult.Success(items = listOf(steamItem(accountName = null))),
+            result,
+        )
+    }
+
+    @Test
+    fun `parseForResult with Steam entry with an otpauth URI should return Error`() {
+        val result = parser.parseForResult(
+            exportJson(
+                steamEntry(
+                    uri = "otpauth://totp/Account?secret=$SECRET&issuer=Issuer",
+                    name = "steam-user",
+                ),
+            )
+                .toByteArray(),
+        )
+
+        assertEquals(FILE_COULD_NOT_BE_PROCESSED_ERROR, result)
     }
 
     @Test
@@ -549,7 +625,7 @@ private fun totpItem(
     favorite = false,
 )
 
-private fun steamItem(accountName: String): AuthenticatorItemEntity = AuthenticatorItemEntity(
+private fun steamItem(accountName: String?): AuthenticatorItemEntity = AuthenticatorItemEntity(
     id = TEST_ID,
     key = SECRET,
     type = AuthenticatorItemType.STEAM,
