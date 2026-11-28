@@ -297,7 +297,7 @@
     <string name="no_items_trash">ಅನುಪಯುಕ್ತದಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</string>
     <string name="autofill_accessibility_summary">ಇತರ ಅಪ್ಲಿಕೇಶನ್ಗಳು ಮತ್ತು ವೆಬ್ನಲ್ಲಿ ಬಳಕೆದಾರಹೆಸರು ಮತ್ತು ಪಾಸ್ವರ್ಡ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಲು ಸಹಾಯ ಮಾಡಿ.</string>
     <string name="autofill_service_description">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿನ ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗೆ ಲಾಗಿನ್‌ಗಳು, ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು ಮತ್ತು ಗುರುತಿನ ಮಾಹಿತಿಯನ್ನು ಭರ್ತಿ ಮಾಡಲು ಸಹಾಯ ಮಾಡಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆ ಆಂಡ್ರಾಯ್ಡ್ ಆಟೋಫಿಲ್ ಫ್ರೇಮ್‌ವರ್ಕ್ ಅನ್ನು ಬಳಸುತ್ತದೆ.</string>
-    <string name="bitwarden_autofill_go_to_settings">ನಿಮಗಾಗಿ Android ಆಟೋಫಿಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಮೆನುವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತೆರೆಯಲು ನಮಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ನೀವು Android ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ ಹಸ್ತಚಾಲಿತವಾಗಿ ಆಟೋಫಿಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಮೆನುಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡಬಹುದು &gt; ಸಿಸ್ಟಮ್ &gt; ಭಾಷೆಗಳು ಮತ್ತು ಇನ್ಪುಟ್ &gt; ಸುಧಾರಿತ &gt; ಆಟೋಫಿಲ್ ಸೇವೆ.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">ಕಸ್ಟಮ್ಫೀಲ್ಡ್ ನೇಮ್</string>
     <string name="field_type_boolean">ಬೂಲಿಯನ್</string>
     <string name="field_type_hidden">ಮರೆಮಾಡಲಾಗಿದೆ</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">ನೋಂದಣಿ ಟೋಕನ್ ಅನ್ನು ಮೌಲ್ಯೀಕರಿಸುವಲ್ಲಿ ಸಮಸ್ಯೆ ಇತ್ತು.</string>
     <string name="turn_on_autofill">ಸ್ವಯಂ ಭರ್ತಿ ಆನ್ ಮಾಡಿ</string>
     <string name="autofill_setup">ಸ್ವಯಂ ಭರ್ತಿ ಸೆಟಪ್</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ಬ್ರೌಸರ್ ಸ್ವಯಂ ಭರ್ತಿ ಏಕೀಕರಣವನ್ನು ಆನ್ ಮಾಡಿ</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Bitwarden ನಿಮ್ಮ ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ವಿಶೇಷ ಅನುಮತಿಗಳ ಅಗತ್ಯವಿರುವ ಬ್ರೌಸರ್ ಅನ್ನು ನೀವು ಬಳಸುತ್ತಿದ್ದೀರಿ.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Bitwarden ನಿಮ್ಮ ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ವಿಶೇಷ ಅನುಮತಿಗಳ ಅಗತ್ಯವಿರುವ ಬ್ರೌಸರ್ಗಳನ್ನು ನೀವು ಬಳಸುತ್ತಿದ್ದೀರಿ.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Bitwarden ನಿಮ್ಮ ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ವಿಶೇಷ ಅನುಮತಿಗಳ ಅಗತ್ಯವಿರುವ ಬ್ರೌಸರ್ ಅನ್ನು ನೀವು ಬಳಸುತ್ತಿದ್ದೀರಿ. ಕೆಳಗೆ ನಿಮ್ಮ ಆದ್ಯತೆಯ ಸ್ವಯಂ ಭರ್ತಿ ಏಕೀಕರಣವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Bitwarden ನಿಮ್ಮ ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ವಿಶೇಷ ಅನುಮತಿಗಳ ಅಗತ್ಯವಿರುವ ಬ್ರೌಸರ್ಗಳನ್ನು ನೀವು ಬಳಸುತ್ತಿದ್ದೀರಿ. ಮುಂದುವರಿಯಲು ನಿಮ್ಮ ಎಲ್ಲಾ ಸ್ಥಾಪಿಸಿದ ಬ್ರೌಸರ್ಗಳಿಗೆ ಸ್ವಯಂ ಭರ್ತಿಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">ಒಂದೇ ಟ್ಯಾಪ್ನೊಂದಿಗೆ ನಿಮ್ಮ ಖಾತೆಗಳಿಗೆ ಲಾಗಿನ್ ಆಗಲು ಸ್ವಯಂ ಭರ್ತಿ ಬಳಸಿ.</string>
     <string name="turn_on_later">ನಂತರ ಆನ್ ಮಾಡಿ</string>
     <string name="turn_on_autofill_later">ಸ್ವಯಂ ಭರ್ತಿಯನ್ನು ನಂತರ ಆನ್ ಮಾಡುವುದೇ?</string>

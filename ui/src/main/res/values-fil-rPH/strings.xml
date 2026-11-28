@@ -297,7 +297,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="no_items_trash">Walang mga item sa basurahan.</string>
     <string name="autofill_accessibility_summary">Tulong sa pagpuno ng mga field ng username at password sa ibang mga app at sa web.</string>
     <string name="autofill_service_description">Gumagamit ng Android Autofill Framework ang serbisyo ng Bitwarden pang-autofill para tumulong maglagay ng impormasyon ng login sa iba pang mga app sa device mo.</string>
-    <string name="bitwarden_autofill_go_to_settings">Hindi namin awtomatikong mabuksan ang menu ng mga setting ng Android autofill para sayo. Manu-mano kang makakapunta roon sa pamamagitan ng Mga Setting &gt; System &gt; Mga wika at input &gt; Advanced &gt; Serbisyo ng autofill.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Pangalan ng pasadyang field</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Nakatago</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Nagkaroon ng isyu sa pag-validate ng registration token.</string>
     <string name="turn_on_autofill">I-on ang autofill</string>
     <string name="autofill_setup">Pag-set up ng autofill</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">I-on ang browser autofill integration</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Gumagamit ka ng browser na nangangailangan ng mga espesyal na pahintulot para ma-autofill ng Bitwarden ang iyong mga password.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Gumagamit ka ng mga browser na nangangailangan ng mga espesyal na pahintulot para ma-autofill ng Bitwarden ang iyong mga password.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Gumagamit ka ng browser na nangangailangan ng mga espesyal na pahintulot para ma-autofill ng Bitwarden ang iyong mga password. I-enable ang iyong gustong autofill integration sa ibaba.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Gumagamit ka ng mga browser na nangangailangan ng mga espesyal na pahintulot para ma-autofill ng Bitwarden ang iyong mga password. I-enable ang autofill para sa lahat ng iyong naka-install na browser upang magpatuloy.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Gamitin ang autofill upang mag-log in sa iyong mga account sa pamamagitan ng isang tap.</string>
     <string name="turn_on_later">I-on mamaya</string>
     <string name="turn_on_autofill_later">I-on ang autofill mamaya?</string>

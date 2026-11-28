@@ -297,7 +297,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="no_items_trash">Er zijn geen items in de prullenbak.</string>
     <string name="autofill_accessibility_summary">Help met het invullen van velden voor gebruikersnaam en wachtwoord in andere apps en op het web.</string>
     <string name="autofill_service_description">De Dienst Automatisch aanvullen van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</string>
-    <string name="bitwarden_autofill_go_to_settings">Het instellingenmenu Android Automatisch aanvullen is niet geopend. Je kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatische aanvuldienst.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Het instellingenmenu Android Automatisch aanvullen is niet geopend. Je kunt het menu handmatig openen via Android-instellingen.</string>
     <string name="custom_field_name">Naam van aangepast veld</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Verborgen</string>
@@ -820,11 +820,13 @@ Wil je naar dit account wisselen?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Er is een probleem opgetreden bij het valideren van het registratietoken.</string>
     <string name="turn_on_autofill">2. Automatisch invullen inschakelen</string>
     <string name="autofill_setup">Instellingen automatisch invullen</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Kies ‘Autofill using another service’ in je browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Kies ‘Autofill using another service’ in je browser</string>
     <string name="turn_on_browser_autofill_integration">Automatisch aanvullen in browser later inschakelen</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Je gebruikt een browser die speciale rechten voor Bitwarden nodig heeft voor eht automatisch invullen van je wachtwoorden.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Je gebruikt browsers die speciale rechten voor Bitwarden nodig heeft voor eht automatisch invullen van je wachtwoorden.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Je gebruikt een browser die speciale rechten voor Bitwarden nodig heeft voor eht automatisch invullen van je wachtwoorden. Schakel hieronder je voorkeur voor automatisch invullen in.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Je gebruikt browsers die speciale rechten voor Bitwarden nodig heeft voor eht automatisch invullen van je wachtwoorden. Schakel automatisch invullen voor al je geïnstalleerde browsers in om door te gaan.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">Je gebruikt browsers die speciale rechten voor Bitwarden nodig hebben voor het automatisch invullen van je wachtwoorden. Schakel hieronder je voorkeur voor automatisch invullen in.</string>
     <string name="use_autofill_to_log_into_your_accounts">Gebruik automatisch invullen om met een enkele tik in te loggen op je accounts.</string>
     <string name="turn_on_later">Later inschakelen</string>
     <string name="turn_on_autofill_later">Automatisch aanvullen later inschakelen?</string>

@@ -296,7 +296,7 @@
     <string name="no_items_trash">垃圾桶中沒有項目。</string>
     <string name="autofill_accessibility_summary">在其它應用程式及網頁上協助自動填寫使用者名稱和密碼。</string>
     <string name="autofill_service_description">Bitwarden 自動填入服務使用 Android 自動填入框架來協助您將登入資訊填入至您裝置上的其他應用程式中。</string>
-    <string name="bitwarden_autofill_go_to_settings">我們無法為您自動開啟 Android 自動填入設定選單。您可以從 Android 設定 &gt; 系統 &gt; 語言與輸入設定 &gt; 進階 &gt; 自動填入服務，手動到達自動填入設定選單。</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">自訂欄位名稱</string>
     <string name="field_type_boolean">布林值</string>
     <string name="field_type_hidden">隱藏型</string>
@@ -816,11 +816,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">在驗證您的註冊權杖時遇到了問題。</string>
     <string name="turn_on_autofill">啟用自動填入</string>
     <string name="autofill_setup">自動填入設定</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">開啟瀏覽器自動填入整合功能</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">開啟瀏覽器自動填入整合功能</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">您正在使用的瀏覽器需要授予 Bitwarden 特殊權限，才能自動填入您的密碼。</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">您正在使用的瀏覽器需要授予 Bitwarden 特殊權限，才能自動填入您的密碼。請在下方啟用您偏好的自動填入整合功能。</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">您正在使用的瀏覽器需要授予 Bitwarden 特殊權限，才能自動填入您的密碼。請啟用所有已安裝瀏覽器的自動填入功能以繼續。</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">使用自動填入來一鍵登入您的帳號。</string>
     <string name="turn_on_later">稍後再啟動</string>
     <string name="turn_on_autofill_later">稍後再啟動自動填入？</string>

@@ -297,7 +297,7 @@
     <string name="no_items_trash">Няма записи в кошчето.</string>
     <string name="autofill_accessibility_summary">Помощ с попълването на полета за потребителско име и парола в други приложения и в уеб сайтове.</string>
     <string name="autofill_service_description">Услугата на Битуорден за автоматично дописване разчита на инфраструктурата на Андроид на устройството ви за дописване, за да може да попълва полета с идентификационна информация и банкови карти.</string>
-    <string name="bitwarden_autofill_go_to_settings">Екранът за настройките за автоматично дописване не може да се отвори автоматично. Може да го достигнете през: Настройки (Android Settings) → Системни (System) → Езици и вход (Languages and input) → Допълнителни (Advanced) → Услуга за дописване (Autofill service).</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">Екранът за настройките за автоматично дописване не може да се отвори автоматично. Може да го намерите в Настройките на Android.</string>
     <string name="custom_field_name">Име на допълнителното поле</string>
     <string name="field_type_boolean">Булево</string>
     <string name="field_type_hidden">Скрито</string>
@@ -820,11 +820,13 @@
     <string name="there_was_an_issue_validating_the_registration_token">Имаше проблем с проверката на идентификатора за регистриране.</string>
     <string name="turn_on_autofill">Включете автоматичното попълване</string>
     <string name="autofill_setup">Настройка на авт. попълване</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Изберете „Автоматично попълване чрез друга услуга“ в браузъра си</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Изберете „Автоматично попълване чрез друга услуга“ в браузърите си</string>
     <string name="turn_on_browser_autofill_integration">Включете интеграцията с автоматичното попълване на браузъра</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Използвате браузър, който изисква специално разрешение, за да може Битуорден да попълва автоматично паролите.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Използвате браузъри, които изискват специално разрешение, за да може Битуорден да попълва автоматично паролите.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Използвате браузър, който изисква специално разрешение, за да може Битуорден да попълва автоматично пароли. Включете предпочитаната интеграция за автоматично попълване по-долу.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Използвате браузъри, които изискват специално разрешение, за да може Битуорден да попълва автоматично пароли. Включете предпочитаната интеграция за автоматично попълване във всички инсталирани браузъри, за да продължите.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">Използвате браузъри, който изискват специално разрешение, за да може Битуорден да попълва автоматично пароли. Включете предпочитаната интеграция за автоматично попълване по-долу.</string>
     <string name="use_autofill_to_log_into_your_accounts">Използвайте автоматичното попълване, за да се вписвате с едно докосване.</string>
     <string name="turn_on_later">Включване по-късно</string>
     <string name="turn_on_autofill_later">Искате да включите автоматичното попълване по-късно?</string>

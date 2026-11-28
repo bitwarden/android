@@ -298,7 +298,7 @@ Scanarea se va face automat.</string>
     <string name="no_items_trash">Nu există articole în coșul de reciclare.</string>
     <string name="autofill_accessibility_summary">Asistă la completarea câmpurilor numelui de utilizator și a parolei în alte aplicații și pe web.</string>
     <string name="autofill_service_description">Serviciul de autocompletare Bitwarden folosește Android Autofill Framework pentru a ajuta la completarea informațiilor de autentificare în alte aplicații de pe dispozitivul dumneavoastră.</string>
-    <string name="bitwarden_autofill_go_to_settings">Nu am reușit să deschidem automat meniul setărilor pentru auto-completare. Puteți să navigați manual la acesta din Setările Android &gt; Sistem &gt; Limbi și introducere text &gt; Avansate &gt; Serviciul de auto-completare.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Numele câmpului personalizat</string>
     <string name="field_type_boolean">Valoare logică</string>
     <string name="field_type_hidden">Ascuns</string>
@@ -825,11 +825,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">A apărut o problemă la validarea token-ului de înregistrare.</string>
     <string name="turn_on_autofill">Activează completarea automată</string>
     <string name="autofill_setup">Configurare completare automată</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Activează integrarea completării automate în browser</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Folosești un browser care necesită permisiuni speciale pentru ca Bitwarden să completeze automat parolele.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Folosești browsere care necesită permisiuni speciale pentru ca Bitwarden să completeze automat parolele.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Folosești un browser care necesită permisiuni speciale pentru ca Bitwarden să completeze automat parolele. Activează mai jos integrarea preferată de completare automată.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Folosești browsere care necesită permisiuni speciale pentru ca Bitwarden să completeze automat parolele. Activează completarea automată pentru toate browserele instalate pentru a continua.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Folosește completarea automată pentru a te autentifica în conturile tale cu o singură atingere.</string>
     <string name="turn_on_later">Activează mai târziu</string>
     <string name="turn_on_autofill_later">Activezi completarea automată mai târziu?</string>

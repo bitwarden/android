@@ -297,7 +297,7 @@
     <string name="no_items_trash">இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</string>
     <string name="autofill_accessibility_summary">பிற செயலிகளிலும் வலையிலும் பயனர்பெயர் மற்றும் கடவுச்சொல் புலங்களை நிரப்ப உதவு.</string>
     <string name="autofill_service_description">Bitwarden தன்னிரப்பி சேவை உள்நுழைவு தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்ப உதவ Android தன்னிரப்பி சட்டகத்தைப் பயன்படுத்துகிறது.</string>
-    <string name="bitwarden_autofill_go_to_settings">உமக்காக எங்களால் தானாக Android தன்னிரப்பி அமைப்புகள் பட்டியை திறக்க இயலவில்லை. Android அமைப்புகள் &gt; சிஸ்டம் &gt; மொழிகள் மற்றும் உள்ளீடு &gt; மேம்பட்டவை &gt; தன்னிரப்பிச் சேவைக்கு கைமுறையாக நீங்களே தன்னிரப்பி அமைப்புகள் பட்டிக்கு வழிநடக்கலாம்.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">தனிப்பயன் புலத்தின் பெயர்</string>
     <string name="field_type_boolean">ஈர்மம்</string>
     <string name="field_type_hidden">மறைக்கப்பட்ட</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">பதிவு டோக்கனை சரிபார்ப்பதில் ஒரு சிக்கல் இருந்தது.</string>
     <string name="turn_on_autofill">தானியங்கு நிரப்புதலை இயக்கவும்</string>
     <string name="autofill_setup">தானியங்கு நிரப்பு அமைப்பு</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">உலாவி தானியங்கு நிரப்பு ஒருங்கிணைப்பை இயக்கவும்</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">நீங்கள் Bitwarden உங்கள் கடவுச்சொற்களை தானாக நிரப்ப சிறப்பு அனுமதிகள் தேவைப்படும் ஒரு உலாவியைப் பயன்படுத்துகிறீர்கள்.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">நீங்கள் Bitwarden உங்கள் கடவுச்சொற்களை தானாக நிரப்ப சிறப்பு அனுமதிகள் தேவைப்படும் உலாவிகளைப் பயன்படுத்துகிறீர்கள்.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">நீங்கள் Bitwarden உங்கள் கடவுச்சொற்களை தானாக நிரப்ப சிறப்பு அனுமதிகள் தேவைப்படும் ஒரு உலாவியைப் பயன்படுத்துகிறீர்கள். கீழே உங்கள் விருப்பமான தானியங்கு நிரப்பு ஒருங்கிணைப்பை இயக்கவும்.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">நீங்கள் Bitwarden உங்கள் கடவுச்சொற்களை தானாக நிரப்ப சிறப்பு அனுமதிகள் தேவைப்படும் உலாவிகளைப் பயன்படுத்துகிறீர்கள். தொடர உங்கள் நிறுவப்பட்ட அனைத்து உலாவிகளுக்கும் தானியங்கு நிரப்பு இயக்கவும்.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">ஒற்றை தட்டலில் உங்கள் கணக்குகளில் உள்நுழைய தானியங்கு நிரப்புதலைப் பயன்படுத்தவும்.</string>
     <string name="turn_on_later">பின்னர் இயக்கவும்</string>
     <string name="turn_on_autofill_later">பின்னர் தானியங்கு நிரப்புதலை இயக்கவா?</string>

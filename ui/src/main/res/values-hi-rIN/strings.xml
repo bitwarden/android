@@ -296,7 +296,7 @@
     <string name="no_items_trash">कचरे में कोई आइटम नहीं है।</string>
     <string name="autofill_accessibility_summary">अन्य ऐप्स और वेब पर उपयोगकर्ता नाम और पासवर्ड फ़ील्ड भरने में सहायता करें।</string>
     <string name="autofill_service_description">बिटवार्डन ऑटो-फिल सर्विस एंड्रॉइड ऑटोफिल फ्रेमवर्क से डिवाइस के दूसरे ऐप में लॉगइन करने में मदद करता है।</string>
-    <string name="bitwarden_autofill_go_to_settings">हम एंड्रॉइड ऑटोफिल सेटिंग अपनेआप नहीं खोल पा रहे। ऑटोफिल सेटिंग में जाने के लिए एंड्रॉइड सेटिंग &gt; सिस्टम &gt; भाषा और इंपुट &gt; एडवांस &gt; ऑटोफिल सर्विस पर जाएं।</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">कस्टम फील्ड नाम</string>
     <string name="field_type_boolean">बूलियन</string>
     <string name="field_type_hidden">छुपा हुआ</string>
@@ -819,11 +819,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">पंजीकरण टोकन मान्य करने में एक समस्या थी।</string>
     <string name="turn_on_autofill">ऑटोफिल चालू करें</string>
     <string name="autofill_setup">ऑटोफिल सेटअप</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ब्राउज़र ऑटोफिल एकीकरण चालू करें</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">आप एक ऐसे ब्राउज़र का उपयोग कर रहे हैं जिसके लिए Bitwarden को आपके पासवर्ड ऑटोफिल करने के लिए विशेष अनुमतियों की आवश्यकता है।</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">आप ऐसे ब्राउज़रों का उपयोग कर रहे हैं जिनके लिए Bitwarden को आपके पासवर्ड ऑटोफिल करने के लिए विशेष अनुमतियों की आवश्यकता है।</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">आप एक ऐसे ब्राउज़र का उपयोग कर रहे हैं जिसके लिए Bitwarden को आपके पासवर्ड ऑटोफिल करने के लिए विशेष अनुमतियों की आवश्यकता है। नीचे अपना पसंदीदा ऑटोफिल एकीकरण सक्षम करें।</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">आप ऐसे ब्राउज़रों का उपयोग कर रहे हैं जिनके लिए Bitwarden को आपके पासवर्ड ऑटोफिल करने के लिए विशेष अनुमतियों की आवश्यकता है। जारी रखने के लिए अपने सभी स्थापित ब्राउज़रों के लिए ऑटोफिल सक्षम करें।</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">एक टैप से अपने खातों में लॉग इन करने के लिए ऑटोफिल का उपयोग करें।</string>
     <string name="turn_on_later">बाद में चालू करें</string>
     <string name="turn_on_autofill_later">बाद में ऑटोफिल चालू करें?</string>

@@ -297,7 +297,7 @@
     <string name="no_items_trash">هیچ موردی در سطل زباله وجود ندارد.</string>
     <string name="autofill_accessibility_summary">در پر کردن فیلدهای نام کاربری و کلمه عبور در برنامه‌های دیگر و در وب کمک می‌کند.</string>
     <string name="autofill_service_description">سرویس پر کردن خودکار Bitwarden با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی‌ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه‌ها در دستگاه شما کمک می‌کند.</string>
-    <string name="bitwarden_autofill_go_to_settings">ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt; سیستم &gt; زبان‌ها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">نام فیلد سفارشی</string>
     <string name="field_type_boolean">منطقی</string>
     <string name="field_type_hidden">مخفی</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">در تأیید توکن ثبت‌نام مشکلی پیش آمده است.</string>
     <string name="turn_on_autofill">پر کردن خودکار را فعال کنید</string>
     <string name="autofill_setup">راه‌اندازی پر کردن خودکار</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">فعال‌سازی یکپارچه سازی پر کردن خودکار مرورگر</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">شما از مرورگری استفاده می‌کنید که برای پر کردم خودکار کلمات عبور شما توسط Bitwarden به مجوزهای ویژه نیاز دارد.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">شما از مرورگرهایی استفاده می‌کنید که برای پر کردم خودکار کلمات عبور شما توسط Bitwarden به مجوزهای ویژه نیاز دارد.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">شما از مرورگری استفاده می‌کنید که برای پر کردن خودکار کلمات عبور شما توسط Bitwarden به مجوزهای ویژه نیاز دارد. ادغام پر کردن خودکار دلخواه خود را در زیر فعال کنید.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">شما از مرورگرهایی استفاده می‌کنید که Bitwarden برای پر کردن خودکار کلمات عبور شما به مجوزهای ویژه نیاز دارد. برای ادامه، پر کردن خودکار را برای همه مرورگرهای نصب شده خود فعال کنید.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">از پر کردن خودکار برای ورود به حساب‌های کاربری خود با یک ضربه استفاده کنید.</string>
     <string name="turn_on_later">بعداً روشن کنید</string>
     <string name="turn_on_autofill_later">بعداً پر کردن خودکار روشن شود؟</string>

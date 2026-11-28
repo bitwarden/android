@@ -297,7 +297,7 @@
     <string name="no_items_trash">ట్రాష్‌లో అంశాలు లేవు.</string>
     <string name="autofill_accessibility_summary">ఇతర యాప్‌లు మరియు వెబ్‌లో వినియోగదారు పేరు మరియు పాస్వర్డ్ ఫీల్డ్‌లను పూరించడంలో సహాయపడండి.</string>
     <string name="autofill_service_description">Bitwarden ఆటోఫిల్ సేవ మీ పరికరంలోని ఇతర యాప్‌లలో లాగిన్ సమాచారాన్ని పూరించడంలో సహాయపడటానికి Android ఆటోఫిల్ ఫ్రేమ్‌వర్క్‌ను ఉపయోగిస్తుంది.</string>
-    <string name="bitwarden_autofill_go_to_settings">మేము మీ కోసం Android ఆటోఫిల్ సెట్టింగ్‌ల మెనూ ఆటోమేటిక్‌గా తెరవలేకపోయాము. మీరు Android సెట్టింగ్‌లు &gt; సిస్టమ్ &gt; భాషలు మరియు ఇన్‌పుట్ &gt; అధునాతన &gt; ఆటోఫిల్ సేవ నుండి ఆటోఫిల్ సెట్టింగ్‌ల మెనూ‌కు మాన్యువల్‌గా నావిగేట్ చేయవచ్చు.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">అనుకూల ఫీల్డ్ పేరు</string>
     <string name="field_type_boolean">బూలియన్</string>
     <string name="field_type_hidden">దాచబడింది</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">నమోదు టోకెన్‌ను ధృవీకరించడంలో సమస్య ఉంది.</string>
     <string name="turn_on_autofill">ఆటోఫిల్ ఆన్ చేయి</string>
     <string name="autofill_setup">ఆటోఫిల్ సెటప్</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">బ్రౌజర్ ఆటోఫిల్ ఇంటిగ్రేషన్ ఆన్ చేయి</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">మీరు Bitwarden మీ పాస్వర్డ్‌లను ఆటోఫిల్ చేయడానికి ప్రత్యేక అనుమతులు అవసరమయ్యే బ్రౌజర్‌ను ఉపయోగిస్తున్నారు.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">మీరు Bitwarden మీ పాస్వర్డ్‌లను ఆటోఫిల్ చేయడానికి ప్రత్యేక అనుమతులు అవసరమయ్యే బ్రౌజర్‌లను ఉపయోగిస్తున్నారు.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">మీరు Bitwarden మీ పాస్వర్డ్‌లను ఆటోఫిల్ చేయడానికి ప్రత్యేక అనుమతులు అవసరమయ్యే బ్రౌజర్‌ను ఉపయోగిస్తున్నారు. క్రింద మీకు ఇష్టమైన ఆటోఫిల్ ఇంటిగ్రేషన్ ప్రారంభించండి.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">మీరు Bitwarden మీ పాస్వర్డ్‌లను ఆటోఫిల్ చేయడానికి ప్రత్యేక అనుమతులు అవసరమయ్యే బ్రౌజర్‌లను ఉపయోగిస్తున్నారు. కొనసాగించడానికి మీ అన్ని ఇన్‌స్టాల్ చేసిన బ్రౌజర్‌ల కోసం ఆటోఫిల్ ప్రారంభించండి.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">ఒకే ట్యాప్‌తో మీ ఖాతాలలో లాగిన్ అవ్వడానికి ఆటోఫిల్ ఉపయోగించండి.</string>
     <string name="turn_on_later">తర్వాత ఆన్ చేయి</string>
     <string name="turn_on_autofill_later">తర్వాత ఆటోఫిల్ ఆన్ చేయాలా?</string>

@@ -298,7 +298,7 @@
     <string name="no_items_trash">У сметніцы адсутнічаюць элементы.</string>
     <string name="autofill_accessibility_summary">Дапамагае запаўняць палі імя карыстальніка і пароля ў іншых праграмах і ў інтэрнэце.</string>
     <string name="autofill_service_description">Служба аўтазапаўнення Bitwarden выкарыстоўвае Android Autofill Framework для запаўнення ўліковых даных у іншых праграмах на вашай прыладзе.</string>
-    <string name="bitwarden_autofill_go_to_settings">Немагчыма аўтаматычна адкрыць меню наладаў аўтазапаўнення Android. Вы можаце перайсці ў меню наладаў аўтазапаўнення ўручную з Налады Android &gt; Сістэма &gt; Мова і ўвод &gt; Дадаткова &gt; Служба аўтазапаўнення.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Карыстальніцкая назва поля</string>
     <string name="field_type_boolean">Булева</string>
     <string name="field_type_hidden">Схавана</string>
@@ -828,11 +828,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Узнікла праблема з праверкай рэгістрацыйнага токена.</string>
     <string name="turn_on_autofill">Уключыць аўтазапаўненне</string>
     <string name="autofill_setup">Наладка аўтазапаўнення</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Уключыць інтэграцыю аўтазапаўнення ў браўзеры</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Вы выкарыстоўваеце браўзер, які патрабуе спецыяльных дазволаў, каб Bitwarden мог аўтазапаўняць вашы паролі.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Вы выкарыстоўваеце браўзеры, якія патрабуюць спецыяльных дазволаў, каб Bitwarden мог аўтазапаўняць вашы паролі.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Вы выкарыстоўваеце браўзер, які патрабуе спецыяльных дазволаў, каб Bitwarden мог аўтазапаўняць вашы паролі. Уключыце ніжэй пераважную інтэграцыю аўтазапаўнення.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Вы выкарыстоўваеце браўзеры, якія патрабуюць спецыяльных дазволаў, каб Bitwarden мог аўтазапаўняць вашы паролі. Каб працягнуць, уключыце аўтазапаўненне для ўсіх усталяваных браўзераў.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Выкарыстоўвайце аўтазапаўненне, каб уваходзіць у свае акаўнты адным націскам.</string>
     <string name="turn_on_later">Уключыць пазней</string>
     <string name="turn_on_autofill_later">Уключыць аўтазапаўненне пазней?</string>

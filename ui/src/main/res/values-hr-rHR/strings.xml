@@ -297,7 +297,7 @@
     <string name="no_items_trash">Nema stavki u smeću.</string>
     <string name="autofill_accessibility_summary">Pomoć pri ispunjavanju polja za korisničko ime i lozinku u drugim aplikacijama i na webu.</string>
     <string name="autofill_service_description">Usluga Bitwarden auto-ispune koristi Android Autofill Framework za pomoć pri ispunjavanju prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama na tvojem uređaju.</string>
-    <string name="bitwarden_autofill_go_to_settings">Nismo mogli otvoriti Andorid postavke automatskog popunjavanja. Možeš ručno otvoriti izbornik: Sustav -&gt; Jezici i unos -&gt; Dodatne postavke tipkovnice -&gt; Automatsko popunjavanje</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Prilagođeno ime polja</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Skriveno</string>
@@ -823,11 +823,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Došlo je do problema s potvrđivanjem registracijskog tokena.</string>
     <string name="turn_on_autofill">Uključi auto-ispunu</string>
     <string name="autofill_setup">Postavke auto-ispune</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Uključi integraciju auto-ispune preglednika</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Koristiš preglednik koji zahtijeva posebno dopuštenje za automatsku ispunu lozinki putem Bitwardena.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Koristiš preglednike koji zahtijevaju posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Koristiš preglednik koji zahtijeva posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena. Omogući željenu integraciju automatske ispune u nastavku.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Koristiš preglednike koji zahtijevaju posebna dopuštenja za automatsku ispunu lozinki putem Bitwardena. Omogući željenu integraciju automatske ispune u nastavku.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Koristi auto-ispunu za prijavu u svoje račune jednim dodirom.</string>
     <string name="turn_on_later">Uključi kasnije</string>
     <string name="turn_on_autofill_later">Kasnije uključi auto-ispunu?</string>

@@ -297,7 +297,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="no_items_trash">Prügikast on tühi.</string>
     <string name="autofill_accessibility_summary">Abistab kasutajanime ja parooli väljade täitmisel teistes rakendustes ja veebis.</string>
     <string name="autofill_service_description">Bitwardeni automaattäite teenus kasutab Androidi Autofill raamistikku. See aitab telefonis olevatesse rakendustesse sisestada kontoandmeid, krediitkaardi andmeid ja muud personaalset infot.</string>
-    <string name="bitwarden_autofill_go_to_settings">Meil ei õnnestu Androidi sisestusabi seadeid avada. Võid selle ise avada, navigeerides Seaded &gt; Süsteem &gt; Keeled ja sisend &gt; Täpsemad &gt; Sisestusabi.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Kohandatud välja nimi</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Peidetud</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Registreerimistõendi kinnitamisel tekkis probleem.</string>
     <string name="turn_on_autofill">Lülita automaattäide sisse</string>
     <string name="autofill_setup">Automaattäite seadistamine</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Lülita sisse brauseri automaattäite integreerimine</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Kasutate brauserit, mis nõuab Bitwardenilt teie paroolide automaatseks täitmiseks erilube.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Kasutate brausereid, mis nõuavad Bitwardenilt teie paroolide automaatseks täitmiseks erilube.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Kasutate brauserit, mis nõuab Bitwardenilt teie paroolide automaatseks täitmiseks erilube. Lubage allpool oma eelistatud automaattäite integreerimine.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Kasutate brausereid, mis nõuavad Bitwardenilt teie paroolide automaatseks täitmiseks erilube. Jätkamiseks lubage automaattäide kõigi installitud brauserite jaoks.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Kasutage oma kontodesse sisselogimiseks ühe puudutusega automaattäidet.</string>
     <string name="turn_on_later">Lülita sisse hiljem</string>
     <string name="turn_on_autofill_later">Lülitada automaattäide sisse hiljem?</string>

@@ -296,7 +296,7 @@
     <string name="no_items_trash">回收站中没有项目。</string>
     <string name="autofill_accessibility_summary">在其他 App 和网站上辅助填充用户名和密码字段。</string>
     <string name="autofill_service_description">Bitwarden 自动填充服务使用 Android 自动填充框架来辅助将登录信息填充到您设备上的其他 App 中。</string>
-    <string name="bitwarden_autofill_go_to_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以从 Android 设置手动导航到自动填充设置菜单。</string>
     <string name="custom_field_name">自定义字段名称</string>
     <string name="field_type_boolean">布尔型</string>
     <string name="field_type_hidden">隐藏型</string>
@@ -815,11 +815,13 @@
     <string name="there_was_an_issue_validating_the_registration_token">验证注册令牌时出现问题。</string>
     <string name="turn_on_autofill">开启自动填充</string>
     <string name="autofill_setup">自动填充设置</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">在您的浏览器中选择「使用其他服务自动填充」</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">在您的浏览器中选择「使用其他服务自动填充」</string>
     <string name="turn_on_browser_autofill_integration">开启浏览器自动填充集成</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。请在下方启用您首选的自动填充集成。</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">您正在使用的浏览器需要特殊权限才能让 Bitwarden 自动填充密码。请为所有已安装的浏览器启用自动填充功能。</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">您所使用的浏览器需要特殊权限，才能让 Bitwarden 自动填充您的密码。请在下方启用您首选的自动填充集成。</string>
     <string name="use_autofill_to_log_into_your_accounts">使用自动填充，只需点击一下即可登录您的账户。</string>
     <string name="turn_on_later">稍后开启</string>
     <string name="turn_on_autofill_later">稍后开启自动填充吗？</string>
@@ -1314,7 +1316,7 @@
     <string name="manage_plan">管理方案</string>
     <string name="manage_your_subscription_plan_in_the_bitwarden_web_app">在 Bitwarden 网页 App 中管理您的订阅方案。</string>
     <string name="cancel_premium">取消高级版</string>
-    <string name="subscription_status_active">活动</string>
+    <string name="subscription_status_active">有效</string>
     <string name="subscription_status_canceled">已取消</string>
     <string name="subscription_status_expired">已过期</string>
     <string name="subscription_status_past_due">逾期未支付</string>

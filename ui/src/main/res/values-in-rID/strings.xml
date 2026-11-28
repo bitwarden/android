@@ -296,7 +296,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="no_items_trash">Tidak ada item di sampah.</string>
     <string name="autofill_accessibility_summary">Bantu mengisi kolom nama pengguna dan sandi di aplikasi lain serta di web.</string>
     <string name="autofill_service_description">Layanan isi otomatis Bitwarden menggunakan Android Autofill Framework untuk membantu mengisi informasi login ke apl lain di perangkat Anda.</string>
-    <string name="bitwarden_autofill_go_to_settings">Kami tidak dapat secara otomatis membuka menu pengaturan Android isi otomatis untuk Anda. Anda dapat membuka menu pengaturan isi otomatis secara manual dari Pengaturan Android &gt; Sistem &gt; Bahasa dan masukan &gt; Lanjutan &gt; Layanan isi otomatis.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Nama kolom ubahsuai</string>
     <string name="field_type_boolean">Boolean</string>
     <string name="field_type_hidden">Tersembunyi</string>
@@ -813,11 +813,13 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="there_was_an_issue_validating_the_registration_token">Terjadi masalah saat memvalidasi token pendaftaran.</string>
     <string name="turn_on_autofill">Aktifkan isi otomatis</string>
     <string name="autofill_setup">Setel isi otomatis</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Aktifkan integrasi isi otomatis browser</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Anda menggunakan browser yang memerlukan izin khusus agar Bitwarden dapat mengisi otomatis sandi Anda.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Anda menggunakan browser yang memerlukan izin khusus agar Bitwarden dapat mengisi otomatis sandi Anda.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Anda menggunakan browser yang memerlukan izin khusus agar Bitwarden dapat mengisi otomatis sandi Anda. Aktifkan integrasi isi otomatis pilihan Anda di bawah ini.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Anda menggunakan browser yang memerlukan izin khusus agar Bitwarden dapat mengisi otomatis sandi Anda. Aktifkan isi otomatis pada semua browser yang terpasang untuk melanjutkan.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Gunakan isi otomatis untuk masuk ke akun Anda dengan sekali ketuk.</string>
     <string name="turn_on_later">Aktifkan nanti</string>
     <string name="turn_on_autofill_later">Aktifkan isi otomatis nanti?</string>

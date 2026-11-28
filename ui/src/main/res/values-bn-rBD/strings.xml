@@ -297,7 +297,7 @@
     <string name="no_items_trash">ট্র্যাশে কোনও আইটেম নেই।</string>
     <string name="autofill_accessibility_summary">অন্যান্য অ্যাপ এবং ওয়েবে ব্যবহারকারীর নাম এবং পাসওয়ার্ড ফিল্ড পূরণ করতে সহায়তা করুন।</string>
     <string name="autofill_service_description">বিটওয়ার্ডেন অটোফিল পরিষেবা আপনার ডিভাইসের অন্যান্য অ্যাপে লগইন তথ্য পূরণ করতে সহায়তা করার জন্য অ্যান্ড্রয়েড অটোফিল ফ্রেমওয়ার্ক ব্যবহার করে।</string>
-    <string name="bitwarden_autofill_go_to_settings">আমরা আপনার জন্য Android অটোফিল সেটিংস মেনু স্বয়ংক্রিয়ভাবে খুলতে অক্ষম ছিলাম। আপনি Android সেটিংস &gt; সিস্টেম &gt; ভাষা এবং ইনপুট &gt; উন্নত &gt; অটোফিল পরিষেবা থেকে ম্যানুয়ালি অটোফিল সেটিংস মেনুতে নেভিগেট করতে পারেন।</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">কাস্টম ফিল্ডের নাম</string>
     <string name="field_type_boolean">বুলিয়ান</string>
     <string name="field_type_hidden">লুকোনো</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">নিবন্ধন টোকেন যাচাই করতে একটি সমস্যা ছিল।</string>
     <string name="turn_on_autofill">অটোফিল চালু করুন</string>
     <string name="autofill_setup">অটোফিল সেটআপ</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ব্রাউজার অটোফিল ইন্টিগ্রেশন চালু করুন</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">আপনি এমন একটি ব্রাউজার ব্যবহার করছেন যার জন্য Bitwarden-এর আপনার পাসওয়ার্ড অটোফিল করতে বিশেষ অনুমতির প্রয়োজন।</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">আপনি এমন ব্রাউজার ব্যবহার করছেন যেগুলির জন্য Bitwarden-এর আপনার পাসওয়ার্ড অটোফিল করতে বিশেষ অনুমতির প্রয়োজন।</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">আপনি এমন একটি ব্রাউজার ব্যবহার করছেন যার জন্য Bitwarden-এর আপনার পাসওয়ার্ড অটোফিল করতে বিশেষ অনুমতির প্রয়োজন। নীচে আপনার পছন্দের অটোফিল ইন্টিগ্রেশন সক্ষম করুন।</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">আপনি এমন ব্রাউজার ব্যবহার করছেন যেগুলির জন্য Bitwarden-এর আপনার পাসওয়ার্ড অটোফিল করতে বিশেষ অনুমতির প্রয়োজন। চালিয়ে যেতে আপনার সমস্ত ইনস্টল করা ব্রাউজারের জন্য অটোফিল সক্ষম করুন।</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">এক ট্যাপ করে আপনার অ্যাকাউন্টে লগ ইন করতে অটোফিল ব্যবহার করুন।</string>
     <string name="turn_on_later">পরে চালু করুন</string>
     <string name="turn_on_autofill_later">অটোফিল পরে চালু করবেন?</string>

@@ -297,7 +297,7 @@ Skandering gebeur outomaties.</string>
     <string name="no_items_trash">Daar is geen items in die asblik.</string>
     <string name="autofill_accessibility_summary">Help met die invul van gebruikersnaam- en wagwoordvelde in ander toeps en op die web.</string>
     <string name="autofill_service_description">Die Bitwarden-outovuldiens gebruik die Android-outovulraamwerk om te help met die invul van aantekeninge, kredietkaarte en identiteitsinligting in ander toeps op u toestel.</string>
-    <string name="bitwarden_autofill_go_to_settings">Ons kon nie die Android-outovulinstellingkieslys outomaties vir u open nie. U kan na die outovulinstellingkieslys navigeer deur te gaan na Android Instellings &gt; Stelsel &gt; Tale en toevoer &gt; Gevorderd &gt; Outovuldiens.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Pasgemaakte veldnaam</string>
     <string name="field_type_boolean">Booleaans</string>
     <string name="field_type_hidden">Versteek</string>
@@ -821,11 +821,13 @@ Hier is hoe:</string>
     <string name="there_was_an_issue_validating_the_registration_token">Daar was ’n probleem met die validering van die registrasieteken.</string>
     <string name="turn_on_autofill">Skakel outovul aan</string>
     <string name="autofill_setup">Outovulopstelling</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Skakel blaaier-outovulintegrasie aan</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">U gebruik ’n blaaier wat spesiale toestemmings vereis sodat Bitwarden u wagwoorde kan outovul.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">U gebruik blaaiers wat spesiale toestemmings vereis sodat Bitwarden u wagwoorde kan outovul.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">U gebruik ’n blaaier wat spesiale toestemmings vereis sodat Bitwarden u wagwoorde kan outovul. Aktiveer u voorkeur-outovulintegrasie hieronder.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">U gebruik blaaiers wat spesiale toestemmings vereis sodat Bitwarden u wagwoorde kan outovul. Aktiveer outovul vir al u geïnstalleerde blaaiers om voort te gaan.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Gebruik outovul om met een tik by u rekeninge aan te meld.</string>
     <string name="turn_on_later">Skakel later aan</string>
     <string name="turn_on_autofill_later">Skakel outovul later aan?</string>

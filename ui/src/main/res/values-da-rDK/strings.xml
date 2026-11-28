@@ -297,7 +297,7 @@ Skanning vil ske automatisk.</string>
     <string name="no_items_trash">Der er ingen emner i papirkurven.</string>
     <string name="autofill_accessibility_summary">Assisterer med at udfylde brugernavn- og adgangskodefelter i andre apps og på nettet.</string>
     <string name="autofill_service_description">Bitwarden-autoudfyldnigstjenesten bruger Androids Autofill Framework til at assistere med at udfylde loginoplysninger i andre apps på enheden.</string>
-    <string name="bitwarden_autofill_go_to_settings">Androids Autoudfyld-indstillingsmenu kunne ikke åbnes automatisk. Denne menu kan tilgås manuelt via Androids Indstillinger &gt; System &gt; Sprog og input &gt; Avanceret &gt; Autoudfyldningstjeneste.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Tilpasset feltnavn</string>
     <string name="field_type_boolean">Boolsk</string>
     <string name="field_type_hidden">Skjult</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Der var et problem med at validere registreringstokenet.</string>
     <string name="turn_on_autofill">Slå Autoudfyldning til</string>
     <string name="autofill_setup">Autofill-opsætning</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Aktivér browser-autofill-integration</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Du bruger en browser, der kræver særlige tilladelser for, at Bitwarden kan udfylde dine adgangskoder automatisk.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Du bruger browsere, der kræver særlige tilladelser for, at Bitwarden kan udfylde dine adgangskoder automatisk.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Du bruger en browser, der kræver særlige tilladelser for, at Bitwarden kan udfylde dine adgangskoder automatisk. Aktivér din foretrukne autofill-integration nedenfor.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Du bruger browsere, der kræver særlige tilladelser for, at Bitwarden kan udfylde dine adgangskoder automatisk. Aktivér autofill for alle dine installerede browsere for at fortsætte.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Brug autofyld for at logge ind på konti med ét tryk.</string>
     <string name="turn_on_later">Slå til senere</string>
     <string name="turn_on_autofill_later">Slå autofyld til senere?</string>

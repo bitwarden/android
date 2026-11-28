@@ -297,7 +297,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="no_items_trash">Roskakorissa ei ole kohteita.</string>
     <string name="autofill_accessibility_summary">Avusta muiden sovellusten ja verkkosivustojen käyttäjätunnus- ja salasanakenttien täytössä.</string>
     <string name="autofill_service_description">Bitwardenin automaattitäytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen muissa sovelluksissa.</string>
-    <string name="bitwarden_autofill_go_to_settings">Androidin automaattisen täytön asetuksia ei voitu avata automaattisesti. Voit avata asetukset itse seuraavasti: \"Asetukset\" &gt; \"Järjestelmä\" &gt; \"Kielet ja syöttötapa\" &gt; \"Lisäasetukset\" &gt; \"Automaattinen täyttö -palvelu\".</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">Lisäkentän nimi</string>
     <string name="field_type_boolean">Totuusarvo</string>
     <string name="field_type_hidden">Piilotettu</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">Ongelma vahvistettaessa rekisteröintitunnistetta.</string>
     <string name="turn_on_autofill">Ota automaattitäyttö käyttöön</string>
     <string name="autofill_setup">Automaattisen täytön asetukset</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">Ota selaimen automaattisen täytön integraatio käyttöön</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">Käytät selainta, joka vaatii erityislupia, jotta Bitwarden voi täyttää salasanasi automaattisesti.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">Käytät selaimia, jotka vaativat erityislupia, jotta Bitwarden voi täyttää salasanasi automaattisesti.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">Käytät selainta, joka vaatii erityislupia, jotta Bitwarden voi täyttää salasanasi automaattisesti. Ota haluamasi automaattisen täytön integraatio käyttöön alla.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Käytät selaimia, jotka vaativat erityislupia, jotta Bitwarden voi täyttää salasanasi automaattisesti. Ota automaattinen täyttö käyttöön kaikille asennetuille selaimille jatkaaksesi.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Automaattitäytön avulla kirjaudut tileillesi yhdellä napautuksella.</string>
     <string name="turn_on_later">Ota käyttöön myöhemmin</string>
     <string name="turn_on_autofill_later">Otetaanko automaattitäyttö käyttöön myöhemmin?</string>

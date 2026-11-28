@@ -297,7 +297,7 @@
     <string name="no_items_trash">ნაგავში ჩანაწერები არ არის.</string>
     <string name="autofill_accessibility_summary">დახმარება მომხმარებლის სახელისა და პაროლის ველების შევსებაში სხვა აპლიკაციებსა და ვებში.</string>
     <string name="autofill_service_description">Bitwarden-ის ავტოშევსების სერვისი იყენებს Android Autofill Framework-ს, რათა დაეხმაროს შესვლის ინფორმაციის შევსებაში თქვენს მოწყობილობაზე სხვა აპლიკაციებში.</string>
-    <string name="bitwarden_autofill_go_to_settings">ჩვენ ვერ გავხსენით Android-ის ავტოშევსების პარამეტრების მენიუ ავტომატურად. შეგიძლიათ ხელით გადახვიდეთ ავტოშევსების პარამეტრების მენიუში Android პარამეტრები &gt; სისტემა &gt; ენები და შეყვანა &gt; დამატებითი &gt; ავტოშევსების სერვისი.</string>
+    <string name="we_were_unable_to_automatically_open_the_autofill_settings">We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings.</string>
     <string name="custom_field_name">მორგებული ველის სახელი</string>
     <string name="field_type_boolean">ლოგიკური</string>
     <string name="field_type_hidden">დამალული</string>
@@ -820,11 +820,13 @@ Do you want to switch to this account?</string>
     <string name="there_was_an_issue_validating_the_registration_token">რეგისტრაციის ტოკენის ვალიდაციისას წარმოიშვა პრობლემა.</string>
     <string name="turn_on_autofill">ავტოშევსების ჩართვა</string>
     <string name="autofill_setup">ავტოშევსების დაყენება</string>
+    <string name="choose_autofill_using_another_service_in_your_browser">Choose ‘Autofill using another service’ in your browser</string>
+    <string name="choose_autofill_using_another_service_in_your_browsers">Choose ‘Autofill using another service’ in your browsers</string>
     <string name="turn_on_browser_autofill_integration">ბრაუზერის ავტოშევსების ინტეგრაციის ჩართვა</string>
     <string name="browser_requires_special_permissions_for_bitwarden_singular">თქვენ იყენებთ ბრაუზერს, რომელიც საჭიროებს სპეციალურ ნებართვებს Bitwarden-ისთვის თქვენი პაროლების ავტოშევსებისთვის.</string>
     <string name="browser_requires_special_permissions_for_bitwarden_plural">თქვენ იყენებთ ბრაუზერებს, რომლებიც საჭიროებენ სპეციალურ ნებართვებს Bitwarden-ისთვის თქვენი პაროლების ავტოშევსებისთვის.</string>
     <string name="youre_using_a_browser_that_requires_special_permissions_singular">თქვენ იყენებთ ბრაუზერს, რომელიც საჭიროებს სპეციალურ ნებართვებს Bitwarden-ისთვის თქვენი პაროლების ავტოშევსებისთვის. ქვემოთ ჩართეთ თქვენი სასურველი ავტოშევსების ინტეგრაცია.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_plural">თქვენ იყენებთ ბრაუზერებს, რომლებიც საჭიროებენ სპეციალურ ნებართვებს Bitwarden-ისთვის თქვენი პაროლების ავტოშევსებისთვის. გასაგრძელებლად, ჩართეთ ავტოშევსება ყველა თქვენთვის დაყენებული ბრაუზერისთვის.</string>
+    <string name="youre_using_browsers_that_require_special_permissions_plural">You’re using browsers that require special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">გამოიყენეთ ავტოშევსება თქვენს ანგარიშებში ერთი შეხებით შესასვლელად.</string>
     <string name="turn_on_later">მოგვიანებით ჩართვა</string>
     <string name="turn_on_autofill_later">ავტოშევსების მოგვიანებით ჩართვა?</string>
