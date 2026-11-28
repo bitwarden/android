@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import io.mockk.awaits
@@ -95,6 +96,67 @@ class ReviewExportViewModelTest : BaseViewModelTest() {
                 dialog = null,
                 importCredentialsRequestData = DEFAULT_REQUEST_DATA,
                 hasOtherAccounts = false,
+            )
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `State should count login with both password and passkey in passwords and passkeys`() =
+            runTest {
+                decryptCipherListResultFlow.value = DataState.Loaded(
+                    data = DecryptCipherListResult(
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1, hasFido2 = true),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                )
+                val expectedState = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                        itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
+                            passwordCount = 1,
+                            passkeyCount = 1,
+                        ),
+                    ),
+                )
+                val viewModel = createViewModel()
+                viewModel.stateFlow.test {
+                    assertEquals(expectedState, awaitItem())
+                }
+            }
+
+        @Test
+        fun `State should count passkey-only login only in passkeys`() = runTest {
+            decryptCipherListResultFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = listOf(
+                        createMockCipherListView(
+                            number = 1,
+                            type = CipherListViewType.Login(
+                                createMockLoginListView(number = 1, hasFido2 = true),
+                            ),
+                            copyableFields = emptyList(),
+                        ),
+                    ),
+                    failures = emptyList(),
+                ),
+            )
+            val expectedState = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    itemTypeCounts = DEFAULT_CONTENT_VIEW_STATE.itemTypeCounts.copy(
+                        passwordCount = 0,
+                        passkeyCount = 1,
+                    ),
+                ),
             )
             val viewModel = createViewModel()
             viewModel.stateFlow.test {

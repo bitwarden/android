@@ -245,9 +245,9 @@ class ReviewExportViewModel @Inject constructor(
             ?.filter { it.isActive }
             .orEmpty()
             .forEach {
+                if (it.isActiveWithFido2Credentials) passkeyItemCount++
                 when {
                     it.isActiveWithCopyablePassword -> passwordItemCount++
-                    it.isActiveWithFido2Credentials -> passkeyItemCount++
                     it.type is CipherListViewType.Identity -> identityItemCount++
                     it.card != null -> cardItemCount++
                     it.type is CipherListViewType.SecureNote -> secureNoteItemCount++
