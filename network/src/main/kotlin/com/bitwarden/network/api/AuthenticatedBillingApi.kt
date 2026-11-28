@@ -38,6 +38,6 @@ internal interface AuthenticatedBillingApi {
     /**
      * Retrieves the user's premium subscription details.
      */
-    @GET("/account/billing/vnext/subscription")
+    @GET("/account/billing/subscription/preview")
     suspend fun getSubscription(): NetworkResult<BitwardenSubscriptionResponseJson>
 }
