@@ -6369,7 +6369,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = organizationIdentifier,
                 passwordHint = passwordHint,
                 kdf = profile.toKdfRequestModel(),
-                salt = SALT,
+                salt = EMAIL,
                 masterPasswordAuthenticationHash = passwordHash,
                 masterKeyWrappedUserKey = encryptedUserKey,
                 keys = KeysJson(
